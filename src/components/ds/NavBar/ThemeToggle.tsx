@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
-import styles from "./SiteHeader.module.css";
+import styles from "./NavBar.module.css";
 
 export const THEME_KEY = "nc-theme";
 

@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batch 1. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
@@ -62,5 +62,161 @@
   },
   "legal": {
     "draftBanner": "Borrador en revisión. Este texto no es definitivo y aún no está en vigor."
+  },
+  "ds": {
+    "sampleData": "Datos de ejemplo",
+    "vesselTypes": {
+      "sail": "Dahabiya de vela",
+      "motor": "Crucero a motor",
+      "steam": "Vapor de ruedas"
+    },
+    "amenities": {
+      "pool": "Piscina",
+      "sundeck": "Cubierta solárium",
+      "spa": "Spa",
+      "wifi": "Wi-Fi",
+      "ac": "Aire acondicionado",
+      "balcony": "Balcón privado",
+      "bath": "Bañera",
+      "restaurant": "Restaurante",
+      "bar": "Bar",
+      "wine": "Maridaje de vinos",
+      "gym": "Gimnasio",
+      "egyptologist": "Egiptólogo privado",
+      "butler": "Servicio de mayordomo",
+      "library": "Biblioteca",
+      "accessible": "Acceso sin escalones",
+      "bed": "Cama king",
+      "music": "Música por la noche",
+      "quiet": "Sin ruido de motor",
+      "anchor": "Amarres privados",
+      "temple": "Visitas a templos",
+      "sunrise": "Vistas al amanecer"
+    },
+    "rating": {
+      "outOf": "{value} de 5",
+      "reviews": "({count, plural, one {# opinión} other {# opiniones}})"
+    },
+    "stepper": {
+      "fewer": "Menos {label}",
+      "more": "Más {label}"
+    },
+    "cruiseCard": {
+      "route": "Ruta",
+      "guestsMax": "Máx. {count} pasajeros",
+      "evaluation": "{score}/100 · evaluación de Nilecruz",
+      "onBoard": "A bordo",
+      "fromPerPerson": "Desde, por persona",
+      "pricesInPreparation": "Precios en preparación",
+      "compare": "Comparar",
+      "save": "Guardar {name}",
+      "remove": "Quitar {name} de guardados"
+    },
+    "experienceCard": {
+      "seeDetails": "Ver detalles"
+    },
+    "itinerary": {
+      "label": "Itinerario",
+      "day": "Día",
+      "prevDay": "Día anterior",
+      "nextDay": "Día siguiente",
+      "play": "Reproducir la travesía",
+      "pause": "Pausar la travesía"
+    },
+    "gallery": {
+      "label": "Galería",
+      "slide": "{n} de {total}",
+      "prev": "Imagen anterior",
+      "next": "Imagen siguiente"
+    },
+    "cruiseSearch": {
+      "prevMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "sailingDay": ", día de salida",
+      "departureDays": "Días de salida de esta ruta",
+      "route": "Ruta",
+      "vessel": "Embarcación",
+      "departure": "Salida",
+      "anyDate": "Cualquier fecha",
+      "guests": "Pasajeros",
+      "guestCount": "{count, plural, one {# pasajero} other {# pasajeros}}",
+      "adults": "Adultos",
+      "adultsHint": "12 años o más",
+      "children": "Niños",
+      "childrenHint": "Menores de 12, en el camarote de un adulto",
+      "childAge": "Edad del niño {n}",
+      "chooseAge": "Elegir edad",
+      "underOne": "Menos de 1",
+      "years": "{count, plural, one {# año} other {# años}}",
+      "agesRequired": "Indique la edad de cada niño: el precio depende de ella.",
+      "cta": "Ver disponibilidad",
+      "matches": "{count, plural, one {# salida coincide} other {# salidas coinciden}} · {vessel}, {route}"
+    },
+    "cabinPicker": {
+      "legend": "Elija un camarote",
+      "size": "{size} m²",
+      "soldOut": "Agotado",
+      "onlyLeft": "Solo quedan {count}",
+      "perPerson": "por persona",
+      "signInForPrices": "Inicie sesión para ver precios y fechas de cada camarote."
+    },
+    "bookingSummary": {
+      "label": "Resumen de la reserva",
+      "departs": "Salida el {date}",
+      "total": "Total",
+      "gratuity": "Propinas de la tripulación, se pagan a bordo al salir",
+      "gratuityDetail": "{rate} × {guests} pasajeros × {nights} noches · no incluidas en el total",
+      "extrasTitle": "Se contratan aparte",
+      "from": "desde {price}",
+      "request": "Solicitar reserva"
+    },
+    "vesselTypeCard": {
+      "cta": "Cómo es la vida a bordo"
+    },
+    "vesselCompare": {
+      "tablist": "Tipo de embarcación",
+      "oneAtATime": "Ver de una en una",
+      "compareAll": "Comparar las {count}",
+      "tableLabel": "Tipos de embarcación lado a lado",
+      "rows": {
+        "guests": "Pasajeros",
+        "cabins": "Camarotes",
+        "power": "Propulsión",
+        "pace": "Ritmo",
+        "mooring": "Dónde amarra",
+        "sound": "Lo que se oye",
+        "days": "Sus días",
+        "price": "Precio habitual"
+      },
+      "meters": {
+        "intimacy": "Intimidad",
+        "quiet": "Tranquilidad",
+        "freeItinerary": "Itinerario libre",
+        "facilities": "Instalaciones",
+        "heritage": "Patrimonio"
+      }
+    },
+    "priceAnatomy": {
+      "examples": "Ejemplos",
+      "barLabel": "Composición del precio: {items}"
+    },
+    "amenityGrid": {
+      "filter": "Filtrar servicios",
+      "all": "Todos",
+      "included": "Incluido",
+      "request": "Bajo petición",
+      "none": "No disponible"
+    },
+    "state": {
+      "loadingTitle": "Reuniendo los detalles",
+      "loadingBody": "Será solo un momento.",
+      "emptyTitle": "Aún no hay nada aquí",
+      "errorTitle": "No hemos podido cargar esto",
+      "errorBody": "Inténtelo de nuevo. Si sigue ocurriendo, contáctenos.",
+      "retry": "Intentar de nuevo",
+      "deniedTitle": "Esto es para cuentas con sesión iniciada",
+      "deniedBody": "Inicie sesión con una cuenta que tenga acceso para verlo.",
+      "signIn": "Iniciar sesión"
+    }
   }
 }

@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { localeLabels, routing } from "@/i18n/routing";
-import styles from "./SiteHeader.module.css";
+import styles from "./NavBar.module.css";
 
 /** Links to the same page in each language. Plain links, so it works without JavaScript. */
 export function LanguageSwitch({ className }: { className?: string }) {
