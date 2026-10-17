@@ -522,3 +522,18 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Context:** a request for another role's workspace must return HTTP 403 with a page, never the content. Next.js 16 provides `forbidden()` behind the experimental `authInterrupts` flag.
 - **Decision:** enable `experimental.authInterrupts` and use `forbidden()` with a `forbidden.tsx` page. If the flag changes in a later Next.js release, the e2e test that asserts the 403 status fails first.
 
+### ADR-068 Account security details (Accepted)
+- **Current password:** changing email or password always asks for the current password, checked on a separate throwaway session so the person's own session and two-step level stay. Supabase's "signed in recently" rule (`secure_password_change`) is therefore off: our check is stricter.
+- **Password from a reset link:** setting a password without the current one is allowed only in a session that came from a reset link within the last hour; an ordinary (or stolen) session can't.
+- **Email links:** opening a link shows a page with a Confirm button (a POST), so email scanners that open links can't use up single-use tokens.
+- **Email change:** confirmed from both the old and the new address; after the first, the page says one address is confirmed.
+- **Two-step and other sessions:** completing two-step ends the same person's other password-only sessions (Supabase Auth behaviour, observed in tests). It is a safety feature; tests that share an admin account run one after another.
+- **No account probing:** sign-up, reset and resend answer the same way whether or not an account exists; a wrong password and an unknown email give the same message.
+
+### ADR-069 Dashboard frame, routes and limits of Batch 4a (Accepted)
+- **Frames:** public pages live in the `(site)` route group with the site header and footer; dashboards have their own frame (wordmark, workspace switcher, Cairo time, account security, Day/Night, sign out) and a sidebar that folds into a "Sections" menu on phones (works without JavaScript).
+- **Where checks run:** layouts only refuse (403); redirects to sign-in or two-step happen in pages, which know their own address, so people return exactly where they were.
+- **Language:** dashboards are English (DASH-BND-006); `/es/dashboard/…` and `/ja/dashboard/…` redirect to `/dashboard/…`. My journey is customer-facing, so its own pages get Spanish and Japanese when they are built (Batch 4g).
+- **Header:** the public header shows a static "Sign in" link (signed-in visitors who use it go straight to their dashboard), so public pages stay static and fast. Showing "Account" instead for signed-in visitors needs a small client-side check; it is planned with the account gate in Batch 8.
+- **Staging Auth settings were pushed early:** on 17 Oct 2026 a `supabase config push` preview applied the approved settings (ADR-066) instead of only showing them; no one had a staging account, so nobody was affected. The deploy workflow now pushes them on every change.
+

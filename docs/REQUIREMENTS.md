@@ -36,14 +36,14 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DASH-ROLE-001 | DG §Account roles | There are four account types: Admin, Operator, Customer and Travel partner (B2B), each landing in its own workspace. | 4a | Planned |  |
-| DASH-ROLE-002 | DG §Account roles | Admin can act on vessels, operators, partners, evaluations, bookings, payments and tours across the whole marketplace. | 4a | Planned |  |
-| DASH-ROLE-003 | DG §Account roles | Operator can read and write only its own vessels, cabins, schedules, prices, offers and bookings (enforced by RLS and server checks). | 4a | Planned |  |
-| DASH-ROLE-004 | DG §Account roles | Customer can read and write only their own requests, offers, reservations, payments and tours. | 4a | Planned |  |
-| DASH-ROLE-005 | DG §Account roles | Travel partner can see only approved trade availability, its company's bookings and its team permissions. | 4a | Planned |  |
-| DASH-ROLE-006 | DG §Intro ¶2 | The dashboard's navigation and content change according to the signed-in account type. | 4a | Planned |  |
-| DASH-ROLE-007 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-002 | Operator teams have owner, reservations, finance and viewer roles, and each role's permissions are enforced on the server and in RLS. | 4a | Planned |  |
-| DASH-ROLE-008 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-003 | Admins have a sub-role (super, catalogue, finance, content) that limits which admin actions they can take; only super admins change roles. | 4a | Planned |  |
+| DASH-ROLE-001 | DG §Account roles | There are four account types: Admin, Operator, Customer and Travel partner (B2B), each landing in its own workspace. | 4a | Verified | Batch 4a (17 Oct 2026): e2e dashboard.spec 'each role lands in its own workspace' (8 seed users + applied company); unit auth.test 'workspaces' |
+| DASH-ROLE-002 | DG §Account roles | Admin can act on vessels, operators, partners, evaluations, bookings, payments and tours across the whole marketplace. | 4a | Verified | Batch 4a (17 Oct 2026): admin workspace behind requireAdmin + aal2; e2e 'seeded admin … reaches the admin workspace'; DB 030/070; scope grows in 4b–4h |
+| DASH-ROLE-003 | DG §Account roles | Operator can read and write only its own vessels, cabins, schedules, prices, offers and bookings (enforced by RLS and server checks). | 4a | Verified | Batch 4a (17 Oct 2026): requireOrgRole + RLS (Batch 3); e2e operator A refused operator B and partner workspaces (403); DB 030 isolation |
+| DASH-ROLE-004 | DG §Account roles | Customer can read and write only their own requests, offers, reservations, payments and tours. | 4a | Verified | Batch 4a (17 Oct 2026): customers reach only My journey; e2e customer refused admin, operator and partner (403); profile RLS 030 |
+| DASH-ROLE-005 | DG §Account roles | Travel partner can see only approved trade availability, its company's bookings and its team permissions. | 4a | Verified | Batch 4a (17 Oct 2026): partner roles: e2e finance sees Payments not Search, reservations refused Payments (403); company status gate |
+| DASH-ROLE-006 | DG §Intro ¶2 | The dashboard's navigation and content change according to the signed-in account type. | 4a | Verified | Batch 4a (17 Oct 2026): src/lib/auth/dashboard-nav.ts (sections per role, from the guide); e2e 'navigation changes with role'; phone Sections menu |
+| DASH-ROLE-007 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-002 | Operator teams have owner, reservations, finance and viewer roles, and each role's permissions are enforced on the server and in RLS. | 4a | Verified | Batch 4a (17 Oct 2026): team roles in navFor/sectionAccess and requireOrgRole; e2e viewer and finance refusals; DB 030 viewer can't edit |
+| DASH-ROLE-008 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-003 | Admins have a sub-role (super, catalogue, finance, content) that limits which admin actions they can take; only super admins change roles. | 4a | Verified | Batch 4a (17 Oct 2026): admin sub-roles in nav and requireAdmin(roles); e2e catalogue admin refused finance (403); DB 070 only super admins change roles |
 
 ## Dashboard guide (ADM)
 
@@ -205,7 +205,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-CUS-010 | DG §Customer list | A customer can request cancellation and follow the refund-review status. | 4f | Planned |  |
 | DASH-CUS-011 | DG §Customer list | A customer can browse and manage eligible tours and sightseeing separately from cruises. | 4g | Planned |  |
 | DASH-CUS-012 | DG §Customer list | A customer can review past trips and closed requests. | 4g | Planned |  |
-| DASH-CUS-013 | DG §Customer list | A customer can manage account security. | 4a | Planned |  |
+| DASH-CUS-013 | DG §Customer list | A customer can manage account security. | 4a | Verified | Batch 4a (17 Oct 2026): /account/security/: change email (double confirmation), change password (current required), two-step on/off, sign out everywhere; e2e auth.spec |
 | DASH-CUS-014 | DG §Customer ¶request | A request captures routes or flexible preferences, dates or windows, latest finish date, duration, guests, cabin arrangements and optional budget. | 4e | Planned |  |
 | DASH-CUS-015 | DG §Customer ¶request | Request copy states it is a request for offers: no bid or lowest market price is guaranteed. | 4e | Planned |  |
 | DASH-CUS-016 | DG §Customer ¶deck | A signed-in customer can use the cabin-deck selector to choose a deck and cabin type. | 5 | Planned |  |
@@ -526,10 +526,10 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
 | SEC-001 | CLAUDE.md §5 | Every table has row-level security enabled with explicit policies (CI test fails on a table without RLS). | 3 | Verified | Batch 3 (17 Oct 2026): 010_rls_coverage.sql (RLS on and a policy on every table); 030_isolation.sql (23 checks); 060_privileges.sql; tests/db-api/rest.test.ts through PostgREST and Auth; staging: grant diff empty, anonymous API refused on private tables (ADR-061) |
-| SEC-002 | CLAUDE.md §5 | Every dashboard action is authorised server-side against the caller's role and ownership. | 4a | Planned |  |
+| SEC-002 | CLAUDE.md §5 | Every dashboard action is authorised server-side against the caller's role and ownership. | 4a | Verified | Batch 4a (17 Oct 2026): guards in every dashboard page and action; ESLint local/server-action-guard; e2e 11 cross-role 403 checks |
 | SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; gitleaks 'Secret scan'; e2e 'no secret appears in client JavaScript' |
 | SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Verified | Batch 3 (17 Oct 2026): src/server/validation (zod, mirrors DB checks); parseInput/withInput; validation.test.ts |
-| SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Planned |  |
+| SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Verified | Batch 4a (17 Oct 2026): httpOnly SameSite=Lax cookies (e2e), server-side sign-out revokes copied cookies (e2e), cross-origin sign-out 403, safe return paths (unit), sign-in without JS (e2e) |
 | SEC-006 | ARCH §Security | Public forms and auth endpoints are rate-limited and protected from bots. | 8 | Planned |  |
 | SEC-007 | DG §Operator ¶integration | Feed fetching blocks private network addresses and XML parsing rejects external entities. | 4c | Planned |  |
 | SEC-008 | DG §Operator ¶integration | API credentials are stored hashed and can be rotated without downtime. | 4c | Planned |  |
@@ -538,8 +538,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
 | SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Planned |  |
-| SEC-014 | Faris 17 Oct 2026 (ADR-063); PROPOSED-001 | People can confirm their email, reset a forgotten password and change their email, through single-use links that expire. | 4a | Planned |  |
-| SEC-015 | Faris 17 Oct 2026 (ADR-064) | Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session. | 4a | Planned |  |
+| SEC-014 | Faris 17 Oct 2026 (ADR-063); PROPOSED-001 | People can confirm their email, reset a forgotten password and change their email, through single-use links that expire. | 4a | Verified | Batch 4a (17 Oct 2026): e2e sign-up confirmation, reset link, used link refused, reset needs a fresh link, email change confirmed from both addresses; branded templates |
+| SEC-015 | Faris 17 Oct 2026 (ADR-064) | Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session. | 4a | Verified | Batch 4a (17 Oct 2026): app.is_admin() requires aal2 (DB 030/070, API test); app sends admins to set-up or code screen (e2e); admins can't turn it off (e2e) |
 
 ## SEO
 
@@ -599,7 +599,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | DATA-001 | CLAUDE.md §6 | Money is stored as integer minor units with an ISO currency code. | 3 | Verified | Batch 3 (17 Oct 2026): supabase/tests/020_data_formats.sql (no float money; money-like columns bigint); currency_code domain; validation.test.ts 'money' |
 | DATA-002 | CLAUDE.md §6 | Timestamps are stored in UTC. | 3 | Verified | Batch 3 (17 Oct 2026): 020_data_formats.sql 'every timestamp has a time zone' |
-| DATA-003 | CLAUDE.md §6 | Operational dashboards display dates and times in Africa/Cairo. | 4a | Planned |  |
+| DATA-003 | CLAUDE.md §6 | Operational dashboards display dates and times in Africa/Cairo. | 4a | Verified | Batch 4a (17 Oct 2026): formatCairo + CairoTime; unit cairo-time.test (winter, summer, 29 Oct 2026 repeated hour); e2e 'dashboard shows Cairo time' |
 | DATA-004 | CLAUDE.md §6 | Public pages display dates in the visitor's locale. | 5 | Planned |  |
 | DATA-005 | CLAUDE.md §6 | Prices, vessel facts, itineraries, amenities, reviews and copy live in the database or CMS, not in components. | 3 | Verified | Batch 3 (17 Oct 2026): vessels, vessel_translations, destinations, media in Supabase; article, faq, vesselTypeProfile, priceFactorSet in Sanity (studio/schemaTypes); components take data by props (Batch 2) |
 | DATA-006 | CLAUDE.md §6 | Seeded records carry a visible 'Sample data' flag wherever they render. | 3 | Verified | Batch 3 (17 Oct 2026): is_sample on vessels/destinations/media, Sanity 'sample' field (default on); src/lib/data/sample.ts + data-helpers.test.ts |
@@ -664,9 +664,9 @@ These are gaps: things a marketplace like this normally needs but no source desc
 
 | ID           | Proposal                                                                                                                                | Suggested batch | Status                                                                                                                      |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| PROPOSED-001 | Password reset, email verification and change-email flows                                                                               | 4a              | Approved 17 Oct 2026 (ADR-063) |
-| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model                                             | 4a              | Approved 17 Oct 2026 (ADR-063) |
-| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management                                      | 4a              | Approved 17 Oct 2026 (ADR-063) |
+| PROPOSED-001 | Password reset, email verification and change-email flows                                                                               | 4a              | Approved 17 Oct 2026 (ADR-063)                                                                                              |
+| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model                                             | 4a              | Approved 17 Oct 2026 (ADR-063)                                                                                              |
+| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management                                      | 4a              | Approved 17 Oct 2026 (ADR-063)                                                                                              |
 | PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting                                            | 4f              | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030                                                                    |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8               | Awaiting decision                                                                                                           |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating)                                                    | 12              | Awaiting decision                                                                                                           |

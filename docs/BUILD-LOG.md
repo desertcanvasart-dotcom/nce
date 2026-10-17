@@ -334,3 +334,36 @@
 - **Verified:** both workspace URLs redirect into Sanity's dashboard for sign-in; `pnpm studio:check` validates both workspaces (0 errors, 0 warnings).
 - **Still open:** GitHub has no secrets yet (0 repository, 0 `staging` environment). `deploy-data.yml` keeps failing on `main` until `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD` and `SANITY_DEPLOY_TOKEN` are added. Staging and the Studio are already up to date.
 
+## 17 Oct 2026 · Batch 4a · Accounts and roles
+
+**Built** (branch `batch-04a-accounts`):
+- **Account pages** in EN/ES/JA: sign up, sign in, email confirmation, password reset, two-step code, account security (change email, change password, two-step on/off, sign out everywhere). All forms are server actions and work without JavaScript; `noindex`, outside the sitemap.
+- **Sessions:** Supabase Auth through `@supabase/ssr`; httpOnly, SameSite=Lax (Secure on https) cookies; the proxy refreshes sessions only for visitors with a session cookie; sign-out is a same-site POST that ends the session on the server.
+- **Authorisation:** `requireUser`, `requireAdmin(subRoles)`, `requireOrgRole(org, roles)` in every dashboard page and action; an ESLint rule fails any server action without a guard; database RLS stays the second wall.
+- **Admins:** two-step sign-in required in the app and in the database (`app.is_admin()` needs aal2); only super admins change roles (ADR-064); `scripts/grant-role.ts` for staging, audited.
+- **Dashboard shell** (`/dashboard/`, English): landing per role, workspace switcher, sidebars named from the guide with the batch that builds each section, company status pages (applied, paused, rejected), real HTTP 403 pages for another role's workspace, Cairo time.
+- **Auth settings as code** (`supabase/config.toml` + `[remotes.staging]`): password rules, email confirmation, branded email templates, redirect URLs; pushed to staging by `deploy-data.yml`.
+- **Layout split:** public pages in a `(site)` route group; dashboards have their own frame (ADR-069). NavBar gained an optional quiet "Sign in" link.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 118 unit tests (workspaces, return paths, Cairo time incl. the 29 Oct 2026 repeated hour, authenticator codes against the RFC 6238 vectors).
+- **Database:** 7 pgTAP files pass (new: admin without two-step gets nothing; only super admins change roles); 7 API tests (an admin password alone sees only public data; after two-step, everything).
+- **End-to-end** against local Supabase: 51 account and dashboard tests, stable twice in a row at four workers. Full suite: 80 pass with production settings (97 dev-only skip) and 176 with dev routes (1 skipped by design).
+- **Accessibility:** axe finds no serious or critical issues on account pages (EN and ES) and dashboards, in Day and Night.
+- **Screenshots:** 114 in `docs/screenshots/batch-04a/` (account pages, every workspace, 403, company status, two-step), at 375, 768 and 1440 px in Day and Night. I checked phone and desktop views and fixed what I found: the phone sidebar now folds into a Sections menu; "sign-in" no longer breaks across lines; the 403 page has the wordmark.
+- **Lighthouse (local, simulated):** accessibility 1.00, CLS 0, TBT ≤ 54 ms on all five URLs; sign-in LCP 2.72 s, in line with the unchanged ES/JA home pages on this busy machine (warning-level locally by design, ADR-041; strict on Railway). Largest account route ships 160 KB of JS (budget 200). Client bundle secret scan clean.
+
+**Problems found and fixed:**
+- A form action that redirected to `/dashboard/`, which redirected again, left the browser on `/dashboard/`: actions now send people straight to their workspace.
+- The per-request session cache kept the pre-sign-in session for the page rendered after an action: it is now keyed on the session cookies.
+- Layout-level redirects lost the page someone asked for: layouts only refuse; pages redirect with their own address.
+- The first email-change link showed "changed" although only one address was confirmed: now "one address confirmed".
+- Test flakiness came from the machine (load 18–28 with Spotlight indexing) and two test-helper races; the fixes are in the helpers and in serial runs for shared admin accounts, not in retries.
+
+**Known issues:**
+- The public header always says "Sign in", even when signed in (ADR-069; Batch 8).
+- Staging sends account email through Supabase's built-in sender (a few per hour) until Resend is set up (ADR-065).
+- The Auth settings reached staging before this branch was merged (ADR-069); harmless, recorded.
+
+**Next:** Faris reviews and approves PR; after merge, Faris signs up on staging and I make that account super admin (CONTENT-NEEDED #34). Then the Batch 4b brief.
+
