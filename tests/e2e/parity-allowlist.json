@@ -1,0 +1,20 @@
+{
+  "_about": "Components whose build intentionally differs from their preview.html (ENG-009). Each reason points to a decision. A component over the 1% threshold that is not listed here fails the test.",
+  "Badge": "Preview label 'Free cancellation' replaced with 'Confirmed' (no invented policy claim, ADR-007).",
+  "Button": "Link label 'Browse 48 cruises' became 'Browse cruises' (no invented count).",
+  "TextField": "Hint 'We reply within one working day' replaced (no invented commitment).",
+  "VesselArt": "Felucca variant removed (ADR-008): three vessels instead of four.",
+  "Scene": "Day scene shows no boat (the preview's felucca is removed, ADR-008).",
+  "NavBar": "Silo navigation, Nilecruz wordmark, Day/Night control (ADR-022, ADR-037, Q8).",
+  "Hero": "Different nav links and search data in the slot; Nilecruz wordmark (ADR-022, ADR-037).",
+  "CruiseCard": "Nilecruz score instead of stars on two cards, information-only third card, card links (ADR-009, ADR-019).",
+  "ExperienceCard": "No felucca default in the second card (ADR-008).",
+  "ItineraryTimeline": "Last stop text no longer mentions feluccas (ADR-008).",
+  "Gallery": "Second frame has no felucca (ADR-008).",
+  "CruiseSearch": "Children hint and guest model changed for per-child ages (ADR-012/018).",
+  "CabinPicker": "Deck names follow the dashboard guide (Lower deck); size shown as m² number.",
+  "BookingSummary": "Rebuilt around real data: gratuity paid on board, no flights or invented fees (ADR-007/010/011/017).",
+  "VesselTypeCard": "Sample-data flag shown on each card (DATA-006).",
+  "VesselCompare": "Sample-data flag and 'Compare all 3' label.",
+  "PriceAnatomy": "Last factor is 'Transfers' (flights are not part of a cruise price, ADR-011); lining figures (BRAND-024); sample flag."
+}

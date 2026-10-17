@@ -55,9 +55,12 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - name: End-to-end, production settings
         run: pnpm test:e2e
-      - name: End-to-end, 500 page (dev routes on)
-        run: pnpm test:e2e -g "500 page"
+      - name: End-to-end with dev routes (500 page, component gallery, visual parity)
+        run: pnpm test:e2e
         env: { ENABLE_DEV_ROUTES: "true" }
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: { name: visual-parity, path: docs/screenshots/batch-02/parity, retention-days: 14 }
       - uses: actions/upload-artifact@v7
         if: failure()
         with: { name: playwright-report, path: playwright-report, retention-days: 7 }
