@@ -383,3 +383,51 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Consequence:**
   - The strict gate passes on all four pages. The thinnest margin is `/terms/` at 2.42 s in one run.
   - Pages are served by `next start` with no CDN in front. Before launch (Batch 11), a CDN for static HTML should be evaluated for visitors far from Europe (Japan, the Americas).
+
+---
+
+## Batch 2, 17 Oct 2026
+
+### ADR-043 Components take money in minor units (Accepted)
+- **Context:** the design system passes prices as plain numbers. CLAUDE.md §6 stores money as integer minor units with a currency.
+- **Decision:** every price prop is `{ amount, currency }` in minor units. Formatting is one tested helper (`formatMoney`) that labels currencies unambiguously (US$, €, E£) and follows locale number rules.
+- **Consequence:** pages pass database values straight through, with no float conversions.
+
+### ADR-044 Every component label is a translatable message (Accepted)
+- **Decision:** all component text (about 120 labels) lives under `ds.*` in `messages/{en,es,ja}.json`. ES and JA are my drafts, marked for translator review (CONTENT-NEEDED #28).
+
+### ADR-045 How visual parity is measured (Accepted)
+- **Decision:**
+  - Each component's parity story is rendered in a bare dev-only frame (`/dev-parity/<name>/`) with the same padding as its `preview.html`.
+  - Both are screenshotted at 1440 px in Day and Night with reduced motion, and diffed with pixelmatch.
+  - More than 1% different pixels fails unless the component is listed, with a reason, in `tests/e2e/parity-allowlist.json`.
+  - Results are in `docs/screenshots/batch-02/parity/`.
+- **Result:**
+  - 11 components are under 1% in both themes.
+  - The others differ only by recorded decisions. I checked diff images to confirm this, for example CruiseCard (score instead of stars, information-only card).
+
+### ADR-046 Buttons wrap long labels (Accepted; design-system difference)
+- **Context:** the design system fixes button height and forbids wrapping, so a Spanish label overflowed a 375 px phone (caught by the new no-sideways-scroll test).
+- **Decision:** heights become minimums and labels may wrap (I18N-007).
+
+### ADR-047 Phone-width fixes beyond the design system (Accepted)
+- **Hero:** under 720 px the scrim extends behind the copy, because the scene crops so the boat sits behind the text (BRAND-020).
+- **CruiseSearch:** one column under 480 px, so values are not cut off.
+- **Headings:** wrap long single words (global `overflow-wrap`).
+
+### ADR-048 Reduced motion also zeroes animation and transition delays (Accepted)
+- **Context:** the global kill-switch shortened animations but left staggered delays (up to 3 s), so scenes stayed "running".
+- **Decision:** add `animation-delay: 0s` and `transition-delay: 0s` under `prefers-reduced-motion`. The e2e test asserts no running animations.
+
+### ADR-049 `upgrade-insecure-requests` only on HTTPS sites (Accepted)
+- **Context:** on plain-HTTP localhost it sent the browser to `https://localhost`.
+- **Decision:** emitted only when `NEXT_PUBLIC_SITE_URL` is HTTPS (or a bare domain, which means HTTPS), as on Railway. A test asserts it is absent on the HTTP test server.
+
+### ADR-050 Lint rules refined against false positives (Accepted)
+- **Stylelint:**
+  - `:global()` is allowed (CSS Modules).
+  - Icon sizes (`font-size` on SVG/icon selectors) are not text sizes.
+  - Zero-blur ring and hairline `box-shadow`s are allowed (not elevation shadows).
+  - The ordering-only `no-descending-specificity` rule is off.
+- **Copy lint:** ignores the `>` of arrow functions.
+- **Unchanged:** every real violation is still an error. The rule caught real issues this batch (two raw 4 px gaps and a non-token shadow).

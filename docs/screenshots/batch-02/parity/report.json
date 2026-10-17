@@ -1,0 +1,90 @@
+{
+  "CruiseCard": {
+    "light": 4.55,
+    "dark": 4.48
+  },
+  "Scene": {
+    "light": 12.44,
+    "dark": 11.23
+  },
+  "VesselTypeCard": {
+    "light": 7.38,
+    "dark": 7.36
+  },
+  "VesselCompare": {
+    "light": 0.54,
+    "dark": 0.71
+  },
+  "PriceAnatomy": {
+    "light": 0.27,
+    "dark": 0.43
+  },
+  "AmenityGrid": {
+    "light": 0.09,
+    "dark": 0.08
+  },
+  "ExperienceCard": {
+    "light": 1.36,
+    "dark": 1.33
+  },
+  "ItineraryTimeline": {
+    "light": 0.06,
+    "dark": 0.06
+  },
+  "Gallery": {
+    "light": 4.31,
+    "dark": 3.85
+  },
+  "CruiseSearch": {
+    "light": 3.82,
+    "dark": 3.82
+  },
+  "CabinPicker": {
+    "light": 0.27,
+    "dark": 0.27
+  },
+  "BookingSummary": {
+    "light": 4.75,
+    "dark": 4.21
+  },
+  "NavBar": {
+    "light": 7.12,
+    "dark": 7.08
+  },
+  "Hero": {
+    "light": 16.13,
+    "dark": 14.46
+  },
+  "SectionHeading": {
+    "light": 0.09,
+    "dark": 0.09
+  },
+  "VesselArt": {
+    "light": 44.65,
+    "dark": 44.63
+  },
+  "Button": {
+    "light": 0.47,
+    "dark": 0.47
+  },
+  "Badge": {
+    "light": 0.71,
+    "dark": 2.6
+  },
+  "Rating": {
+    "light": 0.4,
+    "dark": 0.39
+  },
+  "Stepper": {
+    "light": 0.27,
+    "dark": 0.26
+  },
+  "TextField": {
+    "light": 0.2,
+    "dark": 0.2
+  },
+  "Icon": {
+    "light": 0.07,
+    "dark": 0.07
+  }
+}
