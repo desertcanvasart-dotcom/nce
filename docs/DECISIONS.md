@@ -503,3 +503,22 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Decision:** the Studio has two workspaces, **Production** (`/production`, the live site's content) and **Development** (`/development`, drafts and tests). Editors switch at the top left. The Studio and both schemas were first deployed from this Mac with `SANITY_DEPLOY_TOKEN` (17 Oct 2026); later deploys run from `deploy-data.yml` once the GitHub secret exists. The Studio's app ID is pinned in `studio/sanity.cli.ts`.
 - **Consequence:** https://nilecruz.sanity.studio opens through Sanity's dashboard and needs a Sanity sign-in.
 
+### ADR-063 Account proposals approved (Accepted; Faris 17 Oct 2026)
+- **Decision:** PROPOSED-001 (email confirmation, password reset, change of email), PROPOSED-002 (operator team roles owner, reservations, finance, viewer) and PROPOSED-003 (admin sub-roles super, catalogue, finance, content) are approved for Batch 4a. Ledger rows SEC-014, DASH-ROLE-007 and DASH-ROLE-008.
+
+### ADR-064 Two-step sign-in required for admins (Accepted; Faris 17 Oct 2026)
+- **Decision:** admins must enrol an authenticator app and pass a code at sign-in. Two-step is optional for operators, partners and customers.
+- **Enforced twice:** the app sends an admin without a two-step session to set-up or to the code screen; in the database `app.is_admin()` is true only when the session's assurance level is `aal2`, so an admin password alone grants no admin rows (SEC-015).
+- **Consequence:** server jobs using the secret key are unaffected; local test admins have a seeded authenticator secret.
+
+### ADR-065 Sign-in method and account email (Accepted; Faris 17 Oct 2026)
+- **Decision:** email and password now; Google sign-in later (needs a Google Cloud OAuth client from Faris). Staging sends account email through Supabase's built-in sender, which allows only a few messages an hour; Resend from a verified `nilecruz.com` address replaces it before launch (CONTENT-NEEDED #18, Q27).
+- **Consequence:** heavy sign-up testing on staging may hit the email limit; local and CI use the local mail catcher.
+
+### ADR-066 Staging admin and Auth settings as code (Accepted; Faris 17 Oct 2026)
+- **Decision:** after Faris signs up on staging, `islamjp69@gmail.com` becomes super admin through `scripts/grant-role.ts` (audited). No other admins for now. Auth settings (password rules, email confirmation, redirect URLs, two-step, email templates) live in `supabase/config.toml` with a `[remotes.staging]` block, and the deploy workflow pushes them with `supabase config push`.
+
+### ADR-067 403 pages through `forbidden()` (Accepted)
+- **Context:** a request for another role's workspace must return HTTP 403 with a page, never the content. Next.js 16 provides `forbidden()` behind the experimental `authInterrupts` flag.
+- **Decision:** enable `experimental.authInterrupts` and use `forbidden()` with a `forbidden.tsx` page. If the flag changes in a later Next.js release, the e2e test that asserts the 403 status fails first.
+

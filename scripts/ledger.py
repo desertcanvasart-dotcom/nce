@@ -19,6 +19,8 @@ ROLE = [
  ("§Account roles", "Customer can read and write only their own requests, offers, reservations, payments and tours.", "4a"),
  ("§Account roles", "Travel partner can see only approved trade availability, its company's bookings and its team permissions.", "4a"),
  ("§Intro ¶2", "The dashboard's navigation and content change according to the signed-in account type.", "4a"),
+ ("§Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-002", "Operator teams have owner, reservations, finance and viewer roles, and each role's permissions are enforced on the server and in RLS.", "4a"),
+ ("§Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-003", "Admins have a sub-role (super, catalogue, finance, content) that limits which admin actions they can take; only super admins change roles.", "4a"),
 ]
 ADM = [
  ("§Admin/Overview", "Overview shows a counter of operator applications awaiting approval.", "4b"),
@@ -376,6 +378,8 @@ X = {
  ("CLAUDE.md §5", "A security review before launch has no open high findings.", "11"),
  ("ARCH §Security", "Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set.", "1"),
  ("ARCH §Data; ADR-052", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "4e"),
+ ("Faris 17 Oct 2026 (ADR-063); PROPOSED-001", "People can confirm their email, reset a forgotten password and change their email, through single-use links that expire.", "4a"),
+ ("Faris 17 Oct 2026 (ADR-064)", "Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session.", "4a"),
 ],
 "SEO": [
  ("silo.xlsx Read me C10", "URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect.", "1"),

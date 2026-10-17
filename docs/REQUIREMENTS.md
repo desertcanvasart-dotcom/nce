@@ -10,7 +10,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | Source | Rows |
 |---|---:|
-| Dashboard guide (ROLE) | 6 |
+| Dashboard guide (ROLE) | 8 |
 | Dashboard guide (ADM) | 107 |
 | Dashboard guide (OPR) | 27 |
 | Dashboard guide (CUS) | 17 |
@@ -25,12 +25,12 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ENG | 19 |
 | A11Y | 11 |
 | PERF | 10 |
-| SEC | 13 |
+| SEC | 15 |
 | SEO | 30 |
 | I18N | 12 |
 | DATA | 45 |
 | EXP | 10 |
-| **Total** | **522** |
+| **Total** | **526** |
 
 ## Dashboard guide (ROLE)
 
@@ -42,6 +42,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ROLE-004 | DG §Account roles | Customer can read and write only their own requests, offers, reservations, payments and tours. | 4a | Planned |  |
 | DASH-ROLE-005 | DG §Account roles | Travel partner can see only approved trade availability, its company's bookings and its team permissions. | 4a | Planned |  |
 | DASH-ROLE-006 | DG §Intro ¶2 | The dashboard's navigation and content change according to the signed-in account type. | 4a | Planned |  |
+| DASH-ROLE-007 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-002 | Operator teams have owner, reservations, finance and viewer roles, and each role's permissions are enforced on the server and in RLS. | 4a | Planned |  |
+| DASH-ROLE-008 | DG §Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-003 | Admins have a sub-role (super, catalogue, finance, content) that limits which admin actions they can take; only super admins change roles. | 4a | Planned |  |
 
 ## Dashboard guide (ADM)
 
@@ -536,6 +538,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
 | SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Planned |  |
+| SEC-014 | Faris 17 Oct 2026 (ADR-063); PROPOSED-001 | People can confirm their email, reset a forgotten password and change their email, through single-use links that expire. | 4a | Planned |  |
+| SEC-015 | Faris 17 Oct 2026 (ADR-064) | Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session. | 4a | Planned |  |
 
 ## SEO
 
@@ -660,9 +664,9 @@ These are gaps: things a marketplace like this normally needs but no source desc
 
 | ID           | Proposal                                                                                                                                | Suggested batch | Status                                                                                                                      |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| PROPOSED-001 | Password reset, email verification and change-email flows                                                                               | 4a              | Awaiting decision                                                                                                           |
-| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model                                             | 4a              | Awaiting decision                                                                                                           |
-| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management                                      | 4a              | Awaiting decision                                                                                                           |
+| PROPOSED-001 | Password reset, email verification and change-email flows                                                                               | 4a              | Approved 17 Oct 2026 (ADR-063) |
+| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model                                             | 4a              | Approved 17 Oct 2026 (ADR-063) |
+| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management                                      | 4a              | Approved 17 Oct 2026 (ADR-063) |
 | PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting                                            | 4f              | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030                                                                    |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8               | Awaiting decision                                                                                                           |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating)                                                    | 12              | Awaiting decision                                                                                                           |
@@ -674,6 +678,6 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account                                                                           | 5               | Awaiting decision                                                                                                           |
 | PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator)                                                                   | 4f              | Approved 17 Oct 2026 (ADR-026): now DATA-037, DATA-038                                                                      |
 | PROPOSED-014 | Consent-based analytics and conversion tracking                                                                                         | 11              | Awaiting decision                                                                                                           |
-| PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema)                                                | 3               | Approved 17 Oct 2026 (ADR-053) |
+| PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema)                                                | 3               | Approved 17 Oct 2026 (ADR-053)                                                                                              |
 | PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking)                                                                        | 4e              | Awaiting decision                                                                                                           |
 | PROPOSED-017 | Customer support inbox / messaging between customer, operator and admin about a booking                                                 | 4e              | Awaiting decision                                                                                                           |
