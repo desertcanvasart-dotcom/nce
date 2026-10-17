@@ -1,8 +1,14 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { adminDb, LOCAL, newUser, ORG, signIn, signInAdmin } from "../support/local-auth";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
 test.skip(!LOCAL, "needs the local Supabase stack: pnpm with-local-db pnpm test:e2e");
+
+const sections = async (page: Page) =>
+  page
+    .getByRole("navigation", { name: /sections/ })
+    .getByRole("link")
+    .allTextContents();
 
 const landings: [string, RegExp, string][] = [
   ["customer@example.test", /\/dashboard\/journey\/$/, "My journey"],
@@ -42,12 +48,6 @@ test.describe("each role lands in its own workspace (DASH-ROLE-001)", () => {
 });
 
 test.describe("navigation changes with role (DASH-ROLE-006, 007, 008)", () => {
-  const sections = async (page: import("@playwright/test").Page) =>
-    page
-      .getByRole("navigation", { name: /sections/ })
-      .getByRole("link")
-      .allTextContents();
-
   test("operator owner sees every operator section; a viewer sees fewer", async ({ page }) => {
     await signIn(page, "owner@operator-a.test");
     expect(await sections(page)).toEqual([
@@ -75,14 +75,6 @@ test.describe("navigation changes with role (DASH-ROLE-006, 007, 008)", () => {
   test("partner finance sees payments but not search", async ({ page }) => {
     await signIn(page, "finance@partner.test");
     expect(await sections(page)).toEqual(["Overview", "Company bookings", "Payments"]);
-  });
-
-  test("a catalogue admin sees catalogue sections, not finance", async ({ page }) => {
-    await signInAdmin(page, "catalogue@nilecruz.test");
-    await expect(page).toHaveURL(/\/dashboard\/admin\/$/);
-    const s = await sections(page);
-    expect(s).toContain("Catalogue");
-    expect(s).not.toContain("Deposits and commission");
   });
 
   test("a section that a later batch builds says so", async ({ page }) => {
@@ -119,12 +111,6 @@ test.describe("cross-role access is refused with 403 (SEC-002, DASH-ROLE-002–0
     });
   }
 
-  test("a catalogue admin is refused the finance section", async ({ page }) => {
-    await signInAdmin(page, "catalogue@nilecruz.test");
-    const res = await page.goto("/dashboard/admin/finance/");
-    expect(res?.status()).toBe(403);
-  });
-
   test("unknown sections and malformed company ids are 404", async ({ page }) => {
     await signIn(page, "owner@operator-a.test");
     await page.waitForURL(/\/dashboard\//);
@@ -149,6 +135,24 @@ test.describe("cross-role access is refused with 403 (SEC-002, DASH-ROLE-002–0
 });
 
 test.describe("admins need two-step sign-in (SEC-015, ADR-064)", () => {
+  // Completing two-step ends the same person's other password-only sessions (Supabase Auth), so tests that
+  // share a seeded admin account run one after another rather than knocking each other out.
+  test.describe.configure({ mode: "serial" });
+
+  test("a catalogue admin sees catalogue sections, not finance", async ({ page }) => {
+    await signInAdmin(page, "catalogue@nilecruz.test");
+    await expect(page).toHaveURL(/\/dashboard\/admin\/$/);
+    const s = await sections(page);
+    expect(s).toContain("Catalogue");
+    expect(s).not.toContain("Deposits and commission");
+  });
+
+  test("a catalogue admin is refused the finance section", async ({ page }) => {
+    await signInAdmin(page, "catalogue@nilecruz.test");
+    const res = await page.goto("/dashboard/admin/finance/");
+    expect(res?.status()).toBe(403);
+  });
+
   test("the seeded admin is asked for a code and then reaches the admin workspace", async ({ page }) => {
     await signInAdmin(page);
     await expect(page).toHaveURL(/\/dashboard\/admin\/$/);

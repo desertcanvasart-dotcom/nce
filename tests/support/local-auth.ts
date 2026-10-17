@@ -38,8 +38,11 @@ export async function latestLink(to: string, after = 0): Promise<string> {
   const base = process.env.MAILPIT_URL!;
   for (let i = 0; i < 40; i++) {
     const res = await fetch(`${base}/api/v1/search?query=${encodeURIComponent(`to:"${to}"`)}`);
-    const list = (await res.json()) as { messages: { ID: string; Created: string }[] };
-    const msg = list.messages?.find((m) => Date.parse(m.Created) >= after);
+    const list = (await res.json()) as { messages: { ID: string; Created: string; To: { Address: string }[] }[] };
+    // Mailpit's search matches substrings ("a@x" also finds "new.a@x"), so check the exact recipient.
+    const msg = list.messages?.find(
+      (m) => Date.parse(m.Created) >= after && m.To.some((t) => t.Address.toLowerCase() === to.toLowerCase()),
+    );
     if (msg) {
       const full = (await (await fetch(`${base}/api/v1/message/${msg.ID}`)).json()) as { HTML: string };
       const href = /href="([^"]*token_hash=[^"]+)"/.exec(full.HTML)?.[1];
