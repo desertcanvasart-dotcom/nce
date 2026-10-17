@@ -290,7 +290,7 @@ BRAND = [
  ("BRAND-BOOK §Content ¶4", "Prices are formatted as US$1,240, per person, with what is included stated.", "2"),
  ("BRAND-BOOK §Content ¶4", "Dates are formatted as 12 Feb 2027 in English.", "2"),
  ("BRAND-BOOK §Content ¶4", "Durations are stated in nights ('4 nights'), never days.", "2"),
- ("BRAND-BOOK §Content ¶5", "Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'; a felucca is never presented as a cruise vessel.", "3"),
+ ("BRAND-BOOK §Content ¶5", "Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'.", "3"),
  ("BRAND-BOOK §Content ¶4", "Site names use the common English forms (Karnak, Esna, El Kab, Edfu, Kom Ombo, Philae, Gebel Silsila).", "3"),
  ("BRAND-BOOK §Content ¶1", "Every selling surface carries at least one honest, explanatory fact (editorial check per template).", "11"),
  ("BRAND-BOOK §Lines", "The ornament appears only under section titles.", "2"),
@@ -309,6 +309,8 @@ BRAND = [
  ("BRAND-BOOK §Type", "Prices use lining figures; totals and steppers use tabular figures.", "2"),
  ("NavBar/README", "Main navigation has at most seven links and 'Why prices differ' is always visible.", "1"),
  ("Rating/README; CruiseCard/README", "Ratings render only when backed by real reviews, and cards always show the maximum guest count.", "5"),
+ ("Faris 17 Oct 2026 (ADR-008)", "The felucca does not appear anywhere on the site: no pages, links, VesselArt/Scene felucca variant, search option or copy.", "2"),
+ ("Faris 17 Oct 2026 (ADR-009); Q6", "CruiseCard shows the published Nilecruz evaluation as 'NN/100 · Nilecruz evaluation'; stars appear only for verified guest reviews; external ratings appear only on the vessel page with source and date.", "5"),
 ]
 for n, (s, r, b) in enumerate(BRAND, 1): add(f"BRAND-{n:03d}", s, r, b)
 
@@ -414,7 +416,7 @@ X = {
  ("silo.md §Languages", "Translation is plumbed in the order pillars/hubs, money pages, supporting articles.", "10"),
  ("CLAUDE.md §6", "UI strings live in next-intl message files, none hard-coded in components.", "1"),
  ("BRAND-BOOK §Multilingual", "No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish.", "2"),
- ("CLAUDE.md §6; BRAND §Multilingual", "Japanese text is never letter-spaced (see Q13).", "2"),
+ ("Faris 17 Oct 2026 (ADR-014); bundle.css :lang(ja)", "Japanese keeps the design system tracking: 0.08em on eyebrows, section titles and badges under :lang(ja); no other Japanese letter-spacing.", "2"),
  ("BRAND-BOOK §Multilingual", "Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks.", "1"),
  ("CLAUDE.md §6", "Numbers, dates and money format per locale while keeping brand formats in English.", "2"),
  ("CLAUDE.md §6", "Translatable content (CMS and database) is stored per locale with a fallback rule.", "3"),
@@ -435,6 +437,13 @@ X = {
  ("DS CruiseSearch", "CruiseSearch routes, sailing days and match counts come from real schedules and departures.", "5"),
  ("CLAUDE.md §5", "Deterministic test fixtures seed every role and state for e2e tests.", "3"),
  ("ARCH §Migration", "Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1).", "3"),
+ ("Faris 17 Oct 2026 (ADR-010)", "Each vessel has an obligatory crew gratuity of at least US$5 per person per night, set per vessel; lower values are rejected.", "4c"),
+ ("Faris 17 Oct 2026 (ADR-010)", "Gratuities are always shown as their own obligatory line, never inside the cruise fare, wherever a cruise total appears (offers, BookingSummary, bookings).", "8"),
+ ("Faris 17 Oct 2026 (ADR-011)", "The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders.", "8"),
+ ("Faris 17 Oct 2026 (ADR-011)", "A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/.", "5"),
+ ("Faris 17 Oct 2026 (ADR-012)", "Child pricing by age: under 3 free, 3–5.99 pays 25%, 6–11.99 pays 50%, 12 and over pays the full rate (unit-tested at every boundary).", "4c"),
+ ("Faris 17 Oct 2026 (ADR-012)", "Search, requests, offers and bookings record each child's age so the child rule can be applied.", "4e"),
+ ("Faris 17 Oct 2026 (ADR-013); Q26", "Every imported or newly created vessel stays a private draft and cannot be published until its readiness check reports complete.", "4b"),
 ],
 }
 for p, items in X.items():
@@ -447,6 +456,12 @@ EXP = ["Live price build-up linked from every price", "Vessel cutaway: who share
        "Ambient river sound (off by default)"]
 for n, t in enumerate(EXP, 1): add(f"EXP-{n:03d}", "CLAUDE.md §7; EXPERIENCE.md", f"{t}: built to its EXPERIENCE.md spec if Faris approves it.", "9")
 
+DEFERRED = {
+ "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
+ "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
+ "PAGE-045": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
+ "PAGE-097": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008); confirm in Q46",
+}
 # ---------------------------------------------------------------- outputs
 ids = [r[0] for r in R]
 assert len(ids) == len(set(ids)), "duplicate id"
@@ -471,17 +486,18 @@ with open(f"{out}/REQUIREMENTS.md", "w") as f:
     for g, rows in groups.items():
         f.write(f"## {g}\n\n| ID | Source | Requirement | Batch | Status | Evidence |\n|---|---|---|---|---|---|\n")
         for i, s, req, b in rows:
-            st = "Planned" if b != "0" else "Built"
+            st = ("Deferred: " + DEFERRED[i]) if i in DEFERRED else ("Planned" if b != "0" else "Built")
             f.write(f"| {i} | {s} | {req.replace('|', '/')} | {b} | {st} | |\n")
         f.write("\n")
     f.write(open(f"{out}/../scripts/proposed.md").read())
 
 with open(f"{out}/_coverage.md", "w") as f:
     c = collections.Counter(r[3] for r in R)
-    f.write("| Batch | IDs |\n|---|---:|\n")
-    for b in BATCHES: f.write(f"| {b} | {c[b]} |\n")
-    f.write(f"| **Sum** | **{sum(c.values())}** |\n| **Ledger total** | **{len(R)}** |\n")
-    f.write(f"| **Distinct IDs** | **{len(set(ids))}** |\n")
+    d = collections.Counter(r[3] for r in R if r[0] in DEFERRED)
+    f.write("| Batch | IDs | of which Deferred |\n|---|---:|---:|\n")
+    for b in BATCHES: f.write(f"| {b} | {c[b]} | {d[b]} |\n")
+    f.write(f"| **Sum** | **{sum(c.values())}** | **{sum(d.values())}** |\n| **Ledger total** | **{len(R)}** | |\n")
+    f.write(f"| **Distinct IDs** | **{len(set(ids))}** | |\n")
     # per batch by prefix
     f.write("\n| Batch | Breakdown |\n|---|---|\n")
     for b in BATCHES:

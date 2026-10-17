@@ -12,7 +12,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
 | PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
 | PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
-| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Awaiting decision |
+| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012) |
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
 | PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
 | PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |

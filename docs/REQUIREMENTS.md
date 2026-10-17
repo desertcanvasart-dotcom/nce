@@ -21,16 +21,16 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PAGE | 106 |
 | COMP | 22 |
 | TOK | 12 |
-| BRAND | 26 |
+| BRAND | 28 |
 | ENG | 18 |
 | A11Y | 11 |
 | PERF | 10 |
 | SEC | 13 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 14 |
+| DATA | 21 |
 | EXP | 10 |
-| **Total** | **488** |
+| **Total** | **497** |
 
 ## Dashboard guide (ROLE)
 
@@ -318,13 +318,13 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PAGE-036 | silo.xlsx Silo map P036 | `/vessels/paddle-steamers/` (Vessel type hub, P1): H1 "The paddle steamer"; components Hero · VesselArt · VesselCompare · AmenityGrid · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "nile paddle steamer". | 6 | Planned | |
 | PAGE-037 | silo.xlsx Silo map P037 | `/vessels/paddle-steamers/history/` (Guide article, P2): H1 "The Nile steamers of the Cook’s tour era"; components Scene · VesselArt · AmenityGrid; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "nile steamer history". | 12 | Planned | |
 | PAGE-038 | silo.xlsx Silo map P038 | `/vessels/paddle-steamers/a-day-on-board/` (Guide article, P2): H1 "A day on board a paddle steamer"; components Scene · VesselArt · AmenityGrid; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "paddle steamer cruise experience". | 12 | Planned | |
-| PAGE-039 | silo.xlsx Silo map P039 | `/vessels/felucca/` (Vessel type hub, P1): H1 "The felucca"; components Hero · VesselArt · VesselCompare · AmenityGrid · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "felucca nile". | 6 | Planned | |
-| PAGE-040 | silo.xlsx Silo map P040 | `/vessels/felucca/overnight-felucca-trips/` (Guide article, P3): H1 "Sleeping on the Nile: overnight felucca trips"; components Scene · VesselArt · AmenityGrid; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "overnight felucca trip". | 13 | Planned | |
+| PAGE-039 | silo.xlsx Silo map P039 | `/vessels/felucca/` (Vessel type hub, P1): H1 "The felucca"; components Hero · VesselArt · VesselCompare · AmenityGrid · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "felucca nile". | 6 | Deferred: Felucca removed from the site (Faris 17 Oct 2026, ADR-008) | |
+| PAGE-040 | silo.xlsx Silo map P040 | `/vessels/felucca/overnight-felucca-trips/` (Guide article, P3): H1 "Sleeping on the Nile: overnight felucca trips"; components Scene · VesselArt · AmenityGrid; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "overnight felucca trip". | 13 | Deferred: Felucca removed from the site (Faris 17 Oct 2026, ADR-008) | |
 | PAGE-041 | silo.xlsx Silo map P041 | `/vessels/compare/` (Hub, P1): H1 "Comparing Nile vessels side by side"; components VesselCompare (all-three view) · PriceAnatomy; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "dahabiya vs cruise ship". | 6 | Planned | |
 | PAGE-042 | silo.xlsx Silo map P042 | `/vessels/compare/dahabiya-vs-cruise-ship/` (Comparison, P1): H1 "Dahabiya or cruise ship?"; components VesselCompare · PriceAnatomy · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "dahabiya vs cruise ship". | 6 | Planned | |
 | PAGE-043 | silo.xlsx Silo map P043 | `/vessels/compare/dahabiya-vs-paddle-steamer/` (Comparison, P2): H1 "Dahabiya or paddle steamer?"; components VesselCompare · PriceAnatomy · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "dahabiya vs steamer". | 12 | Planned | |
 | PAGE-044 | silo.xlsx Silo map P044 | `/vessels/compare/paddle-steamer-vs-cruise-ship/` (Comparison, P2): H1 "Paddle steamer or cruise ship?"; components VesselCompare · PriceAnatomy · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "steamer vs nile cruise ship". | 12 | Planned | |
-| PAGE-045 | silo.xlsx Silo map P045 | `/vessels/compare/dahabiya-vs-felucca/` (Comparison, P3): H1 "Dahabiya or felucca?"; components VesselCompare · PriceAnatomy · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "dahabiya vs felucca". | 13 | Planned | |
+| PAGE-045 | silo.xlsx Silo map P045 | `/vessels/compare/dahabiya-vs-felucca/` (Comparison, P3): H1 "Dahabiya or felucca?"; components VesselCompare · PriceAnatomy · CruiseCard; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "dahabiya vs felucca". | 13 | Deferred: Felucca removed from the site (Faris 17 Oct 2026, ADR-008) | |
 | PAGE-046 | silo.xlsx Silo map P046 | `/vessels/cabins-explained/` (Explainer, P2): H1 "Nile cruise cabins explained"; components CabinPicker · AmenityGrid; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "nile cruise cabin types". | 12 | Planned | |
 | PAGE-047 | silo.xlsx Silo map P047 | `/vessels/amenities/` (Explainer, P2): H1 "What every icon on a Nile vessel means"; components AmenityGrid · Icon; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "nile cruise amenities". | 12 | Planned | |
 | PAGE-048 | silo.xlsx Silo map P048 | `/vessels/mooring-explained/` (Explainer, P2): H1 "Rafted or private? Where Nile boats moor"; components VesselCompare · Scene; schema Article · BreadcrumbList · FAQPage; links per row (same-silo + bridges); primary keyword "nile cruise mooring". | 12 | Planned | |
@@ -376,7 +376,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PAGE-094 | silo.xlsx Silo map P094 | `/tours-extras/abu-simbel-day-trip/` (Tour / extra, P1): H1 "Abu Simbel day trip from Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "abu simbel day trip". | 7 | Planned | |
 | PAGE-095 | silo.xlsx Silo map P095 | `/tours-extras/luxor-hot-air-balloon/` (Tour / extra, P1): H1 "Hot-air balloon over Luxor"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor hot air balloon". | 7 | Planned | |
 | PAGE-096 | silo.xlsx Silo map P096 | `/tours-extras/valley-of-the-kings-tour/` (Tour / extra, P2): H1 "Valley of the Kings with an Egyptologist"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "valley of the kings tour". | 12 | Planned | |
-| PAGE-097 | silo.xlsx Silo map P097 | `/tours-extras/felucca-sail-aswan/` (Tour / extra, P2): H1 "Sunset felucca sail in Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "felucca ride aswan". | 12 | Planned | |
+| PAGE-097 | silo.xlsx Silo map P097 | `/tours-extras/felucca-sail-aswan/` (Tour / extra, P2): H1 "Sunset felucca sail in Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "felucca ride aswan". | 12 | Deferred: Felucca removed from the site (Faris 17 Oct 2026, ADR-008); confirm in Q46 | |
 | PAGE-098 | silo.xlsx Silo map P098 | `/tours-extras/cairo-and-giza-add-on/` (Tour / extra, P2): H1 "Cairo and the Pyramids before or after your cruise"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "cairo add on nile cruise". | 12 | Planned | |
 | PAGE-099 | silo.xlsx Silo map P099 | `/tours-extras/transfers/` (Tour / extra, P1): H1 "Airport and hotel transfers"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor airport transfer". | 7 | Planned | |
 | PAGE-100 | silo.xlsx Silo map P100 | `/tours-extras/pre-and-post-cruise-hotels/` (Tour / extra, P3): H1 "Hotels before and after your cruise"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor hotels before cruise". | 13 | Planned | |
@@ -442,7 +442,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-005 | BRAND-BOOK §Content ¶4 | Prices are formatted as US$1,240, per person, with what is included stated. | 2 | Planned | |
 | BRAND-006 | BRAND-BOOK §Content ¶4 | Dates are formatted as 12 Feb 2027 in English. | 2 | Planned | |
 | BRAND-007 | BRAND-BOOK §Content ¶4 | Durations are stated in nights ('4 nights'), never days. | 2 | Planned | |
-| BRAND-008 | BRAND-BOOK §Content ¶5 | Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'; a felucca is never presented as a cruise vessel. | 3 | Planned | |
+| BRAND-008 | BRAND-BOOK §Content ¶5 | Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'. | 3 | Planned | |
 | BRAND-009 | BRAND-BOOK §Content ¶4 | Site names use the common English forms (Karnak, Esna, El Kab, Edfu, Kom Ombo, Philae, Gebel Silsila). | 3 | Planned | |
 | BRAND-010 | BRAND-BOOK §Content ¶1 | Every selling surface carries at least one honest, explanatory fact (editorial check per template). | 11 | Planned | |
 | BRAND-011 | BRAND-BOOK §Lines | The ornament appears only under section titles. | 2 | Planned | |
@@ -461,6 +461,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-024 | BRAND-BOOK §Type | Prices use lining figures; totals and steppers use tabular figures. | 2 | Planned | |
 | BRAND-025 | NavBar/README | Main navigation has at most seven links and 'Why prices differ' is always visible. | 1 | Planned | |
 | BRAND-026 | Rating/README; CruiseCard/README | Ratings render only when backed by real reviews, and cards always show the maximum guest count. | 5 | Planned | |
+| BRAND-027 | Faris 17 Oct 2026 (ADR-008) | The felucca does not appear anywhere on the site: no pages, links, VesselArt/Scene felucca variant, search option or copy. | 2 | Planned | |
+| BRAND-028 | Faris 17 Oct 2026 (ADR-009); Q6 | CruiseCard shows the published Nilecruz evaluation as 'NN/100 · Nilecruz evaluation'; stars appear only for verified guest reviews; external ratings appear only on the vessel page with source and date. | 5 | Planned | |
 
 ## ENG
 
@@ -580,7 +582,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | I18N-005 | silo.md §Languages | Translation is plumbed in the order pillars/hubs, money pages, supporting articles. | 10 | Planned | |
 | I18N-006 | CLAUDE.md §6 | UI strings live in next-intl message files, none hard-coded in components. | 1 | Planned | |
 | I18N-007 | BRAND-BOOK §Multilingual | No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish. | 2 | Planned | |
-| I18N-008 | CLAUDE.md §6; BRAND §Multilingual | Japanese text is never letter-spaced (see Q13). | 2 | Planned | |
+| I18N-008 | Faris 17 Oct 2026 (ADR-014); bundle.css :lang(ja) | Japanese keeps the design system tracking: 0.08em on eyebrows, section titles and badges under :lang(ja); no other Japanese letter-spacing. | 2 | Planned | |
 | I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Planned | |
 | I18N-010 | CLAUDE.md §6 | Numbers, dates and money format per locale while keeping brand formats in English. | 2 | Planned | |
 | I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Planned | |
@@ -604,6 +606,13 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-012 | DS CruiseSearch | CruiseSearch routes, sailing days and match counts come from real schedules and departures. | 5 | Planned | |
 | DATA-013 | CLAUDE.md §5 | Deterministic test fixtures seed every role and state for e2e tests. | 3 | Planned | |
 | DATA-014 | ARCH §Migration | Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1). | 3 | Planned | |
+| DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity of at least US$5 per person per night, set per vessel; lower values are rejected. | 4c | Planned | |
+| DATA-016 | Faris 17 Oct 2026 (ADR-010) | Gratuities are always shown as their own obligatory line, never inside the cruise fare, wherever a cruise total appears (offers, BookingSummary, bookings). | 8 | Planned | |
+| DATA-017 | Faris 17 Oct 2026 (ADR-011) | The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders. | 8 | Planned | |
+| DATA-018 | Faris 17 Oct 2026 (ADR-011) | A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/. | 5 | Planned | |
+| DATA-019 | Faris 17 Oct 2026 (ADR-012) | Child pricing by age: under 3 free, 3–5.99 pays 25%, 6–11.99 pays 50%, 12 and over pays the full rate (unit-tested at every boundary). | 4c | Planned | |
+| DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Planned | |
+| DATA-021 | Faris 17 Oct 2026 (ADR-013); Q26 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check reports complete. | 4b | Planned | |
 
 ## EXP
 
@@ -634,7 +643,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
 | PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
 | PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
-| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Awaiting decision |
+| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012) |
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
 | PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
 | PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |

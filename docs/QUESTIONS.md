@@ -1,6 +1,6 @@
 # Questions for Faris
 
-**Batch 0 · 17 Oct 2026.** Each question has a number, a recommendation and the reason for it.
+**Batch 0 · 17 Oct 2026 (updated with Faris's answers the same day).** Each question has a number, a recommendation and the reason for it.
 - **Tags:** **[C]** contradiction between sources · **[A]** ambiguity that affects money, data, permissions or legal text · **[G]** gap (the matching `PROPOSED-*` row is in REQUIREMENTS).
 - **Priority:** ★ means please answer before Batch 1. The others can wait until the batch that needs them, which is named on each question.
 
@@ -86,6 +86,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Stars appear only for verified guest reviews (PROPOSED-006).
   - External ratings appear on the vessel page with their source and date, never as stars on the card.
 
+> **Answered 17 Oct 2026:** agreed. See ADR-009.
+
 **Q7 [C] The felucca (Batch 6).**
 - The problem:
   - The silo uses VesselCompare on `/vessels/felucca/` and `/vessels/compare/dahabiya-vs-felucca/`, and gives the felucca hub a CruiseCard row.
@@ -95,6 +97,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Add a felucca data entry to VesselCompare, flagged "day boat, not a cruise".
   - The felucca pages end with an ExperienceCard row linking to `/tours-extras/felucca-sail-aswan/` instead of a CruiseCard row.
   - Log this as an exception to the money-row rule.
+
+> **Answered 17 Oct 2026:** remove the felucca from the site completely. See ADR-008; four pages deferred, confirm the tour page in Q46.
 
 **Q8 [C] Navigation labels (Batch 1).**
 - The problem: the NavBar default ("Cruises, Vessels, Why prices differ, Itineraries, Journal, Contact") is not the silo rule (five pillars plus Cruises).
@@ -117,6 +121,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Gratuities are shown as guidance ("not included, typical amount set by the operator").
   - Flights and transfers become separate extras (tour products) shown below the total with their own price.
 
+> **Answered 17 Oct 2026:** flights removed from the cruise total; gratuities are separate and obligatory (min US$5 pp/night); cruise runs check-in to check-out, transfers sold separately. See ADR-007, ADR-010, ADR-011; follow-up in Q47.
+
 **Q11 [C] Who manages tours (Batch 4d)?**
 - The problem: tours appear under the admin dashboard only, the operator list never mentions them, and tours have their own "supplier information".
 - **Recommendation:**
@@ -137,6 +143,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - The brand book says to reduce eyebrow tracking to 0.08em.
   - The bundle applies 0.08em to eyebrows, section titles and badges under `:lang(ja)`.
 - **Recommendation:** follow CLAUDE.md (priority 1): letter-spacing 0 under `:lang(ja)`, and log the design-system difference.
+
+> **Answered 17 Oct 2026:** keep the design-system tracking. See ADR-014; confirm in Q50.
 
 **Q14 [C] Motion tokens live outside tokens.json (Batch 1).**
 - The problem: CLAUDE.md requires tokens generated from tokens.json, but `--ease-river` and `--dur-1/2/3` exist only in bundle.css and the brand book.
@@ -241,6 +249,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Publish nothing until an operator or admin confirms them.
   - Scores and prices from these files stay private. CLAUDE.md forbids inventing facts, and these are unverified.
 
+> **Answered 17 Oct 2026:** all vessels are private drafts until their information is complete. See ADR-013; follow-up in Q49.
+
 **Q27 [A] Email sender (Batch 8).** The guide says account emails aren't ready.
 - **Recommendation:** Resend (it is already used in one repo), from a verified `nilecruz.com` domain.
 - I need DNS access for SPF/DKIM when we get there.
@@ -263,7 +273,7 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Q34 [G]** Verified guest reviews: PROPOSED-006. They are needed for AggregateRating and `/reviews/`. [Phase 2.]
 - **Q35 [G]** Legal pages and cookie consent: PROPOSED-007. **I will not write legal text.** [Yes; text from you or your lawyer.]
 - **Q36 [G]** Data export and deletion: PROPOSED-008. [Yes before EU marketing.]
-- **Q37 [G]** Child and infant policy: PROPOSED-009. CruiseSearch already asks for "children under 12 sharing a cabin", but no source defines child rates. [Needed before Batch 4c rates.]
+- **Q37 [G] Answered 17 Oct 2026** (ADR-012): under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full; follow-up in Q48. Was: Child and infant policy: PROPOSED-009. CruiseSearch already asks for "children under 12 sharing a cabin", but no source defines child rates. [Needed before Batch 4c rates.]
 - **Q38 [G]** Display-currency conversion: PROPOSED-010. [Later.]
 - **Q39 [G]** Receipts and confirmations as PDF, and the B2B "client booking record": PROPOSED-011. DASH-B2B-008 needs at least the client record. [Yes, HTML first and print-to-PDF.]
 - **Q40 [G]** Saved cruises (CruiseCard heart): PROPOSED-012. [Yes, cheap; anonymous saves kept locally and merged on sign-in.]
@@ -274,6 +284,28 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Q45 [G]** Messaging about a booking: PROPOSED-017. [After launch; email links in the meantime.]
 
 ---
+
+## Follow-ups from Faris's answers (17 Oct 2026)
+
+**Q46 [A] The felucca tour page (Batch 7/12).** I read "completely" as also removing `/tours-extras/felucca-sail-aswan/` (PAGE-097), so it is now deferred. A felucca sail is a popular extra; say if you want that one tour page kept.
+
+**Q47 [A] Gratuities (Batch 4c/4f).** These affect money:
+- Is the gratuity collected by Nilecruz with the booking, or paid on board? Either way it stays a separate line.
+- Does it apply to children? I recommend not to free infants under 3, and full for everyone 3 and over unless you say otherwise.
+- If a vessel's rates are in EUR, is the minimum EUR 5, or the EUR equivalent of US$5?
+- Is any commission taken on the gratuity? I recommend none.
+
+**Q48 [A] Child pricing details (Batch 4c).**
+- **When is the age measured?** I recommend age on the departure date.
+- **What is the 25% or 50% taken from?** I recommend the adult per-person rate for the same cabin.
+- **Does the rule apply to every operator, or is it a default operators can change?** I recommend it as the platform default, changeable by admin only.
+- **How many children can share a cabin, and must they share with adults?** I recommend that children share with at least one adult, within the cabin's maximum occupancy, and that a free infant does not count towards occupancy.
+
+**Q49 [A] Information-only listings (Batch 4b/5).** The guide lets a vessel be public before prices and availability exist. Your rule says vessels stay private until their information is complete.
+- I recommend "complete" means the full **profile** (name, type, route, description, photos, cabins, decks, amenities, gratuity, policy). Rates can follow, so information-only listings still work.
+- Or should nothing be public until it is bookable?
+
+**Q50 [C] Japanese tracking (Batch 2).** I read "add tracking to the design system" as: keep the design system's 0.08em letter-spacing on Japanese eyebrows, section titles and badges, which overrides CLAUDE.md's "never letter-space Japanese". If you meant the motion tokens (Q14) instead, tell me and I'll revert ADR-014.
 
 ## Smaller notes (no answer needed unless you disagree)
 

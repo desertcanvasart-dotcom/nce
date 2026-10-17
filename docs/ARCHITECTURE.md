@@ -127,6 +127,8 @@ erDiagram
     text visibility "private | info_only | published"
     bool bookable "derived"
     int cabin_count
+    bigint gratuity_pp_night_minor "≥ US$5, ADR-010"
+    char gratuity_currency
     bool sample_data
   }
   VESSEL ||--o{ VESSEL_I18N : translates
@@ -220,6 +222,8 @@ erDiagram
   INVENTORY ||--o{ BOOKING_CABIN : reserves
   BOOKING ||--o{ BOOKING_CABIN : includes
   BOOKING ||--o{ PASSENGER : travels
+  PASSENGER { date birth_date
+    text age_band "infant | child_25 | child_50 | adult, ADR-012" }
   BOOKING { text ref UK
     text status
     date pay_by
@@ -252,6 +256,11 @@ erDiagram
 - `TOUR_ORDER` is separate from `BOOKING`. A tour payment can never settle a cruise balance (DASH-PAY-014).
 - `BOOKING.terms_snapshot` freezes the deadline and cancellation bands agreed at booking (DASH-PAY-010).
 - `INVENTORY` is shared by every rate and currency for the same cabin type and departure (DASH-ADM-056).
+- Pricing is one tested function, `price_booking(rate, passengers, gratuity)`, with three parts:
+  - child bands per ADR-012;
+  - the gratuity as a separate line per ADR-010;
+  - no extras inside the cruise total, per ADR-011.
+- There is no felucca vessel type (ADR-008).
 - `OFFER_VERSION` makes a deck change produce a new version that the customer must accept (DASH-OPR-023).
 
 **Content in Sanity, not Supabase:**
@@ -314,7 +323,7 @@ Vessel pages are server-rendered from Supabase, plus Sanity for any editorial "s
 
 ## 6. Routing
 
-- **Tree:** exactly the 106 silo rows (`PAGE-*`).
+- **Tree:** the 106 silo rows (`PAGE-*`) minus the 4 felucca rows deferred by ADR-008, so 102 live routes.
   - Static rows map to routes under `app/[locale]/(public)/…`.
   - Templates:
     - `/cruises/[vessel]/` (Supabase);
@@ -364,6 +373,10 @@ Vessel pages are server-rendered from Supabase, plus Sanity for any editorial "s
   - `README.md` is carried over verbatim, plus a "Changes from the design system" section.
   - `<Name>.stories.ts` is a states list used by `/dev/components`.
 - Server components by default. Interactive ones (CruiseSearch, PriceAnatomy, VesselCompare, ItineraryTimeline, Gallery, CabinPicker, BookingSummary, NavBar menu, Stepper, TextField) are client islands with server-rendered initial HTML.
+- The felucca variants of `VesselArt` and `Scene` are not ported (ADR-008).
+- `BookingSummary` is rebuilt around real data (ADR-007).
+- Japanese keeps the bundle's `:lang(ja)` tracking (ADR-014).
+- All three are logged in `docs/DS-DIFFS.md`.
 - Illustrative defaults are moved to `src/components/ds/__samples__/` and used only in `/dev/components`.
 
 **Parity check:**

@@ -29,3 +29,68 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Context:** the design system is plain CSS on custom properties.
 - **Decision:** port `bundle.css` into per-component CSS Modules.
 - **Consequence:** this gives the closest parity. CLAUDE.md's "Tailwind theme, if chosen" does not apply.
+
+---
+
+## Faris's answers, 17 Oct 2026
+
+### ADR-007 BookingSummary is rebuilt around real data (Accepted)
+- **Context:** Q10. The design-system component adds invented fees, gratuities and flights into one total.
+- **Decision:** the cruise total is the fare from the rate, with the gratuity on its own line (ADR-010). Extras are shown separately. The invented "free cancellation for 14 days" and "within 24 hours" notes are replaced by text generated from the cruise's real policy.
+- **Consequence:** a logged design-system difference for `BookingSummary`.
+
+### ADR-008 The felucca is removed from the site (Accepted)
+- **Context:** Q7. Faris: "remove the felucca from the site completely".
+- **Decision:** the following rows become `Deferred` (CLAUDE.md §3: never deleted):
+  - PAGE-039 `/vessels/felucca/`
+  - PAGE-040 `/vessels/felucca/overnight-felucca-trips/`
+  - PAGE-045 `/vessels/compare/dahabiya-vs-felucca/`
+  - PAGE-097 `/tours-extras/felucca-sail-aswan/`
+
+  In addition:
+  - Links to these pages listed in other silo rows are dropped (`/vessels/` down links, vessel-type hub across links, `/vessels/compare/` down links, tour across links).
+  - The felucca variant of `VesselArt`/`Scene`, and `ExperienceCard`'s felucca default, are not ported. Their defaults become `sail`/`null`.
+  - BRAND-027 guards this.
+- **Consequence:**
+  - The live scope is 102 silo pages: Phase 1 45, Phase 2 46, Phase 3 11.
+  - The felucca tour page was included because of "completely". Q46 asks to confirm.
+
+### ADR-009 Cards show the Nilecruz score, not stars (Accepted)
+- **Context:** Q6. Faris agreed.
+- **Decision:** CruiseCard shows "NN/100 · Nilecruz evaluation" when an evaluation is published. Stars appear only for verified guest reviews (PROPOSED-006). External ratings appear only on the vessel page, with source and date (BRAND-028).
+
+### ADR-010 Gratuities are obligatory and separate (Accepted)
+- **Context:** Faris: gratuities are always separate, vary by vessel, are obligatory, minimum US$5 per person per night.
+- **Decision:**
+  - A per-vessel gratuity rate is stored as `gratuity_pp_night_minor` with currency, and a database check enforces at least US$5.
+  - It is shown everywhere as its own obligatory line: "Crew gratuities (obligatory) · US$5 × 2 guests × 4 nights". It is never folded into the fare (DATA-015, DATA-016).
+- **Open (Q47):** who collects it, whether it applies to children, and how a non-USD vessel meets the US$ minimum.
+
+### ADR-011 Cruise total excludes flights and extras; check-in to check-out (Accepted)
+- **Context:** Faris: remove flights from the cruise total, because tours are extra. A cruise runs from check-in to check-out. Airport transfers are not part of the package and are offered separately on tour pages.
+- **Decision:**
+  - The cruise total holds the fare (plus the separate gratuity line) only.
+  - Flights, transfers and tours are separate tour/extra products with their own orders (DASH-PAY-014).
+  - Vessel pages state "From check-in on {day 1} to check-out on {last day}; transfers not included" unless the package explicitly includes them, and link to `/tours-extras/transfers/` (DATA-017, DATA-018).
+
+### ADR-012 Child pricing (Accepted)
+- **Context:** Q37 / PROPOSED-009. Faris's rule:
+  - under 3: free;
+  - 3 to 5.99: 25%;
+  - 6 to 11.99: 50%;
+  - 12 and over: full rate.
+- **Decision:**
+  - The rule is implemented as one tested pricing function. Boundaries are tested at 2.99/3, 5.99/6 and 11.99/12.
+  - Ages are captured at search, request, offer and booking (DATA-019, DATA-020).
+  - The CruiseSearch "Children" stepper becomes an age entry per child.
+- **Open (Q48):** which date the age is measured on, what the percentage is applied to, whether operators can override it, and cabin-sharing limits.
+
+### ADR-013 Vessels stay private drafts until complete (Accepted)
+- **Context:** Q26. Faris: all vessels come in as private drafts until all their information is complete.
+- **Decision:** imports (CSV and the existing repos' 600+ records) and new vessels start as `private`. Publishing is blocked until the readiness check passes (DATA-021).
+- **Open (Q49):** does "complete" include rates and availability? If so, the guide's information-only listings (DASH-ADM-019, DASH-PUB-010) would never be used.
+
+### ADR-014 Japanese keeps the design-system tracking (Accepted, overrides CLAUDE.md §6)
+- **Context:** Q13. CLAUDE.md says to never letter-space Japanese, while the design system uses 0.08em under `:lang(ja)`. Faris: "add tracking to the design system". His instructions rank first (CLAUDE.md §2).
+- **Decision:** keep the design system's 0.08em on eyebrows, section titles and badges under `:lang(ja)`, and no other Japanese tracking (I18N-008). CLAUDE.md §6's "Never letter-space Japanese" is superseded for these three styles.
+- **Consequence:** Q50 confirms I read this correctly.

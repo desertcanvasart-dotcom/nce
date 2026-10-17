@@ -11,7 +11,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Legal/finance |
 | 6 | Commission rate(s) | 4f | Q18 |
 | 7 | Eligibility rules and wording for Egyptian-citizen and resident rates | 4c | Q20 |
-| 8 | Child/infant policy | 4c | Q37 |
+| 8 | ~~Child/infant policy~~ Supplied 17 Oct 2026 (ADR-012); details in Q48 | 4c | Q37 |
 | 9 | Terms, privacy, cookie, booking conditions text | 8 | Q35, PROPOSED-007 |
 | 10 | PriceAnatomy factor data (or approval to calibrate from rates) | 6 | Q25 |
 | 11 | VesselCompare type profiles: guest, cabin and price ranges, meters | 6 | Defaults are illustrative |
@@ -22,3 +22,5 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 16 | About, How we choose vessels and Contact details (address, phone, licence numbers) | 7 | Trust pages |
 | 17 | ES and JA translations, or a translator | 10 | I18N-005 |
 | 18 | Email sender domain and DNS access | 8 | Q27 |
+| 19 | Gratuity amount per vessel (minimum US$5 pp/night) and who collects it | 4c | ADR-010, Q47 |
+| 20 | Check-in and check-out times per vessel/itinerary | 4c | ADR-011 |
