@@ -82,3 +82,25 @@
 - **Ledger:** 516 IDs (DATA-032…040 added). The ID guard passed, and an independent re-parse matched. PROPOSED-013 is approved.
 - **New questions:** Q54 (commission on tours), Q55 (manual payments), Q56 (footer legal pages, needed for Batch 1).
 - **Batch 1:** still waiting for the five items in its brief.
+
+## 17 Oct 2026 · Faris's fourth answers; Batch 1 preparation
+
+- **Done on Faris's instruction:**
+  - `main` created from `batch-00-discovery` and set as the GitHub default.
+  - Node 22.23.3 installed through nvm and made the default.
+  - `.nvmrc` pinned.
+  - `.gitignore` added.
+  - `.env.local` created (git-ignored, permissions 600) with labelled staging and production Supabase slots.
+- **Recorded:** ADR-029 to ADR-032.
+  - **Railway:** hosting moves to Railway.
+  - **Sentry:** moves to Batch 11.
+  - **Tours:** Nilecruz-only, with no commission split.
+  - **Payments:** manual payment fallback.
+  - **Legal:** draft terms and privacy pages; `/independence` redirect.
+  - **Translations:** I draft ES/JA strings for review.
+- **Ledger:** 520 IDs.
+  - Added: ENG-019, DATA-041…043.
+  - ENG-014 moved to Batch 11.
+  - ENG-006 and ENG-011 reworded for Railway.
+  - The ID guard and an independent re-parse both passed.
+- **Next:** Faris's go-ahead on the revised Batch 1 brief.

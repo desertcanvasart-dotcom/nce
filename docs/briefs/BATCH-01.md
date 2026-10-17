@@ -1,9 +1,9 @@
 # Batch 1 brief: Foundation
 
-**Status:** awaiting Faris's go-ahead · **Branch:** `batch-01-foundation` (from `main`) · **Size:** M
+**Status:** revised 17 Oct 2026 after Faris's answers (ADR-029 to ADR-032); awaiting go-ahead · **Branch:** `batch-01-foundation` (from `main`) · **Size:** M
 
 **Goal:** an empty but production-grade shell, with these properties:
-- deployed to a preview URL;
+- deployed to a Railway **staging** service from `main`;
 - in EN, ES and JA;
 - in Day and Night themes;
 - every quality gate wired and green.
@@ -12,8 +12,10 @@ No product features or database tables are in scope. Those start in Batch 3.
 
 ## Requirement IDs in scope (45)
 
+ENG-014 (Sentry) moved to Batch 11, and ENG-019 (draft terms and privacy) was added.
+
 - **Tokens (12):** TOK-COLOR-SEMANTIC, TOK-COLOR-PALETTE, TOK-THEMES, TOK-TYPE-FAMILIES, TOK-TYPE-STYLES, TOK-SPACING, TOK-RADIUS, TOK-SHADOW, TOK-LAYOUT, TOK-MOTION, TOK-PIPELINE, TOK-NO-HARDCODE
-- **Engineering (14):** ENG-001, 002, 003, 004, 005, 006, 008, 010, 011, 012, 014, 016, 017, 018
+- **Engineering (14):** ENG-001, 002, 003, 004, 005, 006, 008, 010, 011, 012, 016, 017, 018, 019
 - **Brand (3):** BRAND-001, BRAND-002, BRAND-025
 - **Accessibility (2):** A11Y-001, A11Y-006
 - **Performance (4):** PERF-004, PERF-006, PERF-007, PERF-009
@@ -25,9 +27,11 @@ No product features or database tables are in scope. Those start in Batch 3.
 
 **Repository basics:**
 - `package.json` (pnpm);
-- `.nvmrc` (Node 22 LTS);
+- `.nvmrc` (Node 22.23.3, already installed and set as the default);
+- `.gitignore` (already created; `.env.local` is ignored);
 - `tsconfig.json` (strict, `noUncheckedIndexedAccess`);
-- `next.config.ts` (`trailingSlash: true`, security headers);
+- `next.config.ts` (`trailingSlash: true`, `output: 'standalone'` for Railway, security headers);
+- `railway.json` (build and start commands, health check);
 - `.env.example` (variable names only);
 - `README.md` ("how to run").
 
@@ -71,10 +75,12 @@ No product features or database tables are in scope. Those start in Batch 3.
 - `vitest.config.ts`, `playwright.config.ts`, `lighthouserc.json`.
 
 **CI:**
-- `.github/workflows/ci.yml`: typecheck, lint, format, stylelint, token-diff, copy-lint, unit tests, build, bundle budget, gitleaks, e2e plus axe against the Vercel preview, Lighthouse CI.
+- `.github/workflows/ci.yml`: typecheck, lint, format, stylelint, token-diff, copy-lint, unit tests, build, bundle budget, gitleaks, e2e plus axe against a production build started in CI with the local Supabase stack, Lighthouse CI.
 
 **Integrations:**
-- Sentry: `sentry.*.config.ts` and `instrumentation.ts`, with release tags.
+- Draft legal pages: `src/app/[locale]/terms/page.tsx` and `src/app/[locale]/privacy/page.tsx`, in English, `noindex`, with a "Draft, under review" banner and marked placeholders (ADR-031).
+- `messages/es.json` and `messages/ja.json` drafted by me with a `_review` note (ADR-032).
+- Redirect map `src/lib/redirects.ts`, with the ADR-028 list and `/independence` → `/how-we-choose-vessels/`.
 - Supabase: `supabase/config.toml` (local stack only); the client helpers are added in Batch 3.
 
 ## Navigation
@@ -127,7 +133,6 @@ My recommendation from Q8, which Faris accepted with the docs:
 | `next`, `react`, `react-dom` | Framework |
 | `next-intl` | Languages |
 | `zod` | Validating environment variables at startup; server inputs later |
-| `@sentry/nextjs` | Error tracking (ENG-014) |
 
 **Development:**
 
@@ -145,15 +150,21 @@ My recommendation from Q8, which Faris accepted with the docs:
 - Gitleaks runs as a GitHub Action, not an npm package.
 - No Tailwind and no UI kit (ADR-006).
 
-## What I need from Faris before starting
+## Decided since the first version
 
-1. **A `main` branch.** The repo had no `main`, so GitHub made `batch-00-discovery` the default. May I create `main` from it and set `main` as the default? Every batch then opens a PR into `main`.
-2. **Node 22 LTS on this Mac.** It has Node 20, which reached end of life in April 2026. Run `brew install node@22`, or let me install it with `fnm`.
-3. **Accounts.** You create or invite; please don't paste secrets in chat, I'll tell you where each one goes.
-   - **Vercel:** a project linked to `desertcanvasart-dotcom/nce`. Production stays unpublished, and nilecruz.com stays on Railway until launch.
-   - **Supabase:** two projects, `nilecruz-staging` (shared by previews until Batch 3) and `nilecruz-prod`. Separate per-PR databases need Supabase branching (paid plan). I recommend the shared staging project for now.
-   - **Sentry:** an organisation and project. Otherwise I'll defer ENG-014 to Batch 11, with your OK.
-4. **Spanish and Japanese UI strings.** About 40 labels for the nav, footer and 404/500 pages. May I draft them, marked "needs translator review" in CONTENT-NEEDED? Or will you supply them?
-5. **Footer legal links (Q56).** May the footer link to placeholder `/terms/` and `/privacy/` pages (no text until you supply it)? Is `/independence/` kept or dropped?
+| Item | Status |
+|---|---|
+| `main` branch | Created from `batch-00-discovery` and set as the default |
+| Node 22 | 22.23.3 installed through nvm and made the default |
+| Hosting | Railway: staging from `main`, production promoted manually |
+| Supabase | Faris fills in `.env.local` (created, git-ignored) with the staging and production values |
+| Sentry | Moved to Batch 11 |
+| ES/JA strings | I draft them, marked for translator review |
+| Footer legal links | Draft terms and privacy pages |
 
-**Answered since the brief was written:** Q3, Q51 and Q52 (ADR-025 to ADR-028). Q54 and Q55 are needed by Batches 4d and 4f, not Batch 1.
+## Still needed during the batch, not before it
+
+1. **Supabase values in `.env.local`.** Batch 1 only needs the staging URL and publishable key, to check that the connection works. No tables are created until Batch 3.
+2. **Railway.** Near the end of the batch I'll need one of two things:
+   - you create a Railway project with a service linked to `desertcanvasart-dotcom/nce` (branch `main`) and add the staging variables; or
+   - you give me a Railway API token, which goes into `.env.local`, never into chat, so I can create it.

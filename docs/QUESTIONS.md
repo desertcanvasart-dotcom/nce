@@ -140,6 +140,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Operators can only see tours assigned to their cruises.
   - Please confirm whether operators may create tours.
 
+> **Answered 17 Oct 2026:** tours are Nilecruz-only; operators have no access (ADR-030).
+
 **Q12 [C] Evaluation scale (Batch 4b).**
 - The problem: the two repos disagree on how a dimension is scored.
   - `nilecrz` scores each criterion 0–5 (4 criteria per dimension) and weights them to 100. The weights are hygiene 15, service 20, food 15, amenities 10, management 10, cabin & vessel 20, experience 10.
@@ -277,6 +279,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
 - **Recommendation:** Vercel, for Next.js, preview deployments per PR, image optimisation and cron (ARCHITECTURE §6).
 - Supabase stays on its own project; I recommend a new one per environment.
 
+> **Answered 17 Oct 2026:** Railway, not Vercel (ADR-029).
+
 ---
 
 ## Gaps
@@ -363,9 +367,15 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 
 **Q54 [A] Commission on tours (Batch 4d/4f).** Does the 10% also apply to tour and extra orders, or do tours carry their own rate per supplier? I recommend 10% by default, set per supplier by admin.
 
+> **Answered 17 Oct 2026:** tours are sold and charged by Nilecruz alone; there is no split (ADR-030).
+
 **Q55 [A] Payments other than card (Batch 4f).** Your deadline rules mention "a payment already reported but awaiting verification". I read that as keeping manual payments (for example bank transfer), reported by the customer and verified by an admin, alongside Stripe. Is that right? Should it be open to everyone, or only to travel partners?
 
+> **Answered 17 Oct 2026:** yes, admin-approved manual payments as a fallback (ADR-030).
+
 **Q56 [A] Footer legal pages (Batch 1).** May the footer link to `/terms/` and `/privacy/` as placeholder pages (no text until you supply it), and is `/independence/` kept or dropped?
+
+> **Answered 17 Oct 2026:** draft terms and privacy, to be revised by Faris (ADR-031). `/independence` redirects to `/how-we-choose-vessels/` (my call).
 
 ## Smaller notes (no answer needed unless you disagree)
 

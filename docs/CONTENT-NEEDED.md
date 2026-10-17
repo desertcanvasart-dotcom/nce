@@ -30,3 +30,5 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 24 | Which vessels get a temporary showcase exception for the first front-end previews | 3 / 5 | ADR-019 |
 | 25 | Operator bank details for payouts (recorded by admin, never shown publicly) | 4f | ADR-026 |
 | 26 | Bank-transfer instructions for customers, if manual payment is kept | 4f | Q55 |
+| 27 | Review of the draft Terms and Privacy pages, plus the facts they need: legal entity name, registration number, registered address, governing law, data-protection contact | 1 (draft) / 11 (final) | ADR-031 |
+| 28 | Translator review of the drafted ES and JA UI strings (`messages/es.json`, `messages/ja.json`) | 10 | ADR-032 |

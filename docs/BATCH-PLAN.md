@@ -18,7 +18,7 @@
 | # | Batch | Goal | Depends on | Exit criteria (plus the DoD) | Size |
 |---|---|---|---|---|---|
 | 0 | Discovery & architecture | These documents | — | Faris approves docs; Q1–Q5 answered | S |
-| 1 | Foundation | `nce` Next.js repo, pnpm, CI (typecheck/lint/format/unit/e2e/axe/size/Lighthouse), Vercel + Supabase envs, token pipeline, fonts, next-intl locale routing, app shell (nav, footer, theme, language switch, skip link), 404/500, robots, metadata/canonical helpers, screenshot script, copy lint, Sentry | 0 | Empty shell deployed to preview in EN/ES/JA, both themes, all gates green | M |
+| 1 | Foundation | `nce` Next.js repo, pnpm, CI (typecheck/lint/format/unit/e2e/axe/size/Lighthouse), Railway + Supabase envs (staging, production), token pipeline, fonts, next-intl locale routing, app shell (nav, footer, theme, language switch, skip link), 404/500, robots, metadata/canonical helpers, screenshot script, copy lint, draft terms and privacy pages | 0 | Empty shell deployed to Railway staging in EN/ES/JA, both themes, all gates green | M |
 | 2 | Design-system port | All 22 components as typed modules, `/dev/components` gallery, parity suite, reduced-motion fixes, a11y patterns, data-view state patterns | 1 | 22 components at parity (or logged differences) in Day/Night, keyboard and axe clean | L |
 | 3 | Data foundation | Supabase project, migrations-as-code, users/profiles/organisations/memberships, vessels + i18n + media, audit log, reserved slugs, RLS test harness, seed fixtures (flagged sample), migration dry-run (Q1/Q26), Sanity project + base schemas | 1 | Every table has RLS with tests; seed builds every role; migration report signed off | M |
 | 4a | Accounts & roles | Sign-up/in/out, sessions, role-aware dashboard shell, account security, server-side authorisation helpers, Cairo time display | 3 | Each role lands in its own workspace; cross-role access attempts fail in tests | M |
@@ -59,9 +59,9 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 4a | 10 | 0 |
 | 4b | 46 | 0 |
 | 4c | 44 | 0 |
-| 4d | 15 | 0 |
+| 4d | 16 | 0 |
 | 4e | 26 | 0 |
-| 4f | 46 | 0 |
+| 4f | 48 | 0 |
 | 4g | 5 | 0 |
 | 4h | 17 | 0 |
 | 5 | 31 | 0 |
@@ -70,12 +70,12 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 8 | 12 | 0 |
 | 9 | 11 | 0 |
 | 10 | 13 | 0 |
-| 11 | 8 | 0 |
+| 11 | 9 | 0 |
 | 12 | 49 | 0 |
 | 13 | 13 | 2 |
-| **Sum** | **516** | **3** |
-| **Ledger total** | **516** | |
-| **Distinct IDs** | **516** | |
+| **Sum** | **520** | **3** |
+| **Ledger total** | **520** | |
+| **Distinct IDs** | **520** | |
 
 | Batch | Breakdown |
 |---|---|
@@ -86,9 +86,9 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 4a | DASH-CUS 1, DASH-ROLE 6, DATA 1, SEC 2 |
 | 4b | DASH-ADM 40, DASH-BND 2, DASH-OPR 2, DATA 2 |
 | 4c | DASH-ADM 25, DASH-OPR 12, DATA 4, SEC 3 |
-| 4d | DASH-ADM 15 |
+| 4d | DASH-ADM 15, DATA 1 |
 | 4e | DASH-ADM 8, DASH-BND 1, DASH-CUS 6, DASH-OPR 10, DATA 1 |
-| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14, DATA 11 |
+| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14, DATA 13 |
 | 4g | DASH-CUS 5 |
 | 4h | DASH-ADM 4, DASH-B2B 13 |
 | 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 6, DATA 6, PAGE 7, PERF 1, SEO 4 |
@@ -97,7 +97,7 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 8 | DASH-BND 1, DASH-PUB 5, DATA 4, PAGE 1, SEC 1 |
 | 9 | EXP 10, PERF 1 |
 | 10 | DASH-BND 1, I18N 5, SEO 7 |
-| 11 | A11Y 1, BRAND 1, DATA 1, ENG 1, PERF 3, SEC 1 |
+| 11 | A11Y 1, BRAND 1, DATA 1, ENG 2, PERF 3, SEC 1 |
 | 12 | PAGE 47, SEO 2 |
 | 13 | PAGE 13 |
 

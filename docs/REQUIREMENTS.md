@@ -22,15 +22,15 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | COMP | 22 |
 | TOK | 12 |
 | BRAND | 28 |
-| ENG | 18 |
+| ENG | 19 |
 | A11Y | 11 |
 | PERF | 10 |
 | SEC | 13 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 40 |
+| DATA | 43 |
 | EXP | 10 |
-| **Total** | **516** |
+| **Total** | **520** |
 
 ## Dashboard guide (ROLE)
 
@@ -473,19 +473,20 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ENG-003 | CLAUDE.md §5 | format:check passes. | 1 | Planned |  |
 | ENG-004 | CLAUDE.md §5 | No @ts-ignore or eslint-disable without a written reason (enforced by lint rule). | 1 | Planned |  |
 | ENG-005 | CLAUDE.md §5 | Vitest unit tests run in CI. | 1 | Planned |  |
-| ENG-006 | CLAUDE.md §5 | Playwright end-to-end tests run in CI against a preview deployment. | 1 | Planned |  |
+| ENG-006 | CLAUDE.md §5; ADR-029 | Playwright end-to-end tests run in CI against a production build of the app. | 1 | Planned |  |
 | ENG-007 | CLAUDE.md §6 | A private /dev/components gallery renders every component in every state in both themes, unavailable in production to the public. | 2 | Planned |  |
 | ENG-008 | CLAUDE.md §5 | A screenshot script captures any route at 375, 768 and 1440 px in Day and Night into docs/screenshots/batch-<nn>/. | 1 | Planned |  |
 | ENG-009 | CLAUDE.md §5 | A visual-parity check compares each ported component with its preview.html and logs differences. | 2 | Planned |  |
 | ENG-010 | CLAUDE.md §4 | Work happens on batch-<nn>-<slug> branches with conventional commits citing requirement IDs. | 1 | Planned |  |
-| ENG-011 | ARCH §Environments | Local, preview (per PR) and production environments exist with separate databases and secrets. | 1 | Planned |  |
+| ENG-011 | ARCH §Environments; ADR-029 | Local, staging and production environments (Railway + Supabase) exist with separate databases and secrets. | 1 | Planned |  |
 | ENG-012 | ARCH §CI | CI runs typecheck, lint, format, unit, e2e, axe and bundle-size checks on every PR. | 1 | Planned |  |
 | ENG-013 | CLAUDE.md §4 | REQUIREMENTS, BUILD-LOG and DECISIONS are updated at the end of every batch. | 0 | Verified | Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024) |
-| ENG-014 | ARCH §Monitoring | Server and client errors are reported to an error tracker with release tags. | 1 | Planned |  |
+| ENG-014 | ARCH §Monitoring; ADR-029 | Server and client errors are reported to an error tracker with release tags. | 11 | Planned |  |
 | ENG-015 | ARCH §Backups | Database backups and point-in-time recovery are enabled and a restore has been rehearsed. | 11 | Planned |  |
 | ENG-016 | CLAUDE.md §6 | pnpm is the package manager and new dependencies are justified in the batch brief. | 1 | Planned |  |
 | ENG-017 | CLAUDE.md §6 | 404 and 500 pages exist in the brand voice in all three languages. | 1 | Planned |  |
 | ENG-018 | CLAUDE.md §6 | The app shell (NavBar, footer, theme, language switch, skip link) wraps every public page. | 1 | Planned |  |
+| ENG-019 | Faris 17 Oct 2026 (ADR-031); PROPOSED-007 | Draft /terms/ and /privacy/ pages exist in EN, linked from the footer, visibly marked 'Draft, under review' and noindex until Faris approves the text. | 1 | Planned |  |
 
 ## A11Y
 
@@ -632,6 +633,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-038 | Faris 17 Oct 2026 (ADR-026) | Operators see their own payables, payouts and balance, read-only. | 4f | Planned |  |
 | DATA-039 | Faris 17 Oct 2026 (ADR-027); Q16 | Payment deadlines count Cairo calendar days from the booking date; 24 Dec and 7 Jan are inclusive; the season is set by the departure date (unit-tested at every boundary). | 4f | Planned |  |
 | DATA-040 | Faris 17 Oct 2026 (ADR-027) | At the deadline an unpaid reservation is cancelled and its cabins released automatically, unless a reported payment awaits verification, in which case it goes to the admin queue. | 4f | Planned |  |
+| DATA-041 | Faris 17 Oct 2026 (ADR-030); Q54 | Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split. | 4f | Planned |  |
+| DATA-042 | Faris 17 Oct 2026 (ADR-030); Q11 | Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours. | 4d | Planned |  |
+| DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Planned |  |
 
 ## EXP
 
@@ -660,7 +664,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030 |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
-| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
+| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Partly approved 17 Oct 2026: terms and privacy drafts now ENG-019 (ADR-031); cookie consent and booking conditions awaiting |
 | PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
 | PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012) |
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |

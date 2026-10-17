@@ -82,8 +82,8 @@ The Batch 0 docs are committed locally on branch `batch-00-discovery`. **Nothing
 | Tests | **Vitest** (unit), **pgTAP/SQL tests** (RLS and RPCs), **Playwright** + **@axe-core/playwright** (e2e, accessibility, screenshots) | Default, plus database tests. |
 | Quality | ESLint (with `jsx-a11y`, no-hardcoded-token rule) + Prettier + `tsc --noEmit`; Lighthouse CI; size-limit | Default. |
 | Package manager | **pnpm** | Default. |
-| Hosting | **Vercel** (app), **Supabase Cloud** (data, one project per environment), **Sanity** (content) | Q28. |
-| Monitoring | **Sentry** (errors, releases), Vercel Analytics/Speed Insights (consent-gated, PROPOSED-014) | New. |
+| Hosting | **Railway** (app: staging and production services, built from `main`), **Supabase Cloud** (staging and production projects), **Sanity** (content) | ADR-029: Faris uses Railway. Next.js runs as a Node server (`next start`, standalone output). |
+| Monitoring | **Sentry** (errors, releases), added in Batch 11 (ADR-029); Railway logs and metrics until then | Analytics stays PROPOSED-014. |
 
 **New dependencies, each to be justified again in its batch brief:**
 - `@supabase/ssr`, `@supabase/supabase-js`: data.
@@ -93,7 +93,7 @@ The Batch 0 docs are committed locally on branch `batch-00-discovery`. **Nothing
 - `resend` + `@react-email/components`: email.
 - `fast-xml-parser`: XML feeds, already in both repos.
 - `motion`: two EXP items only.
-- `@sentry/nextjs`: errors.
+- `@sentry/nextjs`: errors (Batch 11).
 - Dev only: `vitest`, `@playwright/test`, `@axe-core/playwright`, `@lhci/cli`, `size-limit`.
 
 ## 3. Data model
@@ -304,7 +304,7 @@ Destinations live in **both**: an identity row in Supabase (for route stops) and
 | Rate plans (incl. trade, company-restricted) | A | own | — | — | — | — | — | — |
 | Promotions and upgrades | A | own, if authorised | — | — | — | — | — | — |
 | Inventory connections; API key rotate | A (approve feed) | own | — | — | — | — | — | — |
-| Tours, sessions, programs, suppliers (Q11) | A | read assigned | — | — | — | — | — | — |
+| Tours, sessions, programs, suppliers (ADR-030) | A | — | — | — | — | — | — | — |
 | Create trip request | — | — | — | own | own company | own company | — | draft only |
 | Send personal offer | — | own | own | — | — | — | — | — |
 | Accept offer / reserve departure | — | — | — | own | own company | own company | — | — |
@@ -412,22 +412,22 @@ Vessel pages are server-rendered from Supabase, plus Sanity for any editorial "s
   - typecheck, lint, format:check;
   - unit and database tests;
   - build, size-limit;
-  - Playwright against the Vercel preview with a seeded Supabase branch;
+  - Playwright against a production build started inside CI (`next build && next start`), using the local Supabase stack with seed data;
   - Lighthouse CI on key templates (home, a pillar, a listing, a vessel page, an article).
 - **Environments:**
   - `local`: Supabase CLI in Docker.
-  - `preview`: Vercel preview per PR plus a Supabase branch.
+  - `staging`: a Railway service deployed from `main`, using the Supabase staging project. Railway PR environments can be enabled later.
   - `production`.
   - Sanity datasets: `development`, `production`.
 - **Deployment:**
-  - Merging to `main` deploys production.
+  - Merging to `main` deploys **staging** on Railway automatically. Production is promoted manually by Faris (or on his instruction) after a batch is approved; nilecruz.com moves to the new production service only at launch.
   - Database migrations are applied by CI with `supabase db push` from version-controlled files only. No editing in the SQL editor.
 - **Secrets:**
-  - Stored in Vercel and GitHub encrypted environments; `.env.example` lists names only.
+  - Stored in Railway service variables and GitHub encrypted secrets. `.env.local` (git-ignored) holds them on the developer Mac, and `.env.example` lists names only.
   - The service-role key is used only in server code (lint rule plus CI check that `NEXT_PUBLIC_` never carries a secret).
   - Gitleaks runs in CI.
 - **Monitoring:**
-  - Sentry for errors and performance, with release tags.
+  - Sentry for errors and performance, with release tags, from Batch 11. Until then, Railway logs.
   - Supabase logs.
   - An uptime check on `/api/health`.
   - Cron failure alerts for feed pulls and deadline jobs.
@@ -435,7 +435,7 @@ Vessel pages are server-rendered from Supabase, plus Sanity for any editorial "s
   - Supabase daily backups plus PITR on production.
   - Sanity dataset export nightly to storage.
   - A restore rehearsal before launch (ENG-015).
-- **Scheduled jobs** (pg_cron, or Vercel cron calling signed endpoints):
+- **Scheduled jobs** (pg_cron, or a Railway cron service calling signed endpoints):
   - feed pulls (hourly);
   - deadline checks and cabin-release queue (every 15 min);
   - offer expiry;

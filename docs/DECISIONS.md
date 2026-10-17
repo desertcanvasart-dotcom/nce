@@ -254,3 +254,42 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
     | `/account` | `/dashboard/` |
 
 - **Open:** `/terms`, `/privacy` and `/independence` wait on Q52's last part and PROPOSED-007.
+
+---
+
+## Faris's fourth answers, 17 Oct 2026
+
+### ADR-029 Hosting on Railway; error tracking in Batch 11 (Accepted, supersedes the Vercel choice in Q28)
+- **Context:** Faris uses Railway, not Vercel. He provides Supabase staging and production projects, and asked to move error tracking to Batch 11.
+- **Decision:**
+  - The app runs on Railway as a Node server (Next.js standalone).
+  - Merging to `main` deploys staging. Production is promoted manually, and nilecruz.com switches only at launch.
+  - CI runs end-to-end tests against a production build started inside GitHub Actions, with the local Supabase stack, instead of a per-PR preview (ENG-006, ENG-011).
+  - ENG-014 (Sentry) moves from Batch 1 to Batch 11; Railway logs cover the gap.
+  - Secrets live in Railway variables, in GitHub secrets, and in `.env.local` on Faris's Mac (git-ignored, created 17 Oct 2026).
+- **Consequence:** there are no preview URLs per PR. Faris reviews each batch on staging after its merge, or locally with `pnpm dev`.
+
+### ADR-030 Tours belong to Nilecruz; manual payments as a fallback (Accepted)
+- **Context:** Q54, Q11 and Q55. Faris: tours are sold entirely by the portal and operators have nothing to do with them; tour payments are listed and charged separately. Manual payments approved by an admin are fine "just in case".
+- **Decision:**
+  - Tour and extra orders are Nilecruz revenue, with no operator payable and no commission split (DATA-041).
+  - Only admins manage tours, suppliers, sessions and programs (DATA-042). This answers Q11.
+  - Admins can approve a manual payment (method, reference, approver recorded) for any booking (DATA-043).
+- **Consequence:** the roles matrix removes operator access to tours.
+
+### ADR-031 Draft terms and privacy pages (Accepted; PROPOSED-007 partly approved)
+- **Context:** Q56. Faris asked me to draft terms and privacy, and he will revise them.
+- **Decision:**
+  - The draft `/terms/` and `/privacy/` pages are built in Batch 1 (ENG-019):
+    - in English only;
+    - carrying a visible "Draft, under review" banner;
+    - `noindex`;
+    - linked from the footer.
+  - The text is a plain-language starting point, not legal advice. Company name, registration, address, governing law and data-controller details are marked placeholders listed in CONTENT-NEEDED.
+  - Nothing is presented as final until Faris (or his lawyer) approves it.
+  - Cookie consent and booking conditions remain under PROPOSED-007.
+- **My call, logged:** `/independence` (live site) redirects to `/how-we-choose-vessels/`, its closest silo page. Faris answered the legal links but not this one; tell me if it should go elsewhere.
+
+### ADR-032 UI strings in Spanish and Japanese drafted by me (Accepted)
+- **Context:** Faris approved me drafting the roughly 40 nav, footer and error-page labels.
+- **Decision:** the drafts go into `messages/es.json` and `messages/ja.json`. Each file carries a `_review` note, and CONTENT-NEEDED lists them for translator review before launch.

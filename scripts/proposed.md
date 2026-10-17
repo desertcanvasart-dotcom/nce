@@ -10,7 +10,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030 |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
-| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
+| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Partly approved 17 Oct 2026: terms and privacy drafts now ENG-019 (ADR-031); cookie consent and booking conditions awaiting |
 | PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
 | PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012) |
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
