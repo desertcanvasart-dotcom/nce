@@ -472,14 +472,14 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ENG-002 | CLAUDE.md §5 | lint passes with zero errors. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm lint, pnpm lint:css |
 | ENG-003 | CLAUDE.md §5 | format:check passes. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm format:check |
 | ENG-004 | CLAUDE.md §5 | No @ts-ignore or eslint-disable without a written reason (enforced by lint rule). | 1 | Verified | Batch 1 (17 Oct 2026): eslint ban-ts-comment + local/disable-needs-reason |
-| ENG-005 | CLAUDE.md §5 | Vitest unit tests run in CI. | 1 | Built | Batch 1 (17 Oct 2026): 27 Vitest tests pass locally; CI job 'quality' awaits first run |
-| ENG-006 | CLAUDE.md §5; ADR-029 | Playwright end-to-end tests run in CI against a production build of the app. | 1 | Built | Batch 1 (17 Oct 2026): 28 Playwright tests pass locally on a production build; CI job awaits first run |
+| ENG-005 | CLAUDE.md §5 | Vitest unit tests run in CI. | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; job 'Types, lint, format, unit tests' |
+| ENG-006 | CLAUDE.md §5; ADR-029 | Playwright end-to-end tests run in CI against a production build of the app. | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; job 'Build, bundle budget, end-to-end' |
 | ENG-007 | CLAUDE.md §6 | A private /dev/components gallery renders every component in every state in both themes, unavailable in production to the public. | 2 | Planned |  |
 | ENG-008 | CLAUDE.md §5 | A screenshot script captures any route at 375, 768 and 1440 px in Day and Night into docs/screenshots/batch-<nn>/. | 1 | Verified | Batch 1 (17 Oct 2026): scripts/screenshots.ts; 42 files in docs/screenshots/batch-01 |
 | ENG-009 | CLAUDE.md §5 | A visual-parity check compares each ported component with its preview.html and logs differences. | 2 | Planned |  |
 | ENG-010 | CLAUDE.md §4 | Work happens on batch-<nn>-<slug> branches with conventional commits citing requirement IDs. | 1 | Verified | Batch 1 (17 Oct 2026): branch batch-01-foundation, conventional commits with IDs |
-| ENG-011 | ARCH §Environments; ADR-029 | Local, staging and production environments (Railway + Supabase) exist with separate databases and secrets. | 1 | In progress | Batch 1 (17 Oct 2026): local env done; Railway staging/production and Supabase values pending from Faris. Carried over (see BUILD-LOG) |
-| ENG-012 | ARCH §CI | CI runs typecheck, lint, format, unit, e2e, axe and bundle-size checks on every PR. | 1 | Built | Batch 1 (17 Oct 2026): .github/workflows/ci.yml; awaits first run on the PR |
+| ENG-011 | ARCH §Environments; ADR-029 | Local, staging and production environments (Railway + Supabase) exist with separate databases and secrets. | 1 | In progress | Batch 1 (17 Oct 2026): Supabase staging and production reachable, publishable keys valid (17 Oct 2026); secret keys entered are the anon key; Railway pending. Carried over (see BUILD-LOG) |
+| ENG-012 | ARCH §CI | CI runs typecheck, lint, format, unit, e2e, axe and bundle-size checks on every PR. | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; .github/workflows/ci.yml |
 | ENG-013 | CLAUDE.md §4 | REQUIREMENTS, BUILD-LOG and DECISIONS are updated at the end of every batch. | 0 | Verified | Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024) |
 | ENG-014 | ARCH §Monitoring; ADR-029 | Server and client errors are reported to an error tracker with release tags. | 11 | Planned |  |
 | ENG-015 | ARCH §Backups | Database backups and point-in-time recovery are enabled and a restore has been rehearsed. | 11 | Planned |  |
@@ -514,7 +514,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PERF-004 | CLAUDE.md §5 | No route ships more than ~200 KB gzipped JS without a logged reason (CI bundle budget). | 1 | Verified | Batch 1 (17 Oct 2026): pnpm budget: max 154.2 KB gzipped per route |
 | PERF-005 | CLAUDE.md §5 | Images use next/image with explicit sizes. | 2 | Planned |  |
 | PERF-006 | PERF/BRAND §Type; ADR-035 | Fonts are self-hosted via next/font with display swap; only first-paint Latin files are preloaded; no Japanese web font is downloaded (the stacks fall back to installed Noto JP or system Japanese faces). | 1 | Verified | Batch 1 (17 Oct 2026): next/font; render-blocking CSS cut from ~200 KB to ~5 KB (ADR-035) |
-| PERF-007 | CLAUDE.md §5 | Lighthouse CI runs on key templates on every PR to main. | 1 | Built | Batch 1 (17 Oct 2026): lighthouserc.json + CI job; local run done. LCP gate method awaits Faris (Q58) |
+| PERF-007 | CLAUDE.md §5 | Lighthouse CI runs on key templates on every PR to main. | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; job 'Lighthouse (mobile)', no assertion warnings. LCP gate method awaits Faris (Q58) |
 | PERF-008 | CLAUDE.md §7 | Heavy effects meet the budget on a mid-range phone and degrade to static design-system art. | 9 | Planned |  |
 | PERF-009 | CLAUDE.md §6 | Public pages render their content on the server and are readable without JavaScript. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'without JavaScript…' |
 | PERF-010 | ARCH §Caching | Public pages are statically generated or cached and revalidated on content change. | 5 | Planned |  |
@@ -525,7 +525,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | SEC-001 | CLAUDE.md §5 | Every table has row-level security enabled with explicit policies (CI test fails on a table without RLS). | 3 | Planned |  |
 | SEC-002 | CLAUDE.md §5 | Every dashboard action is authorised server-side against the caller's role and ownership. | 4a | Planned |  |
-| SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Built | Batch 1 (17 Oct 2026): e2e 'no secret appears in client JavaScript', eslint rule; gitleaks runs in CI (Docker unavailable locally) |
+| SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; gitleaks 'Secret scan'; e2e 'no secret appears in client JavaScript' |
 | SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Planned |  |
 | SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Planned |  |
 | SEC-006 | ARCH §Security | Public forms and auth endpoints are rate-limited and protected from bots. | 8 | Planned |  |

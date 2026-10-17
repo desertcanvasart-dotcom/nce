@@ -170,3 +170,16 @@
 **Decisions:** ADR-033 to ADR-039; design-system differences in `docs/DS-DIFFS.md`.
 
 **Next:** Faris reviews; answers Q58 (and Q57 when convenient); supplies the Supabase and Railway values. Then the Batch 2 brief (design-system port).
+
+### 17 Oct 2026 · Batch 1 update: CI and Supabase
+
+- **CI:** the first run on PR #1 is green (4/4 jobs). ENG-005, ENG-006, ENG-012, PERF-007 and SEC-003 are now Verified.
+- **Lighthouse:**
+  - On GitHub's runner the mobile run printed no assertion warnings, so LCP stayed within 2.5 s even under the simulated method. The slow results on this Mac look machine-specific.
+  - The report artifact was empty, because upload-artifact skips the hidden `.lighthouseci` folder. Fixed (`include-hidden-files`).
+  - Actions were bumped to current majors after CI warned that Node 20 actions are deprecated.
+- **Supabase (ENG-011):**
+  - Staging and production both respond, the URLs match their project refs, and both publishable keys work (auth health 200).
+  - Both "secret key" entries in `.env.local` are the **anon** key, not the secret/service-role key. Faris to replace them. They aren't needed until Batch 3.
+  - The database password is untested; it will be tested when Batch 3 links the CLI.
+- **Still open:** the Railway project, the correct secret keys, Q58.
