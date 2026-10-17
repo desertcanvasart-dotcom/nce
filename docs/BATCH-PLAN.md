@@ -61,21 +61,21 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 4c | 44 | 0 |
 | 4d | 15 | 0 |
 | 4e | 26 | 0 |
-| 4f | 40 | 0 |
+| 4f | 46 | 0 |
 | 4g | 5 | 0 |
 | 4h | 17 | 0 |
-| 5 | 29 | 0 |
+| 5 | 31 | 0 |
 | 6 | 37 | 1 |
 | 7 | 16 | 0 |
-| 8 | 11 | 0 |
+| 8 | 12 | 0 |
 | 9 | 11 | 0 |
 | 10 | 13 | 0 |
 | 11 | 8 | 0 |
 | 12 | 49 | 0 |
 | 13 | 13 | 2 |
-| **Sum** | **507** | **3** |
-| **Ledger total** | **507** | |
-| **Distinct IDs** | **507** | |
+| **Sum** | **516** | **3** |
+| **Ledger total** | **516** | |
+| **Distinct IDs** | **516** | |
 
 | Batch | Breakdown |
 |---|---|
@@ -88,13 +88,13 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 4c | DASH-ADM 25, DASH-OPR 12, DATA 4, SEC 3 |
 | 4d | DASH-ADM 15 |
 | 4e | DASH-ADM 8, DASH-BND 1, DASH-CUS 6, DASH-OPR 10, DATA 1 |
-| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14, DATA 5 |
+| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14, DATA 11 |
 | 4g | DASH-CUS 5 |
 | 4h | DASH-ADM 4, DASH-B2B 13 |
-| 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 6, DATA 4, PAGE 7, PERF 1, SEO 4 |
+| 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 6, DATA 6, PAGE 7, PERF 1, SEO 4 |
 | 6 | DATA 2, PAGE 25, SEO 10 |
 | 7 | DASH-ADM 1, DASH-PUB 1, PAGE 13, SEO 1 |
-| 8 | DASH-BND 1, DASH-PUB 5, DATA 3, PAGE 1, SEC 1 |
+| 8 | DASH-BND 1, DASH-PUB 5, DATA 4, PAGE 1, SEC 1 |
 | 9 | EXP 10, PERF 1 |
 | 10 | DASH-BND 1, I18N 5, SEO 7 |
 | 11 | A11Y 1, BRAND 1, DATA 1, ENG 1, PERF 3, SEC 1 |

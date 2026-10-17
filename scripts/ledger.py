@@ -454,6 +454,15 @@ X = {
  ("Faris 17 Oct 2026 (ADR-020)", "Refunds are issued through Stripe only after admin approval, for the amount the cancellation calculation produces.", "4f"),
  ("Faris 17 Oct 2026 (ADR-020)", "Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only.", "4f"),
  ("Faris 17 Oct 2026 (ADR-021); Q4", "One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL.", "5"),
+ ("Faris 17 Oct 2026 (ADR-025); Q3", "Public pages show one 'from' price per vessel: the lowest available cabin category, per person, with currency and what is included; other categories show no price.", "5"),
+ ("Faris 17 Oct 2026 (ADR-025); Q3", "Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates).", "8"),
+ ("Faris 17 Oct 2026 (ADR-025)", "Vessel-page Offer schema uses the public 'from' price only (AggregateOffer lowPrice and priceCurrency).", "5"),
+ ("Faris 17 Oct 2026 (ADR-026); Q51", "Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-026); Q18", "Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-026); PROPOSED-013", "Each verified payment creates an operator payable (payment less commission); admins record payouts made outside the system and see each operator's outstanding balance.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-026)", "Operators see their own payables, payouts and balance, read-only.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-027); Q16", "Payment deadlines count Cairo calendar days from the booking date; 24 Dec and 7 Jan are inclusive; the season is set by the departure date (unit-tested at every boundary).", "4f"),
+ ("Faris 17 Oct 2026 (ADR-027)", "At the deadline an unpaid reservation is cancelled and its cabins released automatically, unless a reported payment awaits verification, in which case it goes to the admin queue.", "4f"),
 ],
 }
 for p, items in X.items():

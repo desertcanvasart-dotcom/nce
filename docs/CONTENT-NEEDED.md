@@ -9,7 +9,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 3 | Real vessel list to publish, with operator confirmation | 3 / 5 | Q26. Repo data stays private until confirmed |
 | 4 | Cancellation policy wording and bands per operator/cruise | 4f | From operators |
 | 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Legal/finance |
-| 6 | Commission rate(s) and Stripe account model (Connect or merchant of record) | 4f | Q18, Q51 |
+| 6 | ~~Commission and Stripe model~~ Supplied: 10%, Nilecruz merchant of record (ADR-026); tours rate open (Q54) | 4f | Q54 |
 | 7 | Eligibility rules and wording for Egyptian-citizen and resident rates | 4c | Q20 |
 | 8 | ~~Child/infant policy~~ Supplied 17 Oct 2026 (ADR-012); details in Q48 | 4c | Q37 |
 | 9 | Terms, privacy, cookie, booking conditions text | 8 | Q35, PROPOSED-007 |
@@ -28,3 +28,5 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 22 | Max occupancy per cabin type (which vessels offer triples) | 4c | ADR-018 |
 | 23 | Stripe account access (test keys first) | 4f | ADR-020 |
 | 24 | Which vessels get a temporary showcase exception for the first front-end previews | 3 / 5 | ADR-019 |
+| 25 | Operator bank details for payouts (recorded by admin, never shown publicly) | 4f | ADR-026 |
+| 26 | Bank-transfer instructions for customers, if manual payment is kept | 4f | Q55 |

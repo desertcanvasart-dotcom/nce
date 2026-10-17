@@ -16,7 +16,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
 | PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
 | PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |
-| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Awaiting decision |
+| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Approved 17 Oct 2026 (ADR-026): now DATA-037, DATA-038 |
 | PROPOSED-014 | Consent-based analytics and conversion tracking | 11 | Awaiting decision |
 | PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema) | 3 | Awaiting decision |
 | PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking) | 4e | Awaiting decision |

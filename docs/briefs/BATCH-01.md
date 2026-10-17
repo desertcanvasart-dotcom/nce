@@ -154,6 +154,6 @@ My recommendation from Q8, which Faris accepted with the docs:
    - **Supabase:** two projects, `nilecruz-staging` (shared by previews until Batch 3) and `nilecruz-prod`. Separate per-PR databases need Supabase branching (paid plan). I recommend the shared staging project for now.
    - **Sentry:** an organisation and project. Otherwise I'll defer ENG-014 to Batch 11, with your OK.
 4. **Spanish and Japanese UI strings.** About 40 labels for the nav, footer and 404/500 pages. May I draft them, marked "needs translator review" in CONTENT-NEEDED? Or will you supply them?
-5. **Footer legal links.** Terms and privacy aren't in the silo (PROPOSED-007). Should I leave them out of the footer for now?
+5. **Footer legal links (Q56).** May the footer link to placeholder `/terms/` and `/privacy/` pages (no text until you supply it)? Is `/independence/` kept or dropped?
 
-**Not blocking Batch 1:** Q3 (public prices), Q51 (Stripe details) and Q52 (live data and redirects) are needed by Batches 3, 4f and 5.
+**Answered since the brief was written:** Q3, Q51 and Q52 (ADR-025 to ADR-028). Q54 and Q55 are needed by Batches 4d and 4f, not Batch 1.

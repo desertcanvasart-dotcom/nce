@@ -196,3 +196,61 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Context:** Faris approved all Batch 0 documents on 17 Oct 2026.
 - **Decision:** the architecture (ARCHITECTURE.md), the stack, the batch plan and the ledger are the baseline. All Proposed ADRs above are Accepted, except ADR-005, which ADR-023 supersedes.
 - **Consequence:** answers still pending (Q3, Q51, Q52 and the non-starred questions) are taken in the batch that needs them, as QUESTIONS.md notes.
+
+---
+
+## Faris's third answers, 17 Oct 2026
+
+### ADR-025 Public prices: one "from" price per vessel (Accepted)
+- **Context:** Q3.
+- **Decision:**
+  - Visitors see a single "from" price per vessel: the lowest available cabin category, per person, with currency and inclusions. No other cabin category shows a price publicly.
+  - Every category and departure price appears after sign-in (DATA-032, DATA-033). This applies the guide's account rule (DASH-PUB-008).
+  - Structured data uses only the public "from" price (DATA-034).
+- **Consequence:**
+  - On public vessel pages, CabinPicker shows cabin facts (size, deck, bed, occupancy) without prices, plus a "Sign in to see prices and dates" prompt.
+  - PriceAnatomy and EXP-001 use the "from" price when the visitor is not signed in.
+
+### ADR-026 Nilecruz collects payments and keeps 10% commission (Accepted; PROPOSED-013 approved)
+- **Context:** Q51 and Q18. Faris: money goes to the portal, which keeps 10% commission and later transfers the rest to the operator.
+- **Decision:**
+  - Nilecruz is the merchant of record, with one Stripe account and no Stripe Connect (DATA-035).
+  - Commission is 10% of each verified cruise payment. It is kept as a setting, reversed in proportion to refunds, and never taken on gratuities (DATA-036).
+  - Each verified payment creates an operator payable (payment less commission). Admins record payouts made outside the system, and operators see their own balance read-only (DATA-037, DATA-038).
+  - This supersedes the 5% in both repos.
+- **Open (Q54):** whether the 10% also applies to tour orders.
+
+### ADR-027 Payment deadlines measured from the booking date (Accepted)
+- **Context:** Q16/Q17. Faris confirmed full payment within a deadline counted from the booking date, set by departure period. This replaces the earlier idea of paying 45 days or three months before departure.
+
+  | Departure period | Full payment due |
+  |---|---|
+  | 24 Dec – 7 Jan, inclusive | Within 3 days of booking |
+  | Premium periods (Easter 21–29 Mar, configured for 2027) | Within 3 days of booking |
+  | Other October–April | Within 7 days of booking |
+  | May–September | Within 14 days of booking |
+
+- **Decision:**
+  - The deadline is never later than departure.
+  - Unpaid reservations are cancelled and their cabins released automatically at the deadline. A reported payment awaiting verification goes to admin review instead (DATA-040).
+  - Cruise and tour payments stay separate. Each cruise has its own cancellation policy, acknowledged before payment (DASH-PAY-001…014).
+  - **My calls, logged:** days are Cairo calendar days, the season is set by the departure date, and the rules are unit-tested at every boundary (DATA-039).
+- **Consequence:** because a "reported payment awaiting verification" still exists, manual payment reporting (for example a bank transfer) remains alongside Stripe, verified by an admin. Q55 confirms.
+
+### ADR-028 No live data to migrate; redirects approved (Accepted)
+- **Context:** Q52. The live nilecruz.com holds no real customer data, and redirects are approved.
+- **Decision:**
+  - Batch 3 starts with a clean database. The only import is the vessel directory from the repos, as private drafts (ADR-013); DATA-014 covers that import.
+  - The live URLs get 301 redirects (SEO-021):
+
+    | From | To |
+    |---|---|
+    | `/explore` | `/cruises/` |
+    | `/how-we-score` | `/how-we-choose-vessels/` |
+    | `/match` | `/plan-my-cruise/` |
+    | `/request` | `/plan-my-cruise/` |
+    | `/tours` | `/tours-extras/` |
+    | `/compare` | `/cruises/compare/` |
+    | `/account` | `/dashboard/` |
+
+- **Open:** `/terms`, `/privacy` and `/independence` wait on Q52's last part and PROPOSED-007.

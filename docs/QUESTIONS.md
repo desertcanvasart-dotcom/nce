@@ -55,7 +55,7 @@ This keeps SEO and the "explain the price" promise without breaking the guide's 
 Also, which **rate plan** sets the public price? I recommend the international plan only. Egyptian-citizen, resident and trade rates are shown only to verified eligible accounts.
 
 
-> **Status 17 Oct 2026:** not yet answered. This is now the main question blocking Batch 5.
+> **Answered 17 Oct 2026:** one public "from" price per vessel (lowest category); all categories and dates after sign-in (ADR-025).
 ### Q4 ★ [C] Is a vessel page about one vessel, or one sailing?
 - The silo makes `/cruises/{vessel-slug}/` one URL per vessel, with H1 "{Vessel name} — {route}, {nights} nights".
 - The guide lets a vessel have **several schedules** (routes and directions).
@@ -180,6 +180,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
 - Is the season set by the **departure** date (as written) even when the booking crosses seasons?
 - Is cabin release after the deadline automatic or an admin action?
 
+> **Answered 17 Oct 2026:** full payment within 3/7/14 days of booking by departure period, never after departure; automatic cancellation unless a reported payment awaits review. My calls on Cairo days and inclusive bounds are logged in ADR-027.
+
 **Recommendation:**
 - Cairo calendar days.
 - Both ends inclusive.
@@ -193,6 +195,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - Allow an optional operator-set first instalment (deposit) inside that window.
   - Please confirm.
 
+> **Answered 17 Oct 2026:** full payment within the deadline (ADR-027).
+
 **Q18 [A] Commission (Batch 4f).**
 - The problem: the guide doesn't define the rate or its base.
   - `nilecrz` takes 5% of the verified deposit.
@@ -201,6 +205,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - A rate per operator, defaulting to 5%, on verified cruise payments.
   - Reversed proportionally on refund.
   - Tours carry their own rate.
+
+> **Answered 17 Oct 2026:** 10%, kept by Nilecruz (ADR-026).
 
 **Q19 [A] Refunds and currency (Batch 4f).**
 - The problem: who approves a refund, and in which currency is it recorded when the payment came in another currency?
@@ -331,6 +337,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 
 ## Follow-ups from Faris's second answers (17 Oct 2026)
 
+> **Answered 17 Oct 2026:** Nilecruz is merchant of record, keeps 10%, and pays operators later; full payment within the deadline (ADR-026, ADR-027). Bank transfer: see Q55.
+
 **Q51 ★ [A] Stripe: what is charged, when, and to whom (Batch 4f).** These decide the payment design:
 1. **At booking: full amount, or a deposit with the balance by the deadline?**
    - The guide's deadlines (3/7/14 days) suggest this: reserve, then pay in full by card before the deadline.
@@ -342,12 +350,22 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
    - My recommendation: (b) Connect, because commission is then automatic and Nilecruz never holds operator money. It needs each operator to onboard to Stripe.
 4. **Commission rate** (Q18): still 5% by default, per operator?
 
+> **Answered 17 Oct 2026:** there is no real data on the live site, and redirects are approved (ADR-028). Terms, privacy and independence are still open.
+
 **Q52 ★ [A] The live site (Batch 3/10).**
 - Does the live nilecruz.com database hold real customers, bookings or payments that must be carried over?
 - May I 301-redirect its URLs to the new silo? (`/how-we-score` → `/how-we-choose-vessels/`, `/explore` → `/cruises/`, `/request` → `/plan-my-cruise/`, `/tours` → `/tours-extras/`, `/compare` → `/cruises/compare/`, `/match` → `/plan-my-cruise/`.)
 - Keep `/terms`, `/privacy` and `/independence` as footer pages?
 
 **Q53 [A] Felucca tour page (Batch 7/12).** When a supplier and sessions exist, can the felucca sail be booked like any other extra? Or does it stay information-only? I assume information-only.
+
+## Follow-ups from Faris's third answers (17 Oct 2026)
+
+**Q54 [A] Commission on tours (Batch 4d/4f).** Does the 10% also apply to tour and extra orders, or do tours carry their own rate per supplier? I recommend 10% by default, set per supplier by admin.
+
+**Q55 [A] Payments other than card (Batch 4f).** Your deadline rules mention "a payment already reported but awaiting verification". I read that as keeping manual payments (for example bank transfer), reported by the customer and verified by an admin, alongside Stripe. Is that right? Should it be open to everyone, or only to travel partners?
+
+**Q56 [A] Footer legal pages (Batch 1).** May the footer link to `/terms/` and `/privacy/` as placeholder pages (no text until you supply it), and is `/independence/` kept or dropped?
 
 ## Smaller notes (no answer needed unless you disagree)
 

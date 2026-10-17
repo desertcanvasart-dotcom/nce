@@ -78,7 +78,7 @@ The Batch 0 docs are committed locally on branch `batch-00-discovery`. **Nothing
 | Styling | **Generated CSS custom properties + CSS Modules**; **no Tailwind** | The design system is plain CSS with token variables. Porting `bundle.css` into per-component CSS Modules keeps parity and is the lowest-risk route. Tailwind adds a second vocabulary. |
 | Motion | **CSS first**; **Motion** only for View Transitions fallbacks and the scroll-driven voyage (EXP) | Default. Most signature moves are already CSS. |
 | Email | **Resend** + React Email templates | Already used in one repo (Q27). |
-| Payments | **Stripe** (Checkout or Payment Element, webhooks, refunds); test mode outside production | ADR-020. Card data stays with Stripe (PCI SAQ-A). |
+| Payments | **Stripe**, one Nilecruz account as merchant of record (no Connect); Checkout or Payment Element, webhooks, refunds; test mode outside production | ADR-020, ADR-026. Card data stays with Stripe (PCI SAQ-A). Operator payouts are recorded, not automated. |
 | Tests | **Vitest** (unit), **pgTAP/SQL tests** (RLS and RPCs), **Playwright** + **@axe-core/playwright** (e2e, accessibility, screenshots) | Default, plus database tests. |
 | Quality | ESLint (with `jsx-a11y`, no-hardcoded-token rule) + Prettier + `tsc --noEmit`; Lighthouse CI; size-limit | Default. |
 | Package manager | **pnpm** | Default. |
@@ -243,6 +243,13 @@ erDiagram
     text status }
   BOOKING ||--o{ CANCELLATION : may_have
   BOOKING ||--o{ COMMISSION_ENTRY : earns
+  PAYMENT ||--o| OPERATOR_PAYABLE : creates
+  ORGANISATION ||--o{ OPERATOR_PAYOUT : receives
+  OPERATOR_PAYABLE { bigint amount_minor "payment less 10%"
+    char currency }
+  OPERATOR_PAYOUT { bigint amount_minor
+    date paid_on
+    text reference }
   TOUR_ORDER ||--o{ TOUR_PAYMENT : settled_by
   TOUR_SESSION ||--o{ TOUR_ORDER : booked
   ORGANISATION ||--o{ INTEGRATION : connects
@@ -308,6 +315,7 @@ Destinations live in **both**: an identity row in Supabase (for route stops) and
 | Request cancellation | A | own | own | own | own | own | — | — |
 | Approve refund; record refund | A | own (record) | — | — | — | — | — | — |
 | Commission entries and reversals | A (read/write via RPC only) | read own | — | — | — | — | — | — |
+| Record operator payouts; see all payables | A | read own balance | read own (finance) | — | — | — | — | — |
 | Premium periods | A | — | — | — | — | — | — | — |
 | Invite team, set permissions | A | own | — | — | own | — | — | — |
 | See exact departure rates | A | own | own | A | trade rates | trade rates | — | from-price only |

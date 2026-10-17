@@ -28,9 +28,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC | 13 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 31 |
+| DATA | 40 |
 | EXP | 10 |
-| **Total** | **507** |
+| **Total** | **516** |
 
 ## Dashboard guide (ROLE)
 
@@ -623,6 +623,15 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-029 | Faris 17 Oct 2026 (ADR-020) | Refunds are issued through Stripe only after admin approval, for the amount the cancellation calculation produces. | 4f | Planned |  |
 | DATA-030 | Faris 17 Oct 2026 (ADR-020) | Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only. | 4f | Planned |  |
 | DATA-031 | Faris 17 Oct 2026 (ADR-021); Q4 | One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL. | 5 | Planned |  |
+| DATA-032 | Faris 17 Oct 2026 (ADR-025); Q3 | Public pages show one 'from' price per vessel: the lowest available cabin category, per person, with currency and what is included; other categories show no price. | 5 | Planned |  |
+| DATA-033 | Faris 17 Oct 2026 (ADR-025); Q3 | Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates). | 8 | Planned |  |
+| DATA-034 | Faris 17 Oct 2026 (ADR-025) | Vessel-page Offer schema uses the public 'from' price only (AggregateOffer lowPrice and priceCurrency). | 5 | Planned |  |
+| DATA-035 | Faris 17 Oct 2026 (ADR-026); Q51 | Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators. | 4f | Planned |  |
+| DATA-036 | Faris 17 Oct 2026 (ADR-026); Q18 | Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities. | 4f | Planned |  |
+| DATA-037 | Faris 17 Oct 2026 (ADR-026); PROPOSED-013 | Each verified payment creates an operator payable (payment less commission); admins record payouts made outside the system and see each operator's outstanding balance. | 4f | Planned |  |
+| DATA-038 | Faris 17 Oct 2026 (ADR-026) | Operators see their own payables, payouts and balance, read-only. | 4f | Planned |  |
+| DATA-039 | Faris 17 Oct 2026 (ADR-027); Q16 | Payment deadlines count Cairo calendar days from the booking date; 24 Dec and 7 Jan are inclusive; the season is set by the departure date (unit-tested at every boundary). | 4f | Planned |  |
+| DATA-040 | Faris 17 Oct 2026 (ADR-027) | At the deadline an unpaid reservation is cancelled and its cabins released automatically, unless a reported payment awaits verification, in which case it goes to the admin queue. | 4f | Planned |  |
 
 ## EXP
 
@@ -657,7 +666,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
 | PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
 | PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |
-| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Awaiting decision |
+| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Approved 17 Oct 2026 (ADR-026): now DATA-037, DATA-038 |
 | PROPOSED-014 | Consent-based analytics and conversion tracking | 11 | Awaiting decision |
 | PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema) | 3 | Awaiting decision |
 | PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking) | 4e | Awaiting decision |

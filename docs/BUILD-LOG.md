@@ -71,3 +71,14 @@
 - **Approved:** Faris approved the Batch 0 documents (ADR-024).
 - **Ledger:** the Batch 0 rows (ENG-013, DATA-007) are now Verified. The branch `batch-00-discovery` is pushed to `github.com/desertcanvasart-dotcom/nce`.
 - **Next:** the Batch 1 brief (Foundation), in `docs/briefs/BATCH-01.md`, awaiting Faris's go-ahead.
+
+## 17 Oct 2026 · Faris's third answers (between Batch 0 and Batch 1)
+
+- **Recorded:** ADR-025 to ADR-028.
+  - **Public prices:** one "from" price per vessel; everything else after sign-in.
+  - **Payments:** Nilecruz is merchant of record and keeps 10%, with operator payables and recorded payouts.
+  - **Deadlines:** confirmed from the booking date, with automatic cancellation.
+  - **Live site:** no live data to migrate, and redirects are approved.
+- **Ledger:** 516 IDs (DATA-032…040 added). The ID guard passed, and an independent re-parse matched. PROPOSED-013 is approved.
+- **New questions:** Q54 (commission on tours), Q55 (manual payments), Q56 (footer legal pages, needed for Batch 1).
+- **Batch 1:** still waiting for the five items in its brief.
