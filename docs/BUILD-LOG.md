@@ -319,4 +319,6 @@
 - **Hosted Studio and schema deploy:** need a Sanity token with the Developer role (`SANITY_DEPLOY_TOKEN`); the tokens issued at project creation cannot deploy.
 - **Staging migrations:** need GitHub secrets `SUPABASE_ACCESS_TOKEN` and `SUPABASE_STAGING_DB_PASSWORD`.
 
+**Staging gallery:** Faris set `ENABLE_DEV_ROUTES=true` on Railway. Checked 17 Oct 2026: `/dev/components/` and its component pages answer 200 in EN, ES and JA, render with the "Sample data" flag, and stay `noindex, nofollow` (header and meta); `/dev/error-preview/` returns its intended 500.
+
 **Next:** Faris approves the dry run and adds the three secrets; I then import into staging, record the count, and close DATA-014. Then the Batch 4a brief (sign-in).
