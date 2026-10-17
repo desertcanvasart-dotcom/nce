@@ -12,7 +12,7 @@ Every file in the source folder was listed recursively and read in full. Archive
 | 2 | `KICKOFF.md` | Markdown | 6,710 | Batch 0 brief: what to produce now |
 | 3 | `Nilecruz Dashboard Guide.docx` | Word (OOXML) | 44,716 | **Dashboard descriptions**, the source of all `DASH-*` rows |
 | 4 | `README.md` | Markdown | 8,313 | Brand book; byte-identical to `nilecrz-design-system/BRAND-BOOK.md` |
-| 5 | `nilecrz-design-system.zip` | ZIP (stored) | 139,845 | Design system, 58 files (see §5) |
+| 5 | `nilecrz-design-system.zip` | ZIP (stored) | 139,845 | Design system, 57 files (see §5) |
 | 6 | `nilecrz-site-silo.md` | Markdown | 10,347 | Silo narrative: rules, page types, launch order, URL tree |
 | 7 | `nilecrz-site-silo.xlsx` | Excel, 5 sheets | 33,116 | URL contract: 106 rows; the source of all `PAGE-*` rows |
 
@@ -95,7 +95,7 @@ Nothing failed to read. Two limits are worth stating:
   - **Component usage:** groups, and illustrative data in PriceAnatomy and VesselCompare.
 - **Feeds:** the `BRAND-*` rows, the `TOK-*` usage rules, `A11Y-*` (focus, contrast, status colours), `I18N-*` (casing, Japanese, Spanish length) and `EXPERIENCE.md` (motion).
 
-## 5. `nilecrz-design-system.zip` (58 files, extracted)
+## 5. `nilecrz-design-system.zip` (57 files, extracted)
 
 | Path in zip | Type | Size | Contains |
 |---|---|---:|---|
@@ -108,7 +108,7 @@ Nothing failed to read. Two limits are worth stating:
 | `components/bundle.css` | CSS | 42,241 | Imports Google Fonts (Cormorant Garamond 400/500/600 + italics 400/500; Jost 300/400/500); **defines the motion tokens** `--ease-river`, `--dur-1/2/3`; all component styles; a global `prefers-reduced-motion` kill-switch; `:lang(ja)` tracking of .08em on eyebrow, section title and badge |
 | `components/index.d.ts` | TS | 7,751 | Prop types for all 22 components, `VesselType` (sail/motor/steam/felucca), `SceneTime`, 47 `IconName`s |
 | `components/lib/react*.min.js` | JS | 10,751 + 131,835 | React and ReactDOM 18.3.1, production, MIT (vendored) |
-| `components/<Name>/README.md` ×21 | MD | 149–562 each | Usage guidelines (Cover has no README) |
+| `components/<Name>/README.md` ×23 | MD | 149–562 each | Usage guidelines: 22 components + LandingPage (Cover has no README) |
 | `components/<Name>/preview.html` ×24 | HTML | 1.5–4.6k each | A live preview for each of the 22 components plus `Cover` (wordmark with an SVG motif: navy slab, brass and sand blocks, a dusk half-sun) and `LandingPage` (the reference homepage composition). They share a head that reads the theme from `?theme` or `localStorage` and hides the toggle when embedded. |
 
 **The 22 components:**

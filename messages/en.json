@@ -1,0 +1,65 @@
+{
+  "meta": {
+    "siteName": "Nilecruz",
+    "homeTitle": "Nile cruises, explained before you sail",
+    "homeDescription": "How a sailing dahabiya, a paddle steamer and a motor cruise ship differ on board, and why one five-star cabin costs ten times another."
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "tagline": "Nile cruises, explained",
+    "mainNav": "Main",
+    "menuOpen": "Menu",
+    "menuClose": "Close menu",
+    "languageGroup": "Language",
+    "themeToDark": "Switch to Night theme",
+    "themeToLight": "Switch to Day theme",
+    "themeShortDark": "Night",
+    "themeShortLight": "Day"
+  },
+  "nav": {
+    "cruises": "Cruises",
+    "vessels": "Vessels",
+    "prices": "Why prices differ",
+    "guide": "Nile cruise guide",
+    "destinations": "Destinations",
+    "tours": "Tours & extras",
+    "cta": "Plan my cruise"
+  },
+  "footer": {
+    "explore": "Explore",
+    "company": "Company",
+    "legal": "Legal",
+    "about": "About Nilecruz",
+    "howWeChoose": "How we choose vessels",
+    "egyptologists": "Our Egyptologists",
+    "reviews": "Guest reviews",
+    "planMyCruise": "Plan my cruise",
+    "contact": "Contact",
+    "prices": "Nile cruise prices",
+    "terms": "Terms of use",
+    "privacy": "Privacy",
+    "englishOnly": "In English",
+    "copyright": "© {year} Nilecruz"
+  },
+  "home": {
+    "eyebrow": "Nile cruises, explained",
+    "title": "Nile cruises, explained before you sail",
+    "lead": "We are building a guide to how Nile vessels differ on board and why their prices range so widely. The first pages are on their way."
+  },
+  "notFound": {
+    "metaTitle": "Page not found",
+    "title": "We can't find that page",
+    "body": "The address may be mistyped, or the page may have moved.",
+    "home": "Go to the home page",
+    "cruises": "See Nile cruises"
+  },
+  "error": {
+    "title": "Something went wrong on our side",
+    "body": "Please try again in a moment. If it keeps happening, contact us and we will look into it.",
+    "retry": "Try again",
+    "home": "Go to the home page"
+  },
+  "legal": {
+    "draftBanner": "Draft, under review. This text is not final and is not yet in force."
+  }
+}

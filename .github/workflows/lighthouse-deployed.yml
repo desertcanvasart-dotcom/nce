@@ -1,0 +1,61 @@
+# The strict Lighthouse gate (ADR-040, ADR-041): simulated mobile throttling, LCP <= 2.5 s as an error,
+# run against a real Railway deployment so the page-load trace comes from a real network.
+#
+# Runs when Railway reports a successful deployment to GitHub (PR environments and staging),
+# or by hand with a URL. The result appears as a check on the deployed commit (and so on its PR).
+name: Lighthouse on deployment
+
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "Base URL of the deployment, e.g. https://example.up.railway.app"
+        required: true
+
+jobs:
+  lighthouse:
+    name: Lighthouse (mobile, deployed)
+    if: github.event_name == 'workflow_dispatch' || github.event.deployment_status.state == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { ref: "${{ github.event.deployment.sha || github.sha }}" }
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+
+      - name: Work out the deployed URL
+        id: url
+        env:
+          INPUT_URL: ${{ inputs.url }}
+          ENV_URL: ${{ github.event.deployment_status.environment_url }}
+          ENV_NAME: ${{ github.event.deployment.environment }}
+          STAGING_URL: ${{ vars.RAILWAY_STAGING_URL }}
+        run: |
+          url="$INPUT_URL"
+          # Railway sometimes reports its dashboard link instead of the app URL; ignore that.
+          if [ -z "$url" ] && [ -n "$ENV_URL" ] && ! echo "$ENV_URL" | grep -q '://railway.com/'; then url="$ENV_URL"; fi
+          # Fall back to the staging URL saved as a repository variable, for non-PR environments.
+          if [ -z "$url" ] && ! echo "$ENV_NAME" | grep -qi 'pr-'; then url="$STAGING_URL"; fi
+          if [ -z "$url" ]; then
+            echo "::error::No app URL for environment '$ENV_NAME'. Set the RAILWAY_STAGING_URL repository variable, or run this workflow by hand with a URL."
+            exit 1
+          fi
+          url="${url%/}"
+          echo "Testing $url"
+          curl -fsS --retry 10 --retry-delay 6 --retry-all-errors "$url/api/health"
+          echo "base=$url" >> "$GITHUB_OUTPUT"
+
+      - name: Lighthouse (strict gate)
+        run: >-
+          pnpm exec lhci autorun --config=lighthouserc.deployed.json
+          --collect.url=${{ steps.url.outputs.base }}/
+          --collect.url=${{ steps.url.outputs.base }}/es/
+          --collect.url=${{ steps.url.outputs.base }}/ja/
+          --collect.url=${{ steps.url.outputs.base }}/terms/
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with: { name: lighthouse-deployed, path: .lighthouseci, retention-days: 14, include-hidden-files: true }

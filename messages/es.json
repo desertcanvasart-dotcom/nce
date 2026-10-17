@@ -1,0 +1,66 @@
+{
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batch 1. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "meta": {
+    "siteName": "Nilecruz",
+    "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
+    "homeDescription": "En qué se diferencian a bordo una dahabiya de vela, un vapor de ruedas y un crucero a motor, y por qué un camarote de cinco estrellas cuesta diez veces más que otro."
+  },
+  "shell": {
+    "skipToContent": "Ir al contenido",
+    "tagline": "Cruceros por el Nilo, explicados",
+    "mainNav": "Principal",
+    "menuOpen": "Menú",
+    "menuClose": "Cerrar menú",
+    "languageGroup": "Idioma",
+    "themeToDark": "Cambiar al tema Noche",
+    "themeToLight": "Cambiar al tema Día",
+    "themeShortDark": "Noche",
+    "themeShortLight": "Día"
+  },
+  "nav": {
+    "cruises": "Cruceros",
+    "vessels": "Embarcaciones",
+    "prices": "Por qué varían los precios",
+    "guide": "Guía de cruceros por el Nilo",
+    "destinations": "Destinos",
+    "tours": "Excursiones y extras",
+    "cta": "Planificar mi crucero"
+  },
+  "footer": {
+    "explore": "Explorar",
+    "company": "Empresa",
+    "legal": "Legal",
+    "about": "Sobre Nilecruz",
+    "howWeChoose": "Cómo elegimos las embarcaciones",
+    "egyptologists": "Nuestros egiptólogos",
+    "reviews": "Opiniones de viajeros",
+    "planMyCruise": "Planificar mi crucero",
+    "contact": "Contacto",
+    "prices": "Precios de los cruceros por el Nilo",
+    "terms": "Condiciones de uso",
+    "privacy": "Privacidad",
+    "englishOnly": "En inglés",
+    "copyright": "© {year} Nilecruz"
+  },
+  "home": {
+    "eyebrow": "Cruceros por el Nilo, explicados",
+    "title": "Cruceros por el Nilo, explicados antes de zarpar",
+    "lead": "Estamos preparando una guía sobre en qué se diferencian a bordo las embarcaciones del Nilo y por qué sus precios varían tanto. Las primeras páginas llegarán pronto."
+  },
+  "notFound": {
+    "metaTitle": "Página no encontrada",
+    "title": "No encontramos esa página",
+    "body": "Puede que la dirección tenga un error o que la página se haya movido.",
+    "home": "Ir a la página de inicio",
+    "cruises": "Ver cruceros por el Nilo"
+  },
+  "error": {
+    "title": "Algo ha fallado por nuestra parte",
+    "body": "Inténtelo de nuevo en un momento. Si sigue ocurriendo, contáctenos y lo revisaremos.",
+    "retry": "Intentar de nuevo",
+    "home": "Ir a la página de inicio"
+  },
+  "legal": {
+    "draftBanner": "Borrador en revisión. Este texto no es definitivo y aún no está en vigor."
+  }
+}

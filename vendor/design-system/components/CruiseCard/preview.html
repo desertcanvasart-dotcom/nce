@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>CruiseCard</title>
+<style>body{margin:0;background:var(--surface);} #root{padding:32px;} </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../bundle.css">
+<script src="../lib/react.production.min.js"></script>
+<script src="../lib/react-dom.production.min.js"></script>
+<script src="../bundle.js"></script>
+<script>(function(){var t=new URLSearchParams(location.search).get('theme');try{t=t||localStorage.getItem('nc-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');if(window.top!==window.self)document.documentElement.classList.add('nc-embedded');})();</script>
+<style>.nc-embedded .nc-theme-toggle{display:none}.nc-theme-toggle{position:fixed;top:12px;right:12px;z-index:99;font:500 12px/1 var(--font-sans);letter-spacing:.06em;padding:8px 12px;border:1px solid var(--line-strong);background:var(--surface-raised);color:var(--ink);cursor:pointer}</style>
+</head>
+<body>
+<button class="nc-theme-toggle" onclick="var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('nc-theme',n)}catch(e){}">Day / Night</button>
+
+<div id="root" class="nc-root"></div>
+<script>
+var N = window.Nilecrz, h = React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:24}},
+ h(N.CruiseCard,{name:'Dahabiya Meroe',vessel:'sail',time:'dusk',route:['Esna','El Kab','Edfu','Kom Ombo','Aswan'],nights:5,guests:16,rating:4.9,reviews:212,price:2650,amenities:['quiet','egyptologist','anchor','sundeck','wine'],badges:[{label:'Only 2 suites left'}]}),
+ h(N.CruiseCard,{name:'Steamer Khedive',vessel:'steam',time:'dawn',route:['Luxor','Esna','Edfu','Kom Ombo','Aswan'],nights:4,guests:46,rating:4.7,reviews:96,price:3100,amenities:['library','bar','balcony','egyptologist'],saved:true}),
+ h(N.CruiseCard,{name:'Nile Aurora',vessel:'motor',time:'night',route:['Luxor','Edfu','Kom Ombo','Aswan'],nights:3,guests:140,rating:4.3,reviews:540,price:780,amenities:['pool','spa','gym','wifi','music'],badges:[{label:'Best value'}]})));
+</script>
+</body>
+</html>

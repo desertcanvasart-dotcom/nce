@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>AmenityGrid</title>
+<style>body{margin:0;background:var(--surface);} #root{padding:32px;} </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../bundle.css">
+<script src="../lib/react.production.min.js"></script>
+<script src="../lib/react-dom.production.min.js"></script>
+<script src="../bundle.js"></script>
+<script>(function(){var t=new URLSearchParams(location.search).get('theme');try{t=t||localStorage.getItem('nc-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');if(window.top!==window.self)document.documentElement.classList.add('nc-embedded');})();</script>
+<style>.nc-embedded .nc-theme-toggle{display:none}.nc-theme-toggle{position:fixed;top:12px;right:12px;z-index:99;font:500 12px/1 var(--font-sans);letter-spacing:.06em;padding:8px 12px;border:1px solid var(--line-strong);background:var(--surface-raised);color:var(--ink);cursor:pointer}</style>
+</head>
+<body>
+<button class="nc-theme-toggle" onclick="var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('nc-theme',n)}catch(e){}">Day / Night</button>
+
+<div id="root" class="nc-root"></div>
+<script>
+var N = window.Nilecrz, h = React.createElement;
+ReactDOM.createRoot(document.getElementById('root')).render(h(N.AmenityGrid,{items:[
+ {icon:'egyptologist',label:'Private Egyptologist',note:'A qualified guide sails with you and plans the site timings.'},
+ {icon:'sundeck',label:'Shaded sun deck',note:'Day beds and lunch under sail.'},
+ {icon:'quiet',label:'No engine noise',note:'Moved by the wind; a tug only on calm days.'},
+ {icon:'anchor',label:'Private moorings',note:'Islands and riverbanks, never rafted to other ships.'},
+ {icon:'bath',label:'Bathtub',status:'request',note:'In the two master suites only.'},
+ {icon:'wine',label:'Paired wines',status:'request',note:'Egyptian and imported, charged by the bottle.'},
+ {icon:'ac',label:'Air conditioning',note:'Individually controlled in every cabin.'},
+ {icon:'wifi',label:'Wi-Fi',status:'request',note:'4G router in the salon; patchy between towns.'},
+ {icon:'pool',label:'Pool',status:'none',note:'Dahabiyas are too small for a pool. Swim stops instead.'},
+ {icon:'spa',label:'Spa',status:'none',note:'Massage can be arranged ashore in Aswan.'},
+ {icon:'gym',label:'Gym',status:'none'},
+ {icon:'accessible',label:'Step-free access',status:'request',note:'One main-deck cabin; the gangway has steps.'}]}));
+</script>
+</body>
+</html>

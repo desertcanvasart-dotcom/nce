@@ -1,0 +1,79 @@
+# CI for every pull request and every push to main (ENG-012).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+  NEXT_PUBLIC_SITE_URL: http://localhost:3100
+
+jobs:
+  quality:
+    name: Types, lint, format, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm tokens:check
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm lint:css
+      - run: pnpm lint:copy
+      - run: pnpm format:check
+      - run: pnpm test
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { fetch-depth: 0 }
+      - name: gitleaks
+        run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 detect --source /repo --redact --no-banner
+
+  build-and-e2e:
+    name: Build, bundle budget, end-to-end
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm budget
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: End-to-end, production settings
+        run: pnpm test:e2e
+      - name: End-to-end, 500 page (dev routes on)
+        run: pnpm test:e2e -g "500 page"
+        env: { ENABLE_DEV_ROUTES: "true" }
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with: { name: playwright-report, path: playwright-report, retention-days: 7 }
+
+  lighthouse:
+    name: Lighthouse (mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .nvmrc, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm lhci
+      - uses: actions/upload-artifact@v7
+        if: always()
+        # .lighthouseci starts with a dot; upload-artifact skips hidden paths unless told otherwise.
+        with: { name: lighthouse, path: .lighthouseci, retention-days: 14, include-hidden-files: true }

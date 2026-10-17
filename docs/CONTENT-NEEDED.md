@@ -32,3 +32,4 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 26 | Bank-transfer instructions for customers, if manual payment is kept | 4f | Q55 |
 | 27 | Review of the draft Terms and Privacy pages, plus the facts they need: legal entity name, registration number, registered address, governing law, data-protection contact | 1 (draft) / 11 (final) | ADR-031 |
 | 28 | Translator review of the drafted ES and JA UI strings (`messages/es.json`, `messages/ja.json`) | 10 | ADR-032 |
+| 29 | Decide the "Best for" label wording (Q57) | 4b | Brand vs guide |
