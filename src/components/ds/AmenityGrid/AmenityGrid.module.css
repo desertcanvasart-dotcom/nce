@@ -1,0 +1,141 @@
+/* Ported from bundle.css "AmenityGrid". */
+.amen {
+  display: grid;
+  gap: var(--space-5);
+  color: var(--ink);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-0);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font-size: var(--type-caption-size);
+  line-height: 16px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    background var(--dur-1),
+    color var(--dur-1),
+    border-color var(--dur-1);
+}
+
+.chip:hover {
+  border-color: var(--ink);
+}
+
+.chip[aria-checked="true"] {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  list-style: none;
+}
+
+.tile {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  justify-items: start;
+  overflow: hidden;
+  min-height: 150px;
+  padding: var(--space-5) var(--space-4);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-raised);
+  animation: rise var(--dur-2) var(--ease-river) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tile:focus-visible {
+  outline-offset: -2px;
+}
+
+.ico {
+  color: var(--accent);
+  font-size: 30px;
+  transition: transform var(--dur-2) var(--ease-river);
+}
+
+.tile:hover .ico,
+.tile:focus-visible .ico {
+  transform: translateY(-3px) scale(1.08);
+}
+
+.tile b {
+  font-size: var(--type-body-size);
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.status {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  font-size: var(--type-eyebrow-size);
+  letter-spacing: 0.04em;
+}
+
+.included .status {
+  color: var(--success);
+}
+
+.request .status {
+  color: var(--accent);
+}
+
+.none {
+  background: var(--surface-sunk);
+}
+
+.none .ico,
+.none b,
+.none .status {
+  color: var(--ink-muted);
+}
+
+.note {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: end;
+  padding: var(--space-4);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+  transform: translateY(101%);
+  transition: transform var(--dur-2) var(--ease-river);
+}
+
+.tile:hover .note,
+.tile:focus-visible .note {
+  transform: none;
+}
