@@ -6,6 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
 import { beforeAll, describe, expect, it } from "vitest";
 import type { Database } from "@/server/db/database.types";
+import { totp } from "../support/totp";
 
 let url = "";
 let anonKey = "";
@@ -58,8 +59,18 @@ describe("signed-in roles", () => {
       .eq("slug", "sample-steam-one");
     expect(error?.code).toBe("42501");
   });
-  it("an admin sees every vessel and the audit trail", async () => {
+  it("an admin with a password only gets no admin powers (SEC-015)", async () => {
     const c = await signedIn("admin@nilecruz.test");
+    expect((await c.from("vessels").select("id")).data).toHaveLength(2);
+    expect((await c.from("audit_log").select("id").limit(1)).data).toEqual([]);
+  });
+  it("an admin after two-step sign-in sees every vessel and the audit trail", async () => {
+    const c = await signedIn("admin@nilecruz.test");
+    const { data: factors } = await c.auth.mfa.listFactors();
+    const factor = factors?.totp[0];
+    expect(factor).toBeDefined();
+    const { error } = await c.auth.mfa.challengeAndVerify({ factorId: factor!.id, code: totp() });
+    expect(error).toBeNull();
     expect((await c.from("vessels").select("id")).data).toHaveLength(4);
     expect((await c.from("audit_log").select("id").limit(1)).data).toHaveLength(1);
   });

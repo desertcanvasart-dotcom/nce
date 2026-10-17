@@ -74,3 +74,10 @@ insert into public.vessel_private (vessel_id, verification_note) values
 insert into public.vessel_translations (vessel_id, locale, summary) values
   ('00000000-0000-4000-8000-000000000001', 'en', 'Sample summary for the gallery and tests.'),
   ('00000000-0000-4000-8000-000000000003', 'en', 'Sample summary of a private draft.');
+
+-- Two-step sign-in for the seeded admins (ADR-064). LOCAL TEST SECRET ONLY: tests compute codes from it.
+insert into auth.mfa_factors (id, user_id, friendly_name, factor_type, status, created_at, updated_at, secret)
+values
+  ('00000000-0000-4000-a100-000000000001', '00000000-0000-4000-a000-000000000001', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
+  ('00000000-0000-4000-a100-000000000002', '00000000-0000-4000-a000-000000000002', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
+
