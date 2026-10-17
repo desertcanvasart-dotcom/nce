@@ -1,0 +1,61 @@
+# On merge to main: apply new database migrations to STAGING and deploy the Sanity Studio.
+# Production migrations are applied by hand at launch (Batch 11), never from here.
+name: Deploy data layer
+
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/migrations/**", "studio/**", ".github/workflows/deploy-data.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-data
+  cancel-in-progress: false
+
+jobs:
+  migrations:
+    name: Apply migrations to staging
+    runs-on: ubuntu-latest
+    environment: staging
+    env:
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_STAGING_DB_PASSWORD }}
+      STAGING_REF: fmidxxcadbuzxaxyohtk
+    steps:
+      - uses: actions/checkout@v7
+      - uses: supabase/setup-cli@v1
+        with: { version: 2.111.0 }
+      - name: Check secrets
+        run: |
+          [ -n "$SUPABASE_ACCESS_TOKEN" ] || { echo "Missing secret SUPABASE_ACCESS_TOKEN"; exit 1; }
+          [ -n "$SUPABASE_DB_PASSWORD" ] || { echo "Missing secret SUPABASE_STAGING_DB_PASSWORD"; exit 1; }
+      - run: supabase link --project-ref "$STAGING_REF"
+      - name: Show what will change
+        run: supabase db push --dry-run
+      - run: supabase db push
+      - name: Table privileges are exactly the intended set (ADR-061)
+        run: |
+          out=$(supabase db query --linked -f scripts/check-grants.sql -o json)
+          echo "$out" | jq -e '.rows | length == 0' >/dev/null || { echo "$out" | jq '.rows'; echo "Unexpected table privileges on staging."; exit 1; }
+
+  studio:
+    name: Deploy Sanity Studio and schema
+    runs-on: ubuntu-latest
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_DEPLOY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with: { node-version-file: .nvmrc }
+      - name: Check secret
+        run: '[ -n "$SANITY_AUTH_TOKEN" ] || { echo "Missing secret SANITY_DEPLOY_TOKEN"; exit 1; }'
+      - run: pnpm --dir studio install --frozen-lockfile --ignore-workspace
+      - name: Deploy the Studio (nilecruz.sanity.studio)
+        working-directory: studio
+        run: pnpm exec sanity deploy --yes
+      - name: Deploy the schema to both datasets
+        working-directory: studio
+        run: |
+          SANITY_STUDIO_DATASET=development pnpm exec sanity schema deploy
+          SANITY_STUDIO_DATASET=production pnpm exec sanity schema deploy

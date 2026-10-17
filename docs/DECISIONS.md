@@ -432,3 +432,69 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - The ordering-only `no-descending-specificity` rule is off.
 - **Copy lint:** ignores the `>` of arrow functions.
 - **Unchanged:** every real violation is still an error. The rule caught real issues this batch (two raw 4 px gaps and a non-token shadow).
+
+---
+
+## Faris's Batch 3 answers, 17 Oct 2026
+
+### ADR-051 Vessel import mapping (Accepted)
+- **Context:** the old directory types are powered (366), dahabiya (238) and lake_nasser (5). Faris: vessels fall into engine-powered, wind-powered and steam-powered; every dahabiya is wind-powered; most are engine-powered; only a few are steam-powered.
+- **Decision:**
+  - dahabiya → wind (`sail`, "sailing dahabiya");
+  - powered and lake_nasser → engine (`motor`, "motor cruise ship");
+  - steam (`steam`, "paddle steamer") is set only when Faris confirms a vessel. The import report lists steam candidates (names or notes mentioning steam or paddle) for him to confirm.
+- **Consequence:** no vessel is labelled a steamer by guesswork (DATA-045).
+
+### ADR-052 Passenger personal data moves to Batch 4e (Accepted)
+- **Decision:** SEC-013 moves from Batch 3 to 4e, where passengers and bookings are created. Batch 3 sets the access pattern it will use: membership-based helper functions.
+
+### ADR-053 Egyptologist profiles in the CMS (Accepted; PROPOSED-015 approved)
+- **Decision:** a translatable Sanity type `egyptologist` (name, photo, qualifications, languages, short bio, links) is created in Batch 3 (DATA-044). Faris supplies the names, bios and photos.
+
+### ADR-054 Sanity project (Accepted)
+- **Context:** Faris approved creating the Nilecruz Sanity project.
+- **Decision:** Studio is hosted by Sanity, so it adds nothing to the site's bundle. Datasets are `production` and `development`.
+
+### ADR-055 Local Supabase ports 554xx (Accepted)
+- **Context:** CleanMyMac on Faris's Mac listens on 54321, the Supabase default.
+- **Decision:** the local stack uses 55420–55429 (`supabase/config.toml`). CI uses the same file.
+- **Consequence:** local URLs are `http://127.0.0.1:55421` (API) and `:55423` (Studio).
+
+### ADR-056 Explicit table privileges and admin-only fields by trigger (Accepted)
+- **Context:** current Supabase no longer grants table access to `anon` and `authenticated` by default.
+- **Decision:** every table grants its privileges in a migration (`*_grants.sql`); default privileges are revoked, so a new table is closed until its migration opens it. RLS policies then decide the rows. Fields only admins may change (vessel visibility, operator, slug, source, sample flag; profile roles) are guarded by triggers, not column grants, because admins use the same database role.
+- **Consequence:** anonymous visitors get "permission denied" (not an empty list) on private tables; tested in `030_isolation.sql` and through the API.
+
+### ADR-057 Sanity setup details (Accepted)
+- **Decision:**
+  - Standalone Studio in `studio/` (Sanity's recommended layout), version-controlled, deployed by CI to `nilecruz.sanity.studio`.
+  - Both datasets are private; the site reads on the server with a read token. `production` was created public by default and switched to private.
+  - Translations: article, FAQ, destination story and vessel-type profile are translated as whole documents (each language published on its own). Price explainers and Egyptologist profiles share numbers and photos across languages, so only their text fields are translated. The brief said document-level for all; this split follows Sanity's guidance and avoids copying figures three times.
+  - The app uses `@sanity/client` (server-only) instead of `next-sanity`, which pulls in the whole Studio as a peer dependency. Live preview tooling is chosen in Batch 5, when pages first show content.
+  - Studio text fields run the house-style check (no superlatives, exclamation marks or emoji).
+- **Consequence:** deploying the Studio and schema needs a token with the Developer role (`SANITY_DEPLOY_TOKEN`); the tokens issued at project creation cannot deploy.
+
+### ADR-058 Vessel import rules (Accepted)
+- **Decision:**
+  - Only exact duplicates (identical name once case, accents and look-alike letters are ignored, same type) are skipped; near-matches and the source's own "possible duplicate" flags are imported and listed for an admin to merge.
+  - Cyrillic look-alike letters in names and slugs (for example "ІІ" used as the Roman numeral) are replaced with Latin letters, and each change is listed.
+  - Reserved listing slugs get a "-ship" or "-dahabiya" suffix.
+  - The source's bundled record "Unverified names (…)" is skipped: it is a list of 14 names, not a vessel (CONTENT-NEEDED #31).
+  - Re-running never overwrites a row (same `source_ref`), so admin edits survive. `--apply` accepts only `local` or `staging`; production is refused.
+- **Consequence:** 609 read, 608 mapped (237 sail, 371 motor), 1 skipped with its reason.
+
+### ADR-059 Migrations reach staging from CI only (Accepted)
+- **Decision:** on merge to `main`, `deploy-data.yml` runs `supabase db push` against staging (secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD`). Production migrations are applied by hand at launch (Batch 11). No schema change is made in the SQL editor.
+
+### ADR-060 Steamers and the unverified-names record (Accepted; Faris 17 Oct 2026)
+- **Decision:** the Sudan is the only paddle steamer. The source lists her three times (`historic-steamer-sudan-ss-sudan`, `sudan`, `sudan-steamer-nile-cruise`); all three are `steam` and are left for an admin to merge. Karim, Mövenpick SS Misr and S.S. Sphinx stay motor cruise ships. The bundled "Unverified names" record becomes 14 separate name-only dahabiya drafts, flagged `unverified-name`, with no facts. This replaces the skip in ADR-058.
+- **Consequence:** staging holds 622 private drafts: 368 motor, 251 sail, 3 steam.
+
+### ADR-061 Exact table privileges, checked after every deploy (Accepted)
+- **Context:** pushing the migrations to staging showed that hosted Supabase gives `anon` and `authenticated` every privilege, TRUNCATE included, on tables as they are created; the local Docker stack does not. RLS blocked every row, and the public API has no TRUNCATE, so nothing was exposed. But TRUNCATE bypasses RLS, so the gap had to close.
+- **Decision:** migration `*_exact_grants.sql` revokes everything and grants back exactly the intended set, and makes future tables start closed. `scripts/check-grants.sql` lists any difference: it ran empty on staging, runs in `deploy-data.yml` after every push, and `060_privileges.sql` asserts the same locally and in CI.
+- **Consequence:** anonymous visitors now get "permission denied" on private tables on staging too.
+
+### ADR-059 amendment: first staging push from this Mac
+- With Faris's approval of the import (17 Oct 2026), I applied the six migrations to staging once with the Supabase CLI from this Mac, because the GitHub secrets are not set yet. From now on, staging changes only through `deploy-data.yml`.
+

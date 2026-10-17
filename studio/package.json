@@ -1,0 +1,27 @@
+{
+  "name": "nilecruz-studio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Nilecruz editorial Studio (Sanity). Hosted by Sanity; adds nothing to the site's bundle.",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@sanity/document-internationalization": "6.2.43",
+    "@sanity/icons": "5.2.3",
+    "@sanity/vision": "6.19.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sanity": "6.19.0",
+    "sanity-plugin-internationalized-array": "^5.3.6",
+    "styled-components": "^6.6.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

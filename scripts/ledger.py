@@ -375,7 +375,7 @@ X = {
  ("DG §Admin/Overview", "Privileged actions write an append-only audit log entry.", "3"),
  ("CLAUDE.md §5", "A security review before launch has no open high findings.", "11"),
  ("ARCH §Security", "Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set.", "1"),
- ("ARCH §Data", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "3"),
+ ("ARCH §Data; ADR-052", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "4e"),
 ],
 "SEO": [
  ("silo.xlsx Read me C10", "URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect.", "1"),
@@ -467,6 +467,8 @@ X = {
  ("Faris 17 Oct 2026 (ADR-030); Q54", "Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split.", "4f"),
  ("Faris 17 Oct 2026 (ADR-030); Q11", "Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours.", "4d"),
  ("Faris 17 Oct 2026 (ADR-030); Q55", "As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-053); PROPOSED-015", "Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris.", "3"),
+ ("Faris 17 Oct 2026 (ADR-051)", "Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates.", "3"),
 ],
 }
 for p, items in X.items():
@@ -585,6 +587,25 @@ STATUS.update({
  "I18N-010": ("Verified", B2+"format.test.ts locale cases (es, ja)"),
  "DATA-010": ("Verified", B2+"StateView (loading, empty, error, denied) in EN/ES/JA; gallery stories"),
  "BRAND-021": ("In progress", B2+"Carried over to Batch 6: section spacing and alternating bands are page composition (first applied on the homepage); components follow their own spacing tokens"),
+})
+B3 = "Batch 3 (17 Oct 2026): "
+STATUS.update({
+ "DATA-001": ("Verified", B3+"supabase/tests/020_data_formats.sql (no float money; money-like columns bigint); currency_code domain; validation.test.ts 'money'"),
+ "DATA-002": ("Verified", B3+"020_data_formats.sql 'every timestamp has a time zone'"),
+ "DATA-005": ("Verified", B3+"vessels, vessel_translations, destinations, media in Supabase; article, faq, vesselTypeProfile, priceFactorSet in Sanity (studio/schemaTypes); components take data by props (Batch 2)"),
+ "DATA-006": ("Verified", B3+"is_sample on vessels/destinations/media, Sanity 'sample' field (default on); src/lib/data/sample.ts + data-helpers.test.ts"),
+ "DATA-013": ("Verified", B3+"supabase/seed.sql: 11 users (every platform, admin and team role), 4 organisations, 4 sample vessels in every visibility; supabase/seed-users.md"),
+ "DATA-014": ("Verified", B3+"approved by Faris 17 Oct 2026; docs/imports/vessels-dry-run.md: 609 source records, 622 vessels (14 from the bundled unverified-names record), 0 skipped; staging holds 622 private drafts (368 motor, 251 sail, 3 steam), 622 private-facts rows, 1,244 audit entries; re-run inserts 0; anonymous API sees 0"),
+ "DATA-044": ("Verified", B3+"studio/schemaTypes/documents/egyptologist.ts (field-level EN/ES/JA, photo consent required); schema validates (pnpm studio:check). Content from Faris: CONTENT-NEEDED #13"),
+ "DATA-045": ("Verified", B3+"scripts/lib/vessel-import.ts; vessel-import.test.ts; Faris confirmed the Sudan as the only steamer (ADR-060): 3 Sudan records steam, Karim, Misr and Sphinx stay motor"),
+ "SEC-001": ("Verified", B3+"010_rls_coverage.sql (RLS on and a policy on every table); 030_isolation.sql (23 checks); 060_privileges.sql; tests/db-api/rest.test.ts through PostgREST and Auth; staging: grant diff empty, anonymous API refused on private tables (ADR-061)"),
+ "SEC-004": ("Verified", B3+"src/server/validation (zod, mirrors DB checks); parseInput/withInput; validation.test.ts"),
+ "SEC-010": ("Verified", B3+"040_audit.sql: update, delete, truncate refused for owner and service role; direct inserts refused; role changes and catalogue writes logged by triggers"),
+ "SEO-030": ("Verified", B3+"app.is_reserved_slug check; 050_catalogue_rules.sql; validation.test.ts (list equals the SQL function); import renames reserved slugs"),
+ "I18N-011": ("Verified", B3+"*_translations tables (en/es/ja); pickTranslation English fallback + data-helpers.test.ts; Sanity document-level and field-level translations, English required"),
+ "BRAND-008": ("Verified", B3+"vessel_type enum sail/motor/steam; labels from messages (Batch 2); Sanity vesselTypeProfile options use the exact labels"),
+ "BRAND-009": ("Verified", B3+"destinations.name holds the common English name (seed: Luxor, Aswan, Edfu); Sanity destinationStory joins by slug, so names have one source"),
+ "BRAND-014": ("Verified", B3+"media_one_parent and path-matches-parent checks; 050_catalogue_rules.sql; 030 'operator A cannot add photos to operator B's vessel'; private storage bucket served only with a readable media row"),
 })
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
