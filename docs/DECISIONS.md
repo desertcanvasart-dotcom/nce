@@ -432,3 +432,25 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - The ordering-only `no-descending-specificity` rule is off.
 - **Copy lint:** ignores the `>` of arrow functions.
 - **Unchanged:** every real violation is still an error. The rule caught real issues this batch (two raw 4 px gaps and a non-token shadow).
+
+---
+
+## Faris's Batch 3 answers, 17 Oct 2026
+
+### ADR-051 Vessel import mapping (Accepted)
+- **Context:** the old directory types are powered (366), dahabiya (238) and lake_nasser (5). Faris: vessels fall into engine-powered, wind-powered and steam-powered; every dahabiya is wind-powered; most are engine-powered; only a few are steam-powered.
+- **Decision:**
+  - dahabiya → wind (`sail`, "sailing dahabiya");
+  - powered and lake_nasser → engine (`motor`, "motor cruise ship");
+  - steam (`steam`, "paddle steamer") is set only when Faris confirms a vessel. The import report lists steam candidates (names or notes mentioning steam or paddle) for him to confirm.
+- **Consequence:** no vessel is labelled a steamer by guesswork (DATA-045).
+
+### ADR-052 Passenger personal data moves to Batch 4e (Accepted)
+- **Decision:** SEC-013 moves from Batch 3 to 4e, where passengers and bookings are created. Batch 3 sets the access pattern it will use: membership-based helper functions.
+
+### ADR-053 Egyptologist profiles in the CMS (Accepted; PROPOSED-015 approved)
+- **Decision:** a translatable Sanity type `egyptologist` (name, photo, qualifications, languages, short bio, links) is created in Batch 3 (DATA-044). Faris supplies the names, bios and photos.
+
+### ADR-054 Sanity project (Accepted)
+- **Context:** Faris approved creating the Nilecruz Sanity project.
+- **Decision:** Studio is hosted by Sanity, so it adds nothing to the site's bundle. Datasets are `production` and `development`.

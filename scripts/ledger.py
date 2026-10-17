@@ -375,7 +375,7 @@ X = {
  ("DG §Admin/Overview", "Privileged actions write an append-only audit log entry.", "3"),
  ("CLAUDE.md §5", "A security review before launch has no open high findings.", "11"),
  ("ARCH §Security", "Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set.", "1"),
- ("ARCH §Data", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "3"),
+ ("ARCH §Data; ADR-052", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "4e"),
 ],
 "SEO": [
  ("silo.xlsx Read me C10", "URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect.", "1"),
@@ -467,6 +467,8 @@ X = {
  ("Faris 17 Oct 2026 (ADR-030); Q54", "Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split.", "4f"),
  ("Faris 17 Oct 2026 (ADR-030); Q11", "Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours.", "4d"),
  ("Faris 17 Oct 2026 (ADR-030); Q55", "As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-053); PROPOSED-015", "Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris.", "3"),
+ ("Faris 17 Oct 2026 (ADR-051)", "Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates.", "3"),
 ],
 }
 for p, items in X.items():

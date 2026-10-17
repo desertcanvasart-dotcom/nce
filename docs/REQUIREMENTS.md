@@ -28,9 +28,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC | 13 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 43 |
+| DATA | 45 |
 | EXP | 10 |
-| **Total** | **520** |
+| **Total** | **522** |
 
 ## Dashboard guide (ROLE)
 
@@ -535,7 +535,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Planned |  |
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
-| SEC-013 | ARCH §Data | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 3 | Planned |  |
+| SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Planned |  |
 
 ## SEO
 
@@ -636,6 +636,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-041 | Faris 17 Oct 2026 (ADR-030); Q54 | Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split. | 4f | Planned |  |
 | DATA-042 | Faris 17 Oct 2026 (ADR-030); Q11 | Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours. | 4d | Planned |  |
 | DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Planned |  |
+| DATA-044 | Faris 17 Oct 2026 (ADR-053); PROPOSED-015 | Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris. | 3 | Planned |  |
+| DATA-045 | Faris 17 Oct 2026 (ADR-051) | Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates. | 3 | Planned |  |
 
 ## EXP
 
