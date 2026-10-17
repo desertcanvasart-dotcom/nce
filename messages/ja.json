@@ -1,0 +1,66 @@
+{
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batch 1. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "meta": {
+    "siteName": "Nilecruz",
+    "homeTitle": "乗船前にわかる、ナイル川クルーズ",
+    "homeDescription": "帆走するダハビヤ、外輪蒸気船、モータークルーズ船は船上で何が違うのか。同じ五つ星の客室で、なぜ価格が十倍も違うのかを解説します。"
+  },
+  "shell": {
+    "skipToContent": "本文へ移動",
+    "tagline": "ナイル川クルーズをわかりやすく",
+    "mainNav": "メイン",
+    "menuOpen": "メニュー",
+    "menuClose": "メニューを閉じる",
+    "languageGroup": "言語",
+    "themeToDark": "夜のテーマに切り替える",
+    "themeToLight": "昼のテーマに切り替える",
+    "themeShortDark": "夜",
+    "themeShortLight": "昼"
+  },
+  "nav": {
+    "cruises": "クルーズ",
+    "vessels": "船の種類",
+    "prices": "価格が違う理由",
+    "guide": "ナイル川クルーズガイド",
+    "destinations": "寄港地",
+    "tours": "ツアーとオプション",
+    "cta": "クルーズを計画する"
+  },
+  "footer": {
+    "explore": "探す",
+    "company": "会社情報",
+    "legal": "規約",
+    "about": "Nilecruz について",
+    "howWeChoose": "船の選び方",
+    "egyptologists": "エジプト学者のご紹介",
+    "reviews": "お客様の声",
+    "planMyCruise": "クルーズを計画する",
+    "contact": "お問い合わせ",
+    "prices": "ナイル川クルーズの料金",
+    "terms": "利用規約",
+    "privacy": "プライバシー",
+    "englishOnly": "英語のみ",
+    "copyright": "© {year} Nilecruz"
+  },
+  "home": {
+    "eyebrow": "ナイル川クルーズをわかりやすく",
+    "title": "乗船前にわかる、ナイル川クルーズ",
+    "lead": "ナイル川の船が船上でどう違うのか、なぜ価格にこれほど差があるのかを解説するガイドを準備しています。最初のページはまもなく公開します。"
+  },
+  "notFound": {
+    "metaTitle": "ページが見つかりません",
+    "title": "ページが見つかりません",
+    "body": "アドレスに誤りがあるか、ページが移動した可能性があります。",
+    "home": "ホームへ戻る",
+    "cruises": "ナイル川クルーズを見る"
+  },
+  "error": {
+    "title": "こちら側で問題が発生しました",
+    "body": "しばらくしてからもう一度お試しください。問題が続く場合はお問い合わせください。",
+    "retry": "もう一度試す",
+    "home": "ホームへ戻る"
+  },
+  "legal": {
+    "draftBanner": "審査中の草案です。この文章は確定版ではなく、まだ効力を持ちません。"
+  }
+}
