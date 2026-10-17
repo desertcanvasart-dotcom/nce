@@ -33,6 +33,10 @@ jobs:
       - name: Show what will change
         run: supabase db push --dry-run
       - run: supabase db push
+      - name: Table privileges are exactly the intended set (ADR-061)
+        run: |
+          out=$(supabase db query --linked -f scripts/check-grants.sql -o json)
+          echo "$out" | jq -e '.rows | length == 0' >/dev/null || { echo "$out" | jq '.rows'; echo "Unexpected table privileges on staging."; exit 1; }
 
   studio:
     name: Deploy Sanity Studio and schema
