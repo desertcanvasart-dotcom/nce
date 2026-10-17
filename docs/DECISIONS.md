@@ -558,3 +558,13 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-075 Catalogue rights by admin sub-role (Accepted)
 - **Decision:** super and catalogue admins create and edit vessels, evaluations, ratings, safety notes, imports, submissions and operators; content admins can edit vessel descriptions and photo descriptions; finance admins read only. Enforced by `requireAdmin(roles)` (super is always included) and by RLS through `app.has_admin_role()`.
 
+### ADR-076 Dashboard forms keep what people typed; outcomes come from the server (Accepted)
+- **Context:** React 19 resets a form posted through an action when the action finishes, so an admin who missed one field lost everything typed. Messages kept in a form also vanished when that form disappeared after a state change (for example "Make private").
+- **Decision:** `ActionForm` submits through a transition when JavaScript runs (no reset) and posts normally without JavaScript. "Add" forms clear only after a success (`resetOnSuccess`). Pages show the current state themselves from the server ("Visibility now: …", "Under review…", the submission history), so the outcome survives the form.
+
+### ADR-077 Small access rules found while testing 4b (Accepted)
+- **Invited people see the inviting company:** a narrow RLS rule lets someone with an open invitation read that company's name before accepting.
+- **The invitations notice filters by recipient:** owners can read all of their company's invitations, so the dashboard notice shows only those addressed to the signed-in email.
+- **Submission status changes only through the transition functions,** enforced by a trigger, because a column-level revoke can't override a table-level grant in Postgres.
+- **Tests:** a third local-only super admin (`editor@nilecruz.test`) serves the catalogue tests; two-step codes are single-use per 30-second window, so tests using one admin account run in order.
+

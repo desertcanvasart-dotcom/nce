@@ -7,7 +7,7 @@ export function ActivityTable({ rows }: { rows: ActivityRow[] }) {
   if (!rows.length) return <p className={ui.muted}>No activity yet.</p>;
   return (
     <div className={ui.tableWrap}>
-      <table className={ui.table}>
+      <table className={`${ui.table} ${ui.stack}`}>
         <caption className="visually-hidden">Marketplace activity, newest first</caption>
         <thead>
           <tr>
@@ -20,15 +20,15 @@ export function ActivityTable({ rows }: { rows: ActivityRow[] }) {
         <tbody>
           {rows.map((r) => (
             <tr key={r.id}>
-              <td>
+              <td data-label="When">
                 <CairoTime value={r.at} />
               </td>
-              <td>{r.who}</td>
-              <td>
+              <td data-label="Who">{r.who}</td>
+              <td data-label="What">
                 {r.what}
                 {r.changed.length ? <span className={ui.muted}> ({r.changed.join(", ")})</span> : null}
               </td>
-              <td>{r.href ? <Link href={r.href}>{r.record}</Link> : r.record}</td>
+              <td data-label="Record">{r.href ? <Link href={r.href}>{r.record}</Link> : r.record}</td>
             </tr>
           ))}
         </tbody>

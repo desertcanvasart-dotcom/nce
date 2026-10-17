@@ -67,6 +67,33 @@ export async function recentActivity(f: ActivityFilter) {
   const { data: people } = actors.length ? await db.from("profiles").select("id, full_name").in("id", actors) : { data: [] };
   const name = new Map((people ?? []).map((p) => [p.id, p.full_name ?? "A team member"]));
 
+  // Records are named, not shown as IDs: vessels (and their facts, photos, scores) and companies.
+  const vesselIds = new Set<string>();
+  const orgIds = new Set<string>();
+  for (const r of data ?? []) {
+    const d = (r.new_data ?? r.old_data ?? {}) as Record<string, unknown>;
+    if (r.table_name === "vessels" && r.row_id) vesselIds.add(r.row_id);
+    if (typeof d.vessel_id === "string") vesselIds.add(d.vessel_id);
+    if (typeof d.org_id === "string") orgIds.add(d.org_id);
+    if (r.table_name === "organisations" && r.row_id) orgIds.add(r.row_id);
+  }
+  const [{ data: vs }, { data: os }] = await Promise.all([
+    vesselIds.size
+      ? db
+          .from("vessels")
+          .select("id, name")
+          .in("id", [...vesselIds])
+      : Promise.resolve({ data: [] as { id: string; name: string }[] }),
+    orgIds.size
+      ? db
+          .from("organisations")
+          .select("id, display_name")
+          .in("id", [...orgIds])
+      : Promise.resolve({ data: [] as { id: string; display_name: string }[] }),
+  ]);
+  const vesselName = new Map((vs ?? []).map((v) => [v.id, v.name]));
+  const orgName = new Map((os ?? []).map((o) => [o.id, o.display_name]));
+
   const rows: ActivityRow[] = (data ?? []).map((r) => {
     const [table, verb] = r.action.split(".") as [string, string];
     const n = (r.new_data ?? r.old_data ?? {}) as Record<string, unknown>;
@@ -75,8 +102,15 @@ export async function recentActivity(f: ActivityFilter) {
       verb === "update" && r.old_data && r.new_data
         ? Object.keys(n).filter((k) => k !== "updated_at" && JSON.stringify(n[k]) !== JSON.stringify(o[k]))
         : [];
-    const label = typeof n.name === "string" ? n.name : typeof n.display_name === "string" ? n.display_name : (r.row_id ?? "");
     const vesselId = table === "vessels" ? r.row_id : typeof n.vessel_id === "string" ? n.vessel_id : null;
+    const orgId = table === "organisations" ? r.row_id : typeof n.org_id === "string" ? n.org_id : null;
+    const label =
+      (typeof n.name === "string" && n.name) ||
+      (typeof n.display_name === "string" && n.display_name) ||
+      (vesselId && vesselName.get(vesselId)) ||
+      (orgId && orgName.get(orgId)) ||
+      (typeof n.email === "string" && n.email) ||
+      (r.row_id ? `#${r.row_id.slice(0, 8)}` : "");
     return {
       id: r.id,
       at: r.occurred_at,

@@ -257,3 +257,37 @@ a.counter:hover {
 .filterSubmit {
   align-self: end;
 }
+
+/* Phones: a table marked .stack shows each row as a labelled block (labels come from data-label). */
+@media (width < 640px) {
+  .stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .stack tr {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .stack td {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: 0;
+    border: 0;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+
+  .stack td::before {
+    color: var(--ink-muted);
+    font-size: var(--type-caption-size);
+    content: attr(data-label);
+  }
+}

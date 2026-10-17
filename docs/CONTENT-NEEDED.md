@@ -38,4 +38,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 32 | ~~Approval of the vessel dry run~~ Approved 17 Oct 2026; imported to staging | 3 | DATA-014 |
 | 33 | Google Cloud OAuth client (only if you want "Sign in with Google") | when wanted | ADR-065 |
 | 34 | Sign up on staging, then I make `islamjp69@gmail.com` super admin | 4a | ADR-066 |
+| 35 | Real evaluations: inspections scored with method v1 (who inspects, when) | 4b onwards | ADR-070 |
+| 36 | Vessel photos with publishing rights and credits | 4b onwards | DASH-ADM-013 |
+| 37 | Which directory vessels get which category, operator and "Best for" labels | 4b onwards | ADR-071, ADR-072 |
 

@@ -71,7 +71,7 @@ export default async function CataloguePage({ searchParams }: Props) {
 
       <Section title={`${list.total} vessel${list.total === 1 ? "" : "s"}`} id="results">
         <div className={ui.tableWrap}>
-          <table className={ui.table}>
+          <table className={`${ui.table} ${ui.stack}`}>
             <caption className="visually-hidden">Vessels in the catalogue</caption>
             <thead>
               <tr>
@@ -86,7 +86,7 @@ export default async function CataloguePage({ searchParams }: Props) {
             <tbody>
               {list.rows.map((v) => (
                 <tr key={v.id}>
-                  <td>
+                  <td data-label="Name">
                     <Link href={`/dashboard/admin/catalogue/${v.id}/`}>{v.name}</Link>
                     {v.is_sample ? (
                       <>
@@ -95,11 +95,11 @@ export default async function CataloguePage({ searchParams }: Props) {
                       </>
                     ) : null}
                   </td>
-                  <td>{VESSEL_TYPE_LABEL[v.type]}</td>
-                  <td>{category(v.category)}</td>
-                  <td>{VIS[v.visibility]}</td>
-                  <td>{v.operator?.display_name ?? <span className={ui.muted}>None</span>}</td>
-                  <td>
+                  <td data-label="Type">{VESSEL_TYPE_LABEL[v.type]}</td>
+                  <td data-label="Category">{category(v.category)}</td>
+                  <td data-label="Visibility">{VIS[v.visibility]}</td>
+                  <td data-label="Operator">{v.operator?.display_name ?? <span className={ui.muted}>None</span>}</td>
+                  <td data-label="Readiness">
                     {v.readiness.complete ? (
                       <Badge tone="success">Complete</Badge>
                     ) : (
