@@ -4,7 +4,7 @@ import { locale, optionalText, slug, trimmed, uuid, vesselSlug } from "./common"
 /** Mirrors the checks in supabase/migrations/*_catalogue.sql, so errors reach people before the database. */
 export const vesselType = z.enum(["sail", "motor", "steam"]);
 export const visibility = z.enum(["private", "showcase", "published"]);
-export const vesselCategory = z.enum(["luxury", "value"]);
+export const vesselCategory = z.enum(["basic", "standard", "superior", "deluxe", "luxury"]);
 
 const count = (max: number) => z.number().int().positive().max(max).nullable().optional();
 
