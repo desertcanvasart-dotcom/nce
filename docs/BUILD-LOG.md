@@ -271,3 +271,15 @@
 - The gallery on staging needs `ENABLE_DEV_ROUTES=true` set on the Railway service (Faris approved this; it has to be set in Railway).
 
 **Next:** Faris reviews the gallery, then the Batch 3 brief (data foundation).
+
+### 17 Oct 2026 · Batch 2 update: CI
+
+- **First two CI runs failed on visual parity only.**
+  - The design system's previews fetch fonts from Google, which sends hinted font files to Linux and unhinted files to macOS. On GitHub's Linux runner, text was a few pixels wider than the build's self-hosted fonts (SectionHeading 1.8% vs 0.09% on macOS; AmenityGrid 1.1%).
+  - In the first run, the parity tests also ran in sequence, so one failure skipped the rest.
+- **Fixed in the test, not the threshold:**
+  - every font family and weight the page uses is loaded before each screenshot;
+  - the previews get the build's own font files;
+  - the tests are independent;
+  - each result is its own file, merged into `report.json`.
+- **CI on `5a652d5` is green** (4/4 jobs). CI parity now matches macOS within about 0.3 points, apart from components already allowlisted for intended differences.

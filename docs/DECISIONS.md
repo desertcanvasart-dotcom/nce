@@ -402,6 +402,7 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - Both are screenshotted at 1440 px in Day and Night with reduced motion, and diffed with pixelmatch.
   - More than 1% different pixels fails unless the component is listed, with a reason, in `tests/e2e/parity-allowlist.json`.
   - Results are in `docs/screenshots/batch-02/parity/`.
+- **Same font files on both sides:** the previews load fonts from Google, which serves Linux different (hinted) files from macOS. On Linux CI the text was a few pixels wider (SectionHeading 1.8% vs 0.09% locally). The parity test therefore answers the previews' Google Fonts request with the build's own font files, and also loads every used font before each screenshot. CI and macOS now agree, for example SectionHeading 0.12% vs 0.09%.
 - **Result:**
   - 11 components are under 1% in both themes.
   - The others differ only by recorded decisions. I checked diff images to confirm this, for example CruiseCard (score instead of stars, information-only card).
