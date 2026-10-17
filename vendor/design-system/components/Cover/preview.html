@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>nilecrz</title>
+<style>
+  html, body { margin:0; height:100%; }
+  body { background:var(--surface); color:var(--ink); font-family:var(--font-sans); overflow:hidden; }
+  .cover { position:relative; height:288px; overflow:hidden; }
+  .art { position:absolute; top:0; left:480px; width:480px; height:288px; overflow:hidden; }
+  .art svg { display:block; width:480px; height:288px; }
+  .deep { fill:var(--nile-800); }
+  [data-theme="dark"] .deep { fill:var(--nile-600); }
+  .brass { fill:var(--brass-500); }
+  .sand { fill:var(--sand-200); }
+  .sun { fill:var(--dusk-500); }
+  .ring { fill:none; stroke:var(--brass-500); stroke-width:1.5; }
+  .horizon { stroke:var(--brass-500); stroke-width:1; }
+  .blk { rx:var(--radius-0); }
+  .words { position:absolute; left:var(--space-6); right:var(--space-6); bottom:var(--space-6); max-width:440px; }
+  .name { margin:0; font-family:var(--font-display); font-size:112px; line-height:.9; font-weight:500; letter-spacing:-.01em; color:var(--ink); }
+  .tag { margin:var(--space-2) 0 0 4px; font-size:14px; line-height:20px; color:var(--ink-muted); }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../tokens/tokens.css">
+<link rel="stylesheet" href="../bundle.css">
+<script src="../lib/react.production.min.js"></script>
+<script src="../lib/react-dom.production.min.js"></script>
+<script src="../bundle.js"></script>
+<script>(function(){var t=new URLSearchParams(location.search).get('theme');try{t=t||localStorage.getItem('nc-theme')}catch(e){}document.documentElement.setAttribute('data-theme',t==='dark'?'dark':'light');if(window.top!==window.self)document.documentElement.classList.add('nc-embedded');})();</script>
+<style>.nc-embedded .nc-theme-toggle{display:none}.nc-theme-toggle{position:fixed;top:12px;right:12px;z-index:99;font:500 12px/1 var(--font-sans);letter-spacing:.06em;padding:8px 12px;border:1px solid var(--line-strong);background:var(--surface-raised);color:var(--ink);cursor:pointer}</style>
+</head>
+<body>
+<button class="nc-theme-toggle" onclick="var d=document.documentElement,n=d.getAttribute('data-theme')==='dark'?'light':'dark';d.setAttribute('data-theme',n);try{localStorage.setItem('nc-theme',n)}catch(e){}">Day / Night</button>
+
+<div class="cover">
+<div class="art" aria-hidden="true">
+<svg viewBox="0 0 480 288" width="480" height="288">
+<!--
+  blocks      nile-800 slab 232×264 bled off the top (the brand navy, largest; nile-600 in Night so it holds on the dark ground) · brass-500 112×208 · sand-200 96×144 bleeding off the right edge · dusk-500 only as the sun disc — ≈38% of 960×288
+  arrangement one tall navy slab with two satellites stepping down to the right, bottoms on one line space-6 above the edge, space-4 gutters
+  pattern     literal motif, the sun setting on the river: a dusk-500 half-disc on a brass hairline horizon with two concentric brass arcs — chosen because the brand is the Nile at dusk, square brochure blocks, brass hairlines
+  scales      sides in space-2 multiples; gutters space-4; ring pitch space-5 (24px); corners radius-0 (the system is square)
+-->
+<rect class="deep blk" x="24" y="-8" width="232" height="264"/>
+<line class="horizon" x1="24" y1="176" x2="256" y2="176"/>
+<circle class="ring" cx="140" cy="176" r="96" clip-path="url(#top)"/>
+<circle class="ring" cx="140" cy="176" r="72" clip-path="url(#top)"/>
+<clipPath id="top"><rect x="0" y="0" width="480" height="176"/></clipPath>
+<path class="sun" d="M92 176A48 48 0 0 1 188 176Z"/>
+<rect class="brass blk" x="272" y="48" width="112" height="208"/>
+<rect class="sand blk" x="400" y="112" width="96" height="144"/>
+</svg>
+</div>
+<div class="words">
+<h1 class="name">nilecrz</h1>
+<p class="tag">Nile cruises, explained before you sail.</p>
+</div>
+</div>
+</body>
+</html>

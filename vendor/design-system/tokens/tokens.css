@@ -1,0 +1,92 @@
+/* nilecrz — generated from tokens.json */
+:root, [data-theme="light"] {
+  --surface: #fbf9f4;
+  --surface-raised: #ffffff;
+  --surface-sunk: #f4efe5;
+  --tint: #ece3d3;
+  --line: #ddd3c2;
+  --line-strong: #7c8597;
+  --ink: #1a2b4b;
+  --ink-muted: #5a6478;
+  --accent: #7a5822;
+  --accent-soft: #f1e6d1;
+  --primary: #1a2b4b;
+  --on-primary: #ffffff;
+  --success: #2f6046;
+  --success-soft: #e3eee6;
+  --danger: #a3392a;
+  --danger-soft: #f6e2dc;
+  --focus: #34507f;
+  --scrim: rgba(11, 20, 36, 0.55);
+  --on-media: #ffffff;
+  --nile-950: #0b1424;
+  --nile-800: #1a2b4b;
+  --nile-600: #34507f;
+  --nile-300: #9fb2d1;
+  --brass-700: #7a5822;
+  --brass-500: #b08a4e;
+  --brass-300: #d9bf8c;
+  --sand-200: #ece3d3;
+  --sand-100: #f5f0e6;
+  --ivory: #fbf9f4;
+  --dusk-500: #c0714a;
+  --dusk-300: #e7b38a;
+  --shadow-float: 0 24px 48px -20px rgba(11, 20, 36, 0.35);
+  --shadow-lift: 0 18px 36px -24px rgba(11, 20, 36, 0.45);
+}
+[data-theme="dark"] {
+  --surface: #0b1424;
+  --surface-raised: #111d33;
+  --surface-sunk: #070e1a;
+  --tint: #1c2a44;
+  --line: #26365a;
+  --line-strong: #65769a;
+  --ink: #f2ede3;
+  --ink-muted: #a9b3c5;
+  --accent: #d9bf8c;
+  --accent-soft: #2a2416;
+  --primary: #d9bf8c;
+  --on-primary: #0b1424;
+  --success: #8cc7a2;
+  --success-soft: #143024;
+  --danger: #f0a08e;
+  --danger-soft: #3a1a15;
+  --focus: #d9bf8c;
+  --scrim: rgba(7, 14, 26, 0.62);
+  --on-media: #f2ede3;
+  --shadow-float: 0 24px 48px -16px rgba(0, 0, 0, 0.7);
+  --shadow-lift: 0 18px 36px -20px rgba(0, 0, 0, 0.8);
+}
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 144px;
+  --radius-0: 0px;
+  --radius-sm: 2px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+  --container: 1240px;
+  --measure: 62ch;
+  --nav-height: 96px;
+  --font-display: "Cormorant Garamond", "Cormorant", "Noto Serif JP", Georgia, serif;
+  --font-sans: "Jost", "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
+}
+.display-xl { font-family: var(--font-display); font-size: 88px; line-height: 0.95; font-weight: 500; letter-spacing: -0.01em; }
+.display-l { font-family: var(--font-display); font-size: 56px; line-height: 1.05; font-weight: 500; }
+.title-caps { font-family: var(--font-display); font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: 0.06em; }
+.heading { font-family: var(--font-display); font-size: 28px; line-height: 1.2; font-weight: 600; }
+.quote { font-family: var(--font-display); font-size: 24px; line-height: 1.4; font-weight: 400; font-style: italic; }
+.price { font-family: var(--font-display); font-size: 30px; line-height: 1; font-weight: 600; }
+.eyebrow { font-family: var(--font-sans); font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.24em; }
+.body-l { font-family: var(--font-sans); font-size: 18px; line-height: 30px; font-weight: 300; }
+.body { font-family: var(--font-sans); font-size: 15px; line-height: 26px; font-weight: 400; }
+.label { font-family: var(--font-sans); font-size: 13px; line-height: 16px; font-weight: 500; letter-spacing: 0.06em; }
+.caption { font-family: var(--font-sans); font-size: 13px; line-height: 20px; font-weight: 400; }
+.micro { font-family: var(--font-sans); font-size: 11px; line-height: 14px; font-weight: 500; letter-spacing: 0.16em; }

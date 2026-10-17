@@ -1,0 +1,13 @@
+{
+  "name": "nilecrz-motion",
+  "version": 1,
+  "source": "BRAND-BOOK.md §Motion and components/bundle.css :root. Added to the token source by ADR-016 (Faris, 17 Oct 2026).",
+  "motion": {
+    "tokens": [
+      { "name": "ease-river", "value": "cubic-bezier(.22, .61, .36, 1)", "usage": "The one easing used everywhere." },
+      { "name": "dur-1", "value": "160ms", "usage": "Hovers." },
+      { "name": "dur-2", "value": "320ms", "usage": "State changes." },
+      { "name": "dur-3", "value": "640ms", "usage": "Entrances." }
+    ]
+  }
+}
