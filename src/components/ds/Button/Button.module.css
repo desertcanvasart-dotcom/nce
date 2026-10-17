@@ -1,0 +1,151 @@
+/* Ported from bundle.css "Button". */
+.btn {
+  --b-fg: var(--ink);
+  --b-bg: transparent;
+  --b-bd: var(--line-strong);
+  --b-fill: var(--primary);
+  --b-fill-fg: var(--on-primary);
+
+  position: relative;
+  display: inline-flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--b-bd);
+  border-radius: var(--radius-0);
+  background:
+    linear-gradient(var(--b-fill), var(--b-fill)) no-repeat left / 0% 100%,
+    var(--b-bg);
+  color: var(--b-fg);
+  font-family: var(--font-sans);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-line);
+  letter-spacing: var(--type-label-tracking);
+  text-align: center;
+  text-decoration: none;
+
+  /* Labels may wrap: Spanish runs ~30% longer and buttons are never fixed-width (I18N-007, DS-DIFFS). */
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition:
+    background-size var(--dur-2) var(--ease-river),
+    color var(--dur-2) var(--ease-river),
+    border-color var(--dur-2) var(--ease-river);
+}
+
+.btn :global(svg) {
+  font-size: var(--space-4);
+  transition: transform var(--dur-2) var(--ease-river);
+}
+
+.btn:hover .arrow {
+  transform: translateX(3px);
+}
+
+.btn:hover .out {
+  transform: translate(2px, -2px);
+}
+
+.outline {
+  --b-bd: var(--ink);
+}
+
+.outline:hover,
+.outline[aria-pressed="true"] {
+  border-color: var(--b-fill);
+  background-size: 100% 100%;
+  color: var(--b-fill-fg);
+}
+
+.primary {
+  --b-bg: var(--primary);
+  --b-bd: var(--primary);
+  --b-fg: var(--on-primary);
+  --b-fill: var(--ink);
+  --b-fill-fg: var(--surface);
+}
+
+.primary:hover {
+  border-color: var(--ink);
+  background-size: 100% 100%;
+  color: var(--b-fill-fg);
+}
+
+.ghost {
+  --b-bd: transparent;
+}
+
+.ghost:hover {
+  background: var(--tint);
+}
+
+/* Inline link: the underline redraws on hover (BRAND-BOOK §Motion). */
+.link {
+  justify-self: start;
+  min-height: 0;
+  padding: 0 0 6px;
+  border: 0;
+  background: linear-gradient(currentcolor, currentcolor) no-repeat left bottom / 100% 1px;
+  font-size: var(--type-body-size);
+  letter-spacing: 0.02em;
+}
+
+.link:hover {
+  animation: underline var(--dur-3) var(--ease-river) forwards;
+}
+
+@keyframes underline {
+  0% {
+    background-position: right bottom;
+    background-size: 100% 1px;
+  }
+
+  50% {
+    background-position: right bottom;
+    background-size: 0% 1px;
+  }
+
+  51% {
+    background-position: left bottom;
+  }
+
+  100% {
+    background-position: left bottom;
+    background-size: 100% 1px;
+  }
+}
+
+.media {
+  --b-fg: var(--on-media);
+  --b-bd: var(--on-media);
+  --b-fill: var(--on-media);
+  --b-fill-fg: var(--nile-800);
+}
+
+.media:focus-visible {
+  outline-color: var(--on-media);
+}
+
+.sm {
+  min-height: 36px;
+  padding: var(--space-1) var(--space-4);
+}
+
+.lg {
+  min-height: 56px;
+  padding: var(--space-2) var(--space-6);
+  font-size: 14px;
+}
+
+.block {
+  width: 100%;
+}
+
+.btn:disabled {
+  background-size: 0 0;
+  cursor: not-allowed;
+  opacity: 0.45;
+}

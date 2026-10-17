@@ -1,0 +1,80 @@
+.tf {
+  position: relative;
+  display: block;
+  padding-top: 18px;
+}
+
+.tf input,
+.tf textarea {
+  width: 100%;
+  padding: var(--space-2) 0;
+  border: 0;
+  border-bottom: 1px solid var(--line-strong);
+  border-radius: var(--radius-0);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  resize: vertical;
+  transition: border-color var(--dur-2);
+}
+
+/* The brass bar animates in on focus; the global focus ring still applies (A11Y-003). */
+.label {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  color: var(--ink-muted);
+  font-size: 16px;
+  pointer-events: none;
+  transform-origin: left top;
+  transition:
+    transform var(--dur-2) var(--ease-river),
+    color var(--dur-2);
+}
+
+.up .label {
+  letter-spacing: 0.06em;
+  transform: translateY(-24px) scale(0.78);
+}
+
+:lang(ja) .up .label {
+  letter-spacing: 0;
+}
+
+.focus .label {
+  color: var(--accent);
+}
+
+.bar {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background: var(--focus);
+  transform: scaleX(0);
+  transition: transform var(--dur-2) var(--ease-river);
+}
+
+.focus .bar {
+  transform: scaleX(1);
+}
+
+.hint {
+  display: block;
+  margin-top: var(--space-2);
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.error input,
+.error textarea {
+  border-bottom-color: var(--danger);
+}
+
+.error .hint,
+.error .label {
+  color: var(--danger);
+}

@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  padding: var(--space-1) var(--space-2);
+  background: var(--tint);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--type-micro-size);
+  font-weight: var(--type-micro-weight);
+  line-height: var(--type-micro-line);
+  letter-spacing: var(--type-micro-tracking);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge :global(svg) {
+  font-size: var(--space-3);
+}
+
+.accent {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.success {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.media {
+  background: var(--scrim);
+  color: var(--on-media);
+  backdrop-filter: blur(6px);
+}
