@@ -19,9 +19,9 @@ jobs:
     name: Types, lint, format, unit tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm tokens:check
@@ -36,7 +36,7 @@ jobs:
     name: Secret scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with: { fetch-depth: 0 }
       - name: gitleaks
         run: docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.28.0 detect --source /repo --redact --no-banner
@@ -45,9 +45,9 @@ jobs:
     name: Build, bundle budget, end-to-end
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
@@ -58,7 +58,7 @@ jobs:
       - name: End-to-end, 500 page (dev routes on)
         run: pnpm test:e2e -g "500 page"
         env: { ENABLE_DEV_ROUTES: "true" }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with: { name: playwright-report, path: playwright-report, retention-days: 7 }
 
@@ -66,13 +66,14 @@ jobs:
     name: Lighthouse (mobile)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm lhci
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
-        with: { name: lighthouse, path: .lighthouseci, retention-days: 14 }
+        # .lighthouseci starts with a dot; upload-artifact skips hidden paths unless told otherwise.
+        with: { name: lighthouse, path: .lighthouseci, retention-days: 14, include-hidden-files: true }
