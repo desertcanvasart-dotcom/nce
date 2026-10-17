@@ -515,7 +515,7 @@ STATUS = {
  "A11Y-006": ("Verified", B1+"e2e 'skip link moves focus…'"),
  "PERF-004": ("Verified", B1+"pnpm budget: max 154.2 KB gzipped per route"),
  "PERF-006": ("Verified", B1+"next/font; render-blocking CSS cut from ~200 KB to ~5 KB (ADR-035)"),
- "PERF-007": ("Verified", B1+"CI run on PR #1 green (4/4 jobs) 17 Oct 2026; job 'Lighthouse (mobile)', no assertion warnings; LCP is a hard gate under simulated throttling (ADR-040)"),
+ "PERF-007": ("Verified", B1+"CI run on PR #1 green (4/4 jobs) 17 Oct 2026; job 'Lighthouse (mobile)', localhost run (LCP warning); strict simulated gate runs on Railway deployments via lighthouse-deployed.yml (ADR-040, ADR-041)"),
  "PERF-009": ("Verified", B1+"e2e 'without JavaScript…'"),
  "SEC-003": ("Verified", B1+"CI run on PR #1 green (4/4 jobs) 17 Oct 2026; gitleaks 'Secret scan'; e2e 'no secret appears in client JavaScript'"),
  "SEC-012": ("Verified", B1+"e2e 'security headers are set'"),

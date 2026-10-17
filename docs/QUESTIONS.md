@@ -398,6 +398,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Alternative:** keep the stricter simulated gate and accept that later batches must cut client JavaScript further, for example by making the language switch and nav server-only.
 - Until you choose, CI shows LCP as a warning (ADR-036).
 
+> **Answered 17 Oct 2026:** on Railway deployments, for PR environments and staging; localhost becomes a warning (ADR-041).
+
 **Q59 ★ [A] Where the strict Lighthouse gate runs.** On `localhost` in CI, the simulated LCP flips between about 2.0 s and 2.8 s for the same page (see BUILD-LOG). The simulation replays the page's real load trace, and on localhost that trace is unrealistically fast, so a 30 ms timing race decides pass or fail.
 - **Recommendation:** run the same strict simulated gate against the **Railway deployment** instead:
   - For each PR: Railway "PR environments" create a temporary URL, CI waits for it and runs Lighthouse there.

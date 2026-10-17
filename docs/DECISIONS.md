@@ -365,3 +365,14 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - CLS ≤ 0.05, TBT ≤ 200 ms and accessibility ≥ 0.95 also remain errors.
   - The CI run on GitHub's runner is the record of truth. Local runs on a busy developer machine are noisier, as Batch 1 showed.
 - **Consequence:** every batch must keep client JavaScript lean. A failing LCP blocks the PR, as intended.
+
+### ADR-041 The strict Lighthouse gate runs against Railway deployments (Accepted)
+- **Context:** Q59. On localhost the simulated LCP flips between about 2.0 s and 2.8 s for the same page, because the trace it replays is unrealistically fast. Faris chose to run the strict gate on real deployments.
+- **Decision:**
+  - New workflow `.github/workflows/lighthouse-deployed.yml` triggers when Railway reports a successful deployment, for PR environments and staging. It can also be run by hand with a URL.
+  - It checks `/api/health`, then runs LHCI with `lighthouserc.deployed.json`: simulated mobile throttling, LCP ≤ 2.5 s as an **error**, CLS, TBT and accessibility as errors.
+  - The localhost run in `ci.yml` stays, with LCP as a **warning** only.
+- **Setup it needs:**
+  - Railway PR environments enabled.
+  - A `RAILWAY_STAGING_URL` repository variable, used when Railway reports only its dashboard link.
+- **Consequence:** the gate reflects a real network. A PR's performance result arrives after its Railway deployment, not with the first CI run.
