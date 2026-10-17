@@ -4,7 +4,7 @@ import { liveSiteRedirects } from "./src/lib/redirects";
 import { securityHeaders } from "./src/lib/security-headers";
 
 const dev = process.env.NODE_ENV !== "production";
-const allowIndexing = process.env.ALLOW_INDEXING === "true";
+const allowIndexing = process.env.ALLOW_INDEXING?.trim().toLowerCase() === "true";
 
 const nextConfig: NextConfig = {
   trailingSlash: true, // SEO-001

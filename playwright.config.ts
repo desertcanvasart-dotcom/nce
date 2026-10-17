@@ -13,7 +13,7 @@ export default defineConfig({
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: `pnpm start --port ${PORT}`,
-    url: `http://localhost:${PORT}/api/health`,
+    url: `http://localhost:${PORT}/api/health/`,
     // Never reuse a server: a stale build once made tests pass or fail against old code.
     reuseExistingServer: false,
     timeout: 60_000,
