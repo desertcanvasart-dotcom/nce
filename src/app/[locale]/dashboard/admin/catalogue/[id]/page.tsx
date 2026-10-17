@@ -67,6 +67,9 @@ export default async function VesselEditor({ params, searchParams }: Props) {
       {saved === "evaluation" ? <Notice tone="success">Evaluation saved.</Notice> : null}
 
       <Section title="Readiness and visibility" id="readiness">
+        <p>
+          <strong>Visibility now: {VIS[v.visibility]}</strong>
+        </p>
         <p className={ui.muted}>
           {v.readiness.complete
             ? "Everything needed for publication is in place."
@@ -233,7 +236,13 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           <p className={ui.muted}>No photos yet. Without one, the site shows the vessel-type illustration.</p>
         )}
         {canEdit ? (
-          <ActionForm action={uploadPhoto.bind(null, id)} submit="Upload photo" variant="outline" encType="multipart/form-data">
+          <ActionForm
+            action={uploadPhoto.bind(null, id)}
+            submit="Upload photo"
+            resetOnSuccess
+            variant="outline"
+            encType="multipart/form-data"
+          >
             <div className={ui.field}>
               <label className={ui.label} htmlFor="photo">
                 Photo (JPEG, PNG, WebP or AVIF, up to 15 MB)
@@ -331,7 +340,7 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           </ul>
         ) : null}
         {canEdit ? (
-          <ActionForm action={addExternalRating.bind(null, id)} submit="Add external rating" variant="outline">
+          <ActionForm action={addExternalRating.bind(null, id)} submit="Add external rating" resetOnSuccess variant="outline">
             <div className={ui.grid}>
               <Input label="Source" name="source_name" required maxLength={120} />
               <Input label="Rating" name="rating" inputMode="decimal" required />
@@ -361,7 +370,7 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           </ul>
         ) : null}
         {canEdit ? (
-          <ActionForm action={addSafety.bind(null, id)} submit="Record observation" variant="outline">
+          <ActionForm action={addSafety.bind(null, id)} submit="Record observation" resetOnSuccess variant="outline">
             <div className={ui.grid}>
               <Input label="Date observed" name="observed_on" type="date" required max={today} />
               <Select label="Status" name="status" defaultValue="open" options={SAFETY} />

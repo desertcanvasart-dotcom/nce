@@ -1,6 +1,6 @@
 -- Operator applications and team invitations (DASH-ADM-042/043, ADR-073, DASH-ROLE-007).
 begin;
-select plan(9);
+select plan(11);
 
 create function pg_temp.as_user(uid uuid, email text, aal text default 'aal1') returns void language plpgsql as $$
 begin
@@ -23,6 +23,10 @@ select throws_ok($$insert into public.org_invitations (org_id, email, team_role)
   '23514', null, 'nobody is invited as owner');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031', 'reservations@partner.test');
 select throws_ok($$select public.accept_invitation('00000000-0000-4000-c100-000000000001')$$, '42501', null, 'another person cannot accept');
+select is_empty($$select 1 from public.organisations where id = '00000000-0000-4000-b000-00000000000a'$$, 'someone not invited cannot read the company');
+select pg_temp.as_user('00000000-0000-4000-a000-000000000040', 'customer@example.test');
+select results_eq($$select display_name from public.organisations where id = '00000000-0000-4000-b000-00000000000a'$$,
+  array['Sample Operator A'], 'the invited person sees which company invites them');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040', 'customer@example.test');
 select lives_ok($$select public.accept_invitation('00000000-0000-4000-c100-000000000001')$$, 'the invited person accepts');
 reset role;

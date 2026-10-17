@@ -1,16 +1,21 @@
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import styles from "@/components/dashboard/ui.module.css";
 import { acceptInvitation } from "./actions";
+import { getSession } from "@/server/auth";
 import { getDb } from "@/server/db";
 
 const ROLE = { reservations: "reservations", finance: "finance", viewer: "viewer", owner: "owner" } as const;
 
 /** Open invitations addressed to the signed-in email (ADR-073), shown on every dashboard page until accepted. */
 export async function Invitations() {
+  const session = await getSession();
+  if (!session?.email) return null;
   const db = await getDb();
+  // Owners can read every invitation of their company, so filter to the ones addressed to this person.
   const { data } = await db
     .from("org_invitations")
     .select("id, team_role, org:organisations(display_name)")
+    .eq("email", session.email.toLowerCase())
     .is("accepted_at", null)
     .is("revoked_at", null)
     .gt("expires_at", new Date().toISOString());

@@ -85,7 +85,7 @@ export default async function TeamPage({ params }: { params: Promise<{ orgId: st
       </Section>
 
       <Section title="Invite someone" id="invite">
-        <ActionForm action={inviteMember.bind(null, orgId)} submit="Send invitation">
+        <ActionForm action={inviteMember.bind(null, orgId)} submit="Send invitation" resetOnSuccess>
           <div className={ui.grid}>
             <Input label="Email" name="email" type="email" inputMode="email" required autoComplete="email" />
             <Select label="Role" name="team_role" required placeholder="Choose a role" options={ROLES} />
