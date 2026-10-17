@@ -15,6 +15,9 @@ export type TextFieldProps = {
   required?: boolean;
   autoComplete?: string;
   defaultValue?: string;
+  /** Mobile keyboard hint, e.g. "numeric" for a six-digit code. */
+  inputMode?: "text" | "numeric" | "email" | "tel";
+  maxLength?: number;
   onChange?: (value: string) => void;
 };
 
@@ -29,6 +32,8 @@ export function TextField({
   required,
   autoComplete,
   defaultValue,
+  inputMode,
+  maxLength,
   onChange,
 }: TextFieldProps) {
   const id = useId();
@@ -40,6 +45,8 @@ export function TextField({
     name,
     required,
     autoComplete,
+    inputMode,
+    maxLength,
     value,
     "aria-invalid": error ? true : undefined,
     "aria-describedby": describedBy,

@@ -12,5 +12,6 @@ Provide `label`, plus optional `type`, `hint`, `error`, `multiline`, `defaultVal
 
 - `<label for>` instead of a wrapping label, plus `name`, `required`, `autoComplete` for real forms.
 - The global focus ring is kept alongside the brass bar (A11Y-003).
+- `inputMode` and `maxLength` props (Batch 4a): the six-digit two-step code field asks phones for a number pad.
 
 States: see `/dev/components/` and `TextField.stories.tsx`. Differences are measured by the visual-parity test (`tests/e2e/parity.spec.ts`).

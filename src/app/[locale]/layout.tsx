@@ -6,8 +6,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/app/fonts";
 import { siteUrl } from "@/lib/env";
-import { SiteHeader } from "@/components/shell/SiteHeader";
-import { SiteFooter } from "@/components/shell/SiteFooter";
 import { THEME_BOOTSTRAP } from "@/components/shell/theme-bootstrap";
 import { ThemeSync } from "@/components/shell/ThemeSync";
 import shell from "@/components/shell/Container.module.css";
@@ -50,11 +48,8 @@ export default async function LocaleLayout({ children, params }: { children: Rea
           <a href="#main" className={shell.skip}>
             {t("skipToContent")}
           </a>
-          <SiteHeader />
-          <main id="main" tabIndex={-1} className={shell.main}>
-            {children}
-          </main>
-          <SiteFooter locale={locale} />
+          {/* The public site frame lives in (site)/layout.tsx; dashboards have their own (dashboard/layout.tsx). */}
+          {children}
         </NextIntlClientProvider>
       </body>
     </html>

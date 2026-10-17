@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import createMiddleware from "next-intl/middleware";
-import type { NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { sessionCookieOptions } from "./lib/auth/cookies";
 
@@ -11,6 +11,14 @@ const intl = createMiddleware(routing);
  * person's short-lived access token is renewed before pages read it (SEC-005). Anonymous visitors cost nothing extra.
  */
 export default async function proxy(request: NextRequest) {
+  // Dashboards are English only (DASH-BND-006): /es/dashboard/… and /ja/dashboard/… go to /dashboard/….
+  const lang = /^\/(es|ja)(\/dashboard(?:\/.*)?)$/.exec(request.nextUrl.pathname);
+  if (lang) {
+    const url = request.nextUrl.clone();
+    url.pathname = lang[2]!;
+    return NextResponse.redirect(url, 308);
+  }
+
   const response = intl(request);
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;

@@ -29,8 +29,8 @@ export default defineConfig([
     },
   },
   {
-    // Server-only modules (guarded by `import "server-only"`) and scripts may read secrets.
-    files: ["src/server/**/*.ts", "scripts/**/*.ts"],
+    // Server-only modules (guarded by `import "server-only"`), scripts and tests (never shipped) may read secrets.
+    files: ["src/server/**/*.ts", "scripts/**/*.ts", "tests/**/*.ts"],
     rules: { "no-restricted-syntax": "off" },
   },
   {

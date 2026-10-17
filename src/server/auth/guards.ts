@@ -1,7 +1,7 @@
 import "server-only";
 import { forbidden, redirect } from "next/navigation";
 import type { AdminRole, TeamRole, Workspace } from "@/lib/auth/workspaces";
-import { resolveWorkspaces } from "@/lib/auth/workspaces";
+import { landingWorkspace, resolveWorkspaces, workspacePath } from "@/lib/auth/workspaces";
 import { getSession, type Session } from "./session";
 
 /**
@@ -50,6 +50,16 @@ export async function requireOrgRole(
   if (roles !== "any" && !roles.includes(company.teamRole)) forbidden();
   if (!allowPending && company.status !== "approved") forbidden();
   return { session, company };
+}
+
+/**
+ * Where someone goes after signing in when no page asked for them: straight to their workspace.
+ * (A form action that redirects to /dashboard/, which redirects again, is not followed by the browser.)
+ */
+export async function landingPath(next: string): Promise<string> {
+  if (next !== "/dashboard/") return next;
+  const session = await getSession();
+  return session ? workspacePath(landingWorkspace(session)) : next;
 }
 
 /** Marks a server action that is meant for people who are not signed in (sign-in, sign-up, reset). */

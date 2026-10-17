@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2 and 4a. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
@@ -15,7 +15,10 @@
     "themeToDark": "Cambiar al tema Noche",
     "themeToLight": "Cambiar al tema Día",
     "themeShortDark": "Noche",
-    "themeShortLight": "Día"
+    "themeShortLight": "Día",
+    "signIn": "Iniciar sesión",
+    "account": "Cuenta",
+    "signOut": "Cerrar sesión"
   },
   "nav": {
     "cruises": "Cruceros",
@@ -217,6 +220,130 @@
       "deniedTitle": "Esto es para cuentas con sesión iniciada",
       "deniedBody": "Inicie sesión con una cuenta que tenga acceso para verlo.",
       "signIn": "Iniciar sesión"
+    }
+  },
+  "account": {
+    "signIn": {
+      "title": "Iniciar sesión",
+      "lede": "Inicia sesión para ver los precios de cada camarote y fecha, enviar solicitudes y seguir tus reservas.",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "submit": "Iniciar sesión",
+      "forgot": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿Nuevo en Nilecruz?",
+      "createAccount": "Crear una cuenta",
+      "resend": "Enviar de nuevo el correo de confirmación"
+    },
+    "signUp": {
+      "title": "Crea tu cuenta",
+      "lede": "Con una cuenta ves el precio de cada camarote, pides ofertas a los operadores y tienes tus reservas en un solo lugar.",
+      "fullName": "Tu nombre",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "passwordHint": "Al menos 10 caracteres, con una letra y un número.",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Iniciar sesión",
+      "sentTitle": "Revisa tu correo",
+      "sentBody": "Si esta dirección se puede usar, te hemos enviado un enlace para confirmarla. El enlace funciona una vez, durante una hora."
+    },
+    "verify": {
+      "title": "Confirma tu correo",
+      "lede": "Pulsa el botón para confirmar. Pedimos que lo pulses, no solo el enlace, para que los filtros de correo no gasten tu enlace.",
+      "submit": "Confirmar",
+      "failedTitle": "Este enlace ha caducado o ya se usó",
+      "failedBody": "Los enlaces funcionan una vez, durante una hora. Pide uno nuevo abajo.",
+      "newConfirmation": "Enviar un nuevo enlace de confirmación",
+      "newReset": "Enviar un nuevo enlace de contraseña"
+    },
+    "reset": {
+      "title": "Restablece tu contraseña",
+      "lede": "Escribe el correo de tu cuenta y te enviaremos un enlace para elegir una contraseña nueva.",
+      "email": "Correo electrónico",
+      "submit": "Enviar el enlace",
+      "backToSignIn": "Volver a iniciar sesión",
+      "newTitle": "Elige una contraseña nueva",
+      "password": "Contraseña nueva",
+      "confirm": "Repite la contraseña nueva",
+      "save": "Guardar la contraseña nueva"
+    },
+    "twoStep": {
+      "title": "Verificación en dos pasos",
+      "lede": "Abre tu app de autenticación y escribe el código de seis dígitos de Nilecruz.",
+      "code": "Código de seis dígitos",
+      "submit": "Continuar",
+      "lost": "¿Perdiste tu app de autenticación? Escríbenos y comprobaremos que eres tú antes de restablecerla."
+    },
+    "security": {
+      "title": "Seguridad de la cuenta",
+      "lede": "Tus datos de acceso, tu verificación en dos pasos y los dispositivos con sesión iniciada.",
+      "signedInAs": "Sesión iniciada como {email}",
+      "emailTitle": "Correo electrónico",
+      "newEmail": "Correo nuevo",
+      "current": "Contraseña actual",
+      "changeEmail": "Cambiar correo",
+      "emailNote": "Enviamos un enlace a las dos direcciones. El cambio se hace cuando ambas están confirmadas.",
+      "passwordTitle": "Contraseña",
+      "newPassword": "Contraseña nueva",
+      "confirmPassword": "Repite la contraseña nueva",
+      "changePassword": "Cambiar contraseña",
+      "twoStepTitle": "Verificación en dos pasos",
+      "twoStepOn": "Activada. Cada inicio de sesión pide un código de tu app de autenticación.",
+      "twoStepOff": "Desactivada. Actívala para que una contraseña robada no baste para entrar.",
+      "twoStepAdmin": "Obligatoria para los administradores de Nilecruz. Configúrala para usar el área de administración.",
+      "twoStepStart": "Configurar la verificación en dos pasos",
+      "twoStepScan": "Escanea este código con una app de autenticación o escribe la clave en ella. Después escribe el código de seis dígitos que muestra.",
+      "twoStepKey": "Clave",
+      "twoStepQr": "Código QR para tu app de autenticación",
+      "twoStepConfirm": "Activar",
+      "twoStepRemove": "Desactivar la verificación en dos pasos",
+      "devicesTitle": "Dispositivos",
+      "devicesBody": "Cierra la sesión en todos los teléfonos y ordenadores, también en este.",
+      "signOutEverywhere": "Cerrar sesión en todas partes"
+    },
+    "notices": {
+      "emailChanged": "Tu correo ha cambiado.",
+      "twoStepOn": "La verificación en dos pasos está activada.",
+      "signedOutEverywhere": "Se ha cerrado tu sesión en todos los dispositivos.",
+      "setupTwoStep": "Los administradores necesitan la verificación en dos pasos. Configúrala abajo para continuar.",
+      "emailHalfConfirmed": "Una dirección está confirmada. Abre el enlace que enviamos a la otra dirección para terminar el cambio."
+    },
+    "messages": {
+      "badCredentials": "Ese correo y esa contraseña no coinciden con ninguna cuenta. Revisa ambos e inténtalo de nuevo.",
+      "notConfirmed": "Primero confirma tu correo. Podemos enviarte el enlace otra vez.",
+      "rateLimited": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+      "unexpected": "Algo ha fallado por nuestra parte. Inténtalo de nuevo en un momento.",
+      "checkEmail": "Si esta dirección se puede usar, el enlace va en camino. Funciona una vez, durante una hora.",
+      "linkExpired": "Este enlace ha caducado o ya se usó. Pide uno nuevo.",
+      "codeWrong": "Ese código no ha funcionado. Los códigos cambian cada 30 segundos: prueba el actual.",
+      "passwordChanged": "Tu contraseña ha cambiado.",
+      "emailChangeSent": "Hemos enviado un enlace a tu dirección antigua y a la nueva. Confirma las dos para terminar.",
+      "twoStepOff": "La verificación en dos pasos está desactivada.",
+      "adminNeedsTwoStep": "Los administradores no pueden desactivar la verificación en dos pasos.",
+      "resetLinkNeeded": "Por tu seguridad, abre primero un enlace nuevo de contraseña desde tu correo."
+    },
+    "errors": {
+      "emailFormat": "Escribe un correo como nombre@ejemplo.com.",
+      "nameRequired": "Dinos tu nombre.",
+      "passwordRequired": "Escribe tu contraseña.",
+      "passwordLength": "Usa al menos 10 caracteres.",
+      "passwordMax": "Usa como máximo 72 caracteres.",
+      "passwordLetterDigit": "Usa al menos una letra y un número.",
+      "passwordMismatch": "Las dos contraseñas son distintas.",
+      "passwordReuse": "Elige una contraseña que no hayas usado aquí.",
+      "codeFormat": "Escribe los seis dígitos de tu app de autenticación.",
+      "currentPasswordWrong": "Esa no es tu contraseña actual.",
+      "invalid": "Revisa este campo."
+    },
+    "meta": {
+      "signIn": "Iniciar sesión",
+      "signUp": "Crear una cuenta",
+      "verify": "Confirma tu correo",
+      "reset": "Restablece tu contraseña",
+      "resetNew": "Elige una contraseña nueva",
+      "twoStep": "Verificación en dos pasos",
+      "security": "Seguridad de la cuenta",
+      "description": "Tu cuenta de Nilecruz."
     }
   }
 }

@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import styles from "./status.module.css";
+import styles from "../status.module.css";
 
 /** Localised 500 in the brand voice (ENG-017). */
 export default function ErrorPage({ reset }: { error: Error & { digest?: string }; reset: () => void }) {

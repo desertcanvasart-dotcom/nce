@@ -30,7 +30,8 @@
     "db:test": "supabase test db",
     "test:db-api": "vitest run --config vitest.db-api.config.mts",
     "studio:check": "pnpm --dir studio --ignore-workspace exec tsc --noEmit -p . && pnpm --dir studio --ignore-workspace exec sanity schema validate --workspace production && pnpm --dir studio --ignore-workspace exec sanity schema validate --workspace development",
-    "import:vessels": "tsx --env-file-if-exists=.env.local scripts/import-vessels.ts"
+    "import:vessels": "tsx --env-file-if-exists=.env.local scripts/import-vessels.ts",
+    "with-local-db": "tsx scripts/with-local-supabase.ts"
   },
   "dependencies": {
     "@sanity/client": "^8.9.0",

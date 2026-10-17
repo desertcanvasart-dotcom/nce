@@ -1,4 +1,5 @@
 import "server-only";
+import { cookies } from "next/headers";
 import { cache } from "react";
 import type { Identity, Membership } from "@/lib/auth/workspaces";
 import { getDb } from "@/server/db";
@@ -16,9 +17,23 @@ export type Session = Identity & {
 
 /**
  * The signed-in person for this request, or null (SEC-005). `getUser()` asks Supabase Auth to validate the
- * session token, so a forged or revoked cookie never counts. Cached per request.
+ * session token, so a forged or revoked cookie never counts.
+ *
+ * Cached per request AND per session cookie: when an action signs someone in, completes two-step or signs out,
+ * the cookies change, so the page rendered after the action reads the new session, not the old one.
  */
-export const getSession = cache(async (): Promise<Session | null> => {
+export async function getSession(): Promise<Session | null> {
+  const store = await cookies();
+  const key = store
+    .getAll()
+    .filter((c) => c.name.startsWith("sb-"))
+    .map((c) => `${c.name}=${c.value}`)
+    .sort()
+    .join(";");
+  return sessionFor(key);
+}
+
+const sessionFor = cache(async (_cookieKey: string): Promise<Session | null> => {
   const db = await getDb();
   const { data: auth, error } = await db.auth.getUser();
   if (error || !auth.user) return null;
