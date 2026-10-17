@@ -1,0 +1,10 @@
+vendor/
+.next/
+node_modules/
+pnpm-lock.yaml
+docs/
+src/styles/tokens.css
+src/styles/tokens.ts
+playwright-report/
+test-results/
+.lighthouseci/
