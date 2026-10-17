@@ -398,6 +398,12 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Alternative:** keep the stricter simulated gate and accept that later batches must cut client JavaScript further, for example by making the language switch and nav server-only.
 - Until you choose, CI shows LCP as a warning (ADR-036).
 
+**Q59 ★ [A] Where the strict Lighthouse gate runs.** On `localhost` in CI, the simulated LCP flips between about 2.0 s and 2.8 s for the same page (see BUILD-LOG). The simulation replays the page's real load trace, and on localhost that trace is unrealistically fast, so a 30 ms timing race decides pass or fail.
+- **Recommendation:** run the same strict simulated gate against the **Railway deployment** instead:
+  - For each PR: Railway "PR environments" create a temporary URL, CI waits for it and runs Lighthouse there.
+  - After each merge: the same check runs against staging.
+- **Until then:** the localhost run stays in CI as a warning, with the numbers recorded.
+
 ## Smaller notes (no answer needed unless you disagree)
 
 - Trust pages list "TextField · Button · SectionHeading" as their components in every row, including About and Reviews. I'll use form components only on Contact and Plan my cruise.

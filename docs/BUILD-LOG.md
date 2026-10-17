@@ -193,3 +193,14 @@
   - Its first deploy built `main` at the Batch 0 docs commit and failed as expected, because `main` has no app until PR #1 is merged.
   - Variables still need setting in Railway before the first real build, because `NEXT_PUBLIC_*` values are baked in at build time.
 - **Status:** ENG-011 stays In progress until a Railway deploy serves `/api/health`.
+
+### 17 Oct 2026 · Batch 1: merge held, Lighthouse gate is unstable on localhost
+
+- **Merge held:** Faris approved Batch 1 and asked for PR #1 to merge once CI is green. CI on `03018ae` was **not** green: the Lighthouse job failed (simulated mobile LCP: `/` 2.69 s, `/es/` 2.83 s). The same gate passed one commit earlier. Not merged.
+- **Evidence:**
+  - Across 12 CI runs, simulated LCP is bimodal: about 2.0–2.1 s or 2.7–2.9 s for the same page. In 6 local runs of `/es/` it is 2.2 s or 2.7 s.
+  - The difference is whether Next's ~30 ms startup script task runs before the text's first paint in the *unthrottled localhost* trace. When it does, the simulation charges the whole ~150 KB JS download to LCP.
+  - Removing the web fonts did not change it (tested and reverted).
+  - Real-throttling LCP is 0.8–2.1 s.
+- **Conclusion:** the simulated gate is valid, but a localhost trace is not a fair input to it. It needs a trace from a real network (the Railway deployment).
+- **Waiting on Faris:** the decision on where the Lighthouse gate runs (Q59).
