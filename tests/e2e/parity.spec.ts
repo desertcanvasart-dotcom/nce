@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { expect, test, type Page } from "@playwright/test";
@@ -23,12 +23,22 @@ const report: Record<string, Record<string, number>> = existsSync(reportPath) ? 
 
 async function shot(page: Page, url: string, selector: string) {
   await page.goto(url, { waitUntil: "load" });
-  await page.evaluate(() => document.fonts.ready);
+  // document.fonts.ready only covers fonts that already started loading. Load every family and weight the page
+  // actually uses, so a cold browser (CI) never screenshots fallback text (it did: AmenityGrid 1.1% vs 0.09%).
+  await page.evaluate(async () => {
+    const wanted = new Set<string>();
+    for (const el of Array.from(document.querySelectorAll("body *"))) {
+      const cs = getComputedStyle(el);
+      if (el.textContent?.trim()) wanted.add(`${cs.fontStyle} ${cs.fontWeight} 16px ${cs.fontFamily}`);
+    }
+    await Promise.all([...wanted].map((f) => document.fonts.load(f).catch(() => [])));
+    await document.fonts.ready;
+  });
   await page.waitForTimeout(150);
   return PNG.sync.read(await page.locator(selector).first().screenshot());
 }
 
-test.describe.configure({ mode: "serial" });
+// Independent tests: one component failing must not skip the others.
 test.use({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
 
 for (const entry of registry.filter((e) => e.ds && e.parity)) {
@@ -55,7 +65,17 @@ for (const entry of registry.filter((e) => e.ds && e.parity)) {
       writeFileSync(`${base}-ds.png`, PNG.sync.write(ds));
       writeFileSync(`${base}-build.png`, PNG.sync.write(build));
       writeFileSync(`${base}-diff.png`, PNG.sync.write(diff));
-      (report[entry.name] ??= {})[theme] = Math.round(ratio * 10000) / 100;
+      // One small file per result (safe when tests run in parallel), then merge them all into report.json.
+      const resultsDir = resolve(out, "results");
+      mkdirSync(resultsDir, { recursive: true });
+      writeFileSync(
+        `${resultsDir}/${entry.name}-${theme}.json`,
+        JSON.stringify({ name: entry.name, theme, percent: Math.round(ratio * 10000) / 100 }),
+      );
+      for (const f of readdirSync(resultsDir)) {
+        const r = JSON.parse(readFileSync(`${resultsDir}/${f}`, "utf8")) as { name: string; theme: string; percent: number };
+        (report[r.name] ??= {})[r.theme] = r.percent;
+      }
       writeFileSync(reportPath, JSON.stringify(report, null, 2));
       if (ratio > THRESHOLD)
         expect(
