@@ -45,7 +45,7 @@ jobs:
           fi
           url="${url%/}"
           echo "Testing $url"
-          curl -fsS --retry 10 --retry-delay 6 --retry-all-errors "$url/api/health"
+          curl -fsS --retry 10 --retry-delay 6 --retry-all-errors "$url/api/health/"
           echo "base=$url" >> "$GITHUB_OUTPUT"
 
       - name: Lighthouse (strict gate)

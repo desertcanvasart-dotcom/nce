@@ -34,7 +34,7 @@ test("staging is never indexed: robots blocks all and X-Robots-Tag is set (SEO-0
 });
 
 test("health check responds (Railway)", async ({ request }) => {
-  expect(await (await request.get("/api/health")).json()).toEqual({ ok: true });
+  expect(await (await request.get("/api/health/")).json()).toEqual({ ok: true });
 });
 
 test("no secret appears in client JavaScript (SEC-003)", async ({ page }) => {
@@ -46,4 +46,9 @@ test("no secret appears in client JavaScript (SEC-003)", async ({ page }) => {
   await page.waitForLoadState("networkidle");
   const all = bodies.join("\n");
   expect(all).not.toMatch(/sb_secret_|service_role|SUPABASE_SECRET_KEY/);
+});
+
+test("the health path Railway checks answers 200 without a redirect (ENG-011)", async ({ request }) => {
+  const res = await request.get("/api/health/", { maxRedirects: 0 });
+  expect(res.status()).toBe(200);
 });
