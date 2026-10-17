@@ -4,7 +4,7 @@
  * dynamically and defeat static caching (PERF-010). The only inline script is the theme
  * bootstrap. Revisited in the Batch 11 security review (ADR-034).
  */
-export function securityHeaders({ dev, supabaseUrl }: { dev: boolean; supabaseUrl?: string }) {
+export function securityHeaders({ dev, https, supabaseUrl }: { dev: boolean; https: boolean; supabaseUrl?: string }) {
   const connect = ["'self'", supabaseUrl].filter(Boolean).join(" ");
   const csp = [
     "default-src 'self'",
@@ -17,7 +17,8 @@ export function securityHeaders({ dev, supabaseUrl }: { dev: boolean; supabaseUr
     "base-uri 'self'",
     "form-action 'self'",
     "object-src 'none'",
-    ...(dev ? [] : ["upgrade-insecure-requests"]),
+    // Only on an HTTPS site: on plain-HTTP localhost it sends the browser to https://localhost, which fails.
+    ...(!dev && https ? ["upgrade-insecure-requests"] : []),
   ].join("; ");
 
   return [

@@ -36,6 +36,10 @@ const plugin = stylelint.createPlugin(ruleName, (enabled) => (root, result) => {
       stylelint.utils.report({ ruleName, result, node: decl, message: messages.rejected(prop, value, hint) });
 
     if (HEX.test(value) || COLOR_FN.test(value) || NAMED.test(value)) return report("uses a raw colour; use a colour token.");
+    // Zero-blur box-shadows are rings and hairlines (selected states, dividers), not the elevation shadows the brand
+    // limits to shadow-float and shadow-lift. Each comma-separated layer must be "[inset] x y 0 spread var(--colour)".
+    const ring = /^(inset\s+)?-?\d+(px)?\s+-?\d+(px)?\s+0(px)?(\s+-?\d+(px)?)?\s+var\(--[a-z0-9-]+\)$/;
+    if (prop === "box-shadow" && value.split(",").every((layer) => ring.test(layer.trim()))) return;
     if (VAR_ONLY.test(prop) && !SAFE.test(value.trim()) && !/^var\(--/.test(value.trim()))
       return report("must use a token (radius-*, shadow-*, font-*).");
     if (SPACING.test(prop)) {
@@ -44,7 +48,9 @@ const plugin = stylelint.createPlugin(ruleName, (enabled) => (root, result) => {
         if (token) return report(`should use var(--${token}).`);
       }
     }
-    if (prop === "font-size") {
+    // Icons are sized with font-size (1em glyphs); those are not text sizes, so token text sizes don't apply.
+    const sel = decl.parent && "selector" in decl.parent ? String(decl.parent.selector) : "";
+    if (prop === "font-size" && !/svg|\.ico\b|icon/i.test(sel)) {
       const token = fontSizes.get(value.trim());
       if (token) return report(`should use var(--${token}).`);
     }
