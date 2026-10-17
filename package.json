@@ -29,7 +29,8 @@
     "db:types": "supabase gen types typescript --db-url postgresql://postgres:postgres@127.0.0.1:55422/postgres --schema public > src/server/db/database.types.ts && prettier --write src/server/db/database.types.ts",
     "db:test": "supabase test db",
     "test:db-api": "vitest run --config vitest.db-api.config.mts",
-    "studio:check": "pnpm --dir studio --ignore-workspace exec tsc --noEmit -p . && pnpm --dir studio --ignore-workspace exec sanity schema validate"
+    "studio:check": "pnpm --dir studio --ignore-workspace exec tsc --noEmit -p . && pnpm --dir studio --ignore-workspace exec sanity schema validate",
+    "import:vessels": "tsx --env-file-if-exists=.env.local scripts/import-vessels.ts"
   },
   "dependencies": {
     "@sanity/client": "^8.9.0",
