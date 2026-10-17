@@ -37,7 +37,8 @@ for (const file of walk(join(root, "messages")).filter((f) => f.endsWith(".json"
 // JSX text between tags in pages and components (comments and code are skipped).
 for (const file of walk(join(root, "src")).filter((f) => f.endsWith(".tsx"))) {
   const src = readFileSync(file, "utf8").replace(/\{\/\*[\s\S]*?\*\/\}/g, "");
-  for (const m of src.matchAll(/>([^<>{}]*[A-Za-z][^<>{}]*)</g)) {
+  // "(?<![=-])>" skips the ">" of arrow functions (=>) and comparisons, which are code, not tag ends.
+  for (const m of src.matchAll(/(?<![=-])>([^<>{}]*[A-Za-z][^<>{}]*)</g)) {
     const text = m[1]!.trim();
     if (!text || /[=;]\s*$/.test(text) || /^\s*\)/.test(text)) continue;
     const line = src.slice(0, m.index).split("\n").length;

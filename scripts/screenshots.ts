@@ -31,7 +31,8 @@ async function main() {
     for (const route of routes) {
       for (const width of widths) {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto(base + route, { waitUntil: "networkidle" });
+        await page.goto(base + route, { waitUntil: "load" });
+        await page.waitForTimeout(400);
         await page.evaluate(() => document.fonts.ready);
         const file = `${outDir}/${slug(route)}-${width}-${theme === "light" ? "day" : "night"}.png`;
         await page.screenshot({ path: file, fullPage: true });

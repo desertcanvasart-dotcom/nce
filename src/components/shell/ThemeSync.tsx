@@ -1,7 +1,7 @@
 "use client";
 
 import { useLayoutEffect } from "react";
-import { THEME_KEY } from "./ThemeToggle";
+import { THEME_KEY } from "@/components/ds/NavBar/ThemeToggle";
 
 /**
  * Re-applies the saved theme whenever the root layout mounts on the client. Normally the head

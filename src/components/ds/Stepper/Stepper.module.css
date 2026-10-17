@@ -1,0 +1,58 @@
+.stepper {
+  display: inline-flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.stepper output {
+  min-width: 2ch;
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.bump {
+  animation: bump var(--dur-2) var(--ease-river);
+}
+
+@keyframes bump {
+  40% {
+    color: var(--accent);
+    transform: scale(1.25);
+  }
+}
+
+/* Round icon button (radius-pill), shared look with the design system's .nc-iconbtn. */
+.btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background var(--dur-1),
+    color var(--dur-1),
+    transform var(--dur-1);
+}
+
+.btn:hover {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.btn:active {
+  transform: scale(0.94);
+}
+
+.btn:disabled {
+  border-color: var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: not-allowed;
+  opacity: 0.35;
+}

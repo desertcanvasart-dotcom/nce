@@ -61,5 +61,161 @@
   },
   "legal": {
     "draftBanner": "Draft, under review. This text is not final and is not yet in force."
+  },
+  "ds": {
+    "sampleData": "Sample data",
+    "vesselTypes": {
+      "sail": "Sailing dahabiya",
+      "motor": "Motor cruise ship",
+      "steam": "Paddle steamer"
+    },
+    "amenities": {
+      "pool": "Pool",
+      "sundeck": "Sun deck",
+      "spa": "Spa",
+      "wifi": "Wi-Fi",
+      "ac": "Air conditioning",
+      "balcony": "Private balcony",
+      "bath": "Bathtub",
+      "restaurant": "Restaurant",
+      "bar": "Bar",
+      "wine": "Wine pairing",
+      "gym": "Gym",
+      "egyptologist": "Private Egyptologist",
+      "butler": "Butler service",
+      "library": "Library",
+      "accessible": "Step-free access",
+      "bed": "King bed",
+      "music": "Evening music",
+      "quiet": "No engine noise",
+      "anchor": "Private moorings",
+      "temple": "Temple visits",
+      "sunrise": "Sunrise views"
+    },
+    "rating": {
+      "outOf": "{value} out of 5",
+      "reviews": "({count, plural, one {# review} other {# reviews}})"
+    },
+    "stepper": {
+      "fewer": "Fewer {label}",
+      "more": "More {label}"
+    },
+    "cruiseCard": {
+      "route": "Route",
+      "guestsMax": "{count} guests max",
+      "evaluation": "{score}/100 · Nilecruz evaluation",
+      "onBoard": "On board",
+      "fromPerPerson": "From, per person",
+      "pricesInPreparation": "Prices in preparation",
+      "compare": "Compare",
+      "save": "Save {name}",
+      "remove": "Remove {name} from saved"
+    },
+    "experienceCard": {
+      "seeDetails": "See details"
+    },
+    "itinerary": {
+      "label": "Itinerary",
+      "day": "Day",
+      "prevDay": "Previous day",
+      "nextDay": "Next day",
+      "play": "Play the voyage",
+      "pause": "Pause the voyage"
+    },
+    "gallery": {
+      "label": "Gallery",
+      "slide": "{n} of {total}",
+      "prev": "Previous image",
+      "next": "Next image"
+    },
+    "cruiseSearch": {
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "sailingDay": ", sailing day",
+      "departureDays": "Departure days for this route",
+      "route": "Route",
+      "vessel": "Vessel",
+      "departure": "Departure",
+      "anyDate": "Any date",
+      "guests": "Guests",
+      "guestCount": "{count, plural, one {# guest} other {# guests}}",
+      "adults": "Adults",
+      "adultsHint": "12 and over",
+      "children": "Children",
+      "childrenHint": "Under 12, sharing a parent's cabin",
+      "childAge": "Age of child {n}",
+      "chooseAge": "Choose age",
+      "underOne": "Under 1",
+      "years": "{count, plural, one {# year} other {# years}}",
+      "agesRequired": "Choose each child's age: children's prices depend on it.",
+      "cta": "Check availability",
+      "matches": "{count, plural, one {# departure matches} other {# departures match}} · {vessel}, {route}"
+    },
+    "cabinPicker": {
+      "legend": "Choose a cabin",
+      "size": "{size} m²",
+      "soldOut": "Sold out",
+      "onlyLeft": "Only {count} left",
+      "perPerson": "per person",
+      "signInForPrices": "Sign in to see prices and dates for every cabin."
+    },
+    "bookingSummary": {
+      "label": "Booking summary",
+      "departs": "Departs {date}",
+      "total": "Total",
+      "gratuity": "Crew gratuities, paid on board at check-out",
+      "gratuityDetail": "{rate} × {guests} guests × {nights} nights · not included in the total",
+      "extrasTitle": "Added separately",
+      "from": "from {price}",
+      "request": "Request to book"
+    },
+    "vesselTypeCard": {
+      "cta": "How it feels on board"
+    },
+    "vesselCompare": {
+      "tablist": "Vessel type",
+      "oneAtATime": "Show one at a time",
+      "compareAll": "Compare all {count}",
+      "tableLabel": "Vessel types side by side",
+      "rows": {
+        "guests": "Guests",
+        "cabins": "Cabins",
+        "power": "Propulsion",
+        "pace": "Pace",
+        "mooring": "Where it moors",
+        "sound": "What you hear",
+        "days": "Your days",
+        "price": "Typical price"
+      },
+      "meters": {
+        "intimacy": "Intimacy",
+        "quiet": "Quiet",
+        "freeItinerary": "Free itinerary",
+        "facilities": "Facilities",
+        "heritage": "Heritage"
+      }
+    },
+    "priceAnatomy": {
+      "examples": "Examples",
+      "barLabel": "Price build-up: {items}"
+    },
+    "amenityGrid": {
+      "filter": "Filter amenities",
+      "all": "All",
+      "included": "Included",
+      "request": "On request",
+      "none": "Not aboard"
+    },
+    "state": {
+      "loadingTitle": "Gathering the details",
+      "loadingBody": "This takes a moment.",
+      "emptyTitle": "Nothing here yet",
+      "errorTitle": "We couldn't load this",
+      "errorBody": "Please try again. If it keeps happening, contact us.",
+      "retry": "Try again",
+      "deniedTitle": "This is for signed-in accounts",
+      "deniedBody": "Sign in with an account that has access to see this.",
+      "signIn": "Sign in"
+    }
   }
 }

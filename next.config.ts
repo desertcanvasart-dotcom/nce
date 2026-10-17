@@ -17,7 +17,9 @@ const nextConfig: NextConfig = {
     return liveSiteRedirects.map((r) => ({ ...r, statusCode: 301 as const }));
   },
   async headers() {
-    const headers = securityHeaders({ dev, supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL });
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";
+    const https = siteUrl.startsWith("https://") || (!!siteUrl && !/^https?:\/\//.test(siteUrl));
+    const headers = securityHeaders({ dev, https, supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL });
     if (!allowIndexing) headers.push({ key: "X-Robots-Tag", value: "noindex, nofollow" });
     return [{ source: "/:path*", headers }];
   },

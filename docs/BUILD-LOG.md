@@ -228,3 +228,58 @@
   - `/terms/` has the thinnest LCP margin (2.42 s in one run).
   - The Railway environment is named "production" although it serves staging (Railway → environment settings).
 - **Next:** the Batch 2 brief (design-system port), on Faris's go-ahead.
+
+## 17 Oct 2026 · Batch 2 · Design-system port
+
+**Built** (branch `batch-02-design-system`):
+- **Components:** all 22 design-system components as typed React modules in `src/components/ds/<Name>/`. Each folder has a component, a CSS Module (tokens only), stories, and a README (the guideline verbatim plus the build's changes).
+- **Shared helpers:** formatting (money, dates, nights), reduced-motion hook, count-up, Media (next/image or Scene), StateView (loading, empty, error, denied), Sample data flag.
+- **Gallery:** `/dev/components/` (index + 23 pages, every state, Day/Night), gated by `ENABLE_DEV_ROUTES`. Plus a bare parity frame, `/dev-parity/<name>/`.
+- **NavBar:** the full port now drives the site header (sliding brass underline, no-JS phone menu).
+- **Labels:** about 120 component labels in EN/ES/JA (ES and JA drafted for review).
+- **Data stays out of components:** illustrative data lives only in `__samples__/` and is flagged "Sample data". It is not public (dev routes only).
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` is clean (tokens, types, ESLint, Stylelint, copy lint, Prettier, 48 unit and component tests).
+- **End-to-end:** with dev routes on, 125 pass (1 skipped by design); with production settings, 29 pass and the 96 dev-only tests skip.
+- **Accessibility:**
+  - axe finds 0 serious or critical issues on all 23 gallery pages in Day and Night;
+  - a keyboard walk shows a 2 px focus ring on every control;
+  - reduced motion leaves 0 running animations;
+  - no gallery page scrolls sideways at 375 px.
+- **Visual parity:** 22 components measured. 11 are under 1% in both themes; the rest differ only by decisions recorded in the allowlist, confirmed by inspecting diff images.
+- **Screenshots:** 180 in `docs/screenshots/batch-02/` (30 routes × 3 widths × 2 themes), plus parity images. I checked phone and Night views myself.
+- **Bundle:** the largest public route ships 154.7 KB of gzipped JS (budget 200).
+
+**Problems found and fixed during the batch:**
+- At 375 px:
+  - fixed three-column story grids overlapped;
+  - long Spanish button labels overflowed (buttons now wrap, ADR-046);
+  - long gallery titles overflowed (headings now wrap).
+- Hero copy sat over the cropped boat on phones (stronger scrim).
+- Search values were cut off on phones (one column).
+- Old-style figures in prices (lining figures now, BRAND-024).
+- Reduced motion left delayed animations running (ADR-048).
+- `upgrade-insecure-requests` broke plain-HTTP local runs (ADR-049).
+- Waits for an idle network were flaky after nav prefetching (replaced).
+- The parity report dropped results on partial runs (now merges).
+
+**Carried over:** BRAND-021 (section spacing and bands) to Batch 6, because it is page composition, first applied on the homepage.
+
+**Known issues:**
+- The screenshots add about 37 MB to the repository. Consider storing future batches' screenshots as CI artifacts only.
+- The gallery on staging needs `ENABLE_DEV_ROUTES=true` set on the Railway service (Faris approved this; it has to be set in Railway).
+
+**Next:** Faris reviews the gallery, then the Batch 3 brief (data foundation).
+
+### 17 Oct 2026 · Batch 2 update: CI
+
+- **First two CI runs failed on visual parity only.**
+  - The design system's previews fetch fonts from Google, which sends hinted font files to Linux and unhinted files to macOS. On GitHub's Linux runner, text was a few pixels wider than the build's self-hosted fonts (SectionHeading 1.8% vs 0.09% on macOS; AmenityGrid 1.1%).
+  - In the first run, the parity tests also ran in sequence, so one failure skipped the rest.
+- **Fixed in the test, not the threshold:**
+  - every font family and weight the page uses is loaded before each screenshot;
+  - the previews get the build's own font files;
+  - the tests are independent;
+  - each result is its own file, merged into `report.json`.
+- **CI on `5a652d5` is green** (4/4 jobs). CI parity now matches macOS within about 0.3 points, apart from components already allowlisted for intended differences.

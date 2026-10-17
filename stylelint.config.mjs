@@ -9,6 +9,10 @@ const config = {
     "keyframes-name-pattern": null,
     "media-feature-range-notation": null,
     "import-notation": "string",
+    // CSS Modules: :global(...) is valid.
+    "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global"] }],
+    // Ordering-only rule; it reports equal-specificity selectors in different blocks, not real conflicts.
+    "no-descending-specificity": null,
   },
 };
 

@@ -1,0 +1,99 @@
+/* Ported from bundle.css "Hero". Text on media uses on-media over scrim (BRAND-020). */
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 640px;
+  color: var(--on-media);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+
+.media::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--scrim) 0%, transparent 30%, transparent 45%, var(--scrim) 100%);
+  content: "";
+  pointer-events: none;
+}
+
+.fill {
+  height: 100%;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-5);
+  max-width: 780px;
+  margin-top: auto;
+  padding: var(--space-8) var(--space-7) var(--space-7);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--on-media);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-xl-size);
+  font-weight: var(--type-display-xl-weight);
+  line-height: var(--type-display-xl-line);
+  letter-spacing: var(--type-display-xl-tracking);
+}
+
+.sub {
+  max-width: 52ch;
+  margin: 0;
+  font-size: var(--type-body-l-size);
+  font-weight: var(--type-body-l-weight);
+  line-height: var(--type-body-l-line);
+  animation-delay: 120ms;
+}
+
+/* Hero copy rises into place (BRAND-BOOK §Motion). */
+.rise {
+  animation: rise var(--dur-3) var(--ease-river) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.slot {
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+@media (max-width: 720px) {
+  /* On narrow screens the scene crops so the boat sits behind the copy: carry the scrim up behind the text (BRAND-020). */
+  .media::after {
+    background: linear-gradient(180deg, var(--scrim) 0%, transparent 22%, var(--scrim) 50%, var(--scrim) 100%);
+  }
+
+  .body {
+    padding: var(--space-7) var(--space-4) var(--space-5);
+  }
+
+  .slot {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+}

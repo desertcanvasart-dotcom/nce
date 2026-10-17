@@ -1,0 +1,14 @@
+.media {
+  position: relative;
+  overflow: hidden;
+  background: var(--tint);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s var(--ease-river);
+}

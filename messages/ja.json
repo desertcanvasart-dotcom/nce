@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batch 1. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "乗船前にわかる、ナイル川クルーズ",
@@ -62,5 +62,161 @@
   },
   "legal": {
     "draftBanner": "審査中の草案です。この文章は確定版ではなく、まだ効力を持ちません。"
+  },
+  "ds": {
+    "sampleData": "サンプルデータ",
+    "vesselTypes": {
+      "sail": "帆走ダハビヤ",
+      "motor": "モータークルーズ船",
+      "steam": "外輪蒸気船"
+    },
+    "amenities": {
+      "pool": "プール",
+      "sundeck": "サンデッキ",
+      "spa": "スパ",
+      "wifi": "Wi-Fi",
+      "ac": "エアコン",
+      "balcony": "専用バルコニー",
+      "bath": "バスタブ",
+      "restaurant": "レストラン",
+      "bar": "バー",
+      "wine": "ワインペアリング",
+      "gym": "ジム",
+      "egyptologist": "専属エジプト学者",
+      "butler": "バトラーサービス",
+      "library": "ライブラリー",
+      "accessible": "段差のない設計",
+      "bed": "キングベッド",
+      "music": "夜の音楽",
+      "quiet": "エンジン音なし",
+      "anchor": "専用係留地",
+      "temple": "神殿訪問",
+      "sunrise": "日の出の眺め"
+    },
+    "rating": {
+      "outOf": "5点中{value}点",
+      "reviews": "（{count}件のレビュー）"
+    },
+    "stepper": {
+      "fewer": "{label}を減らす",
+      "more": "{label}を増やす"
+    },
+    "cruiseCard": {
+      "route": "ルート",
+      "guestsMax": "最大{count}名",
+      "evaluation": "{score}/100 · Nilecruz評価",
+      "onBoard": "船内設備",
+      "fromPerPerson": "1名あたり",
+      "pricesInPreparation": "料金準備中",
+      "compare": "比較する",
+      "save": "{name}を保存",
+      "remove": "{name}を保存から外す"
+    },
+    "experienceCard": {
+      "seeDetails": "詳細を見る"
+    },
+    "itinerary": {
+      "label": "旅程",
+      "day": "日目",
+      "prevDay": "前の日",
+      "nextDay": "次の日",
+      "play": "航海を再生",
+      "pause": "航海を一時停止"
+    },
+    "gallery": {
+      "label": "ギャラリー",
+      "slide": "{total}枚中{n}枚目",
+      "prev": "前の画像",
+      "next": "次の画像"
+    },
+    "cruiseSearch": {
+      "prevMonth": "前の月",
+      "nextMonth": "次の月",
+      "sailingDay": "、出航日",
+      "departureDays": "このルートの出航日",
+      "route": "ルート",
+      "vessel": "船",
+      "departure": "出発日",
+      "anyDate": "日付指定なし",
+      "guests": "人数",
+      "guestCount": "{count}名",
+      "adults": "大人",
+      "adultsHint": "12歳以上",
+      "children": "子ども",
+      "childrenHint": "12歳未満、保護者と同室",
+      "childAge": "お子様{n}の年齢",
+      "chooseAge": "年齢を選択",
+      "underOne": "1歳未満",
+      "years": "{count}歳",
+      "agesRequired": "お子様それぞれの年齢を選んでください。料金は年齢によって異なります。",
+      "cta": "空き状況を確認",
+      "matches": "{count}件の出航が該当 · {vessel}、{route}"
+    },
+    "cabinPicker": {
+      "legend": "客室を選ぶ",
+      "size": "{size} m²",
+      "soldOut": "満室",
+      "onlyLeft": "残り{count}室",
+      "perPerson": "1名あたり",
+      "signInForPrices": "すべての客室の料金と日程はログインすると表示されます。"
+    },
+    "bookingSummary": {
+      "label": "予約内容",
+      "departs": "{date}出発",
+      "total": "合計",
+      "gratuity": "クルーへのチップ（下船時に船上で支払い）",
+      "gratuityDetail": "{rate} × {guests}名 × {nights}泊 · 合計には含まれません",
+      "extrasTitle": "別途お申し込み",
+      "from": "{price}から",
+      "request": "予約をリクエスト"
+    },
+    "vesselTypeCard": {
+      "cta": "船上の過ごし方"
+    },
+    "vesselCompare": {
+      "tablist": "船の種類",
+      "oneAtATime": "1つずつ表示",
+      "compareAll": "{count}種類を比較",
+      "tableLabel": "船の種類の比較",
+      "rows": {
+        "guests": "乗客数",
+        "cabins": "客室数",
+        "power": "推進方式",
+        "pace": "ペース",
+        "mooring": "停泊場所",
+        "sound": "聞こえる音",
+        "days": "一日の過ごし方",
+        "price": "料金の目安"
+      },
+      "meters": {
+        "intimacy": "親密さ",
+        "quiet": "静けさ",
+        "freeItinerary": "旅程の自由度",
+        "facilities": "設備",
+        "heritage": "歴史"
+      }
+    },
+    "priceAnatomy": {
+      "examples": "例",
+      "barLabel": "料金の内訳：{items}"
+    },
+    "amenityGrid": {
+      "filter": "設備で絞り込む",
+      "all": "すべて",
+      "included": "含まれる",
+      "request": "リクエスト制",
+      "none": "なし"
+    },
+    "state": {
+      "loadingTitle": "詳細を準備しています",
+      "loadingBody": "少々お待ちください。",
+      "emptyTitle": "まだ何もありません",
+      "errorTitle": "読み込めませんでした",
+      "errorBody": "もう一度お試しください。問題が続く場合はお問い合わせください。",
+      "retry": "もう一度試す",
+      "deniedTitle": "ログインしたアカウント向けの内容です",
+      "deniedBody": "アクセス権のあるアカウントでログインしてください。",
+      "signIn": "ログイン"
+    }
   }
 }
