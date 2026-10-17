@@ -1,0 +1,108 @@
+/* Ported from bundle.css "Gallery". */
+.gal {
+  position: relative;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.track {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  padding: var(--space-5) 0;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  perspective: 1400px;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.item {
+  flex: 0 0 min(420px, 72%);
+  margin: 0;
+  scroll-snap-align: center;
+  transform-style: preserve-3d;
+  transition: transform var(--dur-2) var(--ease-river);
+}
+
+.media {
+  aspect-ratio: 4 / 3;
+}
+
+.item figcaption {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+  margin-top: var(--space-3);
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.item figcaption b {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.bar {
+  display: flex;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.progress {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.progress i {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  transition:
+    width var(--dur-2) var(--ease-river),
+    left var(--dur-2) var(--ease-river);
+}
+
+.count {
+  min-width: 4.5ch;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.iconBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: pointer;
+  transition:
+    background var(--dur-1),
+    color var(--dur-1);
+}
+
+.iconBtn:hover {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.iconBtn:disabled {
+  border-color: var(--line-strong);
+  background: var(--surface-raised);
+  color: var(--ink);
+  cursor: not-allowed;
+  opacity: 0.35;
+}
