@@ -8,3 +8,5 @@ src/styles/tokens.ts
 playwright-report/
 test-results/
 .lighthouseci/
+supabase/.temp/
+supabase/.branches/

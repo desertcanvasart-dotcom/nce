@@ -29,6 +29,39 @@ export default defineConfig([
     },
   },
   {
+    // Server-only modules (guarded by `import "server-only"`) and scripts may read secrets.
+    files: ["src/server/**/*.ts", "scripts/**/*.ts"],
+    rules: { "no-restricted-syntax": "off" },
+  },
+  {
+    // ENG-016/SEC-003: browser-reachable code never imports server modules or the admin (RLS-bypassing) client.
+    files: ["src/components/**/*.{ts,tsx}", "src/lib/**/*.{ts,tsx}", "src/i18n/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/server", "@/server/*", "**/server/**"],
+              message: "Components and shared libs must not import server code.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/app/**/*.{ts,tsx}", "src/proxy.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: [{ name: "@/server/db/admin", message: "The admin client bypasses RLS: use getDb() in routes and pages." }],
+        },
+      ],
+    },
+  },
+  {
     // ENG-004: an eslint-disable comment must say why ("-- reason").
     linterOptions: { reportUnusedDisableDirectives: "error" },
     plugins: {
@@ -58,6 +91,8 @@ export default defineConfig([
     "node_modules/**",
     "vendor/**",
     "next-env.d.ts",
+    "supabase/.temp/**",
+    "supabase/.branches/**",
     "playwright-report/**",
     "test-results/**",
     ".lighthouseci/**",

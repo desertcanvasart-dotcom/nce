@@ -44,10 +44,10 @@ select results_eq($$with u as (update public.vessels set cabin_count = 1 where s
   array[0], 'operator A cannot change operator B''s vessel');
 
 select throws_ok($$insert into public.media (vessel_id, storage_path, width, height) values
-  ('00000000-0000-4000-c000-000000000004', 'vessels/00000000-0000-4000-c000-000000000004/x.jpg', 10, 10)$$,
+  ('00000000-0000-4000-8000-000000000004', 'vessels/00000000-0000-4000-8000-000000000004/x.jpg', 10, 10)$$,
   '42501', null, 'operator A cannot add photos to operator B''s vessel');
 select lives_ok($$insert into public.media (vessel_id, storage_path, width, height) values
-  ('00000000-0000-4000-c000-000000000003', 'vessels/00000000-0000-4000-c000-000000000003/x.jpg', 10, 10)$$,
+  ('00000000-0000-4000-8000-000000000003', 'vessels/00000000-0000-4000-8000-000000000003/x.jpg', 10, 10)$$,
   'operator A adds a photo to its own draft');
 reset role;
 select pg_temp.as_anon();

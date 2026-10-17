@@ -24,13 +24,20 @@
     "budget": "tsx scripts/bundle-budget.ts",
     "lhci": "lhci autorun",
     "ledger": "python3 -I scripts/ledger.py ../nce/nilecrz-site-silo.xlsx docs",
-    "verify": "pnpm tokens:check && pnpm typecheck && pnpm lint && pnpm lint:css && pnpm lint:copy && pnpm format:check && pnpm test"
+    "verify": "pnpm tokens:check && pnpm typecheck && pnpm lint && pnpm lint:css && pnpm lint:copy && pnpm format:check && pnpm test",
+    "check:client-secrets": "tsx scripts/client-secrets-check.ts",
+    "db:types": "supabase gen types typescript --db-url postgresql://postgres:postgres@127.0.0.1:55422/postgres --schema public > src/server/db/database.types.ts && prettier --write src/server/db/database.types.ts",
+    "db:test": "supabase test db",
+    "test:db-api": "vitest run --config vitest.db-api.config.mts"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.118.0",
     "next": "16.4.2",
     "next-intl": "^4.14.9",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
+    "server-only": "^0.0.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {

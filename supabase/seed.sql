@@ -52,25 +52,25 @@ insert into public.memberships (org_id, user_id, team_role) values
 
 -- Destinations use the common English names (BRAND-009); they are real places, flagged sample until copy is written.
 insert into public.destinations (id, slug, name, visibility, is_sample) values
-  ('00000000-0000-4000-d000-000000000001', 'luxor', 'Luxor', 'published', true),
-  ('00000000-0000-4000-d000-000000000002', 'aswan', 'Aswan', 'published', true),
-  ('00000000-0000-4000-d000-000000000003', 'edfu', 'Edfu', 'private', true);
+  ('00000000-0000-4000-9000-000000000001', 'luxor', 'Luxor', 'published', true),
+  ('00000000-0000-4000-9000-000000000002', 'aswan', 'Aswan', 'published', true),
+  ('00000000-0000-4000-9000-000000000003', 'edfu', 'Edfu', 'private', true);
 
 insert into public.vessels (id, slug, source_ref, name, type, visibility, operator_org_id, category, cabin_count, max_guests,
   deck_count, route_text, is_sample, published_at) values
-  ('00000000-0000-4000-c000-000000000001', 'sample-sail-one', 'seed:1', 'Sample Dahabiya One', 'sail', 'published',
+  ('00000000-0000-4000-8000-000000000001', 'sample-sail-one', 'seed:1', 'Sample Dahabiya One', 'sail', 'published',
    '00000000-0000-4000-b000-00000000000a', 'luxury', 6, 12, 2, 'Luxor–Aswan', true, now()),
-  ('00000000-0000-4000-c000-000000000002', 'sample-motor-one', 'seed:2', 'Sample Motor Ship One', 'motor', 'showcase',
+  ('00000000-0000-4000-8000-000000000002', 'sample-motor-one', 'seed:2', 'Sample Motor Ship One', 'motor', 'showcase',
    '00000000-0000-4000-b000-00000000000a', 'value', 40, 80, 4, 'Luxor–Aswan', true, null),
-  ('00000000-0000-4000-c000-000000000003', 'sample-steam-one', 'seed:3', 'Sample Steamer One', 'steam', 'private',
+  ('00000000-0000-4000-8000-000000000003', 'sample-steam-one', 'seed:3', 'Sample Steamer One', 'steam', 'private',
    '00000000-0000-4000-b000-00000000000a', null, 20, 40, 3, 'Luxor–Aswan', true, null),
-  ('00000000-0000-4000-c000-000000000004', 'sample-motor-two', 'seed:4', 'Sample Motor Ship Two', 'motor', 'private',
+  ('00000000-0000-4000-8000-000000000004', 'sample-motor-two', 'seed:4', 'Sample Motor Ship Two', 'motor', 'private',
    '00000000-0000-4000-b000-00000000000b', null, 30, 60, 3, 'Esna–Aswan', true, null);
 
 insert into public.vessel_private (vessel_id, verification_note) values
-  ('00000000-0000-4000-c000-000000000001', 'Sample record: not verified'),
-  ('00000000-0000-4000-c000-000000000004', 'Sample record: not verified');
+  ('00000000-0000-4000-8000-000000000001', 'Sample record: not verified'),
+  ('00000000-0000-4000-8000-000000000004', 'Sample record: not verified');
 
 insert into public.vessel_translations (vessel_id, locale, summary) values
-  ('00000000-0000-4000-c000-000000000001', 'en', 'Sample summary for the gallery and tests.'),
-  ('00000000-0000-4000-c000-000000000003', 'en', 'Sample summary of a private draft.');
+  ('00000000-0000-4000-8000-000000000001', 'en', 'Sample summary for the gallery and tests.'),
+  ('00000000-0000-4000-8000-000000000003', 'en', 'Sample summary of a private draft.');
