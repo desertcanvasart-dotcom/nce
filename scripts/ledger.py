@@ -502,8 +502,9 @@ with open(f"{out}/REQUIREMENTS.md", "w") as f:
     for g, rows in groups.items():
         f.write(f"## {g}\n\n| ID | Source | Requirement | Batch | Status | Evidence |\n|---|---|---|---|---|---|\n")
         for i, s, req, b in rows:
-            st = ("Deferred: " + DEFERRED[i]) if i in DEFERRED else ("Planned" if b != "0" else "Built")
-            f.write(f"| {i} | {s} | {req.replace('|', '/')} | {b} | {st} | |\n")
+            st = ("Deferred: " + DEFERRED[i]) if i in DEFERRED else ("Planned" if b != "0" else "Verified")
+            ev = "Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024)" if b == "0" else ""
+            f.write(f"| {i} | {s} | {req.replace('|', '/')} | {b} | {st} | {ev} |\n")
         f.write("\n")
     f.write(open(f"{out}/../scripts/proposed.md").read())
 

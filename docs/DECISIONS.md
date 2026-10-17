@@ -7,7 +7,7 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Decision:** clone `nce` locally to `/Users/islamhussein/nce-repo`, branch `batch-00-discovery`, and commit `docs/` there. Nothing is pushed.
 - **Consequence:** if Faris picks another repository (Q1), the docs move with one copy.
 
-## ADR-002 Two extra ledger prefixes (Proposed)
+## ADR-002 Two extra ledger prefixes (Accepted 17 Oct 2026)
 - **Context:** CLAUDE.md §3 lists SEO/I18N/A11Y/PERF/SEC/DATA. The brand book and the Definition of Done contain testable rules that fit none of them.
 - **Decision:** add `BRAND-*` (testable brand-book rules) and `ENG-*` (build hygiene and DoD tooling).
 - **Consequence:** nothing is dropped, and the IDs stay grouped by source.
@@ -17,15 +17,15 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Decision:** `scripts/ledger.py` generates `REQUIREMENTS.md` and the coverage table from one list and asserts uniqueness and single-batch assignment. From Batch 1 the ledger is edited directly (statuses and evidence), and IDs never change.
 - **Consequence:** counts can be re-proved at any time by re-parsing the file.
 
-## ADR-004 Dashboards before public marketplace (Proposed)
+## ADR-004 Dashboards before public marketplace (Accepted 17 Oct 2026)
 - See BATCH-PLAN "Changes from the KICKOFF shape".
 
-## ADR-005 Base the dashboards on the `nilecrz` lineage, moved to Next.js (Proposed)
+## ADR-005 Base the dashboards on the `nilecrz` lineage, moved to Next.js (Superseded by ADR-023)
 - **Context:** Faris is open to reusing either GitHub dashboard. ARCHITECTURE §1 compares them.
 - **Decision:** proposed base is the `nilecrz` core (schema, RPC-only writes, tests, evaluation method), ideally the newer live version (Q1), moved onto Next.js 16. Selected parts of `nile-cruise-marketplace` are cherry-picked. Neither UI is kept.
 - **Consequence:** this depends on Q1. The public site is new either way.
 
-## ADR-006 No Tailwind; CSS Modules over generated tokens (Proposed)
+## ADR-006 No Tailwind; CSS Modules over generated tokens (Accepted 17 Oct 2026)
 - **Context:** the design system is plain CSS on custom properties.
 - **Decision:** port `bundle.css` into per-component CSS Modules.
 - **Consequence:** this gives the closest parity. CLAUDE.md's "Tailwind theme, if chosen" does not apply.
@@ -191,3 +191,8 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
     - the anonymous-request model.
   - Every reused piece is re-reviewed, typed and tested when its batch ports it.
 - **Consequence:** batches 4b–4h build the guide features neither repo has. Q1's remaining part, whether the live nilecruz.com database holds real records, decides whether Batch 3 migrates data (Q52).
+
+### ADR-024 Batch 0 approved (Accepted)
+- **Context:** Faris approved all Batch 0 documents on 17 Oct 2026.
+- **Decision:** the architecture (ARCHITECTURE.md), the stack, the batch plan and the ledger are the baseline. All Proposed ADRs above are Accepted, except ADR-005, which ADR-023 supersedes.
+- **Consequence:** answers still pending (Q3, Q51, Q52 and the non-starred questions) are taken in the batch that needs them, as QUESTIONS.md notes.
