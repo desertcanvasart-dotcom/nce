@@ -5,5 +5,5 @@ export default defineCliConfig({
   api: { projectId, dataset },
   // Hosted at https://nilecruz.sanity.studio (Batch 3 brief, approved by Faris).
   studioHost: "nilecruz",
-  deployment: { autoUpdates: true },
+  deployment: { appId: "myur9r320nzvschavuk28zc9", autoUpdates: true },
 });

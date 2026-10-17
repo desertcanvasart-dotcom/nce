@@ -498,3 +498,8 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-059 amendment: first staging push from this Mac
 - With Faris's approval of the import (17 Oct 2026), I applied the six migrations to staging once with the Supabase CLI from this Mac, because the GitHub secrets are not set yet. From now on, staging changes only through `deploy-data.yml`.
 
+### ADR-062 Studio workspaces and first deploy (Accepted)
+- **Context:** the Studio was built for the `development` dataset only, but real content (Egyptologist profiles, articles) belongs in `production`.
+- **Decision:** the Studio has two workspaces, **Production** (`/production`, the live site's content) and **Development** (`/development`, drafts and tests). Editors switch at the top left. The Studio and both schemas were first deployed from this Mac with `SANITY_DEPLOY_TOKEN` (17 Oct 2026); later deploys run from `deploy-data.yml` once the GitHub secret exists. The Studio's app ID is pinned in `studio/sanity.cli.ts`.
+- **Consequence:** https://nilecruz.sanity.studio opens through Sanity's dashboard and needs a Sanity sign-in.
+

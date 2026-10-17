@@ -327,3 +327,10 @@
 **Staging gallery:** Faris set `ENABLE_DEV_ROUTES=true` on Railway. Checked 17 Oct 2026: `/dev/components/` and its component pages answer 200 in EN, ES and JA, render with the "Sample data" flag, and stay `noindex, nofollow` (header and meta); `/dev/error-preview/` returns its intended 500.
 
 **Next:** Faris adds the three secrets. Then the Batch 4a brief (sign-in).
+
+## 17 Oct 2026 · Batch 3 follow-up · Hosted Studio
+
+- **Deployed:** Sanity Studio at https://nilecruz.sanity.studio, with Production and Development workspaces (ADR-062); the schema is deployed to both datasets (`sanity schema deploy`: 2/2). Sanity lists the Studio for project `auho5414`.
+- **Verified:** both workspace URLs redirect into Sanity's dashboard for sign-in; `pnpm studio:check` validates both workspaces (0 errors, 0 warnings).
+- **Still open:** GitHub has no secrets yet (0 repository, 0 `staging` environment). `deploy-data.yml` keeps failing on `main` until `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD` and `SANITY_DEPLOY_TOKEN` are added. Staging and the Studio are already up to date.
+
