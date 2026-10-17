@@ -267,7 +267,7 @@
       "save": "Save the new password"
     },
     "twoStep": {
-      "title": "Two-step sign-in",
+      "title": "Two-step sign‑in",
       "lede": "Open your authenticator app and enter the six-digit code for Nilecruz.",
       "code": "Six-digit code",
       "submit": "Continue",

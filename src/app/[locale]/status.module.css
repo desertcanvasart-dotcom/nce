@@ -43,3 +43,10 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.brand {
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  text-decoration: none;
+}

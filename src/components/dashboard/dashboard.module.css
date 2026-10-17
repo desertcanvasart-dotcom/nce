@@ -77,11 +77,13 @@
 
 .body {
   display: grid;
+  grid-template-rows: auto 1fr; /* phones: the Sections menu only as tall as it needs */
   grid-template-columns: minmax(0, 1fr);
 }
 
 @media (width >= 900px) {
   .body {
+    grid-template-rows: 1fr; /* the sidebar runs the full height */
     grid-template-columns: 15rem minmax(0, 1fr);
   }
 }
@@ -153,4 +155,46 @@
   text-decoration: underline;
   text-underline-offset: 0.2em;
   cursor: pointer;
+}
+
+/* Wide screens: the full sidebar. Phones: a "Sections" menu, so the page content comes first. */
+.sideNarrow {
+  padding-block: var(--space-3);
+}
+
+@media (width >= 900px) {
+  .sideNarrow {
+    display: none;
+  }
+}
+
+@media (width < 900px) {
+  .sideWide {
+    display: none;
+  }
+}
+
+.sections > .sideList {
+  margin-top: var(--space-3);
+}
+
+.sectionsButton {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  cursor: pointer;
+  list-style: none;
+}
+
+.sectionsButton::-webkit-details-marker {
+  display: none;
+}
+
+.sectionsButton .sideTitle {
+  margin: 0;
+  padding: 0;
 }

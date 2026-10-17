@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { cache } from "react";
 import type { Identity, Membership } from "@/lib/auth/workspaces";
-import { getDb } from "@/server/db";
+import { DatabaseNotConfiguredError, getDb } from "@/server/db";
 
 export type Session = Identity & {
   userId: string;
@@ -33,8 +33,16 @@ export async function getSession(): Promise<Session | null> {
   return sessionFor(key);
 }
 
-const sessionFor = cache(async (_cookieKey: string): Promise<Session | null> => {
-  const db = await getDb();
+const sessionFor = cache(async (cookieKey: string): Promise<Session | null> => {
+  if (!cookieKey) return null; // no session cookie: anonymous, and no network call
+  let db: Awaited<ReturnType<typeof getDb>>;
+  try {
+    db = await getDb();
+  } catch (e) {
+    // Without a database (e.g. a build checked by Lighthouse) pages render for anonymous visitors.
+    if (e instanceof DatabaseNotConfiguredError) return null;
+    throw e;
+  }
   const { data: auth, error } = await db.auth.getUser();
   if (error || !auth.user) return null;
   const user = auth.user;

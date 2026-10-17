@@ -11,6 +11,11 @@ export default function Forbidden() {
       style={{ margin: "0 auto", padding: "var(--space-9) var(--space-5)" }}
     >
       <title>Not part of your account | Nilecruz</title>
+      <p>
+        <Link href="/" className={styles.brand}>
+          Nilecruz
+        </Link>
+      </p>
       <p className={styles.code}>403</p>
       <h1 className={styles.title}>This is not part of your account</h1>
       <p className={styles.body}>

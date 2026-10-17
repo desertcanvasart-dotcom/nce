@@ -266,7 +266,7 @@ subject = "Reset your Nilecruz password"
 content_path = "./supabase/templates/recovery.html"
 
 [auth.email.template.email_change]
-subject = "Confirm your new email for Nilecruz"
+subject = "Confirm the change of email for your Nilecruz account"
 content_path = "./supabase/templates/email-change.html"
 
 [auth.sms]
@@ -440,4 +440,8 @@ additional_redirect_urls = ["https://nce-production-da4c.up.railway.app/**"]
 email_sent = 2
 sign_in_sign_ups = 30
 token_verifications = 30
+
+[remotes.staging.auth.email]
+# Hosted default: at most one email per address per minute (local tests use 1s).
+max_frequency = "1m0s"
 

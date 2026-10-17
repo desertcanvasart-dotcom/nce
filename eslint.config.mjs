@@ -67,6 +67,43 @@ export default defineConfig([
     plugins: {
       local: {
         rules: {
+          // SEC-002: every exported server action starts from an authorisation guard (or says it is for anonymous visitors).
+          "server-action-guard": {
+            meta: { type: "problem", schema: [] },
+            create(context) {
+              const GUARDS = new Set(["requireUser", "requireAdmin", "requireOrgRole", "allowAnonymous"]);
+              const isServerFile = context.sourceCode.ast.body.some(
+                (n) => n.type === "ExpressionStatement" && n.directive === "use server",
+              );
+              const callsGuard = (node) => {
+                let found = false;
+                const visit = (n) => {
+                  if (!n || typeof n !== "object" || found) return;
+                  if (n.type === "CallExpression" && n.callee.type === "Identifier" && GUARDS.has(n.callee.name)) found = true;
+                  for (const k of Object.keys(n)) {
+                    if (k === "parent") continue;
+                    const v = n[k];
+                    if (Array.isArray(v)) v.forEach(visit);
+                    else if (v && typeof v.type === "string") visit(v);
+                  }
+                };
+                visit(node.body);
+                return found;
+              };
+              return {
+                ExportNamedDeclaration(node) {
+                  if (!isServerFile) return;
+                  const d = node.declaration;
+                  if (d?.type === "FunctionDeclaration" && !callsGuard(d)) {
+                    context.report({
+                      node: d,
+                      message: "Server actions must call requireUser/requireAdmin/requireOrgRole or allowAnonymous().",
+                    });
+                  }
+                },
+              };
+            },
+          },
           "disable-needs-reason": {
             meta: { type: "problem", schema: [] },
             create(context) {
@@ -84,7 +121,7 @@ export default defineConfig([
         },
       },
     },
-    rules: { "local/disable-needs-reason": "error" },
+    rules: { "local/disable-needs-reason": "error", "local/server-action-guard": "error" },
   },
   globalIgnores([
     ".next/**",
