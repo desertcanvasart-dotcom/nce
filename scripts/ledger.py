@@ -19,6 +19,8 @@ ROLE = [
  ("§Account roles", "Customer can read and write only their own requests, offers, reservations, payments and tours.", "4a"),
  ("§Account roles", "Travel partner can see only approved trade availability, its company's bookings and its team permissions.", "4a"),
  ("§Intro ¶2", "The dashboard's navigation and content change according to the signed-in account type.", "4a"),
+ ("§Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-002", "Operator teams have owner, reservations, finance and viewer roles, and each role's permissions are enforced on the server and in RLS.", "4a"),
+ ("§Account roles; Faris 17 Oct 2026 (ADR-063); PROPOSED-003", "Admins have a sub-role (super, catalogue, finance, content) that limits which admin actions they can take; only super admins change roles.", "4a"),
 ]
 ADM = [
  ("§Admin/Overview", "Overview shows a counter of operator applications awaiting approval.", "4b"),
@@ -376,6 +378,8 @@ X = {
  ("CLAUDE.md §5", "A security review before launch has no open high findings.", "11"),
  ("ARCH §Security", "Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set.", "1"),
  ("ARCH §Data; ADR-052", "Passenger personal data is readable only by the booking's customer, partner, operator and admins.", "4e"),
+ ("Faris 17 Oct 2026 (ADR-063); PROPOSED-001", "People can confirm their email, reset a forgotten password and change their email, through single-use links that expire.", "4a"),
+ ("Faris 17 Oct 2026 (ADR-064)", "Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session.", "4a"),
 ],
 "SEO": [
  ("silo.xlsx Read me C10", "URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect.", "1"),
@@ -606,6 +610,23 @@ STATUS.update({
  "BRAND-008": ("Verified", B3+"vessel_type enum sail/motor/steam; labels from messages (Batch 2); Sanity vesselTypeProfile options use the exact labels"),
  "BRAND-009": ("Verified", B3+"destinations.name holds the common English name (seed: Luxor, Aswan, Edfu); Sanity destinationStory joins by slug, so names have one source"),
  "BRAND-014": ("Verified", B3+"media_one_parent and path-matches-parent checks; 050_catalogue_rules.sql; 030 'operator A cannot add photos to operator B's vessel'; private storage bucket served only with a readable media row"),
+})
+B4A = "Batch 4a (17 Oct 2026): "
+STATUS.update({
+ "DASH-ROLE-001": ("Verified", B4A+"e2e dashboard.spec 'each role lands in its own workspace' (8 seed users + applied company); unit auth.test 'workspaces'"),
+ "DASH-ROLE-002": ("Verified", B4A+"admin workspace behind requireAdmin + aal2; e2e 'seeded admin … reaches the admin workspace'; DB 030/070; scope grows in 4b–4h"),
+ "DASH-ROLE-003": ("Verified", B4A+"requireOrgRole + RLS (Batch 3); e2e operator A refused operator B and partner workspaces (403); DB 030 isolation"),
+ "DASH-ROLE-004": ("Verified", B4A+"customers reach only My journey; e2e customer refused admin, operator and partner (403); profile RLS 030"),
+ "DASH-ROLE-005": ("Verified", B4A+"partner roles: e2e finance sees Payments not Search, reservations refused Payments (403); company status gate"),
+ "DASH-ROLE-006": ("Verified", B4A+"src/lib/auth/dashboard-nav.ts (sections per role, from the guide); e2e 'navigation changes with role'; phone Sections menu"),
+ "DASH-ROLE-007": ("Verified", B4A+"team roles in navFor/sectionAccess and requireOrgRole; e2e viewer and finance refusals; DB 030 viewer can't edit"),
+ "DASH-ROLE-008": ("Verified", B4A+"admin sub-roles in nav and requireAdmin(roles); e2e catalogue admin refused finance (403); DB 070 only super admins change roles"),
+ "DASH-CUS-013": ("Verified", B4A+"/account/security/: change email (double confirmation), change password (current required), two-step on/off, sign out everywhere; e2e auth.spec"),
+ "SEC-002": ("Verified", B4A+"guards in every dashboard page and action; ESLint local/server-action-guard; e2e 11 cross-role 403 checks"),
+ "SEC-005": ("Verified", B4A+"httpOnly SameSite=Lax cookies (e2e), server-side sign-out revokes copied cookies (e2e), cross-origin sign-out 403, safe return paths (unit), sign-in without JS (e2e)"),
+ "SEC-014": ("Verified", B4A+"e2e sign-up confirmation, reset link, used link refused, reset needs a fresh link, email change confirmed from both addresses; branded templates"),
+ "SEC-015": ("Verified", B4A+"app.is_admin() requires aal2 (DB 030/070, API test); app sends admins to set-up or code screen (e2e); admins can't turn it off (e2e)"),
+ "DATA-003": ("Verified", B4A+"formatCairo + CairoTime; unit cairo-time.test (winter, summer, 29 Oct 2026 repeated hour); e2e 'dashboard shows Cairo time'"),
 })
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

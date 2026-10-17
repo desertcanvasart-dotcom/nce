@@ -1,11 +1,11 @@
 -- SEC-001: who can see and change what. Users are the seed fixtures.
 begin;
-select plan(23);
+select plan(25);
 
-create function pg_temp.as_user(uid uuid) returns void language plpgsql as $$
+create function pg_temp.as_user(uid uuid, aal text default 'aal1') returns void language plpgsql as $$
 begin
   perform set_config('role', 'authenticated', true);
-  perform set_config('request.jwt.claims', json_build_object('sub', uid, 'role', 'authenticated')::text, true);
+  perform set_config('request.jwt.claims', json_build_object('sub', uid, 'role', 'authenticated', 'aal', aal)::text, true);
 end $$;
 create function pg_temp.as_anon() returns void language plpgsql as $$
 begin
@@ -59,8 +59,13 @@ select pg_temp.as_user('00000000-0000-4000-a000-000000000013');
 select results_eq($$with u as (update public.vessels set cabin_count = 2 where slug = 'sample-steam-one' returning 1) select count(*)::int from u$$,
   array[0], 'viewer cannot edit vessels');
 
--- Admin: everything, including drafts, private facts and the audit log.
-select pg_temp.as_user('00000000-0000-4000-a000-000000000001');
+-- Admin with a password only (no two-step): no admin powers (SEC-015).
+select pg_temp.as_user('00000000-0000-4000-a000-000000000001', 'aal1');
+select results_eq('select count(*)::int from public.vessel_private', array[0], 'admin without two-step reads no private facts');
+select results_eq('select count(*)::int from public.vessels', array[2], 'admin without two-step sees only public vessels');
+
+-- Admin with two-step: everything, including drafts, private facts and the audit log.
+select pg_temp.as_user('00000000-0000-4000-a000-000000000001', 'aal2');
 select results_eq('select count(*)::int from public.vessels', array[4], 'admin sees every vessel');
 select results_eq('select count(*)::int from public.vessel_private', array[2], 'admin reads private vessel facts');
 select isnt_empty('select 1 from public.audit_log', 'admin reads the audit log');

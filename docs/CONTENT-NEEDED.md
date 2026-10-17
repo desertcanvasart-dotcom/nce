@@ -31,8 +31,11 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 25 | Operator bank details for payouts (recorded by admin, never shown publicly) | 4f | ADR-026 |
 | 26 | Bank-transfer instructions for customers, if manual payment is kept | 4f | Q55 |
 | 27 | Review of the draft Terms and Privacy pages, plus the facts they need: legal entity name, registration number, registered address, governing law, data-protection contact | 1 (draft) / 11 (final) | ADR-031 |
-| 28 | Translator review of the drafted ES and JA UI strings (`messages/es.json`, `messages/ja.json`), now including about 120 component labels | 10 | ADR-032, ADR-044 |
+| 28 | Translator review of the drafted ES and JA UI strings (`messages/es.json`, `messages/ja.json`), now including about 120 component labels and about 100 account-page strings (Batch 4a) | 10 | ADR-032, ADR-044 |
 | 29 | Decide the "Best for" label wording (Q57) | 4b | Brand vs guide |
 | 30 | ~~Which steamer candidates are paddle steamers~~ Supplied 17 Oct 2026: the Sudan only (ADR-060) | 3 | ADR-060 |
 | 31 | ~~The bundled "Unverified names" record~~ Decided 17 Oct 2026: 14 separate name-only drafts (ADR-060). Facts for each are still needed before any is shown | 4b | ADR-060 |
 | 32 | ~~Approval of the vessel dry run~~ Approved 17 Oct 2026; imported to staging | 3 | DATA-014 |
+| 33 | Google Cloud OAuth client (only if you want "Sign in with Google") | when wanted | ADR-065 |
+| 34 | Sign up on staging, then I make `islamjp69@gmail.com` super admin | 4a | ADR-066 |
+

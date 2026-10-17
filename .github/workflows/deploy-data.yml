@@ -5,7 +5,14 @@ name: Deploy data layer
 on:
   push:
     branches: [main]
-    paths: ["supabase/migrations/**", "studio/**", ".github/workflows/deploy-data.yml"]
+    paths:
+      [
+        "supabase/migrations/**",
+        "supabase/config.toml",
+        "supabase/templates/**",
+        "studio/**",
+        ".github/workflows/deploy-data.yml",
+      ]
   workflow_dispatch:
 
 concurrency:
@@ -33,6 +40,8 @@ jobs:
       - name: Show what will change
         run: supabase db push --dry-run
       - run: supabase db push
+      - name: Auth settings and email templates (ADR-066)
+        run: supabase config push --project-ref "$STAGING_REF"
       - name: Table privileges are exactly the intended set (ADR-061)
         run: |
           # The CLI prints a plain array in CI and {"rows": [...]} under agent mode; accept both.

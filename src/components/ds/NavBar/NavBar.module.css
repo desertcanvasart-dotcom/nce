@@ -114,6 +114,22 @@
 }
 
 /* Outline button, sm (fills from the left). */
+.account {
+  color: inherit;
+  font-family: var(--font-sans);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-line);
+  letter-spacing: var(--type-label-tracking);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+}
+
+:global(:lang(ja)) .account {
+  letter-spacing: 0;
+}
+
 .cta {
   display: inline-flex;
   align-items: center;

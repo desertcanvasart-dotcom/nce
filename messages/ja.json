@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2 and 4a. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "乗船前にわかる、ナイル川クルーズ",
@@ -15,7 +15,10 @@
     "themeToDark": "夜のテーマに切り替える",
     "themeToLight": "昼のテーマに切り替える",
     "themeShortDark": "夜",
-    "themeShortLight": "昼"
+    "themeShortLight": "昼",
+    "signIn": "ログイン",
+    "account": "アカウント",
+    "signOut": "ログアウト"
   },
   "nav": {
     "cruises": "クルーズ",
@@ -217,6 +220,130 @@
       "deniedTitle": "ログインしたアカウント向けの内容です",
       "deniedBody": "アクセス権のあるアカウントでログインしてください。",
       "signIn": "ログイン"
+    }
+  },
+  "account": {
+    "signIn": {
+      "title": "ログイン",
+      "lede": "ログインすると、すべての客室と日程の料金を確認し、リクエストを送り、予約の状況を追えます。",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "submit": "ログイン",
+      "forgot": "パスワードをお忘れですか",
+      "noAccount": "Nilecruzは初めてですか",
+      "createAccount": "アカウントを作成",
+      "resend": "確認メールを再送する"
+    },
+    "signUp": {
+      "title": "アカウントを作成",
+      "lede": "アカウントがあれば、すべての客室料金を確認し、運航会社に見積もりを依頼し、予約を一か所で管理できます。",
+      "fullName": "お名前",
+      "email": "メールアドレス",
+      "password": "パスワード",
+      "passwordHint": "10文字以上で、英字と数字をそれぞれ1つ以上含めてください。",
+      "submit": "アカウントを作成",
+      "haveAccount": "すでにアカウントをお持ちですか",
+      "signIn": "ログイン",
+      "sentTitle": "メールをご確認ください",
+      "sentBody": "このアドレスが利用可能な場合、確認用のリンクを送信しました。リンクは1回のみ、1時間有効です。"
+    },
+    "verify": {
+      "title": "メールアドレスの確認",
+      "lede": "ボタンを押して確認してください。メールの自動スキャンでリンクが使われてしまわないよう、ボタン操作をお願いしています。",
+      "submit": "確認する",
+      "failedTitle": "このリンクは期限切れか、すでに使用されています",
+      "failedBody": "リンクは1回のみ、1時間有効です。下から新しいリンクを請求してください。",
+      "newConfirmation": "新しい確認リンクを送る",
+      "newReset": "新しいパスワード用リンクを送る"
+    },
+    "reset": {
+      "title": "パスワードの再設定",
+      "lede": "アカウントのメールアドレスを入力すると、新しいパスワードを設定するリンクをお送りします。",
+      "email": "メールアドレス",
+      "submit": "リンクを送る",
+      "backToSignIn": "ログインに戻る",
+      "newTitle": "新しいパスワードを設定",
+      "password": "新しいパスワード",
+      "confirm": "新しいパスワード（確認）",
+      "save": "新しいパスワードを保存"
+    },
+    "twoStep": {
+      "title": "2段階認証",
+      "lede": "認証アプリを開き、Nilecruzの6桁のコードを入力してください。",
+      "code": "6桁のコード",
+      "submit": "続ける",
+      "lost": "認証アプリを紛失した場合はご連絡ください。ご本人確認のうえで再設定します。"
+    },
+    "security": {
+      "title": "アカウントのセキュリティ",
+      "lede": "ログイン情報、2段階認証、ログイン中の端末を管理します。",
+      "signedInAs": "{email} でログイン中",
+      "emailTitle": "メールアドレス",
+      "newEmail": "新しいメールアドレス",
+      "current": "現在のパスワード",
+      "changeEmail": "メールアドレスを変更",
+      "emailNote": "新旧両方のアドレスにリンクを送ります。両方の確認が済むと変更されます。",
+      "passwordTitle": "パスワード",
+      "newPassword": "新しいパスワード",
+      "confirmPassword": "新しいパスワード（確認）",
+      "changePassword": "パスワードを変更",
+      "twoStepTitle": "2段階認証",
+      "twoStepOn": "オン。ログインのたびに認証アプリのコードを求めます。",
+      "twoStepOff": "オフ。パスワードが盗まれても入られないよう、オンにしてください。",
+      "twoStepAdmin": "Nilecruzの管理者は必須です。管理画面を使うには設定してください。",
+      "twoStepStart": "2段階認証を設定する",
+      "twoStepScan": "認証アプリでこのコードを読み取るか、キーを入力してください。その後、表示された6桁のコードを入力してください。",
+      "twoStepKey": "キー",
+      "twoStepQr": "認証アプリ用のQRコード",
+      "twoStepConfirm": "オンにする",
+      "twoStepRemove": "2段階認証をオフにする",
+      "devicesTitle": "端末",
+      "devicesBody": "この端末を含め、すべてのスマートフォンとパソコンからログアウトします。",
+      "signOutEverywhere": "すべての端末からログアウト"
+    },
+    "notices": {
+      "emailChanged": "メールアドレスを変更しました。",
+      "twoStepOn": "2段階認証がオンになりました。",
+      "signedOutEverywhere": "すべての端末からログアウトしました。",
+      "setupTwoStep": "管理者には2段階認証が必要です。続けるには下で設定してください。",
+      "emailHalfConfirmed": "一方のアドレスを確認しました。もう一方のアドレスに送ったリンクを開くと変更が完了します。"
+    },
+    "messages": {
+      "badCredentials": "メールアドレスとパスワードが一致するアカウントがありません。両方を確認して、もう一度お試しください。",
+      "notConfirmed": "先にメールアドレスを確認してください。リンクを再送できます。",
+      "rateLimited": "試行回数が多すぎます。数分待ってから、もう一度お試しください。",
+      "unexpected": "こちらで問題が発生しました。しばらくしてから、もう一度お試しください。",
+      "checkEmail": "このアドレスが利用可能な場合、リンクをお送りしました。リンクは1回のみ、1時間有効です。",
+      "linkExpired": "このリンクは期限切れか、すでに使用されています。新しいリンクを請求してください。",
+      "codeWrong": "そのコードは使えませんでした。コードは30秒ごとに変わるので、最新のコードをお試しください。",
+      "passwordChanged": "パスワードを変更しました。",
+      "emailChangeSent": "新旧両方のアドレスにリンクを送りました。両方を確認すると完了します。",
+      "twoStepOff": "2段階認証がオフになりました。",
+      "adminNeedsTwoStep": "管理者は2段階認証をオフにできません。",
+      "resetLinkNeeded": "安全のため、先にメールから新しいパスワード用リンクを開いてください。"
+    },
+    "errors": {
+      "emailFormat": "name@example.com のような形式でメールアドレスを入力してください。",
+      "nameRequired": "お名前を入力してください。",
+      "passwordRequired": "パスワードを入力してください。",
+      "passwordLength": "10文字以上にしてください。",
+      "passwordMax": "72文字以内にしてください。",
+      "passwordLetterDigit": "英字と数字をそれぞれ1つ以上含めてください。",
+      "passwordMismatch": "2つのパスワードが一致しません。",
+      "passwordReuse": "このサイトで使ったことのないパスワードにしてください。",
+      "codeFormat": "認証アプリの6桁の数字を入力してください。",
+      "currentPasswordWrong": "現在のパスワードが正しくありません。",
+      "invalid": "この項目を確認してください。"
+    },
+    "meta": {
+      "signIn": "ログイン",
+      "signUp": "アカウントを作成",
+      "verify": "メールアドレスの確認",
+      "reset": "パスワードの再設定",
+      "resetNew": "新しいパスワードを設定",
+      "twoStep": "2段階認証",
+      "security": "アカウントのセキュリティ",
+      "description": "Nilecruzのアカウント。"
     }
   }
 }

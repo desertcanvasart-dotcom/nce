@@ -14,7 +14,10 @@
     "themeToDark": "Switch to Night theme",
     "themeToLight": "Switch to Day theme",
     "themeShortDark": "Night",
-    "themeShortLight": "Day"
+    "themeShortLight": "Day",
+    "signIn": "Sign in",
+    "account": "Account",
+    "signOut": "Sign out"
   },
   "nav": {
     "cruises": "Cruises",
@@ -216,6 +219,130 @@
       "deniedTitle": "This is for signed-in accounts",
       "deniedBody": "Sign in with an account that has access to see this.",
       "signIn": "Sign in"
+    }
+  },
+  "account": {
+    "signIn": {
+      "title": "Sign in",
+      "lede": "Sign in to see prices for every cabin and date, send requests and follow your bookings.",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "forgot": "Forgotten your password?",
+      "noAccount": "New to Nilecruz?",
+      "createAccount": "Create an account",
+      "resend": "Send the confirmation email again"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "lede": "With an account you see every cabin price, ask operators for offers and keep your bookings in one place.",
+      "fullName": "Your name",
+      "email": "Email",
+      "password": "Password",
+      "passwordHint": "At least 10 characters, with a letter and a number.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "sentTitle": "Check your email",
+      "sentBody": "If this address can be used, we have sent a link to confirm it. The link works once, for one hour."
+    },
+    "verify": {
+      "title": "Confirm your email",
+      "lede": "Press the button to confirm. We ask for a press, not just the link, so email scanners can't use up your link.",
+      "submit": "Confirm",
+      "failedTitle": "This link has expired or was already used",
+      "failedBody": "Links work once, for one hour. Ask for a new one below.",
+      "newConfirmation": "Send a new confirmation link",
+      "newReset": "Send a new password link"
+    },
+    "reset": {
+      "title": "Reset your password",
+      "lede": "Enter the email of your account and we will send a link to choose a new password.",
+      "email": "Email",
+      "submit": "Send the link",
+      "backToSignIn": "Back to sign in",
+      "newTitle": "Choose a new password",
+      "password": "New password",
+      "confirm": "New password again",
+      "save": "Save the new password"
+    },
+    "twoStep": {
+      "title": "Two-step sign‑in",
+      "lede": "Open your authenticator app and enter the six-digit code for Nilecruz.",
+      "code": "Six-digit code",
+      "submit": "Continue",
+      "lost": "Lost your authenticator? Contact us and we will check it is you before we reset it."
+    },
+    "security": {
+      "title": "Account security",
+      "lede": "Your sign-in details, your two-step sign-in and the devices you are signed in on.",
+      "signedInAs": "Signed in as {email}",
+      "emailTitle": "Email",
+      "newEmail": "New email",
+      "current": "Current password",
+      "changeEmail": "Change email",
+      "emailNote": "We send a link to both addresses. The change happens when both are confirmed.",
+      "passwordTitle": "Password",
+      "newPassword": "New password",
+      "confirmPassword": "New password again",
+      "changePassword": "Change password",
+      "twoStepTitle": "Two-step sign-in",
+      "twoStepOn": "On. Each sign-in asks for a code from your authenticator app.",
+      "twoStepOff": "Off. Turn it on so a stolen password is not enough to get in.",
+      "twoStepAdmin": "Required for Nilecruz admins. Set it up to use the admin workspace.",
+      "twoStepStart": "Set up two-step sign-in",
+      "twoStepScan": "Scan this code with an authenticator app, or type the key into it. Then enter the six-digit code it shows.",
+      "twoStepKey": "Key",
+      "twoStepQr": "QR code for your authenticator app",
+      "twoStepConfirm": "Turn on",
+      "twoStepRemove": "Turn off two-step sign-in",
+      "devicesTitle": "Devices",
+      "devicesBody": "Sign out on every phone and computer, including this one.",
+      "signOutEverywhere": "Sign out everywhere"
+    },
+    "notices": {
+      "emailChanged": "Your email has been changed.",
+      "twoStepOn": "Two-step sign-in is on.",
+      "signedOutEverywhere": "You have been signed out on every device.",
+      "setupTwoStep": "Admins need two-step sign-in. Set it up below to continue.",
+      "emailHalfConfirmed": "One address is confirmed. Open the link we sent to the other address to finish the change."
+    },
+    "messages": {
+      "badCredentials": "That email and password don't match an account. Check both and try again.",
+      "notConfirmed": "Confirm your email first. We can send the link again.",
+      "rateLimited": "Too many attempts. Wait a few minutes and try again.",
+      "unexpected": "Something went wrong on our side. Try again in a moment.",
+      "checkEmail": "If this address can be used, a link is on its way. It works once, for one hour.",
+      "linkExpired": "This link has expired or was already used. Ask for a new one.",
+      "codeWrong": "That code didn't work. Codes change every 30 seconds: try the current one.",
+      "passwordChanged": "Your password has been changed.",
+      "emailChangeSent": "We have sent a link to your old and your new address. Confirm both to finish.",
+      "twoStepOff": "Two-step sign-in is off.",
+      "adminNeedsTwoStep": "Admins can't turn off two-step sign-in.",
+      "resetLinkNeeded": "For your safety, open a new password link from your email first."
+    },
+    "errors": {
+      "emailFormat": "Enter an email address like name@example.com.",
+      "nameRequired": "Tell us your name.",
+      "passwordRequired": "Enter your password.",
+      "passwordLength": "Use at least 10 characters.",
+      "passwordMax": "Use at most 72 characters.",
+      "passwordLetterDigit": "Use at least one letter and one number.",
+      "passwordMismatch": "The two passwords are different.",
+      "passwordReuse": "Choose a password you haven't used here.",
+      "codeFormat": "Enter the six digits from your authenticator app.",
+      "currentPasswordWrong": "That isn't your current password.",
+      "invalid": "Check this field."
+    },
+    "meta": {
+      "signIn": "Sign in",
+      "signUp": "Create an account",
+      "verify": "Confirm your email",
+      "reset": "Reset your password",
+      "resetNew": "Choose a new password",
+      "twoStep": "Two-step sign-in",
+      "security": "Account security",
+      "description": "Your Nilecruz account."
     }
   }
 }

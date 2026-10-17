@@ -32,7 +32,7 @@
     "light": 3.82
   },
   "Gallery": {
-    "dark": 3.86,
+    "dark": 3.85,
     "light": 4.31
   },
   "BookingSummary": {
@@ -44,8 +44,8 @@
     "light": 0.27
   },
   "NavBar": {
-    "light": 7.13,
-    "dark": 7.07
+    "light": 7.12,
+    "dark": 7.08
   },
   "Hero": {
     "dark": 14.46,

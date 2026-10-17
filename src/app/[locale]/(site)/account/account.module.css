@@ -1,0 +1,106 @@
+.frame {
+  display: grid;
+  gap: var(--space-6);
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: var(--space-9) 0 var(--space-10);
+}
+
+.title {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line);
+}
+
+.lede {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.section {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  font-weight: var(--type-heading-weight);
+  line-height: var(--type-heading-line);
+}
+
+.note {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+}
+
+.message {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  color: var(--ink);
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-line);
+}
+
+.error {
+  border-left-color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.success {
+  border-left-color: var(--success);
+  background: var(--success-soft);
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--type-body-size);
+}
+
+.links a {
+  color: var(--ink);
+  text-underline-offset: 0.2em;
+}
+
+.qr {
+  display: block;
+  width: 12rem;
+  height: 12rem;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+
+.key {
+  overflow-wrap: anywhere;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--type-body-size);
+  letter-spacing: 0.08em;
+}
+
+:global(:lang(ja)) .key {
+  letter-spacing: 0;
+}

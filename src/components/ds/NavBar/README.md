@@ -14,4 +14,6 @@ Provide `links`, `active`, `brand`, `tagline`, `cta`, `overMedia` (transparent w
 - Day/Night control beside the language switch; phone menu is a `<details>` element (works without JS) and includes the language switch (ADR-037).
 - Wordmark reads Nilecruz (ADR-022).
 
+- Optional `account` link (Batch 4a): a quiet "Sign in" text link before the call to action, in the header and the phone menu.
+
 States: see `/dev/components/` and `NavBar.stories.tsx`. Differences are measured by the visual-parity test (`tests/e2e/parity.spec.ts`).

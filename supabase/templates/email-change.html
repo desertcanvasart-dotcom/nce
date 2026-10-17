@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <body
+    style="
+      margin: 0;
+      padding: 24px;
+      background: #f6f1e7;
+      font-family: Georgia, &quot;Times New Roman&quot;, serif;
+      color: #1d2a33;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="max-width: 520px; margin: 0 auto; background: #fffdf8; border: 1px solid #e4dccb"
+    >
+      <tr>
+        <td style="padding: 32px">
+          <p style="margin: 0 0 24px; font-size: 22px; letter-spacing: 0.02em">Nilecruz</p>
+          <h1 style="margin: 0 0 16px; font-size: 24px; font-weight: normal">Confirm the change of email</h1>
+          <p style="margin: 0 0 24px; font-size: 16px; line-height: 1.6; font-family: Arial, Helvetica, sans-serif">
+            The email for this Nilecruz account is changing to {{ .NewEmail }}. We send this link to the old and the new address:
+            confirm from both to finish.
+          </p>
+          <p style="margin: 0 0 24px">
+            <a
+              href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email_change"
+              style="
+                display: inline-block;
+                padding: 12px 20px;
+                background: #1d2a33;
+                color: #fffdf8;
+                text-decoration: none;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 16px;
+              "
+              >Confirm the change</a
+            >
+          </p>
+          <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #55606a; font-family: Arial, Helvetica, sans-serif">
+            The link works once and expires in one hour. If you did not ask for this, do not confirm, and change your password.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

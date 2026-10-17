@@ -17,3 +17,7 @@ Password for every account: `nilecruz-local-only`
 | reservations@partner.test    | Partner · reservations               |
 | finance@partner.test         | Partner · finance                    |
 | customer@example.test        | Customer                             |
+
+## Two-step sign-in (admins)
+
+Both admin accounts have an authenticator already set up with the **local test secret** `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP`. Add it to an authenticator app as a "manual key" (or let the end-to-end tests compute the code). This secret exists only in the local database.
