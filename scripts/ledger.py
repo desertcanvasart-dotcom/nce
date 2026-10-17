@@ -588,6 +588,25 @@ STATUS.update({
  "DATA-010": ("Verified", B2+"StateView (loading, empty, error, denied) in EN/ES/JA; gallery stories"),
  "BRAND-021": ("In progress", B2+"Carried over to Batch 6: section spacing and alternating bands are page composition (first applied on the homepage); components follow their own spacing tokens"),
 })
+B3 = "Batch 3 (17 Oct 2026): "
+STATUS.update({
+ "DATA-001": ("Verified", B3+"supabase/tests/020_data_formats.sql (no float money; money-like columns bigint); currency_code domain; validation.test.ts 'money'"),
+ "DATA-002": ("Verified", B3+"020_data_formats.sql 'every timestamp has a time zone'"),
+ "DATA-005": ("Verified", B3+"vessels, vessel_translations, destinations, media in Supabase; article, faq, vesselTypeProfile, priceFactorSet in Sanity (studio/schemaTypes); components take data by props (Batch 2)"),
+ "DATA-006": ("Verified", B3+"is_sample on vessels/destinations/media, Sanity 'sample' field (default on); src/lib/data/sample.ts + data-helpers.test.ts"),
+ "DATA-013": ("Verified", B3+"supabase/seed.sql: 11 users (every platform, admin and team role), 4 organisations, 4 sample vessels in every visibility; supabase/seed-users.md"),
+ "DATA-014": ("In progress", B3+"dry run docs/imports/vessels-dry-run.md (609 read, 608 mapped, 1 skipped with reason); apply verified on local DB (608 private drafts, re-run inserts 0, production refused). Staging import waits for Faris's approval of the dry run"),
+ "DATA-044": ("Verified", B3+"studio/schemaTypes/documents/egyptologist.ts (field-level EN/ES/JA, photo consent required); schema validates (pnpm studio:check). Content from Faris: CONTENT-NEEDED #13"),
+ "DATA-045": ("Verified", B3+"scripts/lib/vessel-import.ts; tests/unit/vessel-import.test.ts 'type mapping', 'never guesses a steamer'; 7 candidates listed in the dry-run report"),
+ "SEC-001": ("Verified", B3+"010_rls_coverage.sql (RLS on and a policy on every table); 030_isolation.sql (23 checks); tests/db-api/rest.test.ts through PostgREST and Auth"),
+ "SEC-004": ("Verified", B3+"src/server/validation (zod, mirrors DB checks); parseInput/withInput; validation.test.ts"),
+ "SEC-010": ("Verified", B3+"040_audit.sql: update, delete, truncate refused for owner and service role; direct inserts refused; role changes and catalogue writes logged by triggers"),
+ "SEO-030": ("Verified", B3+"app.is_reserved_slug check; 050_catalogue_rules.sql; validation.test.ts (list equals the SQL function); import renames reserved slugs"),
+ "I18N-011": ("Verified", B3+"*_translations tables (en/es/ja); pickTranslation English fallback + data-helpers.test.ts; Sanity document-level and field-level translations, English required"),
+ "BRAND-008": ("Verified", B3+"vessel_type enum sail/motor/steam; labels from messages (Batch 2); Sanity vesselTypeProfile options use the exact labels"),
+ "BRAND-009": ("Verified", B3+"destinations.name holds the common English name (seed: Luxor, Aswan, Edfu); Sanity destinationStory joins by slug, so names have one source"),
+ "BRAND-014": ("Verified", B3+"media_one_parent and path-matches-parent checks; 050_catalogue_rules.sql; 030 'operator A cannot add photos to operator B's vessel'; private storage bucket served only with a readable media row"),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

@@ -322,6 +322,15 @@ Destinations live in **both**: an identity row in Supabase (for route stops) and
 | Read published vessels, evaluations, tours | A | A | A | A | A | A | A | A |
 | MCP read | A | A | A | A | A | A | A | public data |
 
+### 4.1 How access is enforced (built in Batch 3)
+
+- **Helpers** in schema `app` (not exposed by the API), `SECURITY DEFINER`: `is_admin()`, `my_org_ids()`, `has_org_role(org, roles)`, and per-record helpers such as `can_read_vessel()` and `can_edit_vessel()`. Every policy calls these, so a rule changes in one place.
+- **Privileges first, then rows:** each migration grants table privileges explicitly (ADR-056); RLS policies then pick the rows. A table with no grants is closed.
+- **Admin-only fields** are guarded by triggers (vessel visibility, operator, slug, sample flag; profile roles).
+- **Two clients:** `getDb()` acts as the visitor, so RLS applies; `getAdminDb()` bypasses RLS and is only for trusted jobs (imports, webhooks). ESLint forbids importing it from routes, pages and components, and `server-only` fails the build if browser code reaches it.
+- **Audit:** triggers write every change to organisations, memberships, vessels, private vessel facts, destinations and media, plus profile role changes (not names), to the append-only `audit_log`.
+- **Pattern for passenger data (SEC-013, Batch 4e):** passengers will sit in their own table keyed by booking. A `can_read_booking(booking_id)` helper returns true for the booking's customer, members of the operator and partner organisations on the booking, and admins. Policies on passengers call only that helper, every read of passenger data by staff is logged, and anonymous visitors get no privileges on the table at all.
+
 ## 5. Content strategy
 
 | Content | Lives in | Who updates it | How |

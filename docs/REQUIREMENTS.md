@@ -442,13 +442,13 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-005 | BRAND-BOOK §Content ¶4 | Prices are formatted as US$1,240, per person, with what is included stated. | 2 | Verified | Batch 2 (17 Oct 2026): tests/unit/format.test.ts (US$1,240, minor units) |
 | BRAND-006 | BRAND-BOOK §Content ¶4 | Dates are formatted as 12 Feb 2027 in English. | 2 | Verified | Batch 2 (17 Oct 2026): tests/unit/format.test.ts (12 Feb 2027) |
 | BRAND-007 | BRAND-BOOK §Content ¶4 | Durations are stated in nights ('4 nights'), never days. | 2 | Verified | Batch 2 (17 Oct 2026): tests/unit/format.test.ts (4 nights) |
-| BRAND-008 | BRAND-BOOK §Content ¶5 | Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'. | 3 | Planned |  |
-| BRAND-009 | BRAND-BOOK §Content ¶4 | Site names use the common English forms (Karnak, Esna, El Kab, Edfu, Kom Ombo, Philae, Gebel Silsila). | 3 | Planned |  |
+| BRAND-008 | BRAND-BOOK §Content ¶5 | Vessel categories are labelled exactly 'sailing dahabiya', 'paddle steamer', 'motor cruise ship'. | 3 | Verified | Batch 3 (17 Oct 2026): vessel_type enum sail/motor/steam; labels from messages (Batch 2); Sanity vesselTypeProfile options use the exact labels |
+| BRAND-009 | BRAND-BOOK §Content ¶4 | Site names use the common English forms (Karnak, Esna, El Kab, Edfu, Kom Ombo, Philae, Gebel Silsila). | 3 | Verified | Batch 3 (17 Oct 2026): destinations.name holds the common English name (seed: Luxor, Aswan, Edfu); Sanity destinationStory joins by slug, so names have one source |
 | BRAND-010 | BRAND-BOOK §Content ¶1 | Every selling surface carries at least one honest, explanatory fact (editorial check per template). | 11 | Planned |  |
 | BRAND-011 | BRAND-BOOK §Lines | The ornament appears only under section titles. | 2 | Verified | Batch 2 (17 Oct 2026): ornament exists only in SectionHeading |
 | BRAND-012 | BRAND-BOOK §Shape | radius-sm is used only on inputs/checkboxes and radius-lg only on floating panels; everything else is square. | 2 | Verified | Batch 2 (17 Oct 2026): radius-lg only on CruiseSearch panel/popovers; radius-sm on inputs; stylelint token rule |
 | BRAND-013 | BRAND-BOOK §Imagery | Components take a real image when one exists and fall back to Scene only when it does not. | 2 | Verified | Batch 2 (17 Oct 2026): Media renders next/image when a photo exists, else Scene |
-| BRAND-014 | BRAND-BOOK §Imagery | A vessel's media can only be images of that vessel (media is attached to the vessel record). | 3 | Planned |  |
+| BRAND-014 | BRAND-BOOK §Imagery | A vessel's media can only be images of that vessel (media is attached to the vessel record). | 3 | Verified | Batch 3 (17 Oct 2026): media_one_parent and path-matches-parent checks; 050_catalogue_rules.sql; 030 'operator A cannot add photos to operator B's vessel'; private storage bucket served only with a readable media row |
 | BRAND-015 | BRAND-BOOK §Iconography | Only the system's own icon set is used, and every amenity icon has a visible or accessible label. | 2 | Verified | Batch 2 (17 Oct 2026): own icon set only (icons.ts from bundle); amenity labels in messages; AmenityGrid test |
 | BRAND-016 | BRAND-BOOK §Iconography | Wherever a vessel type is named it is paired with its icon (and VesselArt where space allows). | 2 | Verified | Batch 2 (17 Oct 2026): type icon on CruiseCard eyebrow, VesselCompare tabs, VesselTypeCard art |
 | BRAND-017 | BRAND-BOOK §Logo; ADR-022 | The wordmark reads 'Nilecruz' (Cormorant Garamond 500 34px + strapline in Jost 9px tracked 0.42em) until a logo file exists. | 2 | Verified | Batch 2 (17 Oct 2026): NavBar wordmark Nilecruz; screenshots |
@@ -523,16 +523,16 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| SEC-001 | CLAUDE.md §5 | Every table has row-level security enabled with explicit policies (CI test fails on a table without RLS). | 3 | Planned |  |
+| SEC-001 | CLAUDE.md §5 | Every table has row-level security enabled with explicit policies (CI test fails on a table without RLS). | 3 | Verified | Batch 3 (17 Oct 2026): 010_rls_coverage.sql (RLS on and a policy on every table); 030_isolation.sql (23 checks); tests/db-api/rest.test.ts through PostgREST and Auth |
 | SEC-002 | CLAUDE.md §5 | Every dashboard action is authorised server-side against the caller's role and ownership. | 4a | Planned |  |
 | SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Verified | Batch 1 (17 Oct 2026): CI run on PR #1 green (4/4 jobs) 17 Oct 2026; gitleaks 'Secret scan'; e2e 'no secret appears in client JavaScript' |
-| SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Planned |  |
+| SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Verified | Batch 3 (17 Oct 2026): src/server/validation (zod, mirrors DB checks); parseInput/withInput; validation.test.ts |
 | SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Planned |  |
 | SEC-006 | ARCH §Security | Public forms and auth endpoints are rate-limited and protected from bots. | 8 | Planned |  |
 | SEC-007 | DG §Operator ¶integration | Feed fetching blocks private network addresses and XML parsing rejects external entities. | 4c | Planned |  |
 | SEC-008 | DG §Operator ¶integration | API credentials are stored hashed and can be rotated without downtime. | 4c | Planned |  |
 | SEC-009 | DG §Operator ¶integration | Inbound API calls are signed and idempotent; outbound webhooks are signed. | 4c | Planned |  |
-| SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Planned |  |
+| SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Verified | Batch 3 (17 Oct 2026): 040_audit.sql: update, delete, truncate refused for owner and service role; direct inserts refused; role changes and catalogue writes logged by triggers |
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
 | SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Planned |  |
@@ -570,7 +570,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEO-027 | silo.xlsx P104 schema | /reviews/ emits no self-serving review stars. | 12 | Planned |  |
 | SEO-028 | silo.xlsx P001 schema | Home emits Organization and WebSite with SearchAction. | 6 | Planned |  |
 | SEO-029 | silo.md §Assumptions | Primary keywords are validated in a keyword tool before copy is written. | 6 | Planned |  |
-| SEO-030 | ARCH §Routing | Vessel slugs cannot collide with reserved /cruises/ facet slugs. | 3 | Planned |  |
+| SEO-030 | ARCH §Routing | Vessel slugs cannot collide with reserved /cruises/ facet slugs. | 3 | Verified | Batch 3 (17 Oct 2026): app.is_reserved_slug check; 050_catalogue_rules.sql; validation.test.ts (list equals the SQL function); import renames reserved slugs |
 
 ## I18N
 
@@ -586,27 +586,27 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | I18N-008 | CLAUDE.md §6; ADR-016 | Japanese text is never letter-spaced: letter-spacing 0 under :lang(ja), overriding the bundle's 0.08em. | 2 | Verified | Batch 2 (17 Oct 2026): global :lang(ja) tracking 0; component tracking overrides (tagline, labels) |
 | I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Verified | Batch 1 (17 Oct 2026): generated stacks keep Noto JP names; ja screenshots (ADR-035) |
 | I18N-010 | CLAUDE.md §6 | Numbers, dates and money format per locale while keeping brand formats in English. | 2 | Verified | Batch 2 (17 Oct 2026): format.test.ts locale cases (es, ja) |
-| I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Planned |  |
+| I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Verified | Batch 3 (17 Oct 2026): *_translations tables (en/es/ja); pickTranslation English fallback + data-helpers.test.ts; Sanity document-level and field-level translations, English required |
 | I18N-012 | silo.md §Assumptions | Spanish and Japanese keywords are validated before translated pages are written. | 10 | Planned |  |
 
 ## DATA
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DATA-001 | CLAUDE.md §6 | Money is stored as integer minor units with an ISO currency code. | 3 | Planned |  |
-| DATA-002 | CLAUDE.md §6 | Timestamps are stored in UTC. | 3 | Planned |  |
+| DATA-001 | CLAUDE.md §6 | Money is stored as integer minor units with an ISO currency code. | 3 | Verified | Batch 3 (17 Oct 2026): supabase/tests/020_data_formats.sql (no float money; money-like columns bigint); currency_code domain; validation.test.ts 'money' |
+| DATA-002 | CLAUDE.md §6 | Timestamps are stored in UTC. | 3 | Verified | Batch 3 (17 Oct 2026): 020_data_formats.sql 'every timestamp has a time zone' |
 | DATA-003 | CLAUDE.md §6 | Operational dashboards display dates and times in Africa/Cairo. | 4a | Planned |  |
 | DATA-004 | CLAUDE.md §6 | Public pages display dates in the visitor's locale. | 5 | Planned |  |
-| DATA-005 | CLAUDE.md §6 | Prices, vessel facts, itineraries, amenities, reviews and copy live in the database or CMS, not in components. | 3 | Planned |  |
-| DATA-006 | CLAUDE.md §6 | Seeded records carry a visible 'Sample data' flag wherever they render. | 3 | Planned |  |
+| DATA-005 | CLAUDE.md §6 | Prices, vessel facts, itineraries, amenities, reviews and copy live in the database or CMS, not in components. | 3 | Verified | Batch 3 (17 Oct 2026): vessels, vessel_translations, destinations, media in Supabase; article, faq, vesselTypeProfile, priceFactorSet in Sanity (studio/schemaTypes); components take data by props (Batch 2) |
+| DATA-006 | CLAUDE.md §6 | Seeded records carry a visible 'Sample data' flag wherever they render. | 3 | Verified | Batch 3 (17 Oct 2026): is_sample on vessels/destinations/media, Sanity 'sample' field (default on); src/lib/data/sample.ts + data-helpers.test.ts |
 | DATA-007 | CLAUDE.md §6 | No invented facts: placeholders are marked and listed in docs/CONTENT-NEEDED.md. | 0 | Verified | Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024) |
 | DATA-008 | CLAUDE.md §6; DS PriceAnatomy | PriceAnatomy is fed from maintained data with an honest footnote, not the bundle defaults. | 6 | Planned |  |
 | DATA-009 | CLAUDE.md §6; DS VesselCompare | VesselCompare and VesselTypeCard are fed from maintained data, not the bundle defaults. | 6 | Planned |  |
 | DATA-010 | CLAUDE.md §6 | Every data view has loading, empty, error and permission-denied states in the brand voice. | 2 | Verified | Batch 2 (17 Oct 2026): StateView (loading, empty, error, denied) in EN/ES/JA; gallery stories |
 | DATA-011 | DS BookingSummary | BookingSummary line items, fees, inclusions and notes come from the departure, rate and policy data. | 8 | Planned |  |
 | DATA-012 | DS CruiseSearch | CruiseSearch routes, sailing days and match counts come from real schedules and departures. | 5 | Planned |  |
-| DATA-013 | CLAUDE.md §5 | Deterministic test fixtures seed every role and state for e2e tests. | 3 | Planned |  |
-| DATA-014 | ARCH §Migration | Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1). | 3 | Planned |  |
+| DATA-013 | CLAUDE.md §5 | Deterministic test fixtures seed every role and state for e2e tests. | 3 | Verified | Batch 3 (17 Oct 2026): supabase/seed.sql: 11 users (every platform, admin and team role), 4 organisations, 4 sample vessels in every visibility; supabase/seed-users.md |
+| DATA-014 | ARCH §Migration | Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1). | 3 | In progress | Batch 3 (17 Oct 2026): dry run docs/imports/vessels-dry-run.md (609 read, 608 mapped, 1 skipped with reason); apply verified on local DB (608 private drafts, re-run inserts 0, production refused). Staging import waits for Faris's approval of the dry run |
 | DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity in US$ (never the rate currency) of at least US$5 per person per night for guests aged 3 and over; lower values are rejected. | 4c | Planned |  |
 | DATA-016 | Faris 17 Oct 2026 (ADR-010) | Gratuities are shown as a separate obligatory line 'paid on board at check-out'; they are never charged online, never part of the amount due, and carry no commission. | 8 | Planned |  |
 | DATA-017 | Faris 17 Oct 2026 (ADR-011) | The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders. | 8 | Planned |  |
@@ -636,8 +636,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-041 | Faris 17 Oct 2026 (ADR-030); Q54 | Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split. | 4f | Planned |  |
 | DATA-042 | Faris 17 Oct 2026 (ADR-030); Q11 | Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours. | 4d | Planned |  |
 | DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Planned |  |
-| DATA-044 | Faris 17 Oct 2026 (ADR-053); PROPOSED-015 | Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris. | 3 | Planned |  |
-| DATA-045 | Faris 17 Oct 2026 (ADR-051) | Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates. | 3 | Planned |  |
+| DATA-044 | Faris 17 Oct 2026 (ADR-053); PROPOSED-015 | Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris. | 3 | Verified | Batch 3 (17 Oct 2026): studio/schemaTypes/documents/egyptologist.ts (field-level EN/ES/JA, photo consent required); schema validates (pnpm studio:check). Content from Faris: CONTENT-NEEDED #13 |
+| DATA-045 | Faris 17 Oct 2026 (ADR-051) | Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates. | 3 | Verified | Batch 3 (17 Oct 2026): scripts/lib/vessel-import.ts; tests/unit/vessel-import.test.ts 'type mapping', 'never guesses a steamer'; 7 candidates listed in the dry-run report |
 
 ## EXP
 

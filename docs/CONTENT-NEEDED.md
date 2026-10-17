@@ -16,7 +16,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 10 | PriceAnatomy factor data (or approval to calibrate from rates) | 6 | Q25 |
 | 11 | VesselCompare type profiles: guest, cabin and price ranges, meters | 6 | Defaults are illustrative |
 | 12 | Editorial copy for all Phase 1 pages, plus keyword validation | 6–7 | SEO-029 |
-| 13 | Egyptologist names, bios, photos and consent | 12 | PROPOSED-015 |
+| 13 | Egyptologist names, bios, qualifications, languages, photos and photo consent (the Studio type is ready since Batch 3) | any time; shown from 12 | ADR-053, DATA-044 |
 | 14 | Real photography per vessel and destination, with rights | 5–7 | Scene placeholder until then |
 | 15 | Tour products, suppliers, prices and live tour URLs | 4d / 7 | SEO-022 |
 | 16 | About, How we choose vessels and Contact details (address, phone, licence numbers) | 7 | Trust pages |
@@ -33,3 +33,6 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 27 | Review of the draft Terms and Privacy pages, plus the facts they need: legal entity name, registration number, registered address, governing law, data-protection contact | 1 (draft) / 11 (final) | ADR-031 |
 | 28 | Translator review of the drafted ES and JA UI strings (`messages/es.json`, `messages/ja.json`), now including about 120 component labels | 10 | ADR-032, ADR-044 |
 | 29 | Decide the "Best for" label wording (Q57) | 4b | Brand vs guide |
+| 30 | Confirm which of the 7 steamer candidates are paddle steamers (`docs/imports/vessels-dry-run.md`) | 3 / 4b | ADR-051 |
+| 31 | The source's bundled record "Unverified names (Sandalion, Mirostar, Meritze, Lampfall, Sonata, Amazon, Egyptus, Vela, St. George, Princess Fatma, Nile Dollar, Shafak, Fatin, Donka)": add any of them as separate vessels? | 4b | ADR-058 |
+| 32 | Approval of the vessel dry run, then the staging import | 3 | DATA-014 |

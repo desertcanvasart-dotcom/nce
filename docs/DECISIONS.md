@@ -454,3 +454,35 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-054 Sanity project (Accepted)
 - **Context:** Faris approved creating the Nilecruz Sanity project.
 - **Decision:** Studio is hosted by Sanity, so it adds nothing to the site's bundle. Datasets are `production` and `development`.
+
+### ADR-055 Local Supabase ports 554xx (Accepted)
+- **Context:** CleanMyMac on Faris's Mac listens on 54321, the Supabase default.
+- **Decision:** the local stack uses 55420–55429 (`supabase/config.toml`). CI uses the same file.
+- **Consequence:** local URLs are `http://127.0.0.1:55421` (API) and `:55423` (Studio).
+
+### ADR-056 Explicit table privileges and admin-only fields by trigger (Accepted)
+- **Context:** current Supabase no longer grants table access to `anon` and `authenticated` by default.
+- **Decision:** every table grants its privileges in a migration (`*_grants.sql`); default privileges are revoked, so a new table is closed until its migration opens it. RLS policies then decide the rows. Fields only admins may change (vessel visibility, operator, slug, source, sample flag; profile roles) are guarded by triggers, not column grants, because admins use the same database role.
+- **Consequence:** anonymous visitors get "permission denied" (not an empty list) on private tables; tested in `030_isolation.sql` and through the API.
+
+### ADR-057 Sanity setup details (Accepted)
+- **Decision:**
+  - Standalone Studio in `studio/` (Sanity's recommended layout), version-controlled, deployed by CI to `nilecruz.sanity.studio`.
+  - Both datasets are private; the site reads on the server with a read token. `production` was created public by default and switched to private.
+  - Translations: article, FAQ, destination story and vessel-type profile are translated as whole documents (each language published on its own). Price explainers and Egyptologist profiles share numbers and photos across languages, so only their text fields are translated. The brief said document-level for all; this split follows Sanity's guidance and avoids copying figures three times.
+  - The app uses `@sanity/client` (server-only) instead of `next-sanity`, which pulls in the whole Studio as a peer dependency. Live preview tooling is chosen in Batch 5, when pages first show content.
+  - Studio text fields run the house-style check (no superlatives, exclamation marks or emoji).
+- **Consequence:** deploying the Studio and schema needs a token with the Developer role (`SANITY_DEPLOY_TOKEN`); the tokens issued at project creation cannot deploy.
+
+### ADR-058 Vessel import rules (Accepted)
+- **Decision:**
+  - Only exact duplicates (identical name once case, accents and look-alike letters are ignored, same type) are skipped; near-matches and the source's own "possible duplicate" flags are imported and listed for an admin to merge.
+  - Cyrillic look-alike letters in names and slugs (for example "ІІ" used as the Roman numeral) are replaced with Latin letters, and each change is listed.
+  - Reserved listing slugs get a "-ship" or "-dahabiya" suffix.
+  - The source's bundled record "Unverified names (…)" is skipped: it is a list of 14 names, not a vessel (CONTENT-NEEDED #31).
+  - Re-running never overwrites a row (same `source_ref`), so admin edits survive. `--apply` accepts only `local` or `staging`; production is refused.
+- **Consequence:** 609 read, 608 mapped (237 sail, 371 motor), 1 skipped with its reason.
+
+### ADR-059 Migrations reach staging from CI only (Accepted)
+- **Decision:** on merge to `main`, `deploy-data.yml` runs `supabase db push` against staging (secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD`). Production migrations are applied by hand at launch (Batch 11). No schema change is made in the SQL editor.
+

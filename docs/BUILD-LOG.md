@@ -283,3 +283,40 @@
   - the tests are independent;
   - each result is its own file, merged into `report.json`.
 - **CI on `5a652d5` is green** (4/4 jobs). CI parity now matches macOS within about 0.3 points, apart from components already allowlisted for intended differences.
+
+## 17 Oct 2026 · Batch 3 · Data foundation
+
+**Built** (branch `batch-03-data-foundation`, PR #5):
+- **Database** (`supabase/migrations/`, 5 files):
+  - conventions: currency and locale domains, `updated_at` trigger, helpers in a private `app` schema;
+  - identity: profiles (platform and admin roles), organisations (operator, partner, Nilecruz; four statuses), memberships (four team roles), a profile created for every sign-up;
+  - catalogue: vessels (sail, motor, steam; private, showcase, published; reserved-slug guard), admin-only vessel facts, translations (EN/ES/JA), destinations, media with exactly one parent, a private storage bucket;
+  - audit: append-only `audit_log`, written by triggers and `app.log_event()` only;
+  - explicit grants, then RLS on every table (ADR-056).
+- **Seed** (local and CI only): 11 users covering every role, 4 organisations, 3 destinations, 4 sample vessels in every visibility (`supabase/seed-users.md`).
+- **Server layer:** request client (`getDb`, RLS applies) and admin client (`getAdminDb`, server-only, guarded by ESLint and the build), generated types, zod schemas for every table input, `parseInput`/`withInput`, English-fallback translation helper, sample-flag mapper, server-only Sanity client.
+- **Sanity:** project "Nilecruz" (`auho5414`), private datasets `production` and `development`, standalone Studio in `studio/` with six types: article, FAQ, destination story, vessel-type profile, price explainer, Egyptologist (ADR-057).
+- **Vessel import:** `scripts/import-vessels.ts`, dry run by default; `--apply` only to local or staging (ADR-058).
+- **CI:** database job (migrations from scratch, pgTAP, API tests, types up to date), Studio check, client-bundle secret scan; `deploy-data.yml` applies migrations to staging and deploys the Studio on merge (ADR-059).
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 93 unit tests; `pnpm studio:check` (types and schema: 0 errors, 0 warnings).
+- **Database:** 5 pgTAP files, 50+ checks, pass locally and in CI (RLS on every table; isolation for anonymous, customer, operator owner, viewer and admin; audit log refuses update, delete and truncate even for the owner and service role; reserved slugs; formats; media parent).
+- **Through the API:** 6 tests sign in as seed users through Auth and PostgREST and confirm the same rules.
+- **Secrets:** gitleaks clean; the bundle scan finds nothing, and catches a planted key when one is added (checked by hand).
+- **Import:** dry run 609 read, 608 mapped (237 sail, 371 motor), 1 skipped with its reason; applied to the local database: 608 private drafts, a second run inserts 0, production refused, anonymous visitors see none of them.
+- **Visual check:** not applicable; no screens in this batch.
+
+**Problems found and fixed:**
+- Port 54321 is taken by CleanMyMac on this Mac (ADR-055).
+- Supabase no longer grants table access by default (ADR-056).
+- A column-level lock on profile roles would also have blocked admins; replaced by a trigger.
+- Fixture IDs were not valid RFC 4122 UUIDs for zod; fixed.
+- The source data has Cyrillic look-alike letters in 6 names, a bundled list record and near-duplicate names; handled and reported (ADR-058).
+
+**Not done, and why:**
+- **DATA-014 (staging import):** waits for Faris's approval of `docs/imports/vessels-dry-run.md`.
+- **Hosted Studio and schema deploy:** need a Sanity token with the Developer role (`SANITY_DEPLOY_TOKEN`); the tokens issued at project creation cannot deploy.
+- **Staging migrations:** need GitHub secrets `SUPABASE_ACCESS_TOKEN` and `SUPABASE_STAGING_DB_PASSWORD`.
+
+**Next:** Faris approves the dry run and adds the three secrets; I then import into staging, record the count, and close DATA-014. Then the Batch 4a brief (sign-in).
