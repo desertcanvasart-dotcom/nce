@@ -17,6 +17,40 @@ const root = resolve(__dirname, "../..");
 const out = resolve(root, "docs/screenshots/batch-02/parity");
 const allow: Record<string, string> = JSON.parse(readFileSync(resolve(__dirname, "parity-allowlist.json"), "utf8"));
 const THRESHOLD = 0.01;
+
+/**
+ * Same font files on both sides. The previews fetch fonts from Google, which serves different files per platform
+ * (hinted on Linux, unhinted on macOS), while the build self-hosts the files next/font downloaded. On Linux CI that
+ * alone made text a few pixels wider (SectionHeading 1.8% vs 0.09% on macOS). During parity tests only, the preview's
+ * Google Fonts request is answered with the build's own @font-face rules and files, so the test measures components.
+ */
+const buildFontCss = (() => {
+  const chunks = resolve(root, ".next/static/chunks");
+  if (!existsSync(chunks)) return "";
+  const css = readdirSync(chunks)
+    .filter((f) => f.endsWith(".css"))
+    .map((f) => readFileSync(resolve(chunks, f), "utf8"))
+    .join("\n");
+  return (css.match(/@font-face\{[^}]*\}/g) ?? [])
+    .filter((rule) => !/Fallback/.test(rule))
+    .map((rule) => rule.replace(/url\(\/_next\/static\/media\//g, "url(https://parity-fonts.test/media/"))
+    .join("\n");
+})();
+
+async function useBuildFonts(page: Page) {
+  await page.route("https://fonts.googleapis.com/**", (route) =>
+    route.fulfill({ status: 200, contentType: "text/css", headers: { "access-control-allow-origin": "*" }, body: buildFontCss }),
+  );
+  await page.route("https://parity-fonts.test/media/**", (route) => {
+    const file = resolve(root, ".next/static/media", new URL(route.request().url()).pathname.replace("/media/", ""));
+    return route.fulfill({
+      status: 200,
+      contentType: "font/woff2",
+      headers: { "access-control-allow-origin": "*" },
+      body: readFileSync(file),
+    });
+  });
+}
 const reportPath = resolve(out, "report.json");
 // Merge into the existing report so a partial run (-g) never drops other components' results.
 const report: Record<string, Record<string, number>> = existsSync(reportPath) ? JSON.parse(readFileSync(reportPath, "utf8")) : {};
@@ -47,6 +81,8 @@ for (const entry of registry.filter((e) => e.ds && e.parity)) {
       mkdirSync(out, { recursive: true });
       const preview =
         pathToFileURL(resolve(root, `vendor/design-system/components/${entry.name}/preview.html`)).href + `?theme=${theme}`;
+      expect(buildFontCss, "build fonts found (run pnpm build first)").toContain("Cormorant Garamond");
+      await useBuildFonts(page);
       const ds = await shot(page, preview, "#root");
       const build = await shot(page, `/dev-parity/${slug(entry.name)}/?theme=${theme}`, "#parity-root");
       const w = Math.min(ds.width, build.width);
