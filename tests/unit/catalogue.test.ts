@@ -48,7 +48,8 @@ describe("evaluation method v1 (ADR-070, DASH-ADM-028–030)", () => {
     const bad = all(3) as Record<string, number[]>;
     bad.food = [6, 3, 3, 3];
     expect(() => evaluate(bad as Scores)).toThrow();
-    const { hygiene: _h, ...short } = all(3);
+    const short: Partial<Scores> = { ...all(3) };
+    delete short.hygiene;
     expect(() => evaluate(short as Scores)).toThrow();
   });
 });
@@ -80,8 +81,7 @@ describe("readiness check (DASH-ADM-018, DATA-021)", () => {
   };
   it("is complete only when everything, including rates and availability, is there", () => {
     expect(readiness(complete).complete).toBe(true);
-    const { cabin_types: _c, bookable_departures: _b, ...profileOnly } = complete;
-    const r = readiness(profileOnly);
+    const r = readiness({ ...complete, cabin_types: undefined, bookable_departures: undefined });
     expect(r.complete).toBe(false);
     expect(r.items.filter((i) => !i.done).map((i) => i.key)).toEqual(["cabin_types", "rates"]);
   });

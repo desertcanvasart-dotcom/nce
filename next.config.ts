@@ -13,7 +13,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   // Our CSS is ~5 KB gzipped: inlining it removes every render-blocking stylesheet request (PERF-001, ADR-036).
   // authInterrupts: forbidden() renders the 403 page for another role's workspace (ADR-067).
-  experimental: { inlineCss: true, authInterrupts: true },
+  experimental: {
+    inlineCss: true,
+    authInterrupts: true,
+    // Vessel photos are uploaded through a server action (admins only); the storage bucket allows 15 MB.
+    serverActions: { bodySizeLimit: "16mb" },
+  },
   async redirects() {
     return liveSiteRedirects.map((r) => ({ ...r, statusCode: 301 as const }));
   },
