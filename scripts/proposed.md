@@ -1,0 +1,23 @@
+## Proposed scope (not scheduled: needs Faris's approval)
+
+These are gaps: things a marketplace like this normally needs but no source describes. Each is explained in `QUESTIONS.md` with a recommendation. Nothing here will be built until Faris approves it. Approved items get a batch and the status `Planned`.
+
+| ID | Proposal | Suggested batch | Status |
+|---|---|---|---|
+| PROPOSED-001 | Password reset, email verification and change-email flows | 4a | Awaiting decision |
+| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model | 4a | Awaiting decision |
+| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management | 4a | Awaiting decision |
+| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Awaiting decision |
+| PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
+| PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
+| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
+| PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
+| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Awaiting decision |
+| PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
+| PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
+| PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |
+| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Awaiting decision |
+| PROPOSED-014 | Consent-based analytics and conversion tracking | 11 | Awaiting decision |
+| PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema) | 3 | Awaiting decision |
+| PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking) | 4e | Awaiting decision |
+| PROPOSED-017 | Customer support inbox / messaging between customer, operator and admin about a booking | 4e | Awaiting decision |
