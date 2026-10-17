@@ -52,13 +52,14 @@ function report(p: ImportPlan): string {
     "",
     "| | Records |",
     "|---|---|",
-    `| Read | ${p.read} |`,
+    `| Read (source records) | ${p.read} |`,
+    `| Vessels from the bundled "Unverified names" record (one per name) | ${p.fromBundle.length} |`,
     `| Mapped (would be imported as private drafts) | ${p.mapped.length} |`,
     `| Skipped | ${p.skipped.length} |`,
     `| of which exact duplicates | ${p.duplicates.length} |`,
     `| Sailing dahabiya (\`sail\`) | ${p.byType.sail ?? 0} |`,
     `| Motor cruise ship (\`motor\`) | ${p.byType.motor ?? 0} |`,
-    `| Paddle steamer (\`steam\`) | ${p.byType.steam ?? 0} (set by an admin after confirmation) |`,
+    `| Paddle steamer (\`steam\`) | ${p.byType.steam ?? 0} (confirmed by Faris: the Sudan only) |`,
     `| Records with notes (corrected or partly empty) | ${withNotes.length} |`,
     "",
     "**How complete the facts are** (of the mapped records):",
@@ -67,11 +68,19 @@ function report(p: ImportPlan): string {
     "",
     `**Not imported, by design:** ${EXCLUDED_FIELDS.map((f) => `\`${f}\``).join(", ")}. Contacts, prices and scores are unverified (ADR-013, Q26); facilities and notes wait for the amenity model.`,
     "",
-    "## Paddle-steamer candidates (need Faris's confirmation)",
+    "## Paddle steamers (confirmed by Faris, 17 Oct 2026)",
     "",
-    "These names suggest a steamer. They are imported as motor ships; an admin changes the type once confirmed.",
+    "The Sudan is the only paddle steamer. The source lists her three times; all three are steam and should be merged by an admin.",
+    "",
+    ...p.steamConfirmed.map((c) => `- ${c.name} (\`${c.slug}\`)`),
+    "",
+    "Other names that suggested a steamer stay motor cruise ships, as Faris confirmed:",
     "",
     ...p.steamCandidates.map((c) => `- ${c.name} (\`${c.slug}\`)`),
+    "",
+    '## From the bundled "Unverified names" record (name only, no facts yet)',
+    "",
+    ...p.fromBundle.map((c) => `- ${c.name} (\`${c.slug}\`)`),
     "",
     "## Exact duplicates (the first is kept)",
     "",
@@ -155,7 +164,7 @@ if (apply) {
     `Dry run: read ${plan.read}, mapped ${plan.mapped.length} (${Object.entries(plan.byType)
       .map(([k, v]) => `${k} ${v}`)
       .join(", ")}), ` +
-      `skipped ${plan.skipped.length} (${plan.duplicates.length} duplicates), steam candidates ${plan.steamCandidates.length}. ` +
+      `skipped ${plan.skipped.length} (${plan.duplicates.length} duplicates), steam ${plan.steamConfirmed.length}, from bundle ${plan.fromBundle.length}. ` +
       `Report: docs/imports/vessels-dry-run.md`,
   );
 }

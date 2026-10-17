@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   EXCLUDED_FIELDS,
+  STEAM_CONFIRMED,
+  expandBundles,
   fixLookalikes,
   mapVessel,
   nameKey,
@@ -40,7 +42,11 @@ describe("type mapping (ADR-051)", () => {
     ["powered", "motor"],
     ["lake_nasser", "motor"],
   ])("%s → %s", (src, want) => expect(ok({ ...base, type: src }).vessel.type).toBe(want));
-  it("never guesses a steamer", () => expect(ok({ ...base, name: "SS Sudan" }).vessel.type).toBe("motor"));
+  it("never guesses a steamer", () => expect(ok({ ...base, name: "SS Karim", slug: "karim" }).vessel.type).toBe("motor"));
+  it("marks only Faris's confirmed steamers (the Sudan) as steam", () => {
+    for (const slug of STEAM_CONFIRMED) expect(ok({ ...base, slug }).vessel.type).toBe("steam");
+    expect(ok({ ...base, name: "Mövenpick SS Misr", slug: "movenpick-ss-misr" }).vessel.type).toBe("motor");
+  });
   it("skips unknown types", () => expect(mapVessel({ ...base, type: "felucca" }, 3)).toMatchObject({ reason: /unknown type/ }));
 });
 
@@ -101,9 +107,31 @@ describe("planImport", () => {
     ]);
     expect(p.mapped.map((m) => m.vessel.slug)).toEqual(["same", "same-2"]);
   });
-  it("lists steamer candidates without changing their type", () => {
-    const p = planImport([{ ...base, name: "Historic Steamer Sudan", slug: "sudan" }, base]);
-    expect(p.steamCandidates).toEqual([{ slug: "sudan", name: "Historic Steamer Sudan" }]);
-    expect(p.byType).toEqual({ motor: 2 });
+  it("lists unconfirmed steamer names without changing their type", () => {
+    const p = planImport([
+      { ...base, name: "Karim Nile Steamer Cruise", slug: "karim-nile-steamer-cruise" },
+      { ...base, name: "SUDAN", slug: "sudan" },
+    ]);
+    expect(p.steamCandidates).toEqual([{ slug: "karim-nile-steamer-cruise", name: "Karim Nile Steamer Cruise" }]);
+    expect(p.steamConfirmed).toEqual([{ slug: "sudan", name: "SUDAN" }]);
+    expect(p.byType).toEqual({ motor: 1, steam: 1 });
+  });
+  it("splits the bundled record into one name-only vessel per name", () => {
+    const bundle = {
+      ...base,
+      type: "dahabiya",
+      name: "Unverified names (Sonata, St. George, Princess Fatma)",
+      slug: "unverified-names-x",
+    };
+    expect(expandBundles([bundle]).map((r) => r.name)).toEqual(["Sonata", "St. George", "Princess Fatma"]);
+    const p = planImport([bundle]);
+    expect(p.read).toBe(1);
+    expect(p.mapped.map((m) => [m.vessel.slug, m.vessel.type, m.vessel.cabin_count, m.vessel.source_ref])).toEqual([
+      ["sonata", "sail", null, "ncm:unverified-names-x#sonata"],
+      ["st-george", "sail", null, "ncm:unverified-names-x#st-george"],
+      ["princess-fatma", "sail", null, "ncm:unverified-names-x#princess-fatma"],
+    ]);
+    expect(p.fromBundle).toHaveLength(3);
+    expect(p.mapped[0]!.private.import_flags).toBe("unverified-name");
   });
 });

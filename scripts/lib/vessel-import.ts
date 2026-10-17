@@ -23,6 +23,8 @@ export type SourceVessel = {
   source_urls: string | null;
   import_flags: string | null;
   slug: string | null;
+  /** Set when one source record is split into several vessels (the "Unverified names" list). */
+  source_ref_override?: string;
   [other: string]: unknown;
 };
 
@@ -58,6 +60,40 @@ export type Skipped = { index: number; name: string; reason: string };
 const TYPE_MAP: Record<string, "sail" | "motor"> = { dahabiya: "sail", powered: "motor", lake_nasser: "motor" };
 
 /** Cyrillic and Greek letters that look Latin, found in the source ("Beau Rivage ІІ"). */
+/**
+ * Steamers confirmed by Faris (17 Oct 2026, ADR-060): only the Sudan. The source lists her three times;
+ * all three records are steam, and they are reported as likely duplicates for an admin to merge.
+ */
+export const STEAM_CONFIRMED = new Set(["historic-steamer-sudan-ss-sudan", "sudan", "sudan-steamer-nile-cruise"]);
+
+/** The source's bundled record of unverified names, imported as one vessel per name (Faris, 17 Oct 2026). */
+export const BUNDLE_RE = /^unverified names\s*\((.*)\)\s*$/i;
+
+export function expandBundles(records: SourceVessel[]): SourceVessel[] {
+  return records.flatMap((r) => {
+    const m = BUNDLE_RE.exec(r.name?.trim() ?? "");
+    if (!m) return [r];
+    return m[1]!
+      .split(/,\s*/)
+      .map((n) => n.trim())
+      .filter(Boolean)
+      .map((name) => ({
+        ...r,
+        name,
+        aliases: null,
+        slug: slugify(name),
+        cabins: null,
+        max_guests: null,
+        decks: null,
+        built: null,
+        route: null,
+        verification: "Name only: listed in the source among unverified names. No facts yet.",
+        import_flags: "unverified-name",
+        source_ref_override: `ncm:${r.slug ?? "unverified-names"}#${slugify(name)}`,
+      }));
+  });
+}
+
 const LOOKALIKES: Record<string, string> = {
   і: "i",
   І: "I",
@@ -135,9 +171,10 @@ export function steamCandidate(r: SourceVessel): boolean {
 export function mapVessel(r: SourceVessel, index: number): MappedVessel | Skipped {
   const rawName = clean(r.name);
   if (!rawName) return { index, name: String(r.name ?? ""), reason: "no name" };
-  const bundle = /^unverified names\s*\((.*)\)\s*$/i.exec(rawName);
+  const bundle = BUNDLE_RE.exec(rawName);
   if (bundle) return { index, name: rawName, reason: `a list of unverified names, not one vessel: ${bundle[1]}` };
-  const type = TYPE_MAP[r.type];
+  const mapped = TYPE_MAP[r.type];
+  const type = r.slug && STEAM_CONFIRMED.has(r.slug) ? "steam" : mapped;
   if (!type) return { index, name: rawName, reason: `unknown type "${r.type}"` };
 
   const notes: string[] = [];
@@ -157,7 +194,7 @@ export function mapVessel(r: SourceVessel, index: number): MappedVessel | Skippe
   return {
     vessel: {
       slug,
-      source_ref: `ncm:${r.slug ?? slug}`,
+      source_ref: r.source_ref_override ?? `ncm:${r.slug ?? slug}`,
       name,
       type,
       visibility: "private",
@@ -190,6 +227,8 @@ export type ImportPlan = {
   flaggedDuplicates: { slug: string; flag: string }[];
   steamCandidates: { slug: string; name: string }[];
   byType: Record<string, number>;
+  steamConfirmed: { slug: string; name: string }[];
+  fromBundle: { slug: string; name: string }[];
 };
 
 /**
@@ -197,7 +236,8 @@ export type ImportPlan = {
  * and the same type) keep the first and are reported. Near-matches ("Dahabiya Dream" / "Dream") are all kept
  * and listed for an admin to merge: no record is dropped on a guess.
  */
-export function planImport(records: SourceVessel[]): ImportPlan {
+export function planImport(source: SourceVessel[]): ImportPlan {
+  const records = expandBundles(source);
   const mapped: MappedVessel[] = [];
   const skipped: Skipped[] = [];
   const duplicates: ImportPlan["duplicates"] = [];
@@ -233,7 +273,7 @@ export function planImport(records: SourceVessel[]): ImportPlan {
   }
 
   return {
-    read: records.length,
+    read: source.length,
     likelyDuplicates: [...near.values()].filter((s) => s.length > 1).map((slugs) => ({ slugs })),
     mapped,
     skipped,
@@ -242,12 +282,16 @@ export function planImport(records: SourceVessel[]): ImportPlan {
       .filter((m) => m.private.import_flags?.startsWith("possible-duplicate-of:"))
       .map((m) => ({ slug: m.vessel.slug, flag: m.private.import_flags! })),
     steamCandidates: records
-      .filter(steamCandidate)
+      .filter((r) => steamCandidate(r) && !(r.slug && STEAM_CONFIRMED.has(r.slug)))
       .map((r) => mapped.find((m) => m.private.raw_type === r.type && nameKey(m.vessel.name) === nameKey(fixLookalikes(r.name))))
       .filter((m): m is MappedVessel => !!m)
       .filter((m, i, all) => all.findIndex((o) => o.vessel.slug === m.vessel.slug) === i)
       .map((m) => ({ slug: m.vessel.slug, name: m.vessel.name })),
     byType,
+    steamConfirmed: mapped.filter((m) => m.vessel.type === "steam").map((m) => ({ slug: m.vessel.slug, name: m.vessel.name })),
+    fromBundle: mapped
+      .filter((m) => m.private.import_flags === "unverified-name")
+      .map((m) => ({ slug: m.vessel.slug, name: m.vessel.name })),
   };
 }
 
