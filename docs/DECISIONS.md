@@ -376,3 +376,10 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - Railway PR environments enabled.
   - A `RAILWAY_STAGING_URL` repository variable, used when Railway reports only its dashboard link.
 - **Consequence:** the gate reflects a real network. A PR's performance result arrives after its Railway deployment, not with the first CI run.
+
+### ADR-042 Railway service runs in EU West (Amsterdam) (Accepted)
+- **Context:** in its first region, the staging service took about 230–250 ms to send the first byte even for cached, prerendered pages. Requests came through Railway's Paris edge (`cdg1`) and a US runner. That alone pushed `/es/` 5 ms over the strict LCP budget (2,505 ms).
+- **Decision:** Faris moved the service to EU West (Amsterdam) on 17 Oct 2026. Server time from here fell to about 70 ms; from GitHub's runner it was 100–200 ms.
+- **Consequence:**
+  - The strict gate passes on all four pages. The thinnest margin is `/terms/` at 2.42 s in one run.
+  - Pages are served by `next start` with no CDN in front. Before launch (Batch 11), a CDN for static HTML should be evaluated for visitors far from Europe (Japan, the Americas).

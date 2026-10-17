@@ -204,3 +204,27 @@
   - Real-throttling LCP is 0.8–2.1 s.
 - **Conclusion:** the simulated gate is valid, but a localhost trace is not a fair input to it. It needs a trace from a real network (the Railway deployment).
 - **Waiting on Faris:** the decision on where the Lighthouse gate runs (Q59).
+
+### 17 Oct 2026 · Batch 1 closed
+
+- **Merged:** PR #1 (Batch 1, merge `4cf086b`) and PR #2 (Railway deploy fix, merge `d5dd427`), both approved by Faris with green CI.
+- **Railway staging:** `https://nce-production-da4c.up.railway.app`, EU West (Amsterdam).
+  - Deploys automatically from `main`.
+  - Serves the pages in three languages, with the canonical URL on its own domain, `noindex` (header and `robots.txt: Disallow: /`) and `/api/health/` returning 200.
+- **Deploy fix (PR #2):** three causes were found by reproducing a Railway-style build:
+  - a bare domain in `NEXT_PUBLIC_SITE_URL` broke the build;
+  - the start command needed a shell;
+  - the health check got a 308 redirect.
+- **Strict Lighthouse gate on the deployment (ADR-041):** passed in two runs after the region move (ADR-042):
+  - median LCP 1.36–2.42 s;
+  - CLS ≤ 0.012;
+  - TBT ≤ 95 ms;
+  - accessibility 100 on every page.
+
+  Before the move, `/es/` failed by 5 ms because of server time.
+- **Ledger, Batch 1 (45 IDs):** 44 Verified. ENG-011 is carried over to Batch 11 for its production part (the separate Railway production environment is created at launch); local and staging are verified.
+- **Known issues:**
+  - From Faris's Mac network, about 3 in 10 connections to Railway's edge address `69.46.46.40` fail before connecting, while the live site's address (`.71`) never does, and GitHub's runners connect every time. It's a local network-path issue, not the app. If Faris sees pages hang in his browser, this is why; Railway support can move the domain to another edge address.
+  - `/terms/` has the thinnest LCP margin (2.42 s in one run).
+  - The Railway environment is named "production" although it serves staging (Railway → environment settings).
+- **Next:** the Batch 2 brief (design-system port), on Faris's go-ahead.
