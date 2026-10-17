@@ -10,6 +10,8 @@ test.describe.configure({ mode: "serial", timeout: 90_000 });
 // One super admin of its own, so these tests never share a session with dashboard.spec (ADR-068).
 const EDITOR = "editor@nilecruz.test";
 const VESSEL = "00000000-0000-4000-8000-000000000003"; // Sample Steamer One (private draft of operator A)
+// CI runs the suite twice on one database: everything a test creates carries this run's stamp.
+const RUN = Date.now();
 
 function png(): Buffer {
   const img = new PNG({ width: 64, height: 40 });
@@ -51,7 +53,7 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
 
     const upload = page.locator("form", { has: page.getByRole("button", { name: "Upload photo" }) });
     await upload.getByLabel(/^Photo/).setInputFiles({ name: "sample.png", mimeType: "image/png", buffer: png() });
-    await upload.getByLabel("Description for screen readers (English)").fill("Grey test card standing in for the sundeck");
+    await upload.getByLabel("Description for screen readers (English)").fill(`Grey test card ${RUN}`);
     await upload.getByLabel("Credit").fill("Sample test fixture");
     await upload.getByRole("button", { name: "Upload photo" }).click();
     await expect(upload.getByText(/Confirm Nilecruz may publish this photo/i)).toBeVisible();
@@ -59,7 +61,7 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
     await upload.getByLabel(/^Photo/).setInputFiles({ name: "sample.png", mimeType: "image/png", buffer: png() });
     await upload.getByRole("button", { name: "Upload photo" }).click();
     await expect(page.getByText("Photo added.")).toBeVisible();
-    await expect(page.getByRole("img", { name: "Grey test card standing in for the sundeck" })).toBeVisible();
+    await expect(page.getByRole("img", { name: `Grey test card ${RUN}` })).toBeVisible();
 
     const ready = page.locator("#readiness").locator("..");
     await expect(ready.getByText("✓ At least one photo with a description and credit")).toBeVisible();
@@ -88,7 +90,7 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
     await signInAdmin(page, EDITOR);
     await page.goto(`/dashboard/admin/catalogue/${VESSEL}/evaluations/new/`);
     await page.getByLabel("Assessment date").fill("2026-10-01");
-    await page.getByLabel("Evaluator or team").fill("Sample inspection team");
+    await page.getByLabel("Evaluator or team").fill(`Sample inspection team ${RUN}`);
     await page.getByLabel("Verdict").selectOption("recommended_with_reservations");
     await fillScores(page, "4");
     await expect(page.getByText("Overall: 80.00 / 100 (preview; saved by the database)")).toBeVisible();
@@ -96,7 +98,7 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
     await expect(page.getByText("Hygiene: 12.75 of 15")).toBeVisible();
     await page.getByRole("button", { name: "Save evaluation" }).click();
     await expect(page.getByText("Evaluation saved.")).toBeVisible();
-    const row = page.getByRole("row", { name: /Sample inspection team/ });
+    const row = page.getByRole("row", { name: new RegExp(`Sample inspection team ${RUN}`) });
     await expect(row.getByText("80.75 / 100")).toBeVisible();
     await expect(row.getByText("No (internal)")).toBeVisible();
   });
@@ -105,16 +107,16 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
     await signInAdmin(page, EDITOR);
     await page.goto(`/dashboard/admin/catalogue/${VESSEL}/`);
     const rating = page.locator("form", { has: page.getByRole("button", { name: "Add external rating" }) });
-    await rating.getByLabel("Source").fill("Sample review site");
+    await rating.getByLabel("Source").fill(`Sample review site ${RUN}`);
     await rating.getByLabel("Rating").fill("4.5");
     await rating.getByLabel("Date read").fill("2026-10-10");
     await rating.getByRole("button", { name: "Add external rating" }).click();
     await expect(page.getByText(/never as our score/)).toBeVisible();
-    await expect(page.getByText(/Sample review site: 4.5 \/ 5, read 2026-10-10/)).toBeVisible();
+    await expect(page.getByText(new RegExp(`Sample review site ${RUN}: 4.5 / 5, read 2026-10-10`))).toBeVisible();
 
     const safety = page.locator("form", { has: page.getByRole("button", { name: "Record observation" }) });
     await safety.getByLabel("Date observed").fill("2026-10-05");
-    await safety.getByLabel("Notes").fill("Sample observation: life-jacket locker label faded.");
+    await safety.getByLabel("Notes").fill(`Sample observation ${RUN}: life-jacket locker label faded.`);
     await safety.getByRole("button", { name: "Record observation" }).click();
     await expect(page.getByText("Safety observation recorded (internal only).")).toBeVisible();
   });
