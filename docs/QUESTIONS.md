@@ -384,6 +384,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - The copy lint currently allows "best for" and still rejects every other "best".
 - **Recommendation:** keep it, or rename the labels to "Suits" or "Ideal for", which needs no exception.
 
+> **Answered 18 Oct 2026:** keep "Best for" (ADR-072).
+
 
 **Q58 ★ [A] How Lighthouse should measure the mobile LCP budget (Batch 1 onward).** The two methods disagree on the same pages:
 
