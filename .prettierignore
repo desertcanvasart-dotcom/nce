@@ -10,3 +10,7 @@ test-results/
 .lighthouseci/
 supabase/.temp/
 supabase/.branches/
+studio/node_modules/
+studio/dist/
+studio/.sanity/
+studio/pnpm-lock.yaml

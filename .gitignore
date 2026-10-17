@@ -26,3 +26,8 @@ supabase/.temp/
 .DS_Store
 *.log
 *.tsbuildinfo
+
+# Sanity Studio build output
+studio/node_modules/
+studio/dist/
+studio/.sanity/
