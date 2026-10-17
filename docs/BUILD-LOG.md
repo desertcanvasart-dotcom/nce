@@ -183,3 +183,13 @@
   - Both "secret key" entries in `.env.local` are the **anon** key, not the secret/service-role key. Faris to replace them. They aren't needed until Batch 3.
   - The database password is untested; it will be tested when Batch 3 links the CLI.
 - **Still open:** the Railway project, the correct secret keys, Q58.
+
+### 17 Oct 2026 · Batch 1 update: gate, keys, Railway
+
+- **Q58 answered:** the strict simulated Lighthouse test is the gate (ADR-040). LCP is an error again in `lighthouserc.json`.
+- **Supabase:** the staging and production secret keys are `service_role` keys and authenticate (REST 200).
+- **Railway:**
+  - Faris linked the repo to project "tranquil-gratitude", environment "production".
+  - Its first deploy built `main` at the Batch 0 docs commit and failed as expected, because `main` has no app until PR #1 is merged.
+  - Variables still need setting in Railway before the first real build, because `NEXT_PUBLIC_*` values are baked in at build time.
+- **Status:** ENG-011 stays In progress until a Railway deploy serves `/api/health`.

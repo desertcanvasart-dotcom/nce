@@ -384,6 +384,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - The copy lint currently allows "best for" and still rejects every other "best".
 - **Recommendation:** keep it, or rename the labels to "Suits" or "Ideal for", which needs no exception.
 
+> **Answered 17 Oct 2026:** keep the strict simulated test as the gate (ADR-040).
+
 **Q58 ★ [A] How Lighthouse should measure the mobile LCP budget (Batch 1 onward).** The two methods disagree on the same pages:
 
 | Method | What it does | LCP on the Batch 1 pages |

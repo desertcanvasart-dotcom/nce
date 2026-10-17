@@ -319,7 +319,7 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
   - PERF-006 is reworded to match.
 - **Consequence:** render-blocking CSS fell from about 200 KB to about 5 KB, and Japanese renders in system Mincho/Gothic faces (checked in screenshots). If Faris wants exact Noto JP rendering everywhere, the alternative is a JA-only layout loading a subset font, at a measurable LCP cost.
 
-### ADR-036 CSS inlined; Lighthouse LCP reported as a warning pending Q58 (Accepted, temporary)
+### ADR-036 CSS inlined; Lighthouse LCP reported as a warning pending Q58 (Superseded by ADR-040)
 - **Context:** after ADR-035, Lighthouse's default **simulated** mobile LCP was:
 
   | Page | Simulated LCP (median) |
@@ -357,3 +357,11 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-039 Draft legal pages stay in English (Accepted)
 - **Decision:** `/terms/` and `/privacy/` exist only in English while in draft. Spanish and Japanese footers link to the English page, marked "In English" with `lang="en"`. `/es/terms/` and `/ja/terms/` return 404.
 - **Consequence:** this is a temporary exception to "links stay within one language" (I18N-003). It ends when translated, approved texts exist.
+
+### ADR-040 Mobile LCP gate uses Lighthouse's simulated throttling (Accepted)
+- **Context:** Q58. Faris chose the strict, simulated Lighthouse test as the gate.
+- **Decision:**
+  - LHCI asserts LCP ≤ 2,500 ms as an **error** again (median of 3 mobile runs, simulated throttling).
+  - CLS ≤ 0.05, TBT ≤ 200 ms and accessibility ≥ 0.95 also remain errors.
+  - The CI run on GitHub's runner is the record of truth. Local runs on a busy developer machine are noisier, as Batch 1 showed.
+- **Consequence:** every batch must keep client JavaScript lean. A failing LCP blocks the PR, as intended.
