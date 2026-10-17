@@ -12,7 +12,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   // Our CSS is ~5 KB gzipped: inlining it removes every render-blocking stylesheet request (PERF-001, ADR-036).
-  experimental: { inlineCss: true },
+  // authInterrupts: forbidden() renders the 403 page for another role's workspace (ADR-067).
+  experimental: { inlineCss: true, authInterrupts: true },
   async redirects() {
     return liveSiteRedirects.map((r) => ({ ...r, statusCode: 301 as const }));
   },

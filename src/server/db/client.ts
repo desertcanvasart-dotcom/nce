@@ -1,6 +1,7 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { sessionCookieOptions } from "@/lib/auth/cookies";
 import { env } from "@/lib/env";
 import type { Database } from "./database.types";
 
@@ -20,6 +21,7 @@ export async function getDb() {
   if (!url || !key) throw new DatabaseNotConfiguredError();
   const store = await cookies();
   return createServerClient<Database>(url, key, {
+    cookieOptions: sessionCookieOptions(),
     cookies: {
       getAll: () => store.getAll(),
       setAll: (list) => {
