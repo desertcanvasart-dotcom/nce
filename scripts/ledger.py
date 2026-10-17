@@ -356,7 +356,7 @@ X = {
  ("CLAUDE.md §5", "INP ≤ 200 ms on key templates.", "11"),
  ("CLAUDE.md §5", "No route ships more than ~200 KB gzipped JS without a logged reason (CI bundle budget).", "1"),
  ("CLAUDE.md §5", "Images use next/image with explicit sizes.", "2"),
- ("PERF/BRAND §Type", "Fonts are self-hosted via next/font with subsets and display swap; Japanese fonts load only on /ja/.", "1"),
+ ("PERF/BRAND §Type; ADR-035", "Fonts are self-hosted via next/font with display swap; only first-paint Latin files are preloaded; no Japanese web font is downloaded (the stacks fall back to installed Noto JP or system Japanese faces).", "1"),
  ("CLAUDE.md §5", "Lighthouse CI runs on key templates on every PR to main.", "1"),
  ("CLAUDE.md §7", "Heavy effects meet the budget on a mid-range phone and degrade to static design-system art.", "9"),
  ("CLAUDE.md §6", "Public pages render their content on the server and are readable without JavaScript.", "1"),
@@ -479,6 +479,55 @@ EXP = ["Live price build-up linked from every price", "Vessel cutaway: who share
        "Ambient river sound (off by default)"]
 for n, t in enumerate(EXP, 1): add(f"EXP-{n:03d}", "CLAUDE.md §7; EXPERIENCE.md", f"{t}: built to its EXPERIENCE.md spec if Faris approves it.", "9")
 
+# Batch 1 results (17 Oct 2026). "Built" = done and checked locally, awaiting its first CI run.
+B1 = "Batch 1 (17 Oct 2026): "
+STATUS = {
+ "TOK-COLOR-SEMANTIC": ("Verified", B1+"tests/unit/tokens.test.ts; screenshots docs/screenshots/batch-01"),
+ "TOK-COLOR-PALETTE": ("Verified", B1+"tests/unit/tokens.test.ts"),
+ "TOK-THEMES": ("Verified", B1+"e2e 'theme toggle…no flash', '500 page' regression; *-day/*-night screenshots"),
+ "TOK-TYPE-FAMILIES": ("Verified", B1+"tokens.test.ts font stack; src/app/fonts.ts; screenshots"),
+ "TOK-TYPE-STYLES": ("Verified", B1+"tokens.test.ts (12 styles, display-xl 56px under 720px)"),
+ "TOK-SPACING": ("Verified", B1+"tokens.test.ts; stylelint nilecruz/use-tokens"),
+ "TOK-RADIUS": ("Verified", B1+"tokens.test.ts; stylelint nilecruz/use-tokens"),
+ "TOK-SHADOW": ("Verified", B1+"tokens.test.ts; stylelint rule caught a non-token box-shadow in the header (fixed)"),
+ "TOK-LAYOUT": ("Verified", B1+"tokens.test.ts"),
+ "TOK-MOTION": ("Verified", B1+"tokens/motion.json; tokens.test.ts 'motion tokens'"),
+ "TOK-PIPELINE": ("Verified", B1+"pnpm tokens:check; tokens.test.ts 'matches the generated file'"),
+ "TOK-NO-HARDCODE": ("Verified", B1+"tooling/stylelint-tokens.mjs via pnpm lint:css"),
+ "BRAND-001": ("Verified", B1+"pnpm lint:copy; tests/unit/copy-rules.test.ts"),
+ "BRAND-002": ("Verified", B1+"pnpm lint:copy; tests/unit/copy-rules.test.ts"),
+ "BRAND-025": ("Verified", B1+"e2e 'main navigation shows the five pillars…'"),
+ "ENG-001": ("Verified", B1+"pnpm typecheck (strict, noUncheckedIndexedAccess)"),
+ "ENG-002": ("Verified", B1+"pnpm lint, pnpm lint:css"),
+ "ENG-003": ("Verified", B1+"pnpm format:check"),
+ "ENG-004": ("Verified", B1+"eslint ban-ts-comment + local/disable-needs-reason"),
+ "ENG-005": ("Built", B1+"27 Vitest tests pass locally; CI job 'quality' awaits first run"),
+ "ENG-006": ("Built", B1+"28 Playwright tests pass locally on a production build; CI job awaits first run"),
+ "ENG-008": ("Verified", B1+"scripts/screenshots.ts; 42 files in docs/screenshots/batch-01"),
+ "ENG-010": ("Verified", B1+"branch batch-01-foundation, conventional commits with IDs"),
+ "ENG-011": ("In progress", B1+"local env done; Railway staging/production and Supabase values pending from Faris. Carried over (see BUILD-LOG)"),
+ "ENG-012": ("Built", B1+".github/workflows/ci.yml; awaits first run on the PR"),
+ "ENG-016": ("Verified", B1+"pnpm 10 via corepack; dependencies listed in docs/briefs/BATCH-01.md"),
+ "ENG-017": ("Verified", B1+"e2e 404 per locale and '500 page'; screenshots no-such-page-*, dev-error-preview-*"),
+ "ENG-018": ("Verified", B1+"e2e 'home renders…the shell'; screenshots"),
+ "ENG-019": ("Verified", B1+"e2e 'draft legal pages…'; screenshots terms-*, privacy-*"),
+ "A11Y-001": ("Verified", B1+"axe (WCAG 2.2 AA tags) on every e2e page, both themes; 0 serious/critical"),
+ "A11Y-006": ("Verified", B1+"e2e 'skip link moves focus…'"),
+ "PERF-004": ("Verified", B1+"pnpm budget: max 154.2 KB gzipped per route"),
+ "PERF-006": ("Verified", B1+"next/font; render-blocking CSS cut from ~200 KB to ~5 KB (ADR-035)"),
+ "PERF-007": ("Built", B1+"lighthouserc.json + CI job; local run done. LCP gate method awaits Faris (Q58)"),
+ "PERF-009": ("Verified", B1+"e2e 'without JavaScript…'"),
+ "SEC-003": ("Built", B1+"e2e 'no secret appears in client JavaScript', eslint rule; gitleaks runs in CI (Docker unavailable locally)"),
+ "SEC-012": ("Verified", B1+"e2e 'security headers are set'"),
+ "SEO-001": ("Verified", B1+"e2e trailing-slash 308; unit localizedPath"),
+ "SEO-002": ("Verified", B1+"src/lib/seo/metadata.ts; e2e title present"),
+ "SEO-006": ("Verified", B1+"e2e canonical per locale; unit pageMetadata"),
+ "SEO-015": ("Verified", B1+"e2e main nav and footer link tests"),
+ "SEO-020": ("Verified", B1+"unit tests/unit/robots.test.ts; e2e staging noindex"),
+ "I18N-001": ("Verified", B1+"e2e lang + URL per locale"),
+ "I18N-006": ("Verified", B1+"messages/{en,es,ja}.json, 47 keys each; copy lint scans them"),
+ "I18N-009": ("Verified", B1+"generated stacks keep Noto JP names; ja screenshots (ADR-035)"),
+}
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
@@ -517,6 +566,7 @@ with open(f"{out}/REQUIREMENTS.md", "w") as f:
         for i, s, req, b in rows:
             st = ("Deferred: " + DEFERRED[i]) if i in DEFERRED else ("Planned" if b != "0" else "Verified")
             ev = "Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024)" if b == "0" else ""
+            if i in STATUS: st, ev = STATUS[i]
             f.write(f"| {i} | {s} | {req.replace('|', '/')} | {b} | {st} | {ev} |\n")
         f.write("\n")
     f.write(open(f"{out}/../scripts/proposed.md").read())

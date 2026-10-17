@@ -293,3 +293,67 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-032 UI strings in Spanish and Japanese drafted by me (Accepted)
 - **Context:** Faris approved me drafting the roughly 40 nav, footer and error-page labels.
 - **Decision:** the drafts go into `messages/es.json` and `messages/ja.json`. Each file carries a `_review` note, and CONTENT-NEEDED lists them for translator review before launch.
+
+---
+
+## Batch 1, 17 Oct 2026
+
+### ADR-033 No automatic language redirect (Accepted)
+- **Context:** next-intl can redirect visitors by browser language.
+- **Decision:** `localeDetection: false`. A URL always shows the same language, and the language switch is explicit.
+- **Consequence:** crawlers and shared links get predictable pages (supports SEO-007 in Batch 10).
+
+### ADR-034 CSP without a nonce (Accepted; revisit in Batch 11)
+- **Context:** a nonce-based CSP forces every page to render dynamically, defeating static generation and caching (PERF-010).
+- **Decision:** a strict CSP (`default-src 'self'`, `object-src 'none'`, `frame-ancestors 'none'`, `base-uri 'self'`, `form-action 'self'`) that allows inline scripts. The only inline script we author is the 3-line theme bootstrap.
+- **Consequence:** weaker XSS protection than nonces. The Batch 11 security review decides whether to move to hashes or nonces once the page set is known.
+
+### ADR-035 No Japanese web fonts (Accepted; changes the Q15 answer)
+- **Context:**
+  - Self-hosting Noto Serif JP and Noto Sans JP through next/font added about 200 KB (gzipped) of render-blocking `@font-face` CSS to **every** page, including English.
+  - On `/ja/` it downloaded 25 font files (722 KB).
+  - Lighthouse mobile LCP was 4.1 s (EN) and 8.1 s (JA).
+- **Decision:**
+  - No Japanese web font is downloaded. The design-system stacks still name Noto Serif JP and Noto Sans JP, so devices that have them installed (Android) use them, and others use their own Japanese faces (Hiragino, Yu).
+  - Only first-paint Latin files are preloaded.
+  - PERF-006 is reworded to match.
+- **Consequence:** render-blocking CSS fell from about 200 KB to about 5 KB, and Japanese renders in system Mincho/Gothic faces (checked in screenshots). If Faris wants exact Noto JP rendering everywhere, the alternative is a JA-only layout loading a subset font, at a measurable LCP cost.
+
+### ADR-036 CSS inlined; Lighthouse LCP reported as a warning pending Q58 (Accepted, temporary)
+- **Context:** after ADR-035, Lighthouse's default **simulated** mobile LCP was:
+
+  | Page | Simulated LCP (median) |
+  |---|---|
+  | `/` | 2.0 s |
+  | `/es/` | 2.7 s |
+  | `/ja/` | 2.7 s |
+  | `/terms/` | 2.8 s |
+
+  Results are bimodal (about 2.0 s or about 2.8 s for the same page). The model counts the React runtime's script evaluation (×4 CPU) whenever it starts before the text paints.
+
+  Real throttled runs (Lighthouse "devtools" throttling: slow 4G, 4× CPU) gave:
+  - LCP of 0.8–2.1 s on every page;
+  - CLS of 0;
+  - total blocking time of 18–307 ms.
+- **Decision:**
+  - `experimental.inlineCss` removes all render-blocking stylesheet requests.
+  - LHCI keeps every threshold, but LCP is set to `warn` instead of `error` until Faris chooses the gate method (Q58). CLS, TBT and accessibility remain errors.
+- **Consequence:** the gap is visible in every CI run, not hidden.
+
+### ADR-037 Shell differences from the design-system NavBar (Accepted; logged in DS-DIFFS.md)
+- **Decision:**
+  - The theme switch is a small text control beside the language switch (left), and inside the menu on phones. The design system has no theme control in NavBar.
+  - The phone menu is a `<details>` element (works without JavaScript) and includes the language switch, which the design system hides under 760 px.
+  - The sliding underline animation is deferred to the full NavBar port in Batch 2.
+
+### ADR-038 Theme handling survives client re-mounts (Accepted)
+- **Context:** screenshots showed the 500 page in Day when Night was saved. React's re-mount after an error rebuilt `<html>` without `data-theme`.
+- **Decision:**
+  - The head script owns `data-theme`.
+  - A tiny `ThemeSync` component re-applies the saved theme on mount.
+  - The no-JS rule uses `<noscript><style>` instead of an `<html>` class.
+- **Consequence:** a regression test was added to the 500-page test.
+
+### ADR-039 Draft legal pages stay in English (Accepted)
+- **Decision:** `/terms/` and `/privacy/` exist only in English while in draft. Spanish and Japanese footers link to the English page, marked "In English" with `lang="en"`. `/es/terms/` and `/ja/terms/` return 404.
+- **Consequence:** this is a temporary exception to "links stay within one language" (I18N-003). It ends when translated, approved texts exist.

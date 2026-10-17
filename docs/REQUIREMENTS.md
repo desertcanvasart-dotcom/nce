@@ -418,25 +418,25 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| TOK-COLOR-SEMANTIC | tokens.json color.tokens (19 themed) | All 19 semantic colour tokens exist as CSS custom properties with Day and Night values. | 1 | Planned |  |
-| TOK-COLOR-PALETTE | tokens.json color.tokens (12 constant) | All 12 palette swatches exist as constant custom properties in both themes. | 1 | Planned |  |
-| TOK-THEMES | tokens.json color.themes; DS README | Day (light) is the default theme and Night is applied with data-theme="dark" on <html>, with no flash of the wrong theme. | 1 | Planned |  |
-| TOK-TYPE-FAMILIES | tokens.json type.families; BRAND-BOOK §Type | --font-display and --font-sans stacks exist and Cormorant Garamond and Jost are loaded at the weights bundle.css uses. | 1 | Planned |  |
-| TOK-TYPE-STYLES | tokens.json type.groups (12 styles) | Each of the 12 type styles exists as a class and as tokens, including display-xl dropping to 56px under 720px. | 1 | Planned |  |
-| TOK-SPACING | tokens.json spacing (space-1…10) | space-1 to space-10 exist as custom properties. | 1 | Planned |  |
-| TOK-RADIUS | tokens.json radius | radius-0, -sm, -lg and -pill exist, and lint flags any other border-radius. | 1 | Planned |  |
-| TOK-SHADOW | tokens.json shadow | shadow-float and shadow-lift exist with themed values, and lint flags any other box-shadow. | 1 | Planned |  |
-| TOK-LAYOUT | tokens.json layout | container, measure and nav-height exist as custom properties. | 1 | Planned |  |
-| TOK-MOTION | BRAND-BOOK §Motion; bundle.css :root | --ease-river and --dur-1/2/3 are added to the design-system token source as a motion group and generated like every other token (ADR-016). | 1 | Planned |  |
-| TOK-PIPELINE | CLAUDE.md §6 Design tokens | A script generates the token CSS (and TS constants) from tokens.json; CI fails if the generated files are stale or edited by hand. | 1 | Planned |  |
-| TOK-NO-HARDCODE | CLAUDE.md §6 | Lint rejects hard-coded colours, sizes and fonts that have a token in component and page styles. | 1 | Planned |  |
+| TOK-COLOR-SEMANTIC | tokens.json color.tokens (19 themed) | All 19 semantic colour tokens exist as CSS custom properties with Day and Night values. | 1 | Verified | Batch 1 (17 Oct 2026): tests/unit/tokens.test.ts; screenshots docs/screenshots/batch-01 |
+| TOK-COLOR-PALETTE | tokens.json color.tokens (12 constant) | All 12 palette swatches exist as constant custom properties in both themes. | 1 | Verified | Batch 1 (17 Oct 2026): tests/unit/tokens.test.ts |
+| TOK-THEMES | tokens.json color.themes; DS README | Day (light) is the default theme and Night is applied with data-theme="dark" on <html>, with no flash of the wrong theme. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'theme toggle…no flash', '500 page' regression; *-day/*-night screenshots |
+| TOK-TYPE-FAMILIES | tokens.json type.families; BRAND-BOOK §Type | --font-display and --font-sans stacks exist and Cormorant Garamond and Jost are loaded at the weights bundle.css uses. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts font stack; src/app/fonts.ts; screenshots |
+| TOK-TYPE-STYLES | tokens.json type.groups (12 styles) | Each of the 12 type styles exists as a class and as tokens, including display-xl dropping to 56px under 720px. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts (12 styles, display-xl 56px under 720px) |
+| TOK-SPACING | tokens.json spacing (space-1…10) | space-1 to space-10 exist as custom properties. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts; stylelint nilecruz/use-tokens |
+| TOK-RADIUS | tokens.json radius | radius-0, -sm, -lg and -pill exist, and lint flags any other border-radius. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts; stylelint nilecruz/use-tokens |
+| TOK-SHADOW | tokens.json shadow | shadow-float and shadow-lift exist with themed values, and lint flags any other box-shadow. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts; stylelint rule caught a non-token box-shadow in the header (fixed) |
+| TOK-LAYOUT | tokens.json layout | container, measure and nav-height exist as custom properties. | 1 | Verified | Batch 1 (17 Oct 2026): tokens.test.ts |
+| TOK-MOTION | BRAND-BOOK §Motion; bundle.css :root | --ease-river and --dur-1/2/3 are added to the design-system token source as a motion group and generated like every other token (ADR-016). | 1 | Verified | Batch 1 (17 Oct 2026): tokens/motion.json; tokens.test.ts 'motion tokens' |
+| TOK-PIPELINE | CLAUDE.md §6 Design tokens | A script generates the token CSS (and TS constants) from tokens.json; CI fails if the generated files are stale or edited by hand. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm tokens:check; tokens.test.ts 'matches the generated file' |
+| TOK-NO-HARDCODE | CLAUDE.md §6 | Lint rejects hard-coded colours, sizes and fonts that have a token in component and page styles. | 1 | Verified | Batch 1 (17 Oct 2026): tooling/stylelint-tokens.mjs via pnpm lint:css |
 
 ## BRAND
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| BRAND-001 | BRAND-BOOK §Content ¶1 | UI and CMS copy never contains 'best', 'unbeatable' or 'once in a lifetime' (copy lint). | 1 | Planned |  |
-| BRAND-002 | BRAND-BOOK §Content ¶2 | UI copy has no exclamation marks or emoji (copy lint). | 1 | Planned |  |
+| BRAND-001 | BRAND-BOOK §Content ¶1 | UI and CMS copy never contains 'best', 'unbeatable' or 'once in a lifetime' (copy lint). | 1 | Verified | Batch 1 (17 Oct 2026): pnpm lint:copy; tests/unit/copy-rules.test.ts |
+| BRAND-002 | BRAND-BOOK §Content ¶2 | UI copy has no exclamation marks or emoji (copy lint). | 1 | Verified | Batch 1 (17 Oct 2026): pnpm lint:copy; tests/unit/copy-rules.test.ts |
 | BRAND-003 | BRAND-BOOK §Content ¶2 | Urgency appears only from real availability (e.g. 'Only 2 suites left' computed from inventory). | 5 | Planned |  |
 | BRAND-004 | BRAND-BOOK §Content ¶3 | Headings, buttons and labels are sentence case in source; uppercase is applied only by CSS. | 2 | Planned |  |
 | BRAND-005 | BRAND-BOOK §Content ¶4 | Prices are formatted as US$1,240, per person, with what is included stated. | 2 | Planned |  |
@@ -459,7 +459,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-022 | BRAND-BOOK §Space | Card padding and grid gaps are space-5; content is capped at container with space-6 gutters (space-4 on mobile). | 2 | Planned |  |
 | BRAND-023 | BRAND-BOOK §States | Hover darkens the border to ink or fills with primary; selected uses primary/on-primary; disabled is 45% opacity. | 2 | Planned |  |
 | BRAND-024 | BRAND-BOOK §Type | Prices use lining figures; totals and steppers use tabular figures. | 2 | Planned |  |
-| BRAND-025 | NavBar/README | Main navigation has at most seven links and 'Why prices differ' is always visible. | 1 | Planned |  |
+| BRAND-025 | NavBar/README | Main navigation has at most seven links and 'Why prices differ' is always visible. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'main navigation shows the five pillars…' |
 | BRAND-026 | Rating/README; CruiseCard/README | Ratings render only when backed by real reviews, and cards always show the maximum guest count. | 5 | Planned |  |
 | BRAND-027 | Faris 17 Oct 2026 (ADR-008) | The felucca appears only on /tours-extras/felucca-sail-aswan/ as a reference that the boat type exists: no vessel-type page, no evaluation, no recommendation, no promotion, no VesselArt/Scene felucca variant, no search option. | 2 | Planned |  |
 | BRAND-028 | Faris 17 Oct 2026 (ADR-009); Q6 | CruiseCard shows the published Nilecruz evaluation as 'NN/100 · Nilecruz evaluation'; stars appear only for verified guest reviews; external ratings appear only on the vessel page with source and date. | 5 | Planned |  |
@@ -468,36 +468,36 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| ENG-001 | CLAUDE.md §5 | typecheck passes with zero errors under TypeScript strict. | 1 | Planned |  |
-| ENG-002 | CLAUDE.md §5 | lint passes with zero errors. | 1 | Planned |  |
-| ENG-003 | CLAUDE.md §5 | format:check passes. | 1 | Planned |  |
-| ENG-004 | CLAUDE.md §5 | No @ts-ignore or eslint-disable without a written reason (enforced by lint rule). | 1 | Planned |  |
-| ENG-005 | CLAUDE.md §5 | Vitest unit tests run in CI. | 1 | Planned |  |
-| ENG-006 | CLAUDE.md §5; ADR-029 | Playwright end-to-end tests run in CI against a production build of the app. | 1 | Planned |  |
+| ENG-001 | CLAUDE.md §5 | typecheck passes with zero errors under TypeScript strict. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm typecheck (strict, noUncheckedIndexedAccess) |
+| ENG-002 | CLAUDE.md §5 | lint passes with zero errors. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm lint, pnpm lint:css |
+| ENG-003 | CLAUDE.md §5 | format:check passes. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm format:check |
+| ENG-004 | CLAUDE.md §5 | No @ts-ignore or eslint-disable without a written reason (enforced by lint rule). | 1 | Verified | Batch 1 (17 Oct 2026): eslint ban-ts-comment + local/disable-needs-reason |
+| ENG-005 | CLAUDE.md §5 | Vitest unit tests run in CI. | 1 | Built | Batch 1 (17 Oct 2026): 27 Vitest tests pass locally; CI job 'quality' awaits first run |
+| ENG-006 | CLAUDE.md §5; ADR-029 | Playwright end-to-end tests run in CI against a production build of the app. | 1 | Built | Batch 1 (17 Oct 2026): 28 Playwright tests pass locally on a production build; CI job awaits first run |
 | ENG-007 | CLAUDE.md §6 | A private /dev/components gallery renders every component in every state in both themes, unavailable in production to the public. | 2 | Planned |  |
-| ENG-008 | CLAUDE.md §5 | A screenshot script captures any route at 375, 768 and 1440 px in Day and Night into docs/screenshots/batch-<nn>/. | 1 | Planned |  |
+| ENG-008 | CLAUDE.md §5 | A screenshot script captures any route at 375, 768 and 1440 px in Day and Night into docs/screenshots/batch-<nn>/. | 1 | Verified | Batch 1 (17 Oct 2026): scripts/screenshots.ts; 42 files in docs/screenshots/batch-01 |
 | ENG-009 | CLAUDE.md §5 | A visual-parity check compares each ported component with its preview.html and logs differences. | 2 | Planned |  |
-| ENG-010 | CLAUDE.md §4 | Work happens on batch-<nn>-<slug> branches with conventional commits citing requirement IDs. | 1 | Planned |  |
-| ENG-011 | ARCH §Environments; ADR-029 | Local, staging and production environments (Railway + Supabase) exist with separate databases and secrets. | 1 | Planned |  |
-| ENG-012 | ARCH §CI | CI runs typecheck, lint, format, unit, e2e, axe and bundle-size checks on every PR. | 1 | Planned |  |
+| ENG-010 | CLAUDE.md §4 | Work happens on batch-<nn>-<slug> branches with conventional commits citing requirement IDs. | 1 | Verified | Batch 1 (17 Oct 2026): branch batch-01-foundation, conventional commits with IDs |
+| ENG-011 | ARCH §Environments; ADR-029 | Local, staging and production environments (Railway + Supabase) exist with separate databases and secrets. | 1 | In progress | Batch 1 (17 Oct 2026): local env done; Railway staging/production and Supabase values pending from Faris. Carried over (see BUILD-LOG) |
+| ENG-012 | ARCH §CI | CI runs typecheck, lint, format, unit, e2e, axe and bundle-size checks on every PR. | 1 | Built | Batch 1 (17 Oct 2026): .github/workflows/ci.yml; awaits first run on the PR |
 | ENG-013 | CLAUDE.md §4 | REQUIREMENTS, BUILD-LOG and DECISIONS are updated at the end of every batch. | 0 | Verified | Batch 0 docs approved by Faris 17 Oct 2026 (ADR-024) |
 | ENG-014 | ARCH §Monitoring; ADR-029 | Server and client errors are reported to an error tracker with release tags. | 11 | Planned |  |
 | ENG-015 | ARCH §Backups | Database backups and point-in-time recovery are enabled and a restore has been rehearsed. | 11 | Planned |  |
-| ENG-016 | CLAUDE.md §6 | pnpm is the package manager and new dependencies are justified in the batch brief. | 1 | Planned |  |
-| ENG-017 | CLAUDE.md §6 | 404 and 500 pages exist in the brand voice in all three languages. | 1 | Planned |  |
-| ENG-018 | CLAUDE.md §6 | The app shell (NavBar, footer, theme, language switch, skip link) wraps every public page. | 1 | Planned |  |
-| ENG-019 | Faris 17 Oct 2026 (ADR-031); PROPOSED-007 | Draft /terms/ and /privacy/ pages exist in EN, linked from the footer, visibly marked 'Draft, under review' and noindex until Faris approves the text. | 1 | Planned |  |
+| ENG-016 | CLAUDE.md §6 | pnpm is the package manager and new dependencies are justified in the batch brief. | 1 | Verified | Batch 1 (17 Oct 2026): pnpm 10 via corepack; dependencies listed in docs/briefs/BATCH-01.md |
+| ENG-017 | CLAUDE.md §6 | 404 and 500 pages exist in the brand voice in all three languages. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 404 per locale and '500 page'; screenshots no-such-page-*, dev-error-preview-* |
+| ENG-018 | CLAUDE.md §6 | The app shell (NavBar, footer, theme, language switch, skip link) wraps every public page. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'home renders…the shell'; screenshots |
+| ENG-019 | Faris 17 Oct 2026 (ADR-031); PROPOSED-007 | Draft /terms/ and /privacy/ pages exist in EN, linked from the footer, visibly marked 'Draft, under review' and noindex until Faris approves the text. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'draft legal pages…'; screenshots terms-*, privacy-* |
 
 ## A11Y
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| A11Y-001 | CLAUDE.md §5 | axe reports no serious or critical issues on every e2e-visited page (CI gate). | 1 | Planned |  |
+| A11Y-001 | CLAUDE.md §5 | axe reports no serious or critical issues on every e2e-visited page (CI gate). | 1 | Verified | Batch 1 (17 Oct 2026): axe (WCAG 2.2 AA tags) on every e2e page, both themes; 0 serious/critical |
 | A11Y-002 | CLAUDE.md §5 | Every interaction is keyboard-operable. | 2 | Planned |  |
 | A11Y-003 | CLAUDE.md §5; BRAND §States | Keyboard focus shows a solid 2px focus ring at 2px offset (on-media ring on photography) everywhere, not only inside .nc-root. | 2 | Planned |  |
 | A11Y-004 | CLAUDE.md §5; BRAND §Motion | prefers-reduced-motion disables CSS and JS motion (count-up, gallery tilt, parallax, autoplay, smooth scroll). | 2 | Planned |  |
 | A11Y-005 | CLAUDE.md §5 | Text contrast ≥4.5:1 (≥3:1 large text and UI marks) in both themes, checked automatically including on-media over scrim. | 2 | Planned |  |
-| A11Y-006 | CLAUDE.md §5 | Pages have a skip link and landmark regions. | 1 | Planned |  |
+| A11Y-006 | CLAUDE.md §5 | Pages have a skip link and landmark regions. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'skip link moves focus…' |
 | A11Y-007 | DS TextField | Every form field has a label and errors say how to fix the problem. | 2 | Planned |  |
 | A11Y-008 | DS PriceAnatomy/Badge | Colour is never the only cue (segment keys, status words). | 2 | Planned |  |
 | A11Y-009 | DS Gallery/VesselCompare/ItineraryTimeline | Carousel, tabs and radio-group widgets follow WAI-ARIA patterns including arrow-key navigation. | 2 | Planned |  |
@@ -511,12 +511,12 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PERF-001 | CLAUDE.md §5 | LCP ≤ 2.5 s on Lighthouse mobile for key templates (production build). | 11 | Planned |  |
 | PERF-002 | CLAUDE.md §5 | CLS ≤ 0.05 on key templates. | 11 | Planned |  |
 | PERF-003 | CLAUDE.md §5 | INP ≤ 200 ms on key templates. | 11 | Planned |  |
-| PERF-004 | CLAUDE.md §5 | No route ships more than ~200 KB gzipped JS without a logged reason (CI bundle budget). | 1 | Planned |  |
+| PERF-004 | CLAUDE.md §5 | No route ships more than ~200 KB gzipped JS without a logged reason (CI bundle budget). | 1 | Verified | Batch 1 (17 Oct 2026): pnpm budget: max 154.2 KB gzipped per route |
 | PERF-005 | CLAUDE.md §5 | Images use next/image with explicit sizes. | 2 | Planned |  |
-| PERF-006 | PERF/BRAND §Type | Fonts are self-hosted via next/font with subsets and display swap; Japanese fonts load only on /ja/. | 1 | Planned |  |
-| PERF-007 | CLAUDE.md §5 | Lighthouse CI runs on key templates on every PR to main. | 1 | Planned |  |
+| PERF-006 | PERF/BRAND §Type; ADR-035 | Fonts are self-hosted via next/font with display swap; only first-paint Latin files are preloaded; no Japanese web font is downloaded (the stacks fall back to installed Noto JP or system Japanese faces). | 1 | Verified | Batch 1 (17 Oct 2026): next/font; render-blocking CSS cut from ~200 KB to ~5 KB (ADR-035) |
+| PERF-007 | CLAUDE.md §5 | Lighthouse CI runs on key templates on every PR to main. | 1 | Built | Batch 1 (17 Oct 2026): lighthouserc.json + CI job; local run done. LCP gate method awaits Faris (Q58) |
 | PERF-008 | CLAUDE.md §7 | Heavy effects meet the budget on a mid-range phone and degrade to static design-system art. | 9 | Planned |  |
-| PERF-009 | CLAUDE.md §6 | Public pages render their content on the server and are readable without JavaScript. | 1 | Planned |  |
+| PERF-009 | CLAUDE.md §6 | Public pages render their content on the server and are readable without JavaScript. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'without JavaScript…' |
 | PERF-010 | ARCH §Caching | Public pages are statically generated or cached and revalidated on content change. | 5 | Planned |  |
 
 ## SEC
@@ -525,7 +525,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | SEC-001 | CLAUDE.md §5 | Every table has row-level security enabled with explicit policies (CI test fails on a table without RLS). | 3 | Planned |  |
 | SEC-002 | CLAUDE.md §5 | Every dashboard action is authorised server-side against the caller's role and ownership. | 4a | Planned |  |
-| SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Planned |  |
+| SEC-003 | CLAUDE.md §5 | No secrets in the client bundle or repository (secret scanning in CI). | 1 | Built | Batch 1 (17 Oct 2026): e2e 'no secret appears in client JavaScript', eslint rule; gitleaks runs in CI (Docker unavailable locally) |
 | SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Planned |  |
 | SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Planned |  |
 | SEC-006 | ARCH §Security | Public forms and auth endpoints are rate-limited and protected from bots. | 8 | Planned |  |
@@ -534,19 +534,19 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-009 | DG §Operator ¶integration | Inbound API calls are signed and idempotent; outbound webhooks are signed. | 4c | Planned |  |
 | SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Planned |  |
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
-| SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Planned |  |
+| SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
 | SEC-013 | ARCH §Data | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 3 | Planned |  |
 
 ## SEO
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| SEO-001 | silo.xlsx Read me C10 | URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect. | 1 | Planned |  |
-| SEO-002 | CLAUDE.md §5 | Each public page has a unique title and meta description from a metadata helper. | 1 | Planned |  |
+| SEO-001 | silo.xlsx Read me C10 | URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect. | 1 | Verified | Batch 1 (17 Oct 2026): e2e trailing-slash 308; unit localizedPath |
+| SEO-002 | CLAUDE.md §5 | Each public page has a unique title and meta description from a metadata helper. | 1 | Verified | Batch 1 (17 Oct 2026): src/lib/seo/metadata.ts; e2e title present |
 | SEO-003 | CLAUDE.md §5 | Each public page has exactly one H1 (CI check). | 10 | Planned |  |
 | SEO-004 | CLAUDE.md §5; Linking rules | Each public page shows a breadcrumb and emits BreadcrumbList. | 5 | Planned |  |
 | SEO-005 | CLAUDE.md §5 | Each page emits the schema types listed in its silo row (validated in CI). | 10 | Planned |  |
-| SEO-006 | CLAUDE.md §5 | Each page has a self-referencing canonical tag. | 1 | Planned |  |
+| SEO-006 | CLAUDE.md §5 | Each page has a self-referencing canonical tag. | 1 | Verified | Batch 1 (17 Oct 2026): e2e canonical per locale; unit pageMetadata |
 | SEO-007 | silo.md §Languages | Each page has reciprocal hreflang for en, es, ja and x-default. | 10 | Planned |  |
 | SEO-008 | Linking rules: Up | Each page links to its parent and pillar in the breadcrumb and once in the intro text. | 6 | Planned |  |
 | SEO-009 | Linking rules: Down | Pillars and hubs link to every child in card grids with the child's primary keyword as anchor. | 6 | Planned |  |
@@ -555,12 +555,12 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEO-012 | Linking rules: Money flow | Every informational page ends with a filtered CruiseCard row linking to the matching listing. | 6 | Planned |  |
 | SEO-013 | Linking rules: Money flow | Each vessel page links to its vessel-type hub and to each destination it stops at. | 5 | Planned |  |
 | SEO-014 | Linking rules: Anchor text | Anchors use the target's primary keyword or a close variant, never 'click here' or a bare URL. | 6 | Planned |  |
-| SEO-015 | Linking rules: Navigation | Main nav shows the five pillars plus Cruises; the footer holds Trust pages and silo roots. | 1 | Planned |  |
+| SEO-015 | Linking rules: Navigation | Main nav shows the five pillars plus Cruises; the footer holds Trust pages and silo roots. | 1 | Verified | Batch 1 (17 Oct 2026): e2e main nav and footer link tests |
 | SEO-016 | Linking rules: Facets | Only listed /cruises/ facet pages are indexable; parameters canonicalise to the clean URL with noindex. | 5 | Planned |  |
 | SEO-017 | silo.md rule 8; Orphan check | Every page is within three folders and three clicks of home (crawler check). | 10 | Planned |  |
 | SEO-018 | Linking rules: Orphan check | A crawler run after each release finds no orphan pages. | 10 | Planned |  |
 | SEO-019 | ARCH §Routing | XML sitemaps per locale list only indexable URLs. | 10 | Planned |  |
-| SEO-020 | ARCH §Routing | robots.txt disallows dashboards, account, API and MCP paths. | 1 | Planned |  |
+| SEO-020 | ARCH §Routing | robots.txt disallows dashboards, account, API and MCP paths. | 1 | Verified | Batch 1 (17 Oct 2026): unit tests/unit/robots.test.ts; e2e staging noindex |
 | SEO-021 | silo.md §Assumptions | Current nilecruz.com URLs redirect (301) to their silo equivalents. | 10 | Planned |  |
 | SEO-022 | silo.md §Assumptions | Tours & Extras slugs are reconciled with any live nilecruz.com tour URLs. | 7 | Planned |  |
 | SEO-023 | silo.md §Cannibalisation | Route guides carry no price grid and listings carry no long itinerary text. | 6 | Planned |  |
@@ -576,15 +576,15 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| I18N-001 | silo.md §Languages | English is served unprefixed; Spanish under /es/ and Japanese under /ja/. | 1 | Planned |  |
+| I18N-001 | silo.md §Languages | English is served unprefixed; Spanish under /es/ and Japanese under /ja/. | 1 | Verified | Batch 1 (17 Oct 2026): e2e lang + URL per locale |
 | I18N-002 | silo.md §Languages; ADR-022 | Spanish pages use translated slugs; Japanese pages use the English (Latin-letter) slugs. | 10 | Planned |  |
 | I18N-003 | Linking rules: Languages | Internal links stay within the current language. | 10 | Planned |  |
 | I18N-004 | Linking rules: Languages | The language switch goes to the equivalent page via hreflang alternates. | 10 | Planned |  |
 | I18N-005 | silo.md §Languages | Translation is plumbed in the order pillars/hubs, money pages, supporting articles. | 10 | Planned |  |
-| I18N-006 | CLAUDE.md §6 | UI strings live in next-intl message files, none hard-coded in components. | 1 | Planned |  |
+| I18N-006 | CLAUDE.md §6 | UI strings live in next-intl message files, none hard-coded in components. | 1 | Verified | Batch 1 (17 Oct 2026): messages/{en,es,ja}.json, 47 keys each; copy lint scans them |
 | I18N-007 | BRAND-BOOK §Multilingual | No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish. | 2 | Planned |  |
 | I18N-008 | CLAUDE.md §6; ADR-016 | Japanese text is never letter-spaced: letter-spacing 0 under :lang(ja), overriding the bundle's 0.08em. | 2 | Planned |  |
-| I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Planned |  |
+| I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Verified | Batch 1 (17 Oct 2026): generated stacks keep Noto JP names; ja screenshots (ADR-035) |
 | I18N-010 | CLAUDE.md §6 | Numbers, dates and money format per locale while keeping brand formats in English. | 2 | Planned |  |
 | I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Planned |  |
 | I18N-012 | silo.md §Assumptions | Spanish and Japanese keywords are validated before translated pages are written. | 10 | Planned |  |
@@ -656,22 +656,22 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 These are gaps: things a marketplace like this normally needs but no source describes. Each is explained in `QUESTIONS.md` with a recommendation. Nothing here will be built until Faris approves it. Approved items get a batch and the status `Planned`.
 
-| ID | Proposal | Suggested batch | Status |
-|---|---|---|---|
-| PROPOSED-001 | Password reset, email verification and change-email flows | 4a | Awaiting decision |
-| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model | 4a | Awaiting decision |
-| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management | 4a | Awaiting decision |
-| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030 |
-| PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
-| PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
-| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Partly approved 17 Oct 2026: terms and privacy drafts now ENG-019 (ADR-031); cookie consent and booking conditions awaiting |
-| PROPOSED-008 | Personal-data export and deletion requests | 11 | Awaiting decision |
-| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules | 4c | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012) |
-| PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged) | 5 | Awaiting decision |
-| PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF | 4f | Awaiting decision |
-| PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account | 5 | Awaiting decision |
-| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator) | 4f | Approved 17 Oct 2026 (ADR-026): now DATA-037, DATA-038 |
-| PROPOSED-014 | Consent-based analytics and conversion tracking | 11 | Awaiting decision |
-| PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema) | 3 | Awaiting decision |
-| PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking) | 4e | Awaiting decision |
-| PROPOSED-017 | Customer support inbox / messaging between customer, operator and admin about a booking | 4e | Awaiting decision |
+| ID           | Proposal                                                                                                                                | Suggested batch | Status                                                                                                                      |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| PROPOSED-001 | Password reset, email verification and change-email flows                                                                               | 4a              | Awaiting decision                                                                                                           |
+| PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model                                             | 4a              | Awaiting decision                                                                                                           |
+| PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management                                      | 4a              | Awaiting decision                                                                                                           |
+| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting                                            | 4f              | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030                                                                    |
+| PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8               | Awaiting decision                                                                                                           |
+| PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating)                                                    | 12              | Awaiting decision                                                                                                           |
+| PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris)                                    | 8               | Partly approved 17 Oct 2026: terms and privacy drafts now ENG-019 (ADR-031); cookie consent and booking conditions awaiting |
+| PROPOSED-008 | Personal-data export and deletion requests                                                                                              | 11              | Awaiting decision                                                                                                           |
+| PROPOSED-009 | Child and infant policy: ages, occupancy and pricing rules                                                                              | 4c              | Approved 17 Oct 2026: now DATA-019, DATA-020 (ADR-012)                                                                      |
+| PROPOSED-010 | Display-currency conversion with dated exchange rates (charged currency unchanged)                                                      | 5               | Awaiting decision                                                                                                           |
+| PROPOSED-011 | Documents: payment receipts, booking confirmations, B2B client record as PDF                                                            | 4f              | Awaiting decision                                                                                                           |
+| PROPOSED-012 | Saved cruises (the CruiseCard heart) persisted to the account                                                                           | 5               | Awaiting decision                                                                                                           |
+| PROPOSED-013 | Operator settlement/payout records (what Nilecruz owes each operator)                                                                   | 4f              | Approved 17 Oct 2026 (ADR-026): now DATA-037, DATA-038                                                                      |
+| PROPOSED-014 | Consent-based analytics and conversion tracking                                                                                         | 11              | Awaiting decision                                                                                                           |
+| PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema)                                                | 3               | Awaiting decision                                                                                                           |
+| PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking)                                                                        | 4e              | Awaiting decision                                                                                                           |
+| PROPOSED-017 | Customer support inbox / messaging between customer, operator and admin about a booking                                                 | 4e              | Awaiting decision                                                                                                           |

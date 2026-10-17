@@ -104,3 +104,69 @@
   - ENG-006 and ENG-011 reworded for Railway.
   - The ID guard and an independent re-parse both passed.
 - **Next:** Faris's go-ahead on the revised Batch 1 brief.
+
+**Correction (17 Oct 2026, Batch 1):** the design-system zip has **57** files, not 58, and 23 component READMEs (22 components + LandingPage), not 21. I found this while vendoring the zip and counting it file by file. INVENTORY.md is corrected. No ledger row changes.
+
+## 17 Oct 2026 · Batch 1 · Foundation
+
+**Built** (branch `batch-01-foundation`):
+- **Platform:** Next.js 16.4.2 with TypeScript (strict), pnpm 10 and Node 22.23.3.
+- **Design system:**
+  - an untouched vendored copy, verified identical to the zip;
+  - the token generator with `--check`;
+  - motion tokens;
+  - self-hosted Latin fonts.
+- **Languages:** next-intl routing (EN unprefixed, `/es/`, `/ja/`), with messages in three languages (47 keys; ES and JA drafted for translator review).
+- **Shell:**
+  - an early NavBar port with a no-JS phone menu;
+  - footer;
+  - Day/Night with no flash;
+  - language switch and skip link.
+- **Pages:**
+  - placeholder home;
+  - branded 404 and 500 in three languages;
+  - draft Terms and Privacy.
+- **Plumbing:**
+  - robots.txt (staging blocks all, plus `X-Robots-Tag`);
+  - metadata and canonical helper;
+  - live-site 301 map;
+  - security headers;
+  - `/api/health`.
+- **Tooling:**
+  - ESLint (jsx-a11y strict, reasons required for suppressions);
+  - Stylelint with a token-enforcement plugin;
+  - copy lint;
+  - Prettier;
+  - Vitest;
+  - Playwright + axe;
+  - screenshot script;
+  - bundle budget;
+  - Lighthouse CI;
+  - GitHub Actions CI (with gitleaks);
+  - `railway.json`;
+  - `.env.example`;
+  - `supabase/config.toml`.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` is clean (tokens, types, ESLint, Stylelint, copy, Prettier, 27 unit tests).
+- **Build:** clean. The largest route ships 154.2 KB of gzipped JS (budget 200).
+- **End-to-end:** 27 tests pass on a production build in production settings, and the 500-page test passes with dev routes on. axe finds 0 serious or critical issues in both themes.
+- **Visual check:** 42 screenshots in `docs/screenshots/batch-01/` (7 routes × 3 widths × 2 themes). I opened a sample of them myself, and an automated pixel check confirmed every Night screenshot uses the Night surface.
+
+**Problems found and fixed during the batch** (all by tests or by looking at screenshots):
+- Accessible names didn't match visible labels (axe).
+- The Spanish header collided at 768 px, and the phone strapline wrapped (screenshots).
+- The 500 page lost the Night theme (screenshots, now covered by a regression test).
+- About 200 KB of Japanese `@font-face` CSS was render-blocking every page (Lighthouse).
+- The bundle budget counted the legacy polyfill.
+- A stale server made one test run misleading. Playwright now never reuses a server.
+- Inventory file counts corrected (57 files).
+
+**Not done, or not yet verified:**
+- **ENG-011 (In progress, carried over):** the Railway staging and production services and the Supabase connection need Faris's values (`.env.local`, the Railway project). The app has no tables yet, so nothing else depends on it in this batch.
+- **CI's first run:** ENG-005, ENG-006, ENG-012, PERF-007 and SEC-003 are "Built". They pass locally and wait for the first CI run on the PR. Gitleaks couldn't run locally because Docker isn't running.
+- **Lighthouse mobile LCP:** under the default simulated method it is 2.0 s on home but 2.7–2.8 s on ES, JA and Terms. Under applied throttling it is 0.8–2.1 s. LCP is a CI warning until Faris decides (Q58, ADR-036). CLS is 0 everywhere.
+
+**Decisions:** ADR-033 to ADR-039; design-system differences in `docs/DS-DIFFS.md`.
+
+**Next:** Faris reviews; answers Q58 (and Q57 when convenient); supplies the Supabase and Railway values. Then the Batch 2 brief (design-system port).
