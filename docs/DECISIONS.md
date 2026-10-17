@@ -39,7 +39,7 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Decision:** the cruise total is the fare from the rate, with the gratuity on its own line (ADR-010). Extras are shown separately. The invented "free cancellation for 14 days" and "within 24 hours" notes are replaced by text generated from the cruise's real policy.
 - **Consequence:** a logged design-system difference for `BookingSummary`.
 
-### ADR-008 The felucca is removed from the site (Accepted)
+### ADR-008 The felucca is removed from the site (Accepted; amended by ADR-015)
 - **Context:** Q7. Faris: "remove the felucca from the site completely".
 - **Decision:** the following rows become `Deferred` (CLAUDE.md §3: never deleted):
   - PAGE-039 `/vessels/felucca/`
@@ -90,7 +90,104 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Decision:** imports (CSV and the existing repos' 600+ records) and new vessels start as `private`. Publishing is blocked until the readiness check passes (DATA-021).
 - **Open (Q49):** does "complete" include rates and availability? If so, the guide's information-only listings (DASH-ADM-019, DASH-PUB-010) would never be used.
 
-### ADR-014 Japanese keeps the design-system tracking (Accepted, overrides CLAUDE.md §6)
+### ADR-014 Japanese keeps the design-system tracking (Superseded by ADR-016)
 - **Context:** Q13. CLAUDE.md says to never letter-space Japanese, while the design system uses 0.08em under `:lang(ja)`. Faris: "add tracking to the design system". His instructions rank first (CLAUDE.md §2).
 - **Decision:** keep the design system's 0.08em on eyebrows, section titles and badges under `:lang(ja)`, and no other Japanese tracking (I18N-008). CLAUDE.md §6's "Never letter-space Japanese" is superseded for these three styles.
 - **Consequence:** Q50 confirms I read this correctly.
+
+---
+
+## Faris's second answers, 17 Oct 2026
+
+### ADR-015 Felucca: one tour page kept as a reference (Accepted, amends ADR-008)
+- **Context:** Q46. Faris: keep the felucca tour page only, as a reference that this type exists, without recommending or evaluating it.
+- **Decision:**
+  - PAGE-097 `/tours-extras/felucca-sail-aswan/` returns to `Planned`. It is an information page about the felucca sail, with no Nilecruz score, no recommendation and no promotion.
+  - The tours hub still lists it, because the orphan rule requires one link in.
+  - PAGE-039, PAGE-040 and PAGE-045 stay `Deferred`. There is no felucca vessel type, art or search option (BRAND-027).
+- **Open:** whether that page is bookable when a supplier and sessions exist, or stays information-only. I assume information-only until you say otherwise.
+
+### ADR-016 Motion tokens join the design-system tokens; Japanese is not letter-spaced (Accepted, supersedes ADR-014)
+- **Context:** Q13/Q14. Faris clarified that "add tracking to the design system" meant the motion tokens.
+- **Decision:**
+  - `--ease-river` and `--dur-1/2/3` are added to the token source as a `motion` group and generated like every other token (TOK-MOTION).
+  - Q13 reverts to CLAUDE.md §6: Japanese is never letter-spaced. The bundle's `:lang(ja)` 0.08em becomes 0 (I18N-008), logged in DS-DIFFS.
+
+### ADR-017 Gratuities: paid on board, in US$, from age 3, no commission (Accepted, extends ADR-010)
+- **Decision:**
+  - Guests pay the gratuity directly to the vessel's front office at check-out.
+  - Nilecruz never charges it, never adds it to the amount due, and takes no commission on it.
+  - It is always quoted in US$, with a minimum of US$5 per person per night, even when the cruise rate is in another currency.
+  - Children under 3 pay none.
+- **Shown as:** "Crew gratuities, paid on board at check-out: US$5 × 2 guests × 4 nights = US$40" (DATA-015, DATA-016).
+
+### ADR-018 Child pricing details and occupancy (Accepted, extends ADR-012)
+- **Decision:**
+  - Age is measured on the departure date.
+  - The percentage is taken from the adult per-person rate.
+  - The age bands are a platform default that **admins can override per operator** (DATA-022).
+  - Maximum occupancy is set per cabin type: at most 3, and most vessels 2. Triple occupancy exists only where a cabin type allows it.
+  - Children share a parent's cabin.
+- **My call, logged:** an infant under 3 does not count towards cabin occupancy (DATA-023), because a free infant normally sleeps in the parents' cabin. Correct me if operators count infants.
+
+### ADR-019 "Complete" means complete; temporary showcase exceptions (Accepted, extends ADR-013)
+- **Context:** Q49. Faris wants complete records, including rates, before publishing, but needs some data on the front end now to see the site.
+- **Decision:**
+  - Publishing requires the full readiness check, including rates and availability (DATA-021).
+  - Admins can grant a **showcase exception** per vessel. The vessel is then public with a visible "Details in preparation · sample" flag and is never bookable (DATA-024).
+  - Every exception must be cleared before launch (DATA-025).
+  - The guide's information-only listings (DASH-ADM-019, DASH-PUB-010) are delivered through this exception mechanism.
+
+### ADR-020 Card payments through Stripe (Accepted; PROPOSED-004 approved)
+- **Context:** Q2. Faris: payment is by card, through Stripe.
+- **Decision:**
+  - Cruise bookings and tour orders are paid separately by card through Stripe, within the payment deadlines of DASH-PAY-002…005.
+  - Status changes come only from verified, idempotent webhooks.
+  - Refunds go through Stripe after admin approval.
+  - Card data never touches our servers (DATA-026…030).
+- **What remains:**
+  - The guide's "reported payment / verification" flow stays for any non-card payment, if allowed (Q51).
+  - The stripe code in `nile-cruise-marketplace` is the starting point (ADR-023).
+- **Open (Q51):** how much is charged when, whether bank transfer is still allowed, and who receives the money.
+
+### ADR-021 One page per vessel with its itineraries (Accepted)
+- **Context:** Q4.
+- **Decision:** `/cruises/{vessel-slug}/` shows all of the vessel's itineraries with a selector. The selected itinerary is a parameter canonical to the vessel URL (DATA-031).
+
+### ADR-022 Brand name and Japanese slugs (Accepted)
+- **Context:** Q5. Faris: "Nilecruz" (with a u); Japanese URLs use English-letter slugs.
+- **Decision:**
+  - The brand is **Nilecruz** on nilecruz.com. "nilecrz" stays only as the design system's package name.
+  - `/ja/` pages use the English slugs; `/es/` pages use translated slugs (I18N-002, BRAND-017).
+- **Still open:** the redirect map from the live site (Q52).
+
+### ADR-023 Codebase: build in `nce`, reuse what passes review from both repos (Accepted)
+- **Context:** Q1. Faris: the code is the two GitHub repos, and I judge what to keep. No newer, unpushed version exists to wait for.
+- **Decision** (detail in ARCHITECTURE §1):
+  - Start a clean Next.js 16 project in `nce`.
+  - **From `nilecrz`, keep:**
+    - the database design: RPC-only writes, RLS on every table;
+    - the evaluation method (7 dimensions × 4 criteria, 0–5);
+    - the offer, acceptance and reservation functions with atomic re-checks;
+    - the deposit/refund/commission ledger logic;
+    - the integration layer (feed pull with SSRF/XXE guards, JSON/XML parsing, signed idempotent API, hashed key rotation, signed webhooks);
+    - and their tests.
+  - **From `nile-cruise-marketplace`, keep:**
+    - the Stripe Checkout and webhook code (adapted to deadlines and admin-approved refunds);
+    - the organisation staff/invite model;
+    - cabins with decks;
+    - the revision workflow;
+    - operator onboarding documents;
+    - admin search and CSV export;
+    - Resend email wiring;
+    - the 609-vessel directory as private drafts.
+  - **Leave:**
+    - both UIs;
+    - vinext and the OpenAI Sites/Cloudflare hosting;
+    - the hand-rolled PostgREST client;
+    - the "Flood Almanac" styles;
+    - the unguarded early RLS (pre-0012);
+    - full-refund-on-cancel;
+    - the anonymous-request model.
+  - Every reused piece is re-reviewed, typed and tested when its batch ports it.
+- **Consequence:** batches 4b–4h build the guide features neither repo has. Q1's remaining part, whether the live nilecruz.com database holds real records, decides whether Batch 3 migrates data (Q52).

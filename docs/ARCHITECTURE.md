@@ -42,27 +42,29 @@ Neither repo uses the nilecrz design system. The **public site has to be built n
     - the 609-vessel directory (as private drafts only, Q26);
     - the admin search and CSV export.
 
-### 1.3 Recommendation
+### 1.3 Decision (ADR-023, Faris 17 Oct 2026)
 
-**Adopt the `nilecrz` lineage as the dashboard base, preferably the newer code behind the live site (Q1), moved onto real Next.js in the empty `nce` repository.**
+Faris confirmed that the two GitHub repos are all the code there is, and that I decide what to keep. **We build in the empty `nce` repository on Next.js 16 and port, piece by piece, what passes review.**
 
-1. Create `nce` as a fresh Next.js 16 project with the stack in §2 (Batch 1).
-2. Bring over `nilecrz`'s Supabase schema, RPCs, domain logic (`lib/methodology.ts`, integrations, HMAC, feed parsing) and its tests. vinext implements the App Router API, so pages and route handlers move with small changes. The work is mostly replacing the hand-rolled PostgREST `fetch` layer with typed `@supabase/ssr` calls behind the same RPCs.
-3. Cherry-pick from `nile-cruise-marketplace`: team/staff model, cabins with deck, revisions, onboarding documents, admin search. Its UI is not reused.
-4. Re-skin every dashboard screen with the ported design system (dashboards use the same tokens and primitives; they don't need the brochure flourishes).
-5. Build the missing guide features (see BATCH-PLAN 4a–4h) on that base.
+| Keep from `nilecrz` | Keep from `nile-cruise-marketplace` | Leave behind |
+|---|---|---|
+| Schema design with RLS on every table and SECURITY DEFINER RPCs for every write | Stripe Checkout + webhook (`src/lib/stripe.ts`, `api/stripe/webhook`), reworked for deadlines and admin-approved refunds | Both UIs, all styles ("Flood Almanac", generic shadcn) |
+| Evaluation method `lib/methodology.ts` (7 × 4 criteria, 0–5, weights) | Organisation staff and invites (`org_staff`, `operator_invites`) | vinext, OpenAI Sites, Cloudflare Workers config |
+| `accept_bid`, `reserve_departure`, deposit/refund/commission RPCs (atomic re-checks) | `vessel_cabins` with deck; `vessel_revisions` workflow | Hand-rolled PostgREST `fetch` client |
+| Integrations: feed pull with SSRF/XXE guards, JSON/XML parity, signed idempotent API, hashed key rotation, signed webhooks | Operator onboarding documents/verification | Early RLS that let users write commission/verification columns (pre-0012) |
+| `node:test` domain tests and SQL RLS/booking tests (moved to Vitest + pgTAP) | Admin search, CSV export, audit log, notification preferences | Full refund on every cancellation; anonymous requests |
+| Account email templates | Resend wiring; 609-vessel directory (private drafts, ADR-013) | Seeded scores and prices as public facts |
+
+Each piece is re-read, typed, tested and logged in the batch that ports it. Nothing is copied wholesale.
 
 **Migration risk:**
-- *Low* for the database: it is plain Postgres.
-- *Medium* for the UI: about 1,400 lines of dashboard component are re-skinned anyway.
-- *Unknown* for the live code until Q1 is answered.
-- If the live database holds real records, Batch 3 includes a dry-run migration with row counts (DATA-014).
+- *Low* for the database: plain Postgres, re-expressed as new migrations.
+- *Low* for logic: small, tested functions.
+- *None* for UI: it is rebuilt with the design system anyway.
 
-### 1.4 If the newer code isn't available
+**Still unknown:** whether the live nilecruz.com database holds real customers, bookings or money records (Q52). If it does, Batch 3 adds a dry-run migration with a count report (DATA-014).
 
-Use GitHub `nilecrz` as the base anyway. Its core (RPC writes, tests, evaluation method) is the part that is expensive to get right; the missing features are additive. Batches 4c–4h grow by roughly a third.
-
-**I will not create or push anything to `nce`** until you approve. These docs are committed locally on branch `batch-00-discovery`.
+The Batch 0 docs are committed locally on branch `batch-00-discovery`. **Nothing is pushed to `nce` until you approve.**
 
 ## 2. Stack
 
@@ -76,6 +78,7 @@ Use GitHub `nilecrz` as the base anyway. Its core (RPC writes, tests, evaluation
 | Styling | **Generated CSS custom properties + CSS Modules**; **no Tailwind** | The design system is plain CSS with token variables. Porting `bundle.css` into per-component CSS Modules keeps parity and is the lowest-risk route. Tailwind adds a second vocabulary. |
 | Motion | **CSS first**; **Motion** only for View Transitions fallbacks and the scroll-driven voyage (EXP) | Default. Most signature moves are already CSS. |
 | Email | **Resend** + React Email templates | Already used in one repo (Q27). |
+| Payments | **Stripe** (Checkout or Payment Element, webhooks, refunds); test mode outside production | ADR-020. Card data stays with Stripe (PCI SAQ-A). |
 | Tests | **Vitest** (unit), **pgTAP/SQL tests** (RLS and RPCs), **Playwright** + **@axe-core/playwright** (e2e, accessibility, screenshots) | Default, plus database tests. |
 | Quality | ESLint (with `jsx-a11y`, no-hardcoded-token rule) + Prettier + `tsc --noEmit`; Lighthouse CI; size-limit | Default. |
 | Package manager | **pnpm** | Default. |
@@ -124,11 +127,10 @@ erDiagram
     text slug UK
     text source_ref UK
     text category "star band"
-    text visibility "private | info_only | published"
+    text visibility "private | showcase | published"
     bool bookable "derived"
     int cabin_count
-    bigint gratuity_pp_night_minor "≥ US$5, ADR-010"
-    char gratuity_currency
+    bigint gratuity_usd_pp_night_cents "≥ 500, paid on board, ADR-017"
     bool sample_data
   }
   VESSEL ||--o{ VESSEL_I18N : translates
@@ -150,7 +152,7 @@ erDiagram
   CABIN_TYPE { text name
     int size_m2
     text bed
-    int max_occupancy
+    int max_occupancy "1-3, ADR-018"
     text view
     bool balcony
     int physical_count
@@ -191,6 +193,10 @@ erDiagram
     bool paused }
   VESSEL ||--o{ CANCELLATION_POLICY : uses
   CANCELLATION_POLICY ||--o{ CANCELLATION_BAND : bands
+  CHILD_POLICY { uuid operator_id "null = platform default"
+    jsonb bands "0-2.99 free, 3-5.99 25%, 6-11.99 50%"
+    timestamptz effective_from }
+  ORGANISATION ||--o| CHILD_POLICY : override
   PREMIUM_PERIOD { daterange period
     text label }
 
@@ -232,6 +238,8 @@ erDiagram
     bigint agency_sell_minor }
   BOOKING ||--o{ PAYMENT : settled_by
   PAYMENT { text kind "request | reported | receipt | refund"
+    text stripe_payment_intent
+    text stripe_refund
     text status }
   BOOKING ||--o{ CANCELLATION : may_have
   BOOKING ||--o{ COMMISSION_ENTRY : earns
@@ -257,8 +265,8 @@ erDiagram
 - `BOOKING.terms_snapshot` freezes the deadline and cancellation bands agreed at booking (DASH-PAY-010).
 - `INVENTORY` is shared by every rate and currency for the same cabin type and departure (DASH-ADM-056).
 - Pricing is one tested function, `price_booking(rate, passengers, gratuity)`, with three parts:
-  - child bands per ADR-012;
-  - the gratuity as a separate line per ADR-010;
+  - child bands per ADR-012/018: age on the departure date, a share of the adult per-person rate, operator override chosen by admin;
+  - the gratuity as a separate, display-only line paid on board in US$ (never charged), per ADR-017;
   - no extras inside the cruise total, per ADR-011.
 - There is no felucca vessel type (ADR-008).
 - `OFFER_VERSION` makes a deck change produce a new version that the customer must accept (DASH-OPR-023).
@@ -323,7 +331,7 @@ Vessel pages are server-rendered from Supabase, plus Sanity for any editorial "s
 
 ## 6. Routing
 
-- **Tree:** the 106 silo rows (`PAGE-*`) minus the 4 felucca rows deferred by ADR-008, so 102 live routes.
+- **Tree:** the 106 silo rows (`PAGE-*`) minus the 3 felucca rows deferred by ADR-008/015, so 103 live routes. The felucca tour page stays as a reference.
   - Static rows map to routes under `app/[locale]/(public)/…`.
   - Templates:
     - `/cruises/[vessel]/` (Supabase);

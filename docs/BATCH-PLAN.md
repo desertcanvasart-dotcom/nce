@@ -36,7 +36,7 @@
 | 9 | Signature interactions | Approved `EXP-*` items | 5–8 | Each meets its spec, budget and fallbacks | M |
 | 10 | SEO & languages | ES/JA translated routing and content plumbing, hreflang, sitemaps, schema validation, crawl checks, redirects from live site | 5–8 | Crawl: no orphans, depth ≤3, valid schema; redirects tested | M |
 | 11 | Hardening & launch | Accessibility, performance and security audits, backups rehearsal, content check vs CONTENT-NEEDED, launch checklist | 1–10 | All launch rows Verified; Faris signs off | M |
-| 12 | Phase 2 pages (post-launch) | 46 Phase 2 silo rows (47 less the deferred felucca tour) + compare tool + reviews page | 11 | Rows Verified | L |
+| 12 | Phase 2 pages (post-launch) | 47 Phase 2 silo rows (felucca tour kept as a reference page, ADR-015) + compare tool + reviews page | 11 | Rows Verified | L |
 | 13 | Phase 3 pages (post-launch) | 11 Phase 3 silo rows (13 less 2 deferred felucca pages) | 12 | Rows Verified | M |
 
 ## Coverage proof
@@ -57,25 +57,25 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 2 | 55 | 0 |
 | 3 | 15 | 0 |
 | 4a | 10 | 0 |
-| 4b | 45 | 0 |
-| 4c | 42 | 0 |
+| 4b | 46 | 0 |
+| 4c | 44 | 0 |
 | 4d | 15 | 0 |
 | 4e | 26 | 0 |
-| 4f | 35 | 0 |
+| 4f | 40 | 0 |
 | 4g | 5 | 0 |
 | 4h | 17 | 0 |
-| 5 | 28 | 0 |
+| 5 | 29 | 0 |
 | 6 | 37 | 1 |
 | 7 | 16 | 0 |
 | 8 | 11 | 0 |
 | 9 | 11 | 0 |
 | 10 | 13 | 0 |
-| 11 | 7 | 0 |
-| 12 | 49 | 1 |
+| 11 | 8 | 0 |
+| 12 | 49 | 0 |
 | 13 | 13 | 2 |
-| **Sum** | **497** | **4** |
-| **Ledger total** | **497** | |
-| **Distinct IDs** | **497** | |
+| **Sum** | **507** | **3** |
+| **Ledger total** | **507** | |
+| **Distinct IDs** | **507** | |
 
 | Batch | Breakdown |
 |---|---|
@@ -84,20 +84,20 @@ The sum of the batch counts equals the ledger total. `PROPOSED-*` rows are exclu
 | 2 | A11Y 8, BRAND 18, COMP 22, DATA 1, ENG 2, I18N 3, PERF 1 |
 | 3 | BRAND 3, DATA 6, I18N 1, SEC 4, SEO 1 |
 | 4a | DASH-CUS 1, DASH-ROLE 6, DATA 1, SEC 2 |
-| 4b | DASH-ADM 40, DASH-BND 2, DASH-OPR 2, DATA 1 |
-| 4c | DASH-ADM 25, DASH-OPR 12, DATA 2, SEC 3 |
+| 4b | DASH-ADM 40, DASH-BND 2, DASH-OPR 2, DATA 2 |
+| 4c | DASH-ADM 25, DASH-OPR 12, DATA 4, SEC 3 |
 | 4d | DASH-ADM 15 |
 | 4e | DASH-ADM 8, DASH-BND 1, DASH-CUS 6, DASH-OPR 10, DATA 1 |
-| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14 |
+| 4f | DASH-ADM 14, DASH-BND 1, DASH-CUS 3, DASH-OPR 3, DASH-PAY 14, DATA 5 |
 | 4g | DASH-CUS 5 |
 | 4h | DASH-ADM 4, DASH-B2B 13 |
-| 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 6, DATA 3, PAGE 7, PERF 1, SEO 4 |
+| 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 6, DATA 4, PAGE 7, PERF 1, SEO 4 |
 | 6 | DATA 2, PAGE 25, SEO 10 |
 | 7 | DASH-ADM 1, DASH-PUB 1, PAGE 13, SEO 1 |
 | 8 | DASH-BND 1, DASH-PUB 5, DATA 3, PAGE 1, SEC 1 |
 | 9 | EXP 10, PERF 1 |
 | 10 | DASH-BND 1, I18N 5, SEO 7 |
-| 11 | A11Y 1, BRAND 1, ENG 1, PERF 3, SEC 1 |
+| 11 | A11Y 1, BRAND 1, DATA 1, ENG 1, PERF 3, SEC 1 |
 | 12 | PAGE 47, SEO 2 |
 | 13 | PAGE 13 |
 

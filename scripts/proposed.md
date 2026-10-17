@@ -7,7 +7,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-001 | Password reset, email verification and change-email flows | 4a | Awaiting decision |
 | PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model | 4a | Awaiting decision |
 | PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management | 4a | Awaiting decision |
-| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Awaiting decision |
+| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030 |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
 | PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |

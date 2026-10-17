@@ -23,6 +23,8 @@ So the code the guide describes is most likely a **newer, unpushed version of `n
 - Is the live database real (real operators, bookings or money records)? That decides whether Batch 3 migrates data or starts clean.
 - Which repository is ours: the empty `nce` (my assumption, because you named it) or one of the existing ones?
 
+
+> **Answered 17 Oct 2026:** there is no newer code; the two GitHub repos are everything, and I judge what to reuse. Decision in ADR-023 and ARCHITECTURE §1.3; we build in `nce`. **Still open:** whether the live database holds real records (Q52).
 ### Q2 ★ [C] How does a booking actually get paid?
 Three sources say three different things:
 
@@ -39,6 +41,8 @@ The 14-day free cancellation and the 24-hour promise are invented facts in the d
 - Replace BookingSummary's footer with text generated from the cruise's actual deadline and cancellation policy.
 - Keep a card gateway as PROPOSED-004 for later.
 
+
+> **Answered 17 Oct 2026:** card payments through Stripe (ADR-020). Follow-ups are in Q51.
 ### Q3 ★ [C] Are exact cabin prices public?
 The guide says exact departure rates and extra cabin details **need an account** (DASH-PUB-008). The silo's vessel page uses CabinPicker (per-cabin prices) and BookingSummary, and emits an `Offer` schema, which needs a price for rich results. The brand and design system show prices everywhere.
 
@@ -50,6 +54,8 @@ This keeps SEO and the "explain the price" promise without breaking the guide's 
 
 Also, which **rate plan** sets the public price? I recommend the international plan only. Egyptian-citizen, resident and trade rates are shown only to verified eligible accounts.
 
+
+> **Status 17 Oct 2026:** not yet answered. This is now the main question blocking Batch 5.
 ### Q4 ★ [C] Is a vessel page about one vessel, or one sailing?
 - The silo makes `/cruises/{vessel-slug}/` one URL per vessel, with H1 "{Vessel name} — {route}, {nights} nights".
 - The guide lets a vessel have **several schedules** (routes and directions).
@@ -60,6 +66,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
 - The H1 uses the vessel's main itinerary: "{Vessel name}: {type}, {main route}". For a vessel with one schedule it stays exactly as the silo says.
 - Listing cards are per vessel × itinerary and all link to the same vessel page with the itinerary pre-selected.
 
+
+> **Answered 17 Oct 2026:** one page per vessel with its itineraries (ADR-021).
 ### Q5 ★ [C] Brand name, domain and slugs
 **Name and domain.** The design system and silo say **nilecrz**. The guide and the live site say **Nilecruz** (domain nilecruz.com). Which name goes in the wordmark, titles and schema `Organization.name`?
 - My recommendation: Nilecruz on nilecruz.com, with "nilecrz" kept only as the internal design-system name. The domain and existing equity are Nilecruz.
@@ -72,6 +80,8 @@ Also, which **rate plan** sets the public price? I recommend the international p
 - I will 301 them to silo equivalents (for example `/how-we-score` → `/how-we-choose-vessels/`).
 - `/terms`, `/privacy` and `/independence` have no silo row. Should they stay as legal/footer pages (PROPOSED-007)?
 
+
+> **Answered 17 Oct 2026:** the brand is **Nilecruz**; Japanese URLs use English-letter slugs (ADR-022). **Still open:** redirects and the three legal/footer pages (Q52).
 ---
 
 ## Contradictions
@@ -144,13 +154,15 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - The bundle applies 0.08em to eyebrows, section titles and badges under `:lang(ja)`.
 - **Recommendation:** follow CLAUDE.md (priority 1): letter-spacing 0 under `:lang(ja)`, and log the design-system difference.
 
-> **Answered 17 Oct 2026:** keep the design-system tracking. See ADR-014; confirm in Q50.
+> **Answered 17 Oct 2026:** Faris meant motion tokens, not letter-spacing. Japanese is **not** letter-spaced (ADR-016).
 
 **Q14 [C] Motion tokens live outside tokens.json (Batch 1).**
 - The problem: CLAUDE.md requires tokens generated from tokens.json, but `--ease-river` and `--dur-1/2/3` exist only in bundle.css and the brand book.
 - **Recommendation:**
   - The generator also emits a `motion` group defined in a small `tokens/motion.json` beside the original, with the same values.
   - Ideally, add it to the design system's `tokens.json` at its next version.
+
+> **Answered 17 Oct 2026:** yes, add them to the design-system tokens (ADR-016).
 
 **Q15 [C] Fonts "with no files" (Batch 1).**
 - The problem: the brand book says to use hosted Google fonts and no files, while our performance budget favours self-hosting through `next/font` (same faces, downloaded at build).
@@ -289,11 +301,15 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 
 **Q46 [A] The felucca tour page (Batch 7/12).** I read "completely" as also removing `/tours-extras/felucca-sail-aswan/` (PAGE-097), so it is now deferred. A felucca sail is a popular extra; say if you want that one tour page kept.
 
+> **Answered 17 Oct 2026:** keep the felucca tour page only, as a reference that the type exists, without recommending or evaluating it (ADR-015).
+
 **Q47 [A] Gratuities (Batch 4c/4f).** These affect money:
 - Is the gratuity collected by Nilecruz with the booking, or paid on board? Either way it stays a separate line.
 - Does it apply to children? I recommend not to free infants under 3, and full for everyone 3 and over unless you say otherwise.
 - If a vessel's rates are in EUR, is the minimum EUR 5, or the EUR equivalent of US$5?
 - Is any commission taken on the gratuity? I recommend none.
+
+> **Answered 17 Oct 2026:** paid directly to the front office at check-out; children pay from age 3; always US$5 minimum, even when the rate is in another currency; no commission (ADR-017).
 
 **Q48 [A] Child pricing details (Batch 4c).**
 - **When is the age measured?** I recommend age on the departure date.
@@ -301,11 +317,37 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Does the rule apply to every operator, or is it a default operators can change?** I recommend it as the platform default, changeable by admin only.
 - **How many children can share a cabin, and must they share with adults?** I recommend that children share with at least one adult, within the cabin's maximum occupancy, and that a free infant does not count towards occupancy.
 
+> **Answered 17 Oct 2026:** age on the departure date; percentage of the adult rate; admins can override the bands per operator; maximum 3 per cabin (most vessels 2); children share a parent's cabin (ADR-018). My call: infants don't count towards occupancy.
+
 **Q49 [A] Information-only listings (Batch 4b/5).** The guide lets a vessel be public before prices and availability exist. Your rule says vessels stay private until their information is complete.
 - I recommend "complete" means the full **profile** (name, type, route, description, photos, cabins, decks, amenities, gratuity, policy). Rates can follow, so information-only listings still work.
 - Or should nothing be public until it is bookable?
 
+> **Answered 17 Oct 2026:** "complete" means complete, including rates. Temporary showcase exceptions are allowed so the front end has data until everything is in place (ADR-019).
+
 **Q50 [C] Japanese tracking (Batch 2).** I read "add tracking to the design system" as: keep the design system's 0.08em letter-spacing on Japanese eyebrows, section titles and badges, which overrides CLAUDE.md's "never letter-space Japanese". If you meant the motion tokens (Q14) instead, tell me and I'll revert ADR-014.
+
+> **Answered 17 Oct 2026:** it meant motion tokens. ADR-014 is reverted by ADR-016.
+
+## Follow-ups from Faris's second answers (17 Oct 2026)
+
+**Q51 ★ [A] Stripe: what is charged, when, and to whom (Batch 4f).** These decide the payment design:
+1. **At booking: full amount, or a deposit with the balance by the deadline?**
+   - The guide's deadlines (3/7/14 days) suggest this: reserve, then pay in full by card before the deadline.
+   - My recommendation: take full payment by card at booking whenever the departure is inside its deadline window anyway. Otherwise, take full payment within the deadline through a payment link, with reminders.
+2. **Is bank transfer or cash still allowed** (for example for travel partners)? If not, the manual "reported payment / verification" flow is limited to admin-recorded exceptions.
+3. **Who receives the money?**
+   - (a) Nilecruz is merchant of record and pays operators. This needs settlement records (PROPOSED-013).
+   - (b) Stripe Connect sends each payment to the operator's account, minus commission.
+   - My recommendation: (b) Connect, because commission is then automatic and Nilecruz never holds operator money. It needs each operator to onboard to Stripe.
+4. **Commission rate** (Q18): still 5% by default, per operator?
+
+**Q52 ★ [A] The live site (Batch 3/10).**
+- Does the live nilecruz.com database hold real customers, bookings or payments that must be carried over?
+- May I 301-redirect its URLs to the new silo? (`/how-we-score` → `/how-we-choose-vessels/`, `/explore` → `/cruises/`, `/request` → `/plan-my-cruise/`, `/tours` → `/tours-extras/`, `/compare` → `/cruises/compare/`, `/match` → `/plan-my-cruise/`.)
+- Keep `/terms`, `/privacy` and `/independence` as footer pages?
+
+**Q53 [A] Felucca tour page (Batch 7/12).** When a supplier and sessions exist, can the felucca sail be booked like any other extra? Or does it stay information-only? I assume information-only.
 
 ## Smaller notes (no answer needed unless you disagree)
 

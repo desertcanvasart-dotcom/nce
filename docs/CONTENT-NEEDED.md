@@ -4,12 +4,12 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 
 | # | What | Needed by batch | Notes |
 |---|---|---|---|
-| 1 | Brand name and logo file (Nilecruz vs nilecrz) | 1 | Q5. Wordmark until a logo exists |
+| 1 | Logo file (name confirmed: Nilecruz, ADR-022) | 1 | Wordmark until a logo exists |
 | 2 | The 28 evaluation criteria and the 7 weights, confirmed | 4b | Q12. `nilecrz` has a draft |
 | 3 | Real vessel list to publish, with operator confirmation | 3 / 5 | Q26. Repo data stays private until confirmed |
 | 4 | Cancellation policy wording and bands per operator/cruise | 4f | From operators |
 | 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Legal/finance |
-| 6 | Commission rate(s) | 4f | Q18 |
+| 6 | Commission rate(s) and Stripe account model (Connect or merchant of record) | 4f | Q18, Q51 |
 | 7 | Eligibility rules and wording for Egyptian-citizen and resident rates | 4c | Q20 |
 | 8 | ~~Child/infant policy~~ Supplied 17 Oct 2026 (ADR-012); details in Q48 | 4c | Q37 |
 | 9 | Terms, privacy, cookie, booking conditions text | 8 | Q35, PROPOSED-007 |
@@ -22,5 +22,9 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 16 | About, How we choose vessels and Contact details (address, phone, licence numbers) | 7 | Trust pages |
 | 17 | ES and JA translations, or a translator | 10 | I18N-005 |
 | 18 | Email sender domain and DNS access | 8 | Q27 |
-| 19 | Gratuity amount per vessel (minimum US$5 pp/night) and who collects it | 4c | ADR-010, Q47 |
+| 19 | Gratuity amount per vessel (US$, minimum US$5 pp/night, paid on board) | 4c | ADR-017 |
 | 20 | Check-in and check-out times per vessel/itinerary | 4c | ADR-011 |
+| 21 | Child-pricing overrides for the operators that differ from the default | 4c | ADR-018 |
+| 22 | Max occupancy per cabin type (which vessels offer triples) | 4c | ADR-018 |
+| 23 | Stripe account access (test keys first) | 4f | ADR-020 |
+| 24 | Which vessels get a temporary showcase exception for the first front-end previews | 3 / 5 | ADR-019 |

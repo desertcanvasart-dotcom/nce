@@ -275,7 +275,7 @@ TOK = [
  ("TOK-RADIUS", "tokens.json radius", "radius-0, -sm, -lg and -pill exist, and lint flags any other border-radius."),
  ("TOK-SHADOW", "tokens.json shadow", "shadow-float and shadow-lift exist with themed values, and lint flags any other box-shadow."),
  ("TOK-LAYOUT", "tokens.json layout", "container, measure and nav-height exist as custom properties."),
- ("TOK-MOTION", "BRAND-BOOK §Motion; bundle.css :root", "--ease-river and --dur-1/2/3 exist as tokens (they are absent from tokens.json; see Q14)."),
+ ("TOK-MOTION", "BRAND-BOOK §Motion; bundle.css :root", "--ease-river and --dur-1/2/3 are added to the design-system token source as a motion group and generated like every other token (ADR-016)."),
  ("TOK-PIPELINE", "CLAUDE.md §6 Design tokens", "A script generates the token CSS (and TS constants) from tokens.json; CI fails if the generated files are stale or edited by hand."),
  ("TOK-NO-HARDCODE", "CLAUDE.md §6", "Lint rejects hard-coded colours, sizes and fonts that have a token in component and page styles."),
 ]
@@ -299,7 +299,7 @@ BRAND = [
  ("BRAND-BOOK §Imagery", "A vessel's media can only be images of that vessel (media is attached to the vessel record).", "3"),
  ("BRAND-BOOK §Iconography", "Only the system's own icon set is used, and every amenity icon has a visible or accessible label.", "2"),
  ("BRAND-BOOK §Iconography", "Wherever a vessel type is named it is paired with its icon (and VesselArt where space allows).", "2"),
- ("BRAND-BOOK §Logo", "The wordmark (Cormorant Garamond 500 34px + strapline in Jost 9px tracked 0.42em) is used until a logo file exists.", "2"),
+ ("BRAND-BOOK §Logo; ADR-022", "The wordmark reads 'Nilecruz' (Cormorant Garamond 500 34px + strapline in Jost 9px tracked 0.42em) until a logo file exists.", "2"),
  ("BRAND-BOOK §Color", "dusk-* is never used for UI text and brass-500 never for small text.", "2"),
  ("BRAND-BOOK §Color", "Success and danger colours always come with a word or an icon.", "2"),
  ("BRAND-BOOK §Color", "Text on photography uses on-media over scrim.", "2"),
@@ -309,7 +309,7 @@ BRAND = [
  ("BRAND-BOOK §Type", "Prices use lining figures; totals and steppers use tabular figures.", "2"),
  ("NavBar/README", "Main navigation has at most seven links and 'Why prices differ' is always visible.", "1"),
  ("Rating/README; CruiseCard/README", "Ratings render only when backed by real reviews, and cards always show the maximum guest count.", "5"),
- ("Faris 17 Oct 2026 (ADR-008)", "The felucca does not appear anywhere on the site: no pages, links, VesselArt/Scene felucca variant, search option or copy.", "2"),
+ ("Faris 17 Oct 2026 (ADR-008)", "The felucca appears only on /tours-extras/felucca-sail-aswan/ as a reference that the boat type exists: no vessel-type page, no evaluation, no recommendation, no promotion, no VesselArt/Scene felucca variant, no search option.", "2"),
  ("Faris 17 Oct 2026 (ADR-009); Q6", "CruiseCard shows the published Nilecruz evaluation as 'NN/100 · Nilecruz evaluation'; stars appear only for verified guest reviews; external ratings appear only on the vessel page with source and date.", "5"),
 ]
 for n, (s, r, b) in enumerate(BRAND, 1): add(f"BRAND-{n:03d}", s, r, b)
@@ -410,13 +410,13 @@ X = {
 ],
 "I18N": [
  ("silo.md §Languages", "English is served unprefixed; Spanish under /es/ and Japanese under /ja/.", "1"),
- ("silo.md §Languages", "Spanish and Japanese pages use translated slugs mapped to the English route.", "10"),
+ ("silo.md §Languages; ADR-022", "Spanish pages use translated slugs; Japanese pages use the English (Latin-letter) slugs.", "10"),
  ("Linking rules: Languages", "Internal links stay within the current language.", "10"),
  ("Linking rules: Languages", "The language switch goes to the equivalent page via hreflang alternates.", "10"),
  ("silo.md §Languages", "Translation is plumbed in the order pillars/hubs, money pages, supporting articles.", "10"),
  ("CLAUDE.md §6", "UI strings live in next-intl message files, none hard-coded in components.", "1"),
  ("BRAND-BOOK §Multilingual", "No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish.", "2"),
- ("Faris 17 Oct 2026 (ADR-014); bundle.css :lang(ja)", "Japanese keeps the design system tracking: 0.08em on eyebrows, section titles and badges under :lang(ja); no other Japanese letter-spacing.", "2"),
+ ("CLAUDE.md §6; ADR-016", "Japanese text is never letter-spaced: letter-spacing 0 under :lang(ja), overriding the bundle's 0.08em.", "2"),
  ("BRAND-BOOK §Multilingual", "Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks.", "1"),
  ("CLAUDE.md §6", "Numbers, dates and money format per locale while keeping brand formats in English.", "2"),
  ("CLAUDE.md §6", "Translatable content (CMS and database) is stored per locale with a fallback rule.", "3"),
@@ -437,13 +437,23 @@ X = {
  ("DS CruiseSearch", "CruiseSearch routes, sailing days and match counts come from real schedules and departures.", "5"),
  ("CLAUDE.md §5", "Deterministic test fixtures seed every role and state for e2e tests.", "3"),
  ("ARCH §Migration", "Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1).", "3"),
- ("Faris 17 Oct 2026 (ADR-010)", "Each vessel has an obligatory crew gratuity of at least US$5 per person per night, set per vessel; lower values are rejected.", "4c"),
- ("Faris 17 Oct 2026 (ADR-010)", "Gratuities are always shown as their own obligatory line, never inside the cruise fare, wherever a cruise total appears (offers, BookingSummary, bookings).", "8"),
+ ("Faris 17 Oct 2026 (ADR-010)", "Each vessel has an obligatory crew gratuity in US$ (never the rate currency) of at least US$5 per person per night for guests aged 3 and over; lower values are rejected.", "4c"),
+ ("Faris 17 Oct 2026 (ADR-010)", "Gratuities are shown as a separate obligatory line 'paid on board at check-out'; they are never charged online, never part of the amount due, and carry no commission.", "8"),
  ("Faris 17 Oct 2026 (ADR-011)", "The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders.", "8"),
  ("Faris 17 Oct 2026 (ADR-011)", "A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/.", "5"),
- ("Faris 17 Oct 2026 (ADR-012)", "Child pricing by age: under 3 free, 3–5.99 pays 25%, 6–11.99 pays 50%, 12 and over pays the full rate (unit-tested at every boundary).", "4c"),
+ ("Faris 17 Oct 2026 (ADR-012)", "Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary).", "4c"),
  ("Faris 17 Oct 2026 (ADR-012)", "Search, requests, offers and bookings record each child's age so the child rule can be applied.", "4e"),
- ("Faris 17 Oct 2026 (ADR-013); Q26", "Every imported or newly created vessel stays a private draft and cannot be published until its readiness check reports complete.", "4b"),
+ ("Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49", "Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete.", "4b"),
+ ("Faris 17 Oct 2026 (ADR-018)", "Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only.", "4c"),
+ ("Faris 17 Oct 2026 (ADR-018)", "Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy.", "4c"),
+ ("Faris 17 Oct 2026 (ADR-019)", "Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable.", "4b"),
+ ("Faris 17 Oct 2026 (ADR-019)", "At launch no showcase exception remains (launch checklist check).", "11"),
+ ("Faris 17 Oct 2026 (ADR-020); Q2", "Cruise bookings are paid by card through Stripe, within the booking's payment deadline.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-020)", "Tour orders are paid by card through Stripe as separate payments from the cruise.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-020)", "Payment status changes only from verified, idempotent Stripe webhooks, never from the browser redirect.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-020)", "Refunds are issued through Stripe only after admin approval, for the amount the cancellation calculation produces.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-020)", "Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only.", "4f"),
+ ("Faris 17 Oct 2026 (ADR-021); Q4", "One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL.", "5"),
 ],
 }
 for p, items in X.items():
@@ -460,11 +470,17 @@ DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-045": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
- "PAGE-097": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008); confirm in Q46",
 }
 # ---------------------------------------------------------------- outputs
 ids = [r[0] for r in R]
 assert len(ids) == len(set(ids)), "duplicate id"
+# IDs are permanent: every ID ever issued must still exist with the same meaning slot.
+import os
+snap = os.path.join(os.path.dirname(__file__), "ledger-ids.txt")
+issued = [l.strip() for l in open(snap) if l.strip()] if os.path.exists(snap) else []
+missing = [i for i in issued if i not in ids]
+assert not missing, f"IDs disappeared: {missing}"
+with open(snap, "w") as fh: fh.write("\n".join(sorted(set(ids) | set(issued))) + "\n")
 BATCHES = ["0","1","2","3","4a","4b","4c","4d","4e","4f","4g","4h","5","6","7","8","9","10","11","12","13"]
 for r in R: assert r[3] in BATCHES, r
 

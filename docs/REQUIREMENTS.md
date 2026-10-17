@@ -28,9 +28,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC | 13 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 21 |
+| DATA | 31 |
 | EXP | 10 |
-| **Total** | **497** |
+| **Total** | **507** |
 
 ## Dashboard guide (ROLE)
 
@@ -376,7 +376,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PAGE-094 | silo.xlsx Silo map P094 | `/tours-extras/abu-simbel-day-trip/` (Tour / extra, P1): H1 "Abu Simbel day trip from Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "abu simbel day trip". | 7 | Planned | |
 | PAGE-095 | silo.xlsx Silo map P095 | `/tours-extras/luxor-hot-air-balloon/` (Tour / extra, P1): H1 "Hot-air balloon over Luxor"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor hot air balloon". | 7 | Planned | |
 | PAGE-096 | silo.xlsx Silo map P096 | `/tours-extras/valley-of-the-kings-tour/` (Tour / extra, P2): H1 "Valley of the Kings with an Egyptologist"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "valley of the kings tour". | 12 | Planned | |
-| PAGE-097 | silo.xlsx Silo map P097 | `/tours-extras/felucca-sail-aswan/` (Tour / extra, P2): H1 "Sunset felucca sail in Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "felucca ride aswan". | 12 | Deferred: Felucca removed from the site (Faris 17 Oct 2026, ADR-008); confirm in Q46 | |
+| PAGE-097 | silo.xlsx Silo map P097 | `/tours-extras/felucca-sail-aswan/` (Tour / extra, P2): H1 "Sunset felucca sail in Aswan"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "felucca ride aswan". | 12 | Planned | |
 | PAGE-098 | silo.xlsx Silo map P098 | `/tours-extras/cairo-and-giza-add-on/` (Tour / extra, P2): H1 "Cairo and the Pyramids before or after your cruise"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "cairo add on nile cruise". | 12 | Planned | |
 | PAGE-099 | silo.xlsx Silo map P099 | `/tours-extras/transfers/` (Tour / extra, P1): H1 "Airport and hotel transfers"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor airport transfer". | 7 | Planned | |
 | PAGE-100 | silo.xlsx Silo map P100 | `/tours-extras/pre-and-post-cruise-hotels/` (Tour / extra, P3): H1 "Hotels before and after your cruise"; components ExperienceCard · BookingSummary · Gallery; schema TouristTrip · Offer · BreadcrumbList; links per row (same-silo + bridges); primary keyword "luxor hotels before cruise". | 13 | Planned | |
@@ -427,7 +427,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | TOK-RADIUS | tokens.json radius | radius-0, -sm, -lg and -pill exist, and lint flags any other border-radius. | 1 | Planned | |
 | TOK-SHADOW | tokens.json shadow | shadow-float and shadow-lift exist with themed values, and lint flags any other box-shadow. | 1 | Planned | |
 | TOK-LAYOUT | tokens.json layout | container, measure and nav-height exist as custom properties. | 1 | Planned | |
-| TOK-MOTION | BRAND-BOOK §Motion; bundle.css :root | --ease-river and --dur-1/2/3 exist as tokens (they are absent from tokens.json; see Q14). | 1 | Planned | |
+| TOK-MOTION | BRAND-BOOK §Motion; bundle.css :root | --ease-river and --dur-1/2/3 are added to the design-system token source as a motion group and generated like every other token (ADR-016). | 1 | Planned | |
 | TOK-PIPELINE | CLAUDE.md §6 Design tokens | A script generates the token CSS (and TS constants) from tokens.json; CI fails if the generated files are stale or edited by hand. | 1 | Planned | |
 | TOK-NO-HARDCODE | CLAUDE.md §6 | Lint rejects hard-coded colours, sizes and fonts that have a token in component and page styles. | 1 | Planned | |
 
@@ -451,7 +451,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-014 | BRAND-BOOK §Imagery | A vessel's media can only be images of that vessel (media is attached to the vessel record). | 3 | Planned | |
 | BRAND-015 | BRAND-BOOK §Iconography | Only the system's own icon set is used, and every amenity icon has a visible or accessible label. | 2 | Planned | |
 | BRAND-016 | BRAND-BOOK §Iconography | Wherever a vessel type is named it is paired with its icon (and VesselArt where space allows). | 2 | Planned | |
-| BRAND-017 | BRAND-BOOK §Logo | The wordmark (Cormorant Garamond 500 34px + strapline in Jost 9px tracked 0.42em) is used until a logo file exists. | 2 | Planned | |
+| BRAND-017 | BRAND-BOOK §Logo; ADR-022 | The wordmark reads 'Nilecruz' (Cormorant Garamond 500 34px + strapline in Jost 9px tracked 0.42em) until a logo file exists. | 2 | Planned | |
 | BRAND-018 | BRAND-BOOK §Color | dusk-* is never used for UI text and brass-500 never for small text. | 2 | Planned | |
 | BRAND-019 | BRAND-BOOK §Color | Success and danger colours always come with a word or an icon. | 2 | Planned | |
 | BRAND-020 | BRAND-BOOK §Color | Text on photography uses on-media over scrim. | 2 | Planned | |
@@ -461,7 +461,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | BRAND-024 | BRAND-BOOK §Type | Prices use lining figures; totals and steppers use tabular figures. | 2 | Planned | |
 | BRAND-025 | NavBar/README | Main navigation has at most seven links and 'Why prices differ' is always visible. | 1 | Planned | |
 | BRAND-026 | Rating/README; CruiseCard/README | Ratings render only when backed by real reviews, and cards always show the maximum guest count. | 5 | Planned | |
-| BRAND-027 | Faris 17 Oct 2026 (ADR-008) | The felucca does not appear anywhere on the site: no pages, links, VesselArt/Scene felucca variant, search option or copy. | 2 | Planned | |
+| BRAND-027 | Faris 17 Oct 2026 (ADR-008) | The felucca appears only on /tours-extras/felucca-sail-aswan/ as a reference that the boat type exists: no vessel-type page, no evaluation, no recommendation, no promotion, no VesselArt/Scene felucca variant, no search option. | 2 | Planned | |
 | BRAND-028 | Faris 17 Oct 2026 (ADR-009); Q6 | CruiseCard shows the published Nilecruz evaluation as 'NN/100 · Nilecruz evaluation'; stars appear only for verified guest reviews; external ratings appear only on the vessel page with source and date. | 5 | Planned | |
 
 ## ENG
@@ -576,13 +576,13 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
 | I18N-001 | silo.md §Languages | English is served unprefixed; Spanish under /es/ and Japanese under /ja/. | 1 | Planned | |
-| I18N-002 | silo.md §Languages | Spanish and Japanese pages use translated slugs mapped to the English route. | 10 | Planned | |
+| I18N-002 | silo.md §Languages; ADR-022 | Spanish pages use translated slugs; Japanese pages use the English (Latin-letter) slugs. | 10 | Planned | |
 | I18N-003 | Linking rules: Languages | Internal links stay within the current language. | 10 | Planned | |
 | I18N-004 | Linking rules: Languages | The language switch goes to the equivalent page via hreflang alternates. | 10 | Planned | |
 | I18N-005 | silo.md §Languages | Translation is plumbed in the order pillars/hubs, money pages, supporting articles. | 10 | Planned | |
 | I18N-006 | CLAUDE.md §6 | UI strings live in next-intl message files, none hard-coded in components. | 1 | Planned | |
 | I18N-007 | BRAND-BOOK §Multilingual | No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish. | 2 | Planned | |
-| I18N-008 | Faris 17 Oct 2026 (ADR-014); bundle.css :lang(ja) | Japanese keeps the design system tracking: 0.08em on eyebrows, section titles and badges under :lang(ja); no other Japanese letter-spacing. | 2 | Planned | |
+| I18N-008 | CLAUDE.md §6; ADR-016 | Japanese text is never letter-spaced: letter-spacing 0 under :lang(ja), overriding the bundle's 0.08em. | 2 | Planned | |
 | I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Planned | |
 | I18N-010 | CLAUDE.md §6 | Numbers, dates and money format per locale while keeping brand formats in English. | 2 | Planned | |
 | I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Planned | |
@@ -606,13 +606,23 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-012 | DS CruiseSearch | CruiseSearch routes, sailing days and match counts come from real schedules and departures. | 5 | Planned | |
 | DATA-013 | CLAUDE.md §5 | Deterministic test fixtures seed every role and state for e2e tests. | 3 | Planned | |
 | DATA-014 | ARCH §Migration | Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1). | 3 | Planned | |
-| DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity of at least US$5 per person per night, set per vessel; lower values are rejected. | 4c | Planned | |
-| DATA-016 | Faris 17 Oct 2026 (ADR-010) | Gratuities are always shown as their own obligatory line, never inside the cruise fare, wherever a cruise total appears (offers, BookingSummary, bookings). | 8 | Planned | |
+| DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity in US$ (never the rate currency) of at least US$5 per person per night for guests aged 3 and over; lower values are rejected. | 4c | Planned | |
+| DATA-016 | Faris 17 Oct 2026 (ADR-010) | Gratuities are shown as a separate obligatory line 'paid on board at check-out'; they are never charged online, never part of the amount due, and carry no commission. | 8 | Planned | |
 | DATA-017 | Faris 17 Oct 2026 (ADR-011) | The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders. | 8 | Planned | |
 | DATA-018 | Faris 17 Oct 2026 (ADR-011) | A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/. | 5 | Planned | |
-| DATA-019 | Faris 17 Oct 2026 (ADR-012) | Child pricing by age: under 3 free, 3–5.99 pays 25%, 6–11.99 pays 50%, 12 and over pays the full rate (unit-tested at every boundary). | 4c | Planned | |
+| DATA-019 | Faris 17 Oct 2026 (ADR-012) | Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary). | 4c | Planned | |
 | DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Planned | |
-| DATA-021 | Faris 17 Oct 2026 (ADR-013); Q26 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check reports complete. | 4b | Planned | |
+| DATA-021 | Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete. | 4b | Planned | |
+| DATA-022 | Faris 17 Oct 2026 (ADR-018) | Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only. | 4c | Planned | |
+| DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Planned | |
+| DATA-024 | Faris 17 Oct 2026 (ADR-019) | Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable. | 4b | Planned | |
+| DATA-025 | Faris 17 Oct 2026 (ADR-019) | At launch no showcase exception remains (launch checklist check). | 11 | Planned | |
+| DATA-026 | Faris 17 Oct 2026 (ADR-020); Q2 | Cruise bookings are paid by card through Stripe, within the booking's payment deadline. | 4f | Planned | |
+| DATA-027 | Faris 17 Oct 2026 (ADR-020) | Tour orders are paid by card through Stripe as separate payments from the cruise. | 4f | Planned | |
+| DATA-028 | Faris 17 Oct 2026 (ADR-020) | Payment status changes only from verified, idempotent Stripe webhooks, never from the browser redirect. | 4f | Planned | |
+| DATA-029 | Faris 17 Oct 2026 (ADR-020) | Refunds are issued through Stripe only after admin approval, for the amount the cancellation calculation produces. | 4f | Planned | |
+| DATA-030 | Faris 17 Oct 2026 (ADR-020) | Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only. | 4f | Planned | |
+| DATA-031 | Faris 17 Oct 2026 (ADR-021); Q4 | One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL. | 5 | Planned | |
 
 ## EXP
 
@@ -638,7 +648,7 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-001 | Password reset, email verification and change-email flows | 4a | Awaiting decision |
 | PROPOSED-002 | Operator team roles (owner, reservations, finance, read-only), mirroring the B2B team model | 4a | Awaiting decision |
 | PROPOSED-003 | Admin sub-roles (super admin, catalogue editor, finance, content editor) and admin user management | 4a | Awaiting decision |
-| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Awaiting decision |
+| PROPOSED-004 | Online card payment through a gateway (e.g. Stripe), in addition to manual payment reporting | 4f | Approved 17 Oct 2026 (ADR-020): Stripe, now DATA-026…030 |
 | PROPOSED-005 | Transactional notifications (email + in-app): offer received, offer updated, deadline reminders, payment verified, cancellation outcome | 8 | Awaiting decision |
 | PROPOSED-006 | Verified guest reviews collected after sailing (for `/reviews/` and AggregateRating) | 12 | Awaiting decision |
 | PROPOSED-007 | Legal pages and consent: terms, privacy, cookie consent, booking conditions (text supplied by Faris) | 8 | Awaiting decision |
