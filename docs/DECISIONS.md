@@ -486,3 +486,15 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-059 Migrations reach staging from CI only (Accepted)
 - **Decision:** on merge to `main`, `deploy-data.yml` runs `supabase db push` against staging (secrets `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD`). Production migrations are applied by hand at launch (Batch 11). No schema change is made in the SQL editor.
 
+### ADR-060 Steamers and the unverified-names record (Accepted; Faris 17 Oct 2026)
+- **Decision:** the Sudan is the only paddle steamer. The source lists her three times (`historic-steamer-sudan-ss-sudan`, `sudan`, `sudan-steamer-nile-cruise`); all three are `steam` and are left for an admin to merge. Karim, Mövenpick SS Misr and S.S. Sphinx stay motor cruise ships. The bundled "Unverified names" record becomes 14 separate name-only dahabiya drafts, flagged `unverified-name`, with no facts. This replaces the skip in ADR-058.
+- **Consequence:** staging holds 622 private drafts: 368 motor, 251 sail, 3 steam.
+
+### ADR-061 Exact table privileges, checked after every deploy (Accepted)
+- **Context:** pushing the migrations to staging showed that hosted Supabase gives `anon` and `authenticated` every privilege, TRUNCATE included, on tables as they are created; the local Docker stack does not. RLS blocked every row, and the public API has no TRUNCATE, so nothing was exposed. But TRUNCATE bypasses RLS, so the gap had to close.
+- **Decision:** migration `*_exact_grants.sql` revokes everything and grants back exactly the intended set, and makes future tables start closed. `scripts/check-grants.sql` lists any difference: it ran empty on staging, runs in `deploy-data.yml` after every push, and `060_privileges.sql` asserts the same locally and in CI.
+- **Consequence:** anonymous visitors now get "permission denied" on private tables on staging too.
+
+### ADR-059 amendment: first staging push from this Mac
+- With Faris's approval of the import (17 Oct 2026), I applied the six migrations to staging once with the Supabase CLI from this Mac, because the GitHub secrets are not set yet. From now on, staging changes only through `deploy-data.yml`.
+

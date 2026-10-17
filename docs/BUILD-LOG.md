@@ -314,11 +314,16 @@
 - Fixture IDs were not valid RFC 4122 UUIDs for zod; fixed.
 - The source data has Cyrillic look-alike letters in 6 names, a bundled list record and near-duplicate names; handled and reported (ADR-058).
 
+**Faris's answers (17 Oct 2026), then done:**
+- **Import approved:** the Sudan is the only steamer, and the 14 unverified names became separate drafts (ADR-060). New dry run: 609 source records → 622 vessels, 0 skipped.
+- **Staging migrations:** the six migrations were applied once from this Mac with the Supabase CLI (ADR-059 amendment); the seed is never pushed.
+- **Found on staging:** hosted Supabase had given anonymous and signed-in roles every table privilege, TRUNCATE included. RLS blocked every row, so nothing was exposed. Fixed by `*_exact_grants.sql`; the grant check is empty on staging and now runs after every deploy (ADR-061).
+- **Staging import:** 622 private drafts (368 motor, 251 sail, 3 steam), 622 private-facts rows, 1,244 audit entries; a second run inserts 0. Through the public API, anonymous visitors see 0 vessels and are refused on private tables.
+
 **Not done, and why:**
-- **DATA-014 (staging import):** waits for Faris's approval of `docs/imports/vessels-dry-run.md`.
-- **Hosted Studio and schema deploy:** need a Sanity token with the Developer role (`SANITY_DEPLOY_TOKEN`); the tokens issued at project creation cannot deploy.
-- **Staging migrations:** need GitHub secrets `SUPABASE_ACCESS_TOKEN` and `SUPABASE_STAGING_DB_PASSWORD`.
+- **Hosted Studio and schema deploy:** need a Sanity token with the Developer role (`SANITY_DEPLOY_TOKEN`).
+- **GitHub secrets** `SUPABASE_ACCESS_TOKEN`, `SUPABASE_STAGING_DB_PASSWORD`, `SANITY_DEPLOY_TOKEN`: until they are set, `deploy-data.yml` fails on `main` with a "missing secret" message. Staging is already up to date, so nothing is lost meanwhile.
 
 **Staging gallery:** Faris set `ENABLE_DEV_ROUTES=true` on Railway. Checked 17 Oct 2026: `/dev/components/` and its component pages answer 200 in EN, ES and JA, render with the "Sample data" flag, and stay `noindex, nofollow` (header and meta); `/dev/error-preview/` returns its intended 500.
 
-**Next:** Faris approves the dry run and adds the three secrets; I then import into staging, record the count, and close DATA-014. Then the Batch 4a brief (sign-in).
+**Next:** Faris adds the three secrets. Then the Batch 4a brief (sign-in).
