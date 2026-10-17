@@ -136,7 +136,7 @@ export async function confirmLink(_prev: FormState, fd: FormData): Promise<FormS
   const db = await getDb();
   const { data, error } = await db.auth.verifyOtp({ token_hash, type });
   if (error) return { status: "error", message: "linkExpired" };
-  if (type === "recovery") redirect(page(locale, "/account/reset-password/new"));
+  if (type === "recovery" || type === "invite") redirect(page(locale, "/account/reset-password/new"));
   if (type === "email_change") {
     // Double confirmation: Supabase returns no user until both addresses are confirmed (checked against local Auth).
     const pending = !data.user || !!data.user.new_email;
@@ -153,7 +153,7 @@ export async function setNewPassword(_prev: FormState, fd: FormData): Promise<Fo
   const db = await getDb();
   const { data } = await db.auth.getClaims();
   const amr = (data?.claims?.amr ?? []) as { method: string; timestamp: number }[];
-  const fromLink = amr.some((a) => (a.method === "recovery" || a.method === "otp") && Date.now() / 1000 - a.timestamp < 3600);
+  const fromLink = amr.some((a) => ["recovery", "otp", "invite"].includes(a.method) && Date.now() / 1000 - a.timestamp < 3600);
   if (!fromLink) return { status: "error", message: "resetLinkNeeded" };
   const { error } = await db.auth.updateUser({ password: input.data.password });
   if (error?.code === "same_password") return { status: "error", fields: { password: "passwordReuse" } };

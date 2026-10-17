@@ -22,7 +22,7 @@ export default async function ConfirmPage({ params, searchParams }: Props) {
   const usable =
     !!token_hash &&
     /^[A-Za-z0-9_-]{10,200}$/.test(token_hash) &&
-    ["signup", "recovery", "email_change", "email"].includes(type ?? "");
+    ["signup", "recovery", "email_change", "email", "invite"].includes(type ?? "");
   return (
     <AccountFrame title={t("verify.title")} lede={usable ? t("verify.lede") : undefined}>
       {usable ? (

@@ -342,7 +342,27 @@
       "resetNew": "Choose a new password",
       "twoStep": "Two-step sign-in",
       "security": "Account security",
-      "description": "Your Nilecruz account."
+      "description": "Your Nilecruz account.",
+      "apply": "Apply as an operator"
+    },
+    "apply": {
+      "title": "Apply as an operator",
+      "lede": "Run a Nile cruise company? Apply here. Nilecruz checks every company before it can sell through the marketplace; we email you when the check is done.",
+      "company": "Company name (as travellers know it)",
+      "legal": "Legal name",
+      "country": "Country of registration",
+      "registration": "Registration number",
+      "website": "Website",
+      "submit": "Send application",
+      "note": "After approval you can invite your team and submit your vessels.",
+      "already": "You already have an application waiting. You can follow it in your dashboard.",
+      "signedOutPrompt": "Sign in or create an account first, then apply.",
+      "errors": {
+        "companyRequired": "Tell us the company name.",
+        "tooLong": "That is too long.",
+        "websiteFormat": "Use a full address starting with https://."
+      },
+      "link": "Run a cruise company? Apply as an operator"
     }
   }
 }

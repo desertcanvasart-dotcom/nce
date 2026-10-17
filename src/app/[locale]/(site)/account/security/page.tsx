@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { safeNextPath } from "@/lib/auth/next-path";
 import { localizedPath } from "@/lib/seo/metadata";
@@ -56,6 +57,12 @@ export default async function SecurityPage({ params, searchParams }: Props) {
         </h2>
         <ChangePasswordForm />
       </section>
+
+      {session.memberships.length === 0 && !admin ? (
+        <p className={styles.note}>
+          <Link href="/account/apply-operator/">{t("apply.link")}</Link>
+        </p>
+      ) : null}
 
       <section className={styles.section} aria-labelledby="sec-devices">
         <h2 id="sec-devices" className={styles.sectionTitle}>
