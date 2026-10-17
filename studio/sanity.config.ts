@@ -1,17 +1,14 @@
 import { documentInternationalization } from "@sanity/document-internationalization";
 import { visionTool } from "@sanity/vision";
-import { defineConfig, type Template } from "sanity";
+import { defineConfig, type Template, type WorkspaceOptions } from "sanity";
 import { internationalizedArray } from "sanity-plugin-internationalized-array";
 import { structureTool } from "sanity/structure";
-import { dataset, projectId } from "./env";
+import { projectId } from "./env";
 import { BASE_LOCALE, DOCUMENT_LOCALISED_TYPES, LOCALES } from "./locales";
 import { schemaTypes } from "./schemaTypes";
 
-export default defineConfig({
-  name: "nilecruz",
-  title: "Nilecruz",
+const shared: Omit<WorkspaceOptions, "name" | "dataset" | "basePath"> = {
   projectId,
-  dataset,
   plugins: [
     structureTool(),
     // Whole-document translations, each language published on its own (I18N-011).
@@ -50,4 +47,20 @@ export default defineConfig({
       })),
     ],
   },
-});
+};
+
+/**
+ * Two workspaces (ADR-062): Production holds the live site's content, Development is for drafts and tests.
+ * Editors choose the workspace at the top left of the Studio.
+ */
+export default defineConfig([
+  { ...shared, name: "production", title: "Nilecruz", subtitle: "Production", dataset: "production", basePath: "/production" },
+  {
+    ...shared,
+    name: "development",
+    title: "Nilecruz",
+    subtitle: "Development",
+    dataset: "development",
+    basePath: "/development",
+  },
+]);

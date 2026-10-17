@@ -54,8 +54,6 @@ jobs:
       - name: Deploy the Studio (nilecruz.sanity.studio)
         working-directory: studio
         run: pnpm exec sanity deploy --yes
-      - name: Deploy the schema to both datasets
+      - name: Deploy the schema (both workspaces, production and development)
         working-directory: studio
-        run: |
-          SANITY_STUDIO_DATASET=development pnpm exec sanity schema deploy
-          SANITY_STUDIO_DATASET=production pnpm exec sanity schema deploy
+        run: pnpm exec sanity schema deploy

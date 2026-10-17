@@ -4,7 +4,7 @@ Editorial content: articles, FAQs, destination stories, vessel-type profiles, pr
 Prices, vessel facts, itineraries and bookings live in Supabase, not here (CLAUDE.md §6).
 
 - Project `auho5414`, datasets `development` (local and staging) and `production` (live site). Both are private.
-- Hosted Studio: https://nilecruz.sanity.studio (deployed by CI from `main`).
+- Hosted Studio: https://nilecruz.sanity.studio, with two workspaces: **Production** (live-site content) and **Development** (drafts and tests). Deployed by CI from `main`.
 - Translations: articles, FAQs, destination stories and vessel-type profiles are translated as whole documents
   (each language published on its own). Price explainers and Egyptologist profiles share figures and photos,
   so only their text fields are translated. English is always required; the site falls back to English.
