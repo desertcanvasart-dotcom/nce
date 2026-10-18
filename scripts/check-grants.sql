@@ -7,7 +7,12 @@ with intended(table_name, grantee, privileges) as (
     ('evaluations', 'anon', 'SELECT'), ('evaluation_translations', 'anon', 'SELECT'), ('external_ratings', 'anon', 'SELECT'),
     ('vessel_submission_events', 'authenticated', 'SELECT'), ('vessel_submission_events', 'service_role', 'SELECT'),
     ('cabin_types', 'anon', 'SELECT'), ('cabin_type_translations', 'anon', 'SELECT'), ('schedules', 'anon', 'SELECT'),
-    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT')
+    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT'),
+    -- Batch 4c-2: connections are read by people and changed only through functions or the service role.
+    ('inventory_feeds', 'authenticated', 'SELECT'), ('api_keys', 'authenticated', 'SELECT'),
+    ('inventory_runs', 'authenticated', 'SELECT'),
+    ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['profiles', 'organisations', 'memberships', 'vessels', 'vessel_private', 'vessel_translations',
