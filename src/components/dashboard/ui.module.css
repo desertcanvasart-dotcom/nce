@@ -324,3 +324,8 @@ a.counter:hover {
   font-weight: var(--type-label-weight);
   line-height: var(--type-body-line);
 }
+
+/* Values in a definition grid line up with their labels. */
+.grid dd {
+  margin: 0;
+}
