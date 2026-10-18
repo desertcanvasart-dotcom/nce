@@ -611,3 +611,10 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Feed addresses** are visible to the company's team and to admins. If an operator puts a token in the address, it is stored as given; the format document recommends a dedicated read-only address.
 - **Tests:** the local e2e feed server uses a self-signed certificate made at test time. Its origin is trusted only when the app runs against a local database (`NILECRUZ_FEED_TEST_ORIGINS`, `NILECRUZ_FEED_TEST_CA`); a fifth local admin (`connections@nilecruz.test`) serves the connections tests.
 - **Staging scheduler (approved by Faris 18 Oct 2026, done):** Vault secrets `feed_pull_url` (the staging pull endpoint) and `feed_pull_secret` in the staging Supabase project, and `FEED_PULL_SECRET` on the Railway staging service (`nce` in project `tranquil-gratitude`). The secret was generated locally, set in both places and never written to the repository or shown. Production gets its own secret at launch (Batch 11).
+
+### ADR-087 Tour rights, currencies, children and public prices (Accepted; Faris 18 Oct 2026, Batch 4d brief)
+- **Rights:** catalogue admins (and super admins) manage tours, suppliers, sessions, prices, cancellation bands and programs. Content admins edit tour and program texts and photos only. Operators and travel partners have no access (DATA-042, ADR-030).
+- **Currencies:** tours are priced in US$ or €. E£ is not offered for tours for now.
+- **Children:** a per-guest price applies to every guest aged 3 and over, by age on the day of the tour; under-3s are free (the cruise age rule, DATA-019). A tour can be marked "adults only", meaning every guest must be 18 or over. Group prices are one price for the party.
+- **Public prices:** published tours and their sessions, prices included, are public. ADR-025's "prices after sign-in" applies to cruises only.
+- **No supplier cost** is recorded for now.
