@@ -86,7 +86,9 @@ export default async function MyRequests() {
             />
           </div>
           <TextArea label="Anything else operators should know (optional)" name="notes" rows={3} maxLength={2000} />
-          <p className={ui.muted}>Operators see your trip and the guests’ ages, not your name or contact details, until you accept an offer.</p>
+          <p className={ui.muted}>
+            Operators see your trip and the guests’ ages, not your name or contact details, until you accept an offer.
+          </p>
         </ActionForm>
       </Section>
     </>

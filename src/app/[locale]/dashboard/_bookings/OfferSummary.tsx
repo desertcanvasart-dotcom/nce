@@ -69,7 +69,8 @@ export function OfferSummary({ o, now, title }: { o: OfferRow; now: number; titl
           .sort((a, b) => a.line - b.line)
           .map((c) => (
             <li key={c.line}>
-              Cabin {c.line}: {c.cabin_name}, {c.deck} deck · {guestsText(c.adults, c.child_ages)} · {money(c.price_minor, o.currency)}
+              Cabin {c.line}: {c.cabin_name}, {c.deck} deck · {guestsText(c.adults, c.child_ages)} ·{" "}
+              {money(c.price_minor, o.currency)}
             </li>
           ))}
       </ul>

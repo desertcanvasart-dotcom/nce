@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { ActionState } from "@/components/dashboard/ActionForm";
 import { currenciesFor, MIN_GRATUITY_USD_MINOR, validBands, type Band, type RatePlan } from "@/lib/product/pricing";
+import { bandsProblem, type CancellationBand } from "@/lib/tours/tours";
 import { requireAdmin } from "@/server/auth";
 import { dbProblem, failed, formObject, problemsFrom, saved } from "@/server/catalogue/form";
 import { getDb } from "@/server/db";
@@ -671,4 +672,58 @@ export async function saveFreshness(_prev: ActionState, fd: FormData): Promise<A
   if (error) return dbProblem(error);
   revalidatePath("/dashboard/admin/settings/");
   return saved("Freshness thresholds saved.");
+}
+
+// ── Cancellation policy (ADR-088, DASH-BND-001): the vessel's default; calculation in 4f ─────────────────────
+export async function savePolicy(orgId: string | null, vesselId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
+  const f = formObject(fd);
+  const bands: CancellationBand[] = [];
+  for (let i = 0; i < 6; i++) {
+    const d = String(f[`from_days_${i}`] ?? "").trim();
+    const pc = String(f[`percent_${i}`] ?? "").trim();
+    if (!d && !pc) continue;
+    if (!/^\d{1,3}$/.test(d) || !/^\d{1,3}$/.test(pc))
+      return failed(`Band ${i + 1}: give whole numbers for the days and the percentage.`);
+    bands.push({ from_days: Number(d), percent: Number(pc) });
+  }
+  if (!bands.length) return failed("Add at least one band, including one from 0 days.");
+  const problem = bandsProblem(bands);
+  if (problem) return failed(problem);
+  const terms = (["en", "es", "ja"] as const).map((locale) => ({ locale, terms: String(f[`terms_${locale}`] ?? "").trim() }));
+  if (!terms[0]!.terms) return failed("Write the policy in English; Spanish and Japanese fall back to it.");
+  if (terms.some((t) => t.terms.length > 4000)) return failed("Each wording has at most 4,000 characters.");
+  const db = await getDb();
+  const { data: existing } = await db
+    .from("cancellation_policies")
+    .select("id")
+    .eq("vessel_id", vesselId)
+    .is("schedule_id", null)
+    .maybeSingle();
+  const res = existing
+    ? await db
+        .from("cancellation_policies")
+        .update({ bands: bands.sort((a, b) => b.from_days - a.from_days) })
+        .eq("id", existing.id)
+        .select("id")
+        .single()
+    : await db
+        .from("cancellation_policies")
+        .insert({ vessel_id: vesselId, bands: bands.sort((a, b) => b.from_days - a.from_days) })
+        .select("id")
+        .single();
+  if (res.error) return dbProblem(res.error);
+  for (const t of terms) {
+    const r = t.terms
+      ? await db
+          .from("cancellation_policy_translations")
+          .upsert({ policy_id: res.data.id, locale: t.locale, terms: t.terms }, { onConflict: "policy_id,locale" })
+      : await db.from("cancellation_policy_translations").delete().eq("policy_id", res.data.id).eq("locale", t.locale);
+    if (r.error) return dbProblem(r.error);
+  }
+  revalidatePath(p.cabins);
+  return saved(
+    "Cancellation policy saved. Travellers read and accept it before reserving; the charges are calculated with payments.",
+  );
 }

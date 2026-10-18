@@ -53,7 +53,8 @@ export async function createRequest(_prev: ActionState, fd: FormData): Promise<A
   }
   const d = input.data;
   const ages = d.child_ages ? d.child_ages.split(/[\s,]+/).filter(Boolean) : [];
-  if (ages.some((a) => !/^\d{1,2}$/.test(a))) return failed("Give each child's age as a whole number, separated by commas, for example “7, 4”.");
+  if (ages.some((a) => !/^\d{1,2}$/.test(a)))
+    return failed("Give each child's age as a whole number, separated by commas, for example “7, 4”.");
   const child_ages = ages.map(Number);
   const problems = requestProblems({ ...d, child_ages }, cairoDate(new Date()));
   if (problems.length) return { ok: false, message: "The request can't be sent yet:", problems };
@@ -112,7 +113,13 @@ export async function acceptOffer(
   const guests: Passenger[] = Array.from({ length: total }, (_, i) => ({
     full_name: String(f[`name_${i}`] ?? "").trim(),
     date_of_birth: String(f[`dob_${i}`] ?? ""),
-    ...(i === 0 ? { nationality: String(f.nationality ?? "").trim().toUpperCase() } : {}),
+    ...(i === 0
+      ? {
+          nationality: String(f.nationality ?? "")
+            .trim()
+            .toUpperCase(),
+        }
+      : {}),
   }));
   if (!(f.terms as string[]).includes("yes")) return failed("Tick that you have read the terms and the cancellation policy.");
   const problem = passengersProblem(guests, departsOn, offered, ageOn);
@@ -120,7 +127,11 @@ export async function acceptOffer(
   const db = await getDb();
   const { data: reference, error } = await db.rpc("accept_offer", { target: offerId, guests, terms_read: true });
   if (error) return connectionProblem(error);
-  const { data: res } = await db.from("reservations").select("id").eq("reference", reference as string).single();
+  const { data: res } = await db
+    .from("reservations")
+    .select("id")
+    .eq("reference", reference as string)
+    .single();
   redirect(`/dashboard/journey/reservations/${res!.id}/`);
 }
 
@@ -136,7 +147,9 @@ export async function uploadProof(reservationId: string, _prev: ActionState, fd:
   if (file.size > 10 * 1024 * 1024) return failed("The file is larger than 10 MB.");
   const db = await getDb();
   const path = `reservations/${reservationId}/${randomUUID()}.${ext}`;
-  const up = await db.storage.from("eligibility").upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type, upsert: false });
+  const up = await db.storage
+    .from("eligibility")
+    .upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type, upsert: false });
   if (up.error) return failed("The file could not be stored. Try again.");
   const { error } = await db.from("eligibility_proofs").insert({ reservation_id: reservationId, storage_path: path });
   if (error) {

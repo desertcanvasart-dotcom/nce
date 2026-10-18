@@ -63,8 +63,9 @@ export default async function AcceptOffer({ params }: Props) {
           {local ? (
             <Notice>
               {/* CONTENT-NEEDED #38: Faris's wording replaces this draft. */}
-              Draft wording: this price is for Egyptian citizens or foreign residents of Egypt. After accepting, you’ll be asked to
-              upload proof; the operator checks it before payment is due, and sends an updated offer at the right rate if needed.
+              Draft wording: this price is for Egyptian citizens or foreign residents of Egypt. After accepting, you’ll be asked
+              to upload proof; the operator checks it before payment is due, and sends an updated offer at the right rate if
+              needed.
             </Notice>
           ) : null}
           <Section title="Guests" id="guests">
@@ -75,10 +76,21 @@ export default async function AcceptOffer({ params }: Props) {
               </p>
               {Array.from({ length: total }, (_, i) => (
                 <div key={i} className={ui.grid}>
-                  <Input label={`Guest ${i + 1}: full name`} name={`name_${i}`} required maxLength={160} autoComplete={i === 0 ? "name" : "off"} />
+                  <Input
+                    label={`Guest ${i + 1}: full name`}
+                    name={`name_${i}`}
+                    required
+                    maxLength={160}
+                    autoComplete={i === 0 ? "name" : "off"}
+                  />
                   <Input label="Date of birth" name={`dob_${i}`} type="date" required />
                   {i === 0 ? (
-                    <Input label="Nationality" name="nationality" maxLength={2} hint="Two-letter country code, for example GB or EG." />
+                    <Input
+                      label="Nationality"
+                      name="nationality"
+                      maxLength={2}
+                      hint="Two-letter country code, for example GB or EG."
+                    />
                   ) : null}
                 </div>
               ))}
@@ -88,9 +100,7 @@ export default async function AcceptOffer({ params }: Props) {
                 options={[{ value: "yes", label: "I have read the terms and the cancellation policy" }]}
                 checked={[]}
               />
-              <p className={ui.muted}>
-                Accepting checks the cabins are still free and reserves them. Payment details follow.
-              </p>
+              <p className={ui.muted}>Accepting checks the cabins are still free and reserves them. Payment details follow.</p>
             </ActionForm>
           </Section>
         </>

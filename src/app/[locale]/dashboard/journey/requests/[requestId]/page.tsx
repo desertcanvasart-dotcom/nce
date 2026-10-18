@@ -30,8 +30,8 @@ export default async function MyRequest({ params }: { params: Promise<{ requestI
       <h1 className={ui.pageTitle}>{r.origin && r.destination ? `${r.origin} → ${r.destination}` : "Flexible route"}</h1>
       <p>
         Departing {r.earliest_departure} to {r.latest_departure}
-        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {r.nights_min}–{r.nights_max} nights · {guestsText(r.adults, r.child_ages)} ·{" "}
-        {r.cabins} cabin{r.cabins === 1 ? "" : "s"}
+        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {r.nights_min}–{r.nights_max} nights ·{" "}
+        {guestsText(r.adults, r.child_ages)} · {r.cabins} cabin{r.cabins === 1 ? "" : "s"}
       </p>
       {r.status === "open" ? (
         <ActionForm action={closeRequest.bind(null, r.id)} submit="Close this request" variant="ghost" />
@@ -40,8 +40,8 @@ export default async function MyRequest({ params }: { params: Promise<{ requestI
       <Section title={latest.length ? `Offers (${latest.length})` : "Offers"} id="offers">
         {replaced ? (
           <p className={ui.muted}>
-            {replaced} earlier version{replaced === 1 ? " was" : "s were"} replaced by an operator’s update. Only the latest version of an
-            offer can be accepted.
+            {replaced} earlier version{replaced === 1 ? " was" : "s were"} replaced by an operator’s update. Only the latest
+            version of an offer can be accepted.
           </p>
         ) : null}
         {latest.length ? (
@@ -58,7 +58,9 @@ export default async function MyRequest({ params }: { params: Promise<{ requestI
             ))}
           </div>
         ) : (
-          <p className={ui.muted}>No offers yet. Operators whose cruises fit your dates and route can reply; you’ll see a notice here.</p>
+          <p className={ui.muted}>
+            No offers yet. Operators whose cruises fit your dates and route can reply; you’ll see a notice here.
+          </p>
         )}
       </Section>
     </>

@@ -32,7 +32,9 @@ export default async function MyOffers() {
                   <div key={o.id}>
                     <OfferSummary o={o} now={now} />
                     <p>
-                      <Link href={`/dashboard/journey/requests/${r.id}/accept/${o.id}/`}>Read the terms and accept this offer</Link>
+                      <Link href={`/dashboard/journey/requests/${r.id}/accept/${o.id}/`}>
+                        Read the terms and accept this offer
+                      </Link>
                     </p>
                   </div>
                 ))}
@@ -41,7 +43,8 @@ export default async function MyOffers() {
           ))
       ) : (
         <p className={ui.muted}>
-          No open offers. <Link href="/dashboard/journey/requests/">Ask for offers</Link> and operators whose cruises fit can reply.
+          No open offers. <Link href="/dashboard/journey/requests/">Ask for offers</Link> and operators whose cruises fit can
+          reply.
         </p>
       )}
     </>

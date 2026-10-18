@@ -2,11 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Section, ui } from "@/components/dashboard/ui";
 import { requireOrgRole } from "@/server/auth";
+import { offerView } from "@/lib/bookings/bookings";
+import { nowMs } from "@/lib/product/departures";
+import { notices, orgOffers, visibleRequests } from "@/server/bookings/queries";
 import { connectionIssues } from "@/server/connections/queries";
 import { operatorOverview } from "@/server/product/queries";
+import { Notices } from "../../_bookings/Notices";
 import { isUuid } from "../../sections";
+import { markOrgNoticesRead } from "./offers/actions";
 
-/** DASH-OPR-001, 004, 005: the operator's own business at a glance. */
+/** DASH-OPR-001–005: the operator's own business at a glance: requests, offers, departures, inventory issues. */
 export default async function OperatorOverview({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = await params;
   if (!isUuid(orgId)) notFound();
@@ -16,11 +21,31 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
     returnTo: `/dashboard/operator/${orgId}/`,
   });
   if (company.status !== "approved") return null; // the layout shows the company's status instead
-  const [o, connection] = await Promise.all([operatorOverview(orgId), connectionIssues(orgId)]);
+  const [o, connection, requests, offers, items] = await Promise.all([
+    operatorOverview(orgId),
+    connectionIssues(orgId),
+    visibleRequests(),
+    orgOffers(orgId),
+    notices({ orgId }),
+  ]);
+  const now = nowMs();
+  const newRequests = requests.filter((r) => r.status === "open" && !r.offers.some((x) => x.org_id === orgId)).length;
+  const outstanding = offers.filter((x) => offerView(x, now) === "open").length;
   const inventoryHref = `/dashboard/operator/${orgId}/inventory/`;
   return (
     <>
       <h1 className={ui.pageTitle}>Overview</h1>
+      <div className={ui.counters}>
+        <Link className={ui.counter} href={`/dashboard/operator/${orgId}/offers/#requests`}>
+          <span className={ui.counterValue}>{newRequests}</span>
+          <span className={ui.counterLabel}>New requests to answer</span>
+        </Link>
+        <Link className={ui.counter} href={`/dashboard/operator/${orgId}/offers/#offers`}>
+          <span className={ui.counterValue}>{outstanding}</span>
+          <span className={ui.counterLabel}>Outstanding offers</span>
+        </Link>
+      </div>
+      <Notices items={items} markRead={markOrgNoticesRead.bind(null, orgId)} />
       <Section title="Upcoming departures" id="upcoming">
         {o.upcoming.length ? (
           <div className={ui.tableWrap}>

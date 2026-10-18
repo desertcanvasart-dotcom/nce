@@ -59,12 +59,17 @@ export function ReservationRecord({ r }: { r: Res }) {
           </div>
           <div>
             <dt className={ui.label}>Payment</dt>
-            <dd>{r.status === "awaiting_payment" ? "Not paid yet: payment requests arrive with deadlines" : RESERVATION_BADGE[r.status].text}</dd>
+            <dd>
+              {r.status === "awaiting_payment"
+                ? "Not paid yet: payment requests arrive with deadlines"
+                : RESERVATION_BADGE[r.status].text}
+            </dd>
           </div>
         </dl>
         {r.gratuity_usd_minor ? (
           <p className={ui.muted}>
-            Crew gratuity: {money(r.gratuity_usd_minor, "USD")} per person (aged 3 and over) per night, paid on board, not in the total.
+            Crew gratuity: {money(r.gratuity_usd_minor, "USD")} per person (aged 3 and over) per night, paid on board, not in the
+            total.
           </p>
         ) : null}
       </Section>

@@ -28,7 +28,15 @@ export type OfferRow = {
   created_at: string;
   org_id: string;
   departure_id: string;
-  offer_cabins: { line: number; cabin_type_id: string; deck: string; cabin_name: string; adults: number; child_ages: number[]; price_minor: number }[];
+  offer_cabins: {
+    line: number;
+    cabin_type_id: string;
+    deck: string;
+    cabin_name: string;
+    adults: number;
+    child_ages: number[];
+    price_minor: number;
+  }[];
   departure: {
     id: string;
     departs_on: string;
@@ -41,7 +49,11 @@ export type OfferRow = {
 /** Routes people can ask for: those of published vessels (DASH-CUS-014). */
 export async function routeOptions() {
   const db = await getDb();
-  const { data } = await db.from("schedules").select("origin, destination, vessel:vessels!inner(visibility)").eq("active", true).eq("vessel.visibility", "published");
+  const { data } = await db
+    .from("schedules")
+    .select("origin, destination, vessel:vessels!inner(visibility)")
+    .eq("active", true)
+    .eq("vessel.visibility", "published");
   const seen = new Map<string, { origin: string; destination: string }>();
   for (const s of data ?? []) seen.set(`${s.origin}→${s.destination}`, { origin: s.origin, destination: s.destination });
   return [...seen.values()].sort((a, b) => `${a.origin}${a.destination}`.localeCompare(`${b.origin}${b.destination}`));
@@ -49,7 +61,10 @@ export async function routeOptions() {
 
 export async function myRequests() {
   const db = await getDb();
-  const { data, error } = await db.from("cruise_requests").select("*, offers(id, status, expires_at)").order("created_at", { ascending: false });
+  const { data, error } = await db
+    .from("cruise_requests")
+    .select("*, offers(id, status, expires_at)")
+    .order("created_at", { ascending: false });
   if (error) throw error;
   return data ?? [];
 }
@@ -98,7 +113,9 @@ export async function reservations(filter: { orgId?: string; customer?: boolean 
   const db = await getDb();
   let q = db
     .from("reservations")
-    .select("id, reference, status, currency, total_minor, created_at, org_id, departure:departures(departs_on), vessel:vessels(name)")
+    .select(
+      "id, reference, status, currency, total_minor, created_at, org_id, departure:departures(departs_on), vessel:vessels(name)",
+    )
     .order("created_at", { ascending: false })
     .limit(200);
   if (filter.orgId) q = q.eq("org_id", filter.orgId);
@@ -125,7 +142,11 @@ export async function reservation(id: string) {
 /** Requests this person may answer or has answered (RLS), newest first. */
 export async function visibleRequests() {
   const db = await getDb();
-  const { data, error } = await db.from("cruise_requests").select("*, offers(id, org_id, status)").order("created_at", { ascending: false }).limit(200);
+  const { data, error } = await db
+    .from("cruise_requests")
+    .select("*, offers(id, org_id, status)")
+    .order("created_at", { ascending: false })
+    .limit(200);
   if (error) throw error;
   return data ?? [];
 }
@@ -135,7 +156,9 @@ export async function departuresForRequest(orgId: string, r: NonNullable<Awaited
   const db = await getDb();
   const { data } = await db
     .from("departures")
-    .select("id, departs_on, returns_on, status, schedule:schedules!inner(code, origin, destination, nights, active), vessel:vessels!inner(id, name, visibility, operator_org_id, gratuity_usd_minor)")
+    .select(
+      "id, departs_on, returns_on, status, schedule:schedules!inner(code, origin, destination, nights, active), vessel:vessels!inner(id, name, visibility, operator_org_id, gratuity_usd_minor)",
+    )
     .eq("vessel.operator_org_id", orgId)
     .eq("vessel.visibility", "published")
     .eq("status", "scheduled")
@@ -165,7 +188,12 @@ export async function cabinsForDeparture(departureId: string, plan: string, curr
   const db = await getDb();
   const { data: dep } = await db.from("departures").select("vessel_id, departs_on").eq("id", departureId).single();
   const [{ data: cabins }, { data: rates }, { data: inv }] = await Promise.all([
-    db.from("cabin_types").select("id, name, deck, max_occupancy, active").eq("vessel_id", dep!.vessel_id).eq("active", true).order("sort_order"),
+    db
+      .from("cabin_types")
+      .select("id, name, deck, max_occupancy, active")
+      .eq("vessel_id", dep!.vessel_id)
+      .eq("active", true)
+      .order("sort_order"),
     db
       .from("rates")
       .select("cabin_type_id, occupancy, amount_minor, child_bands")
@@ -187,7 +215,9 @@ export async function orgOffers(orgId: string) {
   const db = await getDb();
   const { data, error } = await db
     .from("offers")
-    .select("id, request_id, version, status, currency, total_minor, expires_at, created_at, departure:departures(departs_on, vessel:vessels(name))")
+    .select(
+      "id, request_id, version, status, currency, total_minor, expires_at, created_at, departure:departures(departs_on, vessel:vessels(name))",
+    )
     .eq("org_id", orgId)
     .order("created_at", { ascending: false })
     .limit(200);
@@ -198,7 +228,11 @@ export async function orgOffers(orgId: string) {
 // ── Notices (ADR-088) ─────────────────────────────────────────────────────────────────────────────────────
 export async function notices(scope: { orgId?: string; userId?: string }) {
   const db = await getDb();
-  let q = db.from("notifications").select("id, kind, title, link, read_at, created_at").order("created_at", { ascending: false }).limit(10);
+  let q = db
+    .from("notifications")
+    .select("id, kind, title, link, read_at, created_at")
+    .order("created_at", { ascending: false })
+    .limit(10);
   q = scope.orgId ? q.eq("org_id", scope.orgId) : q.eq("user_id", scope.userId!);
   const { data } = await q;
   return data ?? [];
@@ -233,14 +267,23 @@ export async function searchBookings(s: BookingSearch) {
   if (s.to) res = res.lte("departure.departs_on", s.to);
   if (s.route) {
     const [origin, destination] = s.route.split("→");
-    if (origin && destination) res = res.eq("departure.schedule.origin", origin).eq("departure.schedule.destination", destination);
+    if (origin && destination)
+      res = res.eq("departure.schedule.origin", origin).eq("departure.schedule.destination", destination);
   }
   const [{ data: found, error }, { data: requests }, { data: offers }] = await Promise.all([
     res,
-    db.from("cruise_requests").select("id, origin, destination, earliest_departure, latest_departure, adults, child_ages, status, created_at, offers(count)").order("created_at", { ascending: false }).limit(100),
+    db
+      .from("cruise_requests")
+      .select(
+        "id, origin, destination, earliest_departure, latest_departure, adults, child_ages, status, created_at, offers(count)",
+      )
+      .order("created_at", { ascending: false })
+      .limit(100),
     db
       .from("offers")
-      .select("id, request_id, version, status, currency, total_minor, expires_at, created_at, org:organisations(display_name), departure:departures(departs_on)")
+      .select(
+        "id, request_id, version, status, currency, total_minor, expires_at, created_at, org:organisations(display_name), departure:departures(departs_on)",
+      )
       .order("created_at", { ascending: false })
       .limit(100),
   ]);

@@ -21,7 +21,8 @@ export type RequestInput = {
   cabins: number;
 };
 
-const addDays = (date: string, n: number) => new Date(Date.parse(`${date}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+const addDays = (date: string, n: number) =>
+  new Date(Date.parse(`${date}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
 
 /** What is wrong with a request, in plain words (empty when it can be sent). `today` is the Cairo date. */
 export function requestProblems(r: RequestInput, today: string): string[] {
@@ -35,13 +36,15 @@ export function requestProblems(r: RequestInput, today: string): string[] {
     p.push("With these dates and nights, no cruise could finish by the latest finish date.");
   }
   if (r.adults < 1) p.push("At least one adult travels.");
-  if (r.child_ages.some((a) => !Number.isInteger(a) || a < 0 || a >= ADULT_AGE)) p.push("Children’s ages are whole years from 0 to 17.");
+  if (r.child_ages.some((a) => !Number.isInteger(a) || a < 0 || a >= ADULT_AGE))
+    p.push("Children’s ages are whole years from 0 to 17.");
   const guests = r.adults + r.child_ages.length;
   if (r.cabins < 1 || r.cabins > guests) p.push("Ask for at least one cabin and no more cabins than guests.");
   // Every cabin needs someone aged 12 or over (fitsCabin), and a cabin sleeps at most 3 (infants don't count).
   const grownUps = r.adults + r.child_ages.filter((a) => a >= 12).length;
   if (r.cabins > grownUps) p.push("Each cabin needs a guest aged 12 or over.");
-  if (r.adults + r.child_ages.filter((a) => a >= 3).length > r.cabins * 3) p.push("A cabin sleeps at most 3 (infants under 3 don’t count). Ask for more cabins.");
+  if (r.adults + r.child_ages.filter((a) => a >= 3).length > r.cabins * 3)
+    p.push("A cabin sleeps at most 3 (infants under 3 don’t count). Ask for more cabins.");
   return p;
 }
 
@@ -61,13 +64,17 @@ export function linePrice(line: CabinLine, rate: RateLookup): LinePrice {
   if (!fit.ok) return { ok: false, reason: fit.reason! };
   const occupancy = ages.filter((a) => a >= 3).length;
   const r = rate(occupancy);
-  if (!r) return { ok: false, reason: `There is no rate for ${occupancy} guest${occupancy === 1 ? "" : "s"} in this cabin type.` };
+  if (!r)
+    return { ok: false, reason: `There is no rate for ${occupancy} guest${occupancy === 1 ? "" : "s"} in this cabin type.` };
   const perGuest = ages.map((a) => (a >= ADULT_AGE ? r.amountMinor : guestPrice(r.amountMinor, a, r.bands)));
   return { ok: true, priceMinor: perGuest.reduce((s, x) => s + x, 0), occupancy, perGuest };
 }
 
 /** The guests an offer's cabins hold must be exactly the request's guests (the database checks this too). */
-export function sameGuests(lines: { adults: number; childAges: number[] }[], request: { adults: number; child_ages: number[] }): boolean {
+export function sameGuests(
+  lines: { adults: number; childAges: number[] }[],
+  request: { adults: number; child_ages: number[] },
+): boolean {
   const adults = lines.reduce((s, l) => s + l.adults, 0);
   const kids = lines.flatMap((l) => l.childAges).sort((a, b) => a - b);
   return adults === request.adults && kids.join(",") === [...request.child_ages].sort((a, b) => a - b).join(",");
@@ -85,7 +92,8 @@ export function offerView(o: { status: OfferStatus; expires_at: string }, now: n
 export const canAccept = (o: { status: OfferStatus; expires_at: string }, now: number) => offerView(o, now) === "open";
 
 export function expiryProblem(hours: number): string | null {
-  if (!Number.isInteger(hours) || hours < EXPIRY.minHours || hours > EXPIRY.maxHours) return "An offer is valid for 24 hours to 14 days.";
+  if (!Number.isInteger(hours) || hours < EXPIRY.minHours || hours > EXPIRY.maxHours)
+    return "An offer is valid for 24 hours to 14 days.";
   return null;
 }
 

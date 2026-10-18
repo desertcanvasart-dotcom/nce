@@ -3,23 +3,24 @@ import { Section, ui } from "@/components/dashboard/ui";
 import { requireAdmin } from "@/server/auth";
 import { overviewCounts } from "@/server/catalogue/queries";
 import { recentActivity } from "@/server/catalogue/activity";
+import { adminBookingCounts } from "@/server/bookings/queries";
 import { adminConnectionCounts } from "@/server/connections/queries";
 import { ActivityTable } from "./activity/ActivityTable";
 
 /**
- * DASH-ADM-001, 002, 006, 007, 009: the working queue. Each counter links to its pre-filtered list.
- * Payments, bookings and cancellations join the queue with their batches; until then they say so.
+ * DASH-ADM-001, 002, 004, 006, 007, 009: the working queue. Each counter links to its pre-filtered list.
+ * Payments and cancellations join the queue with their batch; until then they say so.
  */
 export default async function AdminOverview() {
   await requireAdmin(undefined, "/dashboard/admin/");
-  const [counts, activity, connections] = await Promise.all([
+  const [counts, activity, connections, bookings] = await Promise.all([
     overviewCounts(),
     recentActivity({ page: 1, pageSize: 10 }),
     adminConnectionCounts(),
+    adminBookingCounts(),
   ]);
   const later = [
     ["Payments awaiting verification", "4f"],
-    ["Current and upcoming bookings", "4e"],
     ["Cancellation requests and refund reviews", "4f"],
   ] as const;
   return (
@@ -38,6 +39,10 @@ export default async function AdminOverview() {
         <Link className={ui.counter} href="/dashboard/admin/submissions/?status=submitted">
           <span className={ui.counterValue}>{counts.submissions}</span>
           <span className={ui.counterLabel}>Cruise submissions awaiting review</span>
+        </Link>
+        <Link className={ui.counter} href="/dashboard/admin/bookings/#reservations">
+          <span className={ui.counterValue}>{bookings.currentAndUpcoming}</span>
+          <span className={ui.counterLabel}>Current and upcoming bookings</span>
         </Link>
         <Link className={ui.counter} href="/dashboard/admin/operators/?connections=problems">
           <span className={ui.counterValue}>{connections.errors}</span>
