@@ -31,7 +31,9 @@ describe("sessions in Cairo time (DASH-ADM-067, DATA-003)", () => {
 
   it("never repeats a start and refuses bad input", () => {
     expect(sessionStarts({ from: "2027-01-04", to: "2027-01-04", weekdays: [1], times: ["09:00", "09:00"] })).toHaveLength(1);
-    expect(() => sessionStarts({ from: "2027-01-05", to: "2027-01-04", weekdays: [1], times: ["09:00"] })).toThrow(/start and an end/);
+    expect(() => sessionStarts({ from: "2027-01-05", to: "2027-01-04", weekdays: [1], times: ["09:00"] })).toThrow(
+      /start and an end/,
+    );
     expect(() => sessionStarts({ from: "2027-01-04", to: "2027-01-10", weekdays: [], times: ["09:00"] })).toThrow(/weekday/);
     expect(() => sessionStarts({ from: "2027-01-04", to: "2027-01-10", weekdays: [1], times: ["9am"] })).toThrow(/HH:MM/);
     expect(() =>
@@ -57,10 +59,25 @@ describe("cancellation bands (DASH-ADM-065)", () => {
   });
   it("explains what is wrong", () => {
     expect(bandsProblem([{ from_days: 7, percent: 50 }])).toMatch(/from 0 days/);
-    expect(bandsProblem([{ from_days: 7, percent: 50 }, { from_days: 0, percent: 20 }])).toMatch(/can’t go down/);
-    expect(bandsProblem([{ from_days: 0, percent: 10 }, { from_days: 0, percent: 20 }])).toMatch(/different number/);
+    expect(
+      bandsProblem([
+        { from_days: 7, percent: 50 },
+        { from_days: 0, percent: 20 },
+      ]),
+    ).toMatch(/can’t go down/);
+    expect(
+      bandsProblem([
+        { from_days: 0, percent: 10 },
+        { from_days: 0, percent: 20 },
+      ]),
+    ).toMatch(/different number/);
     expect(bandsProblem([{ from_days: 0, percent: 120 }])).toMatch(/0 to 100/);
-    expect(bandsProblem([{ from_days: 1.5, percent: 10 }, { from_days: 0, percent: 20 }])).toMatch(/whole numbers/);
+    expect(
+      bandsProblem([
+        { from_days: 1.5, percent: 10 },
+        { from_days: 0, percent: 20 },
+      ]),
+    ).toMatch(/whole numbers/);
   });
   it("finds the charge for a cancellation date", () => {
     expect(cancellationPercent(good, 30)).toBe(0);
@@ -93,7 +110,13 @@ describe("tour prices (DASH-ADM-068, 069, ADR-087)", () => {
 });
 
 describe("readiness: information-only until sellable (DASH-ADM-073)", () => {
-  const base = { published: true, hasSupplier: true, bands: [{ from_days: 0, percent: 100 }], futureSessions: 1, hasEnglishDescription: true };
+  const base = {
+    published: true,
+    hasSupplier: true,
+    bands: [{ from_days: 0, percent: 100 }],
+    futureSessions: 1,
+    hasEnglishDescription: true,
+  };
   it("is bookable with a supplier, bands and a future session", () => {
     expect(tourReadiness(base)).toEqual({ state: "bookable", missing: [] });
   });
