@@ -1,6 +1,6 @@
 # Batch 4f brief: Payments, deadlines, cancellation and commission
 
-**Status:** awaiting Faris's go-ahead · **Branch:** `batch-04f-payments` (from `main`) · **Size:** L (recommend two pull requests, question 6)
+**Status:** approved by Faris 18 Oct 2026 (ADR-089); 4f-1 built, 4f-2 next · **Branch:** `batch-04f-payments` (from `main`) · **Size:** L (recommend two pull requests, question 6)
 
 **Goal:** a reservation from 4e gets a payment deadline and is paid in full by card through Stripe, with Nilecruz as merchant of record (ADR-020, ADR-026, ADR-027). An admin can also approve a manual payment as a fallback (ADR-030). Unpaid reservations are released at their deadline, unless a reported payment is waiting. A customer can ask to cancel; the charge and refund are calculated from the policy accepted at booking, and refunds go through Stripe after an admin approves them. Every verified payment records Nilecruz's 10% commission and the operator's payable. Tours are ordered and paid separately from cruises.
 

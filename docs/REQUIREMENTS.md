@@ -51,7 +51,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | DASH-ADM-001 | DG §Admin/Overview | Overview shows a counter of operator applications awaiting approval. | 4b | Verified | Batch 4b (18 Oct 2026): overview counter 'Operator applications awaiting approval' → /operators/?status=applied; e2e operator flow |
 | DASH-ADM-002 | DG §Admin/Overview | Overview shows a counter of private vessel drafts and cruise submissions awaiting review. | 4b | Verified | Batch 4b (18 Oct 2026): overview counters for private drafts and submissions awaiting review; e2e catalogue.spec 'activity history' |
-| DASH-ADM-003 | DG §Admin/Overview | Overview shows a counter of payments awaiting verification. | 4f | Planned |  |
+| DASH-ADM-003 | DG §Admin/Overview | Overview shows a counter of payments awaiting verification. | 4f | Verified | Batch 4f-1 (18 Oct 2026): overview counter 'Payments awaiting verification' linking to the finance queue; e2e |
 | DASH-ADM-004 | DG §Admin/Overview | Overview shows a counter of current and upcoming bookings. | 4e | Verified | Batch 4e (18 Oct 2026): admin overview counter 'Current and upcoming bookings' (reservations not cancelled, not yet returned), linking to Requests and bookings; e2e bookings.spec |
 | DASH-ADM-005 | DG §Admin/Overview | Overview shows a counter of cancellation requests and refund reviews. | 4f | Planned |  |
 | DASH-ADM-006 | DG §Admin/Overview | Overview shows a counter of inventory connection errors. | 4c | Verified | Batch 4c-2 (18 Oct 2026): overview counters 'Inventory connection errors' (failing active feeds + API calls with refused rows in 24 h) and 'Inventory feeds awaiting approval', each linking to the filtered operators list; e2e connections.spec |
@@ -145,17 +145,17 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-094 | DG §Admin/Requests ¶3 | Admins can find and investigate incomplete transactions. | 4e | Verified | Batch 4e (18 Oct 2026): incomplete transactions: reservations awaiting payment, requests with no offer after 3 days |
 | DASH-ADM-095 | DG §Admin/Requests ¶3 | Admins can investigate cancellation requests and refund cases. | 4f | Planned |  |
 | DASH-ADM-096 | DG §Admin/Requests ¶3 | Admins can search and filter requests and bookings by operator, route and booking reference. | 4e | Verified | Batch 4e (18 Oct 2026): search by booking reference, operator, route and departure dates; e2e finds by reference |
-| DASH-ADM-097 | DG §Admin/Deposits ¶1 | Admins can verify reported payments. | 4f | Planned |  |
-| DASH-ADM-098 | DG §Admin/Deposits ¶1 | Admins can browse financial records. | 4f | Planned |  |
-| DASH-ADM-099 | DG §Admin/Deposits ¶1 | Admins maintain a premium-date calendar. | 4f | Planned |  |
-| DASH-ADM-100 | DG §Admin/Deposits ¶2 | The finance workflow supports payment requests. | 4f | Planned |  |
-| DASH-ADM-101 | DG §Admin/Deposits ¶2 | The finance workflow supports reported payments. | 4f | Planned |  |
-| DASH-ADM-102 | DG §Admin/Deposits ¶2 | The finance workflow supports recorded receipts. | 4f | Planned |  |
-| DASH-ADM-103 | DG §Admin/Deposits ¶2 | The finance workflow shows outstanding balances. | 4f | Planned |  |
+| DASH-ADM-097 | DG §Admin/Deposits ¶1 | Admins can verify reported payments. | 4f | Verified | Batch 4f-1 (18 Oct 2026): finance/super admins with two-step verify or reject reported payments (verify_payment; 160: customer, operator, aal1 refused); e2e |
+| DASH-ADM-098 | DG §Admin/Deposits ¶1 | Admins can browse financial records. | 4f | Verified | Batch 4f-1 (18 Oct 2026): Deposits and commission: all payments, receipts, payables, payouts |
+| DASH-ADM-099 | DG §Admin/Deposits ¶1 | Admins maintain a premium-date calendar. | 4f | Verified | Batch 4f-1 (18 Oct 2026): premium calendar on the finance page; e2e adds a period |
+| DASH-ADM-100 | DG §Admin/Deposits ¶2 | The finance workflow supports payment requests. | 4f | Verified | Batch 4f-1 (18 Oct 2026): payment requests: the reservation shows what is due by when with Pay by card / report a transfer; operators send reminders (send_payment_reminder, 12 h limit; e2e) |
+| DASH-ADM-101 | DG §Admin/Deposits ¶2 | The finance workflow supports reported payments. | 4f | Verified | Batch 4f-1 (18 Oct 2026): reported payments with amount, date, reference and optional private proof (report_payment; e2e) |
+| DASH-ADM-102 | DG §Admin/Deposits ¶2 | The finance workflow supports recorded receipts. | 4f | Verified | Batch 4f-1 (18 Oct 2026): each received payment gets a receipt number NCR-YYYY-NNNNNN and a printable receipt page (160, e2e) |
+| DASH-ADM-103 | DG §Admin/Deposits ¶2 | The finance workflow shows outstanding balances. | 4f | Verified | Batch 4f-1 (18 Oct 2026): total, received, outstanding, reported, deadline on customer, operator and admin views (reservation_balance; 160; e2e) |
 | DASH-ADM-104 | DG §Admin/Deposits ¶2 | The finance workflow calculates cancellation charges. | 4f | Planned |  |
 | DASH-ADM-105 | DG §Admin/Deposits ¶2 | The finance workflow keeps refund records. | 4f | Planned |  |
-| DASH-ADM-106 | DG §Admin/Deposits ¶2 | Commission records track commission entries and reversals. | 4f | Planned |  |
-| DASH-ADM-107 | DG §Admin/Deposits ¶3 | Recording or verifying a payment never charges a card or moves money, and the UI never implies it does. | 4f | Planned |  |
+| DASH-ADM-106 | DG §Admin/Deposits ¶2 | Commission records track commission entries and reversals. | 4f | Verified | Batch 4f-1 (18 Oct 2026): commission_entries per verified payment (kind payment; reversal kind ready for 4f-2 refunds); unit commission and reversal |
+| DASH-ADM-107 | DG §Admin/Deposits ¶3 | Recording or verifying a payment never charges a card or moves money, and the UI never implies it does. | 4f | Verified | Batch 4f-1 (18 Oct 2026): finance page and payout messages say recording never charges a card or moves money; card status only from Stripe webhooks |
 
 ## Dashboard guide (OPR)
 
@@ -173,8 +173,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-010 | DG §Operator list | An operator can manage international, Egyptian-citizen, foreign-resident and trade rate plans. | 4c | Verified | Batch 4c-1 (18 Oct 2026): plans international, Egyptian citizen, foreign resident, trade (ADR-078); E£ only for local plans (DB check, unit, e2e) |
 | DASH-OPR-011 | DG §Operator list | An operator can prepare personal offers for suitable customer requests. | 4e | Verified | Batch 4e (18 Oct 2026): operators answer matching requests with personal offers (send_offer; 150; e2e two operators) |
 | DASH-OPR-012 | DG §Operator list | An authorised operator can manage promotions and upgrades. | 4c | Verified | Batch 4c-1 (18 Oct 2026): owners only (reservations get 403); e2e product.spec |
-| DASH-OPR-013 | DG §Operator list | An operator can review its bookings and their payment information. | 4f | Planned |  |
-| DASH-OPR-014 | DG §Operator list | An operator can request payments and record money received, subject to its permissions. | 4f | Planned |  |
+| DASH-OPR-013 | DG §Operator list | An operator can review its bookings and their payment information. | 4f | Verified | Batch 4f-1 (18 Oct 2026): operator booking page shows payment status, balance and deadline (e2e) |
+| DASH-OPR-014 | DG §Operator list | An operator can request payments and record money received, subject to its permissions. | 4f | Verified | Batch 4f-1 (18 Oct 2026): narrowed by ADR-089: operators send payment reminders; only Nilecruz admins record money (160 refuses; e2e no record button, 403 on finance) |
 | DASH-OPR-015 | DG §Operator list | An operator can handle cancellation and refund workflows for its bookings. | 4f | Planned |  |
 | DASH-OPR-016 | DG §Operator list | An operator can configure manual, feed or API inventory connections. | 4c | Verified | Batch 4c-2 (18 Oct 2026): owners configure paste, feed and API on Inventory connections (owners only, as in the menu; RLS + functions check again); e2e connections.spec |
 | DASH-OPR-017 | DG §Operator ¶offers | A personal offer specifies a sailing and cabin arrangement. | 4e | Verified | Batch 4e (18 Oct 2026): an offer names a departure and, per cabin, the cabin type and who sleeps there (150, e2e) |
@@ -200,8 +200,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-CUS-005 | DG §Customer list | A customer can compare the personal offers received. | 4e | Verified | Batch 4e (18 Oct 2026): offers side by side (latest version per offer) on the request and on Offers; e2e two offers |
 | DASH-CUS-006 | DG §Customer list | An offer shows actual departure dates, route, cabin arrangement and price. | 4e | Verified | Batch 4e (18 Oct 2026): each offer shows real dates, route, vessel, cabins and decks, price per cabin and total, gratuity separately |
 | DASH-CUS-007 | DG §Customer list | A customer can read the terms and accept a valid (unexpired, current) offer. | 4e | Verified | Batch 4e (18 Oct 2026): accept page shows terms and the cancellation policy; tick + guest names and dates of birth; only open, current versions (unit, 150, e2e) |
-| DASH-CUS-008 | DG §Customer list | A customer can review reservations, payment deadlines and outstanding balances. | 4f | Planned |  |
-| DASH-CUS-009 | DG §Customer list | A customer can report a payment and follow its verification status. | 4f | Planned |  |
+| DASH-CUS-008 | DG §Customer list | A customer can review reservations, payment deadlines and outstanding balances. | 4f | Verified | Batch 4f-1 (18 Oct 2026): reservation shows deadline (with its rule in words), total, received, outstanding (e2e) |
+| DASH-CUS-009 | DG §Customer list | A customer can report a payment and follow its verification status. | 4f | Verified | Batch 4f-1 (18 Oct 2026): report a transfer and follow its status: reported → received (e2e) |
 | DASH-CUS-010 | DG §Customer list | A customer can request cancellation and follow the refund-review status. | 4f | Planned |  |
 | DASH-CUS-011 | DG §Customer list | A customer can browse and manage eligible tours and sightseeing separately from cruises. | 4g | Planned |  |
 | DASH-CUS-012 | DG §Customer list | A customer can review past trips and closed requests. | 4g | Planned |  |
@@ -233,19 +233,19 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DASH-PAY-001 | DG §Payment ¶1 | Payment deadlines and cancellation policies are separate mechanisms in data and code. | 4f | Planned |  |
-| DASH-PAY-002 | DG §Payment table | Departures from 24 Dec to 7 Jan, or in a configured premium period, require full payment within 3 days of booking. | 4f | Planned |  |
-| DASH-PAY-003 | DG §Payment table | Other October–April departures require full payment within 7 days of booking. | 4f | Planned |  |
-| DASH-PAY-004 | DG §Payment table | May–September departures require full payment within 14 days of booking. | 4f | Planned |  |
-| DASH-PAY-005 | DG §Payment ¶2 | The deadline is never later than departure. | 4f | Planned |  |
-| DASH-PAY-006 | DG §Payment ¶2 | Admins can add and edit premium periods. | 4f | Planned |  |
-| DASH-PAY-007 | DG §Payment ¶2 | Western Easter 21–29 Mar 2027 is configured as a premium period. | 4f | Planned |  |
-| DASH-PAY-008 | DG §Payment ¶3 | Unpaid reservations past their deadline are subject to cancellation and cabin release. | 4f | Planned |  |
-| DASH-PAY-009 | DG §Payment ¶3 | A reservation with a reported payment awaiting verification is reviewed before release, never released automatically. | 4f | Planned |  |
-| DASH-PAY-010 | DG §Payment ¶4 | Bookings keep the deadline and policy terms agreed at booking; later rule changes never rewrite them. | 4f | Planned |  |
+| DASH-PAY-001 | DG §Payment ¶1 | Payment deadlines and cancellation policies are separate mechanisms in data and code. | 4f | Verified | Batch 4f-1 (18 Oct 2026): deadlines (reservations.payment_due_at, app.payment_deadline) and cancellation policies (cancellation_policies, 4e) are separate tables and code |
+| DASH-PAY-002 | DG §Payment table | Departures from 24 Dec to 7 Jan, or in a configured premium period, require full payment within 3 days of booking. | 4f | Verified | Batch 4f-1 (18 Oct 2026): 24 Dec–7 Jan or a premium period: 3 days (unit boundaries 23/24 Dec, 7/8 Jan; 160) |
+| DASH-PAY-003 | DG §Payment table | Other October–April departures require full payment within 7 days of booking. | 4f | Verified | Batch 4f-1 (18 Oct 2026): other October–April: 7 days (unit 30 Apr, 1 Oct, 20/30 Mar) |
+| DASH-PAY-004 | DG §Payment table | May–September departures require full payment within 14 days of booking. | 4f | Verified | Batch 4f-1 (18 Oct 2026): May–September: 14 days (unit 1 May, 30 Sep) |
+| DASH-PAY-005 | DG §Payment ¶2 | The deadline is never later than departure. | 4f | Verified | Batch 4f-1 (18 Oct 2026): never later than the end of the day before departure; the booking day for last-minute bookings (unit, 160) |
+| DASH-PAY-006 | DG §Payment ¶2 | Admins can add and edit premium periods. | 4f | Verified | Batch 4f-1 (18 Oct 2026): finance admins add, edit and remove premium periods (Deposits and commission → Premium calendar; e2e) |
+| DASH-PAY-007 | DG §Payment ¶2 | Western Easter 21–29 Mar 2027 is configured as a premium period. | 4f | Verified | Batch 4f-1 (18 Oct 2026): Western Easter 21–29 Mar 2027 seeded (160; e2e sees it) |
+| DASH-PAY-008 | DG §Payment ¶3 | Unpaid reservations past their deadline are subject to cancellation and cabin release. | 4f | Verified | Batch 4f-1 (18 Oct 2026): hourly pg_cron app.release_unpaid cancels unpaid reservations past the deadline and returns cabins (160; unit releaseDecision) |
+| DASH-PAY-009 | DG §Payment ¶3 | A reservation with a reported payment awaiting verification is reviewed before release, never released automatically. | 4f | Verified | Batch 4f-1 (18 Oct 2026): a reported payment awaiting verification keeps the reservation for admin review (not released): finance page lists them; unit |
+| DASH-PAY-010 | DG §Payment ¶4 | Bookings keep the deadline and policy terms agreed at booking; later rule changes never rewrite them. | 4f | Verified | Batch 4f-1 (18 Oct 2026): deadline set by trigger at booking and frozen (keep_deadline trigger, 160: rewrite refused, new premium period leaves it); policy snapshot from 4e |
 | DASH-PAY-011 | DG §Payment ¶5 | Each cruise can have its own cancellation wording and percentage bands by time before departure. | 4f | Planned |  |
 | DASH-PAY-012 | DG §Payment ¶5 | The system calculates cancellation charges, refundable amounts and unpaid cancellation charges (unit-tested). | 4f | Planned |  |
-| DASH-PAY-013 | DG §Payment ¶5 | A customer must acknowledge the applicable policy before the payment workflow proceeds. | 4f | Planned |  |
+| DASH-PAY-013 | DG §Payment ¶5 | A customer must acknowledge the applicable policy before the payment workflow proceeds. | 4f | Verified | Batch 4f-1 (18 Oct 2026): policy acknowledged at acceptance (4e) and again before card payment (startCheckout refuses without the tick; e2e) |
 | DASH-PAY-014 | DG §Payment ¶6 | Tours have their own orders, amounts, terms and payments; a tour payment can never settle a cruise balance. | 4f | Planned |  |
 
 ## Dashboard guide (PUB)
@@ -276,7 +276,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-BND-005 | DG §Boundaries 5 | External reviews are not collected or refreshed automatically; each shows its source and retrieval date. | 4b | Verified | Batch 4b (18 Oct 2026): external ratings entered by hand with source and date read; no automatic refresh |
 | DASH-BND-006 | DG §Boundaries 6 | Public surfaces are in EN/ES/JA; admin and operational interfaces may stay in English. | 10 | Planned |  |
 | DASH-BND-007 | DG §Boundaries 7 | Account-email sending depends on a configured sender and fails visibly, not silently, when it is missing. | 8 | Planned |  |
-| DASH-BND-008 | DG §Boundaries 8 | Finance tracking is operational only; no accounting, bank settlement or automated refunds. | 4f | Planned |  |
+| DASH-BND-008 | DG §Boundaries 8 | Finance tracking is operational only; no accounting, bank settlement or automated refunds. | 4f | Verified | Batch 4f-1 (18 Oct 2026): operational tracking only: no accounting or bank settlement; payouts are records of transfers made elsewhere; refunds need admin approval (4f-2) |
 
 ## PAGE
 
@@ -622,24 +622,24 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Verified | Batch 4c-1 (18 Oct 2026): max_occupancy 1–3 per cabin type (DB, 120); occupancy rule unit-tested (infants under 3 don't count, adult needed) |
 | DATA-024 | Faris 17 Oct 2026 (ADR-019) | Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable. | 4b | Verified | Batch 4b (18 Oct 2026): dated showcase with reason (DB check), expires (110_showcase.sql); e2e showcase |
 | DATA-025 | Faris 17 Oct 2026 (ADR-019) | At launch no showcase exception remains (launch checklist check). | 11 | Planned |  |
-| DATA-026 | Faris 17 Oct 2026 (ADR-020); Q2 | Cruise bookings are paid by card through Stripe, within the booking's payment deadline. | 4f | Planned |  |
+| DATA-026 | Faris 17 Oct 2026 (ADR-020); Q2 | Cruise bookings are paid by card through Stripe, within the booking's payment deadline. | 4f | Built | Batch 4f-1 (18 Oct 2026): Stripe Checkout for the outstanding balance in US$/€ (unit checkoutParams); live Checkout untested until Faris adds Stripe test keys (CONTENT-NEEDED #23) |
 | DATA-027 | Faris 17 Oct 2026 (ADR-020) | Tour orders are paid by card through Stripe as separate payments from the cruise. | 4f | Planned |  |
-| DATA-028 | Faris 17 Oct 2026 (ADR-020) | Payment status changes only from verified, idempotent Stripe webhooks, never from the browser redirect. | 4f | Planned |  |
+| DATA-028 | Faris 17 Oct 2026 (ADR-020) | Payment status changes only from verified, idempotent Stripe webhooks, never from the browser redirect. | 4f | Verified | Batch 4f-1 (18 Oct 2026): status changes only from signature-verified webhooks; repeats change nothing (service_card_payment idempotent per intent; 160; e2e bad signature 400, duplicate) |
 | DATA-029 | Faris 17 Oct 2026 (ADR-020) | Refunds are issued through Stripe only after admin approval, for the amount the cancellation calculation produces. | 4f | Planned |  |
-| DATA-030 | Faris 17 Oct 2026 (ADR-020) | Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only. | 4f | Planned |  |
+| DATA-030 | Faris 17 Oct 2026 (ADR-020) | Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only. | 4f | Built | Batch 4f-1 (18 Oct 2026): card entry only on Stripe-hosted Checkout (no card fields in our app); test mode on staging once Faris adds test keys |
 | DATA-031 | Faris 17 Oct 2026 (ADR-021); Q4 | One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL. | 5 | Planned |  |
 | DATA-032 | Faris 17 Oct 2026 (ADR-025); Q3 | Public pages show one 'from' price per vessel: the lowest available cabin category, per person, with currency and what is included; other categories show no price. | 5 | Planned |  |
 | DATA-033 | Faris 17 Oct 2026 (ADR-025); Q3 | Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates). | 8 | Planned |  |
 | DATA-034 | Faris 17 Oct 2026 (ADR-025) | Vessel-page Offer schema uses the public 'from' price only (AggregateOffer lowPrice and priceCurrency). | 5 | Planned |  |
-| DATA-035 | Faris 17 Oct 2026 (ADR-026); Q51 | Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators. | 4f | Planned |  |
-| DATA-036 | Faris 17 Oct 2026 (ADR-026); Q18 | Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities. | 4f | Planned |  |
-| DATA-037 | Faris 17 Oct 2026 (ADR-026); PROPOSED-013 | Each verified payment creates an operator payable (payment less commission); admins record payouts made outside the system and see each operator's outstanding balance. | 4f | Planned |  |
-| DATA-038 | Faris 17 Oct 2026 (ADR-026) | Operators see their own payables, payouts and balance, read-only. | 4f | Planned |  |
-| DATA-039 | Faris 17 Oct 2026 (ADR-027); Q16 | Payment deadlines count Cairo calendar days from the booking date; 24 Dec and 7 Jan are inclusive; the season is set by the departure date (unit-tested at every boundary). | 4f | Planned |  |
-| DATA-040 | Faris 17 Oct 2026 (ADR-027) | At the deadline an unpaid reservation is cancelled and its cabins released automatically, unless a reported payment awaits verification, in which case it goes to the admin queue. | 4f | Planned |  |
+| DATA-035 | Faris 17 Oct 2026 (ADR-026); Q51 | Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators. | 4f | Verified | Batch 4f-1 (18 Oct 2026): payments go to Nilecruz (one Stripe account, no Connect); receipts say received by Nilecruz |
+| DATA-036 | Faris 17 Oct 2026 (ADR-026); Q18 | Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities. | 4f | Verified | Batch 4f-1 (18 Oct 2026): 10 % from platform_settings.commission_bp, half-up, never on the gratuity (not in totals); proportional reversal unit-tested |
+| DATA-037 | Faris 17 Oct 2026 (ADR-026); PROPOSED-013 | Each verified payment creates an operator payable (payment less commission); admins record payouts made outside the system and see each operator's outstanding balance. | 4f | Verified | Batch 4f-1 (18 Oct 2026): each verified payment creates the operator payable; admins record payouts; balances per operator and currency (160, e2e) |
+| DATA-038 | Faris 17 Oct 2026 (ADR-026) | Operators see their own payables, payouts and balance, read-only. | 4f | Verified | Batch 4f-1 (18 Oct 2026): operator owners and finance see payables, payouts and balance read-only; viewers and other operators see none (160, e2e) |
+| DATA-039 | Faris 17 Oct 2026 (ADR-027); Q16 | Payment deadlines count Cairo calendar days from the booking date; 24 Dec and 7 Jan are inclusive; the season is set by the departure date (unit-tested at every boundary). | 4f | Verified | Batch 4f-1 (18 Oct 2026): Cairo calendar days from the booking date; 24 Dec and 7 Jan inclusive; season by departure date (unit at every boundary; SQL mirrors TS, 160) |
+| DATA-040 | Faris 17 Oct 2026 (ADR-027) | At the deadline an unpaid reservation is cancelled and its cabins released automatically, unless a reported payment awaits verification, in which case it goes to the admin queue. | 4f | Verified | Batch 4f-1 (18 Oct 2026): release at the deadline unless a reported payment awaits verification (160; unit) |
 | DATA-041 | Faris 17 Oct 2026 (ADR-030); Q54 | Tour and extra orders are sold and charged by Nilecruz alone: listed and paid separately from cruises, with no operator payable and no commission split. | 4f | Planned |  |
 | DATA-042 | Faris 17 Oct 2026 (ADR-030); Q11 | Only Nilecruz admins create and manage tours, suppliers, sessions and programs; operators have no access to tours. | 4d | Verified | Batch 4d (18 Oct 2026): only admins manage tours; catalogue/super everything, content texts and photos only (ADR-087); operators and partners refused (140, e2e 403) |
-| DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Planned |  |
+| DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Verified | Batch 4f-1 (18 Oct 2026): finance admins record manual payments with method, reference and approver (record_manual_payment; 160) |
 | DATA-044 | Faris 17 Oct 2026 (ADR-053); PROPOSED-015 | Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris. | 3 | Verified | Batch 3 (17 Oct 2026): studio/schemaTypes/documents/egyptologist.ts (field-level EN/ES/JA, photo consent required); schema validates (pnpm studio:check). Content from Faris: CONTENT-NEEDED #13 |
 | DATA-045 | Faris 17 Oct 2026 (ADR-051) | Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates. | 3 | Verified | Batch 3 (17 Oct 2026): scripts/lib/vessel-import.ts; vessel-import.test.ts; Faris confirmed the Sudan as the only steamer (ADR-060): 3 Sudan records steam, Karim, Misr and Sphinx stay motor |
 
