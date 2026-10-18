@@ -674,6 +674,7 @@ export type Database = {
           is_sample: boolean;
           sort_order: number;
           storage_path: string;
+          tour_id: string | null;
           updated_at: string;
           vessel_id: string | null;
           width: number;
@@ -688,6 +689,7 @@ export type Database = {
           is_sample?: boolean;
           sort_order?: number;
           storage_path: string;
+          tour_id?: string | null;
           updated_at?: string;
           vessel_id?: string | null;
           width: number;
@@ -702,6 +704,7 @@ export type Database = {
           is_sample?: boolean;
           sort_order?: number;
           storage_path?: string;
+          tour_id?: string | null;
           updated_at?: string;
           vessel_id?: string | null;
           width?: number;
@@ -719,6 +722,13 @@ export type Database = {
             columns: ["destination_id"];
             isOneToOne: false;
             referencedRelation: "destinations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "media_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
             referencedColumns: ["id"];
           },
           {
@@ -920,6 +930,128 @@ export type Database = {
           locale?: string;
           platform_role?: Database["public"]["Enums"]["platform_role"];
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      program_items: {
+        Row: {
+          day_number: number;
+          program_id: string;
+          tour_id: string;
+        };
+        Insert: {
+          day_number: number;
+          program_id: string;
+          tour_id: string;
+        };
+        Update: {
+          day_number?: number;
+          program_id?: string;
+          tour_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "program_items_program_id_fkey";
+            columns: ["program_id"];
+            isOneToOne: false;
+            referencedRelation: "programs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "program_items_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      program_schedules: {
+        Row: {
+          program_id: string;
+          schedule_id: string;
+        };
+        Insert: {
+          program_id: string;
+          schedule_id: string;
+        };
+        Update: {
+          program_id?: string;
+          schedule_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "program_schedules_program_id_fkey";
+            columns: ["program_id"];
+            isOneToOne: false;
+            referencedRelation: "programs";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "program_schedules_schedule_id_fkey";
+            columns: ["schedule_id"];
+            isOneToOne: false;
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      program_translations: {
+        Row: {
+          description: string | null;
+          locale: string;
+          program_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          description?: string | null;
+          locale: string;
+          program_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          description?: string | null;
+          locale?: string;
+          program_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "program_translations_program_id_fkey";
+            columns: ["program_id"];
+            isOneToOne: false;
+            referencedRelation: "programs";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      programs: {
+        Row: {
+          created_at: string;
+          days: number;
+          id: string;
+          is_sample: boolean;
+          name: string;
+          updated_at: string;
+          visibility: Database["public"]["Enums"]["visibility"];
+        };
+        Insert: {
+          created_at?: string;
+          days: number;
+          id?: string;
+          is_sample?: boolean;
+          name: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["visibility"];
+        };
+        Update: {
+          created_at?: string;
+          days?: number;
+          id?: string;
+          is_sample?: boolean;
+          name?: string;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["visibility"];
         };
         Relationships: [];
       };
@@ -1260,6 +1392,241 @@ export type Database = {
             columns: ["vessel_id"];
             isOneToOne: false;
             referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_schedules: {
+        Row: {
+          schedule_id: string;
+          tour_id: string;
+        };
+        Insert: {
+          schedule_id: string;
+          tour_id: string;
+        };
+        Update: {
+          schedule_id?: string;
+          tour_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_schedules_schedule_id_fkey";
+            columns: ["schedule_id"];
+            isOneToOne: false;
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tour_schedules_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_sessions: {
+        Row: {
+          capacity: number;
+          created_at: string;
+          currency: string;
+          ends_at: string;
+          id: string;
+          kind: Database["public"]["Enums"]["session_kind"];
+          price_minor: number;
+          pricing: Database["public"]["Enums"]["price_basis"];
+          starts_at: string;
+          status: Database["public"]["Enums"]["departure_status"];
+          tour_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          capacity: number;
+          created_at?: string;
+          currency: string;
+          ends_at: string;
+          id?: string;
+          kind: Database["public"]["Enums"]["session_kind"];
+          price_minor: number;
+          pricing: Database["public"]["Enums"]["price_basis"];
+          starts_at: string;
+          status?: Database["public"]["Enums"]["departure_status"];
+          tour_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          capacity?: number;
+          created_at?: string;
+          currency?: string;
+          ends_at?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["session_kind"];
+          price_minor?: number;
+          pricing?: Database["public"]["Enums"]["price_basis"];
+          starts_at?: string;
+          status?: Database["public"]["Enums"]["departure_status"];
+          tour_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_sessions_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_suppliers: {
+        Row: {
+          contact_name: string | null;
+          created_at: string;
+          email: string | null;
+          id: string;
+          is_sample: boolean;
+          name: string;
+          notes: string | null;
+          phone: string | null;
+          registration: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          contact_name?: string | null;
+          created_at?: string;
+          email?: string | null;
+          id?: string;
+          is_sample?: boolean;
+          name: string;
+          notes?: string | null;
+          phone?: string | null;
+          registration?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          contact_name?: string | null;
+          created_at?: string;
+          email?: string | null;
+          id?: string;
+          is_sample?: boolean;
+          name?: string;
+          notes?: string | null;
+          phone?: string | null;
+          registration?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      tour_translations: {
+        Row: {
+          cancellation_terms: string | null;
+          description: string | null;
+          exclusions: string[];
+          inclusions: string[];
+          itinerary: string[];
+          locale: string;
+          meeting_point: string | null;
+          tour_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          cancellation_terms?: string | null;
+          description?: string | null;
+          exclusions?: string[];
+          inclusions?: string[];
+          itinerary?: string[];
+          locale: string;
+          meeting_point?: string | null;
+          tour_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          cancellation_terms?: string | null;
+          description?: string | null;
+          exclusions?: string[];
+          inclusions?: string[];
+          itinerary?: string[];
+          locale?: string;
+          meeting_point?: string | null;
+          tour_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_translations_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tours: {
+        Row: {
+          adults_only: boolean;
+          cancellation_bands: Json;
+          created_at: string;
+          destination_id: string | null;
+          duration_minutes: number;
+          id: string;
+          is_sample: boolean;
+          kind: Database["public"]["Enums"]["tour_kind"];
+          location: string;
+          name: string;
+          slug: string;
+          standalone: boolean;
+          supplier_id: string | null;
+          updated_at: string;
+          visibility: Database["public"]["Enums"]["visibility"];
+        };
+        Insert: {
+          adults_only?: boolean;
+          cancellation_bands?: Json;
+          created_at?: string;
+          destination_id?: string | null;
+          duration_minutes: number;
+          id?: string;
+          is_sample?: boolean;
+          kind: Database["public"]["Enums"]["tour_kind"];
+          location: string;
+          name: string;
+          slug: string;
+          standalone?: boolean;
+          supplier_id?: string | null;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["visibility"];
+        };
+        Update: {
+          adults_only?: boolean;
+          cancellation_bands?: Json;
+          created_at?: string;
+          destination_id?: string | null;
+          duration_minutes?: number;
+          id?: string;
+          is_sample?: boolean;
+          kind?: Database["public"]["Enums"]["tour_kind"];
+          location?: string;
+          name?: string;
+          slug?: string;
+          standalone?: boolean;
+          supplier_id?: string | null;
+          updated_at?: string;
+          visibility?: Database["public"]["Enums"]["visibility"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tours_destination_id_fkey";
+            columns: ["destination_id"];
+            isOneToOne: false;
+            referencedRelation: "destinations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tours_supplier_id_fkey";
+            columns: ["supplier_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_suppliers";
             referencedColumns: ["id"];
           },
         ];
@@ -1625,6 +1992,7 @@ export type Database = {
         Returns: undefined;
       };
       submit_submission: { Args: { target: string }; Returns: undefined };
+      tour_is_bookable: { Args: { target: string }; Returns: boolean };
       vessel_product_summary: {
         Args: { only_vessel?: string };
         Returns: {
@@ -1657,12 +2025,15 @@ export type Database = {
       org_kind: "operator" | "partner" | "nilecruz";
       org_status: "applied" | "approved" | "paused" | "rejected";
       platform_role: "customer" | "admin";
+      price_basis: "per_guest" | "per_group";
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
       rate_plan: "international" | "egyptian_citizen" | "foreign_resident" | "trade";
       safety_status: "open" | "under_review" | "resolved";
+      session_kind: "shared" | "private";
       submission_event: "created" | "edited" | "submitted" | "changes_requested" | "approved" | "rejected";
       submission_status: "draft" | "submitted" | "changes_requested" | "approved" | "rejected";
       team_role: "owner" | "reservations" | "finance" | "viewer";
+      tour_kind: "museum_visit" | "excursion" | "evening_tour" | "transfer" | "other";
       vessel_category: "basic" | "standard" | "superior" | "deluxe" | "luxury";
       vessel_type: "sail" | "motor" | "steam";
       visibility: "private" | "showcase" | "published";
@@ -1803,12 +2174,15 @@ export const Constants = {
       org_kind: ["operator", "partner", "nilecruz"],
       org_status: ["applied", "approved", "paused", "rejected"],
       platform_role: ["customer", "admin"],
+      price_basis: ["per_guest", "per_group"],
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],
       rate_plan: ["international", "egyptian_citizen", "foreign_resident", "trade"],
       safety_status: ["open", "under_review", "resolved"],
+      session_kind: ["shared", "private"],
       submission_event: ["created", "edited", "submitted", "changes_requested", "approved", "rejected"],
       submission_status: ["draft", "submitted", "changes_requested", "approved", "rejected"],
       team_role: ["owner", "reservations", "finance", "viewer"],
+      tour_kind: ["museum_visit", "excursion", "evening_tour", "transfer", "other"],
       vessel_category: ["basic", "standard", "superior", "deluxe", "luxury"],
       vessel_type: ["sail", "motor", "steam"],
       visibility: ["private", "showcase", "published"],
