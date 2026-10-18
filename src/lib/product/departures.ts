@@ -36,3 +36,11 @@ export const WEEKDAYS = [
   { value: 6, label: "Saturday" },
   { value: 7, label: "Sunday" },
 ] as const;
+
+/** Today and a horizon N days ahead, as ISO dates (UTC). Kept out of components so renders stay pure. */
+export function dateWindow(days: number, from?: string): { today: string; until: string } {
+  const now = Date.now();
+  const start = from ? Date.parse(`${from}T00:00:00Z`) : now;
+  return { today: iso(new Date(now)), until: iso(new Date(start + days * 86_400_000)) };
+}
+export const nowMs = () => Date.now();

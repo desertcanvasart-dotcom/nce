@@ -32,7 +32,7 @@ type ListRow = {
   vessel_private: { aliases: string[] } | null;
 };
 
-type Summary = { cabin_types: number; bookable_departures: number };
+type Summary = { cabin_types: number; schedules: number; upcoming_departures: number; bookable_departures: number };
 
 function readinessOf(v: ListRow, sum?: Summary) {
   const input: ReadinessInput = {
