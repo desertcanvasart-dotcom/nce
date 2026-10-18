@@ -15,6 +15,12 @@ with intended(table_name, grantee, privileges) as (
     ('tours', 'anon', 'SELECT'), ('tour_translations', 'anon', 'SELECT'), ('tour_schedules', 'anon', 'SELECT'),
     ('tour_sessions', 'anon', 'SELECT'), ('programs', 'anon', 'SELECT'), ('program_translations', 'anon', 'SELECT'),
     ('program_items', 'anon', 'SELECT'), ('program_schedules', 'anon', 'SELECT'),
+    -- Batch 4e: people write requests, proofs and read marks directly; offers and reservations only through functions.
+    ('cancellation_policies', 'anon', 'SELECT'), ('cancellation_policy_translations', 'anon', 'SELECT'),
+    ('cruise_requests', 'authenticated', 'INSERT,SELECT,UPDATE'), ('offers', 'authenticated', 'SELECT'),
+    ('offer_cabins', 'authenticated', 'SELECT'), ('reservations', 'authenticated', 'SELECT'),
+    ('reservation_cabins', 'authenticated', 'SELECT'), ('passengers', 'authenticated', 'SELECT'),
+    ('eligibility_proofs', 'authenticated', 'INSERT,SELECT'), ('notifications', 'authenticated', 'SELECT,UPDATE'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -26,8 +32,13 @@ with intended(table_name, grantee, privileges) as (
                     'cabin_types', 'cabin_type_translations', 'schedules', 'schedule_periods', 'schedule_days', 'departures',
                     'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates',
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
-                    'program_translations', 'program_items', 'program_schedules']) t,
+                    'program_translations', 'program_items', 'program_schedules',
+                    'cancellation_policies', 'cancellation_policy_translations']) t,
        unnest(array['authenticated', 'service_role']) g
+  union all
+  select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
+  from unnest(array['cruise_requests', 'offers', 'offer_cabins', 'reservations', 'reservation_cabins', 'passengers',
+                    'eligibility_proofs', 'notifications']) t
 ),
 actual as (
   select table_name::text, grantee::text, string_agg(privilege_type, ',' order by privilege_type) as privileges
