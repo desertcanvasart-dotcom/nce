@@ -136,7 +136,9 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
                     </td>
                     <td data-label="Cabin “type” codes">
                       {v.cabin_types.length
-                        ? v.cabin_types.map((c) => `${c.code} (${c.name}, up to ${c.max_occupancy}${c.active ? "" : ", switched off"})`).join(" · ")
+                        ? v.cabin_types
+                            .map((c) => `${c.code} (${c.name}, up to ${c.max_occupancy}${c.active ? "" : ", switched off"})`)
+                            .join(" · ")
                         : "None yet"}
                     </td>
                     <td data-label="Schedule codes">
@@ -162,8 +164,8 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
 
       <Section title="XML" id="xml">
         <p>
-          The same structure. XML with a <code>&lt;!DOCTYPE&gt;</code> or entity declarations is refused, and entity references are
-          not expanded.
+          The same structure. XML with a <code>&lt;!DOCTYPE&gt;</code> or entity declarations is refused, and entity references
+          are not expanded.
         </p>
         <pre className={ui.code} aria-label="XML example">
           {XML_EXAMPLE}
@@ -216,8 +218,8 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
       <Section title="Feeds" id="feeds">
         <p>
           Publish the document at an https:// address on the public internet (port 443 or 8443). After Nilecruz approves the
-          address, it is pulled every hour; after three failures in a row, every two hours until it works again. Limits: 5 MB,
-          20 seconds, uncompressed, at most three redirects, each to a public https address. Changing the address needs a new
+          address, it is pulled every hour; after three failures in a row, every two hours until it works again. Limits: 5 MB, 20
+          seconds, uncompressed, at most three redirects, each to a public https address. Changing the address needs a new
           approval.
         </p>
       </Section>

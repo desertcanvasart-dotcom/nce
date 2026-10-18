@@ -9,7 +9,12 @@ export function POST(request: Request) {
 
 export function GET() {
   return Response.json(
-    { error: { code: "method", message: "Send inventory with a signed POST. See the format document in your operator dashboard." } },
+    {
+      error: {
+        code: "method",
+        message: "Send inventory with a signed POST. See the format document in your operator dashboard.",
+      },
+    },
     { status: 405, headers: { Allow: "POST" } },
   );
 }

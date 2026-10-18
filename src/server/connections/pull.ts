@@ -16,7 +16,11 @@ export async function pullFeed(feed: Feed): Promise<PullOutcome> {
   const db = getAdminDb();
   let error: string;
   try {
-    const res = await safeFetch(feed.url, { maxBytes: LIMITS.feedBytes, timeoutMs: FEED_LIMITS.timeoutMs, policy: fetchPolicy() });
+    const res = await safeFetch(feed.url, {
+      maxBytes: LIMITS.feedBytes,
+      timeoutMs: FEED_LIMITS.timeoutMs,
+      policy: fetchPolicy(),
+    });
     const rows = parseInventory(res.body, { maxBytes: LIMITS.feedBytes, contentType: res.contentType });
     const { data, error: dbError } = await db.rpc("service_apply_inventory", {
       target_org: feed.org_id,

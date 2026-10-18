@@ -19,7 +19,12 @@ export type Run = Pick<
   | "finished_at"
 >;
 export type ApiKey = Pick<Tables<"api_keys">, "id" | "key_id" | "label" | "created_at" | "last_used_at" | "revoked_at">;
-export type RowResult = { i: number; label: string; status: "new" | "changed" | "unchanged" | "skipped" | "error"; messages: string[] };
+export type RowResult = {
+  i: number;
+  label: string;
+  status: "new" | "changed" | "unchanged" | "skipped" | "error";
+  messages: string[];
+};
 
 const RUN_COLUMNS =
   "id, source, status, label, rows_received, rows_changed, rows_unchanged, rows_skipped, rows_failed, error, created_at, finished_at";
@@ -47,9 +52,13 @@ function healthOf(route: Health["route"], runs: Run[], feed: Feed | null): Healt
   if (route === "feed" && feed) {
     return {
       ...base,
-      state: feed.status === "pending" ? "waiting" : feed.status !== "active" ? "problem" : feed.last_error ? "problem" : base.state,
+      state:
+        feed.status === "pending" ? "waiting" : feed.status !== "active" ? "problem" : feed.last_error ? "problem" : base.state,
       lastSuccess: feed.last_success_at ?? base.lastSuccess,
-      lastProblem: feed.status === "rejected" || feed.status === "paused" ? (feed.status_reason ?? null) : (feed.last_error ?? base.lastProblem),
+      lastProblem:
+        feed.status === "rejected" || feed.status === "paused"
+          ? (feed.status_reason ?? null)
+          : (feed.last_error ?? base.lastProblem),
       rowsChanged: feed.last_rows_changed ?? base.rowsChanged,
     };
   }
@@ -60,7 +69,11 @@ export async function connectionsFor(orgId: string) {
   const db = await getDb();
   const [feed, keys, runs] = await Promise.all([
     db.from("inventory_feeds").select("*").eq("org_id", orgId).maybeSingle(),
-    db.from("api_keys").select("id, key_id, label, created_at, last_used_at, revoked_at").eq("org_id", orgId).order("created_at", { ascending: false }),
+    db
+      .from("api_keys")
+      .select("id, key_id, label, created_at, last_used_at, revoked_at")
+      .eq("org_id", orgId)
+      .order("created_at", { ascending: false }),
     db
       .from("inventory_runs")
       .select(RUN_COLUMNS)
@@ -122,7 +135,11 @@ export async function adminConnectionCounts() {
   return { errors: (failing.count ?? 0) + apiOrgs.size, pendingFeeds: pending.count ?? 0 };
 }
 
-export type OrgConnectionStatus = { modes: ("manual" | "paste" | "feed" | "api")[]; feed: Feed["status"] | null; problem: string | null };
+export type OrgConnectionStatus = {
+  modes: ("manual" | "paste" | "feed" | "api")[];
+  feed: Feed["status"] | null;
+  problem: string | null;
+};
 
 export async function connectionStatusByOrg(orgIds: string[]): Promise<Map<string, OrgConnectionStatus>> {
   const out = new Map<string, OrgConnectionStatus>();

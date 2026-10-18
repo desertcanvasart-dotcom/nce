@@ -3,20 +3,24 @@ import { Section, ui } from "@/components/dashboard/ui";
 import { requireAdmin } from "@/server/auth";
 import { overviewCounts } from "@/server/catalogue/queries";
 import { recentActivity } from "@/server/catalogue/activity";
+import { adminConnectionCounts } from "@/server/connections/queries";
 import { ActivityTable } from "./activity/ActivityTable";
 
 /**
- * DASH-ADM-001, 002, 007, 009: the working queue. Each counter links to its pre-filtered list.
- * Payments, bookings, cancellations and feed errors join the queue with their batches; until then they say so.
+ * DASH-ADM-001, 002, 006, 007, 009: the working queue. Each counter links to its pre-filtered list.
+ * Payments, bookings and cancellations join the queue with their batches; until then they say so.
  */
 export default async function AdminOverview() {
   await requireAdmin(undefined, "/dashboard/admin/");
-  const [counts, activity] = await Promise.all([overviewCounts(), recentActivity({ page: 1, pageSize: 10 })]);
+  const [counts, activity, connections] = await Promise.all([
+    overviewCounts(),
+    recentActivity({ page: 1, pageSize: 10 }),
+    adminConnectionCounts(),
+  ]);
   const later = [
     ["Payments awaiting verification", "4f"],
     ["Current and upcoming bookings", "4e"],
     ["Cancellation requests and refund reviews", "4f"],
-    ["Inventory connection errors", "4c"],
   ] as const;
   return (
     <>
@@ -34,6 +38,14 @@ export default async function AdminOverview() {
         <Link className={ui.counter} href="/dashboard/admin/submissions/?status=submitted">
           <span className={ui.counterValue}>{counts.submissions}</span>
           <span className={ui.counterLabel}>Cruise submissions awaiting review</span>
+        </Link>
+        <Link className={ui.counter} href="/dashboard/admin/operators/?connections=problems">
+          <span className={ui.counterValue}>{connections.errors}</span>
+          <span className={ui.counterLabel}>Inventory connection errors</span>
+        </Link>
+        <Link className={ui.counter} href="/dashboard/admin/operators/?connections=pending">
+          <span className={ui.counterValue}>{connections.pendingFeeds}</span>
+          <span className={ui.counterLabel}>Inventory feeds awaiting approval</span>
         </Link>
         {later.map(([label, batch]) => (
           <div key={label} className={ui.counter}>

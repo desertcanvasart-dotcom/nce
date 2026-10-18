@@ -21,7 +21,10 @@ export function fetchPolicy(): FetchPolicy {
   if (!origins || !usesLocalDatabase()) return {};
   const caPath = process.env.NILECRUZ_FEED_TEST_CA;
   return {
-    testOrigins: origins.split(",").map((o) => o.trim()).filter(Boolean),
+    testOrigins: origins
+      .split(",")
+      .map((o) => o.trim())
+      .filter(Boolean),
     ca: caPath ? readFileSync(caPath, "utf8") : undefined,
   };
 }

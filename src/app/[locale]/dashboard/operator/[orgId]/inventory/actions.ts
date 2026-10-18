@@ -87,7 +87,11 @@ export async function removeFeed(orgId: string, _prev: ActionState, _fd: FormDat
 }
 
 // ── API keys (DASH-OPR-026, SEC-008) ──────────────────────────────────────────────────────────────────────
-const keyLabel = z.string().trim().min(1, "Give the key a name, such as the system that will use it.").max(80, "At most 80 characters.");
+const keyLabel = z
+  .string()
+  .trim()
+  .min(1, "Give the key a name, such as the system that will use it.")
+  .max(80, "At most 80 characters.");
 
 export async function createKey(orgId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireOrgRole(orgId, ["owner"], { kind: "operator", returnTo: page(orgId) });
@@ -96,7 +100,11 @@ export async function createKey(orgId: string, _prev: ActionState, fd: FormData)
   // The private key exists only in this response: Nilecruz stores the public key and never sees it again.
   const pair = generateApiKeyPair();
   const db = await getDb();
-  const { data, error } = await db.rpc("create_api_key", { target_org: orgId, key_label: label.data, key_public: pair.publicKey });
+  const { data, error } = await db.rpc("create_api_key", {
+    target_org: orgId,
+    key_label: label.data,
+    key_public: pair.publicKey,
+  });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
   return {

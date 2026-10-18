@@ -4,6 +4,7 @@ import { Button } from "@/components/ds/Button/Button";
 import { Select, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireAdmin } from "@/server/auth";
+import { connectionStatusByOrg } from "@/server/connections/queries";
 import { getDb } from "@/server/db";
 
 const STATUS = [
@@ -13,12 +14,22 @@ const STATUS = [
   { value: "rejected", label: "Rejected" },
 ] as const;
 const tone = { applied: "accent", approved: "success", paused: "neutral", rejected: "danger" } as const;
+const CONNECTIONS = [
+  { value: "problems", label: "With connection errors" },
+  { value: "pending", label: "Feed awaiting approval" },
+] as const;
+const MODE = { manual: "manual", paste: "paste", feed: "feed", api: "API" } as const;
 
-/** DASH-ADM-042: operator applications and operators. */
-export default async function OperatorsPage({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
+/** DASH-ADM-042, 045: operator applications and operators, with how each keeps its inventory current. */
+export default async function OperatorsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string; connections?: string }>;
+}) {
   await requireAdmin(["catalogue", "finance"], "/dashboard/admin/operators/");
-  const { status } = await searchParams;
+  const { status, connections } = await searchParams;
   const filter = STATUS.find((s) => s.value === status)?.value;
+  const connFilter = CONNECTIONS.find((c) => c.value === connections)?.value;
   const db = await getDb();
   let q = db
     .from("organisations")
@@ -27,12 +38,16 @@ export default async function OperatorsPage({ searchParams }: { searchParams: Pr
     .order("created_at", { ascending: false });
   if (filter) q = q.eq("status", filter);
   const { data } = await q;
-  const rows = data ?? [];
+  const conn = await connectionStatusByOrg((data ?? []).map((o) => o.id));
+  const rows = (data ?? []).filter((o) =>
+    connFilter === "problems" ? !!conn.get(o.id)?.problem : connFilter === "pending" ? conn.get(o.id)?.feed === "pending" : true,
+  );
   return (
     <>
       <h1 className={ui.pageTitle}>Operators</h1>
       <form method="get" className={ui.grid} aria-label="Filter operators">
         <Select label="Status" name="status" placeholder="All" defaultValue={filter} options={STATUS} />
+        <Select label="Connections" name="connections" placeholder="All" defaultValue={connFilter} options={CONNECTIONS} />
         <div className={ui.filterSubmit}>
           <Button type="submit">Filter</Button>
         </div>
@@ -49,6 +64,7 @@ export default async function OperatorsPage({ searchParams }: { searchParams: Pr
                 <th scope="col" className={ui.num}>
                   Vessels
                 </th>
+                <th scope="col">Inventory connections</th>
               </tr>
             </thead>
             <tbody>
@@ -65,13 +81,26 @@ export default async function OperatorsPage({ searchParams }: { searchParams: Pr
                     <CairoTime value={o.created_at} />
                   </td>
                   <td className={ui.num}>{(o.vessels as unknown as { count: number }[])[0]?.count ?? 0}</td>
+                  <td>
+                    {conn
+                      .get(o.id)!
+                      .modes.map((m) => MODE[m])
+                      .join(", ")}
+                    {conn.get(o.id)!.feed === "pending" ? <Badge tone="accent">Feed awaiting approval</Badge> : null}
+                    {conn.get(o.id)!.problem ? (
+                      <>
+                        {" "}
+                        <Badge tone="danger">Error</Badge> <span className={ui.muted}>{conn.get(o.id)!.problem}</span>
+                      </>
+                    ) : null}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       ) : (
-        <p className={ui.muted}>No operators {filter ? "with this status" : "yet"}.</p>
+        <p className={ui.muted}>No operators {filter || connFilter ? "match these filters" : "yet"}.</p>
       )}
     </>
   );

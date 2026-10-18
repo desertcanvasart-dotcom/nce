@@ -1,4 +1,13 @@
-import { createHash, createHmac, createPrivateKey, createPublicKey, generateKeyPairSync, sign, timingSafeEqual, verify } from "node:crypto";
+import {
+  createHash,
+  createHmac,
+  createPrivateKey,
+  createPublicKey,
+  generateKeyPairSync,
+  sign,
+  timingSafeEqual,
+  verify,
+} from "node:crypto";
 
 /**
  * Signed, idempotent API calls and signed webhooks (SEC-008, SEC-009, ADR-085).
@@ -55,7 +64,11 @@ export function verifyRequest(
   p: RequestParts,
   nowSeconds: number = Math.floor(Date.now() / 1000),
 ): VerifyResult {
-  if (!/^\d{9,11}$/.test(p.timestamp) || !IDEMPOTENCY_KEY.test(p.idempotencyKey) || !/^[A-Za-z0-9+/]+={0,2}$/.test(signatureBase64)) {
+  if (
+    !/^\d{9,11}$/.test(p.timestamp) ||
+    !IDEMPOTENCY_KEY.test(p.idempotencyKey) ||
+    !/^[A-Za-z0-9+/]+={0,2}$/.test(signatureBase64)
+  ) {
     return { ok: false, reason: "malformed" };
   }
   if (Math.abs(nowSeconds - Number(p.timestamp)) > TOLERANCE_SECONDS) return { ok: false, reason: "expired" };
@@ -75,7 +88,12 @@ export function pullSignature(secret: string, timestamp: string): string {
   return createHmac("sha256", secret).update(`feed-pull.${timestamp}`).digest("hex");
 }
 
-export function verifyPull(secret: string, timestamp: string, signatureHex: string, nowSeconds = Math.floor(Date.now() / 1000)): boolean {
+export function verifyPull(
+  secret: string,
+  timestamp: string,
+  signatureHex: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): boolean {
   if (!/^\d{9,11}$/.test(timestamp) || !/^[0-9a-f]{64}$/.test(signatureHex)) return false;
   if (Math.abs(nowSeconds - Number(timestamp)) > TOLERANCE_SECONDS) return false;
   return timingSafeEqual(Buffer.from(pullSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
@@ -97,9 +115,11 @@ export function signWebhook(
   return {
     "Nilecruz-Event-Id": eventId,
     "Nilecruz-Timestamp": timestamp,
-    "Nilecruz-Signature": sign(null, Buffer.from(webhookCanonical(timestamp, eventId, body)), createPrivateKey(privateKeyPem)).toString(
-      "base64",
-    ),
+    "Nilecruz-Signature": sign(
+      null,
+      Buffer.from(webhookCanonical(timestamp, eventId, body)),
+      createPrivateKey(privateKeyPem),
+    ).toString("base64"),
   };
 }
 

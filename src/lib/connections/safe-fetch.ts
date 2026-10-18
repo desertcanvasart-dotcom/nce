@@ -122,7 +122,11 @@ export function urlProblem(raw: string, policy: FetchPolicy = {}): string | null
 }
 
 /** For saving a feed address: the checks above plus a DNS lookup now (it is checked again on every pull). */
-export async function addressProblem(raw: string, policy: FetchPolicy = {}, resolve: Resolver = systemResolver): Promise<string | null> {
+export async function addressProblem(
+  raw: string,
+  policy: FetchPolicy = {},
+  resolve: Resolver = systemResolver,
+): Promise<string | null> {
   const p = urlProblem(raw, policy);
   if (p) return p;
   const url = new URL(raw);
@@ -137,7 +141,11 @@ export async function addressProblem(raw: string, policy: FetchPolicy = {}, reso
   return null;
 }
 
-type LookupCallback = (err: NodeJS.ErrnoException | null, address: string | { address: string; family: number }[], family?: number) => void;
+type LookupCallback = (
+  err: NodeJS.ErrnoException | null,
+  address: string | { address: string; family: number }[],
+  family?: number,
+) => void;
 
 /** The lookup the connection itself uses: refuses private answers, so what is checked is what is connected to. */
 export function pinnedLookup(resolve: Resolver) {
@@ -146,7 +154,10 @@ export function pinnedLookup(resolve: Resolver) {
       (addrs) => {
         if (!addrs.length) return callback(new FetchProblem("dns", "The feed address could not be found."), "");
         if (addrs.some((a) => !isPublicAddress(a.address))) {
-          return callback(new FetchProblem("unsafe", "The feed address points to a private or internal network, so it is not fetched."), "");
+          return callback(
+            new FetchProblem("unsafe", "The feed address points to a private or internal network, so it is not fetched."),
+            "",
+          );
         }
         if (options.all) callback(null, addrs);
         else callback(null, addrs[0]!.address, addrs[0]!.family);
@@ -168,18 +179,30 @@ export type Fetched = { url: string; status: number; contentType: string; body: 
 
 const TLS_CODES = /CERT|SELF_SIGNED|UNABLE_TO_VERIFY|ERR_TLS|ERR_SSL/;
 
-function once(target: URL, o: FetchOptions, deadline: number): Promise<{ status: number; location: string | null; contentType: string; body: string }> {
+function once(
+  target: URL,
+  o: FetchOptions,
+  deadline: number,
+): Promise<{ status: number; location: string | null; contentType: string; body: string }> {
   const policy = o.policy ?? {};
   const test = isTestOrigin(target, policy);
   const lib = target.protocol === "http:" ? http : https;
   return new Promise((resolvePromise, reject) => {
     const remaining = deadline - Date.now();
-    if (remaining <= 0) return reject(new FetchProblem("timeout", `The feed took longer than ${Math.round(o.timeoutMs / 1000)} seconds to answer.`));
+    if (remaining <= 0)
+      return reject(
+        new FetchProblem("timeout", `The feed took longer than ${Math.round(o.timeoutMs / 1000)} seconds to answer.`),
+      );
     const req = lib.request(
       target,
       {
         method: "GET",
-        headers: { "User-Agent": "Nilecruz-FeedPuller/1.0", Accept: "application/json, application/xml, text/xml", "Accept-Encoding": "identity", ...o.headers },
+        headers: {
+          "User-Agent": "Nilecruz-FeedPuller/1.0",
+          Accept: "application/json, application/xml, text/xml",
+          "Accept-Encoding": "identity",
+          ...o.headers,
+        },
         // Test origins skip the address check (they are local by design) and may use the test CA.
         lookup: test ? undefined : (pinnedLookup(o.resolve ?? systemResolver) as never),
         ...(test && policy.ca ? { ca: policy.ca } : {}),
@@ -205,7 +228,8 @@ function once(target: URL, o: FetchOptions, deadline: number): Promise<{ status:
         let size = 0;
         res.on("data", (c: Buffer) => {
           size += c.length;
-          if (size > o.maxBytes) req.destroy(new FetchProblem("too-large", `The feed is larger than ${Math.round(o.maxBytes / 1_000_000)} MB.`));
+          if (size > o.maxBytes)
+            req.destroy(new FetchProblem("too-large", `The feed is larger than ${Math.round(o.maxBytes / 1_000_000)} MB.`));
           else chunks.push(c);
         });
         res.on("end", () =>
@@ -220,15 +244,20 @@ function once(target: URL, o: FetchOptions, deadline: number): Promise<{ status:
       },
     );
     const timer = setTimeout(
-      () => req.destroy(new FetchProblem("timeout", `The feed took longer than ${Math.round(o.timeoutMs / 1000)} seconds to answer.`)),
+      () =>
+        req.destroy(
+          new FetchProblem("timeout", `The feed took longer than ${Math.round(o.timeoutMs / 1000)} seconds to answer.`),
+        ),
       remaining,
     );
     req.on("close", () => clearTimeout(timer));
     req.on("error", (e: NodeJS.ErrnoException) => {
       clearTimeout(timer);
       if (e instanceof FetchProblem) return reject(e);
-      if (e.code && TLS_CODES.test(e.code)) return reject(new FetchProblem("tls", "The feed’s security certificate could not be verified."));
-      if (e.code === "ENOTFOUND" || e.code === "EAI_AGAIN") return reject(new FetchProblem("dns", "The feed address could not be found."));
+      if (e.code && TLS_CODES.test(e.code))
+        return reject(new FetchProblem("tls", "The feed’s security certificate could not be verified."));
+      if (e.code === "ENOTFOUND" || e.code === "EAI_AGAIN")
+        return reject(new FetchProblem("dns", "The feed address could not be found."));
       if (e.code === "ECONNREFUSED") return reject(new FetchProblem("network", "The feed server refused the connection."));
       reject(new FetchProblem("network", "The feed server could not be reached."));
     });
@@ -242,15 +271,24 @@ export async function safeFetch(raw: string, o: FetchOptions): Promise<Fetched> 
   let current = raw;
   for (let hop = 0; ; hop++) {
     const problem = urlProblem(current, o.policy);
-    if (problem) throw new FetchProblem(hop === 0 ? "address" : "unsafe", hop === 0 ? problem : `The feed redirected to an address that is not allowed: ${problem}`);
+    if (problem)
+      throw new FetchProblem(
+        hop === 0 ? "address" : "unsafe",
+        hop === 0 ? problem : `The feed redirected to an address that is not allowed: ${problem}`,
+      );
     const r = await once(new URL(current), o, deadline);
     if (r.location !== null) {
       if (hop >= (o.maxRedirects ?? 3)) throw new FetchProblem("redirects", "The feed redirected too many times.");
       current = new URL(r.location, current).toString();
       continue;
     }
-    if (r.status >= 300 && r.status < 400) throw new FetchProblem("http", `The feed server answered ${r.status} without a new address.`);
-    if (r.status !== 200) throw new FetchProblem("http", `The feed server answered with error ${r.status}${http.STATUS_CODES[r.status] ? ` (${http.STATUS_CODES[r.status]})` : ""}.`);
+    if (r.status >= 300 && r.status < 400)
+      throw new FetchProblem("http", `The feed server answered ${r.status} without a new address.`);
+    if (r.status !== 200)
+      throw new FetchProblem(
+        "http",
+        `The feed server answered with error ${r.status}${http.STATUS_CODES[r.status] ? ` (${http.STATUS_CODES[r.status]})` : ""}.`,
+      );
     return { url: current, status: r.status, contentType: r.contentType, body: r.body };
   }
 }

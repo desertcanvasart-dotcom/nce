@@ -26,7 +26,11 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
   const signature = request.headers.get("nilecruz-signature") ?? "";
   const idempotencyKey = request.headers.get("idempotency-key") ?? "";
   if (!keyId || !timestamp || !signature || !idempotencyKey) {
-    return problem(401, "missing-signature", "Send the Nilecruz-Key, Nilecruz-Timestamp, Nilecruz-Signature and Idempotency-Key headers.");
+    return problem(
+      401,
+      "missing-signature",
+      "Send the Nilecruz-Key, Nilecruz-Timestamp, Nilecruz-Signature and Idempotency-Key headers.",
+    );
   }
   if (!KEY_ID.test(keyId)) return problem(401, "unknown-key", "This key doesn’t exist or was revoked.");
   if (!IDEMPOTENCY_KEY.test(idempotencyKey)) {
@@ -36,7 +40,8 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
     return problem(413, "too-large", "The body is larger than 2 MB. Send the data in smaller parts.");
   }
   const bytes = new Uint8Array(await request.arrayBuffer());
-  if (bytes.length > LIMITS.apiBytes) return problem(413, "too-large", "The body is larger than 2 MB. Send the data in smaller parts.");
+  if (bytes.length > LIMITS.apiBytes)
+    return problem(413, "too-large", "The body is larger than 2 MB. Send the data in smaller parts.");
 
   const db = getAdminDb();
   const { data: key } = await db
@@ -48,10 +53,20 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
 
   const bodySha256 = sha256Hex(bytes);
   const path = new URL(request.url).pathname;
-  const verified = verifyRequest(key.public_key, signature, { method: request.method, path, timestamp, idempotencyKey, bodySha256 });
+  const verified = verifyRequest(key.public_key, signature, {
+    method: request.method,
+    path,
+    timestamp,
+    idempotencyKey,
+    bodySha256,
+  });
   if (!verified.ok) return problem(401, verified.reason, SIGNATURE_MESSAGES[verified.reason]);
   if (key.organisation.status !== "approved") {
-    return problem(403, "company-not-approved", "Your company’s marketplace access is not active, so inventory can’t be changed.");
+    return problem(
+      403,
+      "company-not-approved",
+      "Your company’s marketplace access is not active, so inventory can’t be changed.",
+    );
   }
 
   // Claim the idempotency key before doing anything (SEC-009).
@@ -71,10 +86,18 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
       .eq("idempotency_key", idempotencyKey)
       .single();
     if (earlier?.body_sha256 !== bodySha256) {
-      return problem(422, "idempotency-conflict", "This Idempotency-Key was already used for a different body. Use a new key for new data.");
+      return problem(
+        422,
+        "idempotency-conflict",
+        "This Idempotency-Key was already used for a different body. Use a new key for new data.",
+      );
     }
     if (earlier.status_code === null) {
-      return problem(409, "in-progress", "The first request with this Idempotency-Key is still being applied. Try again in a moment.");
+      return problem(
+        409,
+        "in-progress",
+        "The first request with this Idempotency-Key is still being applied. Try again in a moment.",
+      );
     }
     return Response.json(earlier.response, {
       status: earlier.status_code,
@@ -104,13 +127,21 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
       // Nothing was applied: free the key so the same request can be retried.
       await db.from("api_idempotency").delete().eq("org_id", key.org_id).eq("idempotency_key", idempotencyKey);
       console.error("api inventory failed", { org: key.org_id, error: e instanceof Error ? e.message : e });
-      return problem(500, "server-error", "Nilecruz couldn’t apply this request because of a problem on our side. Retry with the same Idempotency-Key.");
+      return problem(
+        500,
+        "server-error",
+        "Nilecruz couldn’t apply this request because of a problem on our side. Retry with the same Idempotency-Key.",
+      );
     }
     status = 422;
     body = { error: { code: "format", message: e.message } };
   }
   await Promise.all([
-    db.from("api_idempotency").update({ status_code: status, response: body }).eq("org_id", key.org_id).eq("idempotency_key", idempotencyKey),
+    db
+      .from("api_idempotency")
+      .update({ status_code: status, response: body })
+      .eq("org_id", key.org_id)
+      .eq("idempotency_key", idempotencyKey),
     db.from("api_keys").update({ last_used_at: new Date().toISOString() }).eq("id", key.id),
   ]);
   return Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
