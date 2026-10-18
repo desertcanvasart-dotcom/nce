@@ -5,13 +5,17 @@ with intended(table_name, grantee, privileges) as (
     ('destination_translations', 'anon', 'SELECT'), ('media', 'anon', 'SELECT'), ('media_translations', 'anon', 'SELECT'),
     ('audit_log', 'authenticated', 'SELECT'), ('audit_log', 'service_role', 'SELECT'),
     ('evaluations', 'anon', 'SELECT'), ('evaluation_translations', 'anon', 'SELECT'), ('external_ratings', 'anon', 'SELECT'),
-    ('vessel_submission_events', 'authenticated', 'SELECT'), ('vessel_submission_events', 'service_role', 'SELECT')
+    ('vessel_submission_events', 'authenticated', 'SELECT'), ('vessel_submission_events', 'service_role', 'SELECT'),
+    ('cabin_types', 'anon', 'SELECT'), ('cabin_type_translations', 'anon', 'SELECT'), ('schedules', 'anon', 'SELECT'),
+    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['profiles', 'organisations', 'memberships', 'vessels', 'vessel_private', 'vessel_translations',
                     'destinations', 'destination_translations', 'media', 'media_translations',
                     'evaluations', 'evaluation_translations', 'external_ratings', 'safety_observations',
-                    'org_invitations', 'vessel_submissions', 'vessel_import_batches']) t,
+                    'org_invitations', 'vessel_submissions', 'vessel_import_batches',
+                    'cabin_types', 'cabin_type_translations', 'schedules', 'schedule_periods', 'schedule_days', 'departures',
+                    'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates']) t,
        unnest(array['authenticated', 'service_role']) g
 ),
 actual as (

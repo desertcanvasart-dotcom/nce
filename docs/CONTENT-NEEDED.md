@@ -41,4 +41,5 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 35 | Real evaluations: inspections scored with method v1 (who inspects, when) | 4b onwards | ADR-070 |
 | 36 | Vessel photos with publishing rights and credits | 4b onwards | DASH-ADM-013 |
 | 37 | Which directory vessels get which category, operator and "Best for" labels | 4b onwards | ADR-071, ADR-072 |
+| 38 | Customer-facing wording for Egyptian-citizen and foreign-resident eligibility (declaration, proof, what happens if not eligible) | 4e | ADR-078 |
 

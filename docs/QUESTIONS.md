@@ -227,8 +227,12 @@ Also, which **rate plan** sets the public price? I recommend the international p
   - If ineligible, the operator issues an updated offer at the applicable rate.
   - **The legal wording must come from you.**
 
+> **Answered 18 Oct 2026:** as recommended; wording from Faris (ADR-078).
+
 **Q21 [A] Freshness threshold (Batch 4c).** "Sufficiently recent cabin availability" isn't defined; `nilecrz` refuses inventory older than 2 hours.
 - **Recommendation:** 2 hours for feed/API sources, 24 hours for manual entry, both configurable by admin.
+
+> **Answered 18 Oct 2026:** 2 hours for feeds and API, 24 hours manual, admin-adjustable (ADR-079).
 
 **Q22 [A] Vessel slugs and facets (Batch 3).**
 - The problem:

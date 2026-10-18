@@ -115,6 +115,20 @@ export default async function VesselEditor({ params, searchParams }: Props) {
         ) : null}
       </Section>
 
+      {canEdit && v.operator_org_id ? (
+        <Section title="Product" id="product">
+          <p className={ui.muted}>
+            {v.product?.cabin_types ?? 0} cabin types · {v.product?.schedules ?? 0} schedules ·{" "}
+            {v.product?.upcoming_departures ?? 0} upcoming departures · {v.product?.bookable_departures ?? 0} bookable
+          </p>
+          <p className={ui.actions}>
+            <Link href={`/dashboard/admin/catalogue/${id}/cabins/`}>Cabins and decks</Link>
+            <Link href={`/dashboard/admin/catalogue/${id}/schedules/`}>Routes, schedules and rates</Link>
+            <Link href={`/dashboard/admin/catalogue/${id}/promotions/`}>Promotions</Link>
+          </p>
+        </Section>
+      ) : null}
+
       <Section title="Details" id="details">
         {canEdit ? (
           <ActionForm action={saveDetails.bind(null, id)} submit="Save details">

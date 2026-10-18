@@ -394,3 +394,20 @@
 
 **Next:** Faris reviews PR; after merge, migrations, the invite template and the grant check deploy to staging through `deploy-data.yml`. Then the Batch 4c brief (operator product and inventory).
 
+## 18 Oct 2026 · Batch 4c-1 · Operator product (first of two PRs, ADR-083)
+
+**Built** (branch `batch-04c-operator-product`):
+- **Database:** cabin types on decks (photos, translations, occupancy 1–3), directional schedules with periods and a day-by-day itinerary (EN/ES/JA), departures created by the database from sailing days, shared inventory per departure and cabin type with freshness by source (ADR-079), rates per occupancy, plan and currency (E£ only for local plans, ADR-082), the crew gratuity (US$, at least US$5), child bands with per-operator overrides snapshotted on each rate (DATA-022), promotions (percent, fixed, extra, upgrade) with no stacking and upgrades only against real inventory, admin-adjustable settings, and a per-vessel product summary for the readiness check. RLS, explicit grants and audit on every new table.
+- **Operator workspace:** overview (upcoming departures, inventory issues); Cabins and decks (gratuity, cabin types, photos); Routes, schedules and rates (schedules, periods, itinerary, "Create departures", availability and prices for one date or all matching dates, confirm availability, the departure grid, one departure's rates); Promotions (owners only; create, edit, pause).
+- **Admin:** the same product screens from each vessel in the catalogue; "Cabins and sailings" and "Promotions" overviews; Settings (super admins: freshness); child bands per operator. The readiness check now counts cabin types and bookable departures, so a complete vessel can be published.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 153 unit tests (new: departure dates, child bands at every boundary and age on the departure date incl. 29 February, occupancy, gratuity, currencies by plan, promotion maths, freshness).
+- **Database:** 12 pgTAP files pass (new 120_product: departures, shared quantity, occupancy, E£ rule, gratuity, bands snapshot, owner-only promotions, upgrade inventory, no stacking, rates private, freshness).
+- **End-to-end:** 8 new tests (gratuity, cabins on two decks, schedule → 8 departures → availability and prices → a second currency adds no cabins, promotions and stacking, overview, admin publishes the now-complete vessel, child-band override). They pass twice in a row on one database. Full suite at normal machine load: all pass in both modes. A first run under load 32 (Spotlight indexing) timed out widely; it was rerun after the load fell, and the accessibility helper now measures the settled page.
+- **Screenshots:** 66 in `docs/screenshots/batch-04c/`, 375 / 768 / 1440 px, Day and Night; checked desktop and phone (the departure grid stacks per departure on phones).
+
+**Not done in 4c-1 (by plan):** paste, feed and API connections, their health and security: DASH-ADM-006, 045–047, DASH-OPR-016, 024–027, SEC-007–009 (4c-2). The concurrency test moves to 4e with reservations (ADR-084).
+
+**Next:** Faris reviews PR 4c-1; then 4c-2 on the same batch.
+

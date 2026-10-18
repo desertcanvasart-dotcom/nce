@@ -96,15 +96,15 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-045 | DG §Admin/Operators ¶2 | Admins can see each operator's inventory connection status and integration problems. | 4c | Planned |  |
 | DASH-ADM-046 | DG §Admin/Operators ¶2 | An operator works through manual entry, an inventory feed or an API connection. | 4c | Planned |  |
 | DASH-ADM-047 | DG §Admin/Operators ¶2 | A feed connection becomes active only after an admin approves it. | 4c | Planned |  |
-| DASH-ADM-048 | DG §Admin/Cabins ¶2 | A cabin type holds name, description, photographs, size, bed configuration, maximum occupancy, view, balcony, amenities and active/inactive status. | 4c | Planned |  |
-| DASH-ADM-049 | DG §Admin/Cabins ¶3 | A cabin type has a deck: Lower, Middle, Upper or a vessel-specific deck name. | 4c | Planned |  |
-| DASH-ADM-050 | DG §Admin/Cabins ¶4 | The same cabin category on different decks is stored as separate cabin types so offers state the location. | 4c | Planned |  |
-| DASH-ADM-051 | DG §Admin/Cabins ¶5 | A schedule holds a directional route, number of nights, weekly sailing days, operating date ranges and itinerary details. | 4c | Planned |  |
-| DASH-ADM-052 | DG §Admin/Cabins ¶5 | A vessel can have several schedules for different routes or directions. | 4c | Planned |  |
-| DASH-ADM-053 | DG §Admin/Cabins ¶6 | A departure rate links one sailing, one cabin type, an occupancy, a currency, a price and an available quantity. | 4c | Planned |  |
-| DASH-ADM-054 | DG §Admin/Cabins ¶6 | Rates can be entered for one departure or applied to all matching dates of a schedule. | 4c | Planned |  |
-| DASH-ADM-055 | DG §Admin/Cabins ¶7 | The system distinguishes a scheduled sailing from confirmed, sufficiently recent cabin availability. | 4c | Planned |  |
-| DASH-ADM-056 | DG §Admin/Cabins ¶7 | Several prices or currencies for the same physical cabin inventory never add cabins: quantity is shared. | 4c | Planned |  |
+| DASH-ADM-048 | DG §Admin/Cabins ¶2 | A cabin type holds name, description, photographs, size, bed configuration, maximum occupancy, view, balcony, amenities and active/inactive status. | 4c | Verified | Batch 4c-1 (18 Oct 2026): cabin_types table + editor (name, description EN/ES/JA, photos, size, beds, occupancy, view, balcony, amenities, active); e2e product.spec |
+| DASH-ADM-049 | DG §Admin/Cabins ¶3 | A cabin type has a deck: Lower, Middle, Upper or a vessel-specific deck name. | 4c | Verified | Batch 4c-1 (18 Oct 2026): deck on every cabin type (Lower/Middle/Upper or vessel name); grouped by deck |
+| DASH-ADM-050 | DG §Admin/Cabins ¶4 | The same cabin category on different decks is stored as separate cabin types so offers state the location. | 4c | Verified | Batch 4c-1 (18 Oct 2026): same category on two decks = two cabin types (codes unique per vessel); e2e product.spec Middle and Upper |
+| DASH-ADM-051 | DG §Admin/Cabins ¶5 | A schedule holds a directional route, number of nights, weekly sailing days, operating date ranges and itinerary details. | 4c | Verified | Batch 4c-1 (18 Oct 2026): schedules: directional route, nights, ISO sailing days, periods, itinerary days EN/ES/JA; generate_departures (120: 8 sailings, idempotent); unit departures |
+| DASH-ADM-052 | DG §Admin/Cabins ¶5 | A vessel can have several schedules for different routes or directions. | 4c | Verified | Batch 4c-1 (18 Oct 2026): several schedules per vessel (unique code per vessel) |
+| DASH-ADM-053 | DG §Admin/Cabins ¶6 | A departure rate links one sailing, one cabin type, an occupancy, a currency, a price and an available quantity. | 4c | Verified | Batch 4c-1 (18 Oct 2026): rates: departure × cabin type × occupancy × plan × currency, amount in minor units; 120 |
+| DASH-ADM-054 | DG §Admin/Cabins ¶6 | Rates can be entered for one departure or applied to all matching dates of a schedule. | 4c | Verified | Batch 4c-1 (18 Oct 2026): bulk form applies to one date (From = To) or all matching dates and weekdays; e2e product.spec 'Updated 8 departures' |
+| DASH-ADM-055 | DG §Admin/Cabins ¶7 | The system distinguishes a scheduled sailing from confirmed, sufficiently recent cabin availability. | 4c | Verified | Batch 4c-1 (18 Oct 2026): inventory confirmed_at + source; app.inventory_is_fresh (120); 'To confirm' badge; overview issues; unit freshness |
+| DASH-ADM-056 | DG §Admin/Cabins ¶7 | Several prices or currencies for the same physical cabin inventory never add cabins: quantity is shared. | 4c | Verified | Batch 4c-1 (18 Oct 2026): inventory keyed by departure and cabin type, separate from rates; 120 'two prices share one quantity'; e2e product.spec EUR leaves 6 cabins |
 | DASH-ADM-057 | DG §Admin/Cabins ¶8 | There is no fixed per-booking cabin limit; reservations are limited only by available inventory and validation. | 4e | Planned |  |
 | DASH-ADM-058 | DG §Admin/Tours ¶2 | Tours and extras are independent products (museum visits, evening tours, excursions, transfers). | 4d | Planned |  |
 | DASH-ADM-059 | DG §Admin/Tours ¶2 | A tour has a name, location and duration. | 4d | Planned |  |
@@ -122,18 +122,18 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-071 | DG §Admin/Tours ¶4 | A program links its included tour sessions and checks their availability. | 4d | Planned |  |
 | DASH-ADM-072 | DG §Admin/Tours ¶5 | Each tour has its own detail page; catalogue cards do not carry the full itinerary. | 7 | Planned |  |
 | DASH-ADM-073 | DG §Admin/Tours ¶6 | An information-only tour can be published before rates and sessions exist and stays non-bookable until they do. | 4d | Planned |  |
-| DASH-ADM-074 | DG §Admin/Promotions ¶1 | Admins and authorised operators can create promotions against existing cruise rates and inventory. | 4c | Planned |  |
-| DASH-ADM-075 | DG §Admin/Promotions ¶1 | A promotion can be a percentage discount. | 4c | Planned |  |
-| DASH-ADM-076 | DG §Admin/Promotions ¶1 | A promotion can be a fixed-amount discount. | 4c | Planned |  |
-| DASH-ADM-077 | DG §Admin/Promotions ¶1 | A promotion can be an included extra service. | 4c | Planned |  |
-| DASH-ADM-078 | DG §Admin/Promotions ¶1 | A promotion can be a guaranteed cabin upgrade. | 4c | Planned |  |
-| DASH-ADM-079 | DG §Admin/Promotions ¶2 | A promotion can be restricted to a booking period. | 4c | Planned |  |
-| DASH-ADM-080 | DG §Admin/Promotions ¶2 | A promotion can be restricted to departure dates. | 4c | Planned |  |
-| DASH-ADM-081 | DG §Admin/Promotions ¶2 | A promotion can be restricted to selected cabin rates. | 4c | Planned |  |
-| DASH-ADM-082 | DG §Admin/Promotions ¶2 | A promotion carries its own benefit description and terms. | 4c | Planned |  |
-| DASH-ADM-083 | DG §Admin/Promotions ¶2 | A promotion can be paused and resumed. | 4c | Planned |  |
-| DASH-ADM-084 | DG §Admin/Promotions ¶3 | An upgrade promotion must reference matching inventory in the upgraded cabin type and never creates stock. | 4c | Planned |  |
-| DASH-ADM-085 | DG §Admin/Promotions ¶3 | A promotion cannot be applied on top of another promotional rate. | 4c | Planned |  |
+| DASH-ADM-074 | DG §Admin/Promotions ¶1 | Admins and authorised operators can create promotions against existing cruise rates and inventory. | 4c | Verified | Batch 4c-1 (18 Oct 2026): promotions by owners and catalogue admins; e2e product.spec |
+| DASH-ADM-075 | DG §Admin/Promotions ¶1 | A promotion can be a percentage discount. | 4c | Verified | Batch 4c-1 (18 Oct 2026): percentage kind; unit promotedPrice; e2e product.spec |
+| DASH-ADM-076 | DG §Admin/Promotions ¶1 | A promotion can be a fixed-amount discount. | 4c | Verified | Batch 4c-1 (18 Oct 2026): fixed amount kind in its own currency (DB check on rate currency); unit |
+| DASH-ADM-077 | DG §Admin/Promotions ¶1 | A promotion can be an included extra service. | 4c | Verified | Batch 4c-1 (18 Oct 2026): included extra kind (benefit text, price unchanged); unit |
+| DASH-ADM-078 | DG §Admin/Promotions ¶1 | A promotion can be a guaranteed cabin upgrade. | 4c | Verified | Batch 4c-1 (18 Oct 2026): upgrade kind referencing an active cabin type of the same vessel; 120 |
+| DASH-ADM-079 | DG §Admin/Promotions ¶2 | A promotion can be restricted to a booking period. | 4c | Verified | Batch 4c-1 (18 Oct 2026): booking period (booking_from/to) |
+| DASH-ADM-080 | DG §Admin/Promotions ¶2 | A promotion can be restricted to departure dates. | 4c | Verified | Batch 4c-1 (18 Oct 2026): departure dates restrict the resolved rates |
+| DASH-ADM-081 | DG §Admin/Promotions ¶2 | A promotion can be restricted to selected cabin rates. | 4c | Verified | Batch 4c-1 (18 Oct 2026): applies to selected rates resolved from cabin types, plans and dates (promotion_rates) |
+| DASH-ADM-082 | DG §Admin/Promotions ¶2 | A promotion carries its own benefit description and terms. | 4c | Verified | Batch 4c-1 (18 Oct 2026): benefit and terms EN/ES/JA (promotion_translations) |
+| DASH-ADM-083 | DG §Admin/Promotions ¶2 | A promotion can be paused and resumed. | 4c | Verified | Batch 4c-1 (18 Oct 2026): pause and resume; e2e product.spec |
+| DASH-ADM-084 | DG §Admin/Promotions ¶3 | An upgrade promotion must reference matching inventory in the upgraded cabin type and never creates stock. | 4c | Verified | Batch 4c-1 (18 Oct 2026): upgrade only with available inventory in the upgraded cabin type, never creates stock (120) |
+| DASH-ADM-085 | DG §Admin/Promotions ¶3 | A promotion cannot be applied on top of another promotional rate. | 4c | Verified | Batch 4c-1 (18 Oct 2026): a rate carries one promotion (unique rate_id): 120 and e2e product.spec '8 skipped' |
 | DASH-ADM-086 | DG §Admin/Partners ¶2 | Admins can review a travel partner's company details and registration information. | 4h | Planned |  |
 | DASH-ADM-087 | DG §Admin/Partners ¶2 | Admins can approve a partner's trade access. | 4h | Planned |  |
 | DASH-ADM-088 | DG §Admin/Partners ¶2 | Admins can pause a partner's access while keeping its historical records. | 4h | Planned |  |
@@ -161,18 +161,18 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DASH-OPR-001 | DG §Operator ¶1 | An operator sees only its own business, never other operators' data. | 4c | Planned |  |
+| DASH-OPR-001 | DG §Operator ¶1 | An operator sees only its own business, never other operators' data. | 4c | Verified | Batch 4c-1 (18 Oct 2026): RLS and requireProductEditor: operator A can't touch operator B's product (120); vessel must belong to the workspace's company |
 | DASH-OPR-002 | DG §Operator list | Operator overview shows new requests. | 4e | Planned |  |
 | DASH-OPR-003 | DG §Operator list | Operator overview shows outstanding offers. | 4e | Planned |  |
-| DASH-OPR-004 | DG §Operator list | Operator overview shows upcoming departures. | 4c | Planned |  |
-| DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Planned |  |
+| DASH-OPR-004 | DG §Operator list | Operator overview shows upcoming departures. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator overview lists upcoming departures; e2e product.spec |
+| DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Verified | Batch 4c-1 (18 Oct 2026): overview lists departures without availability, needing confirmation, or without rates (feed errors join in 4c-2) |
 | DASH-OPR-006 | DG §Operator list | An operator can create cruise drafts and submit them for admin approval. | 4b | Verified | Batch 4b (18 Oct 2026): operator cruises page: propose new vessel or changes, save draft, submit; e2e |
 | DASH-OPR-007 | DG §Operator list | An operator can respond to requested changes and resubmit. | 4b | Verified | Batch 4b (18 Oct 2026): operator reads feedback, edits and resubmits; e2e |
-| DASH-OPR-008 | DG §Operator list | An operator can maintain cabin descriptions, photographs, decks and capacities. | 4c | Planned |  |
-| DASH-OPR-009 | DG §Operator list | An operator can create routes, schedules and departure rates. | 4c | Planned |  |
-| DASH-OPR-010 | DG §Operator list | An operator can manage international, Egyptian-citizen, foreign-resident and trade rate plans. | 4c | Planned |  |
+| DASH-OPR-008 | DG §Operator list | An operator can maintain cabin descriptions, photographs, decks and capacities. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator cabin pages (descriptions, photos, decks, capacities) |
+| DASH-OPR-009 | DG §Operator list | An operator can create routes, schedules and departure rates. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator schedules, departures and rates pages |
+| DASH-OPR-010 | DG §Operator list | An operator can manage international, Egyptian-citizen, foreign-resident and trade rate plans. | 4c | Verified | Batch 4c-1 (18 Oct 2026): plans international, Egyptian citizen, foreign resident, trade (ADR-078); E£ only for local plans (DB check, unit, e2e) |
 | DASH-OPR-011 | DG §Operator list | An operator can prepare personal offers for suitable customer requests. | 4e | Planned |  |
-| DASH-OPR-012 | DG §Operator list | An authorised operator can manage promotions and upgrades. | 4c | Planned |  |
+| DASH-OPR-012 | DG §Operator list | An authorised operator can manage promotions and upgrades. | 4c | Verified | Batch 4c-1 (18 Oct 2026): owners only (reservations get 403); e2e product.spec |
 | DASH-OPR-013 | DG §Operator list | An operator can review its bookings and their payment information. | 4f | Planned |  |
 | DASH-OPR-014 | DG §Operator list | An operator can request payments and record money received, subject to its permissions. | 4f | Planned |  |
 | DASH-OPR-015 | DG §Operator list | An operator can handle cancellation and refund workflows for its bookings. | 4f | Planned |  |
@@ -611,15 +611,15 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-012 | DS CruiseSearch | CruiseSearch routes, sailing days and match counts come from real schedules and departures. | 5 | Planned |  |
 | DATA-013 | CLAUDE.md §5 | Deterministic test fixtures seed every role and state for e2e tests. | 3 | Verified | Batch 3 (17 Oct 2026): supabase/seed.sql: 11 users (every platform, admin and team role), 4 organisations, 4 sample vessels in every visibility; supabase/seed-users.md |
 | DATA-014 | ARCH §Migration | Data chosen for carry-over from existing systems is migrated with a verified count report (see Q1). | 3 | Verified | Batch 3 (17 Oct 2026): approved by Faris 17 Oct 2026; docs/imports/vessels-dry-run.md: 609 source records, 622 vessels (14 from the bundled unverified-names record), 0 skipped; staging holds 622 private drafts (368 motor, 251 sail, 3 steam), 622 private-facts rows, 1,244 audit entries; re-run inserts 0; anonymous API sees 0 |
-| DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity in US$ (never the rate currency) of at least US$5 per person per night for guests aged 3 and over; lower values are rejected. | 4c | Planned |  |
+| DATA-015 | Faris 17 Oct 2026 (ADR-010) | Each vessel has an obligatory crew gratuity in US$ (never the rate currency) of at least US$5 per person per night for guests aged 3 and over; lower values are rejected. | 4c | Verified | Batch 4c-1 (18 Oct 2026): vessels.gratuity_usd_minor ≥ 500 (DB check, 120); form refuses US$4 (e2e); unit gratuity counts ages 3+; never in totals |
 | DATA-016 | Faris 17 Oct 2026 (ADR-010) | Gratuities are shown as a separate obligatory line 'paid on board at check-out'; they are never charged online, never part of the amount due, and carry no commission. | 8 | Planned |  |
 | DATA-017 | Faris 17 Oct 2026 (ADR-011) | The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders. | 8 | Planned |  |
 | DATA-018 | Faris 17 Oct 2026 (ADR-011) | A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/. | 5 | Planned |  |
-| DATA-019 | Faris 17 Oct 2026 (ADR-012) | Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary). | 4c | Planned |  |
+| DATA-019 | Faris 17 Oct 2026 (ADR-012) | Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary). | 4c | Verified | Batch 4c-1 (18 Oct 2026): default bands in platform_settings and code; unit tests at 2/3/5/6/11/12 and age on departure incl. leap day |
 | DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Planned |  |
 | DATA-021 | Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete. | 4b | Verified | Batch 4b (18 Oct 2026): Publish refused until readiness incl. cabin types and rates (4c) is complete; e2e refusal |
-| DATA-022 | Faris 17 Oct 2026 (ADR-018) | Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only. | 4c | Planned |  |
-| DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Planned |  |
+| DATA-022 | Faris 17 Oct 2026 (ADR-018) | Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator override on the operator page, validated (no gaps), audited; new rates only (rates.child_bands snapshot; e2e keeps 25%) |
+| DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Verified | Batch 4c-1 (18 Oct 2026): max_occupancy 1–3 per cabin type (DB, 120); occupancy rule unit-tested (infants under 3 don't count, adult needed) |
 | DATA-024 | Faris 17 Oct 2026 (ADR-019) | Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable. | 4b | Verified | Batch 4b (18 Oct 2026): dated showcase with reason (DB check), expires (110_showcase.sql); e2e showcase |
 | DATA-025 | Faris 17 Oct 2026 (ADR-019) | At launch no showcase exception remains (launch checklist check). | 11 | Planned |  |
 | DATA-026 | Faris 17 Oct 2026 (ADR-020); Q2 | Cruise bookings are paid by card through Stripe, within the booking's payment deadline. | 4f | Planned |  |

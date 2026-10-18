@@ -8,6 +8,8 @@ import { requireAdmin } from "@/server/auth";
 import { getDb } from "@/server/db";
 import { emailsFor } from "@/server/teams/people";
 import { isUuid } from "../../../sections";
+import { DEFAULT_CHILD_BANDS, type Band } from "@/lib/product/pricing";
+import { saveOperatorBands } from "../../../_product/actions";
 import { connectVessel, disconnectVessel, setOperatorStatus } from "../actions";
 
 const STATUS_LABEL = {
@@ -96,6 +98,39 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
             </li>
           ))}
         </ul>
+      </Section>
+
+      <Section title="Child pricing" id="child-bands">
+        <p className={ui.muted}>
+          Share of the adult per-person rate by age on the departure date.{" "}
+          {org.child_bands ? "This operator has its own bands." : "This operator uses the default bands."} Changes apply to rates
+          created from now on.
+        </p>
+        {canEdit ? (
+          <ActionForm action={saveOperatorBands.bind(null, orgId)} submit="Save bands" variant="outline">
+            {((org.child_bands as Band[] | null) ?? DEFAULT_CHILD_BANDS)
+              .concat(Array(2).fill(null))
+              .slice(0, 6)
+              .map((b: Band | null, i: number) => (
+                <div key={i} className={ui.grid}>
+                  <Input label={`Band ${i + 1}: from age`} name={`from_${i}`} inputMode="decimal" defaultValue={b?.from} />
+                  <Input
+                    label="up to (not including)"
+                    name={`to_${i}`}
+                    inputMode="decimal"
+                    defaultValue={b?.to ?? undefined}
+                    hint={b && b.to === null ? "Empty: no upper age" : undefined}
+                  />
+                  <Input label="% of adult rate" name={`percent_${i}`} inputMode="numeric" defaultValue={b?.percent} />
+                </div>
+              ))}
+          </ActionForm>
+        ) : null}
+        {canEdit && org.child_bands ? (
+          <ActionForm action={saveOperatorBands.bind(null, orgId)} submit="Use the default bands again" variant="ghost">
+            <input type="hidden" name="reset" value="yes" />
+          </ActionForm>
+        ) : null}
       </Section>
 
       <Section title="Connected vessels" id="vessels">
