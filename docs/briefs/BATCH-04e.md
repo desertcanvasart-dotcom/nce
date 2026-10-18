@@ -1,6 +1,6 @@
 # Batch 4e brief: Requests, offers and reservations
 
-**Status:** awaiting Faris's go-ahead · **Branch:** `batch-04e-requests-offers` (from `main`) · **Size:** L
+**Status:** approved by Faris 18 Oct 2026 (ADR-088); built · **Branch:** `batch-04e-requests-offers` (from `main`) · **Size:** L
 
 **Goal:** a signed-in traveller describes the cruise they want; suitable operators answer with personal offers that name the exact sailing, cabins and deck; the traveller compares them and accepts one; acceptance re-checks availability and takes the cabins in one step, creating a reservation. Admins see and search everything. Payments, deadlines, cancellation charges and refunds come in 4f; until then a reservation is "awaiting payment".
 

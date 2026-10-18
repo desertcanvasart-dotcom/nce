@@ -79,10 +79,11 @@ test.describe("navigation changes with role (DASH-ROLE-006, 007, 008)", () => {
 
   test("a section that a later batch builds says so", async ({ page }) => {
     await signIn(page, "customer@example.test");
-    await page.getByRole("link", { name: "Offers" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Offers" })).toBeVisible();
-    await expect(page.getByText(/arrives in a later release \(planned for Batch 4e\)/)).toBeVisible();
-    await expect(page.getByRole("link", { name: "Offers" })).toHaveAttribute("aria-current", "page");
+    // Offers were built in 4e; past trips arrive with 4g.
+    await page.getByRole("link", { name: "Past trips" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Past trips" })).toBeVisible();
+    await expect(page.getByText(/arrives in a later release \(planned for Batch 4g\)/)).toBeVisible();
+    await expect(page.getByRole("link", { name: "Past trips" })).toHaveAttribute("aria-current", "page");
   });
 });
 

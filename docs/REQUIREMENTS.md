@@ -52,7 +52,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-001 | DG §Admin/Overview | Overview shows a counter of operator applications awaiting approval. | 4b | Verified | Batch 4b (18 Oct 2026): overview counter 'Operator applications awaiting approval' → /operators/?status=applied; e2e operator flow |
 | DASH-ADM-002 | DG §Admin/Overview | Overview shows a counter of private vessel drafts and cruise submissions awaiting review. | 4b | Verified | Batch 4b (18 Oct 2026): overview counters for private drafts and submissions awaiting review; e2e catalogue.spec 'activity history' |
 | DASH-ADM-003 | DG §Admin/Overview | Overview shows a counter of payments awaiting verification. | 4f | Planned |  |
-| DASH-ADM-004 | DG §Admin/Overview | Overview shows a counter of current and upcoming bookings. | 4e | Planned |  |
+| DASH-ADM-004 | DG §Admin/Overview | Overview shows a counter of current and upcoming bookings. | 4e | Verified | Batch 4e (18 Oct 2026): admin overview counter 'Current and upcoming bookings' (reservations not cancelled, not yet returned), linking to Requests and bookings; e2e bookings.spec |
 | DASH-ADM-005 | DG §Admin/Overview | Overview shows a counter of cancellation requests and refund reviews. | 4f | Planned |  |
 | DASH-ADM-006 | DG §Admin/Overview | Overview shows a counter of inventory connection errors. | 4c | Verified | Batch 4c-2 (18 Oct 2026): overview counters 'Inventory connection errors' (failing active feeds + API calls with refused rows in 24 h) and 'Inventory feeds awaiting approval', each linking to the filtered operators list; e2e connections.spec |
 | DASH-ADM-007 | DG §Admin/Overview | Each overview counter links to the list of the records it counts, pre-filtered. | 4b | Verified | Batch 4b (18 Oct 2026): every counter links to its pre-filtered list (operators ?status=applied, catalogue ?visibility=private, submissions ?status=submitted) |
@@ -105,7 +105,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-054 | DG §Admin/Cabins ¶6 | Rates can be entered for one departure or applied to all matching dates of a schedule. | 4c | Verified | Batch 4c-1 (18 Oct 2026): bulk form applies to one date (From = To) or all matching dates and weekdays; e2e product.spec 'Updated 8 departures' |
 | DASH-ADM-055 | DG §Admin/Cabins ¶7 | The system distinguishes a scheduled sailing from confirmed, sufficiently recent cabin availability. | 4c | Verified | Batch 4c-1 (18 Oct 2026): inventory confirmed_at + source; app.inventory_is_fresh (120); 'To confirm' badge; overview issues; unit freshness |
 | DASH-ADM-056 | DG §Admin/Cabins ¶7 | Several prices or currencies for the same physical cabin inventory never add cabins: quantity is shared. | 4c | Verified | Batch 4c-1 (18 Oct 2026): inventory keyed by departure and cabin type, separate from rates; 120 'two prices share one quantity'; e2e product.spec EUR leaves 6 cabins |
-| DASH-ADM-057 | DG §Admin/Cabins ¶8 | There is no fixed per-booking cabin limit; reservations are limited only by available inventory and validation. | 4e | Planned |  |
+| DASH-ADM-057 | DG §Admin/Cabins ¶8 | There is no fixed per-booking cabin limit; reservations are limited only by available inventory and validation. | 4e | Verified | Batch 4e (18 Oct 2026): no cabin limit: accept_offer takes as many cabins as the offer lists, only against inventory (150: 3 cabins refused when 2 left; db-api concurrency) |
 | DASH-ADM-058 | DG §Admin/Tours ¶2 | Tours and extras are independent products (museum visits, evening tours, excursions, transfers). | 4d | Verified | Batch 4d (18 Oct 2026): tours table with kind (museum visit, excursion, evening tour, transfer, other), separate from cruises; admin Tours and sightseeing; e2e tours.spec |
 | DASH-ADM-059 | DG §Admin/Tours ¶2 | A tour has a name, location and duration. | 4d | Verified | Batch 4d (18 Oct 2026): name, location (optional destination link), duration in minutes (15 min to 14 days); e2e |
 | DASH-ADM-060 | DG §Admin/Tours ¶2 | A tour has a description and an itinerary. | 4d | Verified | Batch 4d (18 Oct 2026): description and step-by-step itinerary per language (EN/ES/JA); e2e EN and ES |
@@ -138,13 +138,13 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-087 | DG §Admin/Partners ¶2 | Admins can approve a partner's trade access. | 4h | Planned |  |
 | DASH-ADM-088 | DG §Admin/Partners ¶2 | Admins can pause a partner's access while keeping its historical records. | 4h | Planned |  |
 | DASH-ADM-089 | DG §Admin/Partners ¶3 | Travel partners (buyers) and operators (suppliers) have separate permissions and workflows. | 4h | Planned |  |
-| DASH-ADM-090 | DG §Admin/Requests ¶1 | Admins can see all customer requests across the marketplace. | 4e | Planned |  |
-| DASH-ADM-091 | DG §Admin/Requests ¶1 | Admins can see all operator offers. | 4e | Planned |  |
-| DASH-ADM-092 | DG §Admin/Requests ¶1 | Admins can see all resulting reservations. | 4e | Planned |  |
-| DASH-ADM-093 | DG §Admin/Requests ¶2 | A booking record shows sailing, guests, cabin arrangements, cabin decks, prices, payment status and the applicable terms. | 4e | Planned |  |
-| DASH-ADM-094 | DG §Admin/Requests ¶3 | Admins can find and investigate incomplete transactions. | 4e | Planned |  |
+| DASH-ADM-090 | DG §Admin/Requests ¶1 | Admins can see all customer requests across the marketplace. | 4e | Verified | Batch 4e (18 Oct 2026): admin Requests and bookings lists every request (RLS: admins read all); e2e |
+| DASH-ADM-091 | DG §Admin/Requests ¶1 | Admins can see all operator offers. | 4e | Verified | Batch 4e (18 Oct 2026): every offer with operator, version, status, total; e2e |
+| DASH-ADM-092 | DG §Admin/Requests ¶1 | Admins can see all resulting reservations. | 4e | Verified | Batch 4e (18 Oct 2026): every reservation; e2e |
+| DASH-ADM-093 | DG §Admin/Requests ¶2 | A booking record shows sailing, guests, cabin arrangements, cabin decks, prices, payment status and the applicable terms. | 4e | Verified | Batch 4e (18 Oct 2026): booking record: sailing, guests, cabins and decks, prices, payment status, terms and policy as accepted (ReservationRecord); e2e admin opens it |
+| DASH-ADM-094 | DG §Admin/Requests ¶3 | Admins can find and investigate incomplete transactions. | 4e | Verified | Batch 4e (18 Oct 2026): incomplete transactions: reservations awaiting payment, requests with no offer after 3 days |
 | DASH-ADM-095 | DG §Admin/Requests ¶3 | Admins can investigate cancellation requests and refund cases. | 4f | Planned |  |
-| DASH-ADM-096 | DG §Admin/Requests ¶3 | Admins can search and filter requests and bookings by operator, route and booking reference. | 4e | Planned |  |
+| DASH-ADM-096 | DG §Admin/Requests ¶3 | Admins can search and filter requests and bookings by operator, route and booking reference. | 4e | Verified | Batch 4e (18 Oct 2026): search by booking reference, operator, route and departure dates; e2e finds by reference |
 | DASH-ADM-097 | DG §Admin/Deposits ¶1 | Admins can verify reported payments. | 4f | Planned |  |
 | DASH-ADM-098 | DG §Admin/Deposits ¶1 | Admins can browse financial records. | 4f | Planned |  |
 | DASH-ADM-099 | DG §Admin/Deposits ¶1 | Admins maintain a premium-date calendar. | 4f | Planned |  |
@@ -162,8 +162,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
 | DASH-OPR-001 | DG §Operator ¶1 | An operator sees only its own business, never other operators' data. | 4c | Verified | Batch 4c-1 (18 Oct 2026): RLS and requireProductEditor: operator A can't touch operator B's product (120); vessel must belong to the workspace's company |
-| DASH-OPR-002 | DG §Operator list | Operator overview shows new requests. | 4e | Planned |  |
-| DASH-OPR-003 | DG §Operator list | Operator overview shows outstanding offers. | 4e | Planned |  |
+| DASH-OPR-002 | DG §Operator list | Operator overview shows new requests. | 4e | Verified | Batch 4e (18 Oct 2026): operator overview counter of new requests to answer + new-request notices (150, e2e) |
+| DASH-OPR-003 | DG §Operator list | Operator overview shows outstanding offers. | 4e | Verified | Batch 4e (18 Oct 2026): operator overview counter of outstanding (open, unexpired) offers |
 | DASH-OPR-004 | DG §Operator list | Operator overview shows upcoming departures. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator overview lists upcoming departures; e2e product.spec |
 | DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Verified | Batch 4c-2 (18 Oct 2026): overview issues now include feed awaiting approval, not approved or paused, and the last feed/API problem; e2e connections.spec |
 | DASH-OPR-006 | DG §Operator list | An operator can create cruise drafts and submit them for admin approval. | 4b | Verified | Batch 4b (18 Oct 2026): operator cruises page: propose new vessel or changes, save draft, submit; e2e |
@@ -171,19 +171,19 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-008 | DG §Operator list | An operator can maintain cabin descriptions, photographs, decks and capacities. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator cabin pages (descriptions, photos, decks, capacities) |
 | DASH-OPR-009 | DG §Operator list | An operator can create routes, schedules and departure rates. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator schedules, departures and rates pages |
 | DASH-OPR-010 | DG §Operator list | An operator can manage international, Egyptian-citizen, foreign-resident and trade rate plans. | 4c | Verified | Batch 4c-1 (18 Oct 2026): plans international, Egyptian citizen, foreign resident, trade (ADR-078); E£ only for local plans (DB check, unit, e2e) |
-| DASH-OPR-011 | DG §Operator list | An operator can prepare personal offers for suitable customer requests. | 4e | Planned |  |
+| DASH-OPR-011 | DG §Operator list | An operator can prepare personal offers for suitable customer requests. | 4e | Verified | Batch 4e (18 Oct 2026): operators answer matching requests with personal offers (send_offer; 150; e2e two operators) |
 | DASH-OPR-012 | DG §Operator list | An authorised operator can manage promotions and upgrades. | 4c | Verified | Batch 4c-1 (18 Oct 2026): owners only (reservations get 403); e2e product.spec |
 | DASH-OPR-013 | DG §Operator list | An operator can review its bookings and their payment information. | 4f | Planned |  |
 | DASH-OPR-014 | DG §Operator list | An operator can request payments and record money received, subject to its permissions. | 4f | Planned |  |
 | DASH-OPR-015 | DG §Operator list | An operator can handle cancellation and refund workflows for its bookings. | 4f | Planned |  |
 | DASH-OPR-016 | DG §Operator list | An operator can configure manual, feed or API inventory connections. | 4c | Verified | Batch 4c-2 (18 Oct 2026): owners configure paste, feed and API on Inventory connections (owners only, as in the menu; RLS + functions check again); e2e connections.spec |
-| DASH-OPR-017 | DG §Operator ¶offers | A personal offer specifies a sailing and cabin arrangement. | 4e | Planned |  |
-| DASH-OPR-018 | DG §Operator ¶offers | A personal offer specifies price, inclusions, terms and expiry. | 4e | Planned |  |
-| DASH-OPR-019 | DG §Operator ¶offers | The operator confirms the family or passenger-eligibility conditions of an offer. | 4e | Planned |  |
-| DASH-OPR-020 | DG §Operator ¶offers | Sending an offer does not hold inventory. | 4e | Planned |  |
-| DASH-OPR-021 | DG §Operator ¶offers | Accepting an offer re-checks the sailing and cabin availability atomically. | 4e | Planned |  |
-| DASH-OPR-022 | DG §Operator ¶deck | An offer records the cabin deck. | 4e | Planned |  |
-| DASH-OPR-023 | DG §Operator ¶deck | If the deck changes before acceptance, the customer receives an updated offer to review and the old one cannot be accepted. | 4e | Planned |  |
+| DASH-OPR-017 | DG §Operator ¶offers | A personal offer specifies a sailing and cabin arrangement. | 4e | Verified | Batch 4e (18 Oct 2026): an offer names a departure and, per cabin, the cabin type and who sleeps there (150, e2e) |
+| DASH-OPR-018 | DG §Operator ¶offers | A personal offer specifies price, inclusions, terms and expiry. | 4e | Verified | Batch 4e (18 Oct 2026): price from rates and child bands unless changed with a price note; inclusions, terms, expiry 24 h–14 days (default 72 h, ADR-088); unit + 150 |
+| DASH-OPR-019 | DG §Operator ¶offers | The operator confirms the family or passenger-eligibility conditions of an offer. | 4e | Verified | Batch 4e (18 Oct 2026): required 'Who this offer is for' (family make-up, eligibility) shown to the customer |
+| DASH-OPR-020 | DG §Operator ¶offers | Sending an offer does not hold inventory. | 4e | Verified | Batch 4e (18 Oct 2026): sending holds no cabins (150; e2e inventory unchanged after sending) |
+| DASH-OPR-021 | DG §Operator ¶offers | Accepting an offer re-checks the sailing and cabin availability atomically. | 4e | Verified | Batch 4e (18 Oct 2026): accept_offer re-checks version, expiry, bookable gate and ages, locks inventory in a fixed order; db-api: 20 parallel acceptances for 3 cabins → exactly 3, availability 0, no deadlocks; e2e sold-out refusal |
+| DASH-OPR-022 | DG §Operator ¶deck | An offer records the cabin deck. | 4e | Verified | Batch 4e (18 Oct 2026): offer cabins store the deck as offered (150; e2e shows Upper deck) |
+| DASH-OPR-023 | DG §Operator ¶deck | If the deck changes before acceptance, the customer receives an updated offer to review and the old one cannot be accepted. | 4e | Verified | Batch 4e (18 Oct 2026): offers are immutable; a change sends version N+1 and supersedes the old, which cannot be accepted; customer told to review (150, e2e) |
 | DASH-OPR-024 | DG §Operator ¶integration | An operator can paste supported JSON or XML inventory. | 4c | Verified | Batch 4c-2 (18 Oct 2026): JSON or XML (format v1, ADR-080) pasted or uploaded; row-by-row preview, nothing written until applied, checked again on apply; unit format tests; 130; e2e connections.spec |
 | DASH-OPR-025 | DG §Operator ¶integration | An operator can configure an inventory feed URL. | 4c | Verified | Batch 4c-2 (18 Oct 2026): https feed address, checked after DNS on save and inside every connection; pulled hourly by pg_cron via a signed call (ADR-081); e2e pulls from a local https server |
 | DASH-OPR-026 | DG §Operator ¶integration | An operator can generate and rotate API credentials. | 4c | Verified | Batch 4c-2 (18 Oct 2026): Ed25519 key pairs (ADR-085): private key shown once, two active for rotation, revoke; signed POST /api/v1/inventory/; e2e signed call, replay, tamper, revoked key |
@@ -196,18 +196,18 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-CUS-001 | DG §Customer ¶1 | The customer dashboard is called 'My journey'. | 4g | Planned |  |
 | DASH-CUS-002 | DG §Customer ¶2 | My journey has sections Overview, Requests and offers, Bookings, Tours and sightseeing, Past trips and Account. | 4g | Planned |  |
 | DASH-CUS-003 | DG §Customer list | Overview shows upcoming trips and actions requiring attention. | 4g | Planned |  |
-| DASH-CUS-004 | DG §Customer list | A customer can track their submitted cruise requests. | 4e | Planned |  |
-| DASH-CUS-005 | DG §Customer list | A customer can compare the personal offers received. | 4e | Planned |  |
-| DASH-CUS-006 | DG §Customer list | An offer shows actual departure dates, route, cabin arrangement and price. | 4e | Planned |  |
-| DASH-CUS-007 | DG §Customer list | A customer can read the terms and accept a valid (unexpired, current) offer. | 4e | Planned |  |
+| DASH-CUS-004 | DG §Customer list | A customer can track their submitted cruise requests. | 4e | Verified | Batch 4e (18 Oct 2026): My journey → Cruise requests lists each request with status and offer count; e2e |
+| DASH-CUS-005 | DG §Customer list | A customer can compare the personal offers received. | 4e | Verified | Batch 4e (18 Oct 2026): offers side by side (latest version per offer) on the request and on Offers; e2e two offers |
+| DASH-CUS-006 | DG §Customer list | An offer shows actual departure dates, route, cabin arrangement and price. | 4e | Verified | Batch 4e (18 Oct 2026): each offer shows real dates, route, vessel, cabins and decks, price per cabin and total, gratuity separately |
+| DASH-CUS-007 | DG §Customer list | A customer can read the terms and accept a valid (unexpired, current) offer. | 4e | Verified | Batch 4e (18 Oct 2026): accept page shows terms and the cancellation policy; tick + guest names and dates of birth; only open, current versions (unit, 150, e2e) |
 | DASH-CUS-008 | DG §Customer list | A customer can review reservations, payment deadlines and outstanding balances. | 4f | Planned |  |
 | DASH-CUS-009 | DG §Customer list | A customer can report a payment and follow its verification status. | 4f | Planned |  |
 | DASH-CUS-010 | DG §Customer list | A customer can request cancellation and follow the refund-review status. | 4f | Planned |  |
 | DASH-CUS-011 | DG §Customer list | A customer can browse and manage eligible tours and sightseeing separately from cruises. | 4g | Planned |  |
 | DASH-CUS-012 | DG §Customer list | A customer can review past trips and closed requests. | 4g | Planned |  |
 | DASH-CUS-013 | DG §Customer list | A customer can manage account security. | 4a | Verified | Batch 4a (17 Oct 2026): /account/security/: change email (double confirmation), change password (current required), two-step on/off, sign out everywhere; e2e auth.spec |
-| DASH-CUS-014 | DG §Customer ¶request | A request captures routes or flexible preferences, dates or windows, latest finish date, duration, guests, cabin arrangements and optional budget. | 4e | Planned |  |
-| DASH-CUS-015 | DG §Customer ¶request | Request copy states it is a request for offers: no bid or lowest market price is guaranteed. | 4e | Planned |  |
+| DASH-CUS-014 | DG §Customer ¶request | A request captures routes or flexible preferences, dates or windows, latest finish date, duration, guests, cabin arrangements and optional budget. | 4e | Verified | Batch 4e (18 Oct 2026): request: route or flexible, date window, back-by date, nights, adults, each child’s age, cabins, sharing notes, budget, notes; unit requestProblems |
+| DASH-CUS-015 | DG §Customer ¶request | Request copy states it is a request for offers: no bid or lowest market price is guaranteed. | 4e | Verified | Batch 4e (18 Oct 2026): the request page says it asks for offers: no bid and no lowest price guaranteed |
 | DASH-CUS-016 | DG §Customer ¶deck | A signed-in customer can use the cabin-deck selector to choose a deck and cabin type. | 5 | Planned |  |
 | DASH-CUS-017 | DG §Customer ¶deck | The deck selector is labelled schematic and never implies a numbered cabin is reserved. | 5 | Planned |  |
 
@@ -269,7 +269,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DASH-BND-001 | DG §Boundaries 1 | A sailing is bookable only when its cabin, schedule, rate, inventory and policy records are complete. | 4e | Planned |  |
+| DASH-BND-001 | DG §Boundaries 1 | A sailing is bookable only when its cabin, schedule, rate, inventory and policy records are complete. | 4e | Verified | Batch 4e (18 Oct 2026): public.departure_bookable: published vessel, approved operator, future scheduled departure, cancellation policy, a cabin type with a rate and fresh availability (150; unit gateProblems; operator builder flags unbookable sailings) |
 | DASH-BND-002 | DG §Boundaries 2 | The deck selector shows an honest empty state when a vessel has no structured cabin types. | 5 | Planned |  |
 | DASH-BND-003 | DG §Boundaries 3 | No screen implies numbered-cabin selection or a verified floor plan. | 5 | Planned |  |
 | DASH-BND-004 | DG §Boundaries 4 | The importer's scope (vessel profiles only) is stated in the import screen. | 4b | Verified | Batch 4b (18 Oct 2026): import screen states its scope (vessel profiles only); e2e |
@@ -537,7 +537,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Verified | Batch 3 (17 Oct 2026): 040_audit.sql: update, delete, truncate refused for owner and service role; direct inserts refused; role changes and catalogue writes logged by triggers |
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
-| SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Planned |  |
+| SEC-013 | ARCH §Data; ADR-052 | Passenger personal data is readable only by the booking's customer, partner, operator and admins. | 4e | Verified | Batch 4e (18 Oct 2026): passengers readable only by the customer, the operator’s team and admins (RLS, 150: other operator and partner see none; e2e 404); passenger changes audited without copying data; proofs in a private bucket |
 | SEC-014 | Faris 17 Oct 2026 (ADR-063); PROPOSED-001 | People can confirm their email, reset a forgotten password and change their email, through single-use links that expire. | 4a | Verified | Batch 4a (17 Oct 2026): e2e sign-up confirmation, reset link, used link refused, reset needs a fresh link, email change confirmed from both addresses; branded templates |
 | SEC-015 | Faris 17 Oct 2026 (ADR-064) | Admins must use two-step sign-in (authenticator app); admin powers in the database require a two-step session. | 4a | Verified | Batch 4a (17 Oct 2026): app.is_admin() requires aal2 (DB 030/070, API test); app sends admins to set-up or code screen (e2e); admins can't turn it off (e2e) |
 
@@ -616,7 +616,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-017 | Faris 17 Oct 2026 (ADR-011) | The cruise total never contains flights or other extras; tours, transfers and flights are separate products with their own orders. | 8 | Planned |  |
 | DATA-018 | Faris 17 Oct 2026 (ADR-011) | A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/. | 5 | Planned |  |
 | DATA-019 | Faris 17 Oct 2026 (ADR-012) | Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary). | 4c | Verified | Batch 4c-1 (18 Oct 2026): default bands in platform_settings and code; unit tests at 2/3/5/6/11/12 and age on departure incl. leap day |
-| DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Planned |  |
+| DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Verified | Batch 4e (18 Oct 2026): requests store each child’s age; offers store ages per cabin; acceptance checks ages on the departure date (unit, 150) |
 | DATA-021 | Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete. | 4b | Verified | Batch 4b (18 Oct 2026): Publish refused until readiness incl. cabin types and rates (4c) is complete; e2e refusal |
 | DATA-022 | Faris 17 Oct 2026 (ADR-018) | Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator override on the operator page, validated (no gaps), audited; new rates only (rates.child_bands snapshot; e2e keeps 25%) |
 | DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Verified | Batch 4c-1 (18 Oct 2026): max_occupancy 1–3 per cabin type (DB, 120); occupancy rule unit-tested (infants under 3 don't count, adult needed) |
