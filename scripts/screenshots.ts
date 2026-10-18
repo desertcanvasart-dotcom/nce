@@ -3,6 +3,7 @@
  *   pnpm screenshots --batch 01 [--base http://localhost:3100] [--routes /,/es/]
  *   pnpm screenshots --batch 04a --as customer@example.test --routes /dashboard/journey/   (signed in, local seed only)
  *   --two-step also captures the two-step code screen before entering the code (admins).
+ *   --password for a local test account made by the end-to-end tests (default: the seed password).
  * Needs a running server (pnpm build && ENABLE_DEV_ROUTES=true pnpm start --port 3100).
  */
 import { mkdirSync } from "node:fs";
@@ -45,7 +46,7 @@ async function shoot(page: Page, name: string, theme: "light" | "dark") {
 async function signIn(page: Page, theme: "light" | "dark") {
   await page.goto(`${base}/account/sign-in/`);
   await page.getByLabel("Email").fill(as);
-  await page.getByLabel("Password", { exact: true }).fill("nilecruz-local-only");
+  await page.getByLabel("Password", { exact: true }).fill(arg("password", "nilecruz-local-only"));
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await page.waitForURL((u) => !u.pathname.endsWith("/account/sign-in/"));
   if (new URL(page.url()).pathname.endsWith("/account/two-step/")) {

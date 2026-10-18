@@ -474,3 +474,60 @@
 **Placeholders:** only flagged sample tours exist. CONTENT-NEEDED #39–41 (tours, suppliers and prices, cancellation wording) come from Faris.
 
 **Next:** Faris reviews the PR. Then Batch 4e (requests, offers and reservations) is briefed.
+
+## 18 Oct 2026 · Batch 4e · Requests, offers and reservations
+
+**Built** (branch `batch-04e-requests-offers`; migration `20261018001000_requests_offers`):
+- **Requests (My journey → Cruise requests):**
+  - route or flexible, date window, back-by date, nights, adults, each child's age, cabins, sharing notes, budget and notes;
+  - the page says plainly that this asks for offers, with no bid or lowest price guaranteed.
+- **Who sees a request (ADR-088):** operators with a published sailing that fits the route, dates and nights. They see the trip and the guests' ages, never the customer's details.
+- **Offers (operator → Requests and offers):**
+  - the operator picks a departure and, for each cabin, the cabin type (so the deck) and who sleeps there;
+  - the price comes from their rates and child bands, unless they change it with a price note;
+  - inclusions, terms, "who this offer is for" and an expiry (24 hours to 14 days, 72 by default);
+  - sending holds no cabins;
+  - offers can't be edited: a change sends version N+1, and the old version can't be accepted.
+- **Accepting:**
+  - the customer reads the terms and the cancellation policy, names every guest with a date of birth (plus the lead passenger's nationality), and accepts;
+  - `public.accept_offer` re-checks the version, expiry, bookable gate and the ages on the departure date, takes the cabins with row locks in a fixed order, creates the reservation (`NC-XXXXXX`) with the terms and policy as shown, and closes the other offers.
+- **Reservations:** customer, operator and admin views of the booking record. Status "awaiting payment" until 4f.
+- **Bookable gate:** `public.departure_bookable`. A sailing is bookable only with a published vessel, an approved operator, a future scheduled departure, a cancellation policy, and a cabin type with a rate and fresh availability.
+- **Cruise cancellation policies (ADR-088):** bands and wording in EN/ES/JA on the Cabins page, per vessel; schedule overrides exist in the data. The calculation comes in 4f.
+- **Passenger data (SEC-013):** readable only by the customer, that operator's team and admins; changes are audited without copying the data.
+- **Eligibility proof (ADR-078):** uploaded to a private bucket and checked by the operator. The wording is a marked draft (CONTENT-NEEDED #38).
+- **Notices:** in-dashboard notices for new requests, offers, updates and reservations.
+- **Admin "Requests and bookings":** every request, offer and reservation; search by reference, operator, route and dates; incomplete transactions; the booking record; an overview counter of current and upcoming bookings.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 209 unit tests. New tests cover request checks, the offer price build-up (occupancy rates, child bands, under-3s, 12–17 at full price), versions and expiry, passenger ages on the departure date, and the bookable gate.
+- **Database:** 15 pgTAP files pass. The new `150_requests_offers` has 31 checks:
+  - the gate needs a policy; customers can't ask in someone else's name;
+  - matching operators see the request, but not the customer's profile;
+  - the cabins must hold everyone; expiry limits; E£ only for local plans;
+  - the deck is recorded; sending holds nothing; offers can't be edited; a revision supersedes;
+  - superseded, unread-terms and wrong-age acceptances are refused; acceptance takes the cabin;
+  - passengers are visible only to the right people; not enough cabins means nothing is booked.
+- **Concurrency (BATCH-PLAN exit criterion, ADR-084):** `tests/db-api/concurrency.test.ts` sends 20 simultaneous acceptances, through the real API, for the last 3 cabins. Exactly 3 reservations are made and availability ends at 0. The other 17 get plain refusals, never a deadlock or a server error. It passed on all five runs after the fixes and cleans up after itself.
+- **End-to-end:** 5 new tests in `bookings.spec.ts`:
+  - request → two operators' offers → a deck change (version 2; the old one is refused) → acceptance → reservation for customer, operator and admin, with inventory down and the other offer closed;
+  - a second customer's acceptance when sold out books nothing;
+  - admin search by reference; operators get 403 on admin pages; another customer gets 404;
+  - axe on 12 screens in Day and Night.
+
+  The tests passed twice in a row on one database.
+- **Full suite** (two workers, as in CI): 117 of 119 passed. One older test expected "Offers" to still be unbuilt and now uses "Past trips"; one two-step sign-in timed out under load 15. Both files pass on a rerun.
+- **Screenshots:** 66 in `docs/screenshots/batch-04e/`, at 375, 768 and 1440 px, Day and Night:
+  - customer: the requests list, one request with two offers, the accept page, a reservation;
+  - operator: the overview, requests and offers, the offer builder, a booking, the cabins page with the policy;
+  - admin: Requests and bookings, and the booking record.
+
+**Fixed while building:**
+- A customer couldn't read the request they had just created: the read rule now checks their own id first.
+- The sold-out message no longer claims the operator was told.
+- Every offered cabin needs a guest aged 12 or over.
+- After reviewing the screenshots: "4–4 nights" now reads "4 nights", one child reads "a child aged 7", and cancellation bands are described as ranges ("less than 30 days before departure") everywhere bands appear, tours included.
+
+**Content needed:** CONTENT-NEEDED #4 (cruise cancellation policies) and #38 (eligibility wording). Until the policies are entered, real sailings stay unbookable.
+
+**Next:** Faris reviews the PR. Then Batch 4f (payments, deadlines, cancellation and commission) is briefed.

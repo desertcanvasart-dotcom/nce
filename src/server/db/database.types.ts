@@ -222,6 +222,140 @@ export type Database = {
           },
         ];
       };
+      cancellation_policies: {
+        Row: {
+          bands: Json;
+          created_at: string;
+          id: string;
+          schedule_id: string | null;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          bands: Json;
+          created_at?: string;
+          id?: string;
+          schedule_id?: string | null;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          bands?: Json;
+          created_at?: string;
+          id?: string;
+          schedule_id?: string | null;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_policies_schedule_id_fkey";
+            columns: ["schedule_id"];
+            isOneToOne: false;
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "cancellation_policies_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      cancellation_policy_translations: {
+        Row: {
+          locale: string;
+          policy_id: string;
+          terms: string;
+        };
+        Insert: {
+          locale: string;
+          policy_id: string;
+          terms: string;
+        };
+        Update: {
+          locale?: string;
+          policy_id?: string;
+          terms?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_policy_translations_policy_id_fkey";
+            columns: ["policy_id"];
+            isOneToOne: false;
+            referencedRelation: "cancellation_policies";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      cruise_requests: {
+        Row: {
+          adults: number;
+          budget_currency: string | null;
+          budget_minor: number | null;
+          cabin_notes: string | null;
+          cabins: number;
+          child_ages: number[];
+          created_at: string;
+          customer_id: string;
+          destination: string | null;
+          earliest_departure: string;
+          id: string;
+          latest_departure: string;
+          latest_finish: string | null;
+          nights_max: number;
+          nights_min: number;
+          notes: string | null;
+          origin: string | null;
+          status: Database["public"]["Enums"]["request_status"];
+          updated_at: string;
+        };
+        Insert: {
+          adults: number;
+          budget_currency?: string | null;
+          budget_minor?: number | null;
+          cabin_notes?: string | null;
+          cabins: number;
+          child_ages?: number[];
+          created_at?: string;
+          customer_id?: string;
+          destination?: string | null;
+          earliest_departure: string;
+          id?: string;
+          latest_departure: string;
+          latest_finish?: string | null;
+          nights_max: number;
+          nights_min: number;
+          notes?: string | null;
+          origin?: string | null;
+          status?: Database["public"]["Enums"]["request_status"];
+          updated_at?: string;
+        };
+        Update: {
+          adults?: number;
+          budget_currency?: string | null;
+          budget_minor?: number | null;
+          cabin_notes?: string | null;
+          cabins?: number;
+          child_ages?: number[];
+          created_at?: string;
+          customer_id?: string;
+          destination?: string | null;
+          earliest_departure?: string;
+          id?: string;
+          latest_departure?: string;
+          latest_finish?: string | null;
+          nights_max?: number;
+          nights_min?: number;
+          notes?: string | null;
+          origin?: string | null;
+          status?: Database["public"]["Enums"]["request_status"];
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       departures: {
         Row: {
           created_at: string;
@@ -331,6 +465,50 @@ export type Database = {
           visibility?: Database["public"]["Enums"]["visibility"];
         };
         Relationships: [];
+      };
+      eligibility_proofs: {
+        Row: {
+          created_at: string;
+          id: string;
+          note: string | null;
+          reservation_id: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          status: Database["public"]["Enums"]["proof_status"];
+          storage_path: string;
+          uploaded_by: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          note?: string | null;
+          reservation_id: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database["public"]["Enums"]["proof_status"];
+          storage_path: string;
+          uploaded_by?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          note?: string | null;
+          reservation_id?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          status?: Database["public"]["Enums"]["proof_status"];
+          storage_path?: string;
+          uploaded_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "eligibility_proofs_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       evaluation_translations: {
         Row: {
@@ -802,6 +980,186 @@ export type Database = {
           },
         ];
       };
+      notifications: {
+        Row: {
+          created_at: string;
+          id: string;
+          kind: string;
+          link: string | null;
+          org_id: string | null;
+          read_at: string | null;
+          title: string;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          kind: string;
+          link?: string | null;
+          org_id?: string | null;
+          read_at?: string | null;
+          title: string;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          kind?: string;
+          link?: string | null;
+          org_id?: string | null;
+          read_at?: string | null;
+          title?: string;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "notifications_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      offer_cabins: {
+        Row: {
+          adults: number;
+          cabin_name: string;
+          cabin_type_id: string;
+          child_ages: number[];
+          deck: string;
+          line: number;
+          offer_id: string;
+          price_minor: number;
+        };
+        Insert: {
+          adults: number;
+          cabin_name: string;
+          cabin_type_id: string;
+          child_ages?: number[];
+          deck: string;
+          line: number;
+          offer_id: string;
+          price_minor: number;
+        };
+        Update: {
+          adults?: number;
+          cabin_name?: string;
+          cabin_type_id?: string;
+          child_ages?: number[];
+          deck?: string;
+          line?: number;
+          offer_id?: string;
+          price_minor?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "offer_cabins_cabin_type_id_fkey";
+            columns: ["cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "offer_cabins_offer_id_fkey";
+            columns: ["offer_id"];
+            isOneToOne: false;
+            referencedRelation: "offers";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      offers: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          currency: string;
+          departure_id: string;
+          eligibility_conditions: string;
+          expires_at: string;
+          gratuity_usd_minor: number | null;
+          id: string;
+          inclusions: string | null;
+          list_total_minor: number | null;
+          org_id: string;
+          pricing_note: string | null;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          request_id: string;
+          status: Database["public"]["Enums"]["offer_status"];
+          terms: string;
+          thread_id: string;
+          total_minor: number;
+          updated_at: string;
+          version: number;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          currency: string;
+          departure_id: string;
+          eligibility_conditions: string;
+          expires_at: string;
+          gratuity_usd_minor?: number | null;
+          id?: string;
+          inclusions?: string | null;
+          list_total_minor?: number | null;
+          org_id: string;
+          pricing_note?: string | null;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          request_id: string;
+          status?: Database["public"]["Enums"]["offer_status"];
+          terms: string;
+          thread_id?: string;
+          total_minor: number;
+          updated_at?: string;
+          version?: number;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          currency?: string;
+          departure_id?: string;
+          eligibility_conditions?: string;
+          expires_at?: string;
+          gratuity_usd_minor?: number | null;
+          id?: string;
+          inclusions?: string | null;
+          list_total_minor?: number | null;
+          org_id?: string;
+          pricing_note?: string | null;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          request_id?: string;
+          status?: Database["public"]["Enums"]["offer_status"];
+          terms?: string;
+          thread_id?: string;
+          total_minor?: number;
+          updated_at?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "offers_departure_id_fkey";
+            columns: ["departure_id"];
+            isOneToOne: false;
+            referencedRelation: "departures";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "offers_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "offers_request_id_fkey";
+            columns: ["request_id"];
+            isOneToOne: false;
+            referencedRelation: "cruise_requests";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       org_invitations: {
         Row: {
           accepted_at: string | null;
@@ -884,6 +1242,41 @@ export type Database = {
           updated_at?: string;
         };
         Relationships: [];
+      };
+      passengers: {
+        Row: {
+          date_of_birth: string;
+          full_name: string;
+          id: string;
+          nationality: string | null;
+          position: number;
+          reservation_id: string;
+        };
+        Insert: {
+          date_of_birth: string;
+          full_name: string;
+          id?: string;
+          nationality?: string | null;
+          position: number;
+          reservation_id: string;
+        };
+        Update: {
+          date_of_birth?: string;
+          full_name?: string;
+          id?: string;
+          nationality?: string | null;
+          position?: number;
+          reservation_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "passengers_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       platform_settings: {
         Row: {
@@ -1240,6 +1633,150 @@ export type Database = {
           },
           {
             foreignKeyName: "rates_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      reservation_cabins: {
+        Row: {
+          adults: number;
+          cabin_name: string;
+          cabin_type_id: string;
+          child_ages: number[];
+          deck: string;
+          line: number;
+          price_minor: number;
+          reservation_id: string;
+        };
+        Insert: {
+          adults: number;
+          cabin_name: string;
+          cabin_type_id: string;
+          child_ages: number[];
+          deck: string;
+          line: number;
+          price_minor: number;
+          reservation_id: string;
+        };
+        Update: {
+          adults?: number;
+          cabin_name?: string;
+          cabin_type_id?: string;
+          child_ages?: number[];
+          deck?: string;
+          line?: number;
+          price_minor?: number;
+          reservation_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reservation_cabins_cabin_type_id_fkey";
+            columns: ["cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reservation_cabins_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      reservations: {
+        Row: {
+          created_at: string;
+          currency: string;
+          customer_id: string;
+          departure_id: string;
+          gratuity_usd_minor: number | null;
+          id: string;
+          offer_id: string;
+          org_id: string;
+          policy: Json;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          reference: string;
+          request_id: string | null;
+          status: Database["public"]["Enums"]["reservation_status"];
+          terms: string;
+          total_minor: number;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          currency: string;
+          customer_id: string;
+          departure_id: string;
+          gratuity_usd_minor?: number | null;
+          id?: string;
+          offer_id: string;
+          org_id: string;
+          policy: Json;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          reference: string;
+          request_id?: string | null;
+          status?: Database["public"]["Enums"]["reservation_status"];
+          terms: string;
+          total_minor: number;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          created_at?: string;
+          currency?: string;
+          customer_id?: string;
+          departure_id?: string;
+          gratuity_usd_minor?: number | null;
+          id?: string;
+          offer_id?: string;
+          org_id?: string;
+          policy?: Json;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          reference?: string;
+          request_id?: string | null;
+          status?: Database["public"]["Enums"]["reservation_status"];
+          terms?: string;
+          total_minor?: number;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reservations_departure_id_fkey";
+            columns: ["departure_id"];
+            isOneToOne: false;
+            referencedRelation: "departures";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reservations_offer_id_fkey";
+            columns: ["offer_id"];
+            isOneToOne: true;
+            referencedRelation: "offers";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reservations_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reservations_request_id_fkey";
+            columns: ["request_id"];
+            isOneToOne: false;
+            referencedRelation: "cruise_requests";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "reservations_vessel_id_fkey";
             columns: ["vessel_id"];
             isOneToOne: false;
             referencedRelation: "vessels";
@@ -1918,6 +2455,10 @@ export type Database = {
     };
     Functions: {
       accept_invitation: { Args: { invitation: string }; Returns: string };
+      accept_offer: {
+        Args: { guests: Json; target: string; terms_read: boolean };
+        Returns: string;
+      };
       apply_as_operator: {
         Args: { display_name: string; legal_name: string; registration: Json };
         Returns: string;
@@ -1942,6 +2483,7 @@ export type Database = {
         };
         Returns: undefined;
       };
+      departure_bookable: { Args: { dep: string }; Returns: boolean };
       discard_inventory_paste: { Args: { run: string }; Returns: undefined };
       generate_departures: {
         Args: { horizon?: string; target: string };
@@ -1963,10 +2505,36 @@ export type Database = {
         Args: { note: string; target: string };
         Returns: undefined;
       };
+      review_eligibility_proof: {
+        Args: {
+          decision: Database["public"]["Enums"]["proof_status"];
+          review_note?: string;
+          target: string;
+        };
+        Returns: undefined;
+      };
       revoke_api_key: { Args: { target: string }; Returns: undefined };
       save_inventory_feed: {
         Args: { feed_url: string; target_org: string };
         Returns: undefined;
+      };
+      send_offer: {
+        Args: {
+          cabins: Json;
+          cur: string;
+          dep: string;
+          eligibility: string;
+          expires_in_hours?: number;
+          inclusions_text: string;
+          list_total: number;
+          note: string;
+          plan: Database["public"]["Enums"]["rate_plan"];
+          previous?: string;
+          req: string;
+          terms_text: string;
+          total: number;
+        };
+        Returns: string;
       };
       service_apply_inventory: {
         Args: {
@@ -2003,6 +2571,7 @@ export type Database = {
           vessel_id: string;
         }[];
       };
+      withdraw_offer: { Args: { target: string }; Returns: undefined };
     };
     Enums: {
       admin_role: "super" | "catalogue" | "finance" | "content";
@@ -2022,12 +2591,16 @@ export type Database = {
       feed_status: "pending" | "active" | "paused" | "rejected";
       inventory_run_status: "previewed" | "applied" | "discarded" | "failed";
       inventory_source: "manual" | "paste" | "feed" | "api";
+      offer_status: "sent" | "superseded" | "withdrawn" | "accepted" | "closed";
       org_kind: "operator" | "partner" | "nilecruz";
       org_status: "applied" | "approved" | "paused" | "rejected";
       platform_role: "customer" | "admin";
       price_basis: "per_guest" | "per_group";
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
+      proof_status: "submitted" | "verified" | "rejected";
       rate_plan: "international" | "egyptian_citizen" | "foreign_resident" | "trade";
+      request_status: "open" | "accepted" | "closed";
+      reservation_status: "awaiting_payment" | "confirmed" | "cancelled";
       safety_status: "open" | "under_review" | "resolved";
       session_kind: "shared" | "private";
       submission_event: "created" | "edited" | "submitted" | "changes_requested" | "approved" | "rejected";
@@ -2171,12 +2744,16 @@ export const Constants = {
       feed_status: ["pending", "active", "paused", "rejected"],
       inventory_run_status: ["previewed", "applied", "discarded", "failed"],
       inventory_source: ["manual", "paste", "feed", "api"],
+      offer_status: ["sent", "superseded", "withdrawn", "accepted", "closed"],
       org_kind: ["operator", "partner", "nilecruz"],
       org_status: ["applied", "approved", "paused", "rejected"],
       platform_role: ["customer", "admin"],
       price_basis: ["per_guest", "per_group"],
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],
+      proof_status: ["submitted", "verified", "rejected"],
       rate_plan: ["international", "egyptian_citizen", "foreign_resident", "trade"],
+      request_status: ["open", "accepted", "closed"],
+      reservation_status: ["awaiting_payment", "confirmed", "cancelled"],
       safety_status: ["open", "under_review", "resolved"],
       session_kind: ["shared", "private"],
       submission_event: ["created", "edited", "submitted", "changes_requested", "approved", "rejected"],

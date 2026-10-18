@@ -4,7 +4,9 @@ import { Checkboxes, Input, Section, TextArea, ui } from "@/components/dashboard
 import { formatMoney } from "@/components/ds/lib/format";
 import { requireProductEditor } from "@/server/product/guard";
 import { cabinTypes } from "@/server/product/queries";
-import { saveCabin, saveGratuity } from "./actions";
+import type { CancellationBand } from "@/lib/tours/tours";
+import { getDb } from "@/server/db";
+import { saveCabin, saveGratuity, savePolicy } from "./actions";
 import { productPaths } from "./paths";
 
 export const DECKS = ["Lower", "Middle", "Upper"];
@@ -14,6 +16,15 @@ export async function CabinsPage({ orgId, vesselId }: { orgId: string | null; ve
   const p = productPaths(orgId, vesselId);
   const { vessel } = await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
   const cabins = await cabinTypes(vesselId);
+  const db = await getDb();
+  const { data: policy } = await db
+    .from("cancellation_policies")
+    .select("id, bands, cancellation_policy_translations(locale, terms)")
+    .eq("vessel_id", vesselId)
+    .is("schedule_id", null)
+    .maybeSingle();
+  const bands = (policy?.bands as CancellationBand[] | undefined) ?? [];
+  const policyText = (l: string) => policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "";
   const decks = [...new Set(cabins.map((c) => c.deck))];
   return (
     <>
@@ -40,6 +51,38 @@ export async function CabinsPage({ orgId, vesselId }: { orgId: string | null; ve
                 : "At least US$5."
             }
           />
+        </ActionForm>
+      </Section>
+
+      <Section title="Cancellation policy" id="policy">
+        <p className={ui.muted}>
+          A sailing can be booked only with a policy. For each band: cancelled this many days or more before departure, this share
+          of the price is charged. Include a band from 0 days.
+        </p>
+        <ActionForm action={savePolicy.bind(null, orgId, vesselId)} submit="Save policy" variant="outline">
+          {[...bands, ...Array(Math.max(0, 6 - bands.length)).fill(null)]
+            .slice(0, 6)
+            .map((b: CancellationBand | null, i: number) => (
+              <div key={i} className={ui.grid}>
+                <Input
+                  label={`Band ${i + 1}: days before departure`}
+                  name={`from_days_${i}`}
+                  inputMode="numeric"
+                  defaultValue={b?.from_days}
+                />
+                <Input label="% charged" name={`percent_${i}`} inputMode="numeric" defaultValue={b?.percent} />
+              </div>
+            ))}
+          <TextArea
+            label="Policy wording (English)"
+            name="terms_en"
+            rows={4}
+            maxLength={4000}
+            defaultValue={policyText("en")}
+            lang="en"
+          />
+          <TextArea label="Spanish" name="terms_es" rows={3} maxLength={4000} defaultValue={policyText("es")} lang="es" />
+          <TextArea label="Japanese" name="terms_ja" rows={3} maxLength={4000} defaultValue={policyText("ja")} lang="ja" />
         </ActionForm>
       </Section>
 

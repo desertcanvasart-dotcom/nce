@@ -329,3 +329,24 @@ a.counter:hover {
 .grid dd {
   margin: 0;
 }
+
+/* One offer or record in a comparison: a bordered block that stacks on phones. */
+.card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+/* Text people wrote, with their line breaks kept. */
+.prewrap {
+  white-space: pre-line;
+}

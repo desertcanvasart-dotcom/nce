@@ -618,3 +618,12 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Children:** a per-guest price applies to every guest aged 3 and over, by age on the day of the tour; under-3s are free (the cruise age rule, DATA-019). A tour can be marked "adults only", meaning every guest must be 18 or over. Group prices are one price for the party.
 - **Public prices:** published tours and their sessions, prices included, are public. ADR-025's "prices after sign-in" applies to cruises only.
 - **No supplier cost** is recorded for now.
+
+### ADR-088 Requests, offers and reservations: Faris's answers (Accepted; Faris 18 Oct 2026, Batch 4e brief)
+Faris's message was cut off after "with draft"; it is read as approving all six recommendations, the last being in-dashboard notices only.
+- **Who sees a request:** operators with a published vessel whose schedule matches the requested route (any route when "flexible") and has a departure inside the date window and the nights asked for. Requests no operator can serve are flagged for admins. Operators never see the customer's name or contact details; they learn the lead passenger's name only once their offer is accepted.
+- **Offer expiry:** 72 hours by default; the operator can choose from 24 hours to 14 days. An expired offer can't be accepted.
+- **Cruise cancellation policies** are added in 4e: wording in EN/ES/JA and percentage bands by days before departure, per vessel and optionally per schedule (the schedule's policy wins). Operators and catalogue admins enter them. A departure without a policy isn't bookable. The charge calculation stays in 4f.
+- **Passenger details at acceptance:** full name and date of birth for every guest, and nationality for the lead passenger; no passport numbers.
+- **Eligibility proof (ADR-078):** for offers at the Egyptian-citizen or foreign-resident rate, the customer uploads proof after accepting, into a private store that only the customer, that operator's team and admins can open. The operator marks it verified or not. The customer-facing wording is a marked draft until Faris supplies it (CONTENT-NEEDED #38).
+- **Notifications:** in-dashboard notices only (new request, new offer, offer updated, reservation made). Email waits until a sending service is chosen.
