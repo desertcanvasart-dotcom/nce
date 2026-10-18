@@ -56,8 +56,14 @@ describe("commission and payables (DATA-036, 037)", () => {
     expect(commissionOf(5)).toEqual({ commissionMinor: 1, payableMinor: 4 });
   });
   it("reverses both in proportion to a refund", () => {
-    expect(reversalOf({ amountMinor: 250000, commissionMinor: 25000 }, 125000)).toEqual({ commissionMinor: -12500, payableMinor: -112500 });
-    expect(reversalOf({ amountMinor: 250000, commissionMinor: 25000 }, 250000)).toEqual({ commissionMinor: -25000, payableMinor: -225000 });
+    expect(reversalOf({ amountMinor: 250000, commissionMinor: 25000 }, 125000)).toEqual({
+      commissionMinor: -12500,
+      payableMinor: -112500,
+    });
+    expect(reversalOf({ amountMinor: 250000, commissionMinor: 25000 }, 250000)).toEqual({
+      commissionMinor: -25000,
+      payableMinor: -225000,
+    });
     expect(reversalOf({ amountMinor: 250000, commissionMinor: 25000 }, 0)).toEqual({ commissionMinor: 0, payableMinor: 0 });
   });
 });
