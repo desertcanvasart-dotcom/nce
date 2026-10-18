@@ -826,7 +826,7 @@ export type Database = {
         Insert: {
           amount_minor: number;
           cabin_type_id: string;
-          child_bands: Json;
+          child_bands?: Json;
           created_at?: string;
           currency: string;
           departure_id: string;
@@ -1330,6 +1330,16 @@ export type Database = {
         Returns: undefined;
       };
       submit_submission: { Args: { target: string }; Returns: undefined };
+      vessel_product_summary: {
+        Args: { only_vessel?: string };
+        Returns: {
+          bookable_departures: number;
+          cabin_types: number;
+          schedules: number;
+          upcoming_departures: number;
+          vessel_id: string;
+        }[];
+      };
     };
     Enums: {
       admin_role: "super" | "catalogue" | "finance" | "content";

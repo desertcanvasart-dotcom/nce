@@ -20,10 +20,27 @@ describe("departures (DASH-ADM-051)", () => {
   });
   it("lists every sailing day inside the periods, from today, up to the horizon", () => {
     const dates = sailingDates([1, 5], [{ starts_on: "2026-10-19", ends_on: "2026-11-15" }], "2026-10-19", "2027-12-31");
-    expect(dates).toEqual(["2026-10-19", "2026-10-23", "2026-10-26", "2026-10-30", "2026-11-02", "2026-11-06", "2026-11-09", "2026-11-13"]);
+    expect(dates).toEqual([
+      "2026-10-19",
+      "2026-10-23",
+      "2026-10-26",
+      "2026-10-30",
+      "2026-11-02",
+      "2026-11-06",
+      "2026-11-09",
+      "2026-11-13",
+    ]);
   });
   it("merges overlapping periods and respects the horizon", () => {
-    const dates = sailingDates([3], [{ starts_on: "2026-10-01", ends_on: "2026-10-31" }, { starts_on: "2026-10-15", ends_on: "2026-11-30" }], "2026-10-20", "2026-11-10");
+    const dates = sailingDates(
+      [3],
+      [
+        { starts_on: "2026-10-01", ends_on: "2026-10-31" },
+        { starts_on: "2026-10-15", ends_on: "2026-11-30" },
+      ],
+      "2026-10-20",
+      "2026-11-10",
+    );
     expect(dates).toEqual(["2026-10-21", "2026-10-28", "2026-11-04"]);
   });
   it("returns after the number of nights, across month ends", () => {
@@ -61,9 +78,25 @@ describe("child pricing (DATA-019) at every boundary", () => {
   });
   it("accepts only complete, gap-free band sets as operator overrides (DATA-022)", () => {
     expect(validBands(DEFAULT_CHILD_BANDS)).toBe(true);
-    expect(validBands([{ from: 0, to: 2, percent: 0 }, { from: 2, to: null, percent: 100 }])).toBe(true);
-    expect(validBands([{ from: 0, to: 3, percent: 0 }, { from: 4, to: null, percent: 100 }])).toBe(false); // gap
-    expect(validBands([{ from: 0, to: 3, percent: 0 }, { from: 3, to: 12, percent: 120 }, { from: 12, to: null, percent: 100 }])).toBe(false);
+    expect(
+      validBands([
+        { from: 0, to: 2, percent: 0 },
+        { from: 2, to: null, percent: 100 },
+      ]),
+    ).toBe(true);
+    expect(
+      validBands([
+        { from: 0, to: 3, percent: 0 },
+        { from: 4, to: null, percent: 100 },
+      ]),
+    ).toBe(false); // gap
+    expect(
+      validBands([
+        { from: 0, to: 3, percent: 0 },
+        { from: 3, to: 12, percent: 120 },
+        { from: 12, to: null, percent: 100 },
+      ]),
+    ).toBe(false);
     expect(validBands([{ from: 0, to: 3, percent: 0 }])).toBe(false); // not open-ended
   });
 });

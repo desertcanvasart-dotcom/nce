@@ -71,7 +71,7 @@ export default defineConfig([
           "server-action-guard": {
             meta: { type: "problem", schema: [] },
             create(context) {
-              const GUARDS = new Set(["requireUser", "requireAdmin", "requireOrgRole", "allowAnonymous"]);
+              const GUARDS = new Set(["requireUser", "requireAdmin", "requireOrgRole", "requireProductEditor", "allowAnonymous"]);
               const isServerFile = context.sourceCode.ast.body.some(
                 (n) => n.type === "ExpressionStatement" && n.directive === "use server",
               );

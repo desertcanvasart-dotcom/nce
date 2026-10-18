@@ -100,7 +100,12 @@ export function promotedPrice(rateMinor: number, currency: string, p: Promotion)
 }
 
 /** ADR-079: is availability recent enough to reserve? */
-export const FRESHNESS_HOURS = { manual: 24, paste: 24, feed: 2, api: 2 } as const;
-export function isFresh(confirmedAt: string, source: keyof typeof FRESHNESS_HOURS, now = Date.now(), hours = FRESHNESS_HOURS): boolean {
+export const FRESHNESS_HOURS: Record<"manual" | "paste" | "feed" | "api", number> = { manual: 24, paste: 24, feed: 2, api: 2 };
+export function isFresh(
+  confirmedAt: string,
+  source: keyof typeof FRESHNESS_HOURS,
+  now = Date.now(),
+  hours: Record<keyof typeof FRESHNESS_HOURS, number> = FRESHNESS_HOURS,
+): boolean {
   return now - Date.parse(confirmedAt) < hours[source] * 3_600_000;
 }

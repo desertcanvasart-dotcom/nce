@@ -32,7 +32,9 @@ type ListRow = {
   vessel_private: { aliases: string[] } | null;
 };
 
-function readinessOf(v: ListRow) {
+type Summary = { cabin_types: number; bookable_departures: number };
+
+function readinessOf(v: ListRow, sum?: Summary) {
   const input: ReadinessInput = {
     name: v.name,
     type: v.type,
@@ -43,8 +45,17 @@ function readinessOf(v: ListRow) {
     description_en: v.vessel_translations.find((t) => t.locale === "en")?.description ?? null,
     photos: v.media.map((m) => ({ credit: m.credit, alt_en: m.media_translations.find((t) => t.locale === "en")?.alt ?? null })),
     operator: v.operator,
+    cabin_types: sum?.cabin_types ?? 0,
+    bookable_departures: sum?.bookable_departures ?? 0,
   };
   return readiness(input);
+}
+
+async function productSummaries(only?: string): Promise<Map<string, Summary>> {
+  const db = await getDb();
+  const { data, error } = await db.rpc("vessel_product_summary", only ? { only_vessel: only } : {});
+  if (error) throw error;
+  return new Map((data ?? []).map((r) => [r.vessel_id, r]));
 }
 
 /** DASH-ADM-010–012: search by name or alias, filter by type, visibility and readiness. */
@@ -62,7 +73,8 @@ export async function listVessels(f: VesselFilter) {
   if (error) throw error;
 
   const q = f.q?.trim().toLowerCase();
-  let rows = (data ?? []).map((v) => ({ ...v, readiness: readinessOf(v) }));
+  const sums = await productSummaries();
+  let rows = (data ?? []).map((v) => ({ ...v, readiness: readinessOf(v, sums.get(v.id)) }));
   if (q) {
     rows = rows.filter(
       (v) => v.name.toLowerCase().includes(q) || (v.vessel_private?.aliases ?? []).some((a) => a.toLowerCase().includes(q)),
@@ -121,7 +133,10 @@ export async function vesselForEditor(id: string) {
     }),
   );
   const desc = (l: string) => v.vessel_translations.find((t) => t.locale === l)?.description ?? null;
+  const sum = (await productSummaries(id)).get(id);
   const ready = readiness({
+    cabin_types: sum?.cabin_types ?? 0,
+    bookable_departures: sum?.bookable_departures ?? 0,
     name: v.name,
     type: v.type,
     route_text: v.route_text,
@@ -132,7 +147,7 @@ export async function vesselForEditor(id: string) {
     photos: media.map((m) => ({ credit: m.credit, alt_en: m.media_translations.find((t) => t.locale === "en")?.alt ?? null })),
     operator: v.operator,
   });
-  return { ...v, media: signed, readiness: ready };
+  return { ...v, media: signed, readiness: ready, product: sum ?? null };
 }
 
 export type EditorVessel = NonNullable<Awaited<ReturnType<typeof vesselForEditor>>>;
