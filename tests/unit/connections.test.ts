@@ -13,7 +13,15 @@ import {
   verifyRequest,
   verifyWebhook,
 } from "@/lib/connections/signature";
-import { addressProblem, FetchProblem, isPublicAddress, pinnedLookup, safeFetch, urlProblem, type Resolver } from "@/lib/connections/safe-fetch";
+import {
+  addressProblem,
+  FetchProblem,
+  isPublicAddress,
+  pinnedLookup,
+  safeFetch,
+  urlProblem,
+  type Resolver,
+} from "@/lib/connections/safe-fetch";
 
 const JSON_DOC = {
   format: "nilecruz-inventory/1",
@@ -83,7 +91,12 @@ describe("inventory format v1 (ADR-080)", () => {
 
   it("reads the same data from XML", () => {
     const [row] = parseInventory(XML_DOC);
-    expect(row).toMatchObject({ vessel: "sample-steam-one", cabin: "STD", available: 4, confirmed_at: "2027-03-01T07:30:00.000Z" });
+    expect(row).toMatchObject({
+      vessel: "sample-steam-one",
+      cabin: "STD",
+      available: 4,
+      confirmed_at: "2027-03-01T07:30:00.000Z",
+    });
     expect(row!.rates).toEqual([{ occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050 }]);
   });
 
@@ -92,7 +105,9 @@ describe("inventory format v1 (ADR-080)", () => {
     const laughs = `<?xml version="1.0"?><!DOCTYPE lolz [<!ENTITY lol "lol"><!ENTITY lol2 "&lol;&lol;&lol;&lol;">]><feed>&lol2;</feed>`;
     expect(() => parseInventory(xxe)).toThrow(/DOCTYPE/);
     expect(() => parseInventory(laughs)).toThrow(FormatError);
-    expect(() => parseInventory(`<?xml version="1.0"?>\n<!doctype feed SYSTEM "http://169.254.169.254/">\n<feed/>`)).toThrow(/DOCTYPE/);
+    expect(() => parseInventory(`<?xml version="1.0"?>\n<!doctype feed SYSTEM "http://169.254.169.254/">\n<feed/>`)).toThrow(
+      /DOCTYPE/,
+    );
   });
 
   it("does not expand entity references it finds", () => {
@@ -103,7 +118,18 @@ describe("inventory format v1 (ADR-080)", () => {
   it("refuses data over the size limit and too many rows", () => {
     expect(() => parseInventory(" ".repeat(LIMITS.pasteBytes + 1))).toThrow(/larger than 2 MB/);
     const many = {
-      cruises: [{ id: "a", availability: Array.from({ length: 2501 }, (_, i) => ({ date: "2027-01-01", cabins: [{ type: `C${i}`, available: 1 }, { type: `D${i}`, available: 1 }] })) }],
+      cruises: [
+        {
+          id: "a",
+          availability: Array.from({ length: 2501 }, (_, i) => ({
+            date: "2027-01-01",
+            cabins: [
+              { type: `C${i}`, available: 1 },
+              { type: `D${i}`, available: 1 },
+            ],
+          })),
+        },
+      ],
     };
     expect(() => parseInventory(JSON.stringify(many), { maxBytes: 10_000_000 })).toThrow(/More than 5,000 rows/);
   });
@@ -124,7 +150,13 @@ describe("inventory format v1 (ADR-080)", () => {
             id: "boat",
             availability: [
               { date: "2027-02-30", cabins: [{ type: "STD", available: 2 }] },
-              { date: "2027-02-01", cabins: [{ type: "STD", available: -1 }, { type: "STD", available: 2.5 }] },
+              {
+                date: "2027-02-01",
+                cabins: [
+                  { type: "STD", available: -1 },
+                  { type: "STD", available: 2.5 },
+                ],
+              },
               { date: "2027-02-02", cabins: [{ type: "STD", available: 1, confirmed_at: "2027-01-01 10:00" }] },
               {
                 date: "2027-02-03",
@@ -158,7 +190,13 @@ describe("signed API requests (SEC-008, SEC-009, ADR-085)", () => {
   const keys = generateApiKeyPair();
   const body = JSON.stringify(JSON_DOC);
   const now = 1_800_000_000;
-  const parts = { method: "POST", path: "/api/v1/inventory/", timestamp: String(now), idempotencyKey: "req-0001-abcd", bodySha256: sha256Hex(body) };
+  const parts = {
+    method: "POST",
+    path: "/api/v1/inventory/",
+    timestamp: String(now),
+    idempotencyKey: "req-0001-abcd",
+    bodySha256: sha256Hex(body),
+  };
 
   it("stores a 32-byte public key and gives a PEM private key", () => {
     expect(Buffer.from(keys.publicKey, "base64")).toHaveLength(32);
@@ -190,18 +228,30 @@ describe("signed API requests (SEC-008, SEC-009, ADR-085)", () => {
 
   it("refuses another company's key", () => {
     const other = generateApiKeyPair();
-    expect(verifyRequest(other.publicKey, signRequest(keys.privateKeyPem, parts), parts, now)).toEqual({ ok: false, reason: "bad-signature" });
+    expect(verifyRequest(other.publicKey, signRequest(keys.privateKeyPem, parts), parts, now)).toEqual({
+      ok: false,
+      reason: "bad-signature",
+    });
   });
 
   it("a replayed request verifies, so replays are stopped by the idempotency key (tested end to end)", () => {
     const sig = signRequest(keys.privateKeyPem, parts);
     expect(verifyRequest(keys.publicKey, sig, parts, now + 60)).toEqual({ ok: true });
-    expect(canonicalRequest(parts).split("\n")).toEqual(["nilecruz-v1", "POST", "/api/v1/inventory/", String(now), "req-0001-abcd", parts.bodySha256]);
+    expect(canonicalRequest(parts).split("\n")).toEqual([
+      "nilecruz-v1",
+      "POST",
+      "/api/v1/inventory/",
+      String(now),
+      "req-0001-abcd",
+      parts.bodySha256,
+    ]);
   });
 
   it("refuses malformed headers", () => {
     expect(verifyRequest(keys.publicKey, "not base64!", parts, now).ok).toBe(false);
-    expect(verifyRequest(keys.publicKey, signRequest(keys.privateKeyPem, parts), { ...parts, idempotencyKey: "short" }, now)).toEqual({
+    expect(
+      verifyRequest(keys.publicKey, signRequest(keys.privateKeyPem, parts), { ...parts, idempotencyKey: "short" }, now),
+    ).toEqual({
       ok: false,
       reason: "malformed",
     });
@@ -227,11 +277,32 @@ describe("signed API requests (SEC-008, SEC-009, ADR-085)", () => {
 
 describe("feed fetching (SEC-007)", () => {
   it("blocks private, internal and metadata addresses", () => {
-    for (const a of ["127.0.0.1", "127.8.9.1", "10.1.2.3", "172.16.0.1", "192.168.1.1", "169.254.169.254", "100.64.0.1", "0.0.0.0", "224.0.0.1"])
+    for (const a of [
+      "127.0.0.1",
+      "127.8.9.1",
+      "10.1.2.3",
+      "172.16.0.1",
+      "192.168.1.1",
+      "169.254.169.254",
+      "100.64.0.1",
+      "0.0.0.0",
+      "224.0.0.1",
+    ])
       expect(isPublicAddress(a), a).toBe(false);
-    for (const a of ["::1", "::", "fe80::1", "fd00::1", "::ffff:127.0.0.1", "::ffff:7f00:1", "::ffff:a9fe:a9fe", "64:ff9b::7f00:1", "2002:7f00:1::"])
+    for (const a of [
+      "::1",
+      "::",
+      "fe80::1",
+      "fd00::1",
+      "::ffff:127.0.0.1",
+      "::ffff:7f00:1",
+      "::ffff:a9fe:a9fe",
+      "64:ff9b::7f00:1",
+      "2002:7f00:1::",
+    ])
       expect(isPublicAddress(a), a).toBe(false);
-    for (const a of ["93.184.215.14", "8.8.8.8", "2606:4700:4700::1111", "::ffff:8.8.8.8"]) expect(isPublicAddress(a), a).toBe(true);
+    for (const a of ["93.184.215.14", "8.8.8.8", "2606:4700:4700::1111", "::ffff:8.8.8.8"])
+      expect(isPublicAddress(a), a).toBe(true);
   });
 
   it("checks the address before any network use", () => {
@@ -263,9 +334,14 @@ describe("feed fetching (SEC-007)", () => {
   it("checks again inside the connection's own lookup, so DNS rebinding can't slip through", async () => {
     let calls = 0;
     // Public for the first answer (as when the address was saved), loopback afterwards.
-    const rebinding: Resolver = async () => (calls++ === 0 ? [{ address: "93.184.215.14", family: 4 }] : [{ address: "127.0.0.1", family: 4 }]);
+    const rebinding: Resolver = async () =>
+      calls++ === 0 ? [{ address: "93.184.215.14", family: 4 }] : [{ address: "127.0.0.1", family: 4 }];
     expect(await addressProblem("https://rebind.example.com/", {}, rebinding)).toBeNull();
-    const err = await safeFetch("https://rebind.example.com/feed.xml", { maxBytes: 1000, timeoutMs: 2000, resolve: rebinding }).catch((e) => e);
+    const err = await safeFetch("https://rebind.example.com/feed.xml", {
+      maxBytes: 1000,
+      timeoutMs: 2000,
+      resolve: rebinding,
+    }).catch((e) => e);
     expect(err).toBeInstanceOf(FetchProblem);
     expect((err as FetchProblem).code).toBe("unsafe");
     const v6: Resolver = async () => [{ address: "::1", family: 6 }];

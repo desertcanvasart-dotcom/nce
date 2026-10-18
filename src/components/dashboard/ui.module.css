@@ -308,6 +308,7 @@ a.counter:hover {
   color: var(--ink);
   font-size: var(--type-caption-size);
   line-height: var(--type-caption-line);
+
   /* Wrapped rather than scrolled, so no part is out of reach by keyboard. */
   white-space: pre-wrap;
   overflow-wrap: anywhere;

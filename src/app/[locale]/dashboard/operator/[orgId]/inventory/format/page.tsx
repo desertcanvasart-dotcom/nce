@@ -222,6 +222,10 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
           seconds, uncompressed, at most three redirects, each to a public https address. Changing the address needs a new
           approval.
         </p>
+        <p>
+          Use an address that serves only this document. If your system needs a token in the address, make it one that can only
+          read inventory: the address is visible to your team and to Nilecruz admins.
+        </p>
       </Section>
 
       <Section title="Signing requests (API)" id="signing">
