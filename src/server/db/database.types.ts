@@ -3,6 +3,98 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      api_idempotency: {
+        Row: {
+          api_key_id: string | null;
+          body_sha256: string;
+          created_at: string;
+          idempotency_key: string;
+          org_id: string;
+          response: Json | null;
+          status_code: number | null;
+        };
+        Insert: {
+          api_key_id?: string | null;
+          body_sha256: string;
+          created_at?: string;
+          idempotency_key: string;
+          org_id: string;
+          response?: Json | null;
+          status_code?: number | null;
+        };
+        Update: {
+          api_key_id?: string | null;
+          body_sha256?: string;
+          created_at?: string;
+          idempotency_key?: string;
+          org_id?: string;
+          response?: Json | null;
+          status_code?: number | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "api_idempotency_api_key_id_fkey";
+            columns: ["api_key_id"];
+            isOneToOne: false;
+            referencedRelation: "api_keys";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "api_idempotency_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      api_keys: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          key_id: string;
+          label: string;
+          last_used_at: string | null;
+          org_id: string;
+          public_key: string;
+          revoked_at: string | null;
+          revoked_by: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          key_id: string;
+          label: string;
+          last_used_at?: string | null;
+          org_id: string;
+          public_key: string;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          key_id?: string;
+          label?: string;
+          last_used_at?: string | null;
+          org_id?: string;
+          public_key?: string;
+          revoked_at?: string | null;
+          revoked_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       audit_log: {
         Row: {
           action: string;
@@ -417,6 +509,156 @@ export type Database = {
             columns: ["vessel_id"];
             isOneToOne: false;
             referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      inventory_feeds: {
+        Row: {
+          consecutive_failures: number;
+          created_at: string;
+          decided_at: string | null;
+          decided_by: string | null;
+          id: string;
+          last_attempt_at: string | null;
+          last_error: string | null;
+          last_rows_changed: number | null;
+          last_success_at: string | null;
+          next_pull_at: string | null;
+          org_id: string;
+          requested_by: string | null;
+          status: Database["public"]["Enums"]["feed_status"];
+          status_reason: string | null;
+          updated_at: string;
+          url: string;
+        };
+        Insert: {
+          consecutive_failures?: number;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          id?: string;
+          last_attempt_at?: string | null;
+          last_error?: string | null;
+          last_rows_changed?: number | null;
+          last_success_at?: string | null;
+          next_pull_at?: string | null;
+          org_id: string;
+          requested_by?: string | null;
+          status?: Database["public"]["Enums"]["feed_status"];
+          status_reason?: string | null;
+          updated_at?: string;
+          url: string;
+        };
+        Update: {
+          consecutive_failures?: number;
+          created_at?: string;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          id?: string;
+          last_attempt_at?: string | null;
+          last_error?: string | null;
+          last_rows_changed?: number | null;
+          last_success_at?: string | null;
+          next_pull_at?: string | null;
+          org_id?: string;
+          requested_by?: string | null;
+          status?: Database["public"]["Enums"]["feed_status"];
+          status_reason?: string | null;
+          updated_at?: string;
+          url?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "inventory_feeds_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: true;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      inventory_runs: {
+        Row: {
+          api_key_id: string | null;
+          created_at: string;
+          created_by: string | null;
+          error: string | null;
+          feed_id: string | null;
+          finished_at: string | null;
+          id: string;
+          label: string | null;
+          org_id: string;
+          results: Json;
+          rows: Json | null;
+          rows_changed: number;
+          rows_failed: number;
+          rows_received: number;
+          rows_skipped: number;
+          rows_unchanged: number;
+          source: Database["public"]["Enums"]["inventory_source"];
+          status: Database["public"]["Enums"]["inventory_run_status"];
+        };
+        Insert: {
+          api_key_id?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          error?: string | null;
+          feed_id?: string | null;
+          finished_at?: string | null;
+          id?: string;
+          label?: string | null;
+          org_id: string;
+          results?: Json;
+          rows?: Json | null;
+          rows_changed?: number;
+          rows_failed?: number;
+          rows_received?: number;
+          rows_skipped?: number;
+          rows_unchanged?: number;
+          source: Database["public"]["Enums"]["inventory_source"];
+          status: Database["public"]["Enums"]["inventory_run_status"];
+        };
+        Update: {
+          api_key_id?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          error?: string | null;
+          feed_id?: string | null;
+          finished_at?: string | null;
+          id?: string;
+          label?: string | null;
+          org_id?: string;
+          results?: Json;
+          rows?: Json | null;
+          rows_changed?: number;
+          rows_failed?: number;
+          rows_received?: number;
+          rows_skipped?: number;
+          rows_unchanged?: number;
+          source?: Database["public"]["Enums"]["inventory_source"];
+          status?: Database["public"]["Enums"]["inventory_run_status"];
+        };
+        Relationships: [
+          {
+            foreignKeyName: "inventory_runs_api_key_id_fkey";
+            columns: ["api_key_id"];
+            isOneToOne: false;
+            referencedRelation: "api_keys";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "inventory_runs_feed_id_fkey";
+            columns: ["feed_id"];
+            isOneToOne: false;
+            referencedRelation: "inventory_feeds";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "inventory_runs_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
             referencedColumns: ["id"];
           },
         ];
@@ -1313,20 +1555,73 @@ export type Database = {
         Args: { display_name: string; legal_name: string; registration: Json };
         Returns: string;
       };
+      apply_inventory_paste: { Args: { run: string }; Returns: Json };
       approve_submission: {
         Args: { new_slug?: string; target: string };
         Returns: string;
       };
+      create_api_key: {
+        Args: { key_label: string; key_public: string; target_org: string };
+        Returns: {
+          id: string;
+          key_id: string;
+        }[];
+      };
+      decide_inventory_feed: {
+        Args: {
+          decision: Database["public"]["Enums"]["feed_status"];
+          reason?: string;
+          target_org: string;
+        };
+        Returns: undefined;
+      };
+      discard_inventory_paste: { Args: { run: string }; Returns: undefined };
       generate_departures: {
         Args: { horizon?: string; target: string };
         Returns: number;
+      };
+      preview_inventory_paste: {
+        Args: { input: Json; label?: string; target_org: string };
+        Returns: string;
       };
       reject_submission: {
         Args: { note: string; target: string };
         Returns: undefined;
       };
+      remove_inventory_feed: {
+        Args: { target_org: string };
+        Returns: undefined;
+      };
       request_submission_changes: {
         Args: { note: string; target: string };
+        Returns: undefined;
+      };
+      revoke_api_key: { Args: { target: string }; Returns: undefined };
+      save_inventory_feed: {
+        Args: { feed_url: string; target_org: string };
+        Returns: undefined;
+      };
+      service_apply_inventory: {
+        Args: {
+          api_key?: string;
+          feed?: string;
+          input: Json;
+          run_label?: string;
+          src: Database["public"]["Enums"]["inventory_source"];
+          target_org: string;
+        };
+        Returns: Json;
+      };
+      service_claim_due_feeds: {
+        Args: { max_feeds?: number };
+        Returns: {
+          id: string;
+          org_id: string;
+          url: string;
+        }[];
+      };
+      service_record_feed_failure: {
+        Args: { feed: string; problem: string };
         Returns: undefined;
       };
       submit_submission: { Args: { target: string }; Returns: undefined };
@@ -1356,6 +1651,8 @@ export type Database = {
         | "contemporary_design";
       departure_status: "scheduled" | "cancelled";
       evaluation_verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
+      feed_status: "pending" | "active" | "paused" | "rejected";
+      inventory_run_status: "previewed" | "applied" | "discarded" | "failed";
       inventory_source: "manual" | "paste" | "feed" | "api";
       org_kind: "operator" | "partner" | "nilecruz";
       org_status: "applied" | "approved" | "paused" | "rejected";
@@ -1500,6 +1797,8 @@ export const Constants = {
       ],
       departure_status: ["scheduled", "cancelled"],
       evaluation_verdict: ["recommended", "recommended_with_reservations", "not_recommended"],
+      feed_status: ["pending", "active", "paused", "rejected"],
+      inventory_run_status: ["previewed", "applied", "discarded", "failed"],
       inventory_source: ["manual", "paste", "feed", "api"],
       org_kind: ["operator", "partner", "nilecruz"],
       org_status: ["applied", "approved", "paused", "rejected"],

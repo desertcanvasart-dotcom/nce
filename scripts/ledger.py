@@ -712,6 +712,22 @@ STATUS.update({
  "DATA-022": ("Verified", B4C1+'operator override on the operator page, validated (no gaps), audited; new rates only (rates.child_bands snapshot; e2e keeps 25%)'),
  "DATA-023": ("Verified", B4C1+"max_occupancy 1–3 per cabin type (DB, 120); occupancy rule unit-tested (infants under 3 don't count, adult needed)"),
 })
+B4C2 = "Batch 4c-2 (18 Oct 2026): "
+STATUS.update({
+ "DASH-ADM-006": ("Verified", B4C2+"overview counters 'Inventory connection errors' (failing active feeds + API calls with refused rows in 24 h) and 'Inventory feeds awaiting approval', each linking to the filtered operators list; e2e connections.spec"),
+ "DASH-ADM-045": ("Verified", B4C2+'operators list: modes in use and the last error per operator, filter "with connection errors"; operator page: health per route, feed, keys, recent activity; e2e connections.spec + axe'),
+ "DASH-ADM-046": ("Verified", B4C2+'manual entry (4c-1), paste, feed and API all supported; modes shown per operator; all three write through app.apply_inventory_rows (130_connections)'),
+ "DASH-ADM-047": ("Verified", B4C2+"feeds start 'pending'; only catalogue admins with two-step approve (130: owner, reservations, aal1 admin refused); a changed address needs a new approval (130); approval pulls once (e2e)"),
+ "DASH-OPR-005": ("Verified", B4C2+'overview issues now include feed awaiting approval, not approved or paused, and the last feed/API problem; e2e connections.spec'),
+ "DASH-OPR-016": ("Verified", B4C2+'owners configure paste, feed and API on Inventory connections (owners only, as in the menu; RLS + functions check again); e2e connections.spec'),
+ "DASH-OPR-024": ("Verified", B4C2+'JSON or XML (format v1, ADR-080) pasted or uploaded; row-by-row preview, nothing written until applied, checked again on apply; unit format tests; 130; e2e connections.spec'),
+ "DASH-OPR-025": ("Verified", B4C2+'https feed address, checked after DNS on save and inside every connection; pulled hourly by pg_cron via a signed call (ADR-081); e2e pulls from a local https server'),
+ "DASH-OPR-026": ("Verified", B4C2+'Ed25519 key pairs (ADR-085): private key shown once, two active for rotation, revoke; signed POST /api/v1/inventory/; e2e signed call, replay, tamper, revoked key'),
+ "DASH-OPR-027": ("Verified", B4C2+'health per route: last success, data age, rows changed, last problem in plain words; recent activity of pastes, pulls and API calls; e2e connections.spec'),
+ "SEC-007": ("Verified", B4C2+'https 443/8443 only; private, internal, metadata, IPv6 loopback, mapped and NAT64 addresses refused inside the DNS lookup used to connect (no rebinding); redirects re-checked; 5 MB, 20 s, no compression; XML without DTD/entities; unit tests incl. local server; e2e 169.254.169.254 refused'),
+ "SEC-008": ("Verified", B4C2+'only the Ed25519 public key is stored (130: no secret column), max two active (130, trigger), revoked keys stay revoked; e2e: stored row has no private key'),
+ "SEC-009": ("Verified", B4C2+'Ed25519 signature over method, path, timestamp (±5 min), idempotency key, body hash; idempotency per company 24 h (replay returns the first answer, different body 422); webhooks signed the same way (unit; sending in 4e)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

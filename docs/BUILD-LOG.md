@@ -411,3 +411,26 @@
 
 **Next:** Faris reviews PR 4c-1; then 4c-2 on the same batch.
 
+
+## 18 Oct 2026 · Batch 4c-2 · Inventory connections (second of two PRs; closes Batch 4c)
+
+**Built** (branch `batch-04c2-connections`):
+- **One checked write path** (`app.apply_inventory_rows`, migration `20261018000800_connections`): paste, feed and API rows are checked the same way (company's own vessel, existing and open sailing, active cabin type, occupancy, E£ rule) and newer data wins (ADR-086). Every write records its source and confirmation time.
+- **Paste** (DASH-OPR-024): JSON or XML in the Nilecruz inventory format v1 (ADR-080), pasted or uploaded, previewed row by row; nothing changes until "Apply", which checks again.
+- **Feed** (DASH-OPR-025, DASH-ADM-047, SEC-007): owners save an https address (checked after DNS); catalogue admins approve, pause or reject it; approval pulls once; then hourly via `pg_cron` → a signed internal call (ADR-081), every two hours after three failures. The fetcher checks addresses inside the connection's own DNS lookup (no rebinding), re-checks redirects, and enforces 5 MB / 20 s / no compression. XML with DTDs or entities is refused.
+- **API** (DASH-OPR-026, SEC-008, SEC-009): Ed25519 key pairs (ADR-085, flagged): private key shown once, only the public key stored, two active keys for rotation, revoke. `POST /api/v1/inventory/` verifies the signature (±5 min) and the idempotency key (repeat = first answer; different body = 422). Webhook signing is ready for 4e.
+- **Health** (DASH-OPR-027, DASH-ADM-006, 045, 046): per route, last success, data age, rows changed, last problem in plain words; recent activity; problems on the operator overview; admin overview counters (connection errors, feeds awaiting approval) linking to the operators list, which shows each operator's modes and errors.
+- **Format document** for operators in the dashboard, with the company's own vessel, cabin and schedule codes and a working signing example.
+
+**Verified, and how:**
+- **Static checks:** typecheck, lint, CSS lint, copy lint, format check clean. Unit tests: 178 (new: format parsing JSON/XML, entity attacks, oversize and row limits, row errors, prices without floats; signatures valid/expired/tampered/other key/malformed, scheduler HMAC, webhooks; private addresses incl. 127.0.0.1, 10/8, 169.254.169.254, ::1, mapped and NAT64, numeric spellings; DNS rebinding through the pinned lookup; redirects, size, time and compression against a local server; data age).
+- **Database:** 13 pgTAP files, 156 checks pass (new 130_connections, 37 checks: only catalogue admins with two-step approve feeds, a changed address needs approval, http refused, keys public-only and max two active, revoked stays revoked, preview writes nothing, apply once, other companies refused, service functions closed to people, older data skipped, feed health and back-off, claims not doubled, customers see nothing). The deploy grants check returns no differences locally.
+- **End-to-end:** 6 new tests in `connections.spec.ts` (paste preview and apply; key creation, signed call, replay changes nothing, different body 422, tampered 401, unsigned 401, revoked key 401; metadata address refused, feed awaits approval, admin approves, pulled from a local https server; scheduler call must be signed; axe on the operator page, format document, admin operator page, operators list and overview in Day and Night). Passed twice in a row on one database. The full suite on this machine hit sign-in timeouts in older files while load stayed at 23–36 (the same pattern as 4c-1); with two workers, as in CI, every connections test passed and 3 older tests timed out on sign-in. CI on GitHub is the record.
+- **Screenshots:** 42 in `docs/screenshots/batch-04c/` (prefix `4c2-`), 375 / 768 / 1440 px, Day and Night: operator connections (with a paste preview), the format document, the operator overview, the admin overview, the operators list and an operator's page. Fixed after review: values in definition grids now line up with their labels.
+
+**Needs Faris:**
+- ADR-085: signing with Ed25519 instead of HMAC (the brief's "HMAC + only a hash stored" can't both hold).
+- The staging scheduler: approve adding `feed_pull_url` and `feed_pull_secret` to Supabase Vault (staging) and `FEED_PULL_SECRET` on Railway. Until then approved feeds are pulled only at approval.
+- PROPOSED-018: a "Pull now" button for approved feeds.
+
+**Next:** Faris reviews PR 4c-2; once merged, Batch 4c is closed and Batch 4d (tours and sightseeing) is briefed.

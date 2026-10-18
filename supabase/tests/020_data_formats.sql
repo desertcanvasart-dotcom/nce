@@ -14,7 +14,7 @@ select is(
 
 select is(
   (select array_agg(table_name || '.' || column_name) from information_schema.columns
-   where table_schema = 'public' and (column_name ~ '(amount|price|total|fee)' ) and data_type <> 'bigint'),
+   where table_schema = 'public' and (column_name ~ '(^|_)(amount|price|total|fee|fees)(_|$)') and data_type <> 'bigint'),
   null, 'money-like columns are bigint minor units');
 
 select * from finish();

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Section, ui } from "@/components/dashboard/ui";
 import { requireOrgRole } from "@/server/auth";
+import { connectionIssues } from "@/server/connections/queries";
 import { operatorOverview } from "@/server/product/queries";
 import { isUuid } from "../../sections";
 
@@ -15,7 +16,8 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
     returnTo: `/dashboard/operator/${orgId}/`,
   });
   if (company.status !== "approved") return null; // the layout shows the company's status instead
-  const o = await operatorOverview(orgId);
+  const [o, connection] = await Promise.all([operatorOverview(orgId), connectionIssues(orgId)]);
+  const inventoryHref = `/dashboard/operator/${orgId}/inventory/`;
   return (
     <>
       <h1 className={ui.pageTitle}>Overview</h1>
@@ -56,8 +58,13 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
         )}
       </Section>
       <Section title="Inventory issues" id="issues">
-        {o.issues.length ? (
+        {o.issues.length || connection.length ? (
           <ul className={ui.list}>
+            {connection.map((text) => (
+              <li key={text}>
+                <Link href={inventoryHref}>{text}</Link>
+              </li>
+            ))}
             {o.issues.map((i) => (
               <li key={i.href + i.text}>
                 <Link href={i.href}>

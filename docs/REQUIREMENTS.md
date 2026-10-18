@@ -54,7 +54,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-003 | DG §Admin/Overview | Overview shows a counter of payments awaiting verification. | 4f | Planned |  |
 | DASH-ADM-004 | DG §Admin/Overview | Overview shows a counter of current and upcoming bookings. | 4e | Planned |  |
 | DASH-ADM-005 | DG §Admin/Overview | Overview shows a counter of cancellation requests and refund reviews. | 4f | Planned |  |
-| DASH-ADM-006 | DG §Admin/Overview | Overview shows a counter of inventory connection errors. | 4c | Planned |  |
+| DASH-ADM-006 | DG §Admin/Overview | Overview shows a counter of inventory connection errors. | 4c | Verified | Batch 4c-2 (18 Oct 2026): overview counters 'Inventory connection errors' (failing active feeds + API calls with refused rows in 24 h) and 'Inventory feeds awaiting approval', each linking to the filtered operators list; e2e connections.spec |
 | DASH-ADM-007 | DG §Admin/Overview | Each overview counter links to the list of the records it counts, pre-filtered. | 4b | Verified | Batch 4b (18 Oct 2026): every counter links to its pre-filtered list (operators ?status=applied, catalogue ?visibility=private, submissions ?status=submitted) |
 | DASH-ADM-008 | DG §Admin/Overview | An activity history records marketplace actions (actor, action, record, time) and admins can browse it. | 4b | Verified | Batch 4b (18 Oct 2026): /dashboard/admin/activity/ reads the append-only audit log with names, changed fields, Cairo time, filters; e2e catalogue.spec |
 | DASH-ADM-009 | DG §Admin/Overview | The overview is an operational queue; business-intelligence reporting is out of scope unless Faris adds it. | 4b | Verified | Batch 4b (18 Oct 2026): overview is a queue only; later counters say which batch brings them; no reporting views |
@@ -93,9 +93,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-ADM-042 | DG §Admin/Operators ¶1 | Admins can review operator applications. | 4b | Verified | Batch 4b (18 Oct 2026): operators list and detail with application facts; e2e |
 | DASH-ADM-043 | DG §Admin/Operators ¶1 | Admins can approve an operator's marketplace access. | 4b | Verified | Batch 4b (18 Oct 2026): approve / pause / reject with reason; e2e approval |
 | DASH-ADM-044 | DG §Admin/Operators ¶1 | Admins can manage which vessels are connected to an operator. | 4b | Verified | Batch 4b (18 Oct 2026): connect and disconnect vessels on the operator page |
-| DASH-ADM-045 | DG §Admin/Operators ¶2 | Admins can see each operator's inventory connection status and integration problems. | 4c | Planned |  |
-| DASH-ADM-046 | DG §Admin/Operators ¶2 | An operator works through manual entry, an inventory feed or an API connection. | 4c | Planned |  |
-| DASH-ADM-047 | DG §Admin/Operators ¶2 | A feed connection becomes active only after an admin approves it. | 4c | Planned |  |
+| DASH-ADM-045 | DG §Admin/Operators ¶2 | Admins can see each operator's inventory connection status and integration problems. | 4c | Verified | Batch 4c-2 (18 Oct 2026): operators list: modes in use and the last error per operator, filter "with connection errors"; operator page: health per route, feed, keys, recent activity; e2e connections.spec + axe |
+| DASH-ADM-046 | DG §Admin/Operators ¶2 | An operator works through manual entry, an inventory feed or an API connection. | 4c | Verified | Batch 4c-2 (18 Oct 2026): manual entry (4c-1), paste, feed and API all supported; modes shown per operator; all three write through app.apply_inventory_rows (130_connections) |
+| DASH-ADM-047 | DG §Admin/Operators ¶2 | A feed connection becomes active only after an admin approves it. | 4c | Verified | Batch 4c-2 (18 Oct 2026): feeds start 'pending'; only catalogue admins with two-step approve (130: owner, reservations, aal1 admin refused); a changed address needs a new approval (130); approval pulls once (e2e) |
 | DASH-ADM-048 | DG §Admin/Cabins ¶2 | A cabin type holds name, description, photographs, size, bed configuration, maximum occupancy, view, balcony, amenities and active/inactive status. | 4c | Verified | Batch 4c-1 (18 Oct 2026): cabin_types table + editor (name, description EN/ES/JA, photos, size, beds, occupancy, view, balcony, amenities, active); e2e product.spec |
 | DASH-ADM-049 | DG §Admin/Cabins ¶3 | A cabin type has a deck: Lower, Middle, Upper or a vessel-specific deck name. | 4c | Verified | Batch 4c-1 (18 Oct 2026): deck on every cabin type (Lower/Middle/Upper or vessel name); grouped by deck |
 | DASH-ADM-050 | DG §Admin/Cabins ¶4 | The same cabin category on different decks is stored as separate cabin types so offers state the location. | 4c | Verified | Batch 4c-1 (18 Oct 2026): same category on two decks = two cabin types (codes unique per vessel); e2e product.spec Middle and Upper |
@@ -165,7 +165,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-002 | DG §Operator list | Operator overview shows new requests. | 4e | Planned |  |
 | DASH-OPR-003 | DG §Operator list | Operator overview shows outstanding offers. | 4e | Planned |  |
 | DASH-OPR-004 | DG §Operator list | Operator overview shows upcoming departures. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator overview lists upcoming departures; e2e product.spec |
-| DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Verified | Batch 4c-1 (18 Oct 2026): overview lists departures without availability, needing confirmation, or without rates (feed errors join in 4c-2) |
+| DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Verified | Batch 4c-2 (18 Oct 2026): overview issues now include feed awaiting approval, not approved or paused, and the last feed/API problem; e2e connections.spec |
 | DASH-OPR-006 | DG §Operator list | An operator can create cruise drafts and submit them for admin approval. | 4b | Verified | Batch 4b (18 Oct 2026): operator cruises page: propose new vessel or changes, save draft, submit; e2e |
 | DASH-OPR-007 | DG §Operator list | An operator can respond to requested changes and resubmit. | 4b | Verified | Batch 4b (18 Oct 2026): operator reads feedback, edits and resubmits; e2e |
 | DASH-OPR-008 | DG §Operator list | An operator can maintain cabin descriptions, photographs, decks and capacities. | 4c | Verified | Batch 4c-1 (18 Oct 2026): operator cabin pages (descriptions, photos, decks, capacities) |
@@ -176,7 +176,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-013 | DG §Operator list | An operator can review its bookings and their payment information. | 4f | Planned |  |
 | DASH-OPR-014 | DG §Operator list | An operator can request payments and record money received, subject to its permissions. | 4f | Planned |  |
 | DASH-OPR-015 | DG §Operator list | An operator can handle cancellation and refund workflows for its bookings. | 4f | Planned |  |
-| DASH-OPR-016 | DG §Operator list | An operator can configure manual, feed or API inventory connections. | 4c | Planned |  |
+| DASH-OPR-016 | DG §Operator list | An operator can configure manual, feed or API inventory connections. | 4c | Verified | Batch 4c-2 (18 Oct 2026): owners configure paste, feed and API on Inventory connections (owners only, as in the menu; RLS + functions check again); e2e connections.spec |
 | DASH-OPR-017 | DG §Operator ¶offers | A personal offer specifies a sailing and cabin arrangement. | 4e | Planned |  |
 | DASH-OPR-018 | DG §Operator ¶offers | A personal offer specifies price, inclusions, terms and expiry. | 4e | Planned |  |
 | DASH-OPR-019 | DG §Operator ¶offers | The operator confirms the family or passenger-eligibility conditions of an offer. | 4e | Planned |  |
@@ -184,10 +184,10 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-021 | DG §Operator ¶offers | Accepting an offer re-checks the sailing and cabin availability atomically. | 4e | Planned |  |
 | DASH-OPR-022 | DG §Operator ¶deck | An offer records the cabin deck. | 4e | Planned |  |
 | DASH-OPR-023 | DG §Operator ¶deck | If the deck changes before acceptance, the customer receives an updated offer to review and the old one cannot be accepted. | 4e | Planned |  |
-| DASH-OPR-024 | DG §Operator ¶integration | An operator can paste supported JSON or XML inventory. | 4c | Planned |  |
-| DASH-OPR-025 | DG §Operator ¶integration | An operator can configure an inventory feed URL. | 4c | Planned |  |
-| DASH-OPR-026 | DG §Operator ¶integration | An operator can generate and rotate API credentials. | 4c | Planned |  |
-| DASH-OPR-027 | DG §Operator ¶integration | The dashboard shows connection health and feed activity. | 4c | Planned |  |
+| DASH-OPR-024 | DG §Operator ¶integration | An operator can paste supported JSON or XML inventory. | 4c | Verified | Batch 4c-2 (18 Oct 2026): JSON or XML (format v1, ADR-080) pasted or uploaded; row-by-row preview, nothing written until applied, checked again on apply; unit format tests; 130; e2e connections.spec |
+| DASH-OPR-025 | DG §Operator ¶integration | An operator can configure an inventory feed URL. | 4c | Verified | Batch 4c-2 (18 Oct 2026): https feed address, checked after DNS on save and inside every connection; pulled hourly by pg_cron via a signed call (ADR-081); e2e pulls from a local https server |
+| DASH-OPR-026 | DG §Operator ¶integration | An operator can generate and rotate API credentials. | 4c | Verified | Batch 4c-2 (18 Oct 2026): Ed25519 key pairs (ADR-085): private key shown once, two active for rotation, revoke; signed POST /api/v1/inventory/; e2e signed call, replay, tamper, revoked key |
+| DASH-OPR-027 | DG §Operator ¶integration | The dashboard shows connection health and feed activity. | 4c | Verified | Batch 4c-2 (18 Oct 2026): health per route: last success, data age, rows changed, last problem in plain words; recent activity of pastes, pulls and API calls; e2e connections.spec |
 
 ## Dashboard guide (CUS)
 
@@ -531,9 +531,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC-004 | CLAUDE.md §5 | All server inputs are validated with zod. | 3 | Verified | Batch 3 (17 Oct 2026): src/server/validation (zod, mirrors DB checks); parseInput/withInput; validation.test.ts |
 | SEC-005 | DG §Customer list | Sign-up, sign-in, sign-out and session handling are secure (httpOnly cookies, CSRF-safe mutations). | 4a | Verified | Batch 4a (17 Oct 2026): httpOnly SameSite=Lax cookies (e2e), server-side sign-out revokes copied cookies (e2e), cross-origin sign-out 403, safe return paths (unit), sign-in without JS (e2e) |
 | SEC-006 | ARCH §Security | Public forms and auth endpoints are rate-limited and protected from bots. | 8 | Planned |  |
-| SEC-007 | DG §Operator ¶integration | Feed fetching blocks private network addresses and XML parsing rejects external entities. | 4c | Planned |  |
-| SEC-008 | DG §Operator ¶integration | API credentials are stored hashed and can be rotated without downtime. | 4c | Planned |  |
-| SEC-009 | DG §Operator ¶integration | Inbound API calls are signed and idempotent; outbound webhooks are signed. | 4c | Planned |  |
+| SEC-007 | DG §Operator ¶integration | Feed fetching blocks private network addresses and XML parsing rejects external entities. | 4c | Verified | Batch 4c-2 (18 Oct 2026): https 443/8443 only; private, internal, metadata, IPv6 loopback, mapped and NAT64 addresses refused inside the DNS lookup used to connect (no rebinding); redirects re-checked; 5 MB, 20 s, no compression; XML without DTD/entities; unit tests incl. local server; e2e 169.254.169.254 refused |
+| SEC-008 | DG §Operator ¶integration | API credentials are stored hashed and can be rotated without downtime. | 4c | Verified | Batch 4c-2 (18 Oct 2026): only the Ed25519 public key is stored (130: no secret column), max two active (130, trigger), revoked keys stay revoked; e2e: stored row has no private key |
+| SEC-009 | DG §Operator ¶integration | Inbound API calls are signed and idempotent; outbound webhooks are signed. | 4c | Verified | Batch 4c-2 (18 Oct 2026): Ed25519 signature over method, path, timestamp (±5 min), idempotency key, body hash; idempotency per company 24 h (replay returns the first answer, different body 422); webhooks signed the same way (unit; sending in 4e) |
 | SEC-010 | DG §Admin/Overview | Privileged actions write an append-only audit log entry. | 3 | Verified | Batch 3 (17 Oct 2026): 040_audit.sql: update, delete, truncate refused for owner and service role; direct inserts refused; role changes and catalogue writes logged by triggers |
 | SEC-011 | CLAUDE.md §5 | A security review before launch has no open high findings. | 11 | Planned |  |
 | SEC-012 | ARCH §Security | Security headers (CSP, HSTS, frame-ancestors, referrer policy) are set. | 1 | Verified | Batch 1 (17 Oct 2026): e2e 'security headers are set' |
@@ -681,3 +681,4 @@ These are gaps: things a marketplace like this normally needs but no source desc
 | PROPOSED-015 | Egyptologist profiles as a content type (needed by `/our-egyptologists/`, Person schema)                                                | 3               | Approved 17 Oct 2026 (ADR-053)                                                                                              |
 | PROPOSED-016 | Booking amendments (change guests, dates or cabin after booking)                                                                        | 4e              | Awaiting decision                                                                                                           |
 | PROPOSED-017 | Customer support inbox / messaging between customer, operator and admin about a booking                                                 | 4e              | Awaiting decision                                                                                                           |
+| PROPOSED-018 | A "Pull now" button for an approved feed (operator and admin), for checking a fix without waiting for the next hourly pull              | 4c              | Awaiting decision                                                                                                           |

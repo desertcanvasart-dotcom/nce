@@ -10,7 +10,9 @@ import { emailsFor } from "@/server/teams/people";
 import { isUuid } from "../../../sections";
 import { DEFAULT_CHILD_BANDS, type Band } from "@/lib/product/pricing";
 import { saveOperatorBands } from "../../../_product/actions";
-import { connectVessel, disconnectVessel, setOperatorStatus } from "../actions";
+import { connectionsFor } from "@/server/connections/queries";
+import { FEED_STATUS, HealthTable, RunsTable } from "../../../_connections/Tables";
+import { connectVessel, decideFeed, disconnectVessel, revokeOperatorKey, setOperatorStatus } from "../actions";
 
 const STATUS_LABEL = {
   applied: "Awaiting approval",
@@ -21,7 +23,7 @@ const STATUS_LABEL = {
 } as const;
 const ROLE = { owner: "Owner", reservations: "Reservations", finance: "Finance", viewer: "Viewer" } as const;
 
-/** DASH-ADM-042–044: one operator: application details, decision, team, connected vessels. */
+/** DASH-ADM-042–047: one operator: application details, decision, team, connected vessels, inventory connections. */
 export default async function OperatorPage({ params }: { params: Promise<{ orgId: string }> }) {
   const { orgId } = await params;
   if (!isUuid(orgId)) notFound();
@@ -35,6 +37,8 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
     db.from("vessels").select("id, name").is("operator_org_id", null).order("name").limit(1000),
   ]);
   if (!org) notFound();
+  const connections = await connectionsFor(orgId);
+  const { feed } = connections;
   const emails = await emailsFor((members ?? []).map((m) => m.user_id));
   const reg = (org.registration ?? {}) as Record<string, string>;
 
@@ -160,6 +164,73 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
             />
           </ActionForm>
         ) : null}
+      </Section>
+
+      <Section title="Inventory connections" id="connections">
+        <p className={ui.muted}>
+          Manual entry is always available. Modes in use:{" "}
+          {["Manual entry", feed?.status === "active" ? "feed" : null, connections.keys.some((k) => !k.revoked_at) ? "API" : null]
+            .filter(Boolean)
+            .join(", ")}
+          .
+        </p>
+        <HealthTable health={connections.health} />
+        <h3 className={ui.subTitle}>Feed</h3>
+        {feed ? (
+          <>
+            <p className={ui.actions}>
+              <Badge tone={FEED_STATUS[feed.status].tone}>{FEED_STATUS[feed.status].text}</Badge>
+              {feed.status_reason ? <span className={ui.muted}>{feed.status_reason}</span> : null}
+            </p>
+            <p className={ui.wrap}>
+              <span className={ui.label}>Address: </span>
+              {feed.url}
+            </p>
+            {canEdit ? (
+              <ActionForm action={decideFeed.bind(null, orgId)} submit="Save feed decision">
+                <div className={ui.grid}>
+                  <Select
+                    label="Decision"
+                    name="decision"
+                    required
+                    placeholder="Choose"
+                    options={[
+                      { value: "active", label: "Approve: pull every hour" },
+                      { value: "paused", label: "Pause pulls" },
+                      { value: "rejected", label: "Don’t approve" },
+                    ]}
+                  />
+                  <Input
+                    label="Reason (shown to the operator)"
+                    name="reason"
+                    maxLength={500}
+                    hint="Required to pause or not approve."
+                  />
+                </div>
+              </ActionForm>
+            ) : null}
+          </>
+        ) : (
+          <p className={ui.muted}>No feed.</p>
+        )}
+        <h3 className={ui.subTitle}>API keys</h3>
+        {connections.keys.length ? (
+          <ul className={ui.list}>
+            {connections.keys.map((k) => (
+              <li key={k.id}>
+                {k.label} · <code>{k.key_id}</code> · {k.revoked_at ? "revoked" : "active"} · last used{" "}
+                {k.last_used_at ? <CairoTime value={k.last_used_at} /> : "never"}
+                {canEdit && !k.revoked_at ? (
+                  <ActionForm action={revokeOperatorKey.bind(null, orgId, k.id)} submit={`Revoke ${k.label}`} variant="ghost" />
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={ui.muted}>No API keys.</p>
+        )}
+        <h3 className={ui.subTitle}>Recent activity</h3>
+        <RunsTable runs={connections.runs.slice(0, 10)} />
       </Section>
     </>
   );

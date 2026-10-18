@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
+import { ensureFeedCertificate, FEED_PULL_TEST_SECRET, FEED_TEST_ORIGIN, FEED_TLS } from "./tests/support/feed-tls";
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
+ensureFeedCertificate();
 
 /** E2E runs against a production build (ENG-006, ADR-029): `pnpm build` first, then `pnpm test:e2e`. */
 export default defineConfig({
@@ -20,5 +22,11 @@ export default defineConfig({
     // Never reuse a server: a stale build once made tests pass or fail against old code.
     reuseExistingServer: false,
     timeout: 60_000,
+    // The connections tests' local feed server (honoured only against the local database) and the scheduler's secret.
+    env: {
+      NILECRUZ_FEED_TEST_ORIGINS: FEED_TEST_ORIGIN,
+      NILECRUZ_FEED_TEST_CA: FEED_TLS.cert,
+      FEED_PULL_SECRET: FEED_PULL_TEST_SECRET,
+    },
   },
 });
