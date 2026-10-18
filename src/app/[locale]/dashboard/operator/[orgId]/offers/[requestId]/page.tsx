@@ -9,7 +9,7 @@ import { nowMs } from "@/lib/product/departures";
 import { RATE_PLANS } from "@/lib/product/pricing";
 import { requireOrgRole } from "@/server/auth";
 import { cabinsForDeparture, departuresForRequest, offersForRequest, request } from "@/server/bookings/queries";
-import { guestsText, OfferSummary } from "../../../../_bookings/OfferSummary";
+import { guestsText, nightsText, OfferSummary } from "../../../../_bookings/OfferSummary";
 import { isUuid } from "../../../../sections";
 import { sendOffer, withdrawOffer } from "../actions";
 
@@ -58,7 +58,7 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
       <h1 className={ui.pageTitle}>{r.origin && r.destination ? `${r.origin} → ${r.destination}` : "Flexible route"}</h1>
       <p>
         Departing {r.earliest_departure} to {r.latest_departure}
-        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {r.nights_min}–{r.nights_max} nights ·{" "}
+        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {nightsText(r.nights_min, r.nights_max)} ·{" "}
         {guestsText(r.adults, r.child_ages)} · {r.cabins} cabin{r.cabins === 1 ? "" : "s"}
         {r.budget_minor ? ` · budget ${formatMoney({ amount: Number(r.budget_minor), currency: r.budget_currency! }, "en")}` : ""}
       </p>

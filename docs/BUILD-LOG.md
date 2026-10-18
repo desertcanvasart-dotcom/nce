@@ -500,7 +500,7 @@
 - **Admin "Requests and bookings":** every request, offer and reservation; search by reference, operator, route and dates; incomplete transactions; the booking record; an overview counter of current and upcoming bookings.
 
 **Verified, and how:**
-- **Static checks:** `pnpm verify` clean; 208 unit tests. New tests cover request checks, the offer price build-up (occupancy rates, child bands, under-3s, 12–17 at full price), versions and expiry, passenger ages on the departure date, and the bookable gate.
+- **Static checks:** `pnpm verify` clean; 209 unit tests. New tests cover request checks, the offer price build-up (occupancy rates, child bands, under-3s, 12–17 at full price), versions and expiry, passenger ages on the departure date, and the bookable gate.
 - **Database:** 15 pgTAP files pass. The new `150_requests_offers` has 31 checks:
   - the gate needs a policy; customers can't ask in someone else's name;
   - matching operators see the request, but not the customer's profile;
@@ -516,11 +516,17 @@
   - axe on 12 screens in Day and Night.
 
   The tests passed twice in a row on one database.
+- **Full suite** (two workers, as in CI): 117 of 119 passed. One older test expected "Offers" to still be unbuilt and now uses "Past trips"; one two-step sign-in timed out under load 15. Both files pass on a rerun.
+- **Screenshots:** 66 in `docs/screenshots/batch-04e/`, at 375, 768 and 1440 px, Day and Night:
+  - customer: the requests list, one request with two offers, the accept page, a reservation;
+  - operator: the overview, requests and offers, the offer builder, a booking, the cabins page with the policy;
+  - admin: Requests and bookings, and the booking record.
 
 **Fixed while building:**
 - A customer couldn't read the request they had just created: the read rule now checks their own id first.
 - The sold-out message no longer claims the operator was told.
 - Every offered cabin needs a guest aged 12 or over.
+- After reviewing the screenshots: "4–4 nights" now reads "4 nights", one child reads "a child aged 7", and cancellation bands are described as ranges ("less than 30 days before departure") everywhere bands appear, tours included.
 
 **Content needed:** CONTENT-NEEDED #4 (cruise cancellation policies) and #38 (eligibility wording). Until the policies are entered, real sailings stay unbookable.
 

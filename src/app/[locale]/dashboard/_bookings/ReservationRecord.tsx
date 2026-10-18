@@ -2,7 +2,7 @@ import { Badge } from "@/components/ds/Badge/Badge";
 import { formatMoney } from "@/components/ds/lib/format";
 import { Section, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
-import type { CancellationBand } from "@/lib/tours/tours";
+import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import type { reservation } from "@/server/bookings/queries";
 import { guestsText, PLAN_LABEL } from "./OfferSummary";
 
@@ -103,10 +103,8 @@ export function ReservationRecord({ r }: { r: Res }) {
         <h3 className={ui.subTitle}>Cancellation policy</h3>
         {policy.terms?.en ? <p className={ui.prewrap}>{policy.terms.en}</p> : null}
         <ul className={ui.list}>
-          {(policy.bands ?? []).map((b) => (
-            <li key={b.from_days}>
-              Cancelled {b.from_days} days or more before departure: {b.percent} % charged
-            </li>
+          {bandLines(policy.bands ?? [], "departure").map((line) => (
+            <li key={line}>{line}</li>
           ))}
         </ul>
       </Section>

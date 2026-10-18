@@ -185,3 +185,18 @@ export function programAvailability(
     return { departure, days, missing };
   });
 }
+
+/** Bands in words, from the furthest to the closest: "60 days or more before", "less than 60 days before". */
+export function bandLines(bands: CancellationBand[], what = "the start"): string[] {
+  const sorted = [...bands].sort((a, b) => b.from_days - a.from_days);
+  if (sorted.length === 1 && sorted[0]!.from_days === 0) return [`Cancelled at any time: ${sorted[0]!.percent} % charged`];
+  return sorted.map((b, i) => {
+    const prev = sorted[i - 1];
+    const range = !prev
+      ? `${b.from_days} days or more before ${what}`
+      : b.from_days === 0
+        ? `less than ${prev.from_days} days before ${what}`
+        : `${b.from_days} to ${prev.from_days - 1} days before ${what}`;
+    return `Cancelled ${range}: ${b.percent} % charged`;
+  });
+}

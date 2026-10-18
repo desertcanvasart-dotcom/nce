@@ -21,7 +21,14 @@ export const PLAN_LABEL: Record<string, string> = {
 };
 const money = (minor: number, currency: string) => formatMoney({ amount: Number(minor), currency }, "en");
 export const guestsText = (adults: number, ages: number[]) =>
-  `${adults} adult${adults === 1 ? "" : "s"}${ages.length ? `, children aged ${[...ages].sort((a, b) => a - b).join(", ")}` : ""}`;
+  `${adults} adult${adults === 1 ? "" : "s"}${
+    ages.length === 1
+      ? `, a child aged ${ages[0]}`
+      : ages.length
+        ? `, children aged ${[...ages].sort((a, b) => a - b).join(", ")}`
+        : ""
+  }`;
+export const nightsText = (min: number, max: number) => (min === max ? `${min} nights` : `${min}–${max} nights`);
 
 /** DASH-CUS-005, 006: the facts of one offer: real dates, route, vessel, cabins with decks, price, terms, expiry. */
 export function OfferSummary({ o, now, title }: { o: OfferRow; now: number; title?: string }) {

@@ -161,7 +161,7 @@ test("a request gets two offers; a deck change makes version 2; accepting reserv
 }) => {
   await signIn(page, customer.email, customer.password);
   requestId = await askForOffers(page);
-  await expect(page.getByText(/2 adults, children aged 7 · 1 cabin/)).toBeVisible();
+  await expect(page.getByText(/2 adults, a child aged 7 · 1 cabin/)).toBeVisible();
 
   // Operator A answers (Middle deck), then changes the deck: version 2 (DASH-OPR-023).
   const a = await (await browser.newContext()).newPage();
@@ -245,7 +245,7 @@ test("admins find a booking by reference; others are refused [DASH-ADM-090-096, 
   await page.goto(`/dashboard/admin/bookings/?q=${encodeURIComponent(reference)}`);
   await page.getByRole("link", { name: reference }).first().click();
   await expect(page.getByText(/Sample Second Traveller/)).toBeVisible();
-  await expect(page.getByText(/Cancelled 30 days or more before departure: 20 % charged/)).toBeVisible();
+  await expect(page.getByText(/Cancelled less than 30 days before departure: 100 % charged/)).toBeVisible();
 
   const ctx = await browser.newContext();
   const op = await ctx.newPage();

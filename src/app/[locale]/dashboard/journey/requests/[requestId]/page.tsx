@@ -6,7 +6,7 @@ import { canAccept } from "@/lib/bookings/bookings";
 import { nowMs } from "@/lib/product/departures";
 import { requireUser } from "@/server/auth";
 import { offersForRequest, request } from "@/server/bookings/queries";
-import { guestsText, OfferSummary } from "../../../_bookings/OfferSummary";
+import { guestsText, nightsText, OfferSummary } from "../../../_bookings/OfferSummary";
 import { isUuid } from "../../../sections";
 import { closeRequest } from "../../actions";
 
@@ -30,7 +30,7 @@ export default async function MyRequest({ params }: { params: Promise<{ requestI
       <h1 className={ui.pageTitle}>{r.origin && r.destination ? `${r.origin} → ${r.destination}` : "Flexible route"}</h1>
       <p>
         Departing {r.earliest_departure} to {r.latest_departure}
-        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {r.nights_min}–{r.nights_max} nights ·{" "}
+        {r.latest_finish ? `, back by ${r.latest_finish}` : ""} · {nightsText(r.nights_min, r.nights_max)} ·{" "}
         {guestsText(r.adults, r.child_ages)} · {r.cabins} cabin{r.cabins === 1 ? "" : "s"}
       </p>
       {r.status === "open" ? (

@@ -167,3 +167,33 @@ describe("programs (DASH-ADM-070, 071)", () => {
     expect(programAvailability(deps, items, small, 2)[0]!.missing).toHaveLength(0);
   });
 });
+
+describe("bands in words", () => {
+  it("describes each band as a range", async () => {
+    const { bandLines } = await import("@/lib/tours/tours");
+    expect(
+      bandLines(
+        [
+          { from_days: 0, percent: 100 },
+          { from_days: 30, percent: 20 },
+        ],
+        "departure",
+      ),
+    ).toEqual([
+      "Cancelled 30 days or more before departure: 20 % charged",
+      "Cancelled less than 30 days before departure: 100 % charged",
+    ]);
+    expect(
+      bandLines([
+        { from_days: 7, percent: 0 },
+        { from_days: 2, percent: 50 },
+        { from_days: 0, percent: 100 },
+      ]),
+    ).toEqual([
+      "Cancelled 7 days or more before the start: 0 % charged",
+      "Cancelled 2 to 6 days before the start: 50 % charged",
+      "Cancelled less than 2 days before the start: 100 % charged",
+    ]);
+    expect(bandLines([{ from_days: 0, percent: 100 }])).toEqual(["Cancelled at any time: 100 % charged"]);
+  });
+});

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ds/Badge/Badge";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
-import { TOUR_KINDS, type CancellationBand } from "@/lib/tours/tours";
+import { bandLines, TOUR_KINDS, type CancellationBand } from "@/lib/tours/tours";
 import { requireAdmin } from "@/server/auth";
 import { allSchedules, destinationsList, suppliers, tourForEditor } from "@/server/tours/queries";
 import { isUuid } from "../../../sections";
@@ -216,10 +216,8 @@ export default async function TourEditor({ params }: { params: Promise<{ tourId:
           </ActionForm>
         ) : bands.length ? (
           <ul className={ui.list}>
-            {bands.map((b) => (
-              <li key={b.from_days}>
-                {b.from_days} days or more before: {b.percent} % charged
-              </li>
+            {bandLines(bands).map((line) => (
+              <li key={line}>{line}</li>
             ))}
           </ul>
         ) : (

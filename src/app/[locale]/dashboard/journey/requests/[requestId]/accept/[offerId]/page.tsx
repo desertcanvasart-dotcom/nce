@@ -4,7 +4,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, ui } from "@/components/dashboard/ui";
 import { canAccept } from "@/lib/bookings/bookings";
 import { nowMs } from "@/lib/product/departures";
-import type { CancellationBand } from "@/lib/tours/tours";
+import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import { requireUser } from "@/server/auth";
 import { offer, policyFor, request } from "@/server/bookings/queries";
 import { OfferSummary } from "../../../../../_bookings/OfferSummary";
@@ -49,10 +49,8 @@ export default async function AcceptOffer({ params }: Props) {
               <>
                 <p className={ui.prewrap}>{terms("en") ?? "The operator hasn’t written the policy in English yet."}</p>
                 <ul className={ui.list}>
-                  {(policy.bands as CancellationBand[]).map((b) => (
-                    <li key={b.from_days}>
-                      Cancelled {b.from_days} days or more before departure: {b.percent} % of the price is charged
-                    </li>
+                  {bandLines(policy.bands as CancellationBand[], "departure").map((line) => (
+                    <li key={line}>{line}</li>
                   ))}
                 </ul>
               </>

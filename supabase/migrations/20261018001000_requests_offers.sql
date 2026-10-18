@@ -373,7 +373,7 @@ end $$;
 create trigger cruise_requests_notify after insert on public.cruise_requests for each row execute function app.notify_request();
 
 -- ── Sending an offer (DASH-OPR-011, 017–023) ─────────────────────────────────────────────────────────────
--- cabins: [{cabin_type_id, adults, child_ages: [], price_minor}]. With `previous`, the new offer is the next version
+-- cabins: [{cabin_type_id, adults, child_ages: [], price_minor}]. list_total 0 = no list price. With `previous`, the new offer is the next version
 -- of that thread and the previous version is superseded (it can no longer be accepted).
 create or replace function public.send_offer(
   req uuid, dep uuid, plan public.rate_plan, cur text, cabins jsonb, total bigint, list_total bigint, note text,
@@ -420,7 +420,7 @@ begin
   insert into public.offers (request_id, org_id, departure_id, thread_id, version, rate_plan, currency, total_minor,
     list_total_minor, pricing_note, gratuity_usd_minor, inclusions, terms, eligibility_conditions, expires_at)
   values (req, d.org_id, dep, coalesce(prev.thread_id, gen_random_uuid()), coalesce(prev.version + 1, 1), plan, cur, total,
-    list_total, nullif(trim(note), ''), d.gratuity_usd_minor, nullif(trim(inclusions_text), ''), terms_text, eligibility,
+    nullif(list_total, 0), nullif(trim(note), ''), d.gratuity_usd_minor, nullif(trim(inclusions_text), ''), terms_text, eligibility,
     now() + make_interval(hours => expires_in_hours))
   returning id into new_id;
 
