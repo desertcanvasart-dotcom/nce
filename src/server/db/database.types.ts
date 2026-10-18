@@ -290,6 +290,70 @@ export type Database = {
           },
         ];
       };
+      commission_entries: {
+        Row: {
+          base_minor: number;
+          commission_bp: number;
+          commission_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          kind: Database["public"]["Enums"]["commission_kind"];
+          org_id: string;
+          payable_minor: number;
+          payment_id: string;
+          reservation_id: string;
+        };
+        Insert: {
+          base_minor: number;
+          commission_bp: number;
+          commission_minor: number;
+          created_at?: string;
+          currency: string;
+          id?: string;
+          kind: Database["public"]["Enums"]["commission_kind"];
+          org_id: string;
+          payable_minor: number;
+          payment_id: string;
+          reservation_id: string;
+        };
+        Update: {
+          base_minor?: number;
+          commission_bp?: number;
+          commission_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          kind?: Database["public"]["Enums"]["commission_kind"];
+          org_id?: string;
+          payable_minor?: number;
+          payment_id?: string;
+          reservation_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "commission_entries_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "commission_entries_payment_id_fkey";
+            columns: ["payment_id"];
+            isOneToOne: false;
+            referencedRelation: "payments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "commission_entries_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       cruise_requests: {
         Row: {
           adults: number;
@@ -1278,6 +1342,127 @@ export type Database = {
           },
         ];
       };
+      payments: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          method: Database["public"]["Enums"]["payment_method"];
+          note: string | null;
+          paid_on: string | null;
+          proof_path: string | null;
+          receipt_number: string | null;
+          reference: string | null;
+          reported_by: string | null;
+          reservation_id: string;
+          status: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id: string | null;
+          stripe_refund_id: string | null;
+          stripe_session_id: string | null;
+          updated_at: string;
+          verified_at: string | null;
+          verified_by: string | null;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency: string;
+          id?: string;
+          method: Database["public"]["Enums"]["payment_method"];
+          note?: string | null;
+          paid_on?: string | null;
+          proof_path?: string | null;
+          receipt_number?: string | null;
+          reference?: string | null;
+          reported_by?: string | null;
+          reservation_id: string;
+          status: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id?: string | null;
+          stripe_refund_id?: string | null;
+          stripe_session_id?: string | null;
+          updated_at?: string;
+          verified_at?: string | null;
+          verified_by?: string | null;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          method?: Database["public"]["Enums"]["payment_method"];
+          note?: string | null;
+          paid_on?: string | null;
+          proof_path?: string | null;
+          receipt_number?: string | null;
+          reference?: string | null;
+          reported_by?: string | null;
+          reservation_id?: string;
+          status?: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id?: string | null;
+          stripe_refund_id?: string | null;
+          stripe_session_id?: string | null;
+          updated_at?: string;
+          verified_at?: string | null;
+          verified_by?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "payments_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      payouts: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          method: string;
+          note: string | null;
+          org_id: string;
+          paid_on: string;
+          recorded_by: string | null;
+          reference: string | null;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency: string;
+          id?: string;
+          method: string;
+          note?: string | null;
+          org_id: string;
+          paid_on: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          method?: string;
+          note?: string | null;
+          org_id?: string;
+          paid_on?: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "payouts_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       platform_settings: {
         Row: {
           key: string;
@@ -1293,6 +1478,33 @@ export type Database = {
           key?: string;
           updated_at?: string;
           value?: Json;
+        };
+        Relationships: [];
+      };
+      premium_periods: {
+        Row: {
+          created_at: string;
+          ends_on: string;
+          id: string;
+          name: string;
+          starts_on: string;
+          updated_at: string;
+        };
+        Insert: {
+          created_at?: string;
+          ends_on: string;
+          id?: string;
+          name: string;
+          starts_on: string;
+          updated_at?: string;
+        };
+        Update: {
+          created_at?: string;
+          ends_on?: string;
+          id?: string;
+          name?: string;
+          starts_on?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -1690,14 +1902,19 @@ export type Database = {
       };
       reservations: {
         Row: {
+          booked_on: string;
+          cancelled_at: string | null;
+          cancelled_reason: string | null;
           created_at: string;
           currency: string;
           customer_id: string;
+          deadline_rule: string;
           departure_id: string;
           gratuity_usd_minor: number | null;
           id: string;
           offer_id: string;
           org_id: string;
+          payment_due_at: string;
           policy: Json;
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
@@ -1709,14 +1926,19 @@ export type Database = {
           vessel_id: string;
         };
         Insert: {
+          booked_on: string;
+          cancelled_at?: string | null;
+          cancelled_reason?: string | null;
           created_at?: string;
           currency: string;
           customer_id: string;
+          deadline_rule: string;
           departure_id: string;
           gratuity_usd_minor?: number | null;
           id?: string;
           offer_id: string;
           org_id: string;
+          payment_due_at: string;
           policy: Json;
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
@@ -1728,14 +1950,19 @@ export type Database = {
           vessel_id: string;
         };
         Update: {
+          booked_on?: string;
+          cancelled_at?: string | null;
+          cancelled_reason?: string | null;
           created_at?: string;
           currency?: string;
           customer_id?: string;
+          deadline_rule?: string;
           departure_id?: string;
           gratuity_usd_minor?: number | null;
           id?: string;
           offer_id?: string;
           org_id?: string;
+          payment_due_at?: string;
           policy?: Json;
           rate_plan?: Database["public"]["Enums"]["rate_plan"];
           reference?: string;
@@ -2493,6 +2720,29 @@ export type Database = {
         Args: { input: Json; label?: string; target_org: string };
         Returns: string;
       };
+      record_manual_payment: {
+        Args: {
+          amount: number;
+          cur: string;
+          how: string;
+          paid_date: string;
+          ref: string;
+          res: string;
+        };
+        Returns: string;
+      };
+      record_payout: {
+        Args: {
+          amount: number;
+          cur: string;
+          how: string;
+          paid_date: string;
+          payout_note?: string;
+          ref: string;
+          target_org: string;
+        };
+        Returns: string;
+      };
       reject_submission: {
         Args: { note: string; target: string };
         Returns: undefined;
@@ -2501,9 +2751,31 @@ export type Database = {
         Args: { target_org: string };
         Returns: undefined;
       };
+      report_payment: {
+        Args: {
+          amount: number;
+          cur: string;
+          paid_date: string;
+          proof?: string;
+          ref: string;
+          res: string;
+        };
+        Returns: string;
+      };
       request_submission_changes: {
         Args: { note: string; target: string };
         Returns: undefined;
+      };
+      reservation_balance: {
+        Args: { res: string };
+        Returns: {
+          currency: string;
+          outstanding_minor: number;
+          paid_minor: number;
+          payment_due_at: string;
+          reported_minor: number;
+          total_minor: number;
+        }[];
       };
       review_eligibility_proof: {
         Args: {
@@ -2536,6 +2808,7 @@ export type Database = {
         };
         Returns: string;
       };
+      send_payment_reminder: { Args: { res: string }; Returns: undefined };
       service_apply_inventory: {
         Args: {
           api_key?: string;
@@ -2546,6 +2819,27 @@ export type Database = {
           target_org: string;
         };
         Returns: Json;
+      };
+      service_card_payment: {
+        Args: {
+          amount: number;
+          cur: string;
+          intent: string;
+          res: string;
+          session_id: string;
+        };
+        Returns: string;
+      };
+      service_card_refunded: {
+        Args: {
+          amount: number;
+          cur: string;
+          intent: string;
+          refund: string;
+          res: string;
+          session_id: string;
+        };
+        Returns: undefined;
       };
       service_claim_due_feeds: {
         Args: { max_feeds?: number };
@@ -2561,6 +2855,14 @@ export type Database = {
       };
       submit_submission: { Args: { target: string }; Returns: undefined };
       tour_is_bookable: { Args: { target: string }; Returns: boolean };
+      verify_payment: {
+        Args: {
+          decision: Database["public"]["Enums"]["payment_status"];
+          review_note?: string;
+          target: string;
+        };
+        Returns: undefined;
+      };
       vessel_product_summary: {
         Args: { only_vessel?: string };
         Returns: {
@@ -2586,6 +2888,7 @@ export type Database = {
         | "value"
         | "traditional_character"
         | "contemporary_design";
+      commission_kind: "payment" | "reversal";
       departure_status: "scheduled" | "cancelled";
       evaluation_verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
       feed_status: "pending" | "active" | "paused" | "rejected";
@@ -2594,6 +2897,8 @@ export type Database = {
       offer_status: "sent" | "superseded" | "withdrawn" | "accepted" | "closed";
       org_kind: "operator" | "partner" | "nilecruz";
       org_status: "applied" | "approved" | "paused" | "rejected";
+      payment_method: "card" | "transfer" | "manual";
+      payment_status: "reported" | "verified" | "rejected" | "refunded";
       platform_role: "customer" | "admin";
       price_basis: "per_guest" | "per_group";
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
@@ -2739,6 +3044,7 @@ export const Constants = {
         "traditional_character",
         "contemporary_design",
       ],
+      commission_kind: ["payment", "reversal"],
       departure_status: ["scheduled", "cancelled"],
       evaluation_verdict: ["recommended", "recommended_with_reservations", "not_recommended"],
       feed_status: ["pending", "active", "paused", "rejected"],
@@ -2747,6 +3053,8 @@ export const Constants = {
       offer_status: ["sent", "superseded", "withdrawn", "accepted", "closed"],
       org_kind: ["operator", "partner", "nilecruz"],
       org_status: ["applied", "approved", "paused", "rejected"],
+      payment_method: ["card", "transfer", "manual"],
+      payment_status: ["reported", "verified", "rejected", "refunded"],
       platform_role: ["customer", "admin"],
       price_basis: ["per_guest", "per_group"],
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],

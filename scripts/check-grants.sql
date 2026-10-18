@@ -21,6 +21,8 @@ with intended(table_name, grantee, privileges) as (
     ('offer_cabins', 'authenticated', 'SELECT'), ('reservations', 'authenticated', 'SELECT'),
     ('reservation_cabins', 'authenticated', 'SELECT'), ('passengers', 'authenticated', 'SELECT'),
     ('eligibility_proofs', 'authenticated', 'INSERT,SELECT'), ('notifications', 'authenticated', 'SELECT,UPDATE'),
+    -- Batch 4f: money is read by people and written only through functions (ADR-089).
+    ('payments', 'authenticated', 'SELECT'), ('commission_entries', 'authenticated', 'SELECT'), ('payouts', 'authenticated', 'SELECT'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -33,12 +35,12 @@ with intended(table_name, grantee, privileges) as (
                     'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates',
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
-                    'cancellation_policies', 'cancellation_policy_translations']) t,
+                    'cancellation_policies', 'cancellation_policy_translations', 'premium_periods']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['cruise_requests', 'offers', 'offer_cabins', 'reservations', 'reservation_cabins', 'passengers',
-                    'eligibility_proofs', 'notifications']) t
+                    'eligibility_proofs', 'notifications', 'payments', 'commission_entries', 'payouts']) t
 ),
 actual as (
   select table_name::text, grantee::text, string_agg(privilege_type, ',' order by privilege_type) as privileges
