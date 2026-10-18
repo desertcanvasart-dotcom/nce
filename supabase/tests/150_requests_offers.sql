@@ -47,7 +47,8 @@ select throws_ok($$insert into public.cruise_requests (customer_id, earliest_dep
 select pg_temp.as_user('00000000-0000-4000-a000-000000000011');
 select is((select count(*)::int from public.cruise_requests where id = '00000000-0000-4000-e500-000000000001'), 1, 'operator A''s reservations team sees the matching request');
 select is_empty($$select 1 from public.profiles where id = '00000000-0000-4000-a000-000000000040'$$, 'but not the customer''s profile');
-select is((select count(*)::int from public.notifications where org_id = '00000000-0000-4000-b000-00000000000a' and kind = 'request.new'), 1,
+select is((select count(*)::int from public.notifications where org_id = '00000000-0000-4000-b000-00000000000a' and kind = 'request.new'
+  and link like '%00000000-0000-4000-e500-000000000001%'), 1,
   'and gets a new-request notice (DASH-OPR-002)');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000020');
 select is_empty($$select 1 from public.cruise_requests$$, 'an operator without matching sailings sees nothing');

@@ -295,8 +295,9 @@ create policy "cancellation_policy_translations: product editors write" on publi
   using (exists (select 1 from public.cancellation_policies p where p.id = policy_id and app.can_edit_product(p.vessel_id)))
   with check (exists (select 1 from public.cancellation_policies p where p.id = policy_id and app.can_edit_product(p.vessel_id)));
 
+-- The customer's own check comes first and needs no lookup, so a new request can be returned right after insert.
 create policy "cruise_requests: customer, matching operators, admins read" on public.cruise_requests for select to authenticated
-  using (app.can_read_request(id));
+  using (customer_id = auth.uid() or app.can_read_request(id));
 create policy "cruise_requests: customers create their own" on public.cruise_requests for insert to authenticated
   with check (customer_id = auth.uid() and status = 'open');
 create policy "cruise_requests: customers close their own" on public.cruise_requests for update to authenticated
@@ -514,7 +515,7 @@ begin
   if r.status <> 'open' then raise exception 'This request already has a reservation or was closed' using errcode = '22023'; end if;
   select * into d from public.departures where id = o.departure_id;
   if not public.departure_bookable(d.id) then
-    raise exception 'This sailing can''t be booked right now. The operator has been told.' using errcode = '22023';
+    raise exception 'This sailing has no cabins left or can''t be booked right now. Nothing was booked.' using errcode = '22023';
   end if;
   pol := app.policy_for_departure(d.id);
 
