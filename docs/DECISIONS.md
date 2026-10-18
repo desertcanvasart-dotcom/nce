@@ -627,3 +627,11 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Passenger details at acceptance:** full name and date of birth for every guest, and nationality for the lead passenger; no passport numbers.
 - **Eligibility proof (ADR-078):** for offers at the Egyptian-citizen or foreign-resident rate, the customer uploads proof after accepting, into a private store that only the customer, that operator's team and admins can open. The operator marks it verified or not. The customer-facing wording is a marked draft until Faris supplies it (CONTENT-NEEDED #38).
 - **Notifications:** in-dashboard notices only (new request, new offer, offer updated, reservation made). Email waits until a sending service is chosen.
+
+### ADR-089 Payments: Faris's answers (Accepted; Faris 18 Oct 2026, Batch 4f brief)
+- **Operators don't record money (changes DASH-OPR-014):** with Nilecruz as merchant of record (ADR-026), operators send payment reminders and see payment status; only Nilecruz admins (finance or super) record or verify money received. DASH-OPR-014 is kept and verified against this narrower meaning.
+- **One full card payment** for the outstanding balance through Stripe Checkout (ADR-027). Partial amounts only through reported transfers or admin-recorded manual payments.
+- **Bank-transfer wording** is a marked draft until Faris supplies payment instructions (CONTENT-NEEDED #5).
+- **Refunds** are approved by admins with the finance or super role; the operator confirms the calculation but can't release money.
+- **Two pull requests:** 4f-1 (deadlines, card and manual payments, balances, receipts, commission and payables), 4f-2 (cancellation and refunds, tour orders).
+- **Card currencies (question 1 not yet answered):** cards are charged in US$ or €. A reservation priced in E£ is paid by transfer until it's confirmed that the Nilecruz Stripe account can charge E£. Stripe test keys come from Faris (CONTENT-NEEDED #23); until they exist, "Pay by card" says card payments aren't switched on, and tests sign webhooks with a local test secret.
