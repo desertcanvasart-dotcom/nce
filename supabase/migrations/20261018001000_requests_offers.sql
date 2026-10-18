@@ -436,6 +436,9 @@ begin
        > ct.max_occupancy then
       raise exception 'Cabin %: % sleeps at most %', n, ct.name, ct.max_occupancy using errcode = '22023';
     end if;
+    if (c ->> 'adults')::int + (select count(*) from jsonb_array_elements_text(coalesce(c -> 'child_ages', '[]')) a where a::int >= 12) = 0 then
+      raise exception 'Cabin %: each cabin needs a guest aged 12 or over', n using errcode = '22023';
+    end if;
     guests_offered := guests_offered + (c ->> 'adults')::int + jsonb_array_length(coalesce(c -> 'child_ages', '[]'));
     insert into public.offer_cabins (offer_id, line, cabin_type_id, deck, cabin_name, adults, child_ages, price_minor)
     values (new_id, n, ct.id, ct.deck, ct.name, (c ->> 'adults')::smallint,
