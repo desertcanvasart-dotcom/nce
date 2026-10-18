@@ -10,7 +10,8 @@ export function securityHeaders({ dev, https, supabaseUrl }: { dev: boolean; htt
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    // Vessel photos are served from Supabase Storage through short-lived signed links (Batch 4b).
+    `img-src 'self' data: blob:${supabaseUrl ? ` ${new URL(supabaseUrl).origin}` : ""}`,
     "font-src 'self'",
     `connect-src ${connect}${dev ? " ws:" : ""}`,
     "frame-ancestors 'none'",

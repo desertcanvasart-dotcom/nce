@@ -384,7 +384,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - The copy lint currently allows "best for" and still rejects every other "best".
 - **Recommendation:** keep it, or rename the labels to "Suits" or "Ideal for", which needs no exception.
 
-> **Answered 17 Oct 2026:** keep the strict simulated test as the gate (ADR-040).
+> **Answered 18 Oct 2026:** keep "Best for" (ADR-072).
+
 
 **Q58 ★ [A] How Lighthouse should measure the mobile LCP budget (Batch 1 onward).** The two methods disagree on the same pages:
 
@@ -397,6 +398,8 @@ Each of these is a `PROPOSED-*` row in REQUIREMENTS. My recommendation is in bra
 - **Recommendation:** gate on applied throttling in CI, and confirm with field data (Core Web Vitals) after launch.
 - **Alternative:** keep the stricter simulated gate and accept that later batches must cut client JavaScript further, for example by making the language switch and nav server-only.
 - Until you choose, CI shows LCP as a warning (ADR-036).
+
+> **Answered 17 Oct 2026:** keep the strict simulated test as the gate (ADR-040).
 
 > **Answered 17 Oct 2026:** on Railway deployments, for PR environments and staging; localhost becomes a warning (ADR-041).
 

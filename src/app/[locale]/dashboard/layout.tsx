@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { DashboardFrame } from "@/components/dashboard/DashboardFrame";
 import { resolveWorkspaces } from "@/lib/auth/workspaces";
 import { getSession } from "@/server/auth";
+import { Invitations } from "./Invitations";
 
 export const metadata: Metadata = { title: "Dashboard", robots: { index: false, follow: false } };
 
@@ -20,7 +21,7 @@ export default async function DashboardLayout({
   const session = await getSession();
   if (!session) return children;
   return (
-    <DashboardFrame email={session.email} workspaces={resolveWorkspaces(session)}>
+    <DashboardFrame email={session.email} workspaces={resolveWorkspaces(session)} notices={<Invitations />}>
       {children}
     </DashboardFrame>
   );

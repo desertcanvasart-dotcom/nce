@@ -265,6 +265,10 @@ content_path = "./supabase/templates/confirmation.html"
 subject = "Reset your Nilecruz password"
 content_path = "./supabase/templates/recovery.html"
 
+[auth.email.template.invite]
+subject = "You're invited to a team on Nilecruz"
+content_path = "./supabase/templates/invite.html"
+
 [auth.email.template.email_change]
 subject = "Confirm the change of email for your Nilecruz account"
 content_path = "./supabase/templates/email-change.html"

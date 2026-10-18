@@ -68,11 +68,20 @@ export async function signIn(
   if (!expectFailure) await page.waitForURL((u) => !u.pathname.endsWith("/account/sign-in/"), { timeout: 15_000 });
 }
 
+/** Supabase Auth refuses a two-step code that was already used, so one account uses each 30-second window once. */
+const lastWindow = new Map<string, number>();
+async function freshCode(email: string): Promise<string> {
+  const window = () => Math.floor(Date.now() / 30_000);
+  if (lastWindow.get(email) === window()) await new Promise((r) => setTimeout(r, 30_000 - (Date.now() % 30_000) + 250));
+  lastWindow.set(email, window());
+  return totp();
+}
+
 /** Sign in as a seeded admin, including the two-step code (ADR-064). */
 export async function signInAdmin(page: Page, email = "admin@nilecruz.test") {
   await signIn(page, email);
   await expect(page).toHaveURL(/\/account\/two-step\//);
-  await page.getByLabel("Six-digit code").fill(totp());
+  await page.getByLabel("Six-digit code").fill(await freshCode(email));
   await page.getByRole("button", { name: "Continue" }).click();
   await page.waitForURL((u) => !u.pathname.endsWith("/account/two-step/"), { timeout: 15_000 });
 }

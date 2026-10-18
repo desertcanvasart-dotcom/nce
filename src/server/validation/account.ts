@@ -77,7 +77,7 @@ export const confirmLinkInput = z.object({
     .min(10)
     .max(200)
     .regex(/^[A-Za-z0-9_-]+$/),
-  type: z.enum(["signup", "recovery", "email_change", "email"]),
+  type: z.enum(["signup", "recovery", "email_change", "email", "invite"]),
   locale,
 });
 

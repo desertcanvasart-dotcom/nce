@@ -20,4 +20,4 @@ Password for every account: `nilecruz-local-only`
 
 ## Two-step sign-in (admins)
 
-Both admin accounts have an authenticator already set up with the **local test secret** `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP`. Add it to an authenticator app as a "manual key" (or let the end-to-end tests compute the code). This secret exists only in the local database.
+All three admin accounts have an authenticator already set up with the **local test secret** `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP`. Add it to an authenticator app as a "manual key" (or let the end-to-end tests compute the code). This secret exists only in the local database.

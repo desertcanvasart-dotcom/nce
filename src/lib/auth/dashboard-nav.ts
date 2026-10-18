@@ -10,10 +10,11 @@ export type NavItem = { slug: string; label: string; batch: string; roles?: (Adm
 
 const ADMIN: NavItem[] = [
   { slug: "", label: "Overview", batch: "4b" },
-  { slug: "catalogue", label: "Catalogue", batch: "4b", roles: ["catalogue"] },
-  { slug: "evaluations", label: "Vessel evaluations", batch: "4b", roles: ["catalogue"] },
+  { slug: "activity", label: "Activity history", batch: "4b" },
+  { slug: "catalogue", label: "Catalogue", batch: "4b", roles: ["catalogue", "content", "finance"] },
+  { slug: "evaluations", label: "Vessel evaluations", batch: "4b", roles: ["catalogue", "finance"] },
   { slug: "submissions", label: "Cruise submissions", batch: "4b", roles: ["catalogue"] },
-  { slug: "operators", label: "Operators", batch: "4b", roles: ["catalogue"] },
+  { slug: "operators", label: "Operators", batch: "4b", roles: ["catalogue", "finance"] },
   { slug: "sailings", label: "Cabins and sailings", batch: "4c", roles: ["catalogue"] },
   { slug: "promotions", label: "Promotions", batch: "4c", roles: ["catalogue"] },
   { slug: "tours", label: "Tours and sightseeing", batch: "4d", roles: ["catalogue", "content"] },

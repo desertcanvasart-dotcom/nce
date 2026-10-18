@@ -367,3 +367,30 @@
 
 **Next:** Faris reviews and approves PR; after merge, Faris signs up on staging and I make that account super admin (CONTENT-NEEDED #34). Then the Batch 4b brief.
 
+## 18 Oct 2026 · Batch 4b · Admin catalogue and quality
+
+**Built** (branch `batch-04b-admin-catalogue`):
+- **Database:** five categories and "Best for" labels (ADR-071, 072); dated, explained showcase exceptions that expire (DATA-024); evaluations with method v1 calculated in the database (ADR-070); external ratings; internal safety observations; operator applications; team invitations; submissions with their history and state machine; CSV import batches. Catalogue writes limited by admin sub-role (ADR-075). RLS, explicit grants and audit triggers on every new table.
+- **Admin workspace:** overview queue with linked counters; activity history (names, changed fields, Cairo time, filters); catalogue directory (search by name or alias, filters, incomplete marker, stacked rows on phones); vessel editor (details, descriptions EN/ES/JA, photos with descriptions, credit and rights, readiness, publish or showcase, evaluations, external ratings, safety notes, private source facts); evaluation form with live preview; CSV import with template, stored preview and confirmation; operators (applications, decisions with reasons, team, connected vessels); submissions queue and review (proposal next to current values, history, approve, request changes, reject).
+- **Operators:** apply from the account (EN/ES/JA); owners invite staff (existing accounts see the invitation; new addresses get a branded invitation email and set a password) and change or remove roles; propose new vessels or changes, submit, read feedback, resubmit.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 132 unit tests (method v1 incl. the vector shared with the database, readiness, categories, CSV parsing, submission states).
+- **Database:** 11 pgTAP files pass, new: evaluations and visibility (080), submissions workflow and locks (090), applications and teams incl. invitee reading the company (100), showcase rules (110). Grant diff empty locally with the new tables; the staging check list includes them.
+- **End-to-end:** 15 new tests (catalogue, editor, photo upload, publish refused, showcase, evaluation 80.75, ratings, safety, CSV import, activity, apply → approve → invite → accept → submit → changes → resubmit → approve, and axe on every new screen in Day and Night). Full suite: 95 with production settings (97 dev-only skip), 191 with dev routes (1 skipped by design).
+- **Screenshots:** 78 in `docs/screenshots/batch-04b/` at 375, 768 and 1440 px, Day and Night; I checked phone and desktop and fixed what I found (activity named records instead of IDs; tables stack on phones).
+
+**Problems found and fixed:**
+- Forms lost typed values after a validation error (React 19 reset): ADR-076.
+- Owners saw "Join" for invitations they had sent; invited people couldn't see the company name: ADR-077.
+- A column-level revoke didn't protect submission status: replaced by a trigger (ADR-077).
+- `requireAdmin(roles)` didn't let super admins through when sub-roles were listed: fixed (ADR-075).
+- The activity date filter used fixed offsets: it now uses the Cairo offset in force on each date.
+
+**Known issues:**
+- The seeded "Sample Dahabiya One" shows Published although incomplete, because seed data bypasses the editor; through the editor, publishing is refused until the readiness check is complete.
+- No vessel can be published in this batch: the readiness check needs cabin types and rates, which arrive in Batch 4c. Only showcase exceptions make vessels visible until then.
+- Invitation emails for new addresses use staging's limited built-in sender (ADR-065).
+
+**Next:** Faris reviews PR; after merge, migrations, the invite template and the grant check deploy to staging through `deploy-data.yml`. Then the Batch 4c brief (operator product and inventory).
+

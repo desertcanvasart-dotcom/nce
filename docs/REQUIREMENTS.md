@@ -49,50 +49,50 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| DASH-ADM-001 | DG §Admin/Overview | Overview shows a counter of operator applications awaiting approval. | 4b | Planned |  |
-| DASH-ADM-002 | DG §Admin/Overview | Overview shows a counter of private vessel drafts and cruise submissions awaiting review. | 4b | Planned |  |
+| DASH-ADM-001 | DG §Admin/Overview | Overview shows a counter of operator applications awaiting approval. | 4b | Verified | Batch 4b (18 Oct 2026): overview counter 'Operator applications awaiting approval' → /operators/?status=applied; e2e operator flow |
+| DASH-ADM-002 | DG §Admin/Overview | Overview shows a counter of private vessel drafts and cruise submissions awaiting review. | 4b | Verified | Batch 4b (18 Oct 2026): overview counters for private drafts and submissions awaiting review; e2e catalogue.spec 'activity history' |
 | DASH-ADM-003 | DG §Admin/Overview | Overview shows a counter of payments awaiting verification. | 4f | Planned |  |
 | DASH-ADM-004 | DG §Admin/Overview | Overview shows a counter of current and upcoming bookings. | 4e | Planned |  |
 | DASH-ADM-005 | DG §Admin/Overview | Overview shows a counter of cancellation requests and refund reviews. | 4f | Planned |  |
 | DASH-ADM-006 | DG §Admin/Overview | Overview shows a counter of inventory connection errors. | 4c | Planned |  |
-| DASH-ADM-007 | DG §Admin/Overview | Each overview counter links to the list of the records it counts, pre-filtered. | 4b | Planned |  |
-| DASH-ADM-008 | DG §Admin/Overview | An activity history records marketplace actions (actor, action, record, time) and admins can browse it. | 4b | Planned |  |
-| DASH-ADM-009 | DG §Admin/Overview | The overview is an operational queue; business-intelligence reporting is out of scope unless Faris adds it. | 4b | Planned |  |
-| DASH-ADM-010 | DG §Admin/Catalogue ¶1 | Admins can search the vessel directory by vessel name. | 4b | Planned |  |
-| DASH-ADM-011 | DG §Admin/Catalogue ¶1 | Admins can filter vessels by publication status. | 4b | Planned |  |
-| DASH-ADM-012 | DG §Admin/Catalogue ¶1 | Admins can filter to, and see a marker on, incomplete vessel records. | 4b | Planned |  |
-| DASH-ADM-013 | DG §Admin/Catalogue ¶2 | A vessel record holds name, type, route, category, description, photographs, total cabin count, assigned operator and editorial 'Best for' labels. | 4b | Planned |  |
-| DASH-ADM-014 | DG §Admin/Catalogue ¶3 | Admins can create a vessel. | 4b | Planned |  |
-| DASH-ADM-015 | DG §Admin/Catalogue ¶3 | Admins can edit a vessel. | 4b | Planned |  |
-| DASH-ADM-016 | DG §Admin/Catalogue ¶3 | Admins can assign a vessel to an operator, choosing only from approved operators. | 4b | Planned |  |
-| DASH-ADM-017 | DG §Admin/Catalogue ¶3 | Admins can approve a vessel's publication. | 4b | Planned |  |
-| DASH-ADM-018 | DG §Admin/Catalogue ¶3 | A listing-readiness check lists the missing information for each vessel. | 4b | Planned |  |
-| DASH-ADM-019 | DG §Admin/Catalogue ¶4 | A vessel can be publicly visible as information-only while prices and availability are prepared; visibility never makes it bookable. | 4b | Planned |  |
-| DASH-ADM-020 | DG §Admin/Catalogue ¶5 | Admins can download the vessel CSV import template. | 4b | Planned |  |
-| DASH-ADM-021 | DG §Admin/Catalogue ¶5 | Admins can upload a vessel CSV file. | 4b | Planned |  |
-| DASH-ADM-022 | DG §Admin/Catalogue ¶5 | The importer previews row-level validation errors before anything is written. | 4b | Planned |  |
-| DASH-ADM-023 | DG §Admin/Catalogue ¶5 | Imported rows become private vessel drafts. | 4b | Planned |  |
-| DASH-ADM-024 | DG §Admin/Catalogue ¶5 | Rows whose source reference or vessel name already exists are skipped and existing records are left unchanged. | 4b | Planned |  |
-| DASH-ADM-025 | DG §Admin/Catalogue ¶6 | The CSV importer covers vessel profiles only, not cabins, departure prices, availability, cancellation policies or evaluations. | 4b | Planned |  |
-| DASH-ADM-026 | DG §Admin/Evaluations ¶1 | Evaluations are entered from the vessel's catalogue editor. | 4b | Planned |  |
-| DASH-ADM-027 | DG §Admin/Evaluations ¶1 | An evaluation covers seven dimensions: Hygiene, Service, Food, Amenities, Management, Cabin and vessel, Cruise experience. | 4b | Planned |  |
-| DASH-ADM-028 | DG §Admin/Evaluations ¶2 | Each dimension has inspection criteria scored 0 to 5. | 4b | Planned |  |
-| DASH-ADM-029 | DG §Admin/Evaluations ¶2 | The system calculates a weighted result for each dimension. | 4b | Planned |  |
-| DASH-ADM-030 | DG §Admin/Evaluations ¶2 | The system calculates an overall score out of 100 (unit-tested). | 4b | Planned |  |
-| DASH-ADM-031 | DG §Admin/Evaluations ¶3 | An evaluation records assessment date, evaluator or team name, verdict and notes for travellers. | 4b | Planned |  |
-| DASH-ADM-032 | DG §Admin/Evaluations ¶3 | Admins control whether an evaluation is published; unpublished evaluations are never readable publicly. | 4b | Planned |  |
-| DASH-ADM-033 | DG §Admin/Evaluations ¶4 | External review ratings are stored separately from Nilecruz's evaluation and are never treated as an inspection score. | 4b | Planned |  |
-| DASH-ADM-034 | DG §Admin/Evaluations ¶5 | Admins can record internal safety observations with a review status and notes; they are never public. | 4b | Planned |  |
-| DASH-ADM-035 | DG §Admin/Submissions ¶1 | Operators can prepare vessel information and submit it for review. | 4b | Planned |  |
-| DASH-ADM-036 | DG §Admin/Submissions ¶1 | A submission moves through private draft, submitted for review, changes requested, approved and rejected. | 4b | Planned |  |
-| DASH-ADM-037 | DG §Admin/Submissions ¶2 | Admins can inspect the submitted information. | 4b | Planned |  |
-| DASH-ADM-038 | DG §Admin/Submissions ¶2 | Admins can review a submission's history of states and changes. | 4b | Planned |  |
-| DASH-ADM-039 | DG §Admin/Submissions ¶2 | Admins can send feedback to the operator. | 4b | Planned |  |
-| DASH-ADM-040 | DG §Admin/Submissions ¶2 | Admins make the final approve or reject decision. | 4b | Planned |  |
-| DASH-ADM-041 | DG §Admin/Submissions ¶2 | A submitted record cannot be edited through ordinary editing while under review. | 4b | Planned |  |
-| DASH-ADM-042 | DG §Admin/Operators ¶1 | Admins can review operator applications. | 4b | Planned |  |
-| DASH-ADM-043 | DG §Admin/Operators ¶1 | Admins can approve an operator's marketplace access. | 4b | Planned |  |
-| DASH-ADM-044 | DG §Admin/Operators ¶1 | Admins can manage which vessels are connected to an operator. | 4b | Planned |  |
+| DASH-ADM-007 | DG §Admin/Overview | Each overview counter links to the list of the records it counts, pre-filtered. | 4b | Verified | Batch 4b (18 Oct 2026): every counter links to its pre-filtered list (operators ?status=applied, catalogue ?visibility=private, submissions ?status=submitted) |
+| DASH-ADM-008 | DG §Admin/Overview | An activity history records marketplace actions (actor, action, record, time) and admins can browse it. | 4b | Verified | Batch 4b (18 Oct 2026): /dashboard/admin/activity/ reads the append-only audit log with names, changed fields, Cairo time, filters; e2e catalogue.spec |
+| DASH-ADM-009 | DG §Admin/Overview | The overview is an operational queue; business-intelligence reporting is out of scope unless Faris adds it. | 4b | Verified | Batch 4b (18 Oct 2026): overview is a queue only; later counters say which batch brings them; no reporting views |
+| DASH-ADM-010 | DG §Admin/Catalogue ¶1 | Admins can search the vessel directory by vessel name. | 4b | Verified | Batch 4b (18 Oct 2026): catalogue search by name or alias; e2e catalogue.spec 'search and filters' |
+| DASH-ADM-011 | DG §Admin/Catalogue ¶1 | Admins can filter vessels by publication status. | 4b | Verified | Batch 4b (18 Oct 2026): visibility filter; e2e catalogue.spec 'search and filters' |
+| DASH-ADM-012 | DG §Admin/Catalogue ¶1 | Admins can filter to, and see a marker on, incomplete vessel records. | 4b | Verified | Batch 4b (18 Oct 2026): readiness filter and Incomplete marker with count; e2e catalogue.spec |
+| DASH-ADM-013 | DG §Admin/Catalogue ¶2 | A vessel record holds name, type, route, category, description, photographs, total cabin count, assigned operator and editorial 'Best for' labels. | 4b | Verified | Batch 4b (18 Oct 2026): editor holds name, type, route, category, description EN/ES/JA, photos, cabins, operator, Best for labels |
+| DASH-ADM-014 | DG §Admin/Catalogue ¶3 | Admins can create a vessel. | 4b | Verified | Batch 4b (18 Oct 2026): /catalogue/new/ creates a private draft with a safe address name |
+| DASH-ADM-015 | DG §Admin/Catalogue ¶3 | Admins can edit a vessel. | 4b | Verified | Batch 4b (18 Oct 2026): editor saves details, descriptions, photos; e2e catalogue.spec 'edit details, descriptions and a photo' |
+| DASH-ADM-016 | DG §Admin/Catalogue ¶3 | Admins can assign a vessel to an operator, choosing only from approved operators. | 4b | Verified | Batch 4b (18 Oct 2026): operator list shows approved operators only and the action re-checks status on the server |
+| DASH-ADM-017 | DG §Admin/Catalogue ¶3 | Admins can approve a vessel's publication. | 4b | Verified | Batch 4b (18 Oct 2026): Publish action only when the readiness check is complete; e2e catalogue.spec refusal |
+| DASH-ADM-018 | DG §Admin/Catalogue ¶3 | A listing-readiness check lists the missing information for each vessel. | 4b | Verified | Batch 4b (18 Oct 2026): readiness list in the editor (src/lib/catalogue/readiness.ts, unit tests); updates after a photo is added (e2e) |
+| DASH-ADM-019 | DG §Admin/Catalogue ¶4 | A vessel can be publicly visible as information-only while prices and availability are prepared; visibility never makes it bookable. | 4b | Verified | Batch 4b (18 Oct 2026): showcase is visible but never bookable (no rates exist; DATA-024); 110_showcase.sql |
+| DASH-ADM-020 | DG §Admin/Catalogue ¶5 | Admins can download the vessel CSV import template. | 4b | Verified | Batch 4b (18 Oct 2026): template download route (text/csv, example row refused); e2e |
+| DASH-ADM-021 | DG §Admin/Catalogue ¶5 | Admins can upload a vessel CSV file. | 4b | Verified | Batch 4b (18 Oct 2026): CSV upload (2 MB, 2,000 rows); e2e |
+| DASH-ADM-022 | DG §Admin/Catalogue ¶5 | The importer previews row-level validation errors before anything is written. | 4b | Verified | Batch 4b (18 Oct 2026): row-by-row preview stored before anything is written; unit csv tests; e2e preview counts |
+| DASH-ADM-023 | DG §Admin/Catalogue ¶5 | Imported rows become private vessel drafts. | 4b | Verified | Batch 4b (18 Oct 2026): confirmed rows become private drafts; e2e checks visibility private |
+| DASH-ADM-024 | DG §Admin/Catalogue ¶5 | Rows whose source reference or vessel name already exists are skipped and existing records are left unchanged. | 4b | Verified | Batch 4b (18 Oct 2026): duplicates by source reference or name skipped (again re-checked at confirmation); unit + e2e |
+| DASH-ADM-025 | DG §Admin/Catalogue ¶6 | The CSV importer covers vessel profiles only, not cabins, departure prices, availability, cancellation policies or evaluations. | 4b | Verified | Batch 4b (18 Oct 2026): import columns are profile fields only; unknown columns refused (unit) |
+| DASH-ADM-026 | DG §Admin/Evaluations ¶1 | Evaluations are entered from the vessel's catalogue editor. | 4b | Verified | Batch 4b (18 Oct 2026): evaluations created and edited from the vessel editor |
+| DASH-ADM-027 | DG §Admin/Evaluations ¶1 | An evaluation covers seven dimensions: Hygiene, Service, Food, Amenities, Management, Cabin and vessel, Cruise experience. | 4b | Verified | Batch 4b (18 Oct 2026): seven dimensions of method v1 (ADR-070); unit 'weights sum to 100' |
+| DASH-ADM-028 | DG §Admin/Evaluations ¶2 | Each dimension has inspection criteria scored 0 to 5. | 4b | Verified | Batch 4b (18 Oct 2026): four criteria per dimension scored 0–5 (half points); DB and unit validation |
+| DASH-ADM-029 | DG §Admin/Evaluations ¶2 | The system calculates a weighted result for each dimension. | 4b | Verified | Batch 4b (18 Oct 2026): dimension results (sum ÷ 20) × weight in app.evaluation_results; 080_evaluations.sql vector equals unit vector |
+| DASH-ADM-030 | DG §Admin/Evaluations ¶2 | The system calculates an overall score out of 100 (unit-tested). | 4b | Verified | Batch 4b (18 Oct 2026): overall score out of 100 stored by the database; unit 'all 5s 100, all 4s 80, vector 74.5'; e2e 80.75 |
+| DASH-ADM-031 | DG §Admin/Evaluations ¶3 | An evaluation records assessment date, evaluator or team name, verdict and notes for travellers. | 4b | Verified | Batch 4b (18 Oct 2026): assessment date, evaluator, fixed verdict (ADR-074) and notes EN/ES/JA |
+| DASH-ADM-032 | DG §Admin/Evaluations ¶3 | Admins control whether an evaluation is published; unpublished evaluations are never readable publicly. | 4b | Verified | Batch 4b (18 Oct 2026): published flag; 080: anon and operators read only published evaluations of visible vessels |
+| DASH-ADM-033 | DG §Admin/Evaluations ¶4 | External review ratings are stored separately from Nilecruz's evaluation and are never treated as an inspection score. | 4b | Verified | Batch 4b (18 Oct 2026): external_ratings table, separate from evaluations; editor copy and e2e |
+| DASH-ADM-034 | DG §Admin/Evaluations ¶5 | Admins can record internal safety observations with a review status and notes; they are never public. | 4b | Verified | Batch 4b (18 Oct 2026): safety observations admin-only (080: anon refused, operator sees none); e2e |
+| DASH-ADM-035 | DG §Admin/Submissions ¶1 | Operators can prepare vessel information and submit it for review. | 4b | Verified | Batch 4b (18 Oct 2026): operators prepare and submit vessel information; e2e round-trip |
+| DASH-ADM-036 | DG §Admin/Submissions ¶1 | A submission moves through private draft, submitted for review, changes requested, approved and rejected. | 4b | Verified | Batch 4b (18 Oct 2026): states draft → submitted → changes requested → approved/rejected enforced in app.submission_transition; 090 history test |
+| DASH-ADM-037 | DG §Admin/Submissions ¶2 | Admins can inspect the submitted information. | 4b | Verified | Batch 4b (18 Oct 2026): admin review page shows proposal next to current values |
+| DASH-ADM-038 | DG §Admin/Submissions ¶2 | Admins can review a submission's history of states and changes. | 4b | Verified | Batch 4b (18 Oct 2026): history of states and edits (vessel_submission_events); 090 |
+| DASH-ADM-039 | DG §Admin/Submissions ¶2 | Admins can send feedback to the operator. | 4b | Verified | Batch 4b (18 Oct 2026): request changes with a required note; operator sees it (e2e) |
+| DASH-ADM-040 | DG §Admin/Submissions ¶2 | Admins make the final approve or reject decision. | 4b | Verified | Batch 4b (18 Oct 2026): approve (applies proposal / creates private draft) or reject with reason; 090 + e2e |
+| DASH-ADM-041 | DG §Admin/Submissions ¶2 | A submitted record cannot be edited through ordinary editing while under review. | 4b | Verified | Batch 4b (18 Oct 2026): submitted proposals locked (090) and the vessel under review can't be edited, even by admins (090) |
+| DASH-ADM-042 | DG §Admin/Operators ¶1 | Admins can review operator applications. | 4b | Verified | Batch 4b (18 Oct 2026): operators list and detail with application facts; e2e |
+| DASH-ADM-043 | DG §Admin/Operators ¶1 | Admins can approve an operator's marketplace access. | 4b | Verified | Batch 4b (18 Oct 2026): approve / pause / reject with reason; e2e approval |
+| DASH-ADM-044 | DG §Admin/Operators ¶1 | Admins can manage which vessels are connected to an operator. | 4b | Verified | Batch 4b (18 Oct 2026): connect and disconnect vessels on the operator page |
 | DASH-ADM-045 | DG §Admin/Operators ¶2 | Admins can see each operator's inventory connection status and integration problems. | 4c | Planned |  |
 | DASH-ADM-046 | DG §Admin/Operators ¶2 | An operator works through manual entry, an inventory feed or an API connection. | 4c | Planned |  |
 | DASH-ADM-047 | DG §Admin/Operators ¶2 | A feed connection becomes active only after an admin approves it. | 4c | Planned |  |
@@ -166,8 +166,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-OPR-003 | DG §Operator list | Operator overview shows outstanding offers. | 4e | Planned |  |
 | DASH-OPR-004 | DG §Operator list | Operator overview shows upcoming departures. | 4c | Planned |  |
 | DASH-OPR-005 | DG §Operator list | Operator overview shows inventory issues. | 4c | Planned |  |
-| DASH-OPR-006 | DG §Operator list | An operator can create cruise drafts and submit them for admin approval. | 4b | Planned |  |
-| DASH-OPR-007 | DG §Operator list | An operator can respond to requested changes and resubmit. | 4b | Planned |  |
+| DASH-OPR-006 | DG §Operator list | An operator can create cruise drafts and submit them for admin approval. | 4b | Verified | Batch 4b (18 Oct 2026): operator cruises page: propose new vessel or changes, save draft, submit; e2e |
+| DASH-OPR-007 | DG §Operator list | An operator can respond to requested changes and resubmit. | 4b | Verified | Batch 4b (18 Oct 2026): operator reads feedback, edits and resubmits; e2e |
 | DASH-OPR-008 | DG §Operator list | An operator can maintain cabin descriptions, photographs, decks and capacities. | 4c | Planned |  |
 | DASH-OPR-009 | DG §Operator list | An operator can create routes, schedules and departure rates. | 4c | Planned |  |
 | DASH-OPR-010 | DG §Operator list | An operator can manage international, Egyptian-citizen, foreign-resident and trade rate plans. | 4c | Planned |  |
@@ -272,8 +272,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-BND-001 | DG §Boundaries 1 | A sailing is bookable only when its cabin, schedule, rate, inventory and policy records are complete. | 4e | Planned |  |
 | DASH-BND-002 | DG §Boundaries 2 | The deck selector shows an honest empty state when a vessel has no structured cabin types. | 5 | Planned |  |
 | DASH-BND-003 | DG §Boundaries 3 | No screen implies numbered-cabin selection or a verified floor plan. | 5 | Planned |  |
-| DASH-BND-004 | DG §Boundaries 4 | The importer's scope (vessel profiles only) is stated in the import screen. | 4b | Planned |  |
-| DASH-BND-005 | DG §Boundaries 5 | External reviews are not collected or refreshed automatically; each shows its source and retrieval date. | 4b | Planned |  |
+| DASH-BND-004 | DG §Boundaries 4 | The importer's scope (vessel profiles only) is stated in the import screen. | 4b | Verified | Batch 4b (18 Oct 2026): import screen states its scope (vessel profiles only); e2e |
+| DASH-BND-005 | DG §Boundaries 5 | External reviews are not collected or refreshed automatically; each shows its source and retrieval date. | 4b | Verified | Batch 4b (18 Oct 2026): external ratings entered by hand with source and date read; no automatic refresh |
 | DASH-BND-006 | DG §Boundaries 6 | Public surfaces are in EN/ES/JA; admin and operational interfaces may stay in English. | 10 | Planned |  |
 | DASH-BND-007 | DG §Boundaries 7 | Account-email sending depends on a configured sender and fails visibly, not silently, when it is missing. | 8 | Planned |  |
 | DASH-BND-008 | DG §Boundaries 8 | Finance tracking is operational only; no accounting, bank settlement or automated refunds. | 4f | Planned |  |
@@ -617,10 +617,10 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-018 | Faris 17 Oct 2026 (ADR-011) | A cruise runs from check-in to check-out; airport/hotel transfers are not included unless the package says so, and are offered separately, linked to /tours-extras/transfers/. | 5 | Planned |  |
 | DATA-019 | Faris 17 Oct 2026 (ADR-012) | Default child pricing by age on the departure date, as a share of the adult per-person rate: under 3 free, 3–5.99 25%, 6–11.99 50%, 12+ full (unit-tested at every boundary). | 4c | Planned |  |
 | DATA-020 | Faris 17 Oct 2026 (ADR-012) | Search, requests, offers and bookings record each child's age so the child rule can be applied. | 4e | Planned |  |
-| DATA-021 | Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete. | 4b | Planned |  |
+| DATA-021 | Faris 17 Oct 2026 (ADR-013, ADR-019); Q26, Q49 | Every imported or newly created vessel stays a private draft and cannot be published until its readiness check, including rates and availability, reports complete. | 4b | Verified | Batch 4b (18 Oct 2026): Publish refused until readiness incl. cabin types and rates (4c) is complete; e2e refusal |
 | DATA-022 | Faris 17 Oct 2026 (ADR-018) | Admins can override the child-pricing bands per operator; the override is audited and applies to new rates only. | 4c | Planned |  |
 | DATA-023 | Faris 17 Oct 2026 (ADR-018) | Cabin occupancy is set per cabin type (1–3; most vessels 2); children share a parent's cabin; an infant under 3 does not count towards occupancy. | 4c | Planned |  |
-| DATA-024 | Faris 17 Oct 2026 (ADR-019) | Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable. | 4b | Planned |  |
+| DATA-024 | Faris 17 Oct 2026 (ADR-019) | Admins can grant a temporary showcase exception that publishes an incomplete vessel, which then renders a visible 'Details in preparation · sample' flag and is never bookable. | 4b | Verified | Batch 4b (18 Oct 2026): dated showcase with reason (DB check), expires (110_showcase.sql); e2e showcase |
 | DATA-025 | Faris 17 Oct 2026 (ADR-019) | At launch no showcase exception remains (launch checklist check). | 11 | Planned |  |
 | DATA-026 | Faris 17 Oct 2026 (ADR-020); Q2 | Cruise bookings are paid by card through Stripe, within the booking's payment deadline. | 4f | Planned |  |
 | DATA-027 | Faris 17 Oct 2026 (ADR-020) | Tour orders are paid by card through Stripe as separate payments from the cruise. | 4f | Planned |  |

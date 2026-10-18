@@ -343,7 +343,27 @@
       "resetNew": "Elige una contraseña nueva",
       "twoStep": "Verificación en dos pasos",
       "security": "Seguridad de la cuenta",
-      "description": "Tu cuenta de Nilecruz."
+      "description": "Tu cuenta de Nilecruz.",
+      "apply": "Solicitar como operador"
+    },
+    "apply": {
+      "title": "Solicitar como operador",
+      "lede": "¿Tienes una compañía de cruceros por el Nilo? Solicítalo aquí. Nilecruz revisa cada compañía antes de que pueda vender en el mercado; te escribimos cuando termine la revisión.",
+      "company": "Nombre de la compañía (como lo conocen los viajeros)",
+      "legal": "Razón social",
+      "country": "País de registro",
+      "registration": "Número de registro",
+      "website": "Sitio web",
+      "submit": "Enviar solicitud",
+      "note": "Tras la aprobación podrás invitar a tu equipo y enviar tus barcos.",
+      "already": "Ya tienes una solicitud pendiente. Puedes seguirla en tu panel.",
+      "signedOutPrompt": "Inicia sesión o crea una cuenta primero y después solicita.",
+      "errors": {
+        "companyRequired": "Dinos el nombre de la compañía.",
+        "tooLong": "Es demasiado largo.",
+        "websiteFormat": "Usa una dirección completa que empiece por https://."
+      },
+      "link": "¿Tienes una compañía de cruceros? Solicita como operador"
     }
   }
 }

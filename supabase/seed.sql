@@ -10,6 +10,7 @@ begin
   for u in select * from (values
     ('00000000-0000-4000-a000-000000000001'::uuid, 'admin@nilecruz.test',        'Sample Admin'),
     ('00000000-0000-4000-a000-000000000002'::uuid, 'catalogue@nilecruz.test',    'Sample Catalogue Admin'),
+    ('00000000-0000-4000-a000-000000000003'::uuid, 'editor@nilecruz.test',       'Sample Editor Admin'),
     ('00000000-0000-4000-a000-000000000010'::uuid, 'owner@operator-a.test',      'Sample Operator A Owner'),
     ('00000000-0000-4000-a000-000000000011'::uuid, 'reservations@operator-a.test','Sample Operator A Reservations'),
     ('00000000-0000-4000-a000-000000000012'::uuid, 'finance@operator-a.test',    'Sample Operator A Finance'),
@@ -33,6 +34,7 @@ end $$;
 
 update public.profiles set platform_role = 'admin', admin_role = 'super' where id = '00000000-0000-4000-a000-000000000001';
 update public.profiles set platform_role = 'admin', admin_role = 'catalogue' where id = '00000000-0000-4000-a000-000000000002';
+update public.profiles set platform_role = 'admin', admin_role = 'super' where id = '00000000-0000-4000-a000-000000000003';
 
 insert into public.organisations (id, kind, status, display_name) values
   ('00000000-0000-4000-b000-000000000001', 'nilecruz', 'approved', 'Nilecruz'),
@@ -57,15 +59,15 @@ insert into public.destinations (id, slug, name, visibility, is_sample) values
   ('00000000-0000-4000-9000-000000000003', 'edfu', 'Edfu', 'private', true);
 
 insert into public.vessels (id, slug, source_ref, name, type, visibility, operator_org_id, category, cabin_count, max_guests,
-  deck_count, route_text, is_sample, published_at) values
+  deck_count, route_text, is_sample, published_at, showcase_until, showcase_reason) values
   ('00000000-0000-4000-8000-000000000001', 'sample-sail-one', 'seed:1', 'Sample Dahabiya One', 'sail', 'published',
-   '00000000-0000-4000-b000-00000000000a', 'luxury', 6, 12, 2, 'Luxor–Aswan', true, now()),
+   '00000000-0000-4000-b000-00000000000a', 'luxury', 6, 12, 2, 'Luxor–Aswan', true, now(), null, null),
   ('00000000-0000-4000-8000-000000000002', 'sample-motor-one', 'seed:2', 'Sample Motor Ship One', 'motor', 'showcase',
-   '00000000-0000-4000-b000-00000000000a', 'value', 40, 80, 4, 'Luxor–Aswan', true, null),
+   '00000000-0000-4000-b000-00000000000a', 'standard', 40, 80, 4, 'Luxor–Aswan', true, null, date '2027-12-31', 'Sample showcase for tests'),
   ('00000000-0000-4000-8000-000000000003', 'sample-steam-one', 'seed:3', 'Sample Steamer One', 'steam', 'private',
-   '00000000-0000-4000-b000-00000000000a', null, 20, 40, 3, 'Luxor–Aswan', true, null),
+   '00000000-0000-4000-b000-00000000000a', null, 20, 40, 3, 'Luxor–Aswan', true, null, null, null),
   ('00000000-0000-4000-8000-000000000004', 'sample-motor-two', 'seed:4', 'Sample Motor Ship Two', 'motor', 'private',
-   '00000000-0000-4000-b000-00000000000b', null, 30, 60, 3, 'Esna–Aswan', true, null);
+   '00000000-0000-4000-b000-00000000000b', null, 30, 60, 3, 'Esna–Aswan', true, null, null, null);
 
 insert into public.vessel_private (vessel_id, verification_note) values
   ('00000000-0000-4000-8000-000000000001', 'Sample record: not verified'),
@@ -79,5 +81,6 @@ insert into public.vessel_translations (vessel_id, locale, summary) values
 insert into auth.mfa_factors (id, user_id, friendly_name, factor_type, status, created_at, updated_at, secret)
 values
   ('00000000-0000-4000-a100-000000000001', '00000000-0000-4000-a000-000000000001', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
-  ('00000000-0000-4000-a100-000000000002', '00000000-0000-4000-a000-000000000002', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
+  ('00000000-0000-4000-a100-000000000002', '00000000-0000-4000-a000-000000000002', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
+  ('00000000-0000-4000-a100-000000000003', '00000000-0000-4000-a000-000000000003', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
 

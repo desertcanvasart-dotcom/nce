@@ -537,3 +537,34 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Header:** the public header shows a static "Sign in" link (signed-in visitors who use it go straight to their dashboard), so public pages stay static and fast. Showing "Account" instead for signed-in visitors needs a small client-side check; it is planned with the account gate in Batch 8.
 - **Staging Auth settings were pushed early:** on 17 Oct 2026 a `supabase config push` preview applied the approved settings (ADR-066) instead of only showing them; no one had a staging account, so nobody was affected. The deploy workflow now pushes them on every change.
 
+### ADR-070 Evaluation method version 1 (Accepted; Faris 18 Oct 2026)
+- **Decision:** the method from Faris's `nilecrz` repository becomes version 1. Seven dimensions with weights Hygiene 15, Service 20, Food 15, Amenities 10, Management 10, Cabin and vessel 20, Cruise experience 10 (the same weights as `nile-cruise-marketplace`). Each dimension has four inspection criteria scored 0–5; the dimension result is (sum ÷ 20) × weight; the overall score is the sum, out of 100.
+- **Consequence:** every evaluation stores its method version; criteria change only through a new version, so old scores keep their meaning. The database calculates the results (one source of truth); the editor's live preview uses the same formula, and tests check both agree.
+
+### ADR-071 Five vessel categories, set by admins (Accepted; Faris 18 Oct 2026)
+- **Decision:** Basic, Standard, Superior, Deluxe, Luxury, chosen by an admin and not calculated from the score. `/cruises/luxury/` lists Luxury and Deluxe; `/cruises/value/` lists Basic and Standard; Superior appears in neither facet.
+- **Consequence:** the Batch 3 two-value category type is replaced; the seeded `value` sample maps to Standard.
+
+### ADR-072 "Best for" labels (Accepted; Faris 18 Oct 2026; closes Q57)
+- **Decision:** ten labels from `nilecrz`: first-time visitors, cabins, quiet stays, food lovers, families, couples, luxury travellers, value, traditional character, contemporary design. Shown as "Best for: families"; chosen by admins, never derived from scores. The copy lint keeps its "best for" exception.
+
+### ADR-073 Operator applications and team invitations (Accepted; Faris 18 Oct 2026)
+- **Decision:** operators apply from their account ("Apply as an operator"); a public "List your vessels" page comes with the trust pages (Batch 7). Owners invite staff as reservations, finance or viewer in this batch.
+- **How invitations travel without an email service:** a new address gets Supabase Auth's invitation email (branded template) and sets a password on arrival; an existing account sees the invitation in its dashboard. Either way the person accepts it there. Until Resend (ADR-065), staging's email limit applies.
+
+### ADR-074 Evaluation verdict (Accepted; Faris 18 Oct 2026)
+- **Decision:** a fixed choice (Recommended · Recommended with reservations · Not recommended) plus free notes for travellers in EN/ES/JA.
+
+### ADR-075 Catalogue rights by admin sub-role (Accepted)
+- **Decision:** super and catalogue admins create and edit vessels, evaluations, ratings, safety notes, imports, submissions and operators; content admins can edit vessel descriptions and photo descriptions; finance admins read only. Enforced by `requireAdmin(roles)` (super is always included) and by RLS through `app.has_admin_role()`.
+
+### ADR-076 Dashboard forms keep what people typed; outcomes come from the server (Accepted)
+- **Context:** React 19 resets a form posted through an action when the action finishes, so an admin who missed one field lost everything typed. Messages kept in a form also vanished when that form disappeared after a state change (for example "Make private").
+- **Decision:** `ActionForm` submits through a transition when JavaScript runs (no reset) and posts normally without JavaScript. "Add" forms clear only after a success (`resetOnSuccess`). Pages show the current state themselves from the server ("Visibility now: …", "Under review…", the submission history), so the outcome survives the form.
+
+### ADR-077 Small access rules found while testing 4b (Accepted)
+- **Invited people see the inviting company:** a narrow RLS rule lets someone with an open invitation read that company's name before accepting.
+- **The invitations notice filters by recipient:** owners can read all of their company's invitations, so the dashboard notice shows only those addressed to the signed-in email.
+- **Submission status changes only through the transition functions,** enforced by a trigger, because a column-level revoke can't override a table-level grant in Postgres.
+- **Tests:** a third local-only super admin (`editor@nilecruz.test`) serves the catalogue tests; two-step codes are single-use per 30-second window, so tests using one admin account run in order.
+

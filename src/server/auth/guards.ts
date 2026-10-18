@@ -27,7 +27,8 @@ export async function requireAdmin(roles?: AdminRole[], returnTo = "/dashboard/a
     const next = encodeURIComponent(returnTo);
     redirect(session.nextAal === "aal2" ? `/account/two-step/?next=${next}` : `/account/security/?setup=two-step&next=${next}`);
   }
-  if (roles && !(session.adminRole && roles.includes(session.adminRole))) forbidden();
+  // Super admins can do everything (ADR-075); other sub-roles only what `roles` lists.
+  if (roles && session.adminRole !== "super" && !(session.adminRole && roles.includes(session.adminRole))) forbidden();
   return session;
 }
 

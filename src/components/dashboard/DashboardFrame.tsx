@@ -10,7 +10,17 @@ import styles from "./dashboard.module.css";
  * The dashboard frame (DASH-ROLE-006), in English (DASH-BND-006): wordmark, workspace switcher,
  * Cairo time (DATA-003), account security, Day/Night and sign-out. Each workspace adds its sidebar.
  */
-export function DashboardFrame({ email, workspaces, children }: { email: string; workspaces: Workspace[]; children: ReactNode }) {
+export function DashboardFrame({
+  email,
+  workspaces,
+  notices,
+  children,
+}: {
+  email: string;
+  workspaces: Workspace[];
+  notices?: ReactNode;
+  children: ReactNode;
+}) {
   return (
     <div className={styles.frame}>
       <header className={styles.top}>
@@ -33,6 +43,7 @@ export function DashboardFrame({ email, workspaces, children }: { email: string;
           </form>
         </div>
       </header>
+      {notices}
       {children}
     </div>
   );
