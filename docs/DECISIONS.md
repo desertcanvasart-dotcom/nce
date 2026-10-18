@@ -568,3 +568,21 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 - **Submission status changes only through the transition functions,** enforced by a trigger, because a column-level revoke can't override a table-level grant in Postgres.
 - **Tests:** a third local-only super admin (`editor@nilecruz.test`) serves the catalogue tests; two-step codes are single-use per 30-second window, so tests using one admin account run in order.
 
+### ADR-078 Rate-plan eligibility (Accepted; Faris 18 Oct 2026; answers Q20)
+- **Decision:** rate plans are international, Egyptian citizen, foreign resident and trade. A customer declares Egyptian citizenship or residence and uploads proof; the operator verifies it before payment is due; if not eligible, the operator sends an updated offer at the applicable rate. The customer-facing wording comes from Faris (CONTENT-NEEDED #38). Plans are built in 4c-1; proof upload and verification come with bookings (4e), because the proof is personal data (SEC-013).
+
+### ADR-079 Availability freshness (Accepted; Faris 18 Oct 2026; answers Q21)
+- **Decision:** availability counts as confirmed for 2 hours when it comes from a feed or the API, and for 24 hours when entered by hand; admins can change both. Older availability is shown as "to be confirmed" and cannot be reserved.
+
+### ADR-080 Nilecruz inventory format v1 (Accepted; Faris 18 Oct 2026)
+- **Decision:** build on the JSON/XML feed format documented in `nile-cruise-marketplace` (spec v3 §2.2), extended with cabin-type codes, occupancy, rate plan and the time availability was confirmed. Published for operators with 4c-2.
+
+### ADR-081 Feed pulls (Accepted; Faris 18 Oct 2026)
+- **Decision:** approved feeds are pulled hourly by Supabase's scheduler (`pg_cron`), which calls a signed internal endpoint. Built in 4c-2.
+
+### ADR-082 Rate currencies (Accepted; Faris 18 Oct 2026)
+- **Decision:** operators price in US$, € or E£. E£ is allowed only for the Egyptian-citizen and foreign-resident plans. The crew gratuity is always in US$ (ADR-010).
+
+### ADR-083 Batch 4c in two pull requests (Accepted; Faris 18 Oct 2026)
+- **Decision:** 4c-1 builds cabins, schedules, departures, rates, shared inventory, the gratuity, child pricing and promotions; 4c-2 builds paste, feed and API connections, their health and their security (SEC-007–009). Each is fully tested before review; the batch closes when both are merged.
+
