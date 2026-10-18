@@ -1,6 +1,6 @@
 # Batch 4d brief: Tours and sightseeing
 
-**Status:** awaiting Faris's go-ahead · **Branch:** `batch-04d-tours` (from `main`) · **Size:** M
+**Status:** approved by Faris 18 Oct 2026 (ADR-087); built · **Branch:** `batch-04d-tours` (from `main`) · **Size:** M
 
 **Goal:** Nilecruz admins build and publish the tours and extras that sit around a cruise (museum visits, evening tours, excursions, transfers) and multi-night sightseeing programs tied to cruise schedules. A tour can be published as information first and becomes bookable once it has sessions and prices. Tours belong to Nilecruz: operators have no access (ADR-030). The public tour pages come in Batch 7, and tour orders and payments in 4f. This batch builds the product those batches sell.
 
