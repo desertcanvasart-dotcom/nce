@@ -77,3 +77,38 @@ describe("release at the deadline (DATA-040, DASH-PAY-008, 009)", () => {
     expect(releaseDecision({ ...base, status: "confirmed", now: new Date("2027-03-01T00:00:00Z") })).toBe("keep");
   });
 });
+
+describe("Stripe Checkout and webhooks (DATA-026, 028, 030, ADR-089)", async () => {
+  const { default: Stripe } = await import("stripe");
+  const { cardPayable, checkoutParams } = await import("@/lib/payments/checkout");
+
+  it("charges the outstanding balance in the reservation's currency, cards in US$ or € only", () => {
+    const p = checkoutParams({
+      reservationId: "r1",
+      reference: "NC-ABC234",
+      vesselName: "Sample Ship",
+      outstandingMinor: 125050,
+      currency: "EUR",
+      customerEmail: "a@example.test",
+      siteUrl: "https://example.test/",
+      nowSeconds: 1_800_000_000,
+    });
+    expect(p.line_items[0]!.price_data).toMatchObject({ currency: "eur", unit_amount: 125050 });
+    expect(p.metadata).toEqual({ reservation_id: "r1", reference: "NC-ABC234" });
+    expect(p.success_url).toBe("https://example.test/dashboard/journey/reservations/r1/?paid=1");
+    expect(p.expires_at).toBe(1_800_000_000 + 1800);
+    expect(cardPayable("USD") && cardPayable("EUR")).toBe(true);
+    expect(cardPayable("EGP")).toBe(false);
+  });
+
+  it("accepts only events signed with our webhook secret, unchanged and recent", () => {
+    const secret = "whsec_test_local_only";
+    const payload = JSON.stringify({ id: "evt_1", type: "checkout.session.completed", data: { object: {} } });
+    const header = Stripe.webhooks.generateTestHeaderString({ payload, secret });
+    expect(Stripe.webhooks.constructEvent(payload, header, secret).id).toBe("evt_1");
+    expect(() => Stripe.webhooks.constructEvent(payload, header, "whsec_other")).toThrow();
+    expect(() => Stripe.webhooks.constructEvent(payload.replace("evt_1", "evt_2"), header, secret)).toThrow();
+    const old = Stripe.webhooks.generateTestHeaderString({ payload, secret, timestamp: Math.floor(Date.now() / 1000) - 600 });
+    expect(() => Stripe.webhooks.constructEvent(payload, old, secret)).toThrow();
+  });
+});

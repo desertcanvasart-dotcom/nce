@@ -12,6 +12,9 @@ const schema = z.object({
   SANITY_API_READ_TOKEN: z.string().min(20).optional(),
   // ADR-081: shared with Supabase Vault ("feed_pull_secret"); signs the scheduler's call to pull feeds.
   FEED_PULL_SECRET: z.string().min(32).optional(),
+  // ADR-020, ADR-089: Stripe test mode outside production. Without the key, card payments say they're off.
+  STRIPE_SECRET_KEY: z.string().regex(/^sk_(test|live)_/).optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().regex(/^whsec_/).optional(),
 });
 
 export const serverEnv = schema.parse({
@@ -20,4 +23,6 @@ export const serverEnv = schema.parse({
   NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET || undefined,
   SANITY_API_READ_TOKEN: process.env.SANITY_API_READ_TOKEN || undefined,
   FEED_PULL_SECRET: process.env.FEED_PULL_SECRET || undefined,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || undefined,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || undefined,
 });
