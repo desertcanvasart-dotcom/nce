@@ -42,4 +42,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 36 | Vessel photos with publishing rights and credits | 4b onwards | DASH-ADM-013 |
 | 37 | Which directory vessels get which category, operator and "Best for" labels | 4b onwards | ADR-071, ADR-072 |
 | 38 | Customer-facing wording for Egyptian-citizen and foreign-resident eligibility (declaration, proof, what happens if not eligible) | 4e | ADR-078 |
+| 39 | The tours and extras to sell first (name, location, duration, description, itinerary, inclusions, exclusions, meeting point or pickup), with photos and rights | 4d / 7 | DASH-ADM-058–063; silo PAGE-094–100 |
+| 40 | Tour suppliers (company, contact, licence or registration) and each tour's sessions, capacities and prices | 4d | DASH-ADM-064, 067–069 |
+| 41 | Cancellation wording and bands for each tour (or one standard set) | 4d / 4f | DASH-ADM-065 |
 
