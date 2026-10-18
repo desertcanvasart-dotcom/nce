@@ -4,25 +4,24 @@ import { requireAdmin } from "@/server/auth";
 import { overviewCounts } from "@/server/catalogue/queries";
 import { recentActivity } from "@/server/catalogue/activity";
 import { adminBookingCounts } from "@/server/bookings/queries";
+import { awaitingVerificationCount } from "@/server/payments/queries";
 import { adminConnectionCounts } from "@/server/connections/queries";
 import { ActivityTable } from "./activity/ActivityTable";
 
 /**
- * DASH-ADM-001, 002, 004, 006, 007, 009: the working queue. Each counter links to its pre-filtered list.
+ * DASH-ADM-001–004, 006, 007, 009: the working queue. Each counter links to its pre-filtered list.
  * Payments and cancellations join the queue with their batch; until then they say so.
  */
 export default async function AdminOverview() {
   await requireAdmin(undefined, "/dashboard/admin/");
-  const [counts, activity, connections, bookings] = await Promise.all([
+  const [counts, activity, connections, bookings, toVerify] = await Promise.all([
     overviewCounts(),
     recentActivity({ page: 1, pageSize: 10 }),
     adminConnectionCounts(),
     adminBookingCounts(),
+    awaitingVerificationCount(),
   ]);
-  const later = [
-    ["Payments awaiting verification", "4f"],
-    ["Cancellation requests and refund reviews", "4f"],
-  ] as const;
+  const later = [["Cancellation requests and refund reviews", "4f"]] as const;
   return (
     <>
       <h1 className={ui.pageTitle}>Overview</h1>
@@ -39,6 +38,10 @@ export default async function AdminOverview() {
         <Link className={ui.counter} href="/dashboard/admin/submissions/?status=submitted">
           <span className={ui.counterValue}>{counts.submissions}</span>
           <span className={ui.counterLabel}>Cruise submissions awaiting review</span>
+        </Link>
+        <Link className={ui.counter} href="/dashboard/admin/finance/#verify">
+          <span className={ui.counterValue}>{toVerify}</span>
+          <span className={ui.counterLabel}>Payments awaiting verification</span>
         </Link>
         <Link className={ui.counter} href="/dashboard/admin/bookings/#reservations">
           <span className={ui.counterValue}>{bookings.currentAndUpcoming}</span>

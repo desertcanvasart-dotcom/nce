@@ -50,7 +50,14 @@ export async function handleStripeWebhook(rawBody: string, signature: string): P
     const stripe = getStripe();
     if (!stripe) return { status: 500, body: { error: "refund_needed_but_stripe_not_configured" } };
     const refund = await stripe.refunds.create({ payment_intent: intent }, { idempotencyKey: `late-${intent}` });
-    await db.rpc("service_card_refunded", { res: reservationId, session_id: session.id, intent, refund: refund.id, amount, cur: currency });
+    await db.rpc("service_card_refunded", {
+      res: reservationId,
+      session_id: session.id,
+      intent,
+      refund: refund.id,
+      amount,
+      cur: currency,
+    });
     return { status: 200, body: { received: true, refunded: true } };
   }
   return { status: 200, body: { received: true, result: data } };

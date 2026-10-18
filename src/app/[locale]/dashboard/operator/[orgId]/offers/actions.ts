@@ -164,3 +164,20 @@ export async function markOrgNoticesRead(orgId: string, _prev: ActionState, _fd:
   revalidatePath(`/dashboard/operator/${orgId}/`);
   return saved("Marked as read.");
 }
+
+/** ADR-089: operators remind customers to pay; only Nilecruz admins record money. */
+export async function sendReminder(
+  orgId: string,
+  reservationId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations", "finance"], {
+    kind: "operator",
+    returnTo: `/dashboard/operator/${orgId}/bookings/${reservationId}/`,
+  });
+  const db = await getDb();
+  const { error } = await db.rpc("send_payment_reminder", { res: reservationId });
+  if (error) return connectionProblem(error);
+  return saved("Reminder sent. The customer sees it in My journey.");
+}

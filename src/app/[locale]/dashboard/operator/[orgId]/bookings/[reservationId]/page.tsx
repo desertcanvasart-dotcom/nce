@@ -6,7 +6,9 @@ import { requireOrgRole } from "@/server/auth";
 import { reservation } from "@/server/bookings/queries";
 import { ReservationRecord } from "../../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../../sections";
-import { reviewProof } from "../../offers/actions";
+import { reviewProof, sendReminder } from "../../offers/actions";
+import { balance, paymentsFor } from "@/server/payments/queries";
+import { PaymentPanel } from "../../../../_bookings/PaymentPanel";
 
 const PROOF = { submitted: "Waiting for your check", verified: "Verified", rejected: "Not accepted" } as const;
 
@@ -22,6 +24,8 @@ export default async function OperatorBooking({ params }: { params: Promise<{ or
   if (!r || r.org_id !== orgId) notFound();
   const canReview = company.teamRole === "owner" || company.teamRole === "reservations";
   const local = r.rate_plan === "egyptian_citizen" || r.rate_plan === "foreign_resident";
+  const [bal, pays] = await Promise.all([balance(r.id), paymentsFor(r.id)]);
+  const canRemind = company.teamRole !== "viewer";
 
   return (
     <>
@@ -29,6 +33,15 @@ export default async function OperatorBooking({ params }: { params: Promise<{ or
         <Link href={`/dashboard/operator/${orgId}/bookings/`}>← Bookings</Link>
       </p>
       <h1 className={ui.pageTitle}>Reservation {r.reference}</h1>
+      {bal ? <PaymentPanel bal={bal} pays={pays} rule={r.deadline_rule} status={r.status} /> : null}
+      {canRemind && r.status === "awaiting_payment" ? (
+        <ActionForm
+          action={sendReminder.bind(null, orgId, r.id)}
+          submit="Send the customer a payment reminder"
+          variant="outline"
+        />
+      ) : null}
+      <p className={ui.muted}>Payments are received and recorded by Nilecruz; you see their status here.</p>
       <ReservationRecord r={r} />
       {local ? (
         <Section title="Proof of eligibility" id="proof">

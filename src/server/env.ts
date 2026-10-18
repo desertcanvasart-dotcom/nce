@@ -13,8 +13,14 @@ const schema = z.object({
   // ADR-081: shared with Supabase Vault ("feed_pull_secret"); signs the scheduler's call to pull feeds.
   FEED_PULL_SECRET: z.string().min(32).optional(),
   // ADR-020, ADR-089: Stripe test mode outside production. Without the key, card payments say they're off.
-  STRIPE_SECRET_KEY: z.string().regex(/^sk_(test|live)_/).optional(),
-  STRIPE_WEBHOOK_SECRET: z.string().regex(/^whsec_/).optional(),
+  STRIPE_SECRET_KEY: z
+    .string()
+    .regex(/^sk_(test|live)_/)
+    .optional(),
+  STRIPE_WEBHOOK_SECRET: z
+    .string()
+    .regex(/^whsec_/)
+    .optional(),
 });
 
 export const serverEnv = schema.parse({
