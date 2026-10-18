@@ -586,3 +586,11 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 ### ADR-083 Batch 4c in two pull requests (Accepted; Faris 18 Oct 2026)
 - **Decision:** 4c-1 builds cabins, schedules, departures, rates, shared inventory, the gratuity, child pricing and promotions; 4c-2 builds paste, feed and API connections, their health and their security (SEC-007–009). Each is fully tested before review; the batch closes when both are merged.
 
+### ADR-084 Product details decided while building 4c-1 (Accepted)
+- **Departures** are created by the database (`generate_departures`) for every sailing day inside a schedule's periods, up to 400 days ahead; running it again adds nothing. Single departures can be cancelled and restored.
+- **Rates and availability stay private until the marketplace** (Batch 5, "prices after sign-in", ADR-025): only the operator's team and admins read them in 4c.
+- **Promotion rates** are chosen by cabin type, rate plan and departure dates (and, for fixed amounts, the currency), then resolved into the actual rates; a rate already in another promotion is skipped and reported (no stacking).
+- **Birthdays on 29 February** count from 1 March in non-leap years when computing age on the departure date.
+- **The concurrency test** ("parallel writes never take availability below zero") moves to 4e with the reservation function that takes cabins; 4c-1 relies on the database refusing negative availability.
+- **Dedicated test admins:** `product@nilecruz.test` (catalogue) joins the local seed so test files never share an admin session.
+
