@@ -33,7 +33,17 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 export const MAX_BULK_SESSIONS = 1000;
 
 /** DASH-ADM-067: every chosen weekday between two dates, at each start time; Cairo time in, UTC instants out. */
-export function sessionStarts({ from, to, weekdays, times }: { from: string; to: string; weekdays: number[]; times: string[] }): Date[] {
+export function sessionStarts({
+  from,
+  to,
+  weekdays,
+  times,
+}: {
+  from: string;
+  to: string;
+  weekdays: number[];
+  times: string[];
+}): Date[] {
   if (!DATE.test(from) || !DATE.test(to) || to < from) throw new Error("Choose a start and an end date.");
   if (!weekdays.length) throw new Error("Choose at least one weekday.");
   if (!times.length || times.some((t) => !TIME.test(t))) throw new Error("Give start times as HH:MM, for example 06:30.");
@@ -44,7 +54,8 @@ export function sessionStarts({ from, to, weekdays, times }: { from: string; to:
     for (const t of times) {
       const start = cairoToUtc(day, t);
       out.set(start.getTime(), start);
-      if (out.size > MAX_BULK_SESSIONS) throw new Error(`That would create more than ${MAX_BULK_SESSIONS} sessions. Use a shorter range.`);
+      if (out.size > MAX_BULK_SESSIONS)
+        throw new Error(`That would create more than ${MAX_BULK_SESSIONS} sessions. Use a shorter range.`);
     }
   }
   return [...out.values()].sort((a, b) => a.getTime() - b.getTime());
@@ -64,8 +75,10 @@ export function bandsProblem(bands: CancellationBand[]): string | null {
   if (!bands.length) return null;
   const sorted = [...bands].sort((a, b) => b.from_days - a.from_days);
   for (const b of sorted) {
-    if (!Number.isInteger(b.from_days) || b.from_days < 0 || b.from_days > 365) return "Days before the start must be whole numbers from 0 to 365.";
-    if (!Number.isInteger(b.percent) || b.percent < 0 || b.percent > 100) return "The charge must be a whole percentage from 0 to 100.";
+    if (!Number.isInteger(b.from_days) || b.from_days < 0 || b.from_days > 365)
+      return "Days before the start must be whole numbers from 0 to 365.";
+    if (!Number.isInteger(b.percent) || b.percent < 0 || b.percent > 100)
+      return "The charge must be a whole percentage from 0 to 100.";
   }
   for (let i = 1; i < sorted.length; i++) {
     if (sorted[i]!.from_days === sorted[i - 1]!.from_days) return "Each band needs a different number of days.";
@@ -95,7 +108,10 @@ export function quoteSession(s: SessionPrice, ages: number[], { adultsOnly = fal
   if (ages.some((a) => !Number.isFinite(a) || a < 0)) return { ok: false, reason: "Every guest needs an age." };
   if (adultsOnly && ages.some((a) => a < 18)) return { ok: false, reason: "This tour is for adults only (18 and over)." };
   if (ages.length > s.capacity) {
-    return { ok: false, reason: s.kind === "private" ? `This private session takes up to ${s.capacity} guests.` : `Only ${s.capacity} places.` };
+    return {
+      ok: false,
+      reason: s.kind === "private" ? `This private session takes up to ${s.capacity} guests.` : `Only ${s.capacity} places.`,
+    };
   }
   const paying = ages.filter((a) => a >= 3).length;
   if (s.pricing === "per_group") return { ok: true, totalMinor: s.priceMinor, paying };
