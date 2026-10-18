@@ -441,3 +441,36 @@
 - **Staging scheduler:** `FEED_PULL_SECRET` is set on Railway (followed by a redeploy), and `feed_pull_url` and `feed_pull_secret` are in staging Vault. `cron.job` lists `nilecruz-feed-pull` (every 5 min) and `nilecruz-prune-connections` (daily). `app.request_feed_pull()` now answers "nothing due" (no approved feeds on staging yet). A one-off probe signed by the staging database exactly as the scheduler does got `200 {"pulled":0,"failed":0}` from staging, so the two secrets match. An unsigned call gets 401.
 - **Smoke test:** the home page and the operator connections page (redirects to sign-in) respond; the API refuses unsigned calls in plain words; staging stays noindex. The first request right after the redeploy hung (75 s) once; the following requests took about 0.5 s.
 - **Open:** PROPOSED-018 ("Pull now"). **Next:** the Batch 4d brief, on Faris's go-ahead.
+
+## 18 Oct 2026 · Batch 4d · Tours and sightseeing
+
+**Built** (branch `batch-04d-tours`; migration `20261018000900_tours`):
+- **Suppliers** (DASH-ADM-064): company, contact, email, phone, licence or registration, notes. Admins only; never public.
+- **Tours** (DASH-ADM-058–066):
+  - kind, name, location (optionally a destination), duration and supplier;
+  - texts in EN/ES/JA: description, itinerary, inclusions, exclusions, meeting point or pickup, cancellation wording;
+  - photos with credits and alt text;
+  - cancellation bands, checked in the database and in code;
+  - sold on its own and/or with selected cruise schedules; optional "adults only".
+- **Readiness** (DASH-ADM-073): a published tour is "information only" until it has a supplier, cancellation bands and a future session; then it becomes "bookable" (`public.tour_is_bookable`). The editor lists what is missing.
+- **Sessions** (DASH-ADM-067–069): shared (per guest) or private (per guest or per group), capacity, US$ or €, price.
+  - Created in bulk from dates, weekdays and Cairo start times, across summer time.
+  - Running the same form again adds nothing; a session can be cancelled and restored.
+- **Programs** (DASH-ADM-070, 071): days with tours, descriptions in EN/ES/JA, linked to cruise schedules. An availability grid shows, for each departure in the next 90 days and a chosen party size, whether every tour has a session on its day, and names what is missing.
+- **Rights** (DATA-042, ADR-087): catalogue and super admins manage everything; content admins edit texts and photos only; operators and partners are refused; the public reads published tours with their prices, never suppliers.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 194 unit tests. New tests cover session generation in Cairo time across the change to summer time, bands, per-guest and per-group prices with under-3s free and adults-only, readiness, and the program day mapping and availability check.
+- **Database:** 14 pgTAP files pass. The new `140_tours` has 27 checks: bands, the shared-is-per-guest rule, currencies, no duplicate sessions, capacity, bookable only when complete, program days, content-admin limits, no two-step means no change, operators and partners refused, public reads published only and never suppliers. The grants check returns no differences locally.
+- **End-to-end:** 5 new tests in `tours.spec.ts`:
+  - build, publish as information-only, make bookable;
+  - a program grid showing 1 of 2, then 2 of 2, then 1 of 2 departures for 8 guests;
+  - content-admin and operator rights;
+  - axe on five screens in Day and Night.
+
+  The tests passed on a first run and on a third run on the same database. The second run had one failure under machine load 11–14; its log was overwritten before it was read. Bulk-creating sessions took more than 10 seconds under that load, so its assertions now allow 30.
+- **Screenshots:** 36 in `docs/screenshots/batch-04d/`, at 375, 768 and 1440 px, Day and Night: the tours list, a tour as a catalogue admin and as a content admin, sessions, suppliers and a program with its grid.
+
+**Placeholders:** only flagged sample tours exist. CONTENT-NEEDED #39–41 (tours, suppliers and prices, cancellation wording) come from Faris.
+
+**Next:** Faris reviews the PR. Then Batch 4e (requests, offers and reservations) is briefed.

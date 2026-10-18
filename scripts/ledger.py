@@ -728,6 +728,25 @@ STATUS.update({
  "SEC-008": ("Verified", B4C2+'only the Ed25519 public key is stored (130: no secret column), max two active (130, trigger), revoked keys stay revoked; e2e: stored row has no private key'),
  "SEC-009": ("Verified", B4C2+'Ed25519 signature over method, path, timestamp (±5 min), idempotency key, body hash; idempotency per company 24 h (replay returns the first answer, different body 422); webhooks signed the same way (unit; sending in 4e)'),
 })
+B4D = "Batch 4d (18 Oct 2026): "
+STATUS.update({
+ "DASH-ADM-058": ("Verified", B4D+'tours table with kind (museum visit, excursion, evening tour, transfer, other), separate from cruises; admin Tours and sightseeing; e2e tours.spec'),
+ "DASH-ADM-059": ("Verified", B4D+'name, location (optional destination link), duration in minutes (15 min to 14 days); e2e'),
+ "DASH-ADM-060": ("Verified", B4D+'description and step-by-step itinerary per language (EN/ES/JA); e2e EN and ES'),
+ "DASH-ADM-061": ("Verified", B4D+'photos on media with a tour parent: credit, alt EN/ES/JA, rights confirmation; e2e upload'),
+ "DASH-ADM-062": ("Verified", B4D+'inclusions and exclusions per language, one per line; e2e'),
+ "DASH-ADM-063": ("Verified", B4D+'meeting point or pickup per language; e2e'),
+ "DASH-ADM-064": ("Verified", B4D+'tour_suppliers (company, contact, email, phone, registration, notes), admins only, never public (140); e2e add + assign'),
+ "DASH-ADM-065": ("Verified", B4D+'cancellation wording per language + bands validated in DB and code (cover day 0, never cheaper closer): 140, unit, e2e refuses bands without day 0'),
+ "DASH-ADM-066": ("Verified", B4D+'standalone flag + assignment to cruise schedules (tour_schedules); e2e'),
+ "DASH-ADM-067": ("Verified", B4D+'sessions with start/end (Cairo in, UTC stored), capacity, US$/€ and price; bulk creation by dates, weekdays and times, idempotent (unit incl. summer time; e2e 22 + 0 of 22)'),
+ "DASH-ADM-068": ("Verified", B4D+'shared or private sessions; both offered for the same start (140, e2e)'),
+ "DASH-ADM-069": ("Verified", B4D+'per guest or per group; shared is always per guest (140); unit price maths: ages 3+ pay, under-3s free, group price once, adults-only (ADR-087)'),
+ "DASH-ADM-070": ("Verified", B4D+'programs with days, tours by day, descriptions EN/ES/JA, linked to cruise schedules; day N = departure + N − 1 (unit); e2e'),
+ "DASH-ADM-071": ("Verified", B4D+'availability grid per upcoming departure for a party size; missing sessions named (unit, e2e 1 of 2 / 2 of 2 / 8 guests)'),
+ "DASH-ADM-073": ("Verified", B4D+'published tours are information-only until supplier + bands + a future session (public.tour_is_bookable, 140; unit; e2e badge changes to bookable)'),
+ "DATA-042": ("Verified", B4D+'only admins manage tours; catalogue/super everything, content texts and photos only (ADR-087); operators and partners refused (140, e2e 403)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

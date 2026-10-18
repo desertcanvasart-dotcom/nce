@@ -11,6 +11,10 @@ with intended(table_name, grantee, privileges) as (
     -- Batch 4c-2: connections are read by people and changed only through functions or the service role.
     ('inventory_feeds', 'authenticated', 'SELECT'), ('api_keys', 'authenticated', 'SELECT'),
     ('inventory_runs', 'authenticated', 'SELECT'),
+    -- Batch 4d: published tours, sessions (prices included, ADR-087) and programs are public; suppliers are not.
+    ('tours', 'anon', 'SELECT'), ('tour_translations', 'anon', 'SELECT'), ('tour_schedules', 'anon', 'SELECT'),
+    ('tour_sessions', 'anon', 'SELECT'), ('programs', 'anon', 'SELECT'), ('program_translations', 'anon', 'SELECT'),
+    ('program_items', 'anon', 'SELECT'), ('program_schedules', 'anon', 'SELECT'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -20,7 +24,9 @@ with intended(table_name, grantee, privileges) as (
                     'evaluations', 'evaluation_translations', 'external_ratings', 'safety_observations',
                     'org_invitations', 'vessel_submissions', 'vessel_import_batches',
                     'cabin_types', 'cabin_type_translations', 'schedules', 'schedule_periods', 'schedule_days', 'departures',
-                    'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates']) t,
+                    'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates',
+                    'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
+                    'program_translations', 'program_items', 'program_schedules']) t,
        unnest(array['authenticated', 'service_role']) g
 ),
 actual as (
