@@ -89,7 +89,7 @@ Not in this batch: payments, deadlines, cancellation and refunds (4f); My journe
 
 ## New dependencies
 
-None. The concurrency test opens parallel database connections from the test runner (the existing `pg`-free Supabase client is enough).
+None. The concurrency test runs in pgTAP-style SQL with parallel database sessions opened by the test script.
 
 ## Questions for Faris before I start
 
