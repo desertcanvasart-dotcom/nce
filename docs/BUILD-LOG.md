@@ -434,3 +434,10 @@
 - PROPOSED-018: a "Pull now" button for approved feeds.
 
 **Next:** Faris reviews PR 4c-2; once merged, Batch 4c is closed and Batch 4d (tours and sightseeing) is briefed.
+
+### 18 Oct 2026 · Batch 4c closed
+- **Merged:** PR #11 (4c-2), with CI green. On main, CI, the data-layer deploy (migration `20261018000800_connections`, grants check) and Lighthouse on deployment all passed.
+- **Faris approved** ADR-085 (Ed25519 signing) and the staging scheduler secrets.
+- **Staging scheduler:** `FEED_PULL_SECRET` is set on Railway (followed by a redeploy), and `feed_pull_url` and `feed_pull_secret` are in staging Vault. `cron.job` lists `nilecruz-feed-pull` (every 5 min) and `nilecruz-prune-connections` (daily). `app.request_feed_pull()` now answers "nothing due" (no approved feeds on staging yet). A one-off probe signed by the staging database exactly as the scheduler does got `200 {"pulled":0,"failed":0}` from staging, so the two secrets match. An unsigned call gets 401.
+- **Smoke test:** the home page and the operator connections page (redirects to sign-in) respond; the API refuses unsigned calls in plain words; staging stays noindex. The first request right after the redeploy hung (75 s) once; the following requests took about 0.5 s.
+- **Open:** PROPOSED-018 ("Pull now"). **Next:** the Batch 4d brief, on Faris's go-ahead.
