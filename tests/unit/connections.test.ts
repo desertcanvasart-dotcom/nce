@@ -318,3 +318,16 @@ describe("feed fetching (SEC-007)", () => {
     });
   });
 });
+
+describe("data age in words (DASH-OPR-027)", () => {
+  const now = Date.parse("2026-10-18T12:00:00Z");
+  it("reads naturally", async () => {
+    const { ageInWords } = await import("@/lib/connections/age");
+    expect(ageInWords(null, now)).toBe("No data yet");
+    expect(ageInWords("2026-10-18T11:59:40Z", now)).toBe("Just now");
+    expect(ageInWords("2026-10-18T11:15:00Z", now)).toBe("45 min ago");
+    expect(ageInWords("2026-10-18T09:30:00Z", now)).toBe("2 h 30 min ago");
+    expect(ageInWords("2026-10-17T12:00:00Z", now)).toBe("24 h ago");
+    expect(ageInWords("2026-10-10T12:00:00Z", now)).toBe("8 days ago");
+  });
+});

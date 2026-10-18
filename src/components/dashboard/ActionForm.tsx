@@ -5,7 +5,8 @@ import { useActionState, useEffect, useRef, useTransition } from "react";
 import { Button } from "@/components/ds/Button/Button";
 import styles from "./ui.module.css";
 
-export type ActionState = { ok?: boolean; message?: string; problems?: string[] };
+/** `secret` is shown once, in full, for the person to copy (a new API private key); it is never stored. */
+export type ActionState = { ok?: boolean; message?: string; problems?: string[]; secret?: { label: string; value: string } };
 export type FormAction = (prev: ActionState, fd: FormData) => Promise<ActionState>;
 
 /**
@@ -66,6 +67,14 @@ export function ActionForm({
                 <li key={p}>{p}</li>
               ))}
             </ul>
+          ) : null}
+          {state.secret ? (
+            <>
+              <p className={styles.secretLabel}>{state.secret.label}</p>
+              <pre className={styles.secret} aria-label={state.secret.label}>
+                {state.secret.value}
+              </pre>
+            </>
           ) : null}
         </div>
       ) : null}

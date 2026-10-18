@@ -291,3 +291,28 @@ a.counter:hover {
     content: attr(data-label);
   }
 }
+
+/* A value to copy once (a new API private key), and code examples in the format document. */
+.secretLabel {
+  margin: var(--space-3) 0 var(--space-2);
+  font-weight: var(--type-label-weight);
+}
+
+.secret,
+.code {
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+  color: var(--ink);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+  /* Wrapped rather than scrolled, so no part is out of reach by keyboard. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.wrap {
+  overflow-wrap: anywhere;
+}
