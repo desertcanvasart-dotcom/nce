@@ -18,15 +18,20 @@ begin
   perform set_config('role', 'postgres', true);
 end $$;
 
--- A bookable tour 40 days out: a shared session of 3 places at US$100 per guest, and a private one at US$500 per party.
+-- A bookable tour 40 days out (noon Cairo time on a fixed day, so the day count is exact at any hour and across
+-- Egypt's summer-time change): a shared session of 3 places at US$100 per guest, and a private one at US$500 per party.
 insert into public.tour_suppliers (id, name, email) values ('00000000-0000-4000-d800-000000000001', 'Sample Supplier', 'supplier@example.test');
 insert into public.tours (id, slug, kind, name, location, duration_minutes, supplier_id, visibility, cancellation_bands) values
   ('00000000-0000-4000-d800-000000000002', 'sample-order-tour', 'excursion', 'Sample Order Tour', 'Aswan', 600,
    '00000000-0000-4000-d800-000000000001', 'published', '[{"from_days": 30, "percent": 0}, {"from_days": 7, "percent": 50}, {"from_days": 0, "percent": 100}]');
 insert into public.tour_sessions (id, tour_id, starts_at, ends_at, kind, pricing, capacity, currency, price_minor) values
-  ('00000000-0000-4000-d800-000000000003', '00000000-0000-4000-d800-000000000002', now() + interval '40 days', now() + interval '40 days 10 hours',
+  ('00000000-0000-4000-d800-000000000003', '00000000-0000-4000-d800-000000000002',
+   ((now() at time zone 'Africa/Cairo')::date + 40 + time '12:00') at time zone 'Africa/Cairo',
+   ((now() at time zone 'Africa/Cairo')::date + 40 + time '22:00') at time zone 'Africa/Cairo',
    'shared', 'per_guest', 3, 'USD', 10000),
-  ('00000000-0000-4000-d800-000000000004', '00000000-0000-4000-d800-000000000002', now() + interval '41 days', now() + interval '41 days 10 hours',
+  ('00000000-0000-4000-d800-000000000004', '00000000-0000-4000-d800-000000000002',
+   ((now() at time zone 'Africa/Cairo')::date + 41 + time '12:00') at time zone 'Africa/Cairo',
+   ((now() at time zone 'Africa/Cairo')::date + 41 + time '22:00') at time zone 'Africa/Cairo',
    'private', 'per_group', 4, 'USD', 50000);
 create temp table t (k text primary key, v text) on commit drop;
 grant select, insert on t to authenticated, service_role;
