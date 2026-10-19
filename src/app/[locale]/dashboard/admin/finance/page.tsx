@@ -80,7 +80,7 @@ export default async function FinancePage() {
             {q.overdueReported.map((r) => (
               <li key={r.id}>
                 <Link href={`/dashboard/admin/bookings/${r.id}/`}>{r.reference}</Link> · due{" "}
-                <CairoTime value={r.payment_due_at} />
+                <CairoTime value={r.payment_due_at} endOfDay />
               </li>
             ))}
           </ul>

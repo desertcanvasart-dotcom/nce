@@ -15,6 +15,16 @@ export function formatCairo(value: Date | string, { date = true, time = true }: 
   return time ? `${text.replace(",", "")} Cairo` : text;
 }
 
+/**
+ * A deadline that falls at Cairo midnight (ADR-027) shown as the last day it covers:
+ * 2026-10-26T21:00Z is "end of 26 Oct 2026, Cairo", not "27 Oct 2026 00:00 Cairo".
+ */
+export function formatCairoEndOfDay(value: Date | string): string {
+  const d = typeof value === "string" ? new Date(value) : value;
+  if (Number.isNaN(d.getTime())) throw new Error(`Invalid date: ${String(value)}`);
+  return `end of ${formatCairo(new Date(d.getTime() - 1), { time: false })}, Cairo`;
+}
+
 /** Hours ahead of UTC in Cairo at that moment: 2 in winter, 3 in Egyptian summer time. */
 export function cairoOffsetHours(value: Date): number {
   const parts = new Intl.DateTimeFormat("en-US", { timeZone: CAIRO, timeZoneName: "shortOffset" }).formatToParts(value);

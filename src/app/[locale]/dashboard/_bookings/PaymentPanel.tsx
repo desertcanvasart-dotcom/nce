@@ -55,7 +55,7 @@ export function PaymentPanel({
         <div>
           <dt className={ui.label}>Pay in full by</dt>
           <dd>
-            <CairoTime value={bal.payment_due_at} />
+            <CairoTime value={bal.payment_due_at} endOfDay />
           </dd>
         </div>
       </dl>

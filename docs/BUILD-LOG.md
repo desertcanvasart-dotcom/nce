@@ -579,6 +579,10 @@
   The tests passed twice in a row on one database.
 - **Full suite** (two workers, as in CI): all 125 passed.
 
+- **Screenshots:** 42 in `docs/screenshots/batch-04f/`, at 375, 768 and 1440 px, Day and Night: a customer's unpaid and paid reservation and a receipt; the operator's bookings with payables, and an unpaid booking with the reminder; Deposits and commission, and an admin receipt. Fixed after review:
+  - the deadline read "27 Oct 2026 00:00 Cairo", a day later than the last day to pay; it now reads "end of 26 Oct 2026, Cairo" (new unit test, winter and summer);
+  - the Sailing section still said "payment requests arrive with deadlines" under the new Payment panel; it now says "Awaiting payment (see Payment above)".
+
 **Not verified until Faris adds Stripe test keys:** live Checkout (DATA-026, DATA-030 are "Built"). **Next:** 4f-2: cancellation and refunds, and tour orders.
 
 ### Where we stopped (18 Oct 2026, paused at Faris's request)
