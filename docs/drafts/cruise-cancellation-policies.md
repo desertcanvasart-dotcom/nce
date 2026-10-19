@@ -24,7 +24,7 @@ Each band is "from this many days before departure, this percentage is charged".
 - **Luxury and branded:** `[{from_days: 181, percent: 0}, {from_days: 121, percent: 15}, {from_days: 91, percent: 50}, {from_days: 0, percent: 100}]`
 - **Other vessels:** `[{from_days: 121, percent: 0}, {from_days: 91, percent: 25}, {from_days: 60, percent: 35}, {from_days: 30, percent: 50}, {from_days: 0, percent: 100}]`
 
-The screen lists the bands in words, generated from these numbers ("Cancelled 120 to 91 days before departure: 25 % charged"). At present those generated lines are in English only. That is why the wording below repeats the bands in each language.
+**In the app (4f-2b):** both policies are presets on the Cabins page. The preset fills the bands and a short English paragraph explaining them; the bands themselves are listed in words below the paragraph. The screen lists the bands in words, generated from these numbers ("Cancelled 120 to 91 days before departure: 25 % charged"). At present those generated lines are in English only. That is why the wording below repeats the bands in each language.
 
 ## Wording: luxury and branded vessels
 
