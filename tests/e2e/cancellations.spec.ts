@@ -24,6 +24,7 @@ let res: string[] = [];
 let refs: string[] = [];
 let departureId = "";
 let cabinTypeId = "";
+let vesselId = "";
 const mine = (i: number) => `/dashboard/journey/reservations/${res[i]}/`;
 
 async function adminPage(browser: Browser) {
@@ -48,16 +49,17 @@ test.beforeAll(async ({ request }) => {
     refs,
     departureId,
     cabinTypeId,
+    vesselId,
   } = await sampleReservations({
     run: RUN,
     customer,
     ownerEmail: OWNER,
     bands: STANDARD,
     departsIn: 75,
-    count: 2,
+    count: 3,
   }));
-  // Both paid in full by card, through signed webhooks as Stripe would send them.
-  for (const [i, id] of res.entries()) {
+  // The first two paid in full by card, through signed webhooks as Stripe would send them; the third stays unpaid.
+  for (const [i, id] of res.slice(0, 2).entries()) {
     const ev = paidCheckoutEvent(id, 200000, "usd", `${RUN}-c${i}`);
     const r = await request.post("/api/stripe/webhook/", {
       data: ev.payload,
@@ -167,6 +169,54 @@ test("a request can be withdrawn, and refused only with a reason [DASH-CUS-010, 
   await expect(page.getByText(/Nilecruz’s note: The guests have already boarded/)).toBeVisible();
   const { data: r } = await adminDb().from("reservations").select("status").eq("id", res[1]!).single();
   expect(r!.status).toBe("confirmed");
+});
+
+test("finance admins keep the bank details; customers paying by transfer see them with their reference [CONTENT-NEEDED #5]", async ({
+  page,
+  browser,
+}) => {
+  const admin = await adminPage(browser);
+  await admin.goto("/dashboard/admin/finance/#bank");
+  const form = admin.locator("form", { has: admin.getByRole("button", { name: "Save bank details" }) });
+  await form.getByLabel("Account holder").fill("Sample Holder Ltd");
+  await form.getByRole("textbox", { name: /^Bank/ }).fill("Sample Bank");
+  await form.getByLabel("SWIFT / BIC").fill("SAMPLEXX");
+  await form.getByLabel("IBAN").fill("");
+  await form.getByRole("button", { name: "Save bank details" }).click();
+  await expect(admin.getByText(/Bank details saved/)).toBeVisible();
+
+  await signIn(page, customer.email, customer.password);
+  await page.goto(mine(2));
+  const pay = page.locator("section", { has: page.getByRole("heading", { name: "Pay" }) });
+  await expect(pay.getByText("Sample Holder Ltd")).toBeVisible();
+  await expect(pay.getByText("SAMPLEXX")).toBeVisible();
+  await expect(pay.getByText("IBAN")).toHaveCount(0);
+  await expect(pay.getByText(refs[2]!, { exact: true })).toBeVisible();
+  await expect(page.getByText(/Draft wording: ask Nilecruz/)).toHaveCount(0);
+});
+
+test("an operator starts from the Nilecruz standard cancellation policy [CONTENT-NEEDED #4]", async ({ browser }) => {
+  const op = await (await browser.newContext()).newPage();
+  await signIn(op, OWNER);
+  await op.goto(`/dashboard/operator/${ORG.operatorA}/cabins/${vesselId}/`);
+  await expect(op.getByText("(suggested for this vessel)")).toBeVisible();
+  await op.getByRole("link", { name: "Luxury and branded vessels" }).click();
+  await expect(op.getByText(/Filled in with the standard policy for luxury and branded vessels/)).toBeVisible();
+  await expect(op.getByLabel("Band 1: days before departure")).toHaveValue("181");
+  await op.getByRole("button", { name: "Save policy" }).click();
+  await expect(op.getByText(/Cancellation policy saved/)).toBeVisible();
+  const { data } = await adminDb()
+    .from("cancellation_policies")
+    .select("bands")
+    .eq("vessel_id", vesselId)
+    .is("schedule_id", null)
+    .single();
+  expect(data!.bands).toEqual([
+    { from_days: 181, percent: 0 },
+    { from_days: 121, percent: 15 },
+    { from_days: 91, percent: 50 },
+    { from_days: 0, percent: 100 },
+  ]);
 });
 
 test.describe("cancellation screens are accessible", () => {
