@@ -29,6 +29,8 @@ export async function handleStripeWebhook(rawBody: string, signature: string): P
     return { status: 200, body: { received: true, ignored: event.type } };
   }
   const session = event.data.object as Stripe.Checkout.Session;
+  // Tour orders are their own payments (DASH-PAY-014): never mixed with a cruise reservation.
+  if (session.metadata?.tour_order_id) return handleTourPayment(session, event.id);
   const reservationId = session.metadata?.reservation_id;
   // "complete" isn't "paid": some methods settle later and send async_payment_succeeded.
   if (!reservationId || session.payment_status !== "paid" || !session.payment_intent) {
@@ -109,6 +111,75 @@ export async function issueStripeRefunds(
       console.error("card refund not recorded", { cancellation: cancellationId, refund: refundId, error: error.message });
       return `Stripe issued refund ${refundId}, but it couldn't be recorded here. Record it as a manual refund with that reference.`;
     }
+  }
+  return null;
+}
+
+/** DATA-027: a tour order paid by card. Late, cancelled or mismatched payments go straight back. */
+async function handleTourPayment(session: Stripe.Checkout.Session, eventId: string): Promise<WebhookOutcome> {
+  const orderId = session.metadata!.tour_order_id!;
+  if (session.payment_status !== "paid" || !session.payment_intent)
+    return { status: 200, body: { received: true, pending: true } };
+  const intent = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent.id;
+  const amount = session.amount_total ?? 0;
+  const currency = (session.currency ?? "").toUpperCase();
+  const db = getAdminDb();
+  const { data, error } = await db.rpc("service_tour_payment", {
+    target: orderId,
+    session_id: session.id,
+    intent,
+    amount,
+    cur: currency,
+  });
+  if (error?.code === "P0002" || error?.code === "22P02") {
+    console.error("stripe webhook: unknown tour order", { order: orderId, intent, event: eventId });
+    return { status: 200, body: { received: true, ignored: "unknown_tour_order" } };
+  }
+  if (error) return { status: 500, body: { error: "record_failed" } }; // Stripe retries
+  if (data === "refund") {
+    const stripe = getStripe();
+    if (!stripe) return { status: 500, body: { error: "refund_needed_but_stripe_not_configured" } };
+    const refund = await stripe.refunds.create({ payment_intent: intent }, { idempotencyKey: `late-tour-${intent}` });
+    await db.rpc("service_tour_refunded", {
+      target: orderId,
+      session_id: session.id,
+      intent,
+      refund: refund.id,
+      amount,
+      cur: currency,
+    });
+    return { status: 200, body: { received: true, refunded: true } };
+  }
+  return { status: 200, body: { received: true, result: data } };
+}
+
+/** DASH-PAY-014: refund an approved tour cancellation to the card. Returns null when done, or what went wrong. */
+export async function issueTourRefund(
+  orderId: string,
+  payment: { id: string; intent: string },
+  amountMinor: number,
+): Promise<string | null> {
+  const stripe = getStripe();
+  if (!stripe) return "Card refunds aren't switched on: there's no Stripe key. Record a manual refund instead.";
+  let refundId: string;
+  try {
+    const refund = await stripe.refunds.create(
+      { payment_intent: payment.intent, amount: amountMinor, metadata: { tour_order_id: orderId } },
+      { idempotencyKey: `tour-cancel-${orderId}-${payment.id}-${amountMinor}` },
+    );
+    refundId = refund.id;
+  } catch (e) {
+    return `Stripe refused the refund: ${e instanceof Error ? e.message : "unknown error"}. Nothing was recorded.`;
+  }
+  const { error } = await getAdminDb().rpc("service_record_tour_refund", {
+    target: orderId,
+    pay: payment.id,
+    amount: amountMinor,
+    refund: refundId,
+  });
+  if (error) {
+    console.error("tour refund not recorded", { order: orderId, refund: refundId, error: error.message });
+    return `Stripe issued refund ${refundId}, but it couldn't be recorded here. Record it as a manual refund with that reference.`;
   }
   return null;
 }

@@ -17,6 +17,7 @@ begin
     ('00000000-0000-4000-a000-000000000007'::uuid, 'content@nilecruz.test',      'Sample Content Admin'),
     ('00000000-0000-4000-a000-000000000008'::uuid, 'bookings@nilecruz.test',     'Sample Bookings Admin'),
     ('00000000-0000-4000-a000-000000000009'::uuid, 'refunds@nilecruz.test',      'Sample Refunds Admin'),
+    ('00000000-0000-4000-a000-00000000000a'::uuid, 'orders@nilecruz.test',       'Sample Tour Orders Admin'),
     ('00000000-0000-4000-a000-000000000010'::uuid, 'owner@operator-a.test',      'Sample Operator A Owner'),
     ('00000000-0000-4000-a000-000000000011'::uuid, 'reservations@operator-a.test','Sample Operator A Reservations'),
     ('00000000-0000-4000-a000-000000000012'::uuid, 'finance@operator-a.test',    'Sample Operator A Finance'),
@@ -47,6 +48,7 @@ update public.profiles set platform_role = 'admin', admin_role = 'catalogue' whe
 update public.profiles set platform_role = 'admin', admin_role = 'content' where id = '00000000-0000-4000-a000-000000000007';
 update public.profiles set platform_role = 'admin', admin_role = 'finance' where id = '00000000-0000-4000-a000-000000000008';
 update public.profiles set platform_role = 'admin', admin_role = 'finance' where id = '00000000-0000-4000-a000-000000000009';
+update public.profiles set platform_role = 'admin', admin_role = 'finance' where id = '00000000-0000-4000-a000-00000000000a';
 
 insert into public.organisations (id, kind, status, display_name) values
   ('00000000-0000-4000-b000-000000000001', 'nilecruz', 'approved', 'Nilecruz'),
@@ -100,5 +102,6 @@ values
   ('00000000-0000-4000-a100-000000000006', '00000000-0000-4000-a000-000000000006', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
   ('00000000-0000-4000-a100-000000000007', '00000000-0000-4000-a000-000000000007', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
   ('00000000-0000-4000-a100-000000000008', '00000000-0000-4000-a000-000000000008', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
-  ('00000000-0000-4000-a100-000000000009', '00000000-0000-4000-a000-000000000009', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
+  ('00000000-0000-4000-a100-000000000009', '00000000-0000-4000-a000-000000000009', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP'),
+  ('00000000-0000-4000-a100-00000000000a', '00000000-0000-4000-a000-00000000000a', 'Test authenticator', 'totp', 'verified', now(), now(), 'JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP');
 

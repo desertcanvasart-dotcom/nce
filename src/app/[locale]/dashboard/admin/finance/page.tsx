@@ -5,6 +5,8 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Input, Notice, Section, Select, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireAdmin } from "@/server/auth";
+import { adminTourOrders } from "@/server/tours/orders";
+import { TOUR_CANCEL, TOUR_ORDER_BADGE } from "../../_bookings/TourOrderBits";
 import { approvedOperators } from "@/server/catalogue/queries";
 import { bankDetails, cancellationQueue, financeQueue, payables, premiumPeriods } from "@/server/payments/queries";
 import { CANCELLATION_STATUS, OPERATOR_REVIEW } from "@/lib/payments/cancellation";
@@ -21,13 +23,14 @@ const CURRENCIES = [
 /** DASH-ADM-097–103, 106, DATA-037, 043: payments, receipts, commission, payables, payouts, premium calendar. */
 export default async function FinancePage() {
   await requireAdmin(["finance"], "/dashboard/admin/finance/");
-  const [q, owed, operators, periods, cancellations, bank] = await Promise.all([
+  const [q, owed, operators, periods, cancellations, bank, tourOrders] = await Promise.all([
     financeQueue(),
     payables(),
     approvedOperators(),
     premiumPeriods(),
     cancellationQueue(),
     bankDetails(),
+    adminTourOrders(),
   ]);
 
   return (
@@ -95,6 +98,37 @@ export default async function FinancePage() {
         ) : (
           <p className={ui.muted}>No cancellation requests or refunds waiting.</p>
         )}
+      </Section>
+
+      <Section title={`Tour orders (${tourOrders.waiting.length} waiting)`} id="tour-orders">
+        <p className={ui.muted}>Nilecruz’s own sales, paid by card and kept apart from cruise payments: no commission.</p>
+        {tourOrders.waiting.length ? (
+          <ul className={ui.list}>
+            {tourOrders.waiting.map((o) => (
+              <li key={o.id}>
+                <Link href={`/dashboard/admin/finance/tour-orders/${o.id}/`}>{o.reference}</Link> · {o.tour?.name} ·{" "}
+                {o.cancel_state ? TOUR_CANCEL[o.cancel_state] : ""}
+                {o.refundLeft > 0 ? ` · still to refund ${money(o.refundLeft, o.currency)}` : ""}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={ui.muted}>No tour cancellations or refunds waiting.</p>
+        )}
+        {tourOrders.latest.length ? (
+          <details>
+            <summary>Latest tour orders</summary>
+            <ul className={ui.list}>
+              {tourOrders.latest.map((o) => (
+                <li key={o.id}>
+                  <Link href={`/dashboard/admin/finance/tour-orders/${o.id}/`}>{o.reference}</Link> · {o.tour?.name} ·{" "}
+                  {money(o.total_minor, o.currency)}{" "}
+                  <Badge tone={TOUR_ORDER_BADGE[o.status].tone}>{TOUR_ORDER_BADGE[o.status].text}</Badge>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : null}
       </Section>
 
       <Section title="Past the deadline, held for review" id="review">

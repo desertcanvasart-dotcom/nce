@@ -2313,6 +2313,218 @@ export type Database = {
           },
         ];
       };
+      tour_orders: {
+        Row: {
+          ages: number[];
+          cancel_charge_minor: number | null;
+          cancel_days_before: number | null;
+          cancel_decided_at: string | null;
+          cancel_decided_by: string | null;
+          cancel_note: string | null;
+          cancel_percent: number | null;
+          cancel_reason: string | null;
+          cancel_refund_minor: number | null;
+          cancel_requested_on: string | null;
+          cancel_state: Database["public"]["Enums"]["tour_cancel_state"] | null;
+          cancelled_at: string | null;
+          cancelled_reason: string | null;
+          created_at: string;
+          currency: string;
+          customer_id: string;
+          hold_until: string;
+          id: string;
+          lead_name: string;
+          notes: string | null;
+          policy: Json;
+          reference: string;
+          session_id: string;
+          status: Database["public"]["Enums"]["tour_order_status"];
+          total_minor: number;
+          tour_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          ages: number[];
+          cancel_charge_minor?: number | null;
+          cancel_days_before?: number | null;
+          cancel_decided_at?: string | null;
+          cancel_decided_by?: string | null;
+          cancel_note?: string | null;
+          cancel_percent?: number | null;
+          cancel_reason?: string | null;
+          cancel_refund_minor?: number | null;
+          cancel_requested_on?: string | null;
+          cancel_state?: Database["public"]["Enums"]["tour_cancel_state"] | null;
+          cancelled_at?: string | null;
+          cancelled_reason?: string | null;
+          created_at?: string;
+          currency: string;
+          customer_id: string;
+          hold_until: string;
+          id?: string;
+          lead_name: string;
+          notes?: string | null;
+          policy: Json;
+          reference: string;
+          session_id: string;
+          status?: Database["public"]["Enums"]["tour_order_status"];
+          total_minor: number;
+          tour_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          ages?: number[];
+          cancel_charge_minor?: number | null;
+          cancel_days_before?: number | null;
+          cancel_decided_at?: string | null;
+          cancel_decided_by?: string | null;
+          cancel_note?: string | null;
+          cancel_percent?: number | null;
+          cancel_reason?: string | null;
+          cancel_refund_minor?: number | null;
+          cancel_requested_on?: string | null;
+          cancel_state?: Database["public"]["Enums"]["tour_cancel_state"] | null;
+          cancelled_at?: string | null;
+          cancelled_reason?: string | null;
+          created_at?: string;
+          currency?: string;
+          customer_id?: string;
+          hold_until?: string;
+          id?: string;
+          lead_name?: string;
+          notes?: string | null;
+          policy?: Json;
+          reference?: string;
+          session_id?: string;
+          status?: Database["public"]["Enums"]["tour_order_status"];
+          total_minor?: number;
+          tour_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_orders_session_id_fkey";
+            columns: ["session_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_sessions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tour_orders_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_payments: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          id: string;
+          note: string | null;
+          order_id: string;
+          receipt_number: string | null;
+          status: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id: string;
+          stripe_refund_id: string | null;
+          stripe_session_id: string | null;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency: string;
+          id?: string;
+          note?: string | null;
+          order_id: string;
+          receipt_number?: string | null;
+          status: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id: string;
+          stripe_refund_id?: string | null;
+          stripe_session_id?: string | null;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          id?: string;
+          note?: string | null;
+          order_id?: string;
+          receipt_number?: string | null;
+          status?: Database["public"]["Enums"]["payment_status"];
+          stripe_payment_intent_id?: string;
+          stripe_refund_id?: string | null;
+          stripe_session_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_payments_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_orders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_refunds: {
+        Row: {
+          amount_minor: number;
+          created_at: string;
+          currency: string;
+          how: string | null;
+          id: string;
+          method: Database["public"]["Enums"]["refund_method"];
+          order_id: string;
+          payment_id: string;
+          recorded_by: string | null;
+          reference: string | null;
+          stripe_refund_id: string | null;
+        };
+        Insert: {
+          amount_minor: number;
+          created_at?: string;
+          currency: string;
+          how?: string | null;
+          id?: string;
+          method: Database["public"]["Enums"]["refund_method"];
+          order_id: string;
+          payment_id: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+          stripe_refund_id?: string | null;
+        };
+        Update: {
+          amount_minor?: number;
+          created_at?: string;
+          currency?: string;
+          how?: string | null;
+          id?: string;
+          method?: Database["public"]["Enums"]["refund_method"];
+          order_id?: string;
+          payment_id?: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+          stripe_refund_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_refunds_order_id_fkey";
+            columns: ["order_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_orders";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tour_refunds_payment_id_fkey";
+            columns: ["payment_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_payments";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tour_schedules: {
         Row: {
           schedule_id: string;
@@ -2879,11 +3091,25 @@ export type Database = {
         };
         Returns: undefined;
       };
+      decide_tour_cancellation: {
+        Args: { approve: boolean; note?: string; target: string };
+        Returns: undefined;
+      };
       departure_bookable: { Args: { dep: string }; Returns: boolean };
       discard_inventory_paste: { Args: { run: string }; Returns: undefined };
       generate_departures: {
         Args: { horizon?: string; target: string };
         Returns: number;
+      };
+      order_tour: {
+        Args: {
+          guest_ages: number[];
+          lead: string;
+          order_notes: string;
+          sess: string;
+          terms_read: boolean;
+        };
+        Returns: string;
       };
       preview_inventory_paste: {
         Args: { input: Json; label?: string; target_org: string };
@@ -2916,6 +3142,10 @@ export type Database = {
         };
         Returns: string;
       };
+      record_tour_manual_refund: {
+        Args: { amount: number; how: string; ref: string; target: string };
+        Returns: undefined;
+      };
       reject_submission: {
         Args: { note: string; target: string };
         Returns: undefined;
@@ -2941,6 +3171,10 @@ export type Database = {
       };
       request_submission_changes: {
         Args: { note: string; target: string };
+        Returns: undefined;
+      };
+      request_tour_cancellation: {
+        Args: { policy_read: boolean; target: string; why: string };
         Returns: undefined;
       };
       reservation_balance: {
@@ -3040,6 +3274,32 @@ export type Database = {
         Args: { amount: number; pay: string; refund: string; target: string };
         Returns: undefined;
       };
+      service_record_tour_refund: {
+        Args: { amount: number; pay: string; refund: string; target: string };
+        Returns: undefined;
+      };
+      service_tour_payment: {
+        Args: {
+          amount: number;
+          cur: string;
+          intent: string;
+          session_id: string;
+          target: string;
+        };
+        Returns: string;
+      };
+      service_tour_refunded: {
+        Args: {
+          amount: number;
+          cur: string;
+          intent: string;
+          refund: string;
+          session_id: string;
+          target: string;
+        };
+        Returns: undefined;
+      };
+      session_places_left: { Args: { sess: string }; Returns: number };
       stripe_refund_plan: {
         Args: { target: string };
         Returns: {
@@ -3050,6 +3310,16 @@ export type Database = {
         }[];
       };
       submit_submission: { Args: { target: string }; Returns: undefined };
+      tour_cancel_quote: {
+        Args: { target: string };
+        Returns: {
+          charge_minor: number;
+          days_before: number;
+          paid_minor: number;
+          percent: number;
+          refund_minor: number;
+        }[];
+      };
       tour_is_bookable: { Args: { target: string }; Returns: boolean };
       verify_payment: {
         Args: {
@@ -3111,7 +3381,9 @@ export type Database = {
       submission_event: "created" | "edited" | "submitted" | "changes_requested" | "approved" | "rejected";
       submission_status: "draft" | "submitted" | "changes_requested" | "approved" | "rejected";
       team_role: "owner" | "reservations" | "finance" | "viewer";
+      tour_cancel_state: "requested" | "refused" | "approved";
       tour_kind: "museum_visit" | "excursion" | "evening_tour" | "transfer" | "other";
+      tour_order_status: "awaiting_payment" | "confirmed" | "cancelled";
       vessel_category: "basic" | "standard" | "superior" | "deluxe" | "luxury";
       vessel_type: "sail" | "motor" | "steam";
       visibility: "private" | "showcase" | "published";
@@ -3270,7 +3542,9 @@ export const Constants = {
       submission_event: ["created", "edited", "submitted", "changes_requested", "approved", "rejected"],
       submission_status: ["draft", "submitted", "changes_requested", "approved", "rejected"],
       team_role: ["owner", "reservations", "finance", "viewer"],
+      tour_cancel_state: ["requested", "refused", "approved"],
       tour_kind: ["museum_visit", "excursion", "evening_tour", "transfer", "other"],
+      tour_order_status: ["awaiting_payment", "confirmed", "cancelled"],
       vessel_category: ["basic", "standard", "superior", "deluxe", "luxury"],
       vessel_type: ["sail", "motor", "steam"],
       visibility: ["private", "showcase", "published"],

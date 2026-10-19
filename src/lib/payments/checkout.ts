@@ -38,3 +38,39 @@ export function checkoutParams(r: {
     cancel_url: base,
   };
 }
+
+/** DATA-027: Stripe Checkout for a tour order, payable until its 60-minute hold ends (at least Stripe's 30 minutes). */
+export function tourCheckoutParams(o: {
+  orderId: string;
+  reference: string;
+  tourName: string;
+  startsLabel: string;
+  totalMinor: number;
+  currency: string;
+  customerEmail: string;
+  siteUrl: string;
+  nowSeconds: number;
+  holdUntilSeconds: number;
+}) {
+  const base = `${o.siteUrl.replace(/\/$/, "")}/dashboard/journey/tours/${o.orderId}/`;
+  return {
+    mode: "payment" as const,
+    customer_email: o.customerEmail,
+    client_reference_id: o.orderId,
+    metadata: { tour_order_id: o.orderId, reference: o.reference },
+    payment_intent_data: { metadata: { tour_order_id: o.orderId, reference: o.reference } },
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: o.currency.toLowerCase(),
+          unit_amount: o.totalMinor,
+          product_data: { name: `Tour order ${o.reference}`, description: `${o.tourName}, ${o.startsLabel}` },
+        },
+      },
+    ],
+    expires_at: Math.max(o.holdUntilSeconds, o.nowSeconds + 30 * 60),
+    success_url: `${base}?paid=1`,
+    cancel_url: base,
+  };
+}

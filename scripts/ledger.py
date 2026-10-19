@@ -828,6 +828,12 @@ STATUS.update({
  "DASH-ADM-105": ("Verified", B4F2A+'refunds table: each refund against the payment it gives back, method, Stripe id or how/reference, who recorded it; audited (170, e2e)'),
  "DATA-029": ("Verified", B4F2A+'refunds only after a finance admin approves, never more than is due (stripe_refund_plan, service_record_stripe_refund; 170); Stripe refunds per card payment with idempotency keys, manual refunds for the rest; checked live against the Stripe sandbox: US$1,300 refund succeeded, recorded once, request closed, commission net 10 % of the charge'),
 })
+B4F2C = "Batch 4f-2c (19 Oct 2026): "
+STATUS.update({
+ "DASH-PAY-014": ("Verified", B4F2C+'tour orders have their own table, amount, terms snapshot, payments and refunds (tour_orders, tour_payments, tour_refunds); a tour payment never touches a reservation (190: no cruise payment or commission from a tour; unit: tour Checkout carries no reservation id); cancellation by the tour\'s own bands, decided by a finance admin (190, e2e)'),
+ "DATA-027": ("Verified", B4F2C+'tour orders paid by card through Stripe Checkout as separate payments, recorded only from the signed webhook, once (190, e2e); checked live against the Stripe sandbox: US$200 paid on Checkout, the real event recorded once, order confirmed with a receipt, no cruise payment'),
+ "DATA-041": ("Verified", B4F2C+'tour orders are Nilecruz\'s own sales: no operator payable and no commission entry (190; e2e checks no cruise payment row)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

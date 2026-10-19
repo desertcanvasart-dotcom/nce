@@ -8,7 +8,7 @@ import { requireAdmin } from "@/server/auth";
 import { failed, formObject, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
-import { issueStripeRefunds } from "@/server/payments/stripe";
+import { issueStripeRefunds, issueTourRefund } from "@/server/payments/stripe";
 
 /**
  * Finance (DASH-ADM-097–103, 106, DATA-037, 043). Finance and super admins only; the database checks the same.
@@ -199,4 +199,60 @@ export async function saveBankDetails(_prev: ActionState, fd: FormData): Promise
   if (error) return connectionProblem(error);
   revalidatePath(PAGE);
   return saved("Bank details saved. Customers see them when they pay by transfer.");
+}
+
+// ── Tour orders (DASH-PAY-014): Nilecruz's own sales, so a finance admin decides and refunds ─────────────────
+const tourOrderPage = (id: string) => `/dashboard/admin/finance/tour-orders/${id}/`;
+
+export async function decideTourCancellation(orderId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin([...FIN], tourOrderPage(orderId));
+  const decision = String(fd.get("decision") ?? "");
+  if (decision !== "approve" && decision !== "reject") return failed("Choose approve or refuse.");
+  const db = await getDb();
+  const { error } = await db.rpc("decide_tour_cancellation", {
+    target: orderId,
+    approve: decision === "approve",
+    note: String(fd.get("note") ?? "").trim() || undefined,
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(tourOrderPage(orderId));
+  revalidatePath(PAGE);
+  return saved(decision === "approve" ? "Approved. Now issue the refund." : "Refused. The customer sees your reason.");
+}
+
+export async function issueTourCardRefund(orderId: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
+  await requireAdmin([...FIN], tourOrderPage(orderId));
+  const db = await getDb();
+  const { data: o } = await db
+    .from("tour_orders")
+    .select("cancel_state, cancel_refund_minor, tour_payments(id, status, stripe_payment_intent_id), tour_refunds(amount_minor)")
+    .eq("id", orderId)
+    .maybeSingle();
+  if (!o || o.cancel_state !== "approved") return failed("No refund is due on this order.");
+  const left = Number(o.cancel_refund_minor ?? 0) - o.tour_refunds.reduce((n, r) => n + Number(r.amount_minor), 0);
+  const pay = o.tour_payments.find((p) => p.status === "verified");
+  if (left <= 0 || !pay) return failed("Nothing is left to refund.");
+  const problem = await issueTourRefund(orderId, { id: pay.id, intent: pay.stripe_payment_intent_id }, left);
+  if (problem) return failed(problem);
+  revalidatePath(tourOrderPage(orderId));
+  revalidatePath(PAGE);
+  return saved("Refund issued through Stripe.");
+}
+
+export async function recordTourManualRefund(orderId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin([...FIN], tourOrderPage(orderId));
+  const f = formObject(fd);
+  const amount = priceToMinor(String(f.amount ?? "").replace(/,/g, ""));
+  if (amount === null) return failed("Give the amount refunded.");
+  const db = await getDb();
+  const { error } = await db.rpc("record_tour_manual_refund", {
+    target: orderId,
+    amount,
+    how: String(f.how ?? ""),
+    ref: String(f.ref ?? ""),
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(tourOrderPage(orderId));
+  revalidatePath(PAGE);
+  return saved("Refund recorded. Recording it doesn't move money.");
 }

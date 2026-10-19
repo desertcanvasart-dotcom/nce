@@ -23,3 +23,24 @@ export function paidCheckoutEvent(reservationId: string, amountMinor: number, cu
   });
   return { payload, signature: Stripe.webhooks.generateTestHeaderString({ payload, secret: STRIPE_WEBHOOK_TEST_SECRET }) };
 }
+
+/** A paid Checkout event for a tour order (DATA-027), signed with the test secret. */
+export function paidTourEvent(orderId: string, amountMinor: number, currency: string, id = `${Date.now()}`) {
+  const payload = JSON.stringify({
+    id: `evt_test_tour_${id}`,
+    object: "event",
+    type: "checkout.session.completed",
+    data: {
+      object: {
+        id: `cs_test_tour_${id}`,
+        object: "checkout.session",
+        payment_status: "paid",
+        payment_intent: `pi_test_tour_${id}`,
+        amount_total: amountMinor,
+        currency: currency.toLowerCase(),
+        metadata: { tour_order_id: orderId },
+      },
+    },
+  });
+  return { payload, signature: Stripe.webhooks.generateTestHeaderString({ payload, secret: STRIPE_WEBHOOK_TEST_SECRET }) };
+}
