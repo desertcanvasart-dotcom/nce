@@ -30,6 +30,8 @@ export default defineConfig({
       FEED_PULL_SECRET: FEED_PULL_TEST_SECRET,
       // No Stripe key in tests: card checkout says it's off, and tests sign webhooks themselves (no Stripe network).
       STRIPE_WEBHOOK_SECRET: STRIPE_WEBHOOK_TEST_SECRET,
+      // Empty overrides a sandbox key in .env.local, so local runs match CI.
+      STRIPE_SECRET_KEY: "",
     },
   },
 });
