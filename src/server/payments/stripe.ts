@@ -68,3 +68,47 @@ export async function handleStripeWebhook(rawBody: string, signature: string): P
   }
   return { status: 200, body: { received: true, result: data } };
 }
+
+type RefundPart = { payment_id: string; payment_intent: string; amount_minor: number };
+
+/**
+ * DATA-029: refunds an approved cancellation to the card, part by part, and records each one (service role, after the
+ * caller's finance-admin plan). Returns null when done, or what went wrong in plain words.
+ */
+export async function issueStripeRefunds(
+  reservationId: string,
+  cancellationId: string,
+  plan: RefundPart[],
+): Promise<string | null> {
+  const stripe = getStripe();
+  if (!stripe) return "Card refunds aren't switched on: there's no Stripe key. Record a manual refund instead.";
+  const db = getAdminDb();
+  for (const part of plan) {
+    let refundId: string;
+    try {
+      const refund = await stripe.refunds.create(
+        {
+          payment_intent: part.payment_intent,
+          amount: Number(part.amount_minor),
+          metadata: { reservation_id: reservationId, cancellation_id: cancellationId },
+        },
+        // The same part always gets the same key, so a retried click can't refund twice.
+        { idempotencyKey: `cancel-${cancellationId}-${part.payment_id}-${part.amount_minor}` },
+      );
+      refundId = refund.id;
+    } catch (e) {
+      return `Stripe refused the refund: ${e instanceof Error ? e.message : "unknown error"}. Nothing was recorded.`;
+    }
+    const { error } = await db.rpc("service_record_stripe_refund", {
+      target: cancellationId,
+      pay: part.payment_id,
+      amount: Number(part.amount_minor),
+      refund: refundId,
+    });
+    if (error) {
+      console.error("card refund not recorded", { cancellation: cancellationId, refund: refundId, error: error.message });
+      return `Stripe issued refund ${refundId}, but it couldn't be recorded here. Record it as a manual refund with that reference.`;
+    }
+  }
+  return null;
+}

@@ -7,7 +7,7 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 1 | Logo file (name confirmed: Nilecruz, ADR-022) | 1 | Wordmark until a logo exists |
 | 2 | The 28 evaluation criteria and the 7 weights, confirmed | 4b | Q12. `nilecrz` has a draft |
 | 3 | Real vessel list to publish, with operator confirmation | 3 / 5 | Q26. Repo data stays private until confirmed |
-| 4 | Cancellation policy wording and bands per operator/cruise | 4f | From operators |
+| 4 | Cancellation policy wording and bands per operator/cruise | 4f | Bands supplied 19 Oct 2026 (luxury/branded and other vessels); EN wording and ES/JA drafts in `docs/drafts/cruise-cancellation-policies.md`, awaiting native review |
 | 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Legal/finance |
 | 6 | ~~Commission and Stripe model~~ Supplied: 10%, Nilecruz merchant of record (ADR-026); tours rate open (Q54) | 4f | Q54 |
 | 7 | Eligibility rules and wording for Egyptian-citizen and resident rates | 4c | Q20 |

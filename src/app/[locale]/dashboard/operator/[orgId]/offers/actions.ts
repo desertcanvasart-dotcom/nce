@@ -181,3 +181,28 @@ export async function sendReminder(
   if (error) return connectionProblem(error);
   return saved("Reminder sent. The customer sees it in My journey.");
 }
+
+/** DASH-OPR-015: the operator confirms or contests the cancellation figures. Nilecruz decides and refunds (ADR-089). */
+export async function reviewCancellation(
+  orgId: string,
+  reservationId: string,
+  cancellationId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const page = `/dashboard/operator/${orgId}/bookings/${reservationId}/`;
+  await requireOrgRole(orgId, ["owner", "reservations", "finance"], { kind: "operator", returnTo: page });
+  const verdict = String(fd.get("verdict") ?? "");
+  if (verdict !== "confirmed" && verdict !== "contested") return failed("Choose whether the figures are right.");
+  const db = await getDb();
+  const { error } = await db.rpc("review_cancellation", {
+    target: cancellationId,
+    agree: verdict === "confirmed",
+    review_note: String(fd.get("note") ?? "").trim() || undefined,
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(page);
+  return saved(
+    verdict === "confirmed" ? "Figures confirmed. Nilecruz decides the cancellation." : "Sent to Nilecruz with your note.",
+  );
+}

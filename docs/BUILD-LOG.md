@@ -609,3 +609,94 @@
   - after a restart, start Docker, then `supabase stop --no-backup && supabase start`;
   - the Railway CLI is signed out (`railway login` is Faris's to run);
   - the ledger script needs `/usr/local/bin/python3` (it has openpyxl).
+
+## 19 Oct 2026 · Batch 4f-1 merged; Stripe sandbox; Batch 4f-2a · Cancellation and refunds
+
+**4f-1:** Faris approved it, and PR #15 was merged; staging deployed it. A follow-up fix, PR #16, was also merged: a Stripe webhook for a reservation this database doesn't have now gets 200 and is logged. One sandbox serves both local and staging, and these used to return 500 and be retried for days.
+
+**Stripe sandbox (Faris, 19 Oct):**
+- The account is registered in Spain, with euros by default. It can charge E£, US$ and €.
+- Its secret key is in `.env.local` and in Railway's staging variables.
+- A staging webhook endpoint was created through the API for `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Its signing secret is in Railway.
+- **Checked locally against the real sandbox:** the app's "Pay the balance by card" opens Stripe Checkout, and test card 4242 pays. Stripe's real event, passed to the local webhook, was recorded once and the duplicate ignored. The reservation was confirmed, and a receipt and commission entry were created.
+- The e2e server now ignores a key in `.env.local`, so local runs match CI.
+
+**Decisions from Faris on 19 Oct (memory and `docs/drafts/`, not yet built):**
+- **Cancellation bands:** luxury and branded vessels (Sonesta, Mövenpick, Oberoi, Historia, Solai, Mayfair) are charged 0 / 15 / 50 / 100 % from 181 / 121 / 91 / 0 days. Other vessels are charged 0 / 25 / 35 / 50 / 100 % from 121 / 91 / 60 / 30 / 0 days. The EN wording is drafted; ES and JA drafts await a native speaker.
+- **Bank transfer details:** Online Era (provisional), Emirates NBD, the account number and SWIFT code. The IBAN and the account's currency are still to come. They will be kept as a finance-admin setting.
+- **Tours:** content comes from nilecruz.com/tours. Meet and Assist and airport transfers come out of the sightseeing programs and are sold separately; transfers are private only, and the other tours are sold private and shared.
+- **Sailing time of day:** morning, noon or evening, especially from Aswan. To be proposed for a later batch.
+- **Open question:** Faris's accountant is looking at whether Nilecruz should act as an agent rather than the seller (Stripe Connect can't make Egyptian operators the seller). If so, receipts, terms and the "payables" wording change; the money flow can stay.
+
+### Batch 4f-2a: cancellation requests and refunds (branch `batch-04f-2-cancellations`, migration `20261019000100_cancellations`)
+
+**Built:**
+- **The calculation** (`app.cancellation_quote`, mirrored in `src/lib/payments/cancellation.ts`):
+  - from the bands accepted at booking and the Cairo days before departure on the day the request arrives;
+  - gives the charge (a share of the whole price, rounded half up), the refund (paid beyond the charge) and any charge still unpaid.
+- **Customer:**
+  - sees what cancelling today would cost, in words;
+  - asks to cancel after ticking the policy, with an optional reason, and can withdraw while it's undecided;
+  - follows the request through "requested", "refund being issued" and "cancelled", with each refund listed.
+- **Operator (ADR-089):**
+  - confirms the figures, or contests them with a note;
+  - can't decide or refund.
+- **Finance or super admin with two-step:**
+  - approves or refuses on the booking record; a refusal needs a reason, which the customer sees;
+  - approving cancels the reservation and returns its cabins. The charge stays as quoted, and the refund is refreshed against what has been received by then.
+  - **Refunds:** "Refund to the card through Stripe" covers card payments, up to what is due, with idempotency keys. "Record a manual refund" covers the rest (how and reference).
+  - Each refund is stored against the payment it gives back, with a proportional commission and payable reversal.
+  - The request closes when everything due has been given back.
+- **Queue:** "Cancellations and refunds" on Deposits and commission, plus an overview counter (it replaces the "arrives with 4f" placeholder).
+- **Other changes:**
+  - the release job leaves a reservation with an open request for the admin;
+  - the balance now shows what was refunded.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` is clean, with 261 unit tests. New unit tests cover every band edge of the luxury and standard bands (181/180, 121/120, 91/90, 60/59, 30/29, 0), refusal after departure, refunds, unpaid charges and rounding.
+- **Database:** pgTAP passes, 17 files and 275 checks. The new `170_cancellations` has 31 checks:
+  - the quote at 75 days (35 %);
+  - another customer gets no quote;
+  - the policy must be acknowledged;
+  - one open request per reservation, and withdrawal;
+  - the operator confirms, and contesting needs a note;
+  - customers, operators and admins without two-step can't decide;
+  - approval cancels and returns the cabin;
+  - no Stripe plan for a transfer, and a manual refund can't exceed what is due;
+  - closing, and commission net 10 % of the charge;
+  - the card refund plan, Stripe refunds recordable by the service role only, never more than due, and a repeat changes nothing.
+- **End-to-end:** `cancellations.spec.ts`:
+  - ask → operator contests without a note (refused), then confirms → admin approves → the cabin is back;
+  - the card refund says it's off with no key → manual refund → commission 7 000 / payable 63 000 → the customer sees the refund and the notice;
+  - withdraw, then refuse with a reason;
+  - axe on 6 screens in Day and Night.
+- **Live Stripe refund against the real sandbox, run locally:**
+  1. the customer paid by card on Stripe's sandbox Checkout (test card 4242), and the real event was recorded;
+  2. the customer asked to cancel, and the `refunds@` admin approved with two-step;
+  3. "Refund to the card through Stripe" created a US$1,300 refund that Stripe reports as **succeeded**, with our reservation and request ids in its metadata.
+
+  It was recorded once, the request closed, and commission nets 7 000 against 63 000 payable. **DATA-029 is Verified.**
+- **Full suites on a clean database:** e2e 129 passed, 97 skipped, none flaky (8.7 min); pgTAP 17 files, 275 checks.
+- **Screenshots:** 48 in `docs/screenshots/batch-04f/` (prefix `4f2-`), at 375, 768 and 1440 px, Day and Night:
+  - customer: the quote and form, a request waiting, and cancelled and refunded;
+  - operator: the review form;
+  - admin: the overview counter, the finance queue, the decision form, and a refund due with both refund forms.
+
+  Fixed after review: a cancelled reservation no longer shows "Pay in full by" or the deadline rule.
+- **Test set-up:**
+  - a new local finance admin, `refunds@nilecruz.test`, is used by the cancellation tests. Two workers signing one admin in with the same two-step code made runs flaky.
+  - `tests/support/sailing.ts` sets up a sample sailing with reservations.
+
+**Notes:**
+- The customer's cancellation form, the operator's review and the admin's decision disappear once used; the outcome is then read from the panel (as in ADR-076).
+- With the sample bands the policy text reads "Cancelled less than 30 days before departure: 100 % charged". The real standard policy will show the same once entered.
+- **Local machine:** Docker Desktop has 3.8 GB. Running two heavy jobs at once (a full check during the e2e suite) stopped Docker and caused auth timeouts. Run the suites one at a time.
+
+**Next:**
+1. Faris reviews the 4f-2a PR.
+2. **4f-2b:**
+   - tour orders paid separately (DASH-PAY-014, DATA-027, 041);
+   - the 7 tours from nilecruz.com, with Meet and Assist and airport transfers sold separately, transfers private only;
+   - the bank details as a finance-admin setting (#5);
+   - the two standard cancellation policies as presets.
+3. **Waiting on Faris:** the accountant's answer on the agent model; the bank account's currency and IBAN; tour prices and dates; ES/JA review of `docs/drafts/cruise-cancellation-policies.md`.

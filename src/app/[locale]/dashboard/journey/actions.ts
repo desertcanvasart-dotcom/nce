@@ -242,3 +242,33 @@ export async function reportTransfer(reservationId: string, _prev: ActionState, 
   revalidatePath(`/dashboard/journey/reservations/${reservationId}/`);
   return saved("Thank you. Nilecruz checks the transfer and confirms it here; until then it shows as reported.");
 }
+
+// ── Cancelling (DASH-CUS-010, DASH-PAY-011–013) ───────────────────────────────────────────────────────────
+export async function requestCancellation(reservationId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`/dashboard/journey/reservations/${reservationId}/`);
+  const f = formObject(fd, ["policy"]);
+  if (!(f.policy as string[]).includes("yes")) return failed("Tick that you have read the cancellation policy and the charge.");
+  const db = await getDb();
+  const { error } = await db.rpc("request_cancellation", {
+    res: reservationId,
+    why: String(f.reason ?? "").slice(0, 1000),
+    policy_read: true,
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(`/dashboard/journey/reservations/${reservationId}/`);
+  return saved("Cancellation requested. The operator checks the figures and Nilecruz confirms it here.");
+}
+
+export async function withdrawCancellation(
+  reservationId: string,
+  cancellationId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  await requireUser(`/dashboard/journey/reservations/${reservationId}/`);
+  const db = await getDb();
+  const { error } = await db.rpc("withdraw_cancellation", { target: cancellationId });
+  if (error) return connectionProblem(error);
+  revalidatePath(`/dashboard/journey/reservations/${reservationId}/`);
+  return saved("Request withdrawn. Your reservation stays as it was.");
+}

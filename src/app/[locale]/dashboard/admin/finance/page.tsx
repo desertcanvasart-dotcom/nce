@@ -6,7 +6,8 @@ import { Input, Notice, Section, Select, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireAdmin } from "@/server/auth";
 import { approvedOperators } from "@/server/catalogue/queries";
-import { financeQueue, payables, premiumPeriods } from "@/server/payments/queries";
+import { cancellationQueue, financeQueue, payables, premiumPeriods } from "@/server/payments/queries";
+import { CANCELLATION_STATUS, OPERATOR_REVIEW } from "@/lib/payments/cancellation";
 import { PAYMENT_BADGE } from "../../_bookings/PaymentPanel";
 import { decidePayment, deletePeriod, recordManualPayment, recordPayout, savePeriod } from "./actions";
 
@@ -20,7 +21,13 @@ const CURRENCIES = [
 /** DASH-ADM-097–103, 106, DATA-037, 043: payments, receipts, commission, payables, payouts, premium calendar. */
 export default async function FinancePage() {
   await requireAdmin(["finance"], "/dashboard/admin/finance/");
-  const [q, owed, operators, periods] = await Promise.all([financeQueue(), payables(), approvedOperators(), premiumPeriods()]);
+  const [q, owed, operators, periods, cancellations] = await Promise.all([
+    financeQueue(),
+    payables(),
+    approvedOperators(),
+    premiumPeriods(),
+    cancellationQueue(),
+  ]);
 
   return (
     <>
@@ -68,6 +75,24 @@ export default async function FinancePage() {
           </ul>
         ) : (
           <p className={ui.muted}>Nothing to verify.</p>
+        )}
+      </Section>
+
+      <Section title={`Cancellations and refunds (${cancellations.length})`} id="cancellations">
+        {cancellations.length ? (
+          <ul className={ui.list}>
+            {cancellations.map((c) => (
+              <li key={c.id}>
+                <Link href={`/dashboard/admin/bookings/${c.reservation?.id}/#cancellation`}>{c.reservation?.reference}</Link> (
+                {c.reservation?.org?.display_name}) · requested {c.requested_on}, {c.days_before} days before departure ·{" "}
+                {c.percent} % charge · refund {money(c.refund_minor, c.currency)}{" "}
+                <Badge tone={CANCELLATION_STATUS[c.status].tone}>{CANCELLATION_STATUS[c.status].text}</Badge>
+                {c.status === "requested" ? <span className={ui.muted}> {OPERATOR_REVIEW[c.operator_review]}.</span> : null}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={ui.muted}>No cancellation requests or refunds waiting.</p>
         )}
       </Section>
 

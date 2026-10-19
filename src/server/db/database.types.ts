@@ -290,6 +290,92 @@ export type Database = {
           },
         ];
       };
+      cancellation_requests: {
+        Row: {
+          charge_minor: number;
+          created_at: string;
+          currency: string;
+          days_before: number;
+          decided_at: string | null;
+          decided_by: string | null;
+          decision_note: string | null;
+          id: string;
+          operator_note: string | null;
+          operator_review: Database["public"]["Enums"]["operator_review"];
+          operator_reviewed_at: string | null;
+          operator_reviewed_by: string | null;
+          paid_minor: number;
+          percent: number;
+          reason: string | null;
+          refund_minor: number;
+          requested_by: string | null;
+          requested_on: string;
+          reservation_id: string;
+          status: Database["public"]["Enums"]["cancellation_status"];
+          total_minor: number;
+          unpaid_charge_minor: number;
+          updated_at: string;
+        };
+        Insert: {
+          charge_minor: number;
+          created_at?: string;
+          currency: string;
+          days_before: number;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          decision_note?: string | null;
+          id?: string;
+          operator_note?: string | null;
+          operator_review?: Database["public"]["Enums"]["operator_review"];
+          operator_reviewed_at?: string | null;
+          operator_reviewed_by?: string | null;
+          paid_minor: number;
+          percent: number;
+          reason?: string | null;
+          refund_minor: number;
+          requested_by?: string | null;
+          requested_on: string;
+          reservation_id: string;
+          status?: Database["public"]["Enums"]["cancellation_status"];
+          total_minor: number;
+          unpaid_charge_minor: number;
+          updated_at?: string;
+        };
+        Update: {
+          charge_minor?: number;
+          created_at?: string;
+          currency?: string;
+          days_before?: number;
+          decided_at?: string | null;
+          decided_by?: string | null;
+          decision_note?: string | null;
+          id?: string;
+          operator_note?: string | null;
+          operator_review?: Database["public"]["Enums"]["operator_review"];
+          operator_reviewed_at?: string | null;
+          operator_reviewed_by?: string | null;
+          paid_minor?: number;
+          percent?: number;
+          reason?: string | null;
+          refund_minor?: number;
+          requested_by?: string | null;
+          requested_on?: string;
+          reservation_id?: string;
+          status?: Database["public"]["Enums"]["cancellation_status"];
+          total_minor?: number;
+          unpaid_charge_minor?: number;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "cancellation_requests_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       commission_entries: {
         Row: {
           base_minor: number;
@@ -1852,6 +1938,73 @@ export type Database = {
           },
         ];
       };
+      refunds: {
+        Row: {
+          amount_minor: number;
+          cancellation_id: string;
+          created_at: string;
+          currency: string;
+          how: string | null;
+          id: string;
+          method: Database["public"]["Enums"]["refund_method"];
+          payment_id: string;
+          recorded_by: string | null;
+          reference: string | null;
+          reservation_id: string;
+          stripe_refund_id: string | null;
+        };
+        Insert: {
+          amount_minor: number;
+          cancellation_id: string;
+          created_at?: string;
+          currency: string;
+          how?: string | null;
+          id?: string;
+          method: Database["public"]["Enums"]["refund_method"];
+          payment_id: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+          reservation_id: string;
+          stripe_refund_id?: string | null;
+        };
+        Update: {
+          amount_minor?: number;
+          cancellation_id?: string;
+          created_at?: string;
+          currency?: string;
+          how?: string | null;
+          id?: string;
+          method?: Database["public"]["Enums"]["refund_method"];
+          payment_id?: string;
+          recorded_by?: string | null;
+          reference?: string | null;
+          reservation_id?: string;
+          stripe_refund_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "refunds_cancellation_id_fkey";
+            columns: ["cancellation_id"];
+            isOneToOne: false;
+            referencedRelation: "cancellation_requests";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "refunds_payment_id_fkey";
+            columns: ["payment_id"];
+            isOneToOne: false;
+            referencedRelation: "payments";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "refunds_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       reservation_cabins: {
         Row: {
           adults: number;
@@ -2695,12 +2848,28 @@ export type Database = {
         Args: { new_slug?: string; target: string };
         Returns: string;
       };
+      cancellation_quote: {
+        Args: { res: string };
+        Returns: {
+          charge_minor: number;
+          days_before: number;
+          paid_minor: number;
+          percent: number;
+          refund_minor: number;
+          total_minor: number;
+          unpaid_charge_minor: number;
+        }[];
+      };
       create_api_key: {
         Args: { key_label: string; key_public: string; target_org: string };
         Returns: {
           id: string;
           key_id: string;
         }[];
+      };
+      decide_cancellation: {
+        Args: { approve: boolean; note?: string; target: string };
+        Returns: Database["public"]["Enums"]["cancellation_status"];
       };
       decide_inventory_feed: {
         Args: {
@@ -2730,6 +2899,10 @@ export type Database = {
           res: string;
         };
         Returns: string;
+      };
+      record_manual_refund: {
+        Args: { amount: number; how: string; ref: string; target: string };
+        Returns: undefined;
       };
       record_payout: {
         Args: {
@@ -2762,6 +2935,10 @@ export type Database = {
         };
         Returns: string;
       };
+      request_cancellation: {
+        Args: { policy_read: boolean; res: string; why: string };
+        Returns: string;
+      };
       request_submission_changes: {
         Args: { note: string; target: string };
         Returns: undefined;
@@ -2773,9 +2950,14 @@ export type Database = {
           outstanding_minor: number;
           paid_minor: number;
           payment_due_at: string;
+          refunded_minor: number;
           reported_minor: number;
           total_minor: number;
         }[];
+      };
+      review_cancellation: {
+        Args: { agree: boolean; review_note?: string; target: string };
+        Returns: undefined;
       };
       review_eligibility_proof: {
         Args: {
@@ -2853,6 +3035,19 @@ export type Database = {
         Args: { feed: string; problem: string };
         Returns: undefined;
       };
+      service_record_stripe_refund: {
+        Args: { amount: number; pay: string; refund: string; target: string };
+        Returns: undefined;
+      };
+      stripe_refund_plan: {
+        Args: { target: string };
+        Returns: {
+          amount_minor: number;
+          currency: string;
+          payment_id: string;
+          payment_intent: string;
+        }[];
+      };
       submit_submission: { Args: { target: string }; Returns: undefined };
       tour_is_bookable: { Args: { target: string }; Returns: boolean };
       verify_payment: {
@@ -2873,6 +3068,7 @@ export type Database = {
           vessel_id: string;
         }[];
       };
+      withdraw_cancellation: { Args: { target: string }; Returns: undefined };
       withdraw_offer: { Args: { target: string }; Returns: undefined };
     };
     Enums: {
@@ -2888,6 +3084,7 @@ export type Database = {
         | "value"
         | "traditional_character"
         | "contemporary_design";
+      cancellation_status: "requested" | "withdrawn" | "rejected" | "refund_due" | "closed";
       commission_kind: "payment" | "reversal";
       departure_status: "scheduled" | "cancelled";
       evaluation_verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
@@ -2895,6 +3092,7 @@ export type Database = {
       inventory_run_status: "previewed" | "applied" | "discarded" | "failed";
       inventory_source: "manual" | "paste" | "feed" | "api";
       offer_status: "sent" | "superseded" | "withdrawn" | "accepted" | "closed";
+      operator_review: "pending" | "confirmed" | "contested";
       org_kind: "operator" | "partner" | "nilecruz";
       org_status: "applied" | "approved" | "paused" | "rejected";
       payment_method: "card" | "transfer" | "manual";
@@ -2904,6 +3102,7 @@ export type Database = {
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
       proof_status: "submitted" | "verified" | "rejected";
       rate_plan: "international" | "egyptian_citizen" | "foreign_resident" | "trade";
+      refund_method: "stripe" | "manual";
       request_status: "open" | "accepted" | "closed";
       reservation_status: "awaiting_payment" | "confirmed" | "cancelled";
       safety_status: "open" | "under_review" | "resolved";
@@ -3044,6 +3243,7 @@ export const Constants = {
         "traditional_character",
         "contemporary_design",
       ],
+      cancellation_status: ["requested", "withdrawn", "rejected", "refund_due", "closed"],
       commission_kind: ["payment", "reversal"],
       departure_status: ["scheduled", "cancelled"],
       evaluation_verdict: ["recommended", "recommended_with_reservations", "not_recommended"],
@@ -3051,6 +3251,7 @@ export const Constants = {
       inventory_run_status: ["previewed", "applied", "discarded", "failed"],
       inventory_source: ["manual", "paste", "feed", "api"],
       offer_status: ["sent", "superseded", "withdrawn", "accepted", "closed"],
+      operator_review: ["pending", "confirmed", "contested"],
       org_kind: ["operator", "partner", "nilecruz"],
       org_status: ["applied", "approved", "paused", "rejected"],
       payment_method: ["card", "transfer", "manual"],
@@ -3060,6 +3261,7 @@ export const Constants = {
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],
       proof_status: ["submitted", "verified", "rejected"],
       rate_plan: ["international", "egyptian_citizen", "foreign_resident", "trade"],
+      refund_method: ["stripe", "manual"],
       request_status: ["open", "accepted", "closed"],
       reservation_status: ["awaiting_payment", "confirmed", "cancelled"],
       safety_status: ["open", "under_review", "resolved"],

@@ -6,8 +6,9 @@ import { requireOrgRole } from "@/server/auth";
 import { reservation } from "@/server/bookings/queries";
 import { ReservationRecord } from "../../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../../sections";
-import { reviewProof, sendReminder } from "../../offers/actions";
-import { balance, paymentsFor } from "@/server/payments/queries";
+import { reviewCancellation, reviewProof, sendReminder } from "../../offers/actions";
+import { balance, cancellationsFor, paymentsFor, refundsFor } from "@/server/payments/queries";
+import { CancellationPanel } from "../../../../_bookings/CancellationPanel";
 import { PaymentPanel } from "../../../../_bookings/PaymentPanel";
 
 const PROOF = { submitted: "Waiting for your check", verified: "Verified", rejected: "Not accepted" } as const;
@@ -24,7 +25,12 @@ export default async function OperatorBooking({ params }: { params: Promise<{ or
   if (!r || r.org_id !== orgId) notFound();
   const canReview = company.teamRole === "owner" || company.teamRole === "reservations";
   const local = r.rate_plan === "egyptian_citizen" || r.rate_plan === "foreign_resident";
-  const [bal, pays] = await Promise.all([balance(r.id), paymentsFor(r.id)]);
+  const [bal, pays, requests, refunds] = await Promise.all([
+    balance(r.id),
+    paymentsFor(r.id),
+    cancellationsFor(r.id),
+    refundsFor(r.id),
+  ]);
   const canRemind = company.teamRole !== "viewer";
 
   return (
@@ -42,6 +48,29 @@ export default async function OperatorBooking({ params }: { params: Promise<{ or
         />
       ) : null}
       <p className={ui.muted}>Payments are received and recorded by Nilecruz; you see their status here.</p>
+      <CancellationPanel
+        requests={requests}
+        refunds={refunds}
+        actions={(c) =>
+          canRemind && c.status === "requested" && c.operator_review === "pending" ? (
+            <ActionForm action={reviewCancellation.bind(null, orgId, r.id, c.id)} submit="Send to Nilecruz" variant="outline">
+              <div className={ui.grid}>
+                <Select
+                  label="Are the figures right?"
+                  name="verdict"
+                  required
+                  placeholder="Choose"
+                  options={[
+                    { value: "confirmed", label: "Yes, confirm them" },
+                    { value: "contested", label: "No, contest them" },
+                  ]}
+                />
+                <Input label="Note to Nilecruz" name="note" maxLength={1000} hint="Required when contesting." />
+              </div>
+            </ActionForm>
+          ) : null
+        }
+      />
       <ReservationRecord r={r} />
       {local ? (
         <Section title="Proof of eligibility" id="proof">

@@ -130,3 +130,57 @@ export async function payoutsFor(orgId: string) {
   const { data } = await db.from("payouts").select("*").eq("org_id", orgId).order("paid_on", { ascending: false });
   return data ?? [];
 }
+
+// ── Cancellations and refunds (Batch 4f-2a: DASH-PAY-011, 012, DASH-ADM-005, 095, 104, 105) ─────────────────
+export async function cancellationsFor(reservationId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("cancellation_requests")
+    .select("*")
+    .eq("reservation_id", reservationId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function refundsFor(reservationId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("refunds")
+    .select("id, cancellation_id, method, amount_minor, currency, how, reference, created_at")
+    .eq("reservation_id", reservationId)
+    .order("created_at");
+  if (error) throw error;
+  return data ?? [];
+}
+
+/** What cancelling today would cost; null once the sailing has left. */
+export async function cancellationQuote(reservationId: string) {
+  const db = await getDb();
+  const { data, error } = await db.rpc("cancellation_quote", { res: reservationId });
+  if (error) return null;
+  return data?.[0] ?? null;
+}
+
+/** Admin queue: requests waiting for a decision, and approved ones whose refund isn't all given back. */
+export async function cancellationQueue() {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("cancellation_requests")
+    .select(
+      "id, status, requested_on, days_before, percent, currency, charge_minor, refund_minor, operator_review, reservation:reservations(id, reference, org:organisations(display_name))",
+    )
+    .in("status", ["requested", "refund_due"])
+    .order("created_at");
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function openCancellationCount() {
+  const db = await getDb();
+  const { count } = await db
+    .from("cancellation_requests")
+    .select("id", { count: "exact", head: true })
+    .in("status", ["requested", "refund_due"]);
+  return count ?? 0;
+}
