@@ -59,7 +59,7 @@ export function ReservationRecord({ r }: { r: Res }) {
           </div>
           <div>
             <dt className={ui.label}>Payment</dt>
-            <dd>{r.status === "awaiting_payment" ? "Awaiting payment (see Payment above)" : RESERVATION_BADGE[r.status].text}</dd>
+            <dd>{r.status === "awaiting_payment" ? "Not paid yet (see Payment above)" : RESERVATION_BADGE[r.status].text}</dd>
           </div>
         </dl>
         {r.gratuity_usd_minor ? (
