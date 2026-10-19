@@ -183,3 +183,20 @@ export async function recordManualRefund(
   revalidatePath(PAGE);
   return saved("Refund recorded. Recording it doesn't move money; it notes a refund made outside the system.");
 }
+
+const BANK_FIELDS = ["holder", "bank", "account_number", "iban", "swift", "currency", "note"] as const;
+
+/** CONTENT-NEEDED #5: what customers see when paying by transfer. Kept as a setting: the repository is public. */
+export async function saveBankDetails(_prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin([...FIN], PAGE);
+  const details: Record<string, string> = {};
+  for (const k of BANK_FIELDS) {
+    const v = String(fd.get(k) ?? "").trim();
+    if (v) details[k] = v;
+  }
+  const db = await getDb();
+  const { error } = await db.rpc("save_bank_details", { details });
+  if (error) return connectionProblem(error);
+  revalidatePath(PAGE);
+  return saved("Bank details saved. Customers see them when they pay by transfer.");
+}

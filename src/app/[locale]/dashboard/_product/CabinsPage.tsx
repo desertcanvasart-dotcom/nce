@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ActionForm } from "@/components/dashboard/ActionForm";
-import { Checkboxes, Input, Section, TextArea, ui } from "@/components/dashboard/ui";
+import { Checkboxes, Input, Notice, Section, TextArea, ui } from "@/components/dashboard/ui";
+import { STANDARD_POLICIES, suggestedPolicy, type PolicyPreset } from "@/lib/payments/policies";
 import { formatMoney } from "@/components/ds/lib/format";
 import { requireProductEditor } from "@/server/product/guard";
 import { cabinTypes } from "@/server/product/queries";
@@ -12,7 +13,16 @@ import { productPaths } from "./paths";
 export const DECKS = ["Lower", "Middle", "Upper"];
 
 /** DASH-ADM-048–050, DATA-015, DATA-023: a vessel's cabin types by deck, and its crew gratuity. */
-export async function CabinsPage({ orgId, vesselId }: { orgId: string | null; vesselId: string }) {
+export async function CabinsPage({
+  orgId,
+  vesselId,
+  preset,
+}: {
+  orgId: string | null;
+  vesselId: string;
+  /** Start the policy form from a Nilecruz standard policy (?preset=luxury|standard). */
+  preset?: string;
+}) {
   const p = productPaths(orgId, vesselId);
   const { vessel } = await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
   const cabins = await cabinTypes(vesselId);
@@ -23,8 +33,11 @@ export async function CabinsPage({ orgId, vesselId }: { orgId: string | null; ve
     .eq("vessel_id", vesselId)
     .is("schedule_id", null)
     .maybeSingle();
-  const bands = (policy?.bands as CancellationBand[] | undefined) ?? [];
-  const policyText = (l: string) => policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "";
+  const chosen = preset === "luxury" || preset === "standard" ? STANDARD_POLICIES[preset as PolicyPreset] : null;
+  const bands = chosen?.bands ?? (policy?.bands as CancellationBand[] | undefined) ?? [];
+  const policyText = (l: string) =>
+    chosen && l === "en" ? chosen.en : (policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "");
+  const suggested = suggestedPolicy(vessel.name);
   const decks = [...new Set(cabins.map((c) => c.deck))];
   return (
     <>
@@ -59,7 +72,27 @@ export async function CabinsPage({ orgId, vesselId }: { orgId: string | null; ve
           A sailing can be booked only with a policy. For each band: cancelled this many days or more before departure, this share
           of the price is charged. Include a band from 0 days.
         </p>
-        <ActionForm action={savePolicy.bind(null, orgId, vesselId)} submit="Save policy" variant="outline">
+        <p>
+          Start from a Nilecruz standard policy:{" "}
+          {(["luxury", "standard"] as const).map((k, i) => (
+            <span key={k}>
+              {i ? " · " : ""}
+              <Link href={`?preset=${k}#policy`}>{STANDARD_POLICIES[k].label}</Link>
+              {k === suggested ? " (suggested for this vessel)" : ""}
+            </span>
+          ))}
+        </p>
+        {chosen ? (
+          <Notice>
+            Filled in with the standard policy for {chosen.label.toLowerCase()}. Nothing is saved yet: check it, then save.
+          </Notice>
+        ) : null}
+        <ActionForm
+          key={chosen ? `preset-${preset}` : "saved"}
+          action={savePolicy.bind(null, orgId, vesselId)}
+          submit="Save policy"
+          variant="outline"
+        >
           {[...bands, ...Array(Math.max(0, 6 - bands.length)).fill(null)]
             .slice(0, 6)
             .map((b: CancellationBand | null, i: number) => (

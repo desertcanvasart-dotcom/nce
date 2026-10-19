@@ -6,10 +6,10 @@ import { Input, Notice, Section, Select, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireAdmin } from "@/server/auth";
 import { approvedOperators } from "@/server/catalogue/queries";
-import { cancellationQueue, financeQueue, payables, premiumPeriods } from "@/server/payments/queries";
+import { bankDetails, cancellationQueue, financeQueue, payables, premiumPeriods } from "@/server/payments/queries";
 import { CANCELLATION_STATUS, OPERATOR_REVIEW } from "@/lib/payments/cancellation";
 import { PAYMENT_BADGE } from "../../_bookings/PaymentPanel";
-import { decidePayment, deletePeriod, recordManualPayment, recordPayout, savePeriod } from "./actions";
+import { decidePayment, deletePeriod, recordManualPayment, recordPayout, saveBankDetails, savePeriod } from "./actions";
 
 const money = (m: number, c: string) => formatMoney({ amount: Number(m), currency: c }, "en");
 const CURRENCIES = [
@@ -21,12 +21,13 @@ const CURRENCIES = [
 /** DASH-ADM-097–103, 106, DATA-037, 043: payments, receipts, commission, payables, payouts, premium calendar. */
 export default async function FinancePage() {
   await requireAdmin(["finance"], "/dashboard/admin/finance/");
-  const [q, owed, operators, periods, cancellations] = await Promise.all([
+  const [q, owed, operators, periods, cancellations, bank] = await Promise.all([
     financeQueue(),
     payables(),
     approvedOperators(),
     premiumPeriods(),
     cancellationQueue(),
+    bankDetails(),
   ]);
 
   return (
@@ -215,6 +216,30 @@ export default async function FinancePage() {
         ) : (
           <p className={ui.muted}>No payments yet.</p>
         )}
+      </Section>
+
+      <Section title="Bank details for transfers" id="bank">
+        <p className={ui.muted}>
+          What customers see when they pay by bank transfer. Kept here rather than in the code, so they can change without a
+          release. Leave a field empty to hide it.
+        </p>
+        <ActionForm action={saveBankDetails} submit="Save bank details" variant="outline">
+          <div className={ui.grid}>
+            <Input label="Account holder" name="holder" required maxLength={300} defaultValue={bank?.holder} />
+            <Input label="Bank" name="bank" required maxLength={300} defaultValue={bank?.bank} />
+            <Input label="Account number" name="account_number" maxLength={300} defaultValue={bank?.account_number} />
+            <Input label="IBAN" name="iban" maxLength={300} defaultValue={bank?.iban} />
+            <Input label="SWIFT / BIC" name="swift" maxLength={300} defaultValue={bank?.swift} />
+            <Input
+              label="Account currency"
+              name="currency"
+              maxLength={300}
+              defaultValue={bank?.currency}
+              hint="For example “US$ and €”."
+            />
+          </div>
+          <Input label="Note to customers" name="note" maxLength={300} defaultValue={bank?.note} />
+        </ActionForm>
       </Section>
 
       <Section title="Premium calendar" id="premium">

@@ -700,3 +700,41 @@
    - the bank details as a finance-admin setting (#5);
    - the two standard cancellation policies as presets.
 3. **Waiting on Faris:** the accountant's answer on the agent model; the bank account's currency and IBAN; tour prices and dates; ES/JA review of `docs/drafts/cruise-cancellation-policies.md`.
+
+### Batch 4f-2b: bank details, standard policies, the tours from nilecruz.com (branch `batch-04f-2b-tours`, stacked on 4f-2a; migration `20261019000200_bank_details_transfers`)
+
+**Split:** tour orders move to **4f-2c**. Until there are prices and dates, they'd sell nothing; the live site shows "Rates coming soon" for all seven.
+
+**Built:**
+- **Bank details for transfers (CONTENT-NEEDED #5):**
+  - finance admins enter them under Deposits and commission → Bank details: holder, bank, account number, IBAN, SWIFT, account currency, note (`save_bank_details`, which accepts only known fields);
+  - customers paying by transfer see them, with their reservation reference as the payment reference;
+  - until they're entered, the page says to ask Nilecruz.
+  - **The repository is public, so the details are never in the code or the seed.** Faris's details are to be entered on staging and production by a finance admin.
+- **Standard cancellation policies (CONTENT-NEEDED #4):**
+  - the Cabins page offers "Start from a Nilecruz standard policy: Luxury and branded vessels · All other vessels". The vessel's name suggests one: Sonesta, Mövenpick (with or without the accent), Oberoi, Historia, Solai or Mayfair as a whole word means luxury.
+  - The preset fills the bands and an English paragraph; nothing is saved until the operator or admin saves.
+  - The ES/JA drafts stay out of the app until a native speaker reviews them.
+- **Tours (CONTENT-NEEDED #39):**
+  - `docs/imports/nilecruz-tours.json` holds the 7 tours from nilecruz.com/tours, with Faris's 19 Oct rules applied:
+    - the two sightseeing programs start at embarkation and end at the ship, with no meet and assist and no airport transfers (now "sold separately" under not included);
+    - in the airport transfers the driver waits with your name, and meet and assist is sold separately;
+    - excursions say "guide and vehicle", since they will be sold private and shared.
+  - Added: "Meet and Assist: Aswan Airport" and "… Luxor Airport", with wording marked as a draft.
+  - `pnpm import:tours` checks the file (the import refuses meet and assist or airport transfers in a program, and a transfer without "private"). `--apply --target=local|staging` inserts the tours as **private drafts**, never overwriting an existing slug. Production is refused.
+  - The tours stay unbookable until an admin adds a supplier, bands and sessions.
+  - **Staging import:** to be run with the staging service key once Faris approves.
+- **Airport transfers are private only:** a trigger refuses a shared session for a tour of kind "transfer".
+
+**Verified, and how:**
+- **Unit:** 14 new tests: the import file is valid; programs exclude meet and assist and transfers; transfers private; bad slugs, durations and duplicates are refused; both presets are valid band sets; the luxury suggestion for 9 names, including accents and a near-miss ("Solaire").
+- **pgTAP:** the new `180_bank_transfers` has 9 checks: customers and catalogue admins can't change the bank details; only known fields; holder and bank required; a finance admin saves and changes them; customers read them; a shared transfer session is refused and a private one accepted.
+- **End-to-end** (`cancellations.spec.ts`, which runs serially with its own admin):
+  - a finance admin saves bank details, and the customer of an unpaid reservation sees the holder, bank and SWIFT, no empty IBAN, and their reference;
+  - the operator sees the suggestion, applies the luxury preset (band 1 = 181) and saves it, and the database holds exactly the four luxury bands.
+- **Import, run locally:** a dry run, then `--apply --target=local` inserted 9 tours; a second run inserted 0.
+- **Screenshots:** 24 in `docs/screenshots/batch-04f/` (prefix `4f2b-`): the customer's Pay section with bank details, the finance page with the bank form, the operator's Cabins page with the luxury preset, and the admin tours list with the 9 drafts.
+
+**For Faris:**
+1. **Unpaid reservations:** on an unpaid reservation, the cancel section correctly applies the policy ("US$700 of the charge would still be owed"). If unpaid reservations should simply be released without a charge, say so.
+2. **Transfers wording:** in the transfers, the driver waiting with a name sign is part of the transfer. "Meet and assist" (a representative through the airport) is the separate product.

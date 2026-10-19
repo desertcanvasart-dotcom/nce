@@ -184,3 +184,12 @@ export async function openCancellationCount() {
     .in("status", ["requested", "refund_due"]);
   return count ?? 0;
 }
+
+// ── Bank-transfer details (CONTENT-NEEDED #5): a finance-admin setting, never in the code ───────────────────
+export type BankDetails = Partial<Record<"holder" | "bank" | "account_number" | "iban" | "swift" | "currency" | "note", string>>;
+
+export async function bankDetails(): Promise<BankDetails | null> {
+  const db = await getDb();
+  const { data } = await db.from("platform_settings").select("value").eq("key", "bank_transfer").maybeSingle();
+  return (data?.value as BankDetails | undefined) ?? null;
+}

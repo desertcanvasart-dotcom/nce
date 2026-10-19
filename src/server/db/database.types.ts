@@ -2968,6 +2968,7 @@ export type Database = {
         Returns: undefined;
       };
       revoke_api_key: { Args: { target: string }; Returns: undefined };
+      save_bank_details: { Args: { details: Json }; Returns: undefined };
       save_inventory_feed: {
         Args: { feed_url: string; target_org: string };
         Returns: undefined;
