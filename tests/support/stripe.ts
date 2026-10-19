@@ -1,0 +1,25 @@
+import Stripe from "stripe";
+
+/** A test-only webhook secret for the local e2e server. Real Stripe secrets live only in Railway and .env.local. */
+export const STRIPE_WEBHOOK_TEST_SECRET = "whsec_e2e_local_only_not_a_stripe_secret";
+
+/** A checkout.session.completed event as Stripe would send it, signed with the test secret. */
+export function paidCheckoutEvent(reservationId: string, amountMinor: number, currency: string, id = `${Date.now()}`) {
+  const payload = JSON.stringify({
+    id: `evt_test_${id}`,
+    object: "event",
+    type: "checkout.session.completed",
+    data: {
+      object: {
+        id: `cs_test_${id}`,
+        object: "checkout.session",
+        payment_status: "paid",
+        payment_intent: `pi_test_${id}`,
+        amount_total: amountMinor,
+        currency: currency.toLowerCase(),
+        metadata: { reservation_id: reservationId },
+      },
+    },
+  });
+  return { payload, signature: Stripe.webhooks.generateTestHeaderString({ payload, secret: STRIPE_WEBHOOK_TEST_SECRET }) };
+}

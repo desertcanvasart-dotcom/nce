@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cairoOffsetHours, formatCairo } from "@/lib/time/cairo";
+import { cairoOffsetHours, formatCairo, formatCairoEndOfDay } from "@/lib/time/cairo";
 
 describe("Cairo time (DATA-003)", () => {
   it("shows winter time (UTC+2)", () => {
@@ -19,5 +19,10 @@ describe("Cairo time (DATA-003)", () => {
   it("can show the date alone, and refuses invalid input", () => {
     expect(formatCairo("2027-03-21T23:30:00Z", { time: false })).toBe("22 Mar 2027");
     expect(() => formatCairo("not a date")).toThrow(/Invalid date/);
+  });
+  it("shows a deadline at Cairo midnight as the end of the day before, winter and summer (ADR-027)", () => {
+    expect(formatCairoEndOfDay("2026-10-26T21:00:00Z")).toBe("end of 26 Oct 2026, Cairo");
+    expect(formatCairoEndOfDay("2027-07-14T21:00:00Z")).toBe("end of 14 Jul 2027, Cairo");
+    expect(() => formatCairoEndOfDay("not a date")).toThrow(/Invalid date/);
   });
 });

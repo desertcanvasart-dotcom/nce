@@ -531,3 +531,81 @@
 **Content needed:** CONTENT-NEEDED #4 (cruise cancellation policies) and #38 (eligibility wording). Until the policies are entered, real sailings stay unbookable.
 
 **Next:** Faris reviews the PR. Then Batch 4f (payments, deadlines, cancellation and commission) is briefed.
+
+## 18 Oct 2026 · Batch 4f-1 · Deadlines, payments, receipts, commission (first of two PRs, ADR-089)
+
+**Built** (branch `batch-04f-payments`; migration `20261018001100_payments`):
+- **Deadlines (ADR-027, DATA-039):**
+  - set by the database when a reservation is made, and frozen after that;
+  - 24 Dec–7 Jan and premium periods: 3 days; other October–April: 7; May–September: 14;
+  - never later than the end of the day before departure;
+  - Cairo calendar days, ending at Cairo midnight.
+  - Reservations made before this batch were given deadlines from their booking day.
+  - **Premium calendar:** finance admins edit it; Western Easter 2027 is seeded.
+- **Release:** an hourly job cancels unpaid reservations past their deadline and returns the cabins, except those with a reported payment awaiting verification, which wait in the admin queue.
+- **Paying:**
+  - customers pay the outstanding balance by card through Stripe Checkout (US$ or €), after ticking the policy again;
+  - or report a bank transfer with a private proof (the wording is a marked draft, CONTENT-NEEDED #5).
+  - Card payments are recorded only from signature-checked Stripe webhooks, once per payment intent; a payment that arrives for a reservation no longer waiting is refunded straight back.
+- **Admins (finance or super):**
+  - verify or reject reported payments; record manual payments (method, reference, approver);
+  - receipts NCR-YYYY-NNNNNN with a printable page;
+  - payouts to operators recorded as transfers made elsewhere;
+  - overview counter of payments awaiting verification.
+- **Commission and payables (ADR-026):**
+  - 10 % (a setting) of each received cruise payment, with the rest payable to the operator;
+  - reversal entries are ready for 4f-2 refunds;
+  - operator owners and finance see payables, payouts and balance, read-only.
+- **Operators (ADR-089):** see payment status and send reminders (one per 12 hours); they can't record money.
+
+**Verified, and how:**
+- **Static checks:** `pnpm verify` clean; 236 unit tests. New tests cover deadlines at every boundary (23/24 Dec, 7/8 Jan, 30 Apr/1 May, 30 Sep/1 Oct, premium first and last day, the day before departure, last-minute bookings, Cairo midnight in winter and summer), commission and proportional reversal, the release decision, Checkout parameters, and webhook signatures (valid, wrong secret, tampered, too old).
+- **Database:** 16 pgTAP files pass. The new `160_payments` has 30 checks:
+  - a deadline is set at booking and can't be rewritten; a new premium period doesn't change existing reservations;
+  - reports must be in the reservation's currency;
+  - verification is refused to customers, operators and admins without two-step;
+  - receipts, 10 % commission, part-payment and then confirmation;
+  - payouts; payables visible only to the operator's owners and finance;
+  - card payments only from the service role, a duplicate is ignored, a late payment is refunded;
+  - release returns the cabin.
+- **API tests:** 8 pass on a clean database.
+- **End-to-end:** 6 new tests in `payments.spec.ts`:
+  - card: the checkout button says cards are off without a key; a forged webhook gets 400; a signed webhook records the payment once; confirmed; receipt;
+  - a reported transfer is verified by a finance admin, and the operator sees the payable;
+  - operator reminders and the 12-hour limit, no record button, 403 on finance;
+  - premium period and payout;
+  - axe on 7 screens in Day and Night.
+
+  The tests passed twice in a row on one database.
+- **Full suite** (two workers, as in CI): all 125 passed.
+
+- **Screenshots:** 42 in `docs/screenshots/batch-04f/`, at 375, 768 and 1440 px, Day and Night: a customer's unpaid and paid reservation and a receipt; the operator's bookings with payables, and an unpaid booking with the reminder; Deposits and commission, and an admin receipt. Fixed after review:
+  - the deadline read "27 Oct 2026 00:00 Cairo", a day later than the last day to pay; it now reads "end of 26 Oct 2026, Cairo" (new unit test, winter and summer);
+  - the Sailing section still said "payment requests arrive with deadlines" under the new Payment panel; it now says "Not paid yet (see Payment above)".
+
+**Not verified until Faris adds Stripe test keys:** live Checkout (DATA-026, DATA-030 are "Built"). **Next:** 4f-2: cancellation and refunds, and tour orders.
+
+### Where we stopped (18 Oct 2026, paused at Faris's request)
+- **Branch:** `batch-04f-payments`, pushed. Everything below is committed. **No PR yet.**
+- **Done for 4f-1:**
+  - migration `20261018001100_payments`; deadline and commission logic; the Stripe webhook and Checkout;
+  - customer, operator and admin finance screens;
+  - pgTAP `160_payments`; e2e `payments.spec.ts`; ledger statuses; this entry.
+  - Checks: verify, 236 unit tests, 16 pgTAP files, API tests and the full e2e suite (125) all pass locally.
+- **Next, to finish 4f-1:**
+  1. Take screenshots into `docs/screenshots/batch-04f/`, at 375, 768 and 1440 px, Day and Night:
+     - customer: a reservation's payment panel (unpaid and paid) and a receipt;
+     - operator: bookings with payables, and a booking with the reminder;
+     - admin: Deposits and commission, and an admin receipt.
+
+     Use `pnpm with-local-db pnpm build`, then `ENABLE_DEV_ROUTES=true pnpm with-local-db pnpm start --port 3100`, then `pnpm screenshots --batch 04f --as <email> [--password …] --routes …`. Rename ids by exact string only; an earlier regex rename broke names.
+  2. Note the screenshots here, commit, open the PR "Batch 4f-1: Deadlines, payments, receipts, commission", wait for CI, and report to Faris.
+- **Then 4f-2** (after Faris approves 4f-1): cancellation requests and the calculation (DASH-PAY-011, 012, DASH-CUS-010, DASH-OPR-015), refunds approved by finance/super admins through Stripe or recorded as manual (DATA-029, DASH-ADM-095, 104, 105), commission reversals, the admin queue and counter (DASH-ADM-005), and tour orders paid separately (DASH-PAY-014, DATA-027, 041).
+- **Waiting on Faris:**
+  - Stripe test keys (secret key and webhook signing secret), plus the account's country and whether it can charge E£;
+  - CONTENT-NEEDED #4 (cruise cancellation policies), #5 (bank-transfer instructions), #38 (eligibility wording), #39–41 (tours);
+  - PROPOSED-016, 017, 018.
+- **Local machine notes:**
+  - after a restart, start Docker, then `supabase stop --no-backup && supabase start`;
+  - the Railway CLI is signed out (`railway login` is Faris's to run);
+  - the ledger script needs `/usr/local/bin/python3` (it has openpyxl).

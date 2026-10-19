@@ -1,5 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 import { ensureFeedCertificate, FEED_PULL_TEST_SECRET, FEED_TEST_ORIGIN, FEED_TLS } from "./tests/support/feed-tls";
+import { STRIPE_WEBHOOK_TEST_SECRET } from "./tests/support/stripe";
 
 const PORT = Number(process.env.E2E_PORT ?? 3100);
 ensureFeedCertificate();
@@ -27,6 +28,8 @@ export default defineConfig({
       NILECRUZ_FEED_TEST_ORIGINS: FEED_TEST_ORIGIN,
       NILECRUZ_FEED_TEST_CA: FEED_TLS.cert,
       FEED_PULL_SECRET: FEED_PULL_TEST_SECRET,
+      // No Stripe key in tests: card checkout says it's off, and tests sign webhooks themselves (no Stripe network).
+      STRIPE_WEBHOOK_SECRET: STRIPE_WEBHOOK_TEST_SECRET,
     },
   },
 });
