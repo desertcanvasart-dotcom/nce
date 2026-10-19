@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { cardPayable } from "@/lib/payments/checkout";
-import { balance, cancellationQuote, cancellationsFor, paymentsFor, refundsFor } from "@/server/payments/queries";
+import { balance, bankDetails, cancellationQuote, cancellationsFor, paymentsFor, refundsFor } from "@/server/payments/queries";
+import { BankDetails } from "../../../_bookings/BankDetails";
 import { formatMoney } from "@/components/ds/lib/format";
 import { CancellationPanel } from "../../../_bookings/CancellationPanel";
 import { PaymentPanel } from "../../../_bookings/PaymentPanel";
@@ -34,12 +35,13 @@ export default async function MyReservation({
   const r = await reservation(reservationId);
   if (!r || r.customer_id !== session.userId) notFound();
   const local = r.rate_plan === "egyptian_citizen" || r.rate_plan === "foreign_resident";
-  const [bal, pays, requests, refunds, quote] = await Promise.all([
+  const [bal, pays, requests, refunds, quote, bank] = await Promise.all([
     balance(r.id),
     paymentsFor(r.id),
     cancellationsFor(r.id),
     refundsFor(r.id),
     cancellationQuote(r.id),
+    bankDetails(),
   ]);
   const open = requests.find((c) => c.status === "requested" || c.status === "refund_due");
   const owing = r.status === "awaiting_payment" && !open && !!bal && bal.outstanding_minor > 0;
@@ -82,8 +84,7 @@ export default async function MyReservation({
             <p className={ui.muted}>Prices in E£ are paid by bank transfer for now.</p>
           )}
           <h3 className={ui.subTitle}>Paid by bank transfer?</h3>
-          {/* CONTENT-NEEDED #5: Faris's payment instructions replace this draft. */}
-          <Notice>Draft wording: ask Nilecruz for the bank details, then report the transfer here so it can be checked.</Notice>
+          <BankDetails details={bank} reference={r.reference} />
           <ActionForm
             action={reportTransfer.bind(null, r.id)}
             submit="Report the transfer"
