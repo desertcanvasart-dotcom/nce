@@ -52,20 +52,30 @@ export function PaymentPanel({
             <strong>{money(bal.outstanding_minor)}</strong>
           </dd>
         </div>
-        <div>
-          <dt className={ui.label}>Pay in full by</dt>
-          <dd>
-            <CairoTime value={bal.payment_due_at} endOfDay />
-          </dd>
-        </div>
+        {bal.refunded_minor > 0 ? (
+          <div>
+            <dt className={ui.label}>Refunded</dt>
+            <dd>{money(bal.refunded_minor)}</dd>
+          </div>
+        ) : null}
+        {status !== "cancelled" ? (
+          <div>
+            <dt className={ui.label}>Pay in full by</dt>
+            <dd>
+              <CairoTime value={bal.payment_due_at} endOfDay />
+            </dd>
+          </div>
+        ) : null}
       </dl>
-      <p className={ui.muted}>
-        {RULE_WORDS[rule as DeadlineRule]}, and always before departure.{" "}
-        {status === "awaiting_payment"
-          ? "If it isn’t paid by then, the reservation is cancelled and the cabins released, unless a reported payment is still being checked."
-          : null}
-        {bal.reported_minor > 0 ? ` ${money(bal.reported_minor)} is reported and being checked.` : null}
-      </p>
+      {status !== "cancelled" ? (
+        <p className={ui.muted}>
+          {RULE_WORDS[rule as DeadlineRule]}, and always before departure.{" "}
+          {status === "awaiting_payment"
+            ? "If it isn’t paid by then, the reservation is cancelled and the cabins released, unless a reported payment is still being checked."
+            : null}
+          {bal.reported_minor > 0 ? ` ${money(bal.reported_minor)} is reported and being checked.` : null}
+        </p>
+      ) : null}
       {pays.length ? (
         <ul className={ui.list}>
           {pays.map((p) => (

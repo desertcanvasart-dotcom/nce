@@ -4,7 +4,7 @@ import { requireAdmin } from "@/server/auth";
 import { overviewCounts } from "@/server/catalogue/queries";
 import { recentActivity } from "@/server/catalogue/activity";
 import { adminBookingCounts } from "@/server/bookings/queries";
-import { awaitingVerificationCount } from "@/server/payments/queries";
+import { awaitingVerificationCount, openCancellationCount } from "@/server/payments/queries";
 import { adminConnectionCounts } from "@/server/connections/queries";
 import { ActivityTable } from "./activity/ActivityTable";
 
@@ -14,14 +14,14 @@ import { ActivityTable } from "./activity/ActivityTable";
  */
 export default async function AdminOverview() {
   await requireAdmin(undefined, "/dashboard/admin/");
-  const [counts, activity, connections, bookings, toVerify] = await Promise.all([
+  const [counts, activity, connections, bookings, toVerify, toCancel] = await Promise.all([
     overviewCounts(),
     recentActivity({ page: 1, pageSize: 10 }),
     adminConnectionCounts(),
     adminBookingCounts(),
     awaitingVerificationCount(),
+    openCancellationCount(),
   ]);
-  const later = [["Cancellation requests and refund reviews", "4f"]] as const;
   return (
     <>
       <h1 className={ui.pageTitle}>Overview</h1>
@@ -43,6 +43,10 @@ export default async function AdminOverview() {
           <span className={ui.counterValue}>{toVerify}</span>
           <span className={ui.counterLabel}>Payments awaiting verification</span>
         </Link>
+        <Link className={ui.counter} href="/dashboard/admin/finance/#cancellations">
+          <span className={ui.counterValue}>{toCancel}</span>
+          <span className={ui.counterLabel}>Cancellation requests and refund reviews</span>
+        </Link>
         <Link className={ui.counter} href="/dashboard/admin/bookings/#reservations">
           <span className={ui.counterValue}>{bookings.currentAndUpcoming}</span>
           <span className={ui.counterLabel}>Current and upcoming bookings</span>
@@ -55,16 +59,6 @@ export default async function AdminOverview() {
           <span className={ui.counterValue}>{connections.pendingFeeds}</span>
           <span className={ui.counterLabel}>Inventory feeds awaiting approval</span>
         </Link>
-        {later.map(([label, batch]) => (
-          <div key={label} className={ui.counter}>
-            <span className={ui.counterValue} aria-hidden="true">
-              –
-            </span>
-            <span className={ui.counterLabel}>
-              {label} <span className={ui.muted}>(arrives with Batch {batch})</span>
-            </span>
-          </div>
-        ))}
       </div>
       <Section title="Latest activity" id="latest">
         <ActivityTable rows={activity.rows} />

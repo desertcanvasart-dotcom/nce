@@ -2,14 +2,16 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { cardPayable } from "@/lib/payments/checkout";
-import { balance, paymentsFor } from "@/server/payments/queries";
+import { balance, cancellationQuote, cancellationsFor, paymentsFor, refundsFor } from "@/server/payments/queries";
+import { formatMoney } from "@/components/ds/lib/format";
+import { CancellationPanel } from "../../../_bookings/CancellationPanel";
 import { PaymentPanel } from "../../../_bookings/PaymentPanel";
-import { Checkboxes, Input, Notice, Section, ui } from "@/components/dashboard/ui";
+import { Checkboxes, Input, Notice, Section, TextArea, ui } from "@/components/dashboard/ui";
 import { requireUser } from "@/server/auth";
 import { reservation } from "@/server/bookings/queries";
 import { ReservationRecord } from "../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../sections";
-import { reportTransfer, startCheckout, uploadProof } from "../../actions";
+import { reportTransfer, requestCancellation, startCheckout, uploadProof, withdrawCancellation } from "../../actions";
 
 const PROOF = {
   submitted: "Waiting for the operator’s check",
@@ -32,8 +34,17 @@ export default async function MyReservation({
   const r = await reservation(reservationId);
   if (!r || r.customer_id !== session.userId) notFound();
   const local = r.rate_plan === "egyptian_citizen" || r.rate_plan === "foreign_resident";
-  const [bal, pays] = await Promise.all([balance(r.id), paymentsFor(r.id)]);
-  const owing = r.status === "awaiting_payment" && !!bal && bal.outstanding_minor > 0;
+  const [bal, pays, requests, refunds, quote] = await Promise.all([
+    balance(r.id),
+    paymentsFor(r.id),
+    cancellationsFor(r.id),
+    refundsFor(r.id),
+    cancellationQuote(r.id),
+  ]);
+  const open = requests.find((c) => c.status === "requested" || c.status === "refund_due");
+  const owing = r.status === "awaiting_payment" && !open && !!bal && bal.outstanding_minor > 0;
+  const canCancel = r.status !== "cancelled" && !open && !!quote;
+  const money = (m: number) => formatMoney({ amount: Number(m), currency: r.currency }, "en");
 
   return (
     <>
@@ -95,7 +106,42 @@ export default async function MyReservation({
           </ActionForm>
         </Section>
       ) : null}
+      <CancellationPanel
+        requests={requests}
+        refunds={refunds}
+        actions={(c) =>
+          c.status === "requested" ? (
+            <ActionForm action={withdrawCancellation.bind(null, r.id, c.id)} submit="Withdraw the request" variant="outline" />
+          ) : null
+        }
+      />
       <ReservationRecord r={r} />
+      {canCancel ? (
+        <Section title="Cancel this reservation" id="cancel">
+          <p>
+            Cancelled today, {quote.days_before} {quote.days_before === 1 ? "day" : "days"} before departure, the cancellation
+            policy above charges <strong>{quote.percent} %</strong> of the price: {money(quote.charge_minor)}.{" "}
+            {quote.refund_minor > 0
+              ? `You have paid ${money(quote.paid_minor)}, so ${money(quote.refund_minor)} would be refunded.`
+              : quote.unpaid_charge_minor > 0
+                ? `You have paid ${money(quote.paid_minor)}, so ${money(quote.unpaid_charge_minor)} of the charge would still be owed.`
+                : "Nothing would be refunded."}
+          </p>
+          <p className={ui.muted}>
+            The charge is fixed on the day your request arrives. The operator checks the figures, then Nilecruz confirms the
+            cancellation and refunds you.
+          </p>
+          <ActionForm action={requestCancellation.bind(null, r.id)} submit="Ask to cancel" variant="outline">
+            <TextArea label="Reason (optional)" name="reason" rows={3} maxLength={1000} />
+            <Checkboxes
+              legend="Before asking"
+              name="policy"
+              options={[{ value: "yes", label: "I have read the cancellation policy and the charge above" }]}
+              checked={[]}
+            />
+          </ActionForm>
+        </Section>
+      ) : null}
       {local ? (
         <Section title="Proof of eligibility" id="proof">
           {/* CONTENT-NEEDED #38: Faris's wording replaces this draft. */}

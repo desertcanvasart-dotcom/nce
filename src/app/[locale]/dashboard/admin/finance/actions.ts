@@ -8,6 +8,7 @@ import { requireAdmin } from "@/server/auth";
 import { failed, formObject, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
+import { issueStripeRefunds } from "@/server/payments/stripe";
 
 /**
  * Finance (DASH-ADM-097–103, 106, DATA-037, 043). Finance and super admins only; the database checks the same.
@@ -110,4 +111,75 @@ export async function deletePeriod(id: string, _prev: ActionState, _fd: FormData
   if (error) return connectionProblem(error);
   revalidatePath(PAGE);
   return saved("Premium period removed.");
+}
+
+// ── Cancellations and refunds (DASH-ADM-095, 104, 105, DATA-029) ──────────────────────────────────────────
+const bookingPage = (reservationId: string) => `/dashboard/admin/bookings/${reservationId}/`;
+
+export async function decideCancellation(
+  reservationId: string,
+  cancellationId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  await requireAdmin([...FIN], bookingPage(reservationId));
+  const decision = String(fd.get("decision") ?? "");
+  if (decision !== "approve" && decision !== "reject") return failed("Choose approve or refuse.");
+  const db = await getDb();
+  const { data, error } = await db.rpc("decide_cancellation", {
+    target: cancellationId,
+    approve: decision === "approve",
+    note: String(fd.get("note") ?? "").trim() || undefined,
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(bookingPage(reservationId));
+  revalidatePath(PAGE);
+  if (data === "rejected") return saved("Refused. The customer sees your reason.");
+  return saved(
+    data === "refund_due"
+      ? "Approved. The reservation is cancelled and its cabins returned. Now issue the refund below."
+      : "Approved. The reservation is cancelled and its cabins returned; nothing is due back.",
+  );
+}
+
+/** DATA-029: the refund goes back to the card through Stripe, only after approval, for what is due. */
+export async function issueCardRefund(
+  reservationId: string,
+  cancellationId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  await requireAdmin([...FIN], bookingPage(reservationId));
+  const db = await getDb();
+  const { data: plan, error } = await db.rpc("stripe_refund_plan", { target: cancellationId });
+  if (error) return connectionProblem(error);
+  if (!plan?.length) return failed("Nothing more can go back to a card. Record the rest as a manual refund.");
+  const problem = await issueStripeRefunds(reservationId, cancellationId, plan);
+  if (problem) return failed(problem);
+  revalidatePath(bookingPage(reservationId));
+  revalidatePath(PAGE);
+  return saved("Refund issued through Stripe. The customer sees it on their reservation; banks take a few days to show it.");
+}
+
+export async function recordManualRefund(
+  reservationId: string,
+  cancellationId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  await requireAdmin([...FIN], bookingPage(reservationId));
+  const f = formObject(fd);
+  const amount = priceToMinor(String(f.amount ?? "").replace(/,/g, ""));
+  if (amount === null) return failed("Give the amount refunded.");
+  const db = await getDb();
+  const { error } = await db.rpc("record_manual_refund", {
+    target: cancellationId,
+    amount,
+    how: String(f.how ?? ""),
+    ref: String(f.ref ?? ""),
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(bookingPage(reservationId));
+  revalidatePath(PAGE);
+  return saved("Refund recorded. Recording it doesn't move money; it notes a refund made outside the system.");
 }
