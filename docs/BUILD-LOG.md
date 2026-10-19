@@ -738,3 +738,49 @@
 **For Faris:**
 1. **Unpaid reservations:** on an unpaid reservation, the cancel section correctly applies the policy ("US$700 of the charge would still be owed"). If unpaid reservations should simply be released without a charge, say so.
 2. **Transfers wording:** in the transfers, the driver waiting with a name sign is part of the transfer. "Meet and assist" (a representative through the airport) is the separate product.
+
+### Batch 4f-2c: tour orders (branch `batch-04f-2c-tour-orders`, stacked on 4f-2b; migration `20261019000300_tour_orders`)
+
+**Built:**
+- **Ordering** (DASH-PAY-014):
+  - My journey → Tours and sightseeing lists the customer's tour orders and the tours bookable now. The rest of that section (suggestions with the cruise, past trips) stays with 4g.
+  - The booking page shows the description, meeting point and the tour's cancellation bands in words. It takes the date and time (Cairo) with places left, every guest's age, the lead guest and notes (the flight for transfers), plus the terms ticked.
+  - `order_tour` locks the session, then checks: bookable, adults only, places (shared), or one party per private session.
+  - Price: per guest (under-3s free) or per group. The order, NT-XXXXXX, snapshots the bands and wording.
+  - The places are held for **60 minutes**. An expired hold frees them at once, and a job closes it every 15 minutes.
+- **Paying** (DATA-027): card through Stripe Checkout, payable until the hold ends (at least 30 minutes).
+  - Recorded only from the signed webhook (`tour_order_id` in metadata), once, with a receipt number.
+  - A payment for a released or cancelled order, or with the wrong amount, is refunded straight back.
+  - Tour payments live in `tour_payments`, never in `payments`: no commission and no operator payable (DATA-041).
+- **Cancelling:**
+  - unpaid: the places are simply let go;
+  - paid: the charge is by the tour's own bands, by Cairo days before the start, and fixed on the day of the request. A finance admin approves or refuses (with a reason) on Deposits and commission → Tour orders, then refunds to the card through Stripe or records a manual refund.
+- **Test admin:** `orders@nilecruz.test` is a new local finance admin for the tour-order tests.
+
+**Verified, and how:**
+- **Unit:** the tour Checkout carries only the tour order id, never a reservation; the expiry follows the hold, at least 30 minutes.
+- **pgTAP:** the new `190_tour_orders` has 30 checks:
+  - the terms are required;
+  - per guest with an under-3 free, per group;
+  - places held, no overbooking; a private session takes one party, and a second is refused;
+  - another customer sees nothing;
+  - an expired hold frees the session, and the job cancels it;
+  - customers can't mark an order paid; recorded once with a receipt; a late payment is refunded;
+  - no cruise payment or commission;
+  - the quote uses the tour's bands; requested; customers, and admins without two-step, can't decide; approved, and the places are free again;
+  - never more than is due; the Stripe refund is recorded, and nothing more after that.
+- **End-to-end:** `tour-orders.spec.ts`:
+  - book 2 places (one under 3), held, "card payments off" with no key; a signed webhook records it and a duplicate is ignored; confirmed with a receipt; no cruise payment row;
+  - ask to cancel (0 % at 40 days), the admin approves; the card refund is off with no key, so a manual refund; the customer sees it;
+  - axe on 4 screens in Day and Night.
+- **Live against the Stripe sandbox, run locally:** a tour order (2 guests, US$200) was paid on Stripe Checkout with 4242. Stripe's real event was recorded once, and the order was confirmed with receipt NCR-2026-000006, with no row in cruise payments. **DATA-027 is Verified.**
+- **Full suites on a clean database:** verify with 277 unit tests; pgTAP 19 files and 314 checks; e2e 135 passed, 97 skipped, none flaky (8.6 min).
+- **Screenshots:** 24 in `docs/screenshots/batch-04f/` (prefix `4f2c-`): the customer's tours page, booking page and confirmed order; the admin's tour order.
+- **Local machine:** the earlier sign-in timeouts were memory. Supabase now runs without the log, analytics, studio and pg-meta services: `supabase start -x vector,logflare,studio,postgres-meta`. Docker uses about 1.2 GB instead of 3.8 GB.
+
+**Batch 4f is now complete across four PRs (#15 merged; #17, #18 and this one stacked).** Still waiting on Faris:
+- the agent-model answer;
+- the IBAN and the account currency;
+- tour prices, dates and suppliers;
+- ES/JA review;
+- approval to import the tours on staging.
