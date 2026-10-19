@@ -809,12 +809,24 @@ STATUS.update({
  "DATA-028": ("Verified", B4F1+'status changes only from signature-verified webhooks; repeats change nothing (service_card_payment idempotent per intent; 160; e2e bad signature 400, duplicate)'),
  "DATA-030": ("Built", B4F1+'card entry only on Stripe-hosted Checkout (no card fields in our app); test mode on staging once Faris adds test keys'),
  "DATA-035": ("Verified", B4F1+'payments go to Nilecruz (one Stripe account, no Connect); receipts say received by Nilecruz'),
- "DATA-036": ("Verified", B4F1+'10 % from platform_settings.commission_bp, half-up, never on the gratuity (not in totals); proportional reversal unit-tested'),
+ "DATA-036": ("Verified", B4F1+'10 % from platform_settings.commission_bp, half-up, never on the gratuity (not in totals); proportional reversal unit-tested; 4f-2a: refunds write reversal entries (170: 10 % of the charge kept)'),
  "DATA-037": ("Verified", B4F1+'each verified payment creates the operator payable; admins record payouts; balances per operator and currency (160, e2e)'),
  "DATA-038": ("Verified", B4F1+'operator owners and finance see payables, payouts and balance read-only; viewers and other operators see none (160, e2e)'),
  "DATA-039": ("Verified", B4F1+'Cairo calendar days from the booking date; 24 Dec and 7 Jan inclusive; season by departure date (unit at every boundary; SQL mirrors TS, 160)'),
  "DATA-040": ("Verified", B4F1+'release at the deadline unless a reported payment awaits verification (160; unit)'),
  "DATA-043": ("Verified", B4F1+'finance admins record manual payments with method, reference and approver (record_manual_payment; 160)'),
+})
+B4F2A = "Batch 4f-2a (19 Oct 2026): "
+STATUS.update({
+ "DASH-PAY-011": ("Verified", B4F2A+'each reservation keeps the bands and wording of the policy accepted at booking (4e snapshot); the charge uses those bands, never later edits (170)'),
+ "DASH-PAY-012": ("Verified", B4F2A+'charge, refundable amount and unpaid charge from the Cairo days before departure on the day of the request (unit at every edge of the luxury and standard bands; app.cancellation_quote mirrors it, 170)'),
+ "DASH-CUS-010": ("Verified", B4F2A+'the customer sees what cancelling today costs, asks (policy ticked), can withdraw, and follows requested → refund being issued → cancelled, with each refund listed (e2e)'),
+ "DASH-OPR-015": ("Verified", B4F2A+'narrowed by ADR-089: the operator confirms or contests the figures with a note; it can\'t decide or refund (170 refuses; e2e no refund buttons)'),
+ "DASH-ADM-005": ("Verified", B4F2A+"overview counter 'Cancellation requests and refund reviews' linking to the finance queue (e2e)"),
+ "DASH-ADM-095": ("Verified", B4F2A+'finance/super admins with two-step approve or refuse (reason required) on the booking record, with the operator\'s check shown; queue on Deposits and commission (170, e2e)'),
+ "DASH-ADM-104": ("Verified", B4F2A+'the finance workflow fixes the charge at the request and refreshes the refund against what was received at approval (170)'),
+ "DASH-ADM-105": ("Verified", B4F2A+'refunds table: each refund against the payment it gives back, method, Stripe id or how/reference, who recorded it; audited (170, e2e)'),
+ "DATA-029": ("Verified", B4F2A+'refunds only after a finance admin approves, never more than is due (stripe_refund_plan, service_record_stripe_refund; 170); Stripe refunds per card payment with idempotency keys, manual refunds for the rest; checked live against the Stripe sandbox: US$1,300 refund succeeded, recorded once, request closed, commission net 10 % of the charge'),
 })
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
