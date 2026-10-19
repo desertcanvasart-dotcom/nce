@@ -45,6 +45,12 @@ export async function handleStripeWebhook(rawBody: string, signature: string): P
     amount,
     cur: currency,
   });
+  // A reservation this database doesn't have (one Stripe sandbox feeds several environments): retrying can't help,
+  // and endless 500s would get the endpoint disabled. Logged, so a real mismatch is still seen.
+  if (error?.code === "P0002" || error?.code === "22P02") {
+    console.error("stripe webhook: unknown reservation", { reservation: reservationId, intent, event: event.id });
+    return { status: 200, body: { received: true, ignored: "unknown_reservation" } };
+  }
   if (error) return { status: 500, body: { error: "record_failed" } }; // Stripe retries
   if (data === "refund") {
     const stripe = getStripe();

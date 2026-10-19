@@ -159,6 +159,16 @@ test("a card payment is recorded only from a signed Stripe webhook, once, with a
     });
   expect((await post()).status()).toBe(200);
   expect(await (await post()).json()).toMatchObject({ result: "duplicate" });
+  // A payment for a reservation this database doesn't have is acknowledged, not retried forever.
+  for (const unknown of ["00000000-0000-4000-8000-000000000000", "not-a-uuid"]) {
+    const other = paidCheckoutEvent(unknown, 100, "usd", `${RUN}-${unknown}`);
+    const r = await request.post("/api/stripe/webhook/", {
+      data: other.payload,
+      headers: { "stripe-signature": other.signature, "content-type": "application/json" },
+    });
+    expect(r.status()).toBe(200);
+    expect(await r.json()).toMatchObject({ ignored: "unknown_reservation" });
+  }
 
   await page.reload();
   await expect(page.getByText("Confirmed", { exact: true }).first()).toBeVisible();
