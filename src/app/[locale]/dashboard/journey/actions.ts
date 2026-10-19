@@ -8,7 +8,8 @@ import type { ActionState } from "@/components/dashboard/ActionForm";
 import { passengersProblem, requestProblems, type Passenger } from "@/lib/bookings/bookings";
 import { priceToMinor } from "@/lib/connections/format";
 import { env } from "@/lib/env";
-import { cardPayable, checkoutParams } from "@/lib/payments/checkout";
+import { cardPayable, checkoutParams, tourCheckoutParams } from "@/lib/payments/checkout";
+import { formatCairo } from "@/lib/time/cairo";
 import { ageOn } from "@/lib/product/pricing";
 import { cairoDate } from "@/lib/tours/tours";
 import { requireUser } from "@/server/auth";
@@ -271,4 +272,81 @@ export async function withdrawCancellation(
   if (error) return connectionProblem(error);
   revalidatePath(`/dashboard/journey/reservations/${reservationId}/`);
   return saved("Request withdrawn. Your reservation stays as it was.");
+}
+
+// ── Tour orders (DASH-PAY-014, DATA-027) ────────────────────────────────────────────────────────────────────
+const TOURS = "/dashboard/journey/tours/";
+
+export async function orderTour(tourId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`${TOURS}book/${tourId}/`);
+  const f = formObject(fd, ["terms"]);
+  if (!(f.terms as string[]).includes("yes")) return failed("Tick that you have read the terms and the cancellation policy.");
+  const session = String(f.session ?? "");
+  if (!session) return failed("Choose a date and time.");
+  const ages = String(f.ages ?? "")
+    .split(/[\s,]+/)
+    .filter(Boolean);
+  if (!ages.length || ages.some((a) => !/^\d{1,3}$/.test(a)))
+    return failed("Give each guest's age as a whole number, separated by commas, for example “42, 40, 9”.");
+  const lead = String(f.lead ?? "").trim();
+  if (lead.length < 2) return failed("Give the lead guest's full name.");
+  const db = await getDb();
+  const { data, error } = await db.rpc("order_tour", {
+    sess: session,
+    guest_ages: ages.map(Number),
+    lead,
+    order_notes: String(f.notes ?? "").slice(0, 1000),
+    terms_read: true,
+  });
+  if (error) return connectionProblem(error);
+  redirect(`${TOURS}${data}/`);
+}
+
+export async function startTourCheckout(orderId: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
+  const session = await requireUser(`${TOURS}${orderId}/`);
+  const db = await getDb();
+  const { data: o } = await db
+    .from("tour_orders")
+    .select(
+      "id, reference, customer_id, status, currency, total_minor, hold_until, tour:tours(name), session:tour_sessions(starts_at)",
+    )
+    .eq("id", orderId)
+    .maybeSingle();
+  if (!o || o.customer_id !== session.userId) return failed("Order not found.");
+  if (o.status !== "awaiting_payment") return failed("This order isn't waiting for payment.");
+  if (Date.parse(o.hold_until) <= Date.now())
+    return failed("The 60 minutes to pay have passed. Order again; the places may still be free.");
+  const stripe = getStripe();
+  if (!stripe) return failed("Card payments aren't switched on yet. Try again later.");
+  const checkout = await stripe.checkout.sessions.create(
+    tourCheckoutParams({
+      orderId,
+      reference: o.reference,
+      tourName: o.tour?.name ?? "Tour",
+      startsLabel: o.session ? formatCairo(o.session.starts_at) : "",
+      totalMinor: Number(o.total_minor),
+      currency: o.currency,
+      customerEmail: session.email,
+      siteUrl: env.NEXT_PUBLIC_SITE_URL,
+      nowSeconds: Math.floor(Date.now() / 1000),
+      holdUntilSeconds: Math.floor(Date.parse(o.hold_until) / 1000),
+    }),
+  );
+  if (!checkout.url) return failed("Stripe didn't return a payment page. Try again.");
+  redirect(checkout.url);
+}
+
+/** Unpaid: the places are simply let go. Paid: a request for a finance admin, charged by the tour's bands. */
+export async function cancelTourOrder(orderId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`${TOURS}${orderId}/`);
+  const f = formObject(fd, ["policy"]);
+  const db = await getDb();
+  const { error } = await db.rpc("request_tour_cancellation", {
+    target: orderId,
+    why: String(f.reason ?? "").slice(0, 1000),
+    policy_read: (f.policy as string[]).includes("yes"),
+  });
+  if (error) return connectionProblem(error);
+  revalidatePath(`${TOURS}${orderId}/`);
+  return saved("Done.");
 }
