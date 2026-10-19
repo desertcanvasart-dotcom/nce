@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { cairoDate } from "@/lib/tours/tours";
 import { adminDb, ORG } from "./local-auth";
 
 /** A customer or operator signed in through the real API, to set up bookings quickly (the screens are tested separately). */
@@ -11,7 +12,12 @@ export async function apiAs(email: string, password: string) {
   return c;
 }
 
-const isoIn = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 10);
+// Cairo calendar dates, as the app counts days (DATA-039): a UTC date is a day behind just after midnight in Cairo.
+const isoIn = (days: number) => {
+  const d = new Date(`${cairoDate(new Date())}T00:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+};
 
 /**
  * Operator A's own sample sailing, `departsIn` days out, with the given cancellation bands, and `count` reservations for
