@@ -33,7 +33,8 @@ for (const url of EDUCATION) {
     const allowed = allowedLinks(url);
     for (const { href } of links) {
       const isVesselPage = /^\/cruises\/[a-z0-9-]+\/$/.test(href) && !LINK_MAP[href];
-      if (isVesselPage || href === "/cruises/compare/" || href.startsWith("/account/")) continue;
+      // Utility links (sign-in, contact) are not silo links.
+      if (isVesselPage || href === "/cruises/compare/" || href.startsWith("/account/") || href === "/contact/") continue;
       if (url === "/") {
         // Home links the pillars and featured hubs.
         expect(BUILT.has(href) || href === "/", `${href} on home`).toBe(true);
