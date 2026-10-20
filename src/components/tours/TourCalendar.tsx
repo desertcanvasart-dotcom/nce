@@ -74,7 +74,8 @@ export function TourCalendar({
   const dayTimes = day ? times(day) : [];
   const chosen = day && time && dayTimes.includes(time) ? cairoInstant(day, time) : null;
   const left = chosen && rate.mode === "shared" ? placesLeft(rate.maxGuests, taken[`${row.id}|${chosen}`] ?? 0) : null;
-  const quote = day && time ? quoteTour(rate, ages, day, time, seasons) : null;
+  // Only a start this rate offers on that day (switching shared to private can leave a time it doesn't have).
+  const quote = day && time && chosen ? quoteTour(rate, ages, day, time, seasons) : null;
   const privateRate = rates.find((r) => r.mode === "private");
   const tooMany = left !== null && ages.length > left;
 
