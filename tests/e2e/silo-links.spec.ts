@@ -56,9 +56,7 @@ for (const url of EDUCATION) {
     // briefly name one.
     const statuses = await Promise.all(
       [...hrefs]
-        .filter(
-          (h) => !h.startsWith("/account/") && !(/^\/cruises\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h]) && !isTourPage(h),
-        )
+        .filter((h) => !h.startsWith("/account/") && !(/^\/cruises\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h]) && !isTourPage(h))
         .map(async (h) => [h, (await request.get(h)).status()] as const),
     );
     for (const [href, status] of statuses) expect(status, `${url} → ${href}`).toBe(200);
