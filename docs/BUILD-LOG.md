@@ -1175,3 +1175,19 @@ The first of two Batch 6 PRs (ADR-096). 6-2 adds Prices Explained, with the calc
   - The cruise listing now searches by vessel name (`?q=`), so the site search works (SEO-028).
 - **Vessel pages** now link to their vessel-type hub (SEO-013, part).
 - Removed the Batch 1 placeholder home stylesheet.
+
+**Verified, and how:**
+- **Unit** (`silo-links.test.ts`, 22 tests):
+  - the map (felucca dropped, `BUILT` pages all in the workbook);
+  - breadcrumbs, the link up, children, siblings, bridges and the closing listing, with keyword anchors;
+  - every draft against its row: H1, house style, the review flag, the link-up marker, FAQs;
+  - portable text read back into sections; catalogue figures in the comparison; the site search; FAQPage only with questions.
+- `pnpm verify`: 358 tests, types, lint, format. The Studio schema validates (`pnpm studio:check`).
+- **pgTAP:** 26 files, 405 checks on a reset database.
+- **End-to-end:**
+  - `silo-links.spec.ts` (14 tests): the CI link check for every built education page, plus draft flags and structured data, real comparison figures with no sample prices, 404 for felucca and unbuilt pages, and axe on five pages in Day and Night;
+  - the vessel page links to its type hub.
+  - Full run with `CI=1` on a production build against the local database: 190 passed, none failed or flaky.
+  - The link check leaves vessel pages in the cruise row to the marketplace tests: other specs change test vessels straight in the database, so a cached row can briefly name one.
+- **Screenshots:** 30 in `docs/screenshots/batch-06/` (prefix `6-1-`): home, the Vessels pillar, the dahabiya hub, a day on a cruise ship, and dahabiya or cruise ship, at 375, 768 and 1440 in Day and Night.
+- **Environment:** two app restarts stopped the background test runs and Docker, so nothing reported. Docker and Supabase were restarted and the database reset, then the suites ran in full as above.
