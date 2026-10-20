@@ -48,3 +48,16 @@ export function websiteJsonLd(site: string) {
     },
   };
 }
+
+/** PAGE-059: the price calculator is a web application (free, in the browser). */
+export function webApplicationJsonLd(name: string, url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name,
+    url,
+    applicationCategory: "TravelApplication",
+    operatingSystem: "Any",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  };
+}

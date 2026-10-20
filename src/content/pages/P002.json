@@ -1,0 +1,39 @@
+{
+  "id": "P002",
+  "title": "The complete Nile cruise guide",
+  "standfirst": "Everything to decide before a Nile cruise: which route, which time of year, how many nights and how to plan around flights and sightseeing. Start with the route; the rest follows.",
+  "sections": [
+    {
+      "heading": "The short version",
+      "paragraphs": [
+        "Most Nile cruises sail between Luxor and Aswan: four nights upstream from Luxor or three nights downstream from Aswan. Dahabiyas often sail between Esna and Aswan over four or five nights. October to April is cooler and busier; summer is hot and quieter."
+      ]
+    },
+    {
+      "heading": "How a cruise day works",
+      "paragraphs": [
+        "Sightseeing starts early, before the heat. Afternoons are spent sailing, and evenings on board. A cruise runs from check-in on the first day to check-out on the last, so plan flights and transfers around those times."
+      ]
+    },
+    {
+      "heading": "Choosing a boat",
+      "paragraphs": [
+        "The vessel shapes the trip more than anything else. Our guide to the three types of Nile boat explains the differences."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How long is a Nile cruise?",
+      "a": "Usually three or four nights between Luxor and Aswan, and four or five on a dahabiya. Longer cruises exist but are rare."
+    },
+    {
+      "q": "Do I need a guide?",
+      "a": "Most cruises include guided visits. A private Egyptologist is available on many cruises at extra cost."
+    }
+  ],
+  "seoTitle": "Nile cruise guide: routes, seasons and planning",
+  "seoDescription": "A complete guide to planning a Nile cruise: routes, the best time to go, how many nights and what to book separately.",
+  "sample": false,
+  "review": "draft"
+}

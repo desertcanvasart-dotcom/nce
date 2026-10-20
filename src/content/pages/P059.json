@@ -1,0 +1,30 @@
+{
+  "id": "P059",
+  "title": "Nile cruise price calculator",
+  "standfirst": "Choose the boat, the cabin, the way you see the sites and the season, and see how each choice moves the price. It explains prices rather than quoting them: the figures are illustrative ranges. For real prices, see the cruises you can book. This tool is part of our guide to [[up]].",
+  "sections": [
+    {
+      "heading": "How to use it",
+      "paragraphs": [
+        "Each row is one factor. Pick an option and the total changes, with a short reason. The two examples at the top show the same route at the low and high ends."
+      ]
+    },
+    {
+      "heading": "Where the figures come from",
+      "paragraphs": [
+        "The amounts are illustrative estimates, shown so the proportions are clear. They are marked as sample data until enough operators’ real rates are in our catalogue to calculate them. Crew gratuities, flights and transfers are never included."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is this a quote?",
+      "a": "No. It shows how prices are built. Real prices for every cabin and date appear on each cruise after you sign in."
+    }
+  ],
+  "seoTitle": "Nile cruise price calculator",
+  "seoDescription": "See how the boat, the cabin, the guide and the season move the price of a Nile cruise, with illustrative figures.",
+  "sample": true,
+  "review": "draft",
+  "upAnchor": "Nile cruise prices"
+}

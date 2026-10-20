@@ -100,3 +100,26 @@ test.describe("education pages are accessible", () => {
     });
   }
 });
+
+test("the price calculator changes with each choice and says it isn't a quote [PAGE-059, DATA-008]", async ({ page }) => {
+  await page.goto("/nile-cruise-prices/price-calculator/");
+  await expect(page.getByText("Sample data").first()).toBeVisible();
+  await expect(page.getByText(/They are not quotes/)).toBeVisible();
+  const total = page.locator("[aria-live='polite']").first();
+  const before = await total.textContent();
+  await page.getByRole("radiogroup", { name: "Cabin" }).getByRole("radio", { name: /Suite/ }).first().click();
+  await expect(total).not.toHaveText(before ?? "");
+  const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
+  expect(ld).toContain('"WebApplication"');
+});
+
+test("route guides show the days and the vessels, never a price grid [SEO-023]", async ({ page }) => {
+  for (const url of ["/nile-cruise-guide/routes/luxor-to-aswan/", "/nile-cruise-guide/routes/esna-to-aswan/"]) {
+    await page.goto(url);
+    await expect(page.getByText(/Edfu/).first()).toBeVisible();
+    // The only prices allowed are on the closing cruise cards (a "from" price per vessel).
+    const article = page.locator("article").first();
+    await expect(article.locator("table")).toHaveCount(0);
+    await expect(article.getByText(/How a price is built/)).toHaveCount(0);
+  }
+});

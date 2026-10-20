@@ -1,0 +1,40 @@
+{
+  "id": "P003",
+  "title": "Nile cruise routes compared",
+  "standfirst": "Nile cruises follow a handful of routes. Here they are side by side: where each starts and ends, how many nights it takes and what you see on the way. This is part of our [[up]].",
+  "sections": [
+    {
+      "heading": "The classic stretch",
+      "paragraphs": [
+        "Almost all Nile cruises sail the stretch between Luxor and Aswan, about two hundred kilometres of river with the main temples along it: Esna, Edfu and Kom Ombo between the two cities."
+      ]
+    },
+    {
+      "heading": "Upstream or downstream",
+      "paragraphs": [
+        "Sailing from Luxor to Aswan takes longer, because the ship sails against the current, so it is usually a four-night cruise. Sailing from Aswan to Luxor is usually three nights. The sites are the same; the order and the pace differ."
+      ]
+    },
+    {
+      "heading": "The dahabiya route",
+      "paragraphs": [
+        "Dahabiyas usually sail between Esna and Aswan, avoiding the queue at the Esna lock and stopping at smaller sites the ships pass by."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Which direction is better?",
+      "a": "Luxor to Aswan gives an extra night and a slower pace; Aswan to Luxor is shorter. Choose by the flights and the time you have."
+    },
+    {
+      "q": "Do all routes see the same temples?",
+      "a": "The main temples, yes. Dahabiya routes add smaller sites."
+    }
+  ],
+  "seoTitle": "Nile cruise routes compared",
+  "seoDescription": "The Nile cruise routes side by side: Luxor to Aswan, Aswan to Luxor and the dahabiya route from Esna, with nights and stops.",
+  "sample": false,
+  "review": "draft",
+  "upAnchor": "Nile cruise guide"
+}
