@@ -36,7 +36,8 @@ create type public.tour_rate_mode as enum ('shared', 'private', 'transfer', 'ass
 
 -- Amounts in minor units (US cents).
 --   shared   {"adult", "child611", "child35"}: per person; under-3s free
---   private  {"tiers": [{"min", "max" (null = and over), "pp"}], "child_pct"}: per person by party size
+--   private  {"tiers": [{"min", "max" (null = and over), "pp"}], "child_pct", "child35_pct"}: per person by party size;
+--            children 6–11 pay child_pct of the adult price, 3–5 child35_pct (25 when absent, Faris 21 Oct)
 --   transfer {"vehicles": [{"name", "max", "price"}], "night_extra"}: per vehicle, one way
 --   assist   {"tiers": [{"max", "price"}]}: per party
 create or replace function app.valid_tour_prices(mode public.tour_rate_mode, p jsonb) returns boolean
@@ -53,6 +54,9 @@ begin
     when 'private' then
       if jsonb_typeof(p -> 'tiers') <> 'array' or jsonb_array_length(p -> 'tiers') = 0 then return false; end if;
       if jsonb_typeof(p -> 'child_pct') <> 'number' or (p ->> 'child_pct')::numeric not between 0 and 100 then return false; end if;
+      if p ? 'child35_pct' and (jsonb_typeof(p -> 'child35_pct') <> 'number' or (p ->> 'child35_pct')::numeric not between 0 and 100) then
+        return false;
+      end if;
       for x in select * from jsonb_array_elements(p -> 'tiers') loop
         if jsonb_typeof(x -> 'min') <> 'number' or jsonb_typeof(x -> 'pp') <> 'number' or (x ->> 'pp')::bigint <= 0
            or (x ->> 'min')::int < 1 or (jsonb_typeof(x -> 'max') = 'number' and (x ->> 'max')::int < (x ->> 'min')::int)
@@ -199,7 +203,9 @@ begin
       order by (x ->> 'min')::int limit 1;
       if tier is null then raise exception 'There is no private price for this party size.' using errcode = '22023'; end if;
       select sum(case when a >= 12 then (tier ->> 'pp')::bigint
-                      when a >= 3 then round((tier ->> 'pp')::numeric * (r.prices ->> 'child_pct')::numeric / 100)::bigint else 0 end)
+                      when a >= 6 then round((tier ->> 'pp')::numeric * (r.prices ->> 'child_pct')::numeric / 100)::bigint
+                      when a >= 3 then round((tier ->> 'pp')::numeric * coalesce((r.prices ->> 'child35_pct')::numeric, 25) / 100)::bigint
+                      else 0 end)
       into total from unnest(guest_ages) a;
     when 'transfer' then
       select x into v from jsonb_array_elements(r.prices -> 'vehicles') x

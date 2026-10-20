@@ -23,6 +23,7 @@ const priv: TourRate = {
     { min: 15, max: null, pp: 5000 },
   ],
   childPct: 50,
+  child35Pct: 25,
 };
 const transfer: TourRate = {
   mode: "transfer",
@@ -49,7 +50,9 @@ describe("tour prices by basis (ADR-097)", () => {
   it("prices private by party tier, children at their percentage", () => {
     expect(quoteTour(priv, [40, 38], "2027-01-10", "08:00")).toMatchObject({ ok: true, total: 24000 });
     // party of 3 counts the 5-year-old; the infant is free and not counted
-    expect(quoteTour(priv, [40, 38, 5, 1], "2027-01-10", "08:00")).toMatchObject({ ok: true, total: 9000 * 2 + 4500 });
+    // Faris, 21 Oct: 6–11 pay 50 %, 3–5 pay 25 %; the 5-year-old counts towards the party of 3.
+    expect(quoteTour(priv, [40, 38, 5, 1], "2027-01-10", "08:00")).toMatchObject({ ok: true, total: 9000 * 2 + 2250 });
+    expect(quoteTour(priv, [40, 38, 8, 4], "2027-01-10", "08:00")).toMatchObject({ ok: true, total: 9000 * 2 + 4500 + 2250 });
     expect(quoteTour(priv, Array(15).fill(30), "2027-01-10", "08:00")).toMatchObject({ ok: true, total: 15 * 5000 });
   });
   it("prices a transfer by the smallest vehicle that seats everyone, with a night extra", () => {
@@ -115,6 +118,7 @@ describe("from the database to the page", () => {
       mode: "private",
       tiers: [{ min: 1, max: null, pp: 100 }],
       childPct: 50,
+      child35Pct: 25,
     });
     expect(rateFromRow({ ...row, mode: "transfer", prices: { vehicles: [], night_extra: 5 } })).toMatchObject({ nightExtra: 5 });
   });
@@ -219,6 +223,7 @@ describe("the rate sheet (pnpm import:tour-rates)", () => {
       lead_hours: 24,
       prices: {
         child_pct: 50,
+        child35_pct: 25,
         tiers: [
           { min: 1, max: 1, pp: 20000 },
           { min: 2, max: 2, pp: 12000 },

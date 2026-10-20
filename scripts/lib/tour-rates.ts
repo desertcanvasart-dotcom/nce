@@ -152,7 +152,8 @@ export function planTourRates(sheet: Sheet, tours: KnownTour[], offices: Office[
       return pp ? [{ min, max, pp }] : [];
     });
     if (!tiers.length) problems.push(`Private tours, row ${r.row}: no party-size prices`);
-    const child = r.child_pct === null ? 100 : pct(r.child_pct);
+    // Faris, 21 Oct: children 6–11 pay 50 % unless the sheet says otherwise; 3–5 pay 25 %.
+    const child = r.child_pct === null ? 50 : pct(r.child_pct);
     if (!(child >= 0 && child <= 100)) problems.push(`Private tours, row ${r.row}: the child percentage should be 0 to 100 %`);
     if (!c || !tiers.length) continue;
     rates.push({
@@ -162,7 +163,7 @@ export function planTourRates(sheet: Sheet, tours: KnownTour[], offices: Office[
       max_guests: 8,
       min_guests: 1,
       tickets_included: null,
-      prices: { tiers, child_pct: child },
+      prices: { tiers, child_pct: child, child35_pct: 25 },
     });
   }
 

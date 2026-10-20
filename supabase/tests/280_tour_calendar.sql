@@ -67,7 +67,7 @@ select is((select total_minor from public.tour_slot_quote('00000000-0000-4000-d9
 select is((select total_minor from public.tour_slot_quote('00000000-0000-4000-d901-000000000001', pg_temp.at(20, '08:00'), '{40}')),
   6600::bigint, 'a season adds its percentage');
 select is((select total_minor from public.tour_slot_quote('00000000-0000-4000-d901-000000000002', pg_temp.at(10, '09:30'), '{40,38,5,1}')),
-  9000::bigint * 2 + 4500, 'private: the party tier, children at their percentage, infants free and not counted');
+  9000::bigint * 2 + 2250, 'private: the party tier, a child of 5 at 25 %, infants free and not counted');
 select results_eq($$ select total_minor, vehicle from public.tour_slot_quote('00000000-0000-4000-d901-000000000003', pg_temp.at(10, '23:15'), '{30,30,30,30,30}') $$,
   $$ values (5000::bigint, 'Van'::text) $$, 'transfer: the smallest vehicle that seats everyone, with the night extra');
 select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d901-000000000001', pg_temp.at(10, '08:00'), '{30,30,30,30,30,30,30,30,30}') $$,
