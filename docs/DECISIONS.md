@@ -635,3 +635,18 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Refunds** are approved by admins with the finance or super role; the operator confirms the calculation but can't release money.
 - **Two pull requests:** 4f-1 (deadlines, card and manual payments, balances, receipts, commission and payables), 4f-2 (cancellation and refunds, tour orders).
 - **Card currencies (question 1 not yet answered):** cards are charged in US$ or €. A reservation priced in E£ is paid by transfer until it's confirmed that the Nilecruz Stripe account can charge E£. Stripe test keys come from Faris (CONTENT-NEEDED #23); until they exist, "Pay by card" says card payments aren't switched on, and tests sign webhooks with a local test secret.
+
+### ADR-090 Payments and tours: Faris's answers on 19 Oct 2026 (Accepted; Batch 4f-2)
+- **Stripe:** the sandbox account is registered in Spain, with euros by default, and can charge E£, US$ and €. Test keys are in staging and `.env.local`. Live keys come only with launch.
+- **Cancellation bands:**
+  - luxury and branded vessels (Sonesta, Mövenpick, Oberoi, Historia, Solai, Mayfair) are charged 0 / 15 / 50 / 100 % from 181 / 121 / 91 / 0 days;
+  - other vessels are charged 0 / 25 / 35 / 50 / 100 % from 121 / 91 / 60 / 30 / 0 days.
+  - Both are presets on the Cabins page.
+- **Bank-transfer details** are a finance-admin setting, never in the public repository. The account holder is provisional until Faris decides how the business is operated.
+- **Meet and Assist and airport transfers** are always sold separately, never inside a sightseeing program. Transfers are private only. Excursions are sold private and shared.
+- **Tour orders** come in 4f-2c: a 60-minute hold, card only, and cancellation by the tour's own bands, decided by a finance admin.
+- **Open:** whether Nilecruz acts as the operators' agent rather than the seller (the accountant is looking into it), which would change the receipt, terms and payables wording. Stripe Connect can't make Egyptian operators the seller.
+
+### ADR-091 My journey sections (Accepted; Faris 20 Oct 2026, Batch 4g brief)
+- The sections follow the dashboard guide: Overview, Requests and offers (one nav item; the offers list stays reachable from it), Bookings (renamed from "Reservations and payments", with tour orders linked), Tours and sightseeing, Past trips, Account. URLs don't change.
+- The sailing time of day (morning, noon or evening, and "arrive the day before" for morning sailings from Aswan) comes right after 4g as its own item (PROPOSED-019).
