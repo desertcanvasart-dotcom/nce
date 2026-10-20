@@ -961,6 +961,27 @@ STATUS.update({
  "DATA-008": ("Verified", B62+"PriceAnatomy and the calculator use maintained factors (src/content/price-factors.ts) flagged Sample data with an honest footnote until real rates are enough (unit, e2e)"),
  "SEO-029": ("In progress", B62+"the workbook keywords are used as given; validation in a keyword tool before launch (ADR-096)"),
 })
+B71 = "Batch 7-1 (21 Oct 2026): "
+STATUS.update({
+ "PAGE-074": ("Verified", B71+"/destinations/ pillar in river order; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-076": ("Verified", B71+"Luxor; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-083": ("Verified", B71+"Edfu and the Temple of Horus; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-085": ("Verified", B71+"Kom Ombo; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-086": ("Verified", B71+"Aswan; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-090": ("Verified", B71+"Abu Simbel; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-093": ("Verified", B71+"/tours-extras/ hub: every published tour as a card (no itineraries) plus the workbook pages; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-094": ("Verified", B71+"Abu Simbel day trip: the imported tour's details; prices coming soon (ADR-097); drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-095": ("Verified", B71+"hot-air balloon: information only until a supplier and price (ADR-097); drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-099": ("Verified", B71+"transfers: the airport transfers and meet and assist, private only; prices coming soon; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-101": ("Verified", B71+"About Nilecruz: marketplace and booking agent (ADR-094); AboutPage data; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-102": ("Verified", B71+"how we choose vessels: the seven weighted dimensions straight from the scoring code; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "PAGE-106": ("Verified", B71+"Contact: form to an admin inbox (Messages); ContactPage data; drafted copy for review; link check (silo-links.spec, destinations-tours.spec)"),
+ "DASH-PUB-006": ("Verified", B71+"visitors browse every published tour at its one page (destinations-tours.spec)"),
+ "DASH-ADM-072": ("Verified", B71+"each tour has its own page; hub cards carry name, kind, place and length, never the itinerary (unit, e2e)"),
+ "SEO-022": ("Verified", B71+"the seven live nilecruz.com /tours/{id} addresses redirect (301) to each tour's one page; tours a workbook page covers redirect to it (unit, e2e)"),
+ "SEO-013": ("Verified", B52+"type facet; "+B61+"type hub; "+B71+"and each destination its itinerary stops at (unit stopsFor, e2e)"),
+ "DATA-018": ("Verified", B52+"check-in to check-out, transfers not included; "+B71+"linked to /tours-extras/transfers/ (e2e)"),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
