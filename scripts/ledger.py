@@ -842,6 +842,19 @@ STATUS.update({
  "DASH-CUS-011": ("Verified", B4G+'"Suggested for your cruise": bookable tours linked to the cruise schedule with places on a sailing day; airport services only on embarkation and disembarkation days (unit, e2e); booking and orders from 4f-2c'),
  "DASH-CUS-012": ("Verified", B4G+'Past trips: finished and cancelled reservations, past tours and lapsed holds, closed and expired requests (accepted ones show as bookings); Cairo date boundary unit-tested; e2e'),
 })
+B4H1 = "Batch 4h-1 (20 Oct 2026): "
+STATUS.update({
+ "DASH-ADM-086": ("Verified", B4H1+'Admin → Travel partners: company, legal name, country, registration or licence number, website, contact, team (e2e)'),
+ "DASH-ADM-087": ("Verified", B4H1+'catalogue/super admins approve trade access (e2e); only approved agencies can search (210)'),
+ "DASH-ADM-088": ("Verified", B4H1+'pausing keeps the team and records; a paused agency keeps Overview, bookings and payments but can\'t search (210, e2e 403 and notice)'),
+ "DASH-ADM-089": ("Verified", B4H1+'partners never read rate tables or operator screens; operators can\'t search as partners; company rates are per agency (210)'),
+ "DASH-B2B-001": ("Verified", B4H1+'Search departures by dates, route, nights and guests over bookable departures with fresh availability (partner_search; e2e)'),
+ "DASH-B2B-002": ("Verified", B4H1+'company rate, then trade rate, then public rate, labelled (ADR-092; 210, unit, e2e "Your company rate")'),
+ "DASH-B2B-009": ("Verified", B4H1+'the owner invites colleagues who accept and land in the partner workspace (e2e); shared team page with operators'),
+ "DASH-B2B-010": ("Verified", B4H1+'owner, reservations and finance roles; no viewer (database trigger, 210); finance users can\'t search (210, e2e 403)'),
+ "DASH-B2B-011": ("Verified", B4H1+'apply for trade access from the account with registration details; admin approval required before searching (210, e2e)'),
+ "DASH-B2B-012": ("Verified", B4H1+'trade channel = rate plan trade; one company = partner_rates set by the operator; never visible to customers, the public or other agencies (210, e2e)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

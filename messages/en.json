@@ -343,7 +343,8 @@
       "twoStep": "Two-step sign-in",
       "security": "Account security",
       "description": "Your Nilecruz account.",
-      "apply": "Apply as an operator"
+      "apply": "Apply as an operator",
+      "applyPartner": "Apply as a travel partner"
     },
     "apply": {
       "title": "Apply as an operator",
@@ -363,6 +364,28 @@
         "websiteFormat": "Use a full address starting with https://."
       },
       "link": "Run a cruise company? Apply as an operator"
+    },
+    "applyPartner": {
+      "title": "Apply as a travel partner",
+      "lede": "A travel agency or tour operator booking Nile cruises for clients? Apply for trade access. Nilecruz checks every agency first; we email you when the check is done.",
+      "company": "Agency name (as clients know it)",
+      "legal": "Legal name",
+      "country": "Country of registration",
+      "registration": "Registration or licence number",
+      "registrationHint": "For example a Ministry of Tourism licence or an IATA number.",
+      "website": "Website",
+      "contactName": "Contact name",
+      "contactPhone": "Contact phone",
+      "submit": "Send application",
+      "note": "After approval you can invite your reservations and finance colleagues and see trade rates.",
+      "already": "You already have an application waiting. You can follow it in your dashboard.",
+      "errors": {
+        "companyRequired": "Tell us the agency name.",
+        "required": "This is needed to check your agency.",
+        "tooLong": "That is too long.",
+        "websiteFormat": "Use a full address starting with https://."
+      },
+      "link": "A travel agency? Apply for trade access"
     }
   }
 }

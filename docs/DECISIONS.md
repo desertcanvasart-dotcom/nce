@@ -650,3 +650,11 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 ### ADR-091 My journey sections (Accepted; Faris 20 Oct 2026, Batch 4g brief)
 - The sections follow the dashboard guide: Overview, Requests and offers (one nav item; the offers list stays reachable from it), Bookings (renamed from "Reservations and payments", with tour orders linked), Tours and sightseeing, Past trips, Account. URLs don't change.
 - The sailing time of day (morning, noon or evening, and "arrive the day before" for morning sailings from Aswan) comes right after 4g as its own item (PROPOSED-019).
+
+### ADR-092 Travel partners (Accepted; Faris 20 Oct 2026, Batch 4h brief)
+- **Rates:** partners see their company rate first, then the trade rate, then the public international rate, labelled "public rate". Trade and company rates are never visible to customers, the public, other companies or other operators.
+- **Commission:** the same 10 % of each payment on partner bookings, with the rest payable to the operator.
+- **Client booking record:** the agency's name and selling price; "Booked through Nilecruz" in small print only; never the trade price.
+- **Applying:** company name, country, registration or licence number, website, and a contact name and phone (brief question 1, as recommended).
+- **Paying:** partners pay like customers: the same deadlines, card or transfer, to Nilecruz. Credit terms are out of scope (brief question 4, as recommended).
+- **Two pull requests:** 4h-1 (applying, approval and pausing, team roles, trade and company rates, search) and 4h-2 (reserving, company requests and offers, bookings and payments, client references, selling totals, client record).

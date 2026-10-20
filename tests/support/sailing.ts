@@ -132,5 +132,6 @@ export async function sampleReservations(opts: {
     scheduleId: s!.id as string,
     origin,
     destination,
+    departsOn: isoIn(opts.departsIn),
   };
 }

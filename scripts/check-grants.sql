@@ -38,7 +38,8 @@ with intended(table_name, grantee, privileges) as (
                     'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates',
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
-                    'cancellation_policies', 'cancellation_policy_translations', 'premium_periods']) t,
+                    'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
+                    'partner_rates']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'

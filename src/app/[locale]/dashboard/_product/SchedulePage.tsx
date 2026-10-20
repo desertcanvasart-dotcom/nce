@@ -8,12 +8,13 @@ import { CairoTime } from "@/components/shell/CairoTime";
 import { dateWindow, nowMs, sailingDates, WEEKDAYS } from "@/lib/product/departures";
 import { isFresh, RATE_PLANS } from "@/lib/product/pricing";
 import { requireProductEditor } from "@/server/product/guard";
-import { cabinTypes, departureGrid, freshnessHours, schedule as getSchedule } from "@/server/product/queries";
+import { approvedPartners, cabinTypes, departureGrid, freshnessHours, schedule as getSchedule } from "@/server/product/queries";
 import { getDb } from "@/server/db";
 import {
   addPeriod,
   bulkUpdate,
   confirmAvailability,
+  deletePartnerRate,
   deleteRate,
   generate,
   removePeriod,
@@ -43,10 +44,11 @@ export async function SchedulePage({
   const { today } = dateWindow(0);
   const start = from && /^\d{4}-\d{2}-\d{2}$/.test(from) ? from : today;
   const end = dateWindow(62, start).until;
-  const [cabins, grid, hours] = await Promise.all([
+  const [cabins, grid, hours, partners] = await Promise.all([
     cabinTypes(vesselId),
     departureGrid(scheduleId, start, end),
     freshnessHours(),
+    approvedPartners(),
   ]);
   const active = cabins.filter((c) => c.active);
   const horizon = dateWindow(400).until;
@@ -171,6 +173,13 @@ export async function SchedulePage({
             />
             <Select label="Rate plan" name="rate_plan" defaultValue="international" options={RATE_PLANS} />
             <Select
+              label="Only for one travel partner"
+              name="partner"
+              placeholder="All travel partners"
+              options={partners.map((x) => ({ value: x.id, label: x.display_name }))}
+              hint="With the Trade plan: a price only that agency sees."
+            />
+            <Select
               label="Currency"
               name="currency"
               defaultValue="USD"
@@ -293,13 +302,14 @@ export async function DeparturePage({
   const { data: d } = await db
     .from("departures")
     .select(
-      "id, departs_on, returns_on, status, inventory(cabin_type_id, available, confirmed_at, source), rates(id, cabin_type_id, occupancy, rate_plan, currency, amount_minor, child_bands)",
+      "id, departs_on, returns_on, status, inventory(cabin_type_id, available, confirmed_at, source), rates(id, cabin_type_id, occupancy, rate_plan, currency, amount_minor, child_bands), partner_rates(id, partner_org_id, cabin_type_id, occupancy, currency, amount_minor)",
     )
     .eq("id", departureId)
     .eq("schedule_id", scheduleId)
     .maybeSingle();
   if (!d) notFound();
-  const cabins = await cabinTypes(vesselId);
+  const [cabins, partners] = await Promise.all([cabinTypes(vesselId), approvedPartners()]);
+  const partnerName = (id: string) => partners.find((x) => x.id === id)?.display_name ?? "A travel partner";
   return (
     <>
       <p>
@@ -341,6 +351,25 @@ export async function DeparturePage({
             ) : (
               <p className={ui.muted}>No prices.</p>
             )}
+            {d.partner_rates.filter((r) => r.cabin_type_id === c.id).length ? (
+              <ul className={ui.list} aria-label="Company rates">
+                {d.partner_rates
+                  .filter((r) => r.cabin_type_id === c.id)
+                  .map((r) => (
+                    <li key={r.id} className={ui.actions}>
+                      <span>
+                        Company rate for {partnerName(r.partner_org_id)} · {["", "single", "double", "triple"][r.occupancy]} ·{" "}
+                        {formatMoney({ amount: Number(r.amount_minor), currency: r.currency }, "en")} per person
+                      </span>
+                      <ActionForm
+                        action={deletePartnerRate.bind(null, orgId, vesselId, scheduleId, departureId, r.id)}
+                        submit="Remove"
+                        variant="ghost"
+                      />
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
           </Section>
         );
       })}

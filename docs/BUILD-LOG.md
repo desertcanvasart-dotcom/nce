@@ -853,3 +853,46 @@ Faris asked for each sailing to be marked morning, noon or evening, because gues
 - **Screenshots:** 12 in `docs/screenshots/batch-04g/` (prefix `p019-`): the operator's schedule form with "Morning, 08:00", and the customer's reservation with the time and the tip. Fixed after review: the tip no longer repeats the sailing time; it now says "Plan to arrive in Aswan the day before. That day is free for sightseeing."
 
 **Next:** Batch 4h, travel partners.
+
+## 20 Oct 2026 · Batch 4h-1 · Travel partners: applying, approval, team, trade and company rates, search
+
+Brief approved by Faris as recommended (ADR-092): company rate, then trade, then public rate; the same 10 % commission; the client record shows the agency and its selling price, with "Booked through Nilecruz" in small print; partners pay like customers; two pull requests. Branch `batch-04h-partners`, stacked on PR #21; migration `20261020000200_partners`.
+
+**Built:**
+- **Applying** (DASH-B2B-011, DASH-ADM-086): "Apply as a travel partner" at `/account/apply-partner/`.
+  - It asks for the agency name, legal name, country, registration or licence number, website, and a contact name and phone. The database requires the country, registration and contact.
+  - EN wording, with ES/JA drafts (CONTENT-NEEDED #28).
+  - Linked from My journey.
+- **Admin → Travel partners** (DASH-ADM-086–088):
+  - a list with a status filter, and a page per agency showing its company and registration details and its team;
+  - approve, pause or reject (a reason is needed unless approving). Pausing keeps everything.
+- **Paused agencies:** the workspace stays open with a notice. The Overview, bookings and payments stay visible (bookings and payments arrive in 4h-2); search, requests and team management are off.
+- **Team** (DASH-B2B-009, 010):
+  - the team page and actions are now shared by operators and partners (`dashboard/_team/`);
+  - partners can invite reservations or finance users only. The database refuses viewer roles for partner companies.
+  - **Fixed:** accepting an invitation always went to the operator workspace; it now goes to the company's own workspace.
+- **Company rates** (DASH-B2B-012):
+  - `partner_rates` holds a trade price for one named agency, set from the operator's rates form ("Only for one travel partner", Trade plan) and listed on the departure page with a remove button;
+  - it is a separate table, so `rates`, its feeds and its API keep their key;
+  - the same consistency trigger applies, rebased on its latest definition so child bands still never change on an existing rate.
+- **Search** (DASH-B2B-001, 002, ADM-089):
+  - `partner_search` is for owners and reservations users of approved agencies only;
+  - it returns bookable departures with fresh availability and, per cabin and occupancy, the company rate, then the trade rate, then the public rate;
+  - partners never read the rate tables.
+  - The search page prices one cabin for the guests with the offer rules (`groupSearch`) and labels the rate used.
+- **Tests:** `freshCode` now guards two-step codes across test workers (a lock file per admin account). Two workers signing in as the same admin in the same 30-second window had made admin tests flaky.
+
+**Verified, and how:**
+- **Unit:** 5 new tests: pricing at the rate the database chose (company for a single, trade for a double), children and infants, a party too big for the cabin, sorting, and children's ages.
+- **pgTAP:** the new `210_partners` has 24 checks:
+  - company rates are for partner companies only, take the operator's child bands, and are listed by name for operators only;
+  - the public is refused rates; customers and partners read no trade or company rate;
+  - tier order per agency; one agency can't search as another; finance users and operators can't search;
+  - the application needs registration details, one application at a time, no search until approved;
+  - pausing stops search and keeps the team; partner teams have no viewers.
+- **End-to-end:** `partners.spec.ts`: apply (missing fields refused), admin approves; the owner invites reservations and finance colleagues, who join; the operator sets a US$700 company rate and the agency sees US$1,400 for two, "Your company rate"; the finance user gets 403 on search; pause (reason required) with a notice and search refused, then re-approve; axe on 6 screens in Day and Night.
+- **Full suites on a clean database:** verify with 308 unit tests; pgTAP 21 files and 344 checks; e2e 147 passed, 97 skipped. One catalogue test passed on retry: the two-step page was slow under load. That's better than before the guard (1 failed, 1 flaky).
+- **Screenshots:** 36 in `docs/screenshots/batch-04h/`: the application form, the agency's Overview, search results at the company rate and Team, and the admin list and agency page.
+- **Fixed after review:** re-approving an agency left the old pause reason on its page; approving now clears it (e2e checks).
+
+**Next:** 4h-2: reserving for clients, company requests and offers, company bookings and payments, client references, selling totals, and the client booking record.

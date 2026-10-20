@@ -384,6 +384,8 @@ const bulkInput = z.object({
     .refine((v) => v === null || (Number.isInteger(v) && v >= 0 && v <= 400), "0 to 400"),
   occupancy: z.coerce.number().int().min(1).max(3),
   rate_plan: z.enum(["international", "egyptian_citizen", "foreign_resident", "trade"]),
+  // DASH-B2B-012: a trade price for one approved travel partner only.
+  partner: z.string().trim().optional(),
   currency: z.enum(["USD", "EUR", "EGP"]),
   amount: z
     .string()
@@ -444,7 +446,23 @@ export async function bulkUpdate(
     const r = await db.from("inventory").upsert(rows, { onConflict: "departure_id,cabin_type_id" });
     if (r.error) return dbProblem(r.error);
   }
-  if (d.amount !== null) {
+  if (d.amount !== null && d.partner) {
+    if (d.rate_plan !== "trade") return failed("A price for one travel partner uses the Trade plan.");
+    if (d.currency === "EGP") return failed("Travel partner prices are in US$ or €.");
+    const rows = targets.map((t) => ({
+      partner_org_id: d.partner!,
+      departure_id: t.id,
+      cabin_type_id: d.cabin_type_id,
+      vessel_id: vesselId,
+      occupancy: d.occupancy,
+      currency: d.currency as "USD" | "EUR",
+      amount_minor: d.amount!,
+    }));
+    const r = await db
+      .from("partner_rates")
+      .upsert(rows, { onConflict: "partner_org_id,departure_id,cabin_type_id,occupancy,currency" });
+    if (r.error) return dbProblem(r.error);
+  } else if (d.amount !== null) {
     // The database fills in the child bands for new rates and keeps them on updates (DATA-022).
     const rows = targets.map((t) => ({
       departure_id: t.id,
@@ -504,6 +522,24 @@ export async function deleteRate(
   if (error) return dbProblem(error);
   revalidatePath(p.departure(scheduleId, departureId));
   return saved("Rate removed.");
+}
+
+export async function deletePartnerRate(
+  orgId: string | null,
+  vesselId: string,
+  scheduleId: string,
+  departureId: string,
+  rateId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.departure(scheduleId, departureId), { orgId: orgId ?? undefined });
+  const db = await getDb();
+  const { error } = await db.from("partner_rates").delete().eq("id", rateId).eq("departure_id", departureId);
+  if (error) return dbProblem(error);
+  revalidatePath(p.departure(scheduleId, departureId));
+  return saved("Company rate removed.");
 }
 
 // ── Promotions (DASH-ADM-074–085, DASH-OPR-012) ────────────────────────────────────────────────────────

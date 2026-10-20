@@ -1,5 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { expect, type Page } from "@playwright/test";
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { totp } from "./totp";
 
 /** End-to-end helpers against the LOCAL stack only (set by `pnpm with-local-db`). Never staging. */
@@ -68,13 +71,35 @@ export async function signIn(
   if (!expectFailure) await page.waitForURL((u) => !u.pathname.endsWith("/account/sign-in/"), { timeout: 15_000 });
 }
 
-/** Supabase Auth refuses a two-step code that was already used, so one account uses each 30-second window once. */
-const lastWindow = new Map<string, number>();
+/**
+ * Supabase Auth refuses a two-step code that was already used, so one account uses each 30-second window once, across
+ * every test worker: the last window used is kept in a file per account, guarded by a lock directory (mkdir is atomic).
+ */
 async function freshCode(email: string): Promise<string> {
-  const window = () => Math.floor(Date.now() / 30_000);
-  if (lastWindow.get(email) === window()) await new Promise((r) => setTimeout(r, 30_000 - (Date.now() % 30_000) + 250));
-  lastWindow.set(email, window());
-  return totp();
+  const dir = join(tmpdir(), "nilecruz-e2e-totp");
+  mkdirSync(dir, { recursive: true });
+  const key = email.replace(/[^a-z0-9]/gi, "_");
+  const lock = join(dir, `${key}.lock`);
+  const file = join(dir, `${key}.window`);
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  for (let tries = 0; ; tries++) {
+    try {
+      mkdirSync(lock);
+      break;
+    } catch {
+      if (tries > 400) rmSync(lock, { recursive: true, force: true }); // a crashed worker's stale lock
+      await sleep(100);
+    }
+  }
+  try {
+    const window = () => Math.floor(Date.now() / 30_000);
+    const last = existsSync(file) ? Number(readFileSync(file, "utf8")) : -1;
+    if (last >= window()) await sleep(30_000 - (Date.now() % 30_000) + 250);
+    writeFileSync(file, String(window()));
+    return totp();
+  } finally {
+    rmSync(lock, { recursive: true, force: true });
+  }
 }
 
 /** Sign in as a seeded admin, including the two-step code (ADR-064). */

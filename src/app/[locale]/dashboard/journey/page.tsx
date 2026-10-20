@@ -117,6 +117,8 @@ export default async function JourneyHome() {
       {inCompany || session.platformRole === "admin" ? null : (
         <p>
           <Link href="/account/apply-operator/">Run a cruise company? Apply as an operator</Link>
+          {" · "}
+          <Link href="/account/apply-partner/">A travel agency? Apply for trade access</Link>
         </p>
       )}
     </>

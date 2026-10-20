@@ -144,3 +144,10 @@ export async function freshnessHours(): Promise<typeof FRESHNESS_HOURS> {
   const { data } = await db.from("platform_settings").select("value").eq("key", "freshness_hours").maybeSingle();
   return { ...FRESHNESS_HOURS, ...((data?.value ?? {}) as Partial<typeof FRESHNESS_HOURS>) };
 }
+
+/** Approved travel partners by name, for company rates (DASH-B2B-012). Operators and admins only. */
+export async function approvedPartners() {
+  const db = await getDb();
+  const { data } = await db.rpc("approved_partners");
+  return data ?? [];
+}
