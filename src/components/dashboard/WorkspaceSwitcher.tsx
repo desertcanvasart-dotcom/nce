@@ -14,7 +14,7 @@ export function WorkspaceSwitcher({ workspaces }: { workspaces: Workspace[] }) {
       <ul className={styles.switcher}>
         {workspaces.map((w) => {
           const href = workspacePath(w);
-          const label = w.kind === "operator" || w.kind === "partner" ? w.orgName : WORKSPACE_LABEL[w.kind];
+          const label = "orgName" in w ? w.orgName : WORKSPACE_LABEL[w.kind];
           return (
             <li key={href}>
               <Link href={href} aria-current={pathname.startsWith(href) ? "page" : undefined}>

@@ -2,7 +2,7 @@
  * DASH-ROLE-001/006: which workspaces a signed-in person has, and where they land.
  * Pure logic, shared by the server guards and the dashboard navigation.
  */
-export type OrgKind = "operator" | "partner" | "nilecruz";
+export type OrgKind = "operator" | "partner" | "nilecruz" | "tour_office";
 export type OrgStatus = "applied" | "approved" | "paused" | "rejected";
 export type TeamRole = "owner" | "reservations" | "finance" | "viewer";
 export type AdminRole = "super" | "catalogue" | "finance" | "content";
@@ -12,21 +12,24 @@ export type Identity = { platformRole: "customer" | "admin"; adminRole: AdminRol
 
 export type Workspace =
   | { kind: "admin"; adminRole: AdminRole | null }
-  | { kind: "operator" | "partner"; orgId: string; orgName: string; status: OrgStatus; teamRole: TeamRole }
+  | { kind: "operator" | "partner" | "office"; orgId: string; orgName: string; status: OrgStatus; teamRole: TeamRole }
   | { kind: "journey" };
 
 export type WorkspaceKind = Workspace["kind"];
 
-/** Admin first, then companies (operators before partners, by name), then the personal journey everyone has. */
+// A tour office (ADR-097) has the "office" workspace.
+const COMPANY = { operator: "operator", partner: "partner", tour_office: "office" } as const;
+const ORDER = ["operator", "partner", "office"];
+
+/** Admin first, then companies (operators, partners, tour offices; each by name), then the personal journey. */
 export function resolveWorkspaces(id: Identity): Workspace[] {
   const out: Workspace[] = [];
   if (id.platformRole === "admin") out.push({ kind: "admin", adminRole: id.adminRole });
   const companies = id.memberships
-    .filter((m): m is Membership & { kind: "operator" | "partner" } => m.kind === "operator" || m.kind === "partner")
-    .sort((a, b) => (a.kind === b.kind ? a.orgName.localeCompare(b.orgName) : a.kind === "operator" ? -1 : 1));
-  for (const m of companies) {
-    out.push({ kind: m.kind, orgId: m.orgId, orgName: m.orgName, status: m.status, teamRole: m.teamRole });
-  }
+    .filter((m): m is Membership & { kind: keyof typeof COMPANY } => m.kind in COMPANY)
+    .map((m) => ({ kind: COMPANY[m.kind], orgId: m.orgId, orgName: m.orgName, status: m.status, teamRole: m.teamRole }))
+    .sort((a, b) => ORDER.indexOf(a.kind) - ORDER.indexOf(b.kind) || a.orgName.localeCompare(b.orgName));
+  out.push(...companies);
   out.push({ kind: "journey" });
   return out;
 }

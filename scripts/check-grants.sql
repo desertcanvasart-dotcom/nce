@@ -30,6 +30,9 @@ with intended(table_name, grantee, privileges) as (
     ('partner_booking_details', 'authenticated', 'SELECT,UPDATE'),
     -- Batch 7-1: Contact messages: anyone sends; admins read and file them (filing is a column grant, not listed here).
     ('contact_messages', 'anon', 'INSERT'), ('contact_messages', 'authenticated', 'INSERT,SELECT'),
+    -- Batch 7-2: tour rates and seasons are public (prices, ADR-087); closed starts are read by the office and admins.
+    ('tour_rates', 'anon', 'SELECT'), ('tour_seasons', 'anon', 'SELECT'), ('tour_slot_closures', 'authenticated', 'SELECT'),
+    ('tour_slot_closures', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -43,7 +46,7 @@ with intended(table_name, grantee, privileges) as (
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
-                    'partner_rates']) t,
+                    'partner_rates', 'tour_rates', 'tour_seasons']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'

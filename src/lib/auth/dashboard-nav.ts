@@ -46,6 +46,9 @@ const PARTNER: NavItem[] = [
   { slug: "team", label: "Team", batch: "4h", roles: [] },
 ];
 
+// ADR-097: a tour office sees its tours' bookings by day and can cancel a start it can't run.
+const OFFICE: NavItem[] = [{ slug: "", label: "Bookings by day", batch: "7", roles: ["reservations", "viewer", "finance"] }];
+
 // DASH-CUS-002, ADR-091: the guide's sections. Offers live inside Requests and offers; URLs are unchanged.
 const JOURNEY: NavItem[] = [
   { slug: "", label: "Overview", batch: "4g" },
@@ -69,6 +72,8 @@ export function navFor(w: Workspace): NavItem[] {
       return OPERATOR.filter((i) => allowed(i, w.teamRole, "owner"));
     case "partner":
       return PARTNER.filter((i) => allowed(i, w.teamRole, "owner"));
+    case "office":
+      return OFFICE.filter((i) => allowed(i, w.teamRole, "owner"));
     case "journey":
       return JOURNEY;
   }
@@ -76,7 +81,7 @@ export function navFor(w: Workspace): NavItem[] {
 
 /** The section for a URL slug if this person may see it; undefined means 404 (unknown) or 403 (not theirs). */
 export function sectionAccess(w: Workspace, slug: string): "ok" | "forbidden" | "unknown" {
-  const all = { admin: ADMIN, operator: OPERATOR, partner: PARTNER, journey: JOURNEY }[w.kind];
+  const all = { admin: ADMIN, operator: OPERATOR, partner: PARTNER, office: OFFICE, journey: JOURNEY }[w.kind];
   if (!all.some((i) => i.slug === slug)) return "unknown";
   return navFor(w).some((i) => i.slug === slug) ? "ok" : "forbidden";
 }
@@ -85,5 +90,6 @@ export const WORKSPACE_LABEL: Record<Workspace["kind"], string> = {
   admin: "Nilecruz admin",
   operator: "Operator",
   partner: "Travel partner",
+  office: "Tour office",
   journey: "My journey",
 };

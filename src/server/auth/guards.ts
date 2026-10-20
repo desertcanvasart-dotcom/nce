@@ -32,7 +32,7 @@ export async function requireAdmin(roles?: AdminRole[], returnTo = "/dashboard/a
   return session;
 }
 
-type Company = Extract<Workspace, { kind: "operator" | "partner" }>;
+type Company = Extract<Workspace, { kind: "operator" | "partner" | "office" }>;
 
 /**
  * A member of this company with one of `roles`. A company that is not approved is refused for actions
@@ -47,11 +47,11 @@ export async function requireOrgRole(
     allowPending = false,
     allowPaused = false,
     returnTo,
-  }: { kind?: "operator" | "partner"; allowPending?: boolean; allowPaused?: boolean; returnTo?: string } = {},
+  }: { kind?: Company["kind"]; allowPending?: boolean; allowPaused?: boolean; returnTo?: string } = {},
 ): Promise<{ session: Session; company: Company }> {
   const session = await requireUser(returnTo ?? "/dashboard/");
   const company = resolveWorkspaces(session).find(
-    (w): w is Company => (w.kind === "operator" || w.kind === "partner") && w.orgId === orgId,
+    (w): w is Company => "orgId" in w && w.orgId === orgId,
   );
   if (!company || (kind && company.kind !== kind)) forbidden();
   if (roles !== "any" && !roles.includes(company.teamRole)) forbidden();

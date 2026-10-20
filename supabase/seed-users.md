@@ -25,6 +25,8 @@ Password for every account: `nilecruz-local-only`
 | reservations@partner.test    | Partner · reservations               |
 | finance@partner.test         | Partner · finance                    |
 | customer@example.test        | Customer                             |
+| office@luxor-office.test     | Tour office (Luxor) · owner          |
+| office@aswan-office.test     | Tour office (Aswan) · owner          |
 
 ## Two-step sign-in (admins)
 
