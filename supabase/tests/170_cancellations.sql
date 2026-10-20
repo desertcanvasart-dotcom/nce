@@ -60,8 +60,8 @@ select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is((select array[days_before, percent]::bigint[] || array[charge_minor, refund_minor, unpaid_charge_minor]
   from public.cancellation_quote((select v::uuid from t where k = 'res1'))), array[75, 35, 70000, 130000, 0]::bigint[],
   '75 days before: 35 % charged, the rest of what was paid refunded');
-select is((select unpaid_charge_minor from public.cancellation_quote((select v::uuid from t where k = 'res3'))), 70000::bigint,
-  'unpaid: the charge is still owed');
+select is((select array[charge_minor, refund_minor, unpaid_charge_minor] from public.cancellation_quote((select v::uuid from t where k = 'res3'))),
+  array[70000, 0, 0]::bigint[], 'unpaid: the policy charge comes out of nothing paid, so nothing is owed (ADR-094)');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000041');
 select is((select count(*)::int from public.cancellation_quote((select v::uuid from t where k = 'res1'))), 0, 'another customer gets no quote');
 

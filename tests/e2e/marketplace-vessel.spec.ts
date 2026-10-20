@@ -152,7 +152,10 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
   await page.getByRole("button", { name: "Reserve" }).click();
   await page.waitForURL(/\/dashboard\/journey\/reservations\/[0-9a-f-]{36}\/$/);
   await expect(page.getByText("US$2,000").first()).toBeVisible();
-  await expect(page.getByText(/Booked on Nilecruz at the published rate/)).toBeVisible();
+  // ADR-094: the operator sells; Nilecruz books as its agent. An unpaid booking costs nothing to cancel.
+  await expect(page.getByText(/Booked through Nilecruz, acting as booking agent for the operator of/)).toBeVisible();
+  await expect(page.getByText(/the operator; booked through Nilecruz as its agent/)).toBeVisible();
+  await expect(page.getByText("You have paid nothing yet, so cancelling costs nothing", { exact: false })).toBeVisible();
 });
 
 test("'Ask for an offer' opens a request prefilled with the route and dates", async ({ page }) => {
