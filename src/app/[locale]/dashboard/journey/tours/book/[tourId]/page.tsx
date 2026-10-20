@@ -7,7 +7,7 @@ import { STANDARD_TOUR_BANDS } from "@/lib/tours/calendar";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import { TourCalendar } from "@/components/tours/TourCalendar";
 import { requireUser } from "@/server/auth";
-import { tourForOrdering } from "@/server/tours/orders";
+import { myCruiseDays, tourForOrdering } from "@/server/tours/orders";
 import { isUuid } from "../../../../sections";
 import { orderTour, orderTourSlot } from "../../../actions";
 import { money, PRICING, SESSION_KIND } from "../../../../_bookings/TourOrderBits";
@@ -19,8 +19,8 @@ import { money, PRICING, SESSION_KIND } from "../../../../_bookings/TourOrderBit
 export default async function BookTour({ params }: { params: Promise<{ tourId: string }> }) {
   const { tourId } = await params;
   if (!isUuid(tourId)) notFound();
-  await requireUser(`/dashboard/journey/tours/book/${tourId}/`);
-  const t = await tourForOrdering(tourId);
+  const session = await requireUser(`/dashboard/journey/tours/book/${tourId}/`);
+  const [t, cruise] = await Promise.all([tourForOrdering(tourId), myCruiseDays(session.userId)]);
   if (!t) notFound();
   const open = t.sessions.filter((s) => s.placesLeft > 0);
   const own = t.cancellation_bands as CancellationBand[];
@@ -77,6 +77,8 @@ export default async function BookTour({ params }: { params: Promise<{ tourId: s
               closed={t.closed}
               now={new Date().toISOString()}
               adultsOnly={t.adults_only}
+              location={t.location}
+              cruise={cruise}
             />
             {details}
             {policy}

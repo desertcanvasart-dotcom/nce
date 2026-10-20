@@ -145,3 +145,57 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+/* The customer's cruise: a dot on each day, highlighted where the ship is in the tour's city. */
+.cruise {
+  position: relative;
+}
+
+.cruise::after {
+  content: "";
+  position: absolute;
+  bottom: var(--space-1);
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: var(--radius-pill);
+  background: var(--ink-muted);
+}
+
+.here {
+  background: var(--accent-soft);
+}
+
+.here::after {
+  background: var(--accent);
+}
+
+.cruiseList {
+  margin-bottom: var(--space-3);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.cruiseList summary {
+  cursor: pointer;
+}
+
+.cruiseList ul {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-4);
+}
+
+.hereKey,
+.hereItem {
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.hereItem {
+  font-weight: var(--type-label-weight);
+}
+
+.fits {
+  color: var(--ink);
+}

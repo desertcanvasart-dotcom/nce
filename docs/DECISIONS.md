@@ -717,7 +717,7 @@ Choices made while building ADR-097 where the sheet or the brief didn't say:
 - **Notice** (Faris, 21 Oct): each row's "Book at least (hours before)" from the sheet. Only an empty cell falls back to 24 hours for tours, 12 for transfers and meet and assist. Transfers and meet and assist run every day.
 - **A start the office can't run:** the office cancels it in its dashboard with a reason; every booking on it is cancelled and paid ones are approved for a full refund, which finance issues through the usual refund page.
 - **Office logins:** Nilecruz admins add them (one per office). Offices don't invite their own staff yet.
+- **The customer's cruise on the calendar** (Faris, 21 Oct): every day of their upcoming cruise is marked, with where the ship is (from the itinerary's day titles, else the route's start and end; the day before a morning sailing counts as arrival in the start city). Days the ship is in the tour's city are highlighted, and picking a day says where the ship is that day.
 - **Not built yet (follow-ups):**
   - a shared start below its minimum is not converted automatically; the minimum is stored, and the Nilecruz office offers the private tour at the shared price by hand (agreed by Faris, 21 Oct);
-  - the calendar doesn't yet suggest the days the customer's cruise is moored nearby (ADR-097);
   - the Programs tab (multi-day sightseeing that follows a cruise) isn't imported: programs stay as they are until their pricing is designed.

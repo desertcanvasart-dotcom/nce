@@ -1,5 +1,6 @@
 import "server-only";
 import type { Season } from "@/lib/tours/calendar";
+import { cruiseDays, type CruiseDay } from "@/lib/tours/cruise-days";
 import { getDb } from "@/server/db";
 
 /** Tour orders (Batch 4f-2c: DASH-PAY-014, DATA-027, 041). RLS: customers see their own orders, admins all. */
@@ -143,4 +144,35 @@ export async function adminTourOrders() {
       .map((o) => ({ ...o, refundLeft: refundLeft(o) })),
     latest: rows,
   };
+}
+
+/** The customer's own upcoming cruises, day by day, so the tour calendar can show where their ship is (Faris, 21 Oct). */
+export async function myCruiseDays(customerId: string): Promise<CruiseDay[]> {
+  const db = await getDb();
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+  const { data, error } = await db
+    .from("reservations")
+    .select(
+      "reference, status, vessel:vessels(name), departure:departures!inner(departs_on, returns_on, schedule:schedules(origin, destination, sailing_period, schedule_days(day_number, locale, title)))",
+    )
+    .eq("customer_id", customerId)
+    .neq("status", "cancelled")
+    .gte("departure.returns_on", today);
+  if (error) throw error;
+  return (data ?? []).flatMap((r) => {
+    const d = r.departure;
+    const s = d?.schedule;
+    if (!d || !s) return [];
+    const titles = Object.fromEntries(s.schedule_days.filter((x) => x.locale === "en").map((x) => [x.day_number, x.title]));
+    return cruiseDays({
+      reference: r.reference,
+      vessel: r.vessel?.name ?? "your ship",
+      departsOn: d.departs_on,
+      returnsOn: d.returns_on,
+      origin: s.origin,
+      destination: s.destination,
+      morning: s.sailing_period === "morning",
+      titles,
+    });
+  });
 }

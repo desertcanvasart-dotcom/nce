@@ -2,6 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { refreshSignature } from "@/lib/connections/signature";
 import { FEED_PULL_TEST_SECRET } from "../support/feed-tls";
 import { adminDb, LOCAL, newUser, signIn } from "../support/local-auth";
+import { sampleReservations } from "../support/sailing";
 import { paidTourEvent } from "../support/stripe";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
@@ -42,7 +43,7 @@ async function pickDay(page: Page) {
   const month = new Date(`${target}T12:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
   for (let i = 0; i < 3 && !(await page.getByText(month, { exact: true }).isVisible()); i++)
     await page.getByRole("button", { name: "Next month" }).click();
-  await page.getByRole("button", { name: dayLabel }).click();
+  await page.getByRole("button", { name: new RegExp(`^${dayLabel}(,|$)`) }).click();
 }
 
 test.beforeAll(async () => {
@@ -119,6 +120,20 @@ test.beforeAll(async () => {
     },
   });
   customer = await newUser("calendar-customer");
+  // Their cruise: day 3 is in Luxor on the tour's Thursday (Faris, 21 Oct: show where the ship is each day).
+  const cairoToday = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+  const departsIn = Math.round((Date.parse(target) - Date.parse(cairoToday)) / 86_400_000) - 2;
+  const cruise = await sampleReservations({
+    run: `cal-${RUN}`,
+    customer,
+    ownerEmail: "owner@operator-a.test",
+    bands: [{ from_days: 0, percent: 100 }],
+    departsIn,
+    count: 1,
+  });
+  await db
+    .from("schedule_days")
+    .insert({ schedule_id: cruise.scheduleId, day_number: 3, locale: "en", title: "Luxor: Karnak and Luxor Temple" });
 });
 
 test("a tour with rates shows its prices and the calendar link, not 'coming soon' [ADR-097]", async ({ page, request }) => {
@@ -160,6 +175,18 @@ test("a customer picks a date and time, books a shared tour for 2 and pays throu
   await page.reload();
   await expect(page.getByText("Confirmed", { exact: true })).toBeVisible();
   await expect(page.getByText("Shared", { exact: true })).toBeVisible();
+});
+
+test("the calendar shows where the customer's ship is each day and marks the days it's in the tour's city [Faris 21 Oct]", async ({
+  page,
+}) => {
+  await signIn(page, customer.email, customer.password);
+  await page.goto(`/dashboard/journey/tours/book/${tourId}/`);
+  await expect(page.getByText("Your cruise, day by day.")).toBeVisible();
+  await expect(page.getByText("Day 3: Luxor: Karnak and Luxor Temple (Luxor)")).toBeVisible();
+  await expect(page.getByRole("button", { name: new RegExp(`^${dayLabel}, your cruise: Day 3`) })).toBeVisible();
+  await pickDay(page);
+  await expect(page.getByText("That day your ship is in Luxor: Day 3: Luxor: Karnak and Luxor Temple.")).toBeVisible();
 });
 
 test("the shared start has 6 places left; 7 more are refused and a party of 9 is offered private [ADR-097]", async ({ page }) => {

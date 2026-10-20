@@ -13,6 +13,7 @@ import {
   type RateRow,
   type Season,
 } from "@/lib/tours/calendar";
+import { shipIn, type CruiseDay } from "@/lib/tours/cruise-days";
 import styles from "./TourCalendar.module.css";
 
 const MODE = { shared: "Shared group", private: "Private tour", transfer: "Private transfer", assist: "Meet and assist" };
@@ -36,6 +37,8 @@ export function TourCalendar({
   closed,
   now,
   adultsOnly,
+  location,
+  cruise = [],
 }: {
   rates: RateRow[];
   seasons: Season[];
@@ -43,6 +46,9 @@ export function TourCalendar({
   closed: string[];
   now: string;
   adultsOnly: boolean;
+  /** The tour's place, to mark the days the customer's ship is there. */
+  location: string;
+  cruise?: CruiseDay[];
 }) {
   const nowMs = Date.parse(now);
   const today = new Date(nowMs).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
@@ -52,7 +58,12 @@ export function TourCalendar({
   const [rateId, setRateId] = useState(rates[0]!.id);
   const [adults, setAdults] = useState(2);
   const [kids, setKids] = useState("");
-  const [month, setMonth] = useState(today.slice(0, 7));
+  // Open on the month of the customer's next day in the tour's city, if they have a cruise booked.
+  const firstHere = cruise.find((c) => c.date >= today && shipIn(c, location));
+  const [month, setMonth] = useState((firstHere?.date ?? today).slice(0, 7));
+  const onCruise = new Map(cruise.map((c) => [c.date, c]));
+  const fmt = (d: string, o: Intl.DateTimeFormatOptions) =>
+    new Date(`${d}T12:00:00Z`).toLocaleDateString("en-GB", { ...o, timeZone: "UTC" });
   const [day, setDay] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
 
@@ -169,15 +180,17 @@ export function TourCalendar({
               <button
                 key={d}
                 type="button"
-                className={styles.day}
+                className={[
+                  styles.day,
+                  onCruise.has(d) ? styles.cruise : "",
+                  onCruise.has(d) && shipIn(onCruise.get(d)!, location) ? styles.here : "",
+                ].join(" ")}
                 disabled={!open.has(d) || !times(d).length}
                 aria-pressed={d === day}
-                aria-label={new Date(`${d}T12:00:00Z`).toLocaleDateString("en-GB", {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                  timeZone: "UTC",
-                })}
+                aria-label={
+                  fmt(d, { weekday: "long", day: "numeric", month: "long" }) +
+                  (onCruise.has(d) ? `, your cruise: ${onCruise.get(d)!.label}` : "")
+                }
                 onClick={() => choose(d)}
               >
                 {Number(d.slice(8))}
@@ -187,6 +200,31 @@ export function TourCalendar({
             ),
           )}
         </div>
+        {cruise.length ? (
+          <details className={styles.cruiseList} open>
+            <summary>
+              Your cruise, day by day. <span className={styles.hereKey}>Highlighted</span>: your ship is in {location}.
+            </summary>
+            <ul>
+              {cruise.map((c) => (
+                <li key={`${c.reference}-${c.date}`} className={shipIn(c, location) ? styles.hereItem : undefined}>
+                  {fmt(c.date, { weekday: "short", day: "numeric", month: "short" })} · {c.label}
+                  {c.place ? ` (${c.place})` : ""}
+                </li>
+              ))}
+            </ul>
+            <p className={styles.muted}>
+              {cruise[0]!.vessel} · {cruise[0]!.reference}. Check the times with your cruise’s programme before you book.
+            </p>
+          </details>
+        ) : null}
+        {day && onCruise.has(day) ? (
+          <p className={shipIn(onCruise.get(day)!, location) ? styles.fits : styles.problem}>
+            {shipIn(onCruise.get(day)!, location)
+              ? `That day your ship is in ${onCruise.get(day)!.place}: ${onCruise.get(day)!.label}.`
+              : `That day your ship is ${onCruise.get(day)!.place ? `in ${onCruise.get(day)!.place}` : "on the river"}, not in ${location}: ${onCruise.get(day)!.label}.`}
+          </p>
+        ) : null}
         {day ? (
           <label className={styles.time}>
             Start time

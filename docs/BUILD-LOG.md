@@ -1305,4 +1305,10 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **The import, tried locally:** I loaded a filled copy of the template with made-up prices, ran the dry run, applied it, then applied it again (no change the second time). The database price matched the page.
 - **Screenshots:** 18 in `docs/screenshots/batch-07/` (prefix `7-2-`): the tour page with prices, the booking calendar and the Aswan office's bookings, at 375, 768 and 1440 in Day and Night.
 
+**Added after review (21 Oct, Faris's answers):**
+- **Private tours, children's prices:** 6–11 pay 50 % of the adult price, or the sheet's figure; 3–5 pay 25 %.
+- **The customer's cruise on the tour calendar:** each day of an upcoming cruise is marked with where the ship is, and days in the tour's city are highlighted. Picking a day says where the ship is.
+  - Unit: `cruise-days.test.ts`, 4 tests.
+  - End-to-end: a new test in `tour-calendar.spec.ts`. The calendar, journey and tour order specs pass, 15 tests.
+
 **Next:** Faris's filled rate sheet (staging dry run first), then Batch 8.
