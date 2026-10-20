@@ -826,3 +826,30 @@
 - **Screenshots:** 30 in `docs/screenshots/batch-04g/`. Fixed after review: reservation deadlines read "by end of 27 Oct 2026, Cairo" instead of "28 Oct 00:00", and "Coming up" lines start with the reservation reference.
 
 **Next:** PROPOSED-019, the sailing time of day, then Batch 4h (travel partners).
+
+### PROPOSED-019: sailing time of day (branch `proposed-019-sailing-time`, stacked on 4g; migration `20261020000100_sailing_time`)
+
+Faris asked for each sailing to be marked morning, noon or evening, because guests on a morning sailing (especially from Aswan) arrive the day before and do their sightseeing then. Approved on 20 Oct (ADR-091).
+
+**Built:**
+- **Database:**
+  - `schedules.sailing_period` (morning, noon or evening) and an optional exact `sails_at` time, Cairo time;
+  - both optional, so feeds and older schedules keep working;
+  - a rule refuses a time outside its period: morning before 12:00, noon 12:00–15:59, evening from 16:00.
+- **Operators and catalogue admins:** "Sails on the first day" and "Exact time (optional)" on the schedule form.
+  - A time on its own decides the period.
+  - A mismatch is refused in plain words ("13:00 is around noon; choose that, or correct the time").
+  - The schedules list shows the time.
+- **Travellers:**
+  - offers, the reservation's Sailing section, and the Overview's next trip say "Sails from Aswan in the morning (08:00 Cairo time)";
+  - a morning sailing adds "plan to arrive in Aswan the day before. That day is free for sightseeing."
+  - "Suggested for your cruise" includes the day before a morning sailing, for sightseeing and for airport transfers or Meet and Assist on arrival.
+
+**Verified, and how:**
+- **Unit:** 13 new tests: period boundaries (11:59, 12:00, 15:59, 16:00), invalid times, the wording, the tip, and suggestions for the day before (morning only).
+- **pgTAP:** the new `200_sailing_time` has 6 checks on the time-in-period rule.
+- **End-to-end** (`sailing-time.spec.ts`): the operator's 13:00 is refused for a morning sailing and 08:00 is saved; the customer's reservation shows the time and the tip, and the Overview's next trip shows the tip.
+- **Full suites on a clean database:** verify with 303 unit tests; pgTAP 20 files and 320 checks; e2e 141 passed, 97 skipped. One older catalogue CSV test passed on retry.
+- **Screenshots:** 12 in `docs/screenshots/batch-04g/` (prefix `p019-`): the operator's schedule form with "Morning, 08:00", and the customer's reservation with the time and the tip. Fixed after review: the tip no longer repeats the sailing time; it now says "Plan to arrive in Aswan the day before. That day is free for sightseeing."
+
+**Next:** Batch 4h, travel partners.
