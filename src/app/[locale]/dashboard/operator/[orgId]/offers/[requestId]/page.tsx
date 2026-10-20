@@ -39,9 +39,11 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
   const revising = sp.revise && isUuid(sp.revise) ? mine.find((o) => o.id === sp.revise && o.status === "sent") : undefined;
   const departureId = sp.departure && isUuid(sp.departure) ? sp.departure : revising?.departure_id;
   const chosen = departures.find((d) => d.id === departureId);
-  const cabins = chosen
-    ? await cabinsForDeparture(chosen.id, revising?.rate_plan ?? "international", revising?.currency ?? "USD")
-    : [];
+  // ADR-092: a travel partner's request may be answered at the trade rate; a customer's never is.
+  const partner = r.buyer_org_id !== null;
+  const plans = partner ? RATE_PLANS : RATE_PLANS.filter((p) => p.value !== "trade");
+  const defaultPlan = revising?.rate_plan ?? (partner ? "trade" : "international");
+  const cabins = chosen ? await cabinsForDeparture(chosen.id, defaultPlan, revising?.currency ?? "USD") : [];
   const base = `/dashboard/operator/${orgId}/offers/${requestId}/`;
   const keep = revising ? `&revise=${revising.id}` : "";
   const lineDefault = (i: number) =>
@@ -62,11 +64,19 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
         {guestsText(r.adults, r.child_ages)} · {r.cabins} cabin{r.cabins === 1 ? "" : "s"}
         {r.budget_minor ? ` · budget ${formatMoney({ amount: Number(r.budget_minor), currency: r.budget_currency! }, "en")}` : ""}
       </p>
+      {partner ? (
+        <Notice>
+          <Badge tone="accent">Travel partner</Badge> This request is from a travel partner booking for a client. You may offer at
+          the trade rate.
+        </Notice>
+      ) : null}
       {r.cabin_notes ? <p>Cabins: {r.cabin_notes}</p> : null}
       {r.notes ? <p className={ui.prewrap}>{r.notes}</p> : null}
       {r.status !== "open" ? <Notice>This request is no longer open.</Notice> : null}
       {sp.sent ? (
-        <Notice tone="success">Offer sent. The customer sees it now; no cabins are held until they accept.</Notice>
+        <Notice tone="success">
+          Offer sent. {partner ? "The travel partner" : "The customer"} sees it now; no cabins are held until they accept.
+        </Notice>
       ) : null}
 
       <Section title="Your offers on this request" id="offers">
@@ -138,13 +148,7 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
               >
                 <input type="hidden" name="departure_id" value={chosen.id} />
                 <div className={ui.grid}>
-                  <Select
-                    label="Rate plan"
-                    name="plan"
-                    required
-                    options={RATE_PLANS}
-                    defaultValue={revising?.rate_plan ?? "international"}
-                  />
+                  <Select label="Rate plan" name="plan" required options={plans} defaultValue={defaultPlan} />
                   <Select
                     label="Currency"
                     name="currency"

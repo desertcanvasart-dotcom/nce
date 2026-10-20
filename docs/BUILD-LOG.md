@@ -939,3 +939,46 @@ Brief approved by Faris as recommended (ADR-092): company rate, then trade, then
   - axe on 5 screens in Day and Night.
 - **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); pgTAP, all files; end-to-end with `CI=1`: 147 passed, 1 flaky (a catalogue test that passed on retry, load on this machine), the rest skipped as usual without the local stack.
 - **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2-`): reserve, company bookings, booking, client record and payments, at 375, 768 and 1440 in Day and Night.
+
+### Batch 4h-2b: Company requests and offers (branch `batch-04h-2b-requests`, stacked on 4h-2a; migration `20261020000400_partner_requests`)
+
+The second 4h-2 PR. With it every Batch 4h requirement is Verified, and every dashboard section in the nav is built.
+
+**Built:**
+- **Company requests in the database:**
+  - `cruise_requests.buyer_org_id` and `buyer_name`. A trigger takes the name from the database and stops a request changing hands.
+  - Only owners and reservations users of an approved agency (`can_trade`) can create one, so a paused agency can't ask.
+  - The company's owner and reservations users read its requests and their offers; finance users don't. A requester who leaves the company loses access.
+  - Customer-only checks now also require `buyer_org_id is null`.
+  - Operators get "New cruise request from a travel partner".
+- **`send_offer`:** lifted from its current definition with two changes. The trade plan is refused on a customer's request (ADR-092), and the company, not the requester, is told about new and revised offers.
+- **`accept_offer`:** lifted with only the company path added:
+  - the company's owner or reservations users accept while the agency can trade;
+  - the reservation belongs to the company (`buyer_org_id`, `buyer_name`, `booked_by`), with an empty client-details row;
+  - the operator is told "trade booking … from <agency>", and the company is told instead of a person.
+- **Screens:**
+  - Partner **Requests and offers**: the company's requests and the shared request form (now `RequestFields` and `parseRequest`, also used by My journey);
+  - one request with its offers side by side, and its status once accepted or closed;
+  - **Accept for your client**: terms, policy, every guest named, the client reference and selling price, then the booking page;
+  - operators see a "Travel partner" badge in their list, a notice on the request, and the rate plan defaults to Trade (Trade isn't offered for customers' requests);
+  - the partner overview links to requests.
+  - Company requests stay out of the requester's own My journey.
+- **Tests made independent of leftover data:** two counts in `210` and `220` are scoped to the test's own sailing, so they pass after end-to-end runs too.
+
+**Verified, and how:**
+- **pgTAP:** the new `230_partner_requests` has 17 checks:
+  - finance users and customers can't send a request in the agency's name; a reservations user can, and the company name comes from the database whatever is sent;
+  - the owner sees the company's request; finance users and customers don't; the operator sees it marked as a travel partner's;
+  - the operator offers at the trade rate, but not on a customer's request; the company's reservations users see the offer, and the company is told;
+  - finance users can't accept; the owner accepts a colleague's request, and the result is a company booking at the offered trade price, with a client-details row;
+  - a customer's request can't be moved to a company; a paused agency can't ask.
+  - The full suite on a freshly reset database: 23 files, 379 checks.
+- **End-to-end** (`partner-requests.spec.ts`, 6 tests):
+  - the reservations user sends a request from the form, and it isn't in their own My journey;
+  - the operator's list shows "Travel partner", the request shows the notice, and the rate plan defaults to Trade;
+  - the owner compares offers, accepts with guests, the client reference and US$2,000 against the US$1,600 offer (a US$400 difference shown), the request shows as accepted, and the booking is in Company bookings;
+  - finance users get 403 on Requests and offers;
+  - axe on 2 screens in Day and Night.
+  - `dashboard.spec`'s placeholder test now checks that the section is built.
+- **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); end-to-end with `CI=1`: 160 passed, none failed or flaky (97 skipped as usual).
+- **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2b-`): the partner's requests, one request with two offers, and accept; the operator's list and request with the travel-partner notice; at 375, 768 and 1440 in Day and Night. Long sample-sailing names (test run IDs) overflow headings at 375, as on earlier pages; real names are short.

@@ -445,6 +445,8 @@ export type Database = {
           adults: number;
           budget_currency: string | null;
           budget_minor: number | null;
+          buyer_name: string | null;
+          buyer_org_id: string | null;
           cabin_notes: string | null;
           cabins: number;
           child_ages: number[];
@@ -466,6 +468,8 @@ export type Database = {
           adults: number;
           budget_currency?: string | null;
           budget_minor?: number | null;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cabin_notes?: string | null;
           cabins: number;
           child_ages?: number[];
@@ -487,6 +491,8 @@ export type Database = {
           adults?: number;
           budget_currency?: string | null;
           budget_minor?: number | null;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cabin_notes?: string | null;
           cabins?: number;
           child_ages?: number[];
@@ -504,7 +510,15 @@ export type Database = {
           status?: Database["public"]["Enums"]["request_status"];
           updated_at?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "cruise_requests_buyer_org_id_fkey";
+            columns: ["buyer_org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       departures: {
         Row: {

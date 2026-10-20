@@ -38,6 +38,12 @@ export default async function PartnerOverview({ params }: { params: Promise<{ or
               neither is set.
             </li>
           ) : null}
+          {searches ? (
+            <li>
+              <Link href={`${base}requests/`}>Requests and offers</Link>: ask operators for offers for a client, compare them and
+              accept one.
+            </li>
+          ) : null}
           <li>
             <Link href={`${base}bookings/`}>Company bookings</Link>: every booking with its client reference, payments and the
             client booking record.

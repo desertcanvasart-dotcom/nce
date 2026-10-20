@@ -19,7 +19,7 @@ export default async function AcceptOffer({ params }: Props) {
   if (!isUuid(requestId) || !isUuid(offerId)) notFound();
   const session = await requireUser(`/dashboard/journey/requests/${requestId}/accept/${offerId}/`);
   const [r, o] = await Promise.all([request(requestId), offer(offerId)]);
-  if (!r || !o || r.customer_id !== session.userId || o.request_id !== r.id) notFound();
+  if (!r || !o || r.customer_id !== session.userId || r.buyer_org_id || o.request_id !== r.id) notFound();
   const now = nowMs();
   const policy = o.departure ? await policyFor(o.departure.id) : null;
   const terms = (l: string) => policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms;

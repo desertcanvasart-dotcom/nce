@@ -864,6 +864,10 @@ STATUS.update({
  "DASH-B2B-008": ("Verified", B4H2A+'printable client booking record: agency name, client reference, trip, cabins, guests, cancellation terms, selling price; "Booked through Nilecruz" in small print; never the trade price or bank details (e2e)'),
  "DASH-B2B-013": ("Verified", B4H2A+'local-rate eligibility proof stays with the reservation and can be uploaded by the agency\'s owner or reservations users (policy acts_for_reservation); verified by the operator as before'),
 })
+B4H2B = "Batch 4h-2b (20 Oct 2026): "
+STATUS.update({
+ "DASH-B2B-004": ("Verified", B4H2B+'owners and reservations users send requests for the company; operators see them marked "Travel partner" and may offer at the trade rate (the trade plan is refused on customers\' requests); any owner or reservations user compares the offers and accepts one, with the client reference and selling price; the booking belongs to the company; finance users and customers see none of it (230, e2e)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

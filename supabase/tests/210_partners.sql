@@ -47,7 +47,8 @@ select throws_ok($$insert into public.partner_rates (partner_org_id, departure_i
 select lives_ok($$insert into public.partner_rates (partner_org_id, departure_id, cabin_type_id, vessel_id, occupancy, currency, amount_minor)
   values ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', '00000000-0000-4000-f100-000000000001',
   '00000000-0000-4000-8000-000000000003', 2, 'USD', 70000)$$, 'the operator sets a rate for one agency');
-select ok((select child_bands <> '[]'::jsonb from public.partner_rates where partner_org_id = '00000000-0000-4000-b000-0000000000c1'),
+select ok((select child_bands <> '[]'::jsonb from public.partner_rates where partner_org_id = '00000000-0000-4000-b000-0000000000c1'
+  and departure_id = '00000000-0000-4000-f300-000000000001'),
   'it takes the operator''s child bands');
 select is((select count(*)::int from public.approved_partners()), 2, 'operators see approved agencies by name');
 

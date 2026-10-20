@@ -65,7 +65,8 @@ select is((select total_minor from public.reservations where reference = (select
 
 -- Who sees what (DASH-B2B-005, 007, DASH-ADM-089).
 select pg_temp.as_user('00000000-0000-4000-a000-000000000032');
-select is((select count(*)::int from public.reservations where buyer_org_id = '00000000-0000-4000-b000-0000000000c1'), 2,
+select is((select count(*)::int from public.reservations where buyer_org_id = '00000000-0000-4000-b000-0000000000c1'
+  and departure_id = '00000000-0000-4000-f300-000000000001'), 2,
   'the agency''s finance user sees its bookings');
 select is((select selling_total_minor from public.partner_booking_details where reservation_id = (select v::uuid from t where k = 'id1')), 180000::bigint,
   'and the selling total');
