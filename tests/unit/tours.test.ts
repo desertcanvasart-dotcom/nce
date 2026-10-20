@@ -129,6 +129,14 @@ describe("readiness: information-only until sellable (DASH-ADM-073)", () => {
   it("is a draft until published", () => {
     expect(tourReadiness({ ...base, published: false }).state).toBe("draft");
   });
+  it("is bookable on the calendar with an office and rates, no supplier or sessions needed [ADR-097]", () => {
+    const cal = { ...base, hasSupplier: false, bands: [], futureSessions: 0 };
+    expect(tourReadiness({ ...cal, hasOffice: true, activeRates: 2 })).toEqual({ state: "bookable", missing: [] });
+    expect(tourReadiness({ ...cal, hasOffice: true, activeRates: 0 })).toEqual({
+      state: "information",
+      missing: ["rates (from the rate sheet)"],
+    });
+  });
 });
 
 describe("programs (DASH-ADM-070, 071)", () => {

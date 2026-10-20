@@ -163,3 +163,24 @@ export function flexibleTimes(mode: TourMode): string[] {
   for (let h = from; h < to; h++) for (const m of ["00", "15", "30", "45"]) out.push(`${String(h).padStart(2, "0")}:${m}`);
   return out;
 }
+
+/** The price lines a tour page shows for each rate (before any season), lowest first within each. */
+export function priceLine(rate: TourRate): { text: string; from: number } {
+  const usd = (c: number) => `US$${(c / 100).toLocaleString("en", { maximumFractionDigits: 0 })}`;
+  switch (rate.mode) {
+    case "shared":
+      return { text: `Shared group: ${usd(rate.adult)} per adult`, from: rate.adult };
+    case "private": {
+      const low = Math.min(...rate.tiers.map((t) => t.pp));
+      return { text: `Private: from ${usd(low)} per person, less for bigger parties`, from: low };
+    }
+    case "transfer": {
+      const low = Math.min(...rate.vehicles.map((v) => v.price));
+      return { text: `From ${usd(low)} per vehicle, one way`, from: low };
+    }
+    default: {
+      const low = Math.min(...rate.tiers.map((t) => t.price));
+      return { text: `From ${usd(low)} per party`, from: low };
+    }
+  }
+}

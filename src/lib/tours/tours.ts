@@ -125,12 +125,23 @@ export type ReadinessInput = {
   bands: CancellationBand[];
   futureSessions: number;
   hasEnglishDescription: boolean;
+  /** ADR-097: booked on the calendar once it has an office and rates. */
+  hasOffice?: boolean;
+  activeRates?: number;
 };
 export type Readiness = { state: "draft" | "information" | "bookable"; missing: string[] };
 
 /** Mirrors public.tour_is_bookable; also lists what a bookable tour still needs. */
 export function tourReadiness(t: ReadinessInput): Readiness {
   const missing: string[] = [];
+  if (t.hasOffice || t.activeRates) {
+    // The calendar (ADR-097): an office and rates; the standard cancellation applies when the tour sets none.
+    if (!t.hasOffice) missing.push("an office (Luxor or Aswan)");
+    if (!t.activeRates) missing.push("rates (from the rate sheet)");
+    if (!t.hasEnglishDescription) missing.push("an English description");
+    const sellable = !!t.hasOffice && !!t.activeRates;
+    return { state: !t.published ? "draft" : sellable ? "bookable" : "information", missing };
+  }
   if (!t.hasSupplier) missing.push("a supplier");
   if (!t.bands.length) missing.push("cancellation bands");
   if (!t.futureSessions) missing.push("a future session with a price");

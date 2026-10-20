@@ -11,7 +11,7 @@ export async function toursList() {
     db
       .from("tours")
       .select(
-        "id, slug, kind, name, location, visibility, is_sample, supplier_id, cancellation_bands, tour_translations(locale, description)",
+        "id, slug, kind, name, location, visibility, is_sample, supplier_id, office_id, cancellation_bands, tour_translations(locale, description), tour_rates(active)",
       )
       .order("name"),
     db
@@ -33,6 +33,8 @@ export async function toursList() {
         bands: t.cancellation_bands as CancellationBand[],
         futureSessions: future.get(t.id) ?? 0,
         hasEnglishDescription: !!t.tour_translations.find((x) => x.locale === "en")?.description,
+        hasOffice: !!t.office_id,
+        activeRates: t.tour_rates.filter((r) => r.active).length,
       }),
     })),
     programs: (programs ?? []).map((p) => ({
@@ -73,7 +75,7 @@ export async function tourForEditor(id: string) {
   const { data: t, error } = await db
     .from("tours")
     .select(
-      "*, supplier:tour_suppliers(id, name), tour_translations(*), tour_schedules(schedule_id), media(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt))",
+      "*, supplier:tour_suppliers(id, name), office:organisations(id, display_name), tour_rates(id, mode, label, days, start_times, lead_hours, max_guests, min_guests, prices, active, tickets_included), tour_translations(*), tour_schedules(schedule_id), media(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt))",
     )
     .eq("id", id)
     .maybeSingle();
@@ -104,8 +106,17 @@ export async function tourForEditor(id: string) {
       bands: t.cancellation_bands as CancellationBand[],
       futureSessions: count ?? 0,
       hasEnglishDescription: !!tr("en")?.description,
+      hasOffice: !!t.office_id,
+      activeRates: t.tour_rates.filter((r) => r.active).length,
     }),
   };
+}
+
+/** ADR-097: the tour offices admins can put in charge of a tour. */
+export async function tourOffices() {
+  const db = await getDb();
+  const { data } = await db.from("organisations").select("id, display_name").eq("kind", "tour_office").order("display_name");
+  return data ?? [];
 }
 
 export type EditorTour = NonNullable<Awaited<ReturnType<typeof tourForEditor>>>;

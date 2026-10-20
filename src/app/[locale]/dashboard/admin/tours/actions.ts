@@ -83,6 +83,7 @@ export async function createTour(_prev: ActionState, fd: FormData): Promise<Acti
 const basicsInput = tourInput.extend({
   destination_id: optUuid,
   supplier_id: optUuid,
+  office_id: optUuid,
   standalone: z.array(z.string()),
   adults_only: z.array(z.string()),
 });
@@ -91,7 +92,12 @@ export async function saveTourBasics(id: string, _prev: ActionState, fd: FormDat
   await requireAdmin([...MANAGE], tourPage(id));
   const input = basicsInput.safeParse(formObject(fd, ["standalone", "adults_only"]));
   if (!input.success)
-    return problemsFrom(input.error, { ...TOUR_LABELS, destination_id: "Destination", supplier_id: "Supplier" });
+    return problemsFrom(input.error, {
+      ...TOUR_LABELS,
+      destination_id: "Destination",
+      supplier_id: "Supplier",
+      office_id: "Office",
+    });
   const minutes = duration(input.data.hours, input.data.minutes);
   if (minutes < 15) return failed("A tour lasts at least 15 minutes.");
   const db = await getDb();
@@ -104,6 +110,7 @@ export async function saveTourBasics(id: string, _prev: ActionState, fd: FormDat
       duration_minutes: minutes,
       destination_id: input.data.destination_id,
       supplier_id: input.data.supplier_id,
+      office_id: input.data.office_id,
       standalone: input.data.standalone.includes("yes"),
       adults_only: input.data.adults_only.includes("yes"),
     })
