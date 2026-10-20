@@ -684,3 +684,12 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - This changes ADR-079's defaults (`FRESHNESS_HOURS`, and migration `20261020000800` for every database). Admins can still change both thresholds on Admin → Settings → Availability freshness.
 - Operator pages now show the live thresholds ("7 days", "2 hours") instead of fixed text.
 - **Trade-off:** a cabin sold elsewhere can stay bookable here for up to a week if the operator doesn't update Nilecruz. The database still re-checks the count at booking, but it can't see sales made elsewhere.
+
+### ADR-096 Education silos (Accepted; Faris 20 Oct 2026, Batch 6 brief, all as recommended)
+- **Copy:** Claude drafts every Phase 1 page from the workbook rows and facts we hold, in the brand voice. Drafts carry a visible "Draft for review" note until Faris's team approves them in Sanity. No invented statistics.
+- **Keywords (SEO-029):** the workbook's primary keywords are used as given for now, and validated in a keyword tool before launch.
+- **Price figures:** built from real catalogue rates as operators join, flagged "Sample data" until there are enough.
+- **Photography:** the illustrated scenes until Faris supplies photos; never stock photos of other ships.
+- **Trust links:** pages link to "Our Egyptologists" through the linking engine once that page exists (Batch 7).
+- **Felucca:** stays out (ADR-008). `/vessels/felucca/` isn't built, and the workbook's links to it are dropped.
+- **Two pull requests:** 6-1 (Sanity templates, linking engine and CI link check, home, the Vessels silo) and 6-2 (Prices Explained with the calculator, and the Guide).
