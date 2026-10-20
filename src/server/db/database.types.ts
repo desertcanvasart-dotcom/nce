@@ -2190,6 +2190,7 @@ export type Database = {
           customer_id: string;
           deadline_rule: string;
           departure_id: string;
+          direct: boolean;
           gratuity_usd_minor: number | null;
           id: string;
           offer_id: string | null;
@@ -2217,6 +2218,7 @@ export type Database = {
           customer_id: string;
           deadline_rule: string;
           departure_id: string;
+          direct?: boolean;
           gratuity_usd_minor?: number | null;
           id?: string;
           offer_id?: string | null;
@@ -2244,6 +2246,7 @@ export type Database = {
           customer_id?: string;
           deadline_rule?: string;
           departure_id?: string;
+          direct?: boolean;
           gratuity_usd_minor?: number | null;
           id?: string;
           offer_id?: string | null;
@@ -3236,6 +3239,16 @@ export type Database = {
           key_id: string;
         }[];
       };
+      customer_reserve: {
+        Args: {
+          cabins: Json;
+          cur: string;
+          dep: string;
+          guests: Json;
+          terms_read: boolean;
+        };
+        Returns: string;
+      };
       decide_cancellation: {
         Args: { approve: boolean; note?: string; target: string };
         Returns: Database["public"]["Enums"]["cancellation_status"];
@@ -3319,6 +3332,10 @@ export type Database = {
       preview_inventory_paste: {
         Args: { input: Json; label?: string; target_org: string };
         Returns: string;
+      };
+      public_party_price: {
+        Args: { ages: number[]; cab: string; cur: string; dep: string };
+        Returns: number;
       };
       public_vessel_prices: {
         Args: never;
@@ -3542,6 +3559,22 @@ export type Database = {
           target: string;
         };
         Returns: undefined;
+      };
+      vessel_departure_prices: {
+        Args: { target: string };
+        Returns: {
+          bookable: boolean;
+          cabin_type_id: string;
+          currency: string;
+          departs_on: string;
+          departure_id: string;
+          double_minor: number;
+          places_left: number;
+          returns_on: string;
+          schedule_id: string;
+          single_minor: number;
+          triple_minor: number;
+        }[];
       };
       vessel_product_summary: {
         Args: { only_vessel?: string };

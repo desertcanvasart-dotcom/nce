@@ -1,21 +1,37 @@
 import { Input, Select, TextArea, ui } from "@/components/dashboard/ui";
 
 /** The fields of a cruise request, shared by customers (DASH-CUS-014) and travel partners (DASH-B2B-004). */
-export function RequestFields({ routes }: { routes: { origin: string; destination: string }[] }) {
+export type RequestDefaults = { route?: string; earliest?: string; latest?: string; nights?: number };
+
+/** `defaults` prefill the form, for example from a vessel page's "Ask for an offer" (Batch 5-2). */
+export function RequestFields({
+  routes,
+  defaults = {},
+}: {
+  routes: { origin: string; destination: string }[];
+  defaults?: RequestDefaults;
+}) {
   return (
     <>
       <Select
         label="Route"
         name="route"
         placeholder="Flexible: any route"
+        defaultValue={defaults.route}
         options={routes.map((r) => ({ value: `${r.origin}→${r.destination}`, label: `${r.origin} → ${r.destination}` }))}
       />
       <div className={ui.grid}>
-        <Input label="Earliest departure" name="earliest_departure" type="date" required />
-        <Input label="Latest departure" name="latest_departure" type="date" required />
+        <Input label="Earliest departure" name="earliest_departure" type="date" required defaultValue={defaults.earliest} />
+        <Input label="Latest departure" name="latest_departure" type="date" required defaultValue={defaults.latest} />
         <Input label="Back by (optional)" name="latest_finish" type="date" hint="The latest date the cruise may end." />
-        <Input label="Shortest stay (nights)" name="nights_min" inputMode="numeric" required defaultValue={3} />
-        <Input label="Longest stay (nights)" name="nights_max" inputMode="numeric" required defaultValue={7} />
+        <Input
+          label="Shortest stay (nights)"
+          name="nights_min"
+          inputMode="numeric"
+          required
+          defaultValue={defaults.nights ?? 3}
+        />
+        <Input label="Longest stay (nights)" name="nights_max" inputMode="numeric" required defaultValue={defaults.nights ?? 7} />
       </div>
       <div className={ui.grid}>
         <Input label="Adults (18 and over)" name="adults" inputMode="numeric" required defaultValue={2} />

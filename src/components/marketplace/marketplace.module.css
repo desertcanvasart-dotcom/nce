@@ -171,3 +171,256 @@
   background: var(--surface-raised);
   box-shadow: 0 0 0 1px var(--line);
 }
+
+/* The vessel page */
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.facts div {
+  padding: var(--space-3) 0;
+  border-top: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.facts dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--type-body-l-size);
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.primary,
+.secondary {
+  display: inline-block;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: var(--type-label-weight);
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.secondary {
+  color: var(--ink);
+}
+
+.section {
+  display: grid;
+  gap: var(--space-4);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.section h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line);
+}
+
+.section h3 {
+  margin: 0;
+}
+
+.section p {
+  max-width: var(--measure);
+  margin: 0;
+}
+
+.prose {
+  white-space: pre-line;
+}
+
+.dates,
+.list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.score {
+  font-size: var(--type-body-l-size);
+}
+
+.dimensions {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 560px;
+  margin: 0;
+}
+
+.dimensions div {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.dimensions dd {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin: 0;
+}
+
+.dimensions meter {
+  flex: 1;
+  min-width: 0;
+}
+
+.dimensions span {
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  white-space: nowrap;
+}
+
+.schematic {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+.decks {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.decks > li {
+  padding: var(--space-4);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+
+.decks ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.decks ul li {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.decks span,
+.decks small {
+  color: var(--ink-muted);
+}
+
+/* Reserving */
+.reserveForm {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+}
+
+.deck legend {
+  padding: 0 var(--space-2);
+  font-weight: var(--type-label-weight);
+}
+
+.cabinOption {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  cursor: pointer;
+}
+
+.cabinOption:has(input:checked) {
+  border-color: var(--ink);
+}
+
+.cabinOption:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.cabinOption span {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.cabinOption small {
+  color: var(--ink-muted);
+}
+
+.cabinOption em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: var(--type-label-weight);
+}
+
+.party {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-4);
+}
+
+.party label {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--type-label-size);
+}
+
+.party select,
+.party input {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}

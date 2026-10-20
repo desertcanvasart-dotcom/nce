@@ -4,6 +4,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Notice, Section, ui } from "@/components/dashboard/ui";
 import { requireUser } from "@/server/auth";
 import { myRequests, routeOptions } from "@/server/bookings/queries";
+import { requestDefaults } from "@/lib/marketplace/vessel";
 import { RequestFields } from "../../_bookings/RequestFields";
 import { createRequest } from "../actions";
 
@@ -14,9 +15,14 @@ const STATUS = {
 } as const;
 
 /** DASH-CUS-004, 014, 015, DASH-CUS-002 (ADR-091): ask operators for offers and follow each request with its offers. */
-export default async function MyRequests() {
+export default async function MyRequests({
+  searchParams,
+}: {
+  searchParams: Promise<{ route?: string; from?: string; nights?: string }>;
+}) {
   await requireUser("/dashboard/journey/requests/");
-  const [requests, routes] = await Promise.all([myRequests(), routeOptions()]);
+  const [requests, routes, sp] = await Promise.all([myRequests(), routeOptions(), searchParams]);
+  const defaults = requestDefaults(sp, routes);
 
   return (
     <>
@@ -52,7 +58,7 @@ export default async function MyRequests() {
 
       <Section title="Ask for offers" id="new">
         <ActionForm action={createRequest} submit="Send request">
-          <RequestFields routes={routes} />
+          <RequestFields routes={routes} defaults={defaults} />
           <p className={ui.muted}>
             Operators see your trip and the guests’ ages, not your name or contact details, until you accept an offer.
           </p>
