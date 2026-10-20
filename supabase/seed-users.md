@@ -14,6 +14,7 @@ Password for every account: `nilecruz-local-only`
 | bookings@nilecruz.test       | Admin (finance), bookings tests      |
 | refunds@nilecruz.test        | Admin (finance), cancellation tests  |
 | orders@nilecruz.test         | Admin (finance), tour order tests    |
+| partners@nilecruz.test       | Admin (catalogue), partner tests     |
 | owner@operator-a.test        | Operator A · owner                   |
 | reservations@operator-a.test | Operator A · reservations            |
 | finance@operator-a.test      | Operator A · finance                 |
@@ -26,4 +27,4 @@ Password for every account: `nilecruz-local-only`
 
 ## Two-step sign-in (admins)
 
-All ten admin accounts have an authenticator already set up with the **local test secret** `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP`. Add it to an authenticator app as a "manual key" (or let the end-to-end tests compute the code). This secret exists only in the local database.
+All eleven admin accounts have an authenticator already set up with the **local test secret** `JBSWY3DPEHPK3PXPJBSWY3DPEHPK3PXP`. Add it to an authenticator app as a "manual key" (or let the end-to-end tests compute the code). This secret exists only in the local database.
