@@ -25,13 +25,13 @@ describe("signed action links (ADR-099)", () => {
   });
   it("refuse a changed action, request or expiry, and another secret", () => {
     const t = actionToken(SECRET, ID, "decline", NOW);
-    expect(readToken(SECRET, t.replace(".decline.", ".confirm."), NOW)).toMatchObject({ ok: false, reason: "signature" });
+    expect(readToken(SECRET, t.replace("~decline~", "~confirm~"), NOW)).toMatchObject({ ok: false, reason: "signature" });
     expect(readToken(SECRET, t.replace(ID, "11111111-2222-4333-8444-555555555556"), NOW)).toMatchObject({
       ok: false,
       reason: "signature",
     });
-    const [id, act, exp, sig] = t.split(".");
-    expect(readToken(SECRET, [id, act, Number(exp) + 86_400, sig].join("."), NOW)).toMatchObject({
+    const [id, act, exp, sig] = t.split("~");
+    expect(readToken(SECRET, [id, act, Number(exp) + 86_400, sig].join("~"), NOW)).toMatchObject({
       ok: false,
       reason: "signature",
     });

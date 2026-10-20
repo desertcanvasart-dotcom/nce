@@ -23,7 +23,7 @@ export async function answerLink(
   allowAnonymous();
   const f = formObject(fd);
   let alt: { departure_id?: string; cabin_type_id?: string; cabins: number; note?: string } | undefined;
-  if (token.split(".")[1] === "other") {
+  if (token.split("~")[1] === "other") {
     const r = z
       .object({
         departure_id: z.uuid().optional(),

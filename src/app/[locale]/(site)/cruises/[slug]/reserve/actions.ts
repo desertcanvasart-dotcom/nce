@@ -8,17 +8,15 @@ import { requireUser } from "@/server/auth";
 import { failed, formObject } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
+import { notifyNewRequest } from "@/server/requests/dispatch";
 
-/** DASH-PUB-009, ADR-093: a signed-in customer reserves at the published rate; the database re-checks everything. */
-export async function customerReserve(
-  slug: string,
-  plan: { departureId: string; departsOn: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] },
-  _prev: ActionState,
-  fd: FormData,
-): Promise<ActionState> {
-  await requireUser(`/cruises/${slug}/reserve/`);
+type Plan = { departureId: string; departsOn: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] };
+
+/** The guests from the form, checked against the cabins (DATA-020). */
+function guestsFrom(plan: Plan, fd: FormData): { guests: Passenger[] } | { problem: string } {
   const f = formObject(fd, ["terms"]);
-  if (!(f.terms as string[]).includes("yes")) return failed("Tick that you have read the terms and the cancellation policy.");
+  if (!(f.terms as string[]).includes("yes"))
+    return { problem: "Tick that you have read the terms and the cancellation policy." };
   const per = plan.ages.length;
   const guests: Passenger[] = Array.from({ length: plan.cabins * per }, (_, i) => ({
     full_name: String(f[`name_${i}`] ?? "").trim(),
@@ -38,7 +36,36 @@ export async function customerReserve(
     { adults: all.filter((a) => a >= 18).length, childAges: all.filter((a) => a < 18) },
     ageOn,
   );
-  if (problem) return failed(problem);
+  return problem ? { problem } : { guests };
+}
+
+/**
+ * ADR-099: cabins the operator confirms first (manual or sheet data). The request goes to the operator's contacts with
+ * one-tap answers; the customer pays once it's confirmed.
+ */
+export async function customerRequestBooking(slug: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`/cruises/${slug}/reserve/`);
+  const g = guestsFrom(plan, fd);
+  if ("problem" in g) return failed(g.problem);
+  const db = await getDb();
+  const { data: id, error } = await db.rpc("customer_request_booking", {
+    dep: plan.departureId,
+    cur: plan.currency,
+    cabins: Array.from({ length: plan.cabins }, () => ({ cabin_type_id: plan.cabinTypeId, ages: plan.ages })),
+    guests: g.guests,
+    terms_read: true,
+  });
+  if (error) return connectionProblem(error);
+  await notifyNewRequest(id as string);
+  redirect(`/dashboard/journey/requests/booking/${id}/`);
+}
+
+/** DASH-PUB-009, ADR-093: a signed-in customer reserves at the published rate; the database re-checks everything. */
+export async function customerReserve(slug: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`/cruises/${slug}/reserve/`);
+  const g = guestsFrom(plan, fd);
+  if ("problem" in g) return failed(g.problem);
+  const guests = g.guests;
   const db = await getDb();
   const { data: ref, error } = await db.rpc("customer_reserve", {
     dep: plan.departureId,

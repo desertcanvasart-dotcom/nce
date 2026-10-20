@@ -15,16 +15,19 @@ import {
   perPersonFor,
   pickItinerary,
   preferredPrices,
-  scarcity,
+  availabilityLabel,
+  canBook,
+  type BookingMode,
   type DeparturePrice,
 } from "@/lib/marketplace/vessel";
+import { routeId } from "@/lib/marketplace/listing";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { requireUser } from "@/server/auth";
 import { policyFor } from "@/server/bookings/queries";
 import { getDb } from "@/server/db";
 import { publicVessel } from "@/server/marketplace/queries";
-import { customerReserve } from "./actions";
+import { customerRequestBooking, customerReserve } from "./actions";
 
 type Query = { itinerary?: string; dep?: string; cabin?: string; adults?: string; children?: string; cabins?: string };
 type Props = { params: Promise<{ locale: Locale; slug: string }>; searchParams: Promise<Query> };
@@ -64,6 +67,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       triple: r.triple_minor === null ? null : Number(r.triple_minor),
       placesLeft: r.places_left,
       bookable: r.bookable,
+      mode: r.booking_mode as BookingMode,
     })),
   ).filter((r) => r.scheduleId === it?.id);
   const departures = [...new Set(rows.map((r) => r.departureId))].map((id) => rows.filter((r) => r.departureId === id));
@@ -89,6 +93,28 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
     quote = p === null || p === undefined ? null : Number(p);
   }
   const policy = chosen ? await policyFor(chosen.departureId) : null;
+  // ADR-099: how long the operator usually takes to confirm a booking request.
+  const { data: owner } = await db.from("vessels").select("operator_org_id").eq("id", v.id).maybeSingle();
+  const { data: hours } = owner?.operator_org_id
+    ? await db.rpc("operator_confirm_hours", { target_org: owner.operator_org_id })
+    : { data: 24 };
+  const confirmHours = Number(hours ?? 24);
+  const openOn = (d: DeparturePrice[]) => d.some(canBook);
+  // Sold out on the chosen date: the nearest dates on this ship with something bookable, and similar ships.
+  const nearby =
+    dep && !openOn(dep)
+      ? departures
+          .filter((d) => d[0]!.departureId !== dep[0]!.departureId && openOn(d))
+          .sort(
+            (a, b) =>
+              Math.abs(Date.parse(a[0]!.departsOn) - Date.parse(dep[0]!.departsOn)) -
+              Math.abs(Date.parse(b[0]!.departsOn) - Date.parse(dep[0]!.departsOn)),
+          )
+          .slice(0, 3)
+      : [];
+  const similar = it
+    ? `/cruises/?${new URLSearchParams({ route: routeId(it.origin, it.destination), vessel: v.type, ...(dep ? { date: dep[0]!.departsOn } : {}) }).toString()}`
+    : "/cruises/";
 
   return (
     <div className={styles.page}>
@@ -145,7 +171,8 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
           <ul className={styles.list}>
             {departures.map((d) => {
               const first = d[0]!;
-              const prices = d.filter((r) => r.bookable && r.double && (r.placesLeft ?? 0) > 0).map((r) => r.double!);
+              const prices = d.filter((r) => canBook(r) && r.double).map((r) => r.double!);
+              const instant = d.some((r) => canBook(r) && r.mode === "instant");
               return (
                 <li key={first.departureId}>
                   <Link href={keep({ dep: first.departureId })}>
@@ -154,10 +181,10 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   {prices.length ? (
                     <span>
                       from {formatMoney({ amount: Math.min(...prices), currency: first.currency }, locale)} per person, two
-                      sharing
+                      sharing · {instant ? "instant confirmation" : `confirmed within ${confirmHours} h`}
                     </span>
                   ) : (
-                    <span className={styles.note}>no cabins can be booked</span>
+                    <span className={styles.note}>{d.some((r) => r.mode === "sold_out") ? "sold out" : "to be confirmed"}</span>
                   )}
                 </li>
               );
@@ -172,6 +199,26 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
           <p>
             <Link href={keep({})}>← Other departures</Link>
           </p>
+          {!openOn(dep) ? (
+            <div className={styles.note}>
+              <p>Sold out on this date.</p>
+              {nearby.length ? (
+                <p>
+                  Nearby dates on {v.name}:{" "}
+                  {nearby.map((d, i) => (
+                    <span key={d[0]!.departureId}>
+                      {i ? ", " : ""}
+                      <Link href={keep({ dep: d[0]!.departureId })}>{formatDay(d[0]!.departsOn, locale)}</Link>
+                    </span>
+                  ))}
+                  .
+                </p>
+              ) : null}
+              <p>
+                <Link href={similar}>Similar ships on this route</Link>
+              </p>
+            </div>
+          ) : null}
           {chosen && quote === null ? (
             <p className={styles.note}>
               That cabin can’t take this party on this departure. Choose another cabin or change the guests.
@@ -188,11 +235,12 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 <legend>{g.deck} deck</legend>
                 {g.cabins.map((c) => {
                   const r = dep.find((x) => x.cabinTypeId === c.id)!;
-                  const open = r.bookable && (r.placesLeft ?? 0) > 0;
-                  const few = scarcity(r.placesLeft);
+                  const open = canBook(r);
+                  const label = availabilityLabel(r, confirmHours);
                   return (
                     <label key={c.id} className={styles.cabinOption}>
                       <input type="radio" name="cabin" value={c.id} required disabled={!open} defaultChecked={q.cabin === c.id} />
+                      <span className="visually-hidden">Cabin type</span>
                       <span>
                         <strong>{c.name}</strong>
                         <small>
@@ -206,7 +254,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                             : ""}
                           {r.single ? ` · ${formatMoney({ amount: r.single, currency: r.currency }, locale)} alone` : ""}
                         </small>
-                        {!open ? <em>Sold out</em> : few ? <em>{few}</em> : null}
+                        <em>{label}</em>
                       </span>
                     </label>
                   );
@@ -290,7 +338,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             children are priced by age. The total holds the fare only: crew gratuities are paid on board, and transfers, flights
             and tours are booked separately.
           </p>
-          {(chosen.placesLeft ?? 0) < cabinsWanted ? (
+          {chosen.mode === "instant" && (chosen.placesLeft ?? 0) < cabinsWanted ? (
             <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>
           ) : (
             <>
@@ -302,8 +350,14 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   ))}
                 </ul>
               ) : null}
+              {chosen.mode === "request" ? (
+                <p className={styles.note}>
+                  The operator confirms these cabins before you pay, usually within {confirmHours} hours. Nothing is charged until
+                  then.
+                </p>
+              ) : null}
               <ActionForm
-                action={customerReserve.bind(null, slug, {
+                action={(chosen.mode === "request" ? customerRequestBooking : customerReserve).bind(null, slug, {
                   departureId: chosen.departureId,
                   departsOn: chosen.departsOn,
                   cabinTypeId: chosen.cabinTypeId,
@@ -311,7 +365,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   cabins: cabinsWanted,
                   ages,
                 })}
-                submit="Reserve"
+                submit={chosen.mode === "request" ? "Send booking request" : "Reserve"}
               >
                 <p className={styles.note}>
                   Full names as in passports and dates of birth for all {cabinsWanted * ages.length} guests; ages on the departure
@@ -339,8 +393,9 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   checked={[]}
                 />
                 <p className={styles.note}>
-                  Reserving checks the cabins are still free and holds them for you. Payment details and the deadline follow in My
-                  journey.
+                  {chosen.mode === "request"
+                    ? "We send your request to the operator now. When they confirm, you pay in My journey."
+                    : "Reserving checks the cabins are still free and holds them for you. Payment details and the deadline follow in My journey."}
                 </p>
               </ActionForm>
             </>

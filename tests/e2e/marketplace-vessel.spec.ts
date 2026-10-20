@@ -32,6 +32,8 @@ test.beforeAll(async ({ request }) => {
   slug = `sample-cancel-${RUN}vp`;
   await db.from("vessels").update({ max_guests: 60, cabin_count: 30, deck_count: 3 }).eq("id", S.vesselId);
   await db.from("schedules").update({ sailing_period: "morning", sails_at: "08:00" }).eq("id", S.scheduleId);
+  // Availability from a feed, just confirmed: instant booking (ADR-099; manual data becomes a booking request).
+  await db.from("inventory").update({ source: "feed", confirmed_at: new Date().toISOString() }).eq("vessel_id", S.vesselId);
   await db.from("schedule_days").insert([
     { schedule_id: S.scheduleId, day_number: 1, locale: "en", title: "Board and sail", description: "Check in and set off." },
     { schedule_id: S.scheduleId, day_number: 5, locale: "en", title: "Arrive", description: "Check out after breakfast." },

@@ -4148,6 +4148,7 @@ export type Database = {
         Args: { target: string };
         Returns: {
           bookable: boolean;
+          booking_mode: string;
           cabin_type_id: string;
           currency: string;
           departs_on: string;

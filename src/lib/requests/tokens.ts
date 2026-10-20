@@ -5,7 +5,9 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
  * (7 days), signed with HMAC-SHA256 over all three, so no field can be changed. Links are single use: the database keeps
  * a hash of each one used (`used_action_tokens`).
  *
- *   <request id>.<action>.<expiry, unix seconds>.<signature, base64url>
+ *   <request id>~<action>~<expiry, unix seconds>~<signature, base64url>
+ *
+ * `~` rather than `.`: the router treats a last path segment with a dot as a file.
  */
 export const ACTIONS = ["confirm", "decline", "hold", "other"] as const;
 export type Action = (typeof ACTIONS)[number];
@@ -24,7 +26,7 @@ export function actionToken(
   nowSeconds = Math.floor(Date.now() / 1000),
 ): string {
   const exp = nowSeconds + LINK_DAYS * 86_400;
-  return `${requestId}.${action}.${exp}.${sign(secret, requestId, action, exp)}`;
+  return `${requestId}~${action}~${exp}~${sign(secret, requestId, action, exp)}`;
 }
 
 export type TokenCheck =
@@ -32,7 +34,7 @@ export type TokenCheck =
   | { ok: false; reason: "malformed" | "signature" | "expired"; requestId?: string };
 
 export function readToken(secret: string, token: string, nowSeconds = Math.floor(Date.now() / 1000)): TokenCheck {
-  const m = /^([0-9a-f-]{36})\.(confirm|decline|hold|other)\.(\d{9,11})\.([A-Za-z0-9_-]{43})$/.exec(token);
+  const m = /^([0-9a-f-]{36})~(confirm|decline|hold|other)~(\d{9,11})~([A-Za-z0-9_-]{43})$/.exec(token);
   if (!m) return { ok: false, reason: "malformed" };
   const [, id, action, expText, sig] = m as unknown as [string, string, Action, string, string];
   const exp = Number(expText);

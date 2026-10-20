@@ -17,8 +17,9 @@ insert into public.schedules (id, vessel_id, code, origin, destination, nights, 
   ('00000000-0000-4000-f200-000000000031', '00000000-0000-4000-8000-000000000003', 'AG4', 'Luxor', 'Aswan', 4, '{1,2,3,4,5,6,7}');
 insert into public.departures (id, schedule_id, vessel_id, departs_on, returns_on) values
   ('00000000-0000-4000-f300-000000000031', '00000000-0000-4000-f200-000000000031', '00000000-0000-4000-8000-000000000003', current_date + 40, current_date + 44);
-insert into public.inventory (departure_id, cabin_type_id, vessel_id, available) values
-  ('00000000-0000-4000-f300-000000000031', '00000000-0000-4000-f100-000000000031', '00000000-0000-4000-8000-000000000003', 2);
+-- From a feed: instant confirmation (ADR-099; manual data becomes a booking request, 300_reservable_rule).
+insert into public.inventory (departure_id, cabin_type_id, vessel_id, available, source) values
+  ('00000000-0000-4000-f300-000000000031', '00000000-0000-4000-f100-000000000031', '00000000-0000-4000-8000-000000000003', 2, 'feed');
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-8000-000000000003', '[{"from_days": 0, "percent": 100}]');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor) values
   ('00000000-0000-4000-f300-000000000031', '00000000-0000-4000-f100-000000000031', '00000000-0000-4000-8000-000000000003', 2, 'international', 'USD', 80000);
