@@ -889,6 +889,27 @@ STATUS.update({
  "DATA-032": ("Verified", B51+'the lowest international per-person price for two over bookable departures in the next 12 months, with confirmed places, US$ before €; none otherwise (240)'),
  "SEO-004": ("In progress", B51+'breadcrumbs and BreadcrumbList on the hub, facets and comparison; vessel pages follow in 5-2'),
 })
+B52 = "Batch 5-2 (20 Oct 2026): "
+STATUS.update({
+ "PAGE-072": ("Verified", B52+'/cruises/{vessel}/ with H1 "{name} — {route}, {nights} nights", facts, gallery, itineraries with the day-by-day programme and next departures, cabins by deck, evaluation and external ratings; TouristTrip with AggregateOffer from the "from" price, BreadcrumbList, no AggregateRating (e2e marketplace-vessel, unit)'),
+ "DASH-PUB-002": ("Verified", B51+'cards show NN/100; '+B52+'the vessel page shows the score, verdict, date, evaluator and the seven weighted dimensions (e2e)'),
+ "DASH-PUB-003": ("Verified", B52+'external ratings on the vessel page only, with source, scale, review count and the date checked, labelled as not Nilecruz reviews (e2e)'),
+ "DASH-PUB-008": ("Verified", B52+'every cabin and departure price only after sign-in (vessel_departure_prices refuses visitors; 250, e2e redirect to sign-in)'),
+ "DASH-PUB-009": ("Verified", B52+'reserving needs an account (customer_reserve refuses visitors; 250, e2e)'),
+ "DATA-033": ("Verified", B52+'signed-in customers see each cabin type\'s published price per departure (alone, two and three sharing) with places left; visitors see only the "from" price (250, e2e)'),
+ "DASH-CUS-016": ("Verified", B52+'signed-in customers choose a departure, then a deck and cabin type (radio groups by deck), the party and the number of cabins, see the exact total and reserve (e2e exit criterion)'),
+ "DASH-CUS-017": ("Verified", B52+'the deck view and the deck choice say "Schematic: not a floor plan … your cabin number is assigned by the operator" (e2e)'),
+ "DASH-BND-002": ("Verified", B52+'a vessel without structured cabin types shows a plain empty state instead of a deck view (e2e)'),
+ "DASH-BND-003": ("Verified", B52+'no screen draws numbered cabins or a floor plan; decks list cabin types only (e2e)'),
+ "BRAND-003": ("Verified", B52+'"Only N cabins left" appears only from confirmed inventory and only at three or fewer; sold-out cabins can\'t be chosen (unit, 250)'),
+ "SEO-004": ("Verified", B51+'hub, facets, comparison; '+B52+'vessel and reserve pages: visible breadcrumbs and BreadcrumbList (e2e)'),
+ "SEO-013": ("In progress", B52+'vessel pages link up to /cruises/ and their type facet; links to the vessel-type hub and destination pages are rendered once those pages exist (Batches 6 and 7, ADR-093)'),
+ "SEO-026": ("Verified", B52+'no AggregateRating anywhere until verified reviews exist (unit, e2e)'),
+ "DATA-004": ("Verified", B52+'departure and assessment dates are formatted in the visitor\'s language as calendar dates (unit en/es/ja)'),
+ "DATA-018": ("In progress", B52+'vessel pages and direct-booking terms say check-in on day 1 to check-out on the last day, transfers, flights and tours not included; the link to /tours-extras/transfers/ follows when that page exists (Batch 7)'),
+ "DATA-031": ("Verified", B52+'one static page per vessel with every itinerary; ?itinerary=CODE switches it and the canonical stays the vessel URL (unit, e2e)'),
+ "DATA-034": ("Verified", B52+'the vessel page\'s AggregateOffer uses only the public "from" price (lowPrice, priceCurrency) (unit, e2e)'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

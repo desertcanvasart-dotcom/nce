@@ -1024,3 +1024,55 @@ The first of two Batch 5 PRs (ADR-093). 5-2 adds the vessel page, the deck selec
   - axe on three screens in Day and Night.
 - **Full suites:** `pnpm verify` (321 unit tests, lint, types, format, build); end-to-end with `CI=1`: 167 passed, 1 flaky (an admin two-step sign-in in the cancellation accessibility test, which passed on retry).
 - **Screenshots:** 24 in `docs/screenshots/batch-05/` (prefix `5-1-`): the hub, `/luxury/`, `/aswan-to-luxor/` and a three-vessel comparison, at 375, 768 and 1440 in Day and Night.
+
+### Batch 5-2: Vessel pages and reserving (branch `batch-05-2-vessel`, stacked on 5-1; migration `20261020000600_direct_reserve`)
+
+The second Batch 5 PR, and the batch's exit criterion: listing → vessel → sign-in → reserve. With it, 32 of Batch 5's 34 requirements are Verified. Two stay **In progress** until later batches build their link targets (ADR-093):
+- SEO-013 (links to the vessel-type hub and destinations);
+- DATA-018 (the link to `/tours-extras/transfers/`; the text is already there).
+
+**Built:**
+- **Direct bookings in the database:**
+  - `reservations.direct`: a direct booking has neither an offer nor a buying company, so `offer_or_buyer` became `has_source`.
+  - `app.public_cabin_price` prices at the international rate only (child bands; adults 18 and over).
+  - `customer_reserve`, adapted from `partner_reserve`: signed in; 1–5 cabins (more go through a request); every guest named and matched by age; cabins taken under row locks. The terms say check-in to check-out, with transfers, flights and tours not included. The operator and the customer are told.
+  - `vessel_departure_prices` (signed in only): per departure and cabin type, the published price alone and for two or three sharing, places left from confirmed inventory, and whether it's bookable.
+  - `public_party_price` (signed in only) quotes the party exactly as `customer_reserve` will charge it.
+- **The vessel page** `/cruises/{slug}/`:
+  - a static page per vessel, refreshed with the catalogue. Facets and vessels share the `[slug]` route, which SEO-030's reserved slugs keep apart.
+  - Breadcrumb up to its type facet; H1 "{name} — {route}, {nights} nights"; facts (guests, cabins, decks, year, evaluation, "from" price).
+  - **See prices and dates**, or for an information-only vessel **Ask for an offer** (a request prefilled with the route, a two-week window and the nights).
+  - Gallery, About; the evaluation (score, verdict, date, evaluator, seven weighted dimensions as meters) and external ratings (source, scale, count, date checked, "not Nilecruz reviews").
+  - Every itinerary is rendered on the server and `?itinerary=CODE` picks one in the browser, so the page stays static and the canonical stays the vessel URL. Each itinerary shows check-in to check-out with transfers not included, the sailing time and the arrive-the-day-before tip, the day-by-day programme and the next departures in the visitor's language.
+  - **Cabins and decks:** a schematic by deck ("not a floor plan … your cabin number is assigned by the operator"), with cabin facts and no prices, or a plain empty state.
+  - TouristTrip with an AggregateOffer from the "from" price only.
+- **Prices and dates** `/cruises/{slug}/reserve/` (sign-in required, `noindex`):
+  1. a departure, with its lowest two-sharing price;
+  2. a deck and cabin type (radio groups by deck, with price, the single price, "Only N cabins left" from confirmed inventory, sold-out cabins disabled), the adults, children's ages and number of cabins;
+  3. the exact total, the cancellation bands, every guest, then the terms and **Reserve**, which leads to the booking in My journey with its payment deadline (the 4f flows).
+- **Amenities:** cabin amenities are free text, so they are listed on each cabin. The AmenityGrid component waits for structured vessel amenities.
+
+**Verified, and how:**
+- **Unit** (`marketplace-vessel.test.ts`, 10 tests):
+  - the itinerary choice and H1; decks in order;
+  - dates in English, Spanish and Japanese;
+  - TouristTrip offering only the "from" price and no rating, and no offer for information-only vessels;
+  - one currency per cabin (US$ first); per-person prices by beds (infants under 3 don't take one);
+  - scarcity only at three or fewer; the prefilled request's rules.
+- **pgTAP** `250_direct_reserve` (12 checks):
+  - visitors get no departure prices and can't reserve;
+  - a signed-in customer sees the published prices alone and two sharing, never trade, with places left;
+  - unnamed guests and six cabins are refused;
+  - a parent and a 7-year-old book at US$1,200 (the child at 50 %) as a direct international booking; the cabin is taken and the operator is told;
+  - stale availability isn't bookable and can't be reserved.
+  - The full suite on a fresh database: 25 files, 401 checks.
+- **End-to-end** (`marketplace-vessel.spec.ts`, 6 tests, **the exit criterion**):
+  - from the listing card to the vessel page: H1, breadcrumb, check-in to check-out, the morning sailing and arrive-the-day-before tip, the programme, the schematic deck, 80/100, the external rating, one public price, TouristTrip with `lowPrice` 1000.00 and no rating;
+  - `?itinerary=CX7` switches to the 7-night itinerary with the same canonical;
+  - the information-only ship offers a request and shows the empty deck state;
+  - **listing → vessel → sign-in → reserve**: "See prices and dates" asks for sign-in and comes back; departure, Main deck · Double, 2 adults, US$2,000, two guests, terms, **Reserve**, then the booking in My journey;
+  - the prefilled request form;
+  - axe on the vessel page and all three reserve steps in Day and Night.
+- **Full suites:** `pnpm verify` (331 unit tests, lint, types, format, build); end-to-end with `CI=1`: 174 passed, none failed or flaky.
+- **Screenshots:** 30 in `docs/screenshots/batch-05/` (prefix `5-2-`): the vessel page, the information-only ship, and the three reserve steps signed in, at 375, 768 and 1440 in Day and Night.
+- **Noticed, not changed:** the public header shows "Sign in" even when signed in (it doesn't read the session yet; since Batch 1).
