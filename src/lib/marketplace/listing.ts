@@ -185,7 +185,7 @@ export const VESSEL_OPTIONS: { id: string; label: string; type?: VesselType }[] 
   { id: "steam", label: "Paddle steamer", type: "steam" },
 ];
 
-export type SearchQuery = { route?: string; vessel?: string; date?: string; guests?: number };
+export type SearchQuery = { route?: string; vessel?: string; date?: string; guests?: number; q?: string };
 
 /** Reads the CruiseSearch GET form (route, vessel, date, adults, ages); anything unknown is ignored. */
 export function parseSearch(sp: Record<string, string | string[] | undefined>): SearchQuery {
@@ -196,7 +196,10 @@ export function parseSearch(sp: Record<string, string | string[] | undefined>): 
   const adults = Number(one("adults"));
   const ages = (one("ages") ?? "").split(",").filter((a) => /^\d{1,2}$/.test(a));
   const guests = (Number.isInteger(adults) && adults > 0 ? Math.min(adults, 30) : 0) + ages.length;
+  // SEO-028: the site search (WebSite SearchAction) looks up vessels by name.
+  const q = one("q")?.trim().slice(0, 80);
   return {
+    q: q || undefined,
     route: route && route !== "any" && /^[a-z0-9-]{1,120}$/.test(route) ? route : undefined,
     vessel: VESSEL_OPTIONS.some((o) => o.id === vessel && o.type) ? vessel : undefined,
     date: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined,
@@ -204,12 +207,14 @@ export function parseSearch(sp: Record<string, string | string[] | undefined>): 
   };
 }
 
-export const isSearching = (q: SearchQuery) => !!(q.route || q.vessel || q.date || q.guests);
+export const isSearching = (q: SearchQuery) => !!(q.route || q.vessel || q.date || q.guests || q.q);
 
 /** The vessels that fit, and how many departures fit (never invented, ADR-007). */
 export function applySearch(list: ListingVessel[], q: SearchQuery): { vessels: ListingVessel[]; departures: number } {
   let departures = 0;
+  const words = (q.q ?? "").toLowerCase().split(/\s+/).filter(Boolean);
   const vessels = list.filter((v) => {
+    if (words.length && !words.every((w) => v.name.toLowerCase().includes(w))) return false;
     if (q.vessel && v.type !== q.vessel) return false;
     if (q.guests && v.maxGuests && q.guests > v.maxGuests) return false;
     const its = v.itineraries.filter((i) => !q.route || routeId(i.origin, i.destination) === q.route);

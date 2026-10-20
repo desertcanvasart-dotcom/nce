@@ -3589,6 +3589,17 @@ export type Database = {
           vessel_id: string;
         }[];
       };
+      vessel_type_stats: {
+        Args: never;
+        Returns: {
+          cabins_high: number;
+          cabins_low: number;
+          guests_high: number;
+          guests_low: number;
+          type: Database["public"]["Enums"]["vessel_type"];
+          vessels: number;
+        }[];
+      };
       withdraw_cancellation: { Args: { target: string }; Returns: undefined };
       withdraw_offer: { Args: { target: string }; Returns: undefined };
     };

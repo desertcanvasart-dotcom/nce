@@ -14,6 +14,7 @@ import {
   type VesselPage,
 } from "@/lib/marketplace/vessel";
 import { arriveDayBefore, dayBeforeTip, sailingTimeText } from "@/lib/product/sailing-time";
+import { isBuilt, keywordText, LINK_MAP } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { DeckPlan } from "./DeckPlan";
@@ -30,6 +31,10 @@ const TYPE_FACET = {
 export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; it: VesselItinerary | undefined }) {
   const path = `/cruises/${v.slug}/`;
   const facet = v.type === "steam" ? undefined : TYPE_FACET[v.type];
+  const hubUrl = { sail: "/vessels/dahabiya/", motor: "/vessels/motor-cruise-ships/", steam: "/vessels/paddle-steamers/" }[
+    v.type
+  ];
+  const typeHub = isBuilt(hubUrl) ? { href: hubUrl, anchor: keywordText(LINK_MAP[hubUrl]!.keyword) } : null;
   const reserve = `/cruises/${v.slug}/reserve/${it ? `?itinerary=${encodeURIComponent(it.code)}` : ""}`;
   const ask = `/dashboard/journey/requests/?${new URLSearchParams({
     ...(it ? { route: `${it.origin}→${it.destination}`, nights: String(it.nights) } : {}),
@@ -53,6 +58,12 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
         </p>
         <h1 className={styles.title}>{vesselH1(v.name, it)}</h1>
         {v.summary ? <p className={styles.lead}>{v.summary}</p> : null}
+        {typeHub ? (
+          <p className={styles.note}>
+            {/* SEO-013: every vessel page links to its vessel-type hub, by the hub's keyword. */}
+            What it’s like on board: our guide to the <Link href={typeHub.href}>{typeHub.anchor}</Link>.
+          </p>
+        ) : null}
       </header>
 
       <dl className={styles.facts}>
