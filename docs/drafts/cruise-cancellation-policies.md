@@ -1,6 +1,6 @@
 # Cruise cancellation policies (CONTENT-NEEDED #4)
 
-**Status:** Faris gave the bands on 19 Oct 2026, and they are confirmed. The English wording is a draft. **The Spanish and Japanese are Claude's drafts and need a native speaker's review before they are shown to customers.**
+**Status:** Faris gave the bands on 19 Oct 2026, and they are confirmed. The English wording is a draft. **Update 20 Oct 2026 (ADR-094):** native speakers reviewed the Spanish and Japanese, and Faris approved them; both presets now use them. Earlier note: the Spanish and Japanese were Claude's drafts and needed a native speaker's review before they are shown to customers.**
 
 Days are counted before check-in, which is the departure date. The charge is a percentage of the whole cruise price.
 

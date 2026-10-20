@@ -7,8 +7,8 @@ Facts I must not invent. Each one will be a marked placeholder until it is suppl
 | 1 | Logo file (name confirmed: Nilecruz, ADR-022) | 1 | Wordmark until a logo exists |
 | 2 | The 28 evaluation criteria and the 7 weights, confirmed | 4b | Q12. `nilecrz` has a draft |
 | 3 | Real vessel list to publish, with operator confirmation | 3 / 5 | Q26. Repo data stays private until confirmed |
-| 4 | Cancellation policy wording and bands per operator/cruise | 4f | Bands supplied 19 Oct 2026 (luxury/branded and other vessels); both are presets on the Cabins page (4f-2b), EN wording included. ES/JA drafts in `docs/drafts/cruise-cancellation-policies.md` await a native speaker |
-| 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Supplied 19 Oct 2026 (account holder provisional; IBAN and account currency to come). Entered by a finance admin on Deposits and commission → Bank details, never in the public repository |
+| 4 | Cancellation policy wording and bands per operator/cruise | 4f | Bands supplied 19 Oct 2026 (luxury/branded and other vessels); both are presets on the Cabins page (4f-2b), EN wording included. ES/JA reviewed by native speakers and approved 20 Oct 2026; both presets fill EN/ES/JA (ADR-094) |
+| 5 | Payment instructions (bank details, accepted methods) shown to customers | 4f | Supplied 19 Oct 2026 (account holder provisional); account currency USD (20 Oct 2026); IBAN still to come. Entered by a finance admin on Deposits and commission → Bank details, never in the public repository |
 | 6 | ~~Commission and Stripe model~~ Supplied: 10%, Nilecruz merchant of record (ADR-026); tours rate open (Q54) | 4f | Q54 |
 | 7 | Eligibility rules and wording for Egyptian-citizen and resident rates | 4c | Q20 |
 | 8 | ~~Child/infant policy~~ Supplied 17 Oct 2026 (ADR-012); details in Q48 | 4c | Q37 |

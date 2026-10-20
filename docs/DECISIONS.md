@@ -645,7 +645,7 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Bank-transfer details** are a finance-admin setting, never in the public repository. The account holder is provisional until Faris decides how the business is operated.
 - **Meet and Assist and airport transfers** are always sold separately, never inside a sightseeing program. Transfers are private only. Excursions are sold private and shared.
 - **Tour orders** come in 4f-2c: a 60-minute hold, card only, and cancellation by the tour's own bands, decided by a finance admin.
-- **Open:** whether Nilecruz acts as the operators' agent rather than the seller (the accountant is looking into it), which would change the receipt, terms and payables wording. Stripe Connect can't make Egyptian operators the seller.
+- **Settled (ADR-094):** Nilecruz acts as the operators' agent, not the seller. whether Nilecruz acts as the operators' agent rather than the seller (the accountant is looking into it), which would change the receipt, terms and payables wording. Stripe Connect can't make Egyptian operators the seller.
 
 ### ADR-091 My journey sections (Accepted; Faris 20 Oct 2026, Batch 4g brief)
 - The sections follow the dashboard guide: Overview, Requests and offers (one nav item; the offers list stays reachable from it), Bookings (renamed from "Reservations and payments", with tour orders linked), Tours and sightseeing, Past trips, Account. URLs don't change.
@@ -668,3 +668,13 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Links to unbuilt pages:** rendered only once the target page exists; the Batch 6 linking engine fills them in.
 - **Languages:** English content now; `/es/` and `/ja/` show the same pages until Batch 10 translates them.
 - **Two pull requests:** 5-1 (public read path and "from" price, `/cruises/` and the five filtered pages, CruiseCard, CruiseSearch, comparison, SEO, caching) and 5-2 (vessel page, itineraries, deck selector, prices after sign-in, reserving).
+
+### ADR-094 Agent model, free cancellation of unpaid bookings, approved ES/JA wording (Accepted; Faris 20 Oct 2026)
+- **Agent model:** on the accountant's advice, Nilecruz acts as the cruise operators' **booking agent**, not the seller.
+  - The operator sells and provides the cruise, and the customer's contract for the cruise is with the operator. Nilecruz takes the booking and collects payment on the operator's behalf through its own Stripe account. Its 10 % commission (ADR-026) is its revenue, and the rest is held for and payable to the operator.
+  - Each reservation records the seller (the operator's legal name, or its display name) at booking. The booking record shows "Sold by …, the operator; booked through Nilecruz as its agent", and receipts show "Received by Nilecruz, as booking agent" on behalf of the seller.
+  - The terms, direct-booking terms and payables wording say the same. This replaces "merchant of record" in ADR-026.
+  - **Open:** tours and extras are still described as sold by Nilecruz (they have no operator and no commission). Confirm with the accountant whether they also follow the agent model.
+- **Cancelling an unpaid booking costs nothing:** the policy's charge only ever comes out of what was paid. Payments beyond the charge are refunded. A part payment below the charge is kept, and nothing more is owed. The database no longer records an unpaid charge (constraint `no_unpaid_charge`).
+- **Spanish and Japanese cancellation wording:** reviewed by native speakers and approved. Both standard presets now fill English, Spanish and Japanese.
+- **Also settled:** the bank account's currency is USD (the IBAN comes later). The 9 tours from nilecruz.com were imported into staging as private drafts (`pnpm import:tours --apply --target=staging`).
