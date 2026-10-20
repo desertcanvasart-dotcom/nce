@@ -12,14 +12,17 @@ const STATUS = {
   closed: { tone: "neutral", text: "Closed" },
 } as const;
 
-/** DASH-CUS-004, 014, 015: ask operators for offers and follow each request. */
+/** DASH-CUS-004, 014, 015, DASH-CUS-002 (ADR-091): ask operators for offers and follow each request with its offers. */
 export default async function MyRequests() {
   await requireUser("/dashboard/journey/requests/");
   const [requests, routes] = await Promise.all([myRequests(), routeOptions()]);
 
   return (
     <>
-      <h1 className={ui.pageTitle}>Cruise requests</h1>
+      <h1 className={ui.pageTitle}>Requests and offers</h1>
+      <p>
+        <Link href="/dashboard/journey/offers/">All offers you have received</Link>
+      </p>
       <Notice>
         A request asks operators for personal offers. Operators whose cruises fit can reply, and you choose. It isn’t an auction:
         no offer and no lowest price is guaranteed.
