@@ -1393,6 +1393,77 @@ export type Database = {
         };
         Relationships: [];
       };
+      partner_rates: {
+        Row: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands: Json;
+          created_at: string;
+          currency: string;
+          departure_id: string;
+          id: string;
+          occupancy: number;
+          partner_org_id: string;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency: string;
+          departure_id: string;
+          id?: string;
+          occupancy: number;
+          partner_org_id: string;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          cabin_type_id?: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency?: string;
+          departure_id?: string;
+          id?: string;
+          occupancy?: number;
+          partner_org_id?: string;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "partner_rates_cabin_type_id_fkey";
+            columns: ["cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "partner_rates_departure_id_fkey";
+            columns: ["departure_id"];
+            isOneToOne: false;
+            referencedRelation: "departures";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "partner_rates_partner_org_id_fkey";
+            columns: ["partner_org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "partner_rates_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       passengers: {
         Row: {
           date_of_birth: string;
@@ -3061,10 +3132,21 @@ export type Database = {
         Args: { display_name: string; legal_name: string; registration: Json };
         Returns: string;
       };
+      apply_as_partner: {
+        Args: { display_name: string; legal_name: string; registration: Json };
+        Returns: string;
+      };
       apply_inventory_paste: { Args: { run: string }; Returns: Json };
       approve_submission: {
         Args: { new_slug?: string; target: string };
         Returns: string;
+      };
+      approved_partners: {
+        Args: never;
+        Returns: {
+          display_name: string;
+          id: string;
+        }[];
       };
       cancellation_quote: {
         Args: { res: string };
@@ -3116,6 +3198,41 @@ export type Database = {
           terms_read: boolean;
         };
         Returns: string;
+      };
+      partner_search: {
+        Args: {
+          from_day: string;
+          nights_max?: number;
+          nights_min?: number;
+          org: string;
+          route_destination?: string;
+          route_origin?: string;
+          to_day: string;
+        };
+        Returns: {
+          amount_minor: number;
+          available: number;
+          cabin_name: string;
+          cabin_type_id: string;
+          child_bands: Json;
+          currency: string;
+          deck: string;
+          departs_on: string;
+          departure_id: string;
+          destination: string;
+          gratuity_usd_minor: number;
+          max_occupancy: number;
+          nights: number;
+          occupancy: number;
+          origin: string;
+          returns_on: string;
+          sailing_period: string;
+          sails_at: string;
+          schedule_id: string;
+          tier: string;
+          vessel_id: string;
+          vessel_name: string;
+        }[];
       };
       preview_inventory_paste: {
         Args: { input: Json; label?: string; target_org: string };

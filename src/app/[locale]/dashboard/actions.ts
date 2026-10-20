@@ -12,5 +12,7 @@ export async function acceptInvitation(invitationId: string, _prev: ActionState,
   const db = await getDb();
   const { data, error } = await db.rpc("accept_invitation", { invitation: invitationId });
   if (error) return dbProblem(error);
-  redirect(`/dashboard/operator/${data}/`);
+  // Operators and travel partners each have their own workspace (DASH-B2B-009).
+  const { data: org } = await db.from("organisations").select("kind").eq("id", data).maybeSingle();
+  redirect(`/dashboard/${org?.kind === "partner" ? "partner" : "operator"}/${data}/`);
 }

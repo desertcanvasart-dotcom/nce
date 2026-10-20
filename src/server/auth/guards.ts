@@ -36,12 +36,18 @@ type Company = Extract<Workspace, { kind: "operator" | "partner" }>;
 
 /**
  * A member of this company with one of `roles`. A company that is not approved is refused for actions
- * (`allowPending` lets the workspace page show its status instead).
+ * (`allowPending` lets the workspace page show its status instead; `allowPaused` lets a paused company keep reading its
+ * own records, DASH-ADM-088).
  */
 export async function requireOrgRole(
   orgId: string,
   roles: TeamRole[] | "any",
-  { kind, allowPending = false, returnTo }: { kind?: "operator" | "partner"; allowPending?: boolean; returnTo?: string } = {},
+  {
+    kind,
+    allowPending = false,
+    allowPaused = false,
+    returnTo,
+  }: { kind?: "operator" | "partner"; allowPending?: boolean; allowPaused?: boolean; returnTo?: string } = {},
 ): Promise<{ session: Session; company: Company }> {
   const session = await requireUser(returnTo ?? "/dashboard/");
   const company = resolveWorkspaces(session).find(
@@ -49,7 +55,7 @@ export async function requireOrgRole(
   );
   if (!company || (kind && company.kind !== kind)) forbidden();
   if (roles !== "any" && !roles.includes(company.teamRole)) forbidden();
-  if (!allowPending && company.status !== "approved") forbidden();
+  if (!allowPending && company.status !== "approved" && !(allowPaused && company.status === "paused")) forbidden();
   return { session, company };
 }
 

@@ -344,7 +344,8 @@
       "twoStep": "Verificación en dos pasos",
       "security": "Seguridad de la cuenta",
       "description": "Tu cuenta de Nilecruz.",
-      "apply": "Solicitar como operador"
+      "apply": "Solicitar como operador",
+      "applyPartner": "Solicitar acceso como agencia"
     },
     "apply": {
       "title": "Solicitar como operador",
@@ -364,6 +365,28 @@
         "websiteFormat": "Usa una dirección completa que empiece por https://."
       },
       "link": "¿Tienes una compañía de cruceros? Solicita como operador"
+    },
+    "applyPartner": {
+      "title": "Solicitar acceso como agencia",
+      "lede": "¿Una agencia de viajes o turoperador que reserva cruceros por el Nilo para sus clientes? Solicite acceso profesional. Nilecruz revisa cada agencia; le escribiremos cuando terminemos.",
+      "company": "Nombre de la agencia (como la conocen sus clientes)",
+      "legal": "Razón social",
+      "country": "País de registro",
+      "registration": "Número de registro o licencia",
+      "registrationHint": "Por ejemplo, una licencia del Ministerio de Turismo o un número IATA.",
+      "website": "Sitio web",
+      "contactName": "Persona de contacto",
+      "contactPhone": "Teléfono de contacto",
+      "submit": "Enviar solicitud",
+      "note": "Tras la aprobación podrá invitar a sus compañeros de reservas y finanzas y ver las tarifas profesionales.",
+      "already": "Ya tiene una solicitud pendiente. Puede seguirla en su panel.",
+      "errors": {
+        "companyRequired": "Indique el nombre de la agencia.",
+        "required": "Lo necesitamos para revisar su agencia.",
+        "tooLong": "Es demasiado largo.",
+        "websiteFormat": "Use una dirección completa que empiece por https://."
+      },
+      "link": "¿Es una agencia? Solicite acceso profesional"
     }
   }
 }
