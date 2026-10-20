@@ -1149,3 +1149,29 @@ ADR-094 records the answers. The accountant's advice is that Nilecruz acts as th
 - unit `product.test.ts` (7-day expiry for manual and pasted; thresholds in words): 336 tests in all;
 - pgTAP `120` checks manual availability is fresh at 6 days and stale at 8; on a reset database, 26 files and 405 checks;
 - end-to-end connections, product and marketplace specs on a local production build: 22 passed.
+
+### Batch 6-1: Home and the Vessels silo, with the linking engine (branch `batch-06-education`; migration `20261021000100_vessel_type_stats`)
+
+The first of two Batch 6 PRs (ADR-096). 6-2 adds Prices Explained, with the calculator, and the Guide.
+
+**Built:**
+- **Linking engine** (SEO-008–014):
+  - `scripts/link-map.py` (`pnpm links:map`) turns the silo workbook into `src/lib/seo/link-map.json`: 102 pages, felucca rows removed (ADR-008).
+  - `src/lib/seo/links.ts` derives each page's breadcrumb, its one link up, children, up to three siblings ("Keep reading"), bridges and closing listing.
+  - Links go only to pages listed in `BUILT` (ADR-093). Anchors are the target's keyword, with place names capitalised.
+  - **CI link check** (`silo-links.spec.ts`): every built education page against its row (H1, breadcrumb, every required link, nothing outside the row, every link answering 200, no "click here" anchors).
+- **Content** (ADR-096):
+  - Each page is an `article` in Sanity with its workbook row (`pageId`), a review status ("Draft for review" until approved), page FAQs and an optional close-variant anchor for the link up. The Studio schema is updated and validated.
+  - The drafted copy for nine pages is in `src/content/pages/`. `pnpm seed:content --apply` loaded it into the development dataset; production waits for review.
+  - The site reads Sanity and falls back to the repository drafts where Sanity isn't configured (CI). It is cached under the `content` tag, which the signed refresh route also expires.
+- **Maintained data** (DATA-009):
+  - `vessel_type_stats()` gives visitors only aggregates: per type, how many vessels and the middle half of guests and cabins, sample records excluded.
+  - On staging that's dahabiyas 12–20 guests in 6–10 cabins, and motor ships 82–140 guests in 42–70 cabins.
+  - VesselCompare and VesselTypeCard combine those figures with drafted editorial text, and show no sample prices.
+- **Pages:**
+  - home (PAGE-001): the hero with the cruise search, vessel types, comparison, drafted sections, live cruises, and Organization and WebSite with SearchAction;
+  - the Vessels silo (PAGE-026, 027, 030, 032, 033, 036, 041, 042): a pillar with type cards, hubs with the vessel illustration and comparison, day-on-board articles with a scene, comparisons.
+  - One template (`EditorialFrame`): breadcrumb, H1, the intro with its link up, sections, children, related bridges, "Keep reading", FAQs, closing cruises (at most three), and Article and FAQPage data.
+  - The cruise listing now searches by vessel name (`?q=`), so the site search works (SEO-028).
+- **Vessel pages** now link to their vessel-type hub (SEO-013, part).
+- Removed the Batch 1 placeholder home stylesheet.
