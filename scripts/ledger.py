@@ -910,6 +910,29 @@ STATUS.update({
  "DATA-031": ("Verified", B52+'one static page per vessel with every itinerary; ?itinerary=CODE switches it and the canonical stays the vessel URL (unit, e2e)'),
  "DATA-034": ("Verified", B52+'the vessel page\'s AggregateOffer uses only the public "from" price (lowPrice, priceCurrency) (unit, e2e)'),
 })
+B61 = "Batch 6-1 (21 Oct 2026): "
+_link = 'the linking engine (link map from the workbook, scripts/link-map.py) and the CI link check (silo-links.spec) cover home and the Vessels silo; Guide and Prices follow in 6-2'
+STATUS.update({
+ "PAGE-001": ("Verified", B61+'home: Hero with CruiseSearch, the three vessel types, VesselCompare with catalogue figures, drafted sections, live cruises; Organization and WebSite data (silo-links.spec)'),
+ "PAGE-026": ("Verified", B61+'/vessels/ pillar: vessel-type cards, comparison, children, drafted copy (silo-links.spec)'),
+ "PAGE-027": ("Verified", B61+'/vessels/dahabiya/ hub (silo-links.spec)'),
+ "PAGE-030": ("Verified", B61+'/vessels/dahabiya/a-day-on-board/ (silo-links.spec)'),
+ "PAGE-032": ("Verified", B61+'/vessels/motor-cruise-ships/ hub (silo-links.spec)'),
+ "PAGE-033": ("Verified", B61+'/vessels/motor-cruise-ships/a-day-on-board/ (silo-links.spec)'),
+ "PAGE-036": ("Verified", B61+'/vessels/paddle-steamers/ hub; closing cruises filtered to steamers until /cruises/paddle-steamers/ exists (silo-links.spec)'),
+ "PAGE-041": ("Verified", B61+'/vessels/compare/ hub (silo-links.spec)'),
+ "PAGE-042": ("Verified", B61+'/vessels/compare/dahabiya-vs-cruise-ship/ (silo-links.spec)'),
+ "SEO-008": ("In progress", B61+'breadcrumb and one link up in the intro on every built page; '+_link),
+ "SEO-009": ("In progress", B61+'hubs and pillars link every built child by its keyword; '+_link),
+ "SEO-010": ("In progress", B61+'"Keep reading" shows up to three built siblings from the workbook; '+_link),
+ "SEO-011": ("In progress", B61+'bridges only where the workbook lists them, checked in CI; '+_link),
+ "SEO-012": ("In progress", B61+'every informational page ends with up to three real cruises and its matching listing; '+_link),
+ "SEO-014": ("In progress", B61+'anchors are the target keyword (place names capitalised) or a close variant; never "click here" (CI); '+_link),
+ "SEO-024": ("Verified", B61+'vessel-type hubs show at most three cruise cards, then link to the listing (unit, e2e)'),
+ "SEO-028": ("Verified", B61+'home emits Organization and WebSite with SearchAction to /cruises/?q=, which searches vessel names (unit, e2e)'),
+ "DATA-009": ("Verified", B61+'VesselCompare and VesselTypeCard take guests and cabins from the catalogue (vessel_type_stats: the middle half of each type, sample vessels excluded) and editorial text drafted for review; no sample prices (unit, e2e)'),
+ "SEO-013": ("In progress", B52+'vessel pages link up to /cruises/ and their type facet; '+B61+'and to their vessel-type hub by its keyword (e2e); destination links follow in Batch 7'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

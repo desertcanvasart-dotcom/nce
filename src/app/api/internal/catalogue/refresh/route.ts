@@ -1,6 +1,6 @@
 import { verifyRefresh } from "@/lib/connections/signature";
 import { serverEnv } from "@/server/env";
-import { revalidateCatalogue } from "@/server/marketplace/revalidate";
+import { revalidateCatalogue, revalidateContent } from "@/server/marketplace/revalidate";
 
 /**
  * PERF-010: refreshes the public marketplace now, for changes made outside the app (the scheduler, data imports and
@@ -16,5 +16,6 @@ export async function POST(request: Request) {
   const sig = request.headers.get("nilecruz-signature") ?? "";
   if (!verifyRefresh(secret, ts, sig)) return Response.json({ error: "Signature missing, wrong or expired." }, { status: 401 });
   revalidateCatalogue();
+  revalidateContent();
   return Response.json({ refreshed: true });
 }

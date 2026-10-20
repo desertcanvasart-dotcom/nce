@@ -10,3 +10,8 @@ import { CATALOGUE_TAG } from "./queries";
 export function revalidateCatalogue(): void {
   revalidateTag(CATALOGUE_TAG, { expire: 0 });
 }
+
+/** Editorial pages (Batch 6): Sanity publishes (through the signed refresh route) expire them at once. */
+export function revalidateContent(): void {
+  revalidateTag("content", { expire: 0 });
+}
