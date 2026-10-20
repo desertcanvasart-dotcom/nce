@@ -125,6 +125,8 @@ export default defineConfig([
   },
   globalIgnores([
     ".next/**",
+    // Other sessions' git worktrees (Claude Code) hold whole copies of the repository, builds included.
+    ".claude/**",
     "node_modules/**",
     "vendor/**",
     "next-env.d.ts",

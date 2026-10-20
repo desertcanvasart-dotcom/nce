@@ -35,8 +35,8 @@ export async function CabinsPage({
     .maybeSingle();
   const chosen = preset === "luxury" || preset === "standard" ? STANDARD_POLICIES[preset as PolicyPreset] : null;
   const bands = chosen?.bands ?? (policy?.bands as CancellationBand[] | undefined) ?? [];
-  const policyText = (l: string) =>
-    chosen && l === "en" ? chosen.en : (policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "");
+  const policyText = (l: "en" | "es" | "ja") =>
+    chosen ? chosen[l] : (policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "");
   const suggested = suggestedPolicy(vessel.name);
   const decks = [...new Set(cabins.map((c) => c.deck))];
   return (

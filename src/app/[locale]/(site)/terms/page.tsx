@@ -36,9 +36,11 @@ export default async function TermsPage() {
 
       <h2>What Nilecruz does</h2>
       <p>
-        Nilecruz is a marketplace. Independent cruise operators supply the vessels, cabins, sailings and prices you see. We
-        explain how vessels differ, publish our own evaluations, take bookings and collect payment. The operator provides the
-        cruise itself.
+        Nilecruz is a marketplace and acts as a booking agent. Independent cruise operators supply the vessels, cabins, sailings
+        and prices you see. We explain how vessels differ and publish our own evaluations. When you book a cruise, the operator
+        named on your booking sells and provides it, and your contract for the cruise is with that operator. Nilecruz makes the
+        booking and collects your payment on the operator’s behalf, and is paid a commission by the operator, which is included in
+        the price you see.
       </p>
       <p>
         Our evaluations are our own assessments, made on the date shown. Reviews from other websites are shown separately, with
@@ -96,8 +98,10 @@ export default async function TermsPage() {
 
       <h2>Cancellation</h2>
       <p>
-        Each cruise and tour has its own cancellation policy, shown before you pay. You must accept it before paying. Refunds,
-        where due, are calculated from that policy and returned to the original payment method.
+        Each cruise and tour has its own cancellation policy, shown before you pay. You must accept it before paying. The charge
+        it sets only ever comes out of what you have paid: if you cancel before paying anything, cancelling costs nothing, and if
+        you have paid less than the charge, we keep what you paid and you owe nothing more. Refunds, where due, are calculated
+        from that policy and returned to the original payment method.
       </p>
 
       <h2>Our responsibility</h2>

@@ -13,6 +13,7 @@ import { reservation } from "@/server/bookings/queries";
 import { ReservationRecord } from "../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../sections";
 import { reportTransfer, requestCancellation, startCheckout, uploadProof, withdrawCancellation } from "../../actions";
+import { cancellationOutcome } from "@/lib/payments/cancellation";
 
 const PROOF = {
   submitted: "Waiting for the operator’s check",
@@ -122,11 +123,7 @@ export default async function MyReservation({
           <p>
             Cancelled today, {quote.days_before} {quote.days_before === 1 ? "day" : "days"} before departure, the cancellation
             policy above charges <strong>{quote.percent} %</strong> of the price: {money(quote.charge_minor)}.{" "}
-            {quote.refund_minor > 0
-              ? `You have paid ${money(quote.paid_minor)}, so ${money(quote.refund_minor)} would be refunded.`
-              : quote.unpaid_charge_minor > 0
-                ? `You have paid ${money(quote.paid_minor)}, so ${money(quote.unpaid_charge_minor)} of the charge would still be owed.`
-                : "Nothing would be refunded."}
+            {cancellationOutcome(quote, money)}
           </p>
           <p className={ui.muted}>
             The charge is fixed on the day your request arrives. The operator checks the figures, then Nilecruz confirms the

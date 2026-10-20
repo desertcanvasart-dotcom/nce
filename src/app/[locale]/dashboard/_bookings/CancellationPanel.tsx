@@ -58,12 +58,6 @@ export function CancellationPanel({
                   <strong>{money(c.refund_minor)}</strong>
                 </dd>
               </div>
-              {c.unpaid_charge_minor > 0 ? (
-                <div>
-                  <dt className={ui.label}>Charge not yet paid</dt>
-                  <dd>{money(c.unpaid_charge_minor)}</dd>
-                </div>
-              ) : null}
             </dl>
             {c.reason ? <p className={ui.muted}>Reason given: {c.reason}</p> : null}
             {c.status === "requested" || c.operator_review !== "pending" ? (
