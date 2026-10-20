@@ -218,8 +218,8 @@ PUB = [
  ("§Public ¶1", "Visitors see starting prices where an operator supplied them.", "5"),
  ("§Public ¶2", "Visitors can browse tour pages.", "7"),
  ("§Public ¶2", "Visitors can begin planning a request without an account.", "8"),
- ("§Public ¶3", "Exact departure rates and additional cabin details require an account.", "8"),
- ("§Public ¶3", "Reserving or sending a personal request requires an account.", "8"),
+ ("§Public ¶3", "Exact departure rates and additional cabin details require an account.", "5"),  # ADR-093: brought forward from Batch 8
+ ("§Public ¶3", "Reserving or sending a personal request requires an account.", "5"),  # ADR-093: brought forward from Batch 8
  ("§Public ¶3", "Information-only listings stay visible without implying prices or stock.", "5"),
  ("§Public ¶4", "A read-only MCP layer offers cruise search, comparison and availability.", "8"),
  ("§Public ¶4", "The MCP layer applies the same account and pricing restrictions and cannot book or administer.", "8"),
@@ -460,7 +460,7 @@ X = {
  ("Faris 17 Oct 2026 (ADR-020)", "Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only.", "4f"),
  ("Faris 17 Oct 2026 (ADR-021); Q4", "One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL.", "5"),
  ("Faris 17 Oct 2026 (ADR-025); Q3", "Public pages show one 'from' price per vessel: the lowest available cabin category, per person, with currency and what is included; other categories show no price.", "5"),
- ("Faris 17 Oct 2026 (ADR-025); Q3", "Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates).", "8"),
+ ("Faris 17 Oct 2026 (ADR-025); Q3", "Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates).", "5"),  # ADR-093: brought forward from Batch 8
  ("Faris 17 Oct 2026 (ADR-025)", "Vessel-page Offer schema uses the public 'from' price only (AggregateOffer lowPrice and priceCurrency).", "5"),
  ("Faris 17 Oct 2026 (ADR-026); Q51", "Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators.", "4f"),
  ("Faris 17 Oct 2026 (ADR-026); Q18", "Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities.", "4f"),

@@ -658,3 +658,13 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Applying:** company name, country, registration or licence number, website, and a contact name and phone (brief question 1, as recommended).
 - **Paying:** partners pay like customers: the same deadlines, card or transfer, to Nilecruz. Credit terms are out of scope (brief question 4, as recommended).
 - **Two pull requests:** 4h-1 (applying, approval and pausing, team roles, trade and company rates, search) and 4h-2 (reserving, company requests and offers, bookings and payments, client references, selling totals, client record).
+
+### ADR-093 Marketplace (Accepted; Faris 20 Oct 2026, Batch 5 brief, all as recommended)
+- **Reserving:** signed-in customers reserve directly at the public international rate on bookable departures, using the partner-booking engine; otherwise they send a request prefilled from the vessel page. DATA-033, DASH-PUB-008 and 009 move from Batch 8 to Batch 5.
+- **The "from" price:** the lowest international per-person price for two sharing, over bookable departures in the next 12 months, in the rate's own currency ("from US$700 per person"). Gratuities stay a separate line.
+- **Currency (Q23):** each price in its rate's own currency; no conversion for now. An approximate conversion may come later (PROPOSED-010), and a converted amount is never charged.
+- **`/cruises/luxury/`:** vessels whose category is luxury (not deluxe).
+- **Comparison:** a simple compare page for up to three vessels now; the animated compare tray stays EXP-004 (Batch 9).
+- **Links to unbuilt pages:** rendered only once the target page exists; the Batch 6 linking engine fills them in.
+- **Languages:** English content now; `/es/` and `/ja/` show the same pages until Batch 10 translates them.
+- **Two pull requests:** 5-1 (public read path and "from" price, `/cruises/` and the five filtered pages, CruiseCard, CruiseSearch, comparison, SEO, caching) and 5-2 (vessel page, itineraries, deck selector, prices after sign-in, reserving).
