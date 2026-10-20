@@ -78,12 +78,13 @@ test.describe("navigation changes with role (DASH-ROLE-006, 007, 008)", () => {
   });
 
   test("a section that a later batch builds says so", async ({ page }) => {
-    // My journey is complete in 4g; travel partners' sections arrive with 4h.
-    await signIn(page, "finance@partner.test");
-    await page.getByRole("link", { name: "Payments" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Payments" })).toBeVisible();
+    // Travel partners' company requests and offers arrive with 4h-2b.
+    await signIn(page, "reservations@partner.test");
+    const nav = page.getByRole("navigation", { name: /sections/ });
+    await nav.getByRole("link", { name: "Requests and offers" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Requests and offers" })).toBeVisible();
     await expect(page.getByText(/arrives in a later release \(planned for Batch 4h\)/)).toBeVisible();
-    await expect(page.getByRole("link", { name: "Payments" })).toHaveAttribute("aria-current", "page");
+    await expect(nav.getByRole("link", { name: "Requests and offers" })).toHaveAttribute("aria-current", "page");
   });
 
   test("My journey has the guide's sections (DASH-CUS-001, 002)", async ({ page }) => {
