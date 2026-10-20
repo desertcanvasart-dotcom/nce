@@ -16,7 +16,7 @@ export default async function MyRequest({ params }: { params: Promise<{ requestI
   if (!isUuid(requestId)) notFound();
   const session = await requireUser(`/dashboard/journey/requests/${requestId}/`);
   const r = await request(requestId);
-  if (!r || r.customer_id !== session.userId) notFound();
+  if (!r || r.customer_id !== session.userId || r.buyer_org_id) notFound();
   const offers = await offersForRequest(requestId);
   const latest = [...new Map(offers.map((o) => [o.thread_id, o])).values()].reverse();
   const replaced = offers.filter((o) => o.status === "superseded").length;

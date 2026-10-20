@@ -52,6 +52,12 @@ export default async function RequestsAndOffers({ params }: { params: Promise<{ 
                         <Link href={`/dashboard/operator/${orgId}/offers/${r.id}/`}>
                           {r.origin && r.destination ? `${r.origin} → ${r.destination}` : "Flexible route"}
                         </Link>
+                        {r.buyer_org_id ? (
+                          <>
+                            {" "}
+                            <Badge tone="neutral">Travel partner</Badge>
+                          </>
+                        ) : null}
                       </th>
                       <td data-label="Departing">
                         {r.earliest_departure} to {r.latest_departure}

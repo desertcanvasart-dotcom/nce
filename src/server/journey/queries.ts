@@ -31,6 +31,7 @@ export async function journeyRecords(userId: string) {
       .from("cruise_requests")
       .select("id, status, origin, destination, earliest_departure, latest_departure, offers(status, expires_at)")
       .eq("customer_id", userId)
+      .is("buyer_org_id", null)
       .order("created_at", { ascending: false }),
   ]);
   if (e1 ?? e2 ?? e3) throw e1 ?? e2 ?? e3;

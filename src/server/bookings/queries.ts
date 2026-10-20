@@ -71,6 +71,7 @@ export async function myRequests() {
   const { data, error } = await db
     .from("cruise_requests")
     .select("*, offers(id, status, expires_at)")
+    .is("buyer_org_id", null) // a company's requests belong to its workspace (DASH-B2B-004)
     .order("created_at", { ascending: false });
   if (error) throw error;
   return data ?? [];
@@ -323,6 +324,19 @@ export async function companyBookings(orgId: string) {
     .eq("buyer_org_id", orgId)
     .order("created_at", { ascending: false })
     .limit(500);
+  if (error) throw error;
+  return data ?? [];
+}
+
+/** A company's requests with their offers (DASH-B2B-004). */
+export async function companyRequests(orgId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("cruise_requests")
+    .select("*, offers(id, status, expires_at)")
+    .eq("buyer_org_id", orgId)
+    .order("created_at", { ascending: false })
+    .limit(200);
   if (error) throw error;
   return data ?? [];
 }

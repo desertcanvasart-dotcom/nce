@@ -3,17 +3,16 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import type { ActionState } from "@/components/dashboard/ActionForm";
-import { passengersProblem, requestProblems, type Passenger } from "@/lib/bookings/bookings";
+import { passengersProblem, type Passenger } from "@/lib/bookings/bookings";
 import { priceToMinor } from "@/lib/connections/format";
 import { env } from "@/lib/env";
 import { cardPayable, checkoutParams, tourCheckoutParams } from "@/lib/payments/checkout";
 import { formatCairo } from "@/lib/time/cairo";
 import { ageOn } from "@/lib/product/pricing";
-import { cairoDate } from "@/lib/tours/tours";
 import { requireUser } from "@/server/auth";
-import { failed, formObject, problemsFrom, saved } from "@/server/catalogue/form";
+import { failed, formObject, saved } from "@/server/catalogue/form";
+import { parseRequest } from "@/server/bookings/request-form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
 import { getStripe } from "@/server/payments/stripe";
@@ -21,74 +20,12 @@ import { getStripe } from "@/server/payments/stripe";
 /** My journey: cruise requests, accepting offers, eligibility proof (DASH-CUS-004–007, 014, 015, ADR-088). */
 const REQUESTS = "/dashboard/journey/requests/";
 
-const requestInput = z.object({
-  route: z.string(),
-  earliest_departure: z.iso.date({ message: "choose a date" }),
-  latest_departure: z.iso.date({ message: "choose a date" }),
-  latest_finish: z
-    .string()
-    .transform((v) => (v === "" ? null : v))
-    .pipe(z.iso.date({ message: "a date" }).nullable()),
-  nights_min: z.coerce.number().int("a whole number").min(1).max(21),
-  nights_max: z.coerce.number().int("a whole number").min(1).max(21),
-  adults: z.coerce.number().int("a whole number").min(1, "at least one adult").max(30),
-  child_ages: z.string().trim().max(80),
-  cabins: z.coerce.number().int("a whole number").min(1).max(30),
-  cabin_notes: z.string().trim().max(500),
-  budget: z.string().trim(),
-  budget_currency: z.enum(["USD", "EUR", "EGP"]),
-  notes: z.string().trim().max(2000),
-});
-
 export async function createRequest(_prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireUser(REQUESTS);
-  const input = requestInput.safeParse(formObject(fd));
-  if (!input.success) {
-    return problemsFrom(input.error, {
-      earliest_departure: "Earliest departure",
-      latest_departure: "Latest departure",
-      latest_finish: "Back by",
-      nights_min: "Shortest stay",
-      nights_max: "Longest stay",
-      adults: "Adults",
-      cabins: "Cabins",
-      child_ages: "Children's ages",
-    });
-  }
-  const d = input.data;
-  const ages = d.child_ages ? d.child_ages.split(/[\s,]+/).filter(Boolean) : [];
-  if (ages.some((a) => !/^\d{1,2}$/.test(a)))
-    return failed("Give each child's age as a whole number, separated by commas, for example “7, 4”.");
-  const child_ages = ages.map(Number);
-  const problems = requestProblems({ ...d, child_ages }, cairoDate(new Date()));
-  if (problems.length) return { ok: false, message: "The request can't be sent yet:", problems };
-  let budget_minor: number | null = null;
-  if (d.budget) {
-    budget_minor = priceToMinor(d.budget.replace(/,/g, ""));
-    if (budget_minor === null) return failed("Give the budget as an amount, for example 4000.");
-  }
-  const [origin, destination] = d.route ? d.route.split("→") : [null, null];
+  const parsed = parseRequest(fd);
+  if (!parsed.ok) return parsed.state;
   const db = await getDb();
-  const { data, error } = await db
-    .from("cruise_requests")
-    .insert({
-      origin: origin || null,
-      destination: destination || null,
-      earliest_departure: d.earliest_departure,
-      latest_departure: d.latest_departure,
-      latest_finish: d.latest_finish,
-      nights_min: d.nights_min,
-      nights_max: d.nights_max,
-      adults: d.adults,
-      child_ages,
-      cabins: d.cabins,
-      cabin_notes: d.cabin_notes || null,
-      budget_minor,
-      budget_currency: budget_minor === null ? null : d.budget_currency,
-      notes: d.notes || null,
-    })
-    .select("id")
-    .single();
+  const { data, error } = await db.from("cruise_requests").insert(parsed.row).select("id").single();
   if (error) return connectionProblem(error);
   redirect(`${REQUESTS}${data.id}/`);
 }

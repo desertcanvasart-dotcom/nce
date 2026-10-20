@@ -5,9 +5,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/components/dashboard/ActionForm";
 import { priceToMinor } from "@/lib/connections/format";
+import { passengersProblem, type Passenger } from "@/lib/bookings/bookings";
 import { env } from "@/lib/env";
+import { ageOn } from "@/lib/product/pricing";
 import { checkoutParams } from "@/lib/payments/checkout";
 import { requireOrgRole } from "@/server/auth";
+import { parseRequest } from "@/server/bookings/request-form";
 import { failed, formObject, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
@@ -18,6 +21,17 @@ import { getStripe } from "@/server/payments/stripe";
  * owners and reservations users reserve and edit client details; owners and finance users pay; anyone can ask to cancel.
  */
 const booking = (orgId: string, id: string) => `/dashboard/partner/${orgId}/bookings/${id}/`;
+const requests = (orgId: string) => `/dashboard/partner/${orgId}/requests/`;
+
+/** The selling price as typed: empty means none; anything else must be an amount. */
+function sellingFrom(f: Record<string, string | string[]>): { ok: true; minor: number | null } | { ok: false } {
+  const text = String(f.selling_total ?? "")
+    .replace(/,/g, "")
+    .trim();
+  if (!text) return { ok: true, minor: null };
+  const minor = priceToMinor(text);
+  return minor === null ? { ok: false } : { ok: true, minor };
+}
 
 export async function partnerReserve(
   orgId: string,
@@ -43,11 +57,8 @@ export async function partnerReserve(
   }));
   if (guests.some((g) => g.full_name.length < 2 || !/^\d{4}-\d{2}-\d{2}$/.test(g.date_of_birth)))
     return failed("Give every guest's full name and date of birth.");
-  const sellingText = String(f.selling_total ?? "")
-    .replace(/,/g, "")
-    .trim();
-  const selling = sellingText ? priceToMinor(sellingText) : null;
-  if (sellingText && selling === null) return failed("Give your selling price as an amount, for example 2600.");
+  const selling = sellingFrom(f);
+  if (!selling.ok) return failed("Give your selling price as an amount, for example 2600.");
   const db = await getDb();
   const { data: ref, error } = await db.rpc("partner_reserve", {
     org: orgId,
@@ -56,7 +67,7 @@ export async function partnerReserve(
     cabins: Array.from({ length: plan.cabins }, () => ({ cabin_type_id: plan.cabinTypeId, ages: plan.ages })),
     guests,
     client_ref: String(f.client_reference ?? "").slice(0, 120),
-    selling_total: selling ?? 0,
+    selling_total: selling.minor ?? 0,
     terms_read: true,
   });
   if (error) return connectionProblem(error);
@@ -80,11 +91,8 @@ export async function saveClientDetails(
     returnTo: booking(orgId, reservationId),
   });
   const f = formObject(fd);
-  const sellingText = String(f.selling_total ?? "")
-    .replace(/,/g, "")
-    .trim();
-  const selling = sellingText ? priceToMinor(sellingText) : null;
-  if (sellingText && selling === null) return failed("Give your selling price as an amount, for example 2600.");
+  const selling = sellingFrom(f);
+  if (!selling.ok) return failed("Give your selling price as an amount, for example 2600.");
   const db = await getDb();
   const { data, error } = await db
     .from("partner_booking_details")
@@ -93,7 +101,7 @@ export async function saveClientDetails(
         String(f.client_reference ?? "")
           .trim()
           .slice(0, 120) || null,
-      selling_total_minor: selling,
+      selling_total_minor: selling.minor,
     })
     .eq("reservation_id", reservationId)
     .eq("org_id", orgId)
@@ -210,4 +218,91 @@ export async function partnerRequestCancellation(
   if (error) return connectionProblem(error);
   revalidatePath(booking(orgId, reservationId));
   return saved("Cancellation requested. The operator checks the figures and Nilecruz confirms it here.");
+}
+
+/** DASH-B2B-004: a request for the company. Operators see it as from a travel partner and may offer at the trade rate. */
+export async function partnerCreateRequest(orgId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: requests(orgId) });
+  const parsed = parseRequest(fd);
+  if (!parsed.ok) return parsed.state;
+  const db = await getDb();
+  const { data, error } = await db
+    .from("cruise_requests")
+    .insert({ ...parsed.row, buyer_org_id: orgId })
+    .select("id")
+    .single();
+  if (error) return connectionProblem(error);
+  redirect(`${requests(orgId)}${data.id}/`);
+}
+
+export async function partnerCloseRequest(orgId: string, id: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], {
+    kind: "partner",
+    allowPaused: true,
+    returnTo: `${requests(orgId)}${id}/`,
+  });
+  const db = await getDb();
+  const { error } = await db
+    .from("cruise_requests")
+    .update({ status: "closed" })
+    .eq("id", id)
+    .eq("buyer_org_id", orgId)
+    .eq("status", "open");
+  if (error) return connectionProblem(error);
+  revalidatePath(`${requests(orgId)}${id}/`);
+  return saved("Request closed. Operators can no longer send offers for it.");
+}
+
+/** DASH-B2B-004, 006: anyone in the company with the reservations role accepts an offer for a client. */
+export async function partnerAcceptOffer(
+  orgId: string,
+  requestId: string,
+  offerId: string,
+  departsOn: string,
+  offered: { adults: number; childAges: number[] },
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], {
+    kind: "partner",
+    returnTo: `${requests(orgId)}${requestId}/accept/${offerId}/`,
+  });
+  const f = formObject(fd, ["terms"]);
+  if (!(f.terms as string[]).includes("yes"))
+    return failed("Tick that the client has read the terms and the cancellation policy.");
+  const guests: Passenger[] = Array.from({ length: offered.adults + offered.childAges.length }, (_, i) => ({
+    full_name: String(f[`name_${i}`] ?? "").trim(),
+    date_of_birth: String(f[`dob_${i}`] ?? ""),
+    ...(i === 0
+      ? {
+          nationality: String(f.nationality ?? "")
+            .trim()
+            .toUpperCase(),
+        }
+      : {}),
+  }));
+  const problem = passengersProblem(guests, departsOn, offered, ageOn);
+  if (problem) return failed(problem);
+  const selling = sellingFrom(f);
+  if (!selling.ok) return failed("Give your selling price as an amount, for example 2600.");
+  const db = await getDb();
+  const { data: ref, error } = await db.rpc("accept_offer", { target: offerId, guests, terms_read: true });
+  if (error) return connectionProblem(error);
+  const { data: r } = await db
+    .from("reservations")
+    .select("id")
+    .eq("reference", ref as string)
+    .single();
+  // The booking is made; the client's details are the agency's own notes on it.
+  await db
+    .from("partner_booking_details")
+    .update({
+      client_reference:
+        String(f.client_reference ?? "")
+          .trim()
+          .slice(0, 120) || null,
+      selling_total_minor: selling.minor,
+    })
+    .eq("reservation_id", r!.id);
+  redirect(booking(orgId, r!.id));
 }
