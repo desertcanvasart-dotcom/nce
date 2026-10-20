@@ -33,7 +33,7 @@ export async function payment(id: string) {
   const { data } = await db
     .from("payments")
     .select(
-      "*, reservation:reservations(id, reference, customer_id, currency, total_minor, vessel:vessels(name), departure:departures(departs_on))",
+      "*, reservation:reservations(id, reference, customer_id, currency, total_minor, seller_name, vessel:vessels(name), departure:departures(departs_on))",
     )
     .eq("id", id)
     .maybeSingle();

@@ -2200,6 +2200,7 @@ export type Database = {
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
           request_id: string | null;
+          seller_name: string | null;
           status: Database["public"]["Enums"]["reservation_status"];
           terms: string;
           total_minor: number;
@@ -2228,6 +2229,7 @@ export type Database = {
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
           request_id?: string | null;
+          seller_name?: string | null;
           status?: Database["public"]["Enums"]["reservation_status"];
           terms: string;
           total_minor: number;
@@ -2256,6 +2258,7 @@ export type Database = {
           rate_plan?: Database["public"]["Enums"]["rate_plan"];
           reference?: string;
           request_id?: string | null;
+          seller_name?: string | null;
           status?: Database["public"]["Enums"]["reservation_status"];
           terms?: string;
           total_minor?: number;

@@ -162,7 +162,10 @@ export default async function FinancePage() {
       </Section>
 
       <Section title="Operator payables" id="payables">
-        <p className={ui.muted}>Each received cruise payment: 10 % commission to Nilecruz, the rest payable to the operator.</p>
+        <p className={ui.muted}>
+          Nilecruz receives each cruise payment as the operator’s booking agent: its 10 % commission is Nilecruz’s, the rest is
+          held for and payable to the operator.
+        </p>
         {owed.length ? (
           <div className={ui.tableWrap}>
             <table className={`${ui.table} ${ui.stack}`}>

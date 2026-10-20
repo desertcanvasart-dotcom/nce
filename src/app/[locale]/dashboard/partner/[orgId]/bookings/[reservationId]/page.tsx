@@ -12,6 +12,7 @@ import { PaymentPanel } from "../../../../_bookings/PaymentPanel";
 import { ReservationRecord } from "../../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../../sections";
 import { partnerCheckout, partnerReportTransfer, partnerRequestCancellation, saveClientDetails } from "../../actions";
+import { cancellationOutcome } from "@/lib/payments/cancellation";
 
 /** DASH-B2B-005–008: a company booking: payment, the agency's client details and margin, cancellation, the client record. */
 export default async function CompanyBooking({
@@ -141,7 +142,7 @@ export default async function CompanyBooking({
           <p>
             Cancelled today, {quote.days_before} {quote.days_before === 1 ? "day" : "days"} before departure, the policy charges{" "}
             <strong>{quote.percent} %</strong>: {money(quote.charge_minor)}.{" "}
-            {quote.refund_minor > 0 ? `${money(quote.refund_minor)} would be refunded.` : "Nothing would be refunded."}
+            {cancellationOutcome(quote, money, "Your company has")}
           </p>
           <ActionForm action={partnerRequestCancellation.bind(null, orgId, r.id)} submit="Ask to cancel" variant="outline">
             <TextArea label="Reason (optional)" name="reason" rows={3} maxLength={1000} />

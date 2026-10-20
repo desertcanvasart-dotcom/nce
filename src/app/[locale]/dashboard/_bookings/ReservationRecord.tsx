@@ -40,6 +40,11 @@ export function ReservationRecord({ r }: { r: Res }) {
             <dd>{r.vessel?.name}</dd>
           </div>
           <div>
+            {/* ADR-094: the operator sells the cruise; Nilecruz books it as the operator's agent. */}
+            <dt className={ui.label}>Sold by</dt>
+            <dd>{r.seller_name ? `${r.seller_name}, the operator; booked through Nilecruz as its agent` : "The operator"}</dd>
+          </div>
+          <div>
             <dt className={ui.label}>Route</dt>
             <dd>{s ? `${s.origin} → ${s.destination}, ${s.nights} nights` : "—"}</dd>
           </div>

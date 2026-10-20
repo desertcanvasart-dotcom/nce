@@ -55,3 +55,13 @@ describe("standard cancellation policies (CONTENT-NEEDED #4)", () => {
     expect(suggestedPolicy(name)).toBe(preset);
   });
 });
+
+describe("standard policies in three languages (ADR-094)", () => {
+  it("carry the reviewed Spanish and Japanese wording", () => {
+    for (const p of Object.values(STANDARD_POLICIES)) {
+      expect(p.es).toContain("Le reembolsamos lo que haya pagado por encima de los gastos de cancelación.");
+      expect(p.ja).toContain("お支払い済みの金額のうち、キャンセル料を超える分を返金いたします。");
+      expect(p.en).toContain("Anything you have paid beyond the charge is refunded.");
+    }
+  });
+});

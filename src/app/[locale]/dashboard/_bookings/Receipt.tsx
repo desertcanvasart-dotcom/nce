@@ -5,7 +5,10 @@ import type { payment } from "@/server/payments/queries";
 
 const METHOD = { card: "Card (Stripe)", transfer: "Bank transfer", manual: "Recorded by Nilecruz" } as const;
 
-/** DASH-ADM-102: a receipt for one received payment. Printable; Nilecruz is merchant of record (ADR-026). */
+/**
+ * DASH-ADM-102: a receipt for one received payment. Printable. Nilecruz receives the payment as the operator's booking
+ * agent; the operator is the seller (ADR-094).
+ */
 export function Receipt({ p }: { p: NonNullable<Awaited<ReturnType<typeof payment>>> }) {
   return (
     <article className={ui.card} aria-label={`Receipt ${p.receipt_number}`}>
@@ -13,7 +16,11 @@ export function Receipt({ p }: { p: NonNullable<Awaited<ReturnType<typeof paymen
       <dl className={ui.grid}>
         <div>
           <dt className={ui.label}>Received by</dt>
-          <dd>Nilecruz</dd>
+          <dd>Nilecruz, as booking agent</dd>
+        </div>
+        <div>
+          <dt className={ui.label}>On behalf of (seller)</dt>
+          <dd>{p.reservation?.seller_name ?? "The operator"}</dd>
         </div>
         <div>
           <dt className={ui.label}>Amount</dt>
@@ -42,7 +49,8 @@ export function Receipt({ p }: { p: NonNullable<Awaited<ReturnType<typeof paymen
         </div>
       </dl>
       <p className={ui.muted}>
-        A receipt confirms Nilecruz received this payment for the reservation. The crew gratuity is paid on board and isn’t
+        This receipt confirms Nilecruz received this payment for the reservation, as booking agent for the operator, who sells and
+        provides the cruise. Nilecruz’s commission is included in the price. The crew gratuity is paid on board and isn’t
         included.
       </p>
     </article>

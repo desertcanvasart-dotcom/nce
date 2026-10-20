@@ -48,7 +48,8 @@ export default async function OperatorBookings({ params }: { params: Promise<{ o
       {seesMoney ? (
         <Section title="Payables" id="payables">
           <p className={ui.muted}>
-            Nilecruz receives customers’ payments, keeps its 10 % commission and pays you the rest outside this system. Read-only.
+            As your booking agent, Nilecruz receives customers’ payments on your behalf, keeps its 10 % commission and pays you
+            the rest outside this system. Read-only.
           </p>
           {owed.length ? (
             <ul className={ui.list}>

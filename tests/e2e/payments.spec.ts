@@ -174,6 +174,9 @@ test("a card payment is recorded only from a signed Stripe webhook, once, with a
   await expect(page.getByText("Confirmed", { exact: true }).first()).toBeVisible();
   await page.getByRole("link", { name: /^Receipt NCR-\d{4}-\d{6}$/ }).click();
   await expect(page.getByRole("heading", { level: 1, name: /^Receipt NCR-/ })).toBeVisible();
+  // ADR-094: Nilecruz receives the payment as the operator's booking agent.
+  await expect(page.getByText("Nilecruz, as booking agent")).toBeVisible();
+  await expect(page.getByText("On behalf of (seller)")).toBeVisible();
   await expect(page.getByText("US$2,000")).toBeVisible();
   const { count } = await adminDb().from("payments").select("id", { count: "exact", head: true }).eq("reservation_id", res[0]!);
   expect(count).toBe(1);

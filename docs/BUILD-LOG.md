@@ -937,7 +937,7 @@ Brief approved by Faris as recommended (ADR-092): company rate, then trade, then
   - the owner's client record shows the agency, the client reference, US$1,800 and the guests, and never US$1,400 or bank details;
   - the operator sees "Trade booking for Sample Partner" but not the selling price or client reference;
   - axe on 5 screens in Day and Night.
-- **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); pgTAP, all files; end-to-end with `CI=1`: 147 passed, 1 flaky (a catalogue test that passed on retry, load on this machine), the rest skipped as usual without the local stack.
+- **Full suites:** `pnpm verify` (308 unit tests, lint, types) and a production build against the local database; pgTAP, all files; end-to-end with `CI=1`: 147 passed, 1 flaky (a catalogue test that passed on retry, load on this machine), the rest skipped as usual without the local stack.
 - **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2-`): reserve, company bookings, booking, client record and payments, at 375, 768 and 1440 in Day and Night.
 
 ### Batch 4h-2b: Company requests and offers (branch `batch-04h-2b-requests`, stacked on 4h-2a; migration `20261020000400_partner_requests`)
@@ -980,7 +980,7 @@ The second 4h-2 PR. With it every Batch 4h requirement is Verified, and every da
   - finance users get 403 on Requests and offers;
   - axe on 2 screens in Day and Night.
   - `dashboard.spec`'s placeholder test now checks that the section is built.
-- **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); end-to-end with `CI=1`: 160 passed, none failed or flaky (97 skipped as usual).
+- **Full suites:** `pnpm verify` (308 unit tests, lint, types) and a production build against the local database; end-to-end with `CI=1`: 160 passed, none failed or flaky (97 skipped as usual).
 - **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2b-`): the partner's requests, one request with two offers, and accept; the operator's list and request with the travel-partner notice; at 375, 768 and 1440 in Day and Night. Long sample-sailing names (test run IDs) overflow headings at 375, as on earlier pages; real names are short.
 
 ### Batch 5-1: The marketplace listings (branch `batch-05-marketplace`, stacked on 4h-2b; migration `20261020000500_public_listing`)
@@ -1022,7 +1022,7 @@ The first of two Batch 5 PRs (ADR-093). 5-2 adds the vessel page, the deck selec
   - comparing two vessels from the ticks;
   - a vessel taken off sale disappearing after a refresh;
   - axe on three screens in Day and Night.
-- **Full suites:** `pnpm verify` (321 unit tests, lint, types, format, build); end-to-end with `CI=1`: 167 passed, 1 flaky (an admin two-step sign-in in the cancellation accessibility test, which passed on retry).
+- **Full suites:** `pnpm verify` (321 unit tests, lint, types, format) and a production build against the local database; end-to-end with `CI=1`: 167 passed, 1 flaky (an admin two-step sign-in in the cancellation accessibility test, which passed on retry).
 - **Screenshots:** 24 in `docs/screenshots/batch-05/` (prefix `5-1-`): the hub, `/luxury/`, `/aswan-to-luxor/` and a three-vessel comparison, at 375, 768 and 1440 in Day and Night.
 
 ### Batch 5-2: Vessel pages and reserving (branch `batch-05-2-vessel`, stacked on 5-1; migration `20261020000600_direct_reserve`)
@@ -1073,7 +1073,7 @@ The second Batch 5 PR, and the batch's exit criterion: listing → vessel → si
   - **listing → vessel → sign-in → reserve**: "See prices and dates" asks for sign-in and comes back; departure, Main deck · Double, 2 adults, US$2,000, two guests, terms, **Reserve**, then the booking in My journey;
   - the prefilled request form;
   - axe on the vessel page and all three reserve steps in Day and Night.
-- **Full suites:** `pnpm verify` (331 unit tests, lint, types, format, build); end-to-end with `CI=1`: 174 passed, none failed or flaky.
+- **Full suites:** `pnpm verify` (331 unit tests, lint, types, format) and a production build against the local database; end-to-end with `CI=1`: 174 passed, none failed or flaky.
 - **Screenshots:** 30 in `docs/screenshots/batch-05/` (prefix `5-2-`): the vessel page, the information-only ship, and the three reserve steps signed in, at 375, 768 and 1440 in Day and Night.
 - **Noticed, not changed:** the public header shows "Sign in" even when signed in (it doesn't read the session yet; since Batch 1).
 
@@ -1089,3 +1089,40 @@ The second Batch 5 PR, and the batch's exit criterion: listing → vessel → si
 **Verified, and how:**
 - **End-to-end** (`auth.spec.ts`, "the public header follows the session", 2 tests): signed out, `/cruises/` shows Sign in; signed in, it shows Account (to `/dashboard/`, then My journey) and Sign out, and a statically generated page (`/cruises/dahabiyas/`) still isn't served `no-store`/`private`; Sign out from `/es/cruises/` lands on `/es/` with "Iniciar sesión" and the session is gone; without JavaScript a signed-in visitor still sees Sign in.
 - `pnpm verify` (331 unit tests, lint, types, format); `pnpm build` keeps the `/cruises/{slug}/` pages static (●); `/cruises/` was already rendered per request for its search parameters, with its data cached under the catalogue tag.
+
+### Faris's answers of 20 Oct 2026: agent model, free cancellation of unpaid bookings, ES/JA wording (branch `agent-model-unpaid-cancellation`, stacked on #27; migration `20261020000700_agent_model`)
+
+ADR-094 records the answers. The accountant's advice is that Nilecruz acts as the operators' **booking agent**; an unpaid booking owes **no** cancellation charge; the Spanish and Japanese cancellation wording is approved; the bank account is in USD (IBAN later). The 9 tours were imported into staging as private drafts the same day (`pnpm import:tours --apply --target=staging`: 9 inserted, none already there).
+
+**Built:**
+- **Agent model:**
+  - `reservations.seller_name`: the operator's legal name, or its display name, set by the database at booking and backfilled for existing reservations. Customers can't read companies, so the name is a snapshot.
+  - The booking record shows "Sold by …, the operator; booked through Nilecruz as its agent".
+  - Receipts read "Received by: Nilecruz, as booking agent", with "On behalf of (seller)", and say the commission is included in the price.
+  - The terms ("What Nilecruz does") now say the operator sells and provides the cruise, the contract for the cruise is with the operator, and Nilecruz books and collects payment on its behalf for a commission.
+  - Direct bookings' terms read "Booked through Nilecruz, acting as booking agent for the operator of …".
+  - The operator and admin payables text says Nilecruz receives payments as the operator's booking agent.
+- **Unpaid bookings cancel for free:**
+  - `app.cancellation_quote` and `decide_cancellation` never record an unpaid charge, existing rows were zeroed, and the constraint `no_unpaid_charge` keeps it that way.
+  - `quoteCancellation` returns `keptMinor` (never more than was paid) instead of an unpaid charge.
+  - One sentence, `cancellationOutcome`, on the customer and partner booking pages covers every case: costs nothing; a part payment is kept and nothing more is owed; the excess is refunded; all of it is refunded.
+  - The "Charge not yet paid" row is gone from the cancellation panel.
+  - The terms say the charge only ever comes out of what was paid.
+- **ES/JA presets:** both standard policies now fill English, Spanish and Japanese, using the reviewed texts.
+- **Open (ADR-094):** whether tours and extras, which have no operator and no commission and are still described as sold by Nilecruz, also follow the agent model.
+- **Housekeeping:**
+  - ESLint and Prettier now ignore `.claude/`, where other sessions' worktrees (whole copies of the repository) live.
+  - The tour-rates sheet for Faris is in `docs/imports/tour-rates-template.xlsx`: shared, private, programs, transfers, meet and assist, seasons and questions, ready for the calendar-booking brief.
+  - Earlier build-log lines said `pnpm verify` includes the build. It doesn't; the build ran separately each time, and those lines are corrected.
+
+**Verified, and how:**
+- **Unit:** `cancellation.test.ts` covers the kept amount, nothing owed and the booking-page sentence in each case; `tour-import.test.ts` checks the presets in three languages. `pnpm verify`: 335 tests, types, lint, format.
+- **pgTAP:**
+  - `170` now expects nothing owed on an unpaid booking.
+  - The new `260_agent_model` (4 checks): the seller's legal name on a direct booking, the agent wording in its terms, an unpaid booking's quote (100 % on paper, nothing refunded, nothing owed), and the constraint refusing an unpaid charge.
+  - The full suite on a fresh database: 26 files, 405 checks.
+- **End-to-end:**
+  - the direct booking shows the agent terms, "Sold by …, the operator; booked through Nilecruz as its agent" and "You have paid nothing yet, so cancelling costs nothing";
+  - the receipt shows "Nilecruz, as booking agent" and "On behalf of (seller)".
+  - Full run with `CI=1` on a production build against the local database: 173 passed.
+  - The one failure was the catalogue-refresh test. Another worker can re-cache `/cruises/` from data read just before the refresh, so the test now refreshes and reloads until the change shows, as a visitor would see it (at worst it waits for the 10-minute expiry). Marketplace, vessel and partner specs together: 20 passed.

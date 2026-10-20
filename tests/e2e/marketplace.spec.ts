@@ -137,9 +137,18 @@ test("ticking two vessels compares them side by side [DASH-PUB-004]", async ({ p
 
 test("a vessel removed from sale leaves the listing once the catalogue refreshes [PERF-010]", async ({ page, request }) => {
   await adminDb().from("vessels").update({ visibility: "private" }).eq("id", S.vesselId);
-  await refresh(request);
-  await page.goto("/cruises/");
-  await expect(card(page, NAME)).toHaveCount(0);
+  // Another worker may be rendering /cruises/ from the old data at this moment and cache it again just after the
+  // refresh; the next refresh corrects that. So refresh and reload until it's gone, as a visitor would see it.
+  await expect
+    .poll(
+      async () => {
+        await refresh(request);
+        await page.goto("/cruises/");
+        return card(page, NAME).count();
+      },
+      { timeout: 30_000, intervals: [500, 1_000, 2_000] },
+    )
+    .toBe(0);
   await adminDb().from("vessels").update({ visibility: "published" }).eq("id", S.vesselId);
   await refresh(request);
 });
