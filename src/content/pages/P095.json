@@ -1,0 +1,29 @@
+{
+  "id": "P095",
+  "title": "Hot-air balloon over Luxor",
+  "standfirst": "A sunrise balloon flight over the West Bank of Luxor, the temples and fields below. This extra is information only for now. It is one of our [[up]].",
+  "sections": [
+    {
+      "heading": "The flight",
+      "paragraphs": [
+        "Balloons lift off from the West Bank at dawn and drift over the fields, villages and temples for about an hour, depending on the wind."
+      ]
+    },
+    {
+      "heading": "Booking",
+      "paragraphs": [
+        "We don’t take bookings for balloon flights yet. This page will show prices and dates once a supplier is confirmed."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How early does the balloon leave?",
+      "a": "Pickups are usually before dawn, to be in the air at sunrise."
+    }
+  ],
+  "seoTitle": "Hot-air balloon over Luxor",
+  "seoDescription": "A sunrise hot-air balloon flight over the West Bank of Luxor: what it is like, and when it can be booked.",
+  "sample": false,
+  "review": "draft"
+}

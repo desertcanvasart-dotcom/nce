@@ -1,0 +1,39 @@
+{
+  "id": "P102",
+  "title": "How we inspect and choose vessels",
+  "standfirst": "Every vessel on Nilecruz can carry our evaluation: a score out of 100, against the same seven weighted criteria, with the date it was assessed. Here is how it works.",
+  "sections": [
+    {
+      "heading": "The method",
+      "paragraphs": [
+        "An evaluator scores each vessel on seven dimensions: hygiene, service, food, amenities, management, cabin and vessel, and the cruise experience. Each dimension has four criteria, scored from 0 to 5, and the dimensions are weighted to give a total out of 100. The weights are shown below."
+      ]
+    },
+    {
+      "heading": "The verdict",
+      "paragraphs": [
+        "With the score comes a verdict: recommended, recommended with reservations, or not recommended. Every evaluation shows the date it was made, so you know how current it is."
+      ]
+    },
+    {
+      "heading": "What we keep separate",
+      "paragraphs": [
+        "Reviews from other sites are shown with their source and the date we checked them. They are never mixed into our score, and no vessel can pay for its evaluation."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is every vessel evaluated?",
+      "a": "Not yet. A vessel without a published evaluation says so on its page."
+    },
+    {
+      "q": "How often are evaluations updated?",
+      "a": "Each evaluation shows its date; vessels are evaluated again after changes such as a refit."
+    }
+  ],
+  "seoTitle": "How Nilecruz evaluates Nile vessels",
+  "seoDescription": "How Nilecruz scores Nile cruise vessels out of 100 against seven weighted criteria, and what we keep separate.",
+  "sample": false,
+  "review": "draft"
+}

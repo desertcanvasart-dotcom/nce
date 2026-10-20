@@ -213,3 +213,32 @@ export function requestDefaults(
     nights: Number.isInteger(nights) && nights >= 1 && nights <= 21 ? nights : undefined,
   };
 }
+
+/**
+ * SEO-013: the places an itinerary stops at, in sailing order, by their destination pages. The classic stretch between
+ * Luxor (or Esna) and Aswan passes Edfu and Kom Ombo in either direction. Only stops with a page are linked.
+ */
+const STOP_SLUGS: Record<string, string> = {
+  luxor: "/destinations/luxor/",
+  esna: "/destinations/esna/",
+  edfu: "/destinations/edfu/",
+  "kom ombo": "/destinations/kom-ombo/",
+  aswan: "/destinations/aswan/",
+};
+
+export function stopsFor(origin: string, destination: string): { name: string; href: string }[] {
+  const o = origin.trim().toLowerCase();
+  const d = destination.trim().toLowerCase();
+  const south = ["luxor", "esna", "edfu", "kom ombo", "aswan"];
+  const a = south.indexOf(o);
+  const b = south.indexOf(d);
+  const names =
+    a >= 0 && b >= 0
+      ? (a < b ? south.slice(a, b + 1) : south.slice(b, a + 1).reverse()).filter(
+          (n, i, all) => n !== "esna" || i === 0 || i === all.length - 1,
+        )
+      : [o, d];
+  return names
+    .filter((n) => STOP_SLUGS[n])
+    .map((n) => ({ name: n.replace(/\b\w/g, (c) => c.toUpperCase()), href: STOP_SLUGS[n]! }));
+}

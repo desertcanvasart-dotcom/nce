@@ -149,3 +149,85 @@
 .art {
   width: min(100%, 420px);
 }
+
+/* Tours */
+.tour {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--measure);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.tour h2,
+.tour h3 {
+  margin: 0;
+}
+
+.tour p {
+  margin: 0;
+}
+
+.prewrap {
+  white-space: pre-line;
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-4);
+}
+
+.split ul {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+}
+
+.booking {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+/* How we choose vessels */
+.weights {
+  width: 100%;
+  max-width: var(--measure);
+  border-collapse: collapse;
+}
+
+.weights th,
+.weights td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.weights td:last-child {
+  white-space: nowrap;
+}
+
+/* Contact */
+.contact {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--measure);
+}
+
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

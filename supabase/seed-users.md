@@ -15,6 +15,7 @@ Password for every account: `nilecruz-local-only`
 | refunds@nilecruz.test        | Admin (finance), cancellation tests  |
 | orders@nilecruz.test         | Admin (finance), tour order tests    |
 | partners@nilecruz.test       | Admin (catalogue), partner tests     |
+| messages@nilecruz.test       | Admin (content), Contact inbox tests |
 | owner@operator-a.test        | Operator A · owner                   |
 | reservations@operator-a.test | Operator A · reservations            |
 | finance@operator-a.test      | Operator A · finance                 |

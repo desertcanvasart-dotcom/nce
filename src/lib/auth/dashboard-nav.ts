@@ -21,6 +21,7 @@ const ADMIN: NavItem[] = [
   { slug: "bookings", label: "Requests and bookings", batch: "4e", roles: ["finance"] },
   { slug: "finance", label: "Deposits and commission", batch: "4f", roles: ["finance"] },
   { slug: "partners", label: "Travel partners", batch: "4h", roles: ["catalogue"] },
+  { slug: "messages", label: "Messages", batch: "7", roles: ["catalogue", "content", "finance"] },
   { slug: "settings", label: "Settings", batch: "4c", roles: [] },
 ];
 

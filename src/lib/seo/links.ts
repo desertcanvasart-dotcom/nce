@@ -61,14 +61,31 @@ export const BUILT = new Set<string>([
   "/nile-cruise-guide/planning/how-many-nights/",
   "/nile-cruise-guide/planning/nile-cruise-vs-land-tour/",
   "/nile-cruise-guide/planning/tipping/",
+  // Batch 7-1: destinations, tours and extras, trust and company
+  "/destinations/",
+  "/destinations/luxor/",
+  "/destinations/edfu/",
+  "/destinations/kom-ombo/",
+  "/destinations/aswan/",
+  "/destinations/abu-simbel/",
+  "/tours-extras/",
+  "/tours-extras/abu-simbel-day-trip/",
+  "/tours-extras/luxor-hot-air-balloon/",
+  "/tours-extras/transfers/",
+  "/about/",
+  "/how-we-choose-vessels/",
+  "/contact/",
 ]);
 
 export const isBuilt = (url: string) => BUILT.has(url);
 
+/** Pages that don't end with the cruise row (SEO-012 is for informational pages): the Contact form. */
+export const NO_CLOSING = new Set(["/contact/"]);
+
 export type Link = { href: string; anchor: string };
 
 /** Workbook keywords are lower case; names of places keep their capitals in anchors ("nile cruise ship" → "Nile cruise ship"). */
-const PROPER = /\b(nile|egypt|luxor|aswan|esna|edfu|cairo|nasser|kom ombo|abu simbel|dendera|abydos)\b/gi;
+const PROPER = /\b(nilecruz|nile|egypt|luxor|aswan|esna|edfu|cairo|nasser|kom ombo|abu simbel|dendera|abydos)\b/gi;
 export const keywordText = (s: string) => s.replace(PROPER, (w) => w.replace(/\b\w/g, (c) => c.toUpperCase()));
 
 /** The keyword as a card title or breadcrumb label: "Nile cruise ship", "Dahabiya". */
@@ -96,6 +113,9 @@ const PILLAR_NAMES: Record<string, string> = {
   "/cruises/": "Cruises",
   "/destinations/": "Destinations",
   "/tours-extras/": "Tours & extras",
+  "/about/": "About Nilecruz",
+  "/how-we-choose-vessels/": "How we choose vessels",
+  "/contact/": "Contact",
 };
 
 /** SEO-008: home → pillar → … → this page. */
@@ -143,7 +163,7 @@ export function expectedLinks(url: string): string[] {
   const u = up(url);
   if (u) out.add(u.href);
   for (const l of [...children(url), ...siblings(url), ...bridges(url)]) out.add(l.href);
-  if (p.type !== "Homepage") out.add(closingListing(url).href);
+  if (p.type !== "Homepage" && !NO_CLOSING.has(url)) out.add(closingListing(url).href);
   return [...out];
 }
 
