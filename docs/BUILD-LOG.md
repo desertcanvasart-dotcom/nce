@@ -1191,3 +1191,30 @@ The first of two Batch 6 PRs (ADR-096). 6-2 adds Prices Explained, with the calc
   - The link check leaves vessel pages in the cruise row to the marketplace tests: other specs change test vessels straight in the database, so a cached row can briefly name one.
 - **Screenshots:** 30 in `docs/screenshots/batch-06/` (prefix `6-1-`): home, the Vessels pillar, the dahabiya hub, a day on a cruise ship, and dahabiya or cruise ship, at 375, 768 and 1440 in Day and Night.
 - **Environment:** two app restarts stopped the background test runs and Docker, so nothing reported. Docker and Supabase were restarted and the database reset, then the suites ran in full as above.
+
+### Batch 6-2: Prices Explained and the Guide (branch `batch-06-2-prices-guide`, stacked on 6-1; no migration)
+
+The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
+- PAGE-039 (felucca) is deferred (ADR-008);
+- SEO-029 (keyword validation) waits until before launch (ADR-096).
+
+**Built:**
+- **One renderer for the three silos** (`src/app/[locale]/(site)/_silo/silo.tsx`). `/vessels/`, `/nile-cruise-prices/` and `/nile-cruise-guide/` are thin static catch-alls, and each page's components follow from its workbook row and URL.
+- **Prices Explained** (PAGE-049, 050, 051, 057, 059):
+  - the pillar, star ratings and budget or luxury show the price breakdown (PriceAnatomy);
+  - **the calculator** is that breakdown as a full-page tool, with WebApplication data.
+  - The factors (boat, cabin, sightseeing, season) are maintained in `src/content/price-factors.ts`, flagged "Sample data" with a footnote saying they're illustrative, not quotes, and never include gratuities, flights or transfers (DATA-008).
+- **The Guide** (PAGE-002, 003, 004, 005, 007, 010, 016, 017, 018, 019):
+  - the pillar, the routes, when-to-go and planning hubs;
+  - three route guides with a day-by-day timeline and the vessel comparison, and no price grid (SEO-023; stops in `src/content/routes.ts`);
+  - how many nights, cruise or land tour, and tipping, using the gratuity rules from ADR-010.
+- **Copy:** 14 more pages drafted (23 in all) and loaded into Sanity's development dataset as "Draft for review".
+- The vessels pillar now bridges to Prices Explained, which exists. Links to pages still to come (destinations, seasonal pricing, the Nile map) stay off.
+
+**Verified, and how:**
+- **Unit** (`silo-links.test.ts`, 40 tests): every draft against its row and the house style (which caught a "best" in a question, now reworded); price factors and presets; route stops without prices; the calculator's data. `pnpm verify`: 376 tests.
+- **pgTAP:** 26 files, 405 checks on a reset database.
+- **End-to-end:**
+  - `silo-links.spec.ts` (31 tests): the CI link check on all 23 built education pages; the calculator's total changing with a choice, its "not quotes" footnote, sample flag and WebApplication data; route guides without a price breakdown or table.
+  - Full run with `CI=1` on a production build against the local database: 207 passed, none failed or flaky.
+- **Screenshots:** 36 in `docs/screenshots/batch-06/` (prefix `6-2-`): the prices pillar, the calculator, the guide pillar, Luxor to Aswan, when to go and tipping, at 375, 768 and 1440 in Day and Night.
