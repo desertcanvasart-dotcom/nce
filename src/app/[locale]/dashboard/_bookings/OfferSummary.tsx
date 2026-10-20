@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ds/Badge/Badge";
 import { formatMoney } from "@/components/ds/lib/format";
+import { SailingTime } from "./SailingTime";
 import { ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { offerView, type OfferView } from "@/lib/bookings/bookings";
@@ -44,6 +45,7 @@ export function OfferSummary({ o, now, title }: { o: OfferRow; now: number; titl
         <Badge tone={OFFER_BADGE[view].tone}>{OFFER_BADGE[view].text}</Badge>
         <span className={ui.muted}>Version {o.version}</span>
       </p>
+      <SailingTime schedule={s} />
       <dl className={ui.grid}>
         <div>
           <dt className={ui.label}>Sailing</dt>

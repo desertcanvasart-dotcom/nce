@@ -2276,6 +2276,8 @@ export type Database = {
           nights: number;
           origin: string;
           sailing_days: number[];
+          sailing_period: Database["public"]["Enums"]["sailing_period"] | null;
+          sails_at: string | null;
           updated_at: string;
           vessel_id: string;
         };
@@ -2288,6 +2290,8 @@ export type Database = {
           nights: number;
           origin: string;
           sailing_days: number[];
+          sailing_period?: Database["public"]["Enums"]["sailing_period"] | null;
+          sails_at?: string | null;
           updated_at?: string;
           vessel_id: string;
         };
@@ -2300,6 +2304,8 @@ export type Database = {
           nights?: number;
           origin?: string;
           sailing_days?: number[];
+          sailing_period?: Database["public"]["Enums"]["sailing_period"] | null;
+          sails_at?: string | null;
           updated_at?: string;
           vessel_id?: string;
         };
@@ -3377,6 +3383,7 @@ export type Database = {
       request_status: "open" | "accepted" | "closed";
       reservation_status: "awaiting_payment" | "confirmed" | "cancelled";
       safety_status: "open" | "under_review" | "resolved";
+      sailing_period: "morning" | "noon" | "evening";
       session_kind: "shared" | "private";
       submission_event: "created" | "edited" | "submitted" | "changes_requested" | "approved" | "rejected";
       submission_status: "draft" | "submitted" | "changes_requested" | "approved" | "rejected";
@@ -3538,6 +3545,7 @@ export const Constants = {
       request_status: ["open", "accepted", "closed"],
       reservation_status: ["awaiting_payment", "confirmed", "cancelled"],
       safety_status: ["open", "under_review", "resolved"],
+      sailing_period: ["morning", "noon", "evening"],
       session_kind: ["shared", "private"],
       submission_event: ["created", "edited", "submitted", "changes_requested", "approved", "rejected"],
       submission_status: ["draft", "submitted", "changes_requested", "approved", "rejected"],

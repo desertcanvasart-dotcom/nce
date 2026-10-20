@@ -8,7 +8,7 @@ import { getDb } from "@/server/db";
  */
 
 const OFFER_SELECT =
-  "id, thread_id, version, status, rate_plan, currency, total_minor, list_total_minor, pricing_note, gratuity_usd_minor, inclusions, terms, eligibility_conditions, expires_at, created_at, org_id, departure_id, offer_cabins(line, cabin_type_id, deck, cabin_name, adults, child_ages, price_minor), departure:departures(id, departs_on, returns_on, schedule:schedules(code, origin, destination, nights), vessel:vessels(id, name, slug))";
+  "id, thread_id, version, status, rate_plan, currency, total_minor, list_total_minor, pricing_note, gratuity_usd_minor, inclusions, terms, eligibility_conditions, expires_at, created_at, org_id, departure_id, offer_cabins(line, cabin_type_id, deck, cabin_name, adults, child_ages, price_minor), departure:departures(id, departs_on, returns_on, schedule:schedules(code, origin, destination, nights, sailing_period, sails_at), vessel:vessels(id, name, slug))";
 
 export type OfferRow = {
   id: string;
@@ -41,7 +41,14 @@ export type OfferRow = {
     id: string;
     departs_on: string;
     returns_on: string;
-    schedule: { code: string; origin: string; destination: string; nights: number } | null;
+    schedule: {
+      code: string;
+      origin: string;
+      destination: string;
+      nights: number;
+      sailing_period: "morning" | "noon" | "evening" | null;
+      sails_at: string | null;
+    } | null;
     vessel: { id: string; name: string; slug: string } | null;
   } | null;
 };
@@ -107,7 +114,7 @@ export async function policyFor(departureId: string) {
 }
 
 const RES_SELECT =
-  "*, reservation_cabins(*), passengers(position, full_name, date_of_birth, nationality), eligibility_proofs(id, storage_path, status, note, created_at, reviewed_at), departure:departures(departs_on, returns_on, schedule:schedules(code, origin, destination, nights)), vessel:vessels(name, slug)";
+  "*, reservation_cabins(*), passengers(position, full_name, date_of_birth, nationality), eligibility_proofs(id, storage_path, status, note, created_at, reviewed_at), departure:departures(departs_on, returns_on, schedule:schedules(code, origin, destination, nights, sailing_period, sails_at)), vessel:vessels(name, slug)";
 
 export async function reservations(filter: { orgId?: string; customer?: boolean } = {}) {
   const db = await getDb();

@@ -5,6 +5,7 @@ import { CairoTime } from "@/components/shell/CairoTime";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import type { reservation } from "@/server/bookings/queries";
 import { guestsText, PLAN_LABEL } from "./OfferSummary";
+import { SailingTime } from "./SailingTime";
 
 type Res = NonNullable<Awaited<ReturnType<typeof reservation>>>;
 
@@ -32,6 +33,7 @@ export function ReservationRecord({ r }: { r: Res }) {
         </span>
       </p>
       <Section title="Sailing" id="sailing">
+        <SailingTime schedule={s} />
         <dl className={ui.grid}>
           <div>
             <dt className={ui.label}>Vessel</dt>

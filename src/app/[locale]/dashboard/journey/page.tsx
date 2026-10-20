@@ -7,6 +7,7 @@ import { notices } from "@/server/bookings/queries";
 import { journey } from "@/server/journey/queries";
 import { Notices } from "../_bookings/Notices";
 import { RESERVATION_BADGE } from "../_bookings/ReservationRecord";
+import { SailingTime } from "../_bookings/SailingTime";
 import { TOUR_ORDER_BADGE } from "../_bookings/TourOrderBits";
 import { markNoticesRead } from "./actions";
 
@@ -61,6 +62,13 @@ export default async function JourneyHome() {
             <p className={ui.muted}>
               {next.departsOn} to {next.returnsOn} · reservation {next.reference}
             </p>
+            <SailingTime
+              schedule={
+                next.origin
+                  ? { origin: next.origin, sailing_period: next.sailingPeriod ?? null, sails_at: next.sailsAt ?? null }
+                  : null
+              }
+            />
             {j.next!.tours.length ? (
               <ul className={ui.list}>
                 {j.next!.tours.map((o) => (

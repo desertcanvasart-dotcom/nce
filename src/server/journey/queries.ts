@@ -16,7 +16,7 @@ export async function journeyRecords(userId: string) {
     db
       .from("reservations")
       .select(
-        "id, reference, status, currency, rate_plan, payment_due_at, departure:departures(departs_on, returns_on, schedule_id, schedule:schedules(origin, destination)), vessel:vessels(name), eligibility_proofs(status, created_at), cancellation_requests(status)",
+        "id, reference, status, currency, rate_plan, payment_due_at, departure:departures(departs_on, returns_on, schedule_id, schedule:schedules(origin, destination, sailing_period, sails_at)), vessel:vessels(name), eligibility_proofs(status, created_at), cancellation_requests(status)",
       )
       .eq("customer_id", userId)
       .order("created_at", { ascending: false }),
@@ -55,6 +55,9 @@ export async function journeyRecords(userId: string) {
         proof: proof?.status ?? "none",
         cancellationOpen: r.cancellation_requests.some((c) => c.status === "requested" || c.status === "refund_due"),
         scheduleId: r.departure?.schedule_id ?? null,
+        origin: s?.origin,
+        sailingPeriod: s?.sailing_period ?? null,
+        sailsAt: s?.sails_at ?? null,
       };
     }),
   );
@@ -129,7 +132,11 @@ export async function journey(userId: string) {
   const suggestions = current
     .map((r) => ({
       reservation: r,
-      tours: suggestTours({ scheduleId: r.scheduleId!, departsOn: r.departsOn, returnsOn: r.returnsOn }, options, now),
+      tours: suggestTours(
+        { scheduleId: r.scheduleId!, departsOn: r.departsOn, returnsOn: r.returnsOn, morning: r.sailingPeriod === "morning" },
+        options,
+        now,
+      ),
     }))
     .filter((x) => x.tours.length);
   return { ...state, suggestions };
