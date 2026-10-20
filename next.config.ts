@@ -5,11 +5,29 @@ import { securityHeaders } from "./src/lib/security-headers";
 
 const dev = process.env.NODE_ENV !== "production";
 const allowIndexing = process.env.ALLOW_INDEXING?.trim().toLowerCase() === "true";
+// Vessel photos are signed links to the private media bucket (BRAND-014), served through the image optimiser.
+const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL.trim()) : null;
+const localSupabase = !!supabase && ["127.0.0.1", "localhost", "[::1]"].includes(supabase.hostname);
 
 const nextConfig: NextConfig = {
   trailingSlash: true, // SEO-001
   turbopack: { root: process.cwd() },
   poweredByHeader: false,
+  images: {
+    // An object, not a URL: a URL pattern would demand an empty query, and signed links carry their token there.
+    remotePatterns: supabase
+      ? [
+          {
+            protocol: supabase.protocol.replace(":", "") as "http" | "https",
+            hostname: supabase.hostname,
+            port: supabase.port,
+            pathname: "/storage/v1/object/sign/media/**",
+          },
+        ]
+      : [],
+    // Only the local development database lives on a private address.
+    dangerouslyAllowLocalIP: localSupabase,
+  },
   reactStrictMode: true,
   // Our CSS is ~5 KB gzipped: inlining it removes every render-blocking stylesheet request (PERF-001, ADR-036).
   // authInterrupts: forbidden() renders the 403 page for another role's workspace (ADR-067).

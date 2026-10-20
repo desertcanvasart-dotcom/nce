@@ -8,6 +8,7 @@ import { dbProblem, failed, formObject, problemsFrom, saved } from "@/server/cat
 import { connectionProblem } from "@/server/connections/form";
 import { pullFeed } from "@/server/connections/pull";
 import { getDb } from "@/server/db";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /** DASH-ADM-042–044: review applications, approve or pause access, connect vessels. */
 const statusInput = z
@@ -34,6 +35,7 @@ export async function setOperatorStatus(orgId: string, _prev: ActionState, fd: F
     .eq("kind", "operator");
   if (error) return dbProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   const words = {
     approved: "Approved: the operator can now work in its workspace.",
     rejected: "Rejected.",
@@ -52,6 +54,7 @@ export async function connectVessel(orgId: string, _prev: ActionState, fd: FormD
   const { error } = await db.from("vessels").update({ operator_org_id: orgId }).eq("id", vesselId);
   if (error) return dbProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Vessel connected.");
 }
 
@@ -61,6 +64,7 @@ export async function disconnectVessel(orgId: string, vesselId: string, _prev: A
   const { error } = await db.from("vessels").update({ operator_org_id: null }).eq("id", vesselId).eq("operator_org_id", orgId);
   if (error) return dbProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Vessel disconnected. It keeps its details and stays in the catalogue.");
 }
 
@@ -88,12 +92,14 @@ export async function decideFeed(orgId: string, _prev: ActionState, fd: FormData
   });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   if (input.data.decision !== "active") {
     return saved(input.data.decision === "paused" ? "Feed paused: it is not pulled until approved again." : "Feed not approved.");
   }
   const { data: feed } = await db.from("inventory_feeds").select("id, org_id, url").eq("org_id", orgId).single();
   const r = feed ? await pullFeed(feed) : null;
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   if (!r) return saved("Feed approved. It will be pulled within five minutes.");
   return r.ok
     ? saved(
@@ -108,5 +114,6 @@ export async function revokeOperatorKey(orgId: string, keyId: string, _prev: Act
   const { error } = await db.rpc("revoke_api_key", { target: keyId });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Key revoked. Requests signed with it are refused from now on.");
 }

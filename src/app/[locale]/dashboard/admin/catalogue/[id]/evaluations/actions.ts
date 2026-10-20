@@ -8,6 +8,7 @@ import { requireAdmin } from "@/server/auth";
 import { dbProblem, formObject, problemsFrom } from "@/server/catalogue/form";
 import { getDb } from "@/server/db";
 import { criterionScore, evaluationInput } from "@/server/validation";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /** DASH-ADM-026–032: evaluations are entered from the vessel's editor; the database calculates the results. */
 export async function saveEvaluation(
@@ -61,5 +62,6 @@ export async function saveEvaluation(
   const t = await db.from("evaluation_translations").upsert(notes, { onConflict: "evaluation_id,locale" });
   if (t.error) return dbProblem(t.error);
   revalidatePath(`/dashboard/admin/catalogue/${vesselId}/`);
+  revalidateCatalogue();
   redirect(`/dashboard/admin/catalogue/${vesselId}/?saved=evaluation#evaluations`);
 }

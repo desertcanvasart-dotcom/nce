@@ -14,6 +14,7 @@ import { getDb } from "@/server/db";
 import { requireProductEditor } from "@/server/product/guard";
 import { productPaths } from "./paths";
 import { periodOf, type SailingPeriod } from "@/lib/product/sailing-time";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /**
  * Product actions (DASH-ADM-048–056, 074–085, DASH-OPR-008–012, DATA-015, 022, 023).
@@ -53,6 +54,7 @@ export async function saveGratuity(
   const { error } = await db.from("vessels").update({ gratuity_usd_minor: r.data }).eq("id", vesselId);
   if (error) return dbProblem(error);
   revalidatePath(p.cabins);
+  revalidateCatalogue();
   return saved("Gratuity saved. It is shown separately, paid on board, and never added to the total.");
 }
 
@@ -148,6 +150,7 @@ export async function saveCabin(
   const t = await saveCabinTranslations(res.data.id, d);
   if (t.error) return dbProblem(t.error);
   revalidatePath(p.cabins);
+  revalidateCatalogue();
   if (!cabinId) redirect(p.cabin(res.data.id));
   return saved("Cabin type saved.");
 }
@@ -200,6 +203,7 @@ export async function uploadCabinPhoto(
   }
   await db.from("media_translations").insert({ media_id: m.id, locale: "en", alt: alt.slice(0, 300) });
   revalidatePath(p.cabin(cabinId));
+  revalidateCatalogue();
   return saved("Photo added.");
 }
 
@@ -266,6 +270,7 @@ export async function saveSchedule(
   if (res.error?.code === "23505") return failed("Another schedule of this vessel already uses that code.");
   if (res.error) return dbProblem(res.error);
   revalidatePath(p.schedules);
+  revalidateCatalogue();
   if (!scheduleId) redirect(p.schedule(res.data.id));
   return saved("Schedule saved. Existing departures keep their dates; generate again to add new ones.");
 }
@@ -286,6 +291,7 @@ export async function addPeriod(
   const { error } = await db.from("schedule_periods").insert({ schedule_id: scheduleId, ...r.data });
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved("Operating period added.");
 }
 
@@ -303,6 +309,7 @@ export async function removePeriod(
   const { error } = await db.from("schedule_periods").delete().eq("id", periodId).eq("schedule_id", scheduleId);
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved("Period removed. Departures already created stay until you cancel them.");
 }
 
@@ -330,6 +337,7 @@ export async function saveItineraryDay(
     .upsert({ schedule_id: scheduleId, ...r.data }, { onConflict: "schedule_id,day_number,locale" });
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved(`Day ${r.data.day_number} saved.`);
 }
 
@@ -346,6 +354,7 @@ export async function generate(
   const { data, error } = await db.rpc("generate_departures", { target: scheduleId });
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved(
     data
       ? `${data} departure${data === 1 ? "" : "s"} created.`
@@ -368,6 +377,7 @@ export async function setDepartureStatus(
   const { error } = await db.from("departures").update({ status }).eq("id", departureId).eq("schedule_id", scheduleId);
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved(status === "cancelled" ? "Departure cancelled." : "Departure restored.");
 }
 
@@ -477,6 +487,7 @@ export async function bulkUpdate(
     if (r.error) return dbProblem(r.error);
   }
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved(`Updated ${targets.length} departure${targets.length === 1 ? "" : "s"}.`);
 }
 
@@ -503,6 +514,7 @@ export async function confirmAvailability(
     .in("departure_id", ids);
   if (error) return dbProblem(error);
   revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
   return saved(`Availability confirmed as of now for ${count ?? 0} cabin row${count === 1 ? "" : "s"}.`);
 }
 
@@ -521,6 +533,7 @@ export async function deleteRate(
   const { error } = await db.from("rates").delete().eq("id", rateId).eq("departure_id", departureId);
   if (error) return dbProblem(error);
   revalidatePath(p.departure(scheduleId, departureId));
+  revalidateCatalogue();
   return saved("Rate removed.");
 }
 
@@ -539,6 +552,7 @@ export async function deletePartnerRate(
   const { error } = await db.from("partner_rates").delete().eq("id", rateId).eq("departure_id", departureId);
   if (error) return dbProblem(error);
   revalidatePath(p.departure(scheduleId, departureId));
+  revalidateCatalogue();
   return saved("Company rate removed.");
 }
 
@@ -651,6 +665,7 @@ export async function savePromotion(
     else linked++;
   }
   revalidatePath(p.promotions);
+  revalidateCatalogue();
   if (!promoId) redirect(`${p.promotion(id)}?linked=${linked}&skipped=${skipped}`);
   return saved(
     `Saved. Applies to ${linked} rate${linked === 1 ? "" : "s"}${skipped ? `; ${skipped} skipped (already in another promotion, or no upgraded inventory)` : ""}.`,
@@ -671,6 +686,7 @@ export async function setPromotionPaused(
   const { error } = await db.from("promotions").update({ paused }).eq("id", promoId).eq("vessel_id", vesselId);
   if (error) return dbProblem(error);
   revalidatePath(p.promotion(promoId));
+  revalidateCatalogue();
   return saved(paused ? "Paused." : "Resumed.");
 }
 
@@ -697,6 +713,7 @@ export async function saveOperatorBands(orgId: string, _prev: ActionState, fd: F
     const { error } = await db.from("organisations").update({ child_bands: null }).eq("id", orgId);
     if (error) return dbProblem(error);
     revalidatePath(`/dashboard/admin/operators/${orgId}/`);
+    revalidateCatalogue();
     return saved("This operator now uses the default bands for new rates.");
   }
   const bands = bandsFrom(fd);
@@ -705,6 +722,7 @@ export async function saveOperatorBands(orgId: string, _prev: ActionState, fd: F
   const { error } = await db.from("organisations").update({ child_bands: bands }).eq("id", orgId);
   if (error) return dbProblem(error);
   revalidatePath(`/dashboard/admin/operators/${orgId}/`);
+  revalidateCatalogue();
   return saved("Saved. The new bands apply to rates created from now on; existing rates keep theirs.");
 }
 
@@ -721,6 +739,7 @@ export async function saveFreshness(_prev: ActionState, fd: FormData): Promise<A
     .eq("key", "freshness_hours");
   if (error) return dbProblem(error);
   revalidatePath("/dashboard/admin/settings/");
+  revalidateCatalogue();
   return saved("Freshness thresholds saved.");
 }
 
@@ -773,6 +792,7 @@ export async function savePolicy(orgId: string | null, vesselId: string, _prev: 
     if (r.error) return dbProblem(r.error);
   }
   revalidatePath(p.cabins);
+  revalidateCatalogue();
   return saved(
     "Cancellation policy saved. Travellers read and accept it before reserving; the charges are calculated with payments.",
   );

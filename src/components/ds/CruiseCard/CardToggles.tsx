@@ -33,22 +33,19 @@ export function SaveButton({
   );
 }
 
-export function CompareToggle({
-  compared: initial = false,
-  onCompare,
-}: {
-  compared?: boolean;
-  onCompare?: (on: boolean) => void;
-}) {
+export function CompareToggle({ compared: initial, onCompare }: { compared?: boolean; onCompare?: (on: boolean) => void }) {
   const t = useTranslations("ds.cruiseCard");
-  const [on, setOn] = useState(initial);
+  const [own, setOwn] = useState(initial ?? false);
+  // A parent that passes both `compared` and `onCompare` owns the state (the listing's three-vessel limit).
+  const controlled = onCompare !== undefined && initial !== undefined;
+  const on = controlled ? initial : own;
   return (
     <label className={styles.compare}>
       <input
         type="checkbox"
         checked={on}
         onChange={() => {
-          setOn(!on);
+          if (!controlled) setOwn(!on);
           onCompare?.(!on);
         }}
       />

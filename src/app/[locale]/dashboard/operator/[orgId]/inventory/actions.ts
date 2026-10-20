@@ -12,6 +12,7 @@ import { failed, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { fetchPolicy } from "@/server/connections/policy";
 import { getDb } from "@/server/db";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /**
  * Inventory connections (DASH-OPR-016, 024–026). Owners only, as in the dashboard menu; the database checks the
@@ -50,6 +51,7 @@ export async function applyPaste(orgId: string, runId: string, _prev: ActionStat
   const { error } = await db.rpc("apply_inventory_paste", { run: runId });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   redirect(`${page(orgId)}?run=${runId}#paste`);
 }
 
@@ -74,6 +76,7 @@ export async function saveFeed(orgId: string, _prev: ActionState, fd: FormData):
   const { error } = await db.rpc("save_inventory_feed", { target_org: orgId, feed_url: url });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Feed address saved. Nilecruz reviews it before the first pull; until then nothing is fetched.");
 }
 
@@ -83,6 +86,7 @@ export async function removeFeed(orgId: string, _prev: ActionState, _fd: FormDat
   const { error } = await db.rpc("remove_inventory_feed", { target_org: orgId });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Feed removed. Availability already received stays until it is changed.");
 }
 
@@ -107,6 +111,7 @@ export async function createKey(orgId: string, _prev: ActionState, fd: FormData)
   });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return {
     ok: true,
     message: `Key ${data[0]!.key_id} created. Copy the private key below into your system now: it is shown only once, and Nilecruz doesn’t keep a copy.`,
@@ -120,5 +125,6 @@ export async function revokeKey(orgId: string, keyId: string, _prev: ActionState
   const { error } = await db.rpc("revoke_api_key", { target: keyId });
   if (error) return connectionProblem(error);
   revalidatePath(page(orgId));
+  revalidateCatalogue();
   return saved("Key revoked. Requests signed with it are refused from now on.");
 }

@@ -20,6 +20,7 @@ import {
   vesselDetailsInput,
   visibilityInput,
 } from "@/server/validation";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /** Catalogue actions (DASH-ADM-013–019, 033, 034, DATA-021, DATA-024). Super and catalogue admins; content admins edit texts. */
 
@@ -98,6 +99,7 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
     .eq("id", id);
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Details saved.");
 }
 
@@ -115,6 +117,7 @@ export async function saveDescriptions(id: string, _prev: ActionState, fd: FormD
   const { error } = await db.from("vessel_translations").upsert(rows, { onConflict: "vessel_id,locale" });
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Descriptions saved. Spanish or Japanese left empty fall back to English on the site.");
 }
 
@@ -171,6 +174,7 @@ export async function uploadPhoto(id: string, _prev: ActionState, fd: FormData):
   const t = await db.from("media_translations").insert(alts);
   if (t.error) return dbProblem(t.error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Photo added.");
 }
 
@@ -194,6 +198,7 @@ export async function savePhoto(id: string, mediaId: string, _prev: ActionState,
     if (r.error) return dbProblem(r.error);
   }
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Photo details saved.");
 }
 
@@ -206,6 +211,7 @@ export async function deletePhoto(id: string, mediaId: string, _prev: ActionStat
   if (del.error) return dbProblem(del.error);
   await db.storage.from("media").remove([m.storage_path]);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Photo removed.");
 }
 
@@ -233,6 +239,7 @@ export async function setVisibility(id: string, _prev: ActionState, fd: FormData
       .eq("id", id);
     if (error) return dbProblem(error);
     revalidatePath(editor(id));
+    revalidateCatalogue();
     return saved("Published.");
   }
   if (d.mode === "showcase") {
@@ -243,6 +250,7 @@ export async function setVisibility(id: string, _prev: ActionState, fd: FormData
       .eq("id", id);
     if (error) return dbProblem(error);
     revalidatePath(editor(id));
+    revalidateCatalogue();
     return saved(`Showcased until ${d.showcase_until}. The page shows “Details in preparation · sample” and can't be booked.`);
   }
   const { error } = await db
@@ -251,6 +259,7 @@ export async function setVisibility(id: string, _prev: ActionState, fd: FormData
     .eq("id", id);
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Now a private draft.");
 }
 
@@ -271,6 +280,7 @@ export async function addExternalRating(id: string, _prev: ActionState, fd: Form
   const { error } = await db.from("external_ratings").insert({ vessel_id: id, ...input.data });
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("External rating added. It is shown with its source and date, never as our score.");
 }
 
@@ -285,6 +295,7 @@ export async function deleteExternalRating(
   const { error } = await db.from("external_ratings").delete().eq("id", ratingId).eq("vessel_id", id);
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("External rating removed.");
 }
 
@@ -296,6 +307,7 @@ export async function addSafety(id: string, _prev: ActionState, fd: FormData): P
   const { error } = await db.from("safety_observations").insert({ vessel_id: id, ...input.data });
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Safety observation recorded (internal only).");
 }
 
@@ -307,5 +319,6 @@ export async function setSafetyStatus(id: string, obsId: string, _prev: ActionSt
   const { error } = await db.from("safety_observations").update({ status }).eq("id", obsId).eq("vessel_id", id);
   if (error) return dbProblem(error);
   revalidatePath(editor(id));
+  revalidateCatalogue();
   return saved("Status updated.");
 }
