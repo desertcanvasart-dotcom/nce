@@ -12,7 +12,7 @@ import { RESERVATION_BADGE } from "../../_bookings/ReservationRecord";
 /** Bookings (DASH-CUS-002, ADR-091): cruise reservations with their payments; tour orders are linked, not mixed in. */
 export default async function MyReservations() {
   const session = await requireUser("/dashboard/journey/reservations/");
-  const [list, tours] = await Promise.all([reservations(), myTourOrders(session.userId)]);
+  const [list, tours] = await Promise.all([reservations({ customerId: session.userId }), myTourOrders(session.userId)]);
   return (
     <>
       <h1 className={ui.pageTitle}>Bookings</h1>

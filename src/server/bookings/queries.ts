@@ -116,16 +116,19 @@ export async function policyFor(departureId: string) {
 const RES_SELECT =
   "*, reservation_cabins(*), passengers(position, full_name, date_of_birth, nationality), eligibility_proofs(id, storage_path, status, note, created_at, reviewed_at), departure:departures(departs_on, returns_on, schedule:schedules(code, origin, destination, nights, sailing_period, sails_at)), vessel:vessels(name, slug)";
 
-export async function reservations(filter: { orgId?: string; customer?: boolean } = {}) {
+export async function reservations(filter: { orgId?: string; customerId?: string; buyerOrgId?: string } = {}) {
   const db = await getDb();
   let q = db
     .from("reservations")
     .select(
-      "id, reference, status, currency, total_minor, created_at, org_id, departure:departures(departs_on), vessel:vessels(name)",
+      "id, reference, status, currency, total_minor, created_at, org_id, buyer_name, departure:departures(departs_on), vessel:vessels(name)",
     )
     .order("created_at", { ascending: false })
     .limit(200);
   if (filter.orgId) q = q.eq("org_id", filter.orgId);
+  // My journey shows a person's own bookings; a company's bookings belong to its workspace (DASH-B2B-005).
+  if (filter.customerId) q = q.eq("customer_id", filter.customerId).is("buyer_org_id", null);
+  if (filter.buyerOrgId) q = q.eq("buyer_org_id", filter.buyerOrgId);
   const { data, error } = await q;
   if (error) throw error;
   return data ?? [];
@@ -264,7 +267,7 @@ export async function searchBookings(s: BookingSearch) {
   let res = db
     .from("reservations")
     .select(
-      "id, reference, status, currency, total_minor, created_at, org:organisations(id, display_name), vessel:vessels(name), departure:departures!inner(departs_on, schedule:schedules!inner(origin, destination))",
+      "id, reference, status, currency, total_minor, created_at, org:organisations!reservations_org_id_fkey(id, display_name), vessel:vessels(name), departure:departures!inner(departs_on, schedule:schedules!inner(origin, destination))",
     )
     .order("created_at", { ascending: false })
     .limit(100);
@@ -296,4 +299,30 @@ export async function searchBookings(s: BookingSearch) {
   ]);
   if (error) throw error;
   return { reservations: found ?? [], requests: requests ?? [], offers: offers ?? [] };
+}
+
+/** The agency's own details for one of its bookings (DASH-B2B-006, 007): readable only by the agency and admins. */
+export async function partnerDetails(reservationId: string) {
+  const db = await getDb();
+  const { data } = await db
+    .from("partner_booking_details")
+    .select("client_reference, selling_total_minor, org_id")
+    .eq("reservation_id", reservationId)
+    .maybeSingle();
+  return data;
+}
+
+/** A company's bookings with their client references (DASH-B2B-005, 006). */
+export async function companyBookings(orgId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("reservations")
+    .select(
+      "id, reference, status, currency, total_minor, created_at, payment_due_at, departure:departures(departs_on), vessel:vessels(name), partner_booking_details(client_reference, selling_total_minor)",
+    )
+    .eq("buyer_org_id", orgId)
+    .order("created_at", { ascending: false })
+    .limit(500);
+  if (error) throw error;
+  return data ?? [];
 }

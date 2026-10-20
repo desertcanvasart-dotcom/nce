@@ -38,6 +38,15 @@ export default async function PartnerOverview({ params }: { params: Promise<{ or
               neither is set.
             </li>
           ) : null}
+          <li>
+            <Link href={`${base}bookings/`}>Company bookings</Link>: every booking with its client reference, payments and the
+            client booking record.
+          </li>
+          {company.teamRole === "owner" || company.teamRole === "finance" ? (
+            <li>
+              <Link href={`${base}payments/`}>Payments</Link>: card payments, reported transfers and receipts.
+            </li>
+          ) : null}
           {company.teamRole === "owner" ? (
             <li>
               <Link href={`${base}team/`}>Team</Link>: {team ?? 0} {team === 1 ? "person" : "people"}. Invite your reservations

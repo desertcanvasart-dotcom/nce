@@ -1393,6 +1393,45 @@ export type Database = {
         };
         Relationships: [];
       };
+      partner_booking_details: {
+        Row: {
+          client_reference: string | null;
+          org_id: string;
+          reservation_id: string;
+          selling_total_minor: number | null;
+          updated_at: string;
+        };
+        Insert: {
+          client_reference?: string | null;
+          org_id: string;
+          reservation_id: string;
+          selling_total_minor?: number | null;
+          updated_at?: string;
+        };
+        Update: {
+          client_reference?: string | null;
+          org_id?: string;
+          reservation_id?: string;
+          selling_total_minor?: number | null;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "partner_booking_details_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "partner_booking_details_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: true;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       partner_rates: {
         Row: {
           amount_minor: number;
@@ -2126,7 +2165,10 @@ export type Database = {
       };
       reservations: {
         Row: {
+          booked_by: string | null;
           booked_on: string;
+          buyer_name: string | null;
+          buyer_org_id: string | null;
           cancelled_at: string | null;
           cancelled_reason: string | null;
           created_at: string;
@@ -2136,7 +2178,7 @@ export type Database = {
           departure_id: string;
           gratuity_usd_minor: number | null;
           id: string;
-          offer_id: string;
+          offer_id: string | null;
           org_id: string;
           payment_due_at: string;
           policy: Json;
@@ -2150,7 +2192,10 @@ export type Database = {
           vessel_id: string;
         };
         Insert: {
+          booked_by?: string | null;
           booked_on: string;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cancelled_at?: string | null;
           cancelled_reason?: string | null;
           created_at?: string;
@@ -2160,7 +2205,7 @@ export type Database = {
           departure_id: string;
           gratuity_usd_minor?: number | null;
           id?: string;
-          offer_id: string;
+          offer_id?: string | null;
           org_id: string;
           payment_due_at: string;
           policy: Json;
@@ -2174,7 +2219,10 @@ export type Database = {
           vessel_id: string;
         };
         Update: {
+          booked_by?: string | null;
           booked_on?: string;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cancelled_at?: string | null;
           cancelled_reason?: string | null;
           created_at?: string;
@@ -2184,7 +2232,7 @@ export type Database = {
           departure_id?: string;
           gratuity_usd_minor?: number | null;
           id?: string;
-          offer_id?: string;
+          offer_id?: string | null;
           org_id?: string;
           payment_due_at?: string;
           policy?: Json;
@@ -2198,6 +2246,13 @@ export type Database = {
           vessel_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "reservations_buyer_org_id_fkey";
+            columns: ["buyer_org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "reservations_departure_id_fkey";
             columns: ["departure_id"];
@@ -3195,6 +3250,19 @@ export type Database = {
           lead: string;
           order_notes: string;
           sess: string;
+          terms_read: boolean;
+        };
+        Returns: string;
+      };
+      partner_reserve: {
+        Args: {
+          cabins: Json;
+          client_ref: string;
+          cur: string;
+          dep: string;
+          guests: Json;
+          org: string;
+          selling_total: number;
           terms_read: boolean;
         };
         Returns: string;

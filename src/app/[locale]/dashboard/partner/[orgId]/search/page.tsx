@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ds/Button/Button";
 import { formatMoney } from "@/components/ds/lib/format";
@@ -105,7 +106,12 @@ export default async function PartnerSearch({
                     {c.price.ok ? (
                       <>
                         <strong>{money(c.price.totalMinor, c.currency)}</strong>{" "}
-                        <span className={ui.muted}>({TIER_LABEL[c.price.tier]})</span>
+                        <span className={ui.muted}>({TIER_LABEL[c.price.tier]})</span> ·{" "}
+                        <Link
+                          href={`/dashboard/partner/${orgId}/reserve/?dep=${d.departureId}&cabin=${c.cabinTypeId}&cur=${c.currency}&adults=${adults}&children=${encodeURIComponent(q.children ?? "")}`}
+                        >
+                          Reserve
+                        </Link>
                       </>
                     ) : (
                       <span className={ui.muted}>{c.price.reason}</span>

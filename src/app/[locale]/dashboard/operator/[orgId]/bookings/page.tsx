@@ -34,6 +34,7 @@ export default async function OperatorBookings({ params }: { params: Promise<{ o
               <li key={r.id}>
                 <Link href={`/dashboard/operator/${orgId}/bookings/${r.id}/`}>
                   {r.reference} · {r.vessel?.name} · departs {r.departure?.departs_on}
+                  {r.buyer_name ? ` · for ${r.buyer_name}` : ""}
                 </Link>{" "}
                 <Badge tone={RESERVATION_BADGE[r.status].tone}>{RESERVATION_BADGE[r.status].text}</Badge>{" "}
                 {formatMoney({ amount: Number(r.total_minor), currency: r.currency }, "en")}

@@ -19,6 +19,7 @@ export async function journeyRecords(userId: string) {
         "id, reference, status, currency, rate_plan, payment_due_at, departure:departures(departs_on, returns_on, schedule_id, schedule:schedules(origin, destination, sailing_period, sails_at)), vessel:vessels(name), eligibility_proofs(status, created_at), cancellation_requests(status)",
       )
       .eq("customer_id", userId)
+      .is("buyer_org_id", null) // company bookings live in the agency's workspace
       .order("created_at", { ascending: false }),
     db
       .from("tour_orders")
