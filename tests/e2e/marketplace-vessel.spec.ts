@@ -83,6 +83,11 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await page.waitForURL(new RegExp(`/cruises/${slug}/$`));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${NAME} — ${S.origin} to ${S.destination}, 4 nights`);
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("Nile cruise ships");
+  // SEO-013 (Batch 6): the page links to its vessel-type hub by the hub's keyword.
+  await expect(page.getByRole("link", { name: "Nile cruise ship", exact: true })).toHaveAttribute(
+    "href",
+    "/vessels/motor-cruise-ships/",
+  );
   await expect(page.getByText(`From check-in on day 1 in ${S.origin} to check-out on day 5 in ${S.destination}.`)).toBeVisible();
   await expect(page.getByText(`Sails from ${S.origin} in the morning (08:00 Cairo time).`)).toBeVisible();
   await expect(page.getByText(`Plan to arrive in ${S.origin} the day before.`)).toBeVisible();
