@@ -1246,3 +1246,63 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **Screenshots:** 48 in `docs/screenshots/batch-07/` (prefix `7-1-`): destinations, Aswan, the tours hub, the Abu Simbel day trip, transfers, About, How we choose vessels and Contact, at 375, 768 and 1440 in Day and Night.
 
 **Next:** 7-2, booking tours by calendar with the rate sheet.
+
+## 21 Oct 2026 · Batch 7-2 · Tours booked by calendar, the offices' dashboard, the rate-sheet import (second of two PRs, ADR-097, ADR-098)
+
+**Branch:** `batch-07-2-tour-booking`, stacked on 7-1. Two migrations (`tour_office_kind`, `tour_calendar`).
+
+**Built:**
+- **Rates, not sessions:** each tour has an office (Luxor or Aswan) and rates by mode:
+  - shared per person, with child prices by age and at most 8 guests per start;
+  - private per person by party size;
+  - transfers per vehicle, one way, with a night extra;
+  - meet and assist per party.
+  - Seasons add or take off a percentage between two dates.
+  - The database checks each rate's prices and works out the price exactly as the page does.
+- **Booking:** the customer picks how (shared or private), who (adults and children's ages) and when (a month calendar in Cairo time, then a start time), and sees the price at once, with places left on a shared start.
+  - Parties of 9 or more are pointed to the private tour.
+  - The order uses the 4f-2c flow: a 60-minute hold, card payment through the signed webhook.
+  - A lock per start means two parties can't both take the last places.
+  - With no bands of its own, a tour uses the standard rule: free until 48 hours before, then 100 %.
+- **Tour pages:** once a tour has an office and rates, its page shows its prices and a "Choose a date" link instead of "Prices coming soon"; its TouristTrip data carries the lowest price.
+- **The offices:** a new "tour office" company type, with a workspace at `/dashboard/office/{id}/`.
+  - It shows bookings by day and start, with guests, ages, pickup and notes.
+  - An office can cancel a start it can't run: everyone on it is cancelled, paid bookings are approved for a full refund through finance's usual refund page, and customers are told with the reason.
+  - Offices see only their own tours' bookings, never payments.
+  - Sample Luxor and Aswan offices are in the local seed.
+- **Admins:** choose a tour's office, and see its rates on the tour editor; readiness counts a tour with an office and rates as bookable.
+- **`pnpm import:tour-rates <sheet.xlsx> --target=local|staging [--apply]`:**
+  - reads the filled-in rate sheet, checks every row and says what to fix by tab and row;
+  - sets each tour's office, replaces its rates, replaces the seasons, and prints the answers on the Questions tab;
+  - it's a dry run without `--apply`; production is refused; tours are not published by it.
+- **Older orders:** the fixed sessions of 4d stay for orders already made; every order now has its own start time.
+- ADR-098 records the gaps I filled (children's prices, flexible start times, notice periods) and what is not built yet: the below-minimum shared start, the cruise-day suggestion on the calendar, the Programs tab.
+
+**Verified, and how:**
+- **Unit:** `tour-calendar.test.ts` (16 tests) and readiness in `tours.test.ts`. The unit tests cover:
+  - prices for every mode, with children and seasons;
+  - the rules for 9 or more guests and for shared groups;
+  - open days, Cairo times in winter and summer, and the rate sheet's rows and error messages.
+  - `pnpm verify`: 413 tests.
+- **pgTAP:** 28 files, 440 checks on a reset database. `280_tour_calendar` (29 checks) covers:
+  - price shapes, and that only a tour office can run a tour;
+  - visitors read published rates only;
+  - prices in the database match the page;
+  - the lead time, the 12-month limit and start times;
+  - 8 per shared start, and private parties kept separate;
+  - who sees which bookings;
+  - an office cancelling a start, with a full refund.
+- **API under load:** `tour-slot-concurrency`: ten parties of 3 booking one start at the same moment make exactly two bookings (6 of 8 places); the rest get a plain "places left" refusal. The API suite (9 tests) passes on a clean database.
+- **End-to-end:** `tour-calendar.spec.ts` (5 tests) covers:
+  - prices and the calendar link on the tour page;
+  - a shared booking for 2, paid through the signed webhook;
+  - 7 more refused with 6 left, and a party of 9 switched to private at US$540;
+  - a 5-guest transfer at 23:15 priced as a van plus the night extra;
+  - the office seeing the booking and cancelling the start;
+  - axe in Day and Night.
+  - Full run with `CI=1` on a production build: 234 passed, none failed.
+- **Grants check:** no differences.
+- **The import, tried locally:** I loaded a filled copy of the template with made-up prices, ran the dry run, applied it, then applied it again (no change the second time). The database price matched the page.
+- **Screenshots:** 18 in `docs/screenshots/batch-07/` (prefix `7-2-`): the tour page with prices, the booking calendar and the Aswan office's bookings, at 375, 768 and 1440 in Day and Night.
+
+**Next:** Faris's filled rate sheet (staging dry run first), then Batch 8.
