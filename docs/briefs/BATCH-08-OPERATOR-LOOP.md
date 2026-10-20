@@ -1,6 +1,6 @@
 # Operator loop brief: one-tap requests, sheets in, the reservable rule
 
-**Status:** Part 0 report and plan, waiting for Faris's decisions (below) · **Branch:** to be cut after PRs #32 and #33 merge · **Size:** L (three pull requests: A, C, B)
+**Status:** decisions taken by Faris 21 Oct 2026 (ADR-099): Resend; pay after the operator confirms; Claude reads sheets; real sheets to follow · **Branch:** `batch-08-1-operator-loop`, stacked on 7-2 · **Size:** L (built as one pull request, committed per part)
 
 The task asks for a Part 0 report before any code, and to stop if the findings conflict with the task. Four of them do; they are the decisions at the end.
 
