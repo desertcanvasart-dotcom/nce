@@ -45,6 +45,22 @@ export const BUILT = new Set<string>([
   "/vessels/paddle-steamers/",
   "/vessels/compare/",
   "/vessels/compare/dahabiya-vs-cruise-ship/",
+  // Batch 6-2: Prices Explained and the Guide
+  "/nile-cruise-prices/",
+  "/nile-cruise-prices/star-ratings-explained/",
+  "/nile-cruise-prices/whats-included/",
+  "/nile-cruise-prices/budget-vs-luxury/",
+  "/nile-cruise-prices/price-calculator/",
+  "/nile-cruise-guide/",
+  "/nile-cruise-guide/routes/",
+  "/nile-cruise-guide/routes/luxor-to-aswan/",
+  "/nile-cruise-guide/routes/aswan-to-luxor/",
+  "/nile-cruise-guide/routes/esna-to-aswan/",
+  "/nile-cruise-guide/when-to-go/",
+  "/nile-cruise-guide/planning/",
+  "/nile-cruise-guide/planning/how-many-nights/",
+  "/nile-cruise-guide/planning/nile-cruise-vs-land-tour/",
+  "/nile-cruise-guide/planning/tipping/",
 ]);
 
 export const isBuilt = (url: string) => BUILT.has(url);
