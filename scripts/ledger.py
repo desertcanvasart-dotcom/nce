@@ -933,6 +933,34 @@ STATUS.update({
  "DATA-009": ("Verified", B61+'VesselCompare and VesselTypeCard take guests and cabins from the catalogue (vessel_type_stats: the middle half of each type, sample vessels excluded) and editorial text drafted for review; no sample prices (unit, e2e)'),
  "SEO-013": ("In progress", B52+'vessel pages link up to /cruises/ and their type facet; '+B61+'and to their vessel-type hub by its keyword (e2e); destination links follow in Batch 7'),
 })
+B62 = "Batch 6-2 (21 Oct 2026): "
+_all = "every Phase 1 education page is built and checked in CI against its workbook row (silo-links.spec, 31 tests)"
+STATUS.update({
+ "PAGE-002": ("Verified", B62+"/nile-cruise-guide/ pillar; drafted copy for review (silo-links.spec)"),
+ "PAGE-003": ("Verified", B62+"routes hub; drafted copy for review (silo-links.spec)"),
+ "PAGE-004": ("Verified", B62+"Luxor to Aswan route guide with the day-by-day timeline; drafted copy for review (silo-links.spec)"),
+ "PAGE-005": ("Verified", B62+"Aswan to Luxor route guide; drafted copy for review (silo-links.spec)"),
+ "PAGE-007": ("Verified", B62+"Esna to Aswan dahabiya route guide; drafted copy for review (silo-links.spec)"),
+ "PAGE-010": ("Verified", B62+"when to go; drafted copy for review (silo-links.spec)"),
+ "PAGE-016": ("Verified", B62+"planning hub; drafted copy for review (silo-links.spec)"),
+ "PAGE-017": ("Verified", B62+"how many nights; drafted copy for review (silo-links.spec)"),
+ "PAGE-018": ("Verified", B62+"cruise or land tour; drafted copy for review (silo-links.spec)"),
+ "PAGE-019": ("Verified", B62+"tipping (gratuity rules from ADR-010); drafted copy for review (silo-links.spec)"),
+ "PAGE-049": ("Verified", B62+"/nile-cruise-prices/ pillar with the price breakdown; drafted copy for review (silo-links.spec)"),
+ "PAGE-050": ("Verified", B62+"star ratings explained; drafted copy for review (silo-links.spec)"),
+ "PAGE-051": ("Verified", B62+"what is included; drafted copy for review (silo-links.spec)"),
+ "PAGE-057": ("Verified", B62+"budget or luxury; drafted copy for review (silo-links.spec)"),
+ "PAGE-059": ("Verified", B62+"price calculator: PriceAnatomy as a full-page tool, WebApplication data; drafted copy for review (silo-links.spec)"),
+ "SEO-008": ("Verified", B62+"breadcrumb and one link up in the intro; "+_all),
+ "SEO-009": ("Verified", B62+"pillars and hubs link every built child by its keyword; "+_all),
+ "SEO-010": ("Verified", B62+"Keep reading: up to three built siblings; "+_all),
+ "SEO-011": ("Verified", B62+"bridges only where the workbook lists them; "+_all),
+ "SEO-012": ("Verified", B62+"every informational page ends with up to three real cruises and its matching listing; "+_all),
+ "SEO-014": ("Verified", B62+"anchors are the target keyword or a close variant, never click here; "+_all),
+ "SEO-023": ("Verified", B62+"route guides show stops and vessels with no price grid (unit, e2e)"),
+ "DATA-008": ("Verified", B62+"PriceAnatomy and the calculator use maintained factors (src/content/price-factors.ts) flagged Sample data with an honest footnote until real rates are enough (unit, e2e)"),
+ "SEO-029": ("In progress", B62+"the workbook keywords are used as given; validation in a keyword tool before launch (ADR-096)"),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
