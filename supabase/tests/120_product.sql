@@ -72,8 +72,9 @@ select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is_empty('select 1 from public.rates', 'customers see no rates in 4c');
 select pg_temp.as_owner();
 reset role;
-select ok(not app.inventory_is_fresh(now() - interval '3 hours', 'feed') and app.inventory_is_fresh(now() - interval '3 hours', 'manual'),
-  'feed data is stale after 2 hours, manual after 24 (ADR-079)');
+select ok(not app.inventory_is_fresh(now() - interval '3 hours', 'feed') and app.inventory_is_fresh(now() - interval '6 days', 'manual')
+  and not app.inventory_is_fresh(now() - interval '8 days', 'manual'),
+  'feed data is stale after 2 hours, manual after 7 days (ADR-079, ADR-095)');
 
 select * from finish();
 rollback;

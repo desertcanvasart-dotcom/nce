@@ -1126,3 +1126,26 @@ ADR-094 records the answers. The accountant's advice is that Nilecruz acts as th
   - the receipt shows "Nilecruz, as booking agent" and "On behalf of (seller)".
   - Full run with `CI=1` on a production build against the local database: 173 passed.
   - The one failure was the catalogue-refresh test. Another worker can re-cache `/cruises/` from data read just before the refresh, so the test now refreshes and reloads until the change shows, as a visitor would see it (at worst it waits for the 10-minute expiry). Marketplace, vessel and partner specs together: 20 passed.
+
+### Oberoi Zahra on staging, and manual availability for 7 days (20 Oct 2026; branch `freshness-week`; migration `20261020000800_freshness_week`)
+
+**On staging:** set up at Faris's request, with his rate of US$1,500 per cabin per night.
+- The Oberoi Zahra (`/cruises/oberoi-zahra/`) is published and bookable:
+  - an approved test operator, "Oberoi Zahra (staging test operator)", with no login;
+  - category luxury; 27 cabins, 54 guests, 5 decks and built 2007, taken from the duplicate import record `the-oberoi-zahra-luxury-nile-cruiser`, which stays private for an admin to merge;
+  - one Suite cabin type sleeping 2, with 10 cabins available on each departure;
+  - Luxor → Aswan, 4 nights, on Mondays, and Aswan → Luxor, 3 nights, on Fridays: 104 departures over 12 months;
+  - per person, two sharing: US$3,000 (4 nights) and US$2,250 (3 nights); alone: US$6,000 and US$4,500;
+  - the luxury cancellation policy in EN/ES/JA.
+  - The itineraries, sailing days, cabin type and number available are my assumptions and need confirming.
+- The live `/cruises/` shows it "From US$2,250 per person".
+
+**ADR-095:** manual and pasted availability now counts as confirmed for 7 days.
+- Staging's setting was changed at once, so the Zahra stays bookable.
+- The migration makes 7 days the default everywhere, and `FRESHNESS_HOURS` matches it.
+- The operator inventory and schedule pages show the live thresholds with `hoursText` ("7 days").
+
+**Verified:**
+- unit `product.test.ts` (7-day expiry for manual and pasted; thresholds in words): 336 tests in all;
+- pgTAP `120` checks manual availability is fresh at 6 days and stale at 8; on a reset database, 26 files and 405 checks;
+- end-to-end connections, product and marketplace specs on a local production build: 22 passed.

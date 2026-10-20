@@ -678,3 +678,9 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Cancelling an unpaid booking costs nothing:** the policy's charge only ever comes out of what was paid. Payments beyond the charge are refunded. A part payment below the charge is kept, and nothing more is owed. The database no longer records an unpaid charge (constraint `no_unpaid_charge`).
 - **Spanish and Japanese cancellation wording:** reviewed by native speakers and approved. Both standard presets now fill English, Spanish and Japanese.
 - **Also settled:** the bank account's currency is USD (the IBAN comes later). The 9 tours from nilecruz.com were imported into staging as private drafts (`pnpm import:tours --apply --target=staging`).
+
+### ADR-095 Manual availability stays confirmed for 7 days (Accepted; Faris 20 Oct 2026)
+- Availability entered by hand or pasted counts as confirmed for **7 days** (168 hours, the most the admin setting allows), instead of 24 hours. Feeds and the API stay at 2 hours.
+- This changes ADR-079's defaults (`FRESHNESS_HOURS`, and migration `20261020000800` for every database). Admins can still change both thresholds on Admin → Settings → Availability freshness.
+- Operator pages now show the live thresholds ("7 days", "2 hours") instead of fixed text.
+- **Trade-off:** a cabin sold elsewhere can stay bookable here for up to a week if the operator doesn't update Nilecruz. The database still re-checks the count at booking, but it can't see sales made elsewhere.

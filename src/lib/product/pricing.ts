@@ -99,8 +99,14 @@ export function promotedPrice(rateMinor: number, currency: string, p: Promotion)
   }
 }
 
-/** ADR-079: is availability recent enough to reserve? */
-export const FRESHNESS_HOURS: Record<"manual" | "paste" | "feed" | "api", number> = { manual: 24, paste: 24, feed: 2, api: 2 };
+/** ADR-079, ADR-095: is availability recent enough to reserve? Defaults; admins change them on Admin → Settings. */
+export const FRESHNESS_HOURS: Record<"manual" | "paste" | "feed" | "api", number> = { manual: 168, paste: 168, feed: 2, api: 2 };
+/** "2 hours", "24 hours", "7 days": a freshness threshold in words. */
+export function hoursText(h: number): string {
+  if (h >= 48 && h % 24 === 0) return `${h / 24} days`;
+  return `${h} ${h === 1 ? "hour" : "hours"}`;
+}
+
 export function isFresh(
   confirmedAt: string,
   source: keyof typeof FRESHNESS_HOURS,
