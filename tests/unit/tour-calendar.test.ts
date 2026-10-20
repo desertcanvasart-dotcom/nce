@@ -9,6 +9,7 @@ import {
   seasonPct,
   type TourRate,
 } from "@/lib/tours/calendar";
+import { parseDays, parseTimes, planTourRates } from "../../scripts/lib/tour-rates";
 
 const shared: TourRate = { mode: "shared", adult: 6000, child611: 3000, child35: 1500, maxGuests: 8, minGuests: 2 };
 const priv: TourRate = {
@@ -120,5 +121,152 @@ describe("from the database to the page", () => {
   it("offers quarter hours for flexible starts, round the clock for transfers", () => {
     expect(flexibleTimes("private")[0]).toBe("05:00");
     expect(flexibleTimes("transfer")).toHaveLength(96);
+  });
+});
+
+describe("the rate sheet (pnpm import:tour-rates)", () => {
+  const tours = [
+    { id: "t1", name: "Abu Simbel Day Trip from Aswan by Road" },
+    { id: "t2", name: "Aswan Airport Private Transfer" },
+  ];
+  const offices = [
+    { id: "lx", display_name: "Nilecruz Luxor Office" },
+    { id: "as", display_name: "Nilecruz Aswan Office" },
+  ];
+  const empty = { "Shared tours": [], "Private tours": [], Transfers: [], "Meet and assist": [], Seasons: [], Questions: [] };
+  const row = (n: number, r: Record<string, string | number | null>) => ({ row: n, ...r });
+
+  it("reads days and start times as written", () => {
+    expect(parseDays("Every day")).toEqual([1, 2, 3, 4, 5, 6, 7]);
+    expect(parseDays("Mon, Wed, Fri")).toEqual([1, 3, 5]);
+    expect(parseDays("Mon-Fri")).toEqual([1, 2, 3, 4, 5]);
+    expect(parseDays("Fri to Mon")).toEqual([1, 5, 6, 7]);
+    expect(parseDays("someday")).toBeNull();
+    expect(parseTimes("08:00, 13:30")).toEqual(["08:00", "13:30"]);
+    expect(parseTimes("flexible")).toEqual([]);
+    expect(parseTimes("8am")).toBeNull();
+  });
+
+  it("turns dollars into cents, percentages either way, and sets each tour's office", () => {
+    const plan = planTourRates(
+      {
+        ...empty,
+        "Shared tours": [
+          row(5, {
+            tour: "Abu Simbel Day Trip from Aswan by Road",
+            office: "Aswan",
+            days: "Every day",
+            times: "04:00",
+            adult: 60,
+            child611: 30,
+            child35: null,
+            max: 8,
+            min: 2,
+            lead: 24,
+            tickets: "Yes",
+          }),
+        ],
+        "Private tours": [
+          row(5, {
+            tour: "Abu Simbel Day Trip from Aswan by Road",
+            office: "Aswan",
+            days: "Every day",
+            times: "flexible",
+            p1: 200,
+            p2: 120,
+            p34: null,
+            p58: null,
+            p914: 60,
+            p15: null,
+            child_pct: 0.5,
+            lead: null,
+          }),
+        ],
+        Transfers: [
+          row(5, {
+            tour: "Aswan Airport Private Transfer",
+            office: "Aswan",
+            label: "Airport → hotel",
+            car: 25,
+            van: 40,
+            minibus: null,
+            night: 10,
+            lead: null,
+          }),
+        ],
+        Seasons: [row(5, { name: "Christmas", from: "2026-12-24", to: "2027-01-07", pct: 0.2, applies: "All" })],
+      },
+      tours,
+      offices,
+    );
+    expect(plan.problems).toEqual([]);
+    expect(plan.offices).toEqual(
+      new Map([
+        ["t1", "as"],
+        ["t2", "as"],
+      ]),
+    );
+    expect(plan.rates[0]).toMatchObject({
+      mode: "shared",
+      start_times: ["04:00"],
+      min_guests: 2,
+      tickets_included: true,
+      prices: { adult: 6000, child611: 3000, child35: 0 },
+    });
+    expect(plan.rates[1]).toMatchObject({
+      mode: "private",
+      start_times: [],
+      lead_hours: 24,
+      prices: {
+        child_pct: 50,
+        tiers: [
+          { min: 1, max: 1, pp: 20000 },
+          { min: 2, max: 2, pp: 12000 },
+          { min: 9, max: 14, pp: 6000 },
+        ],
+      },
+    });
+    expect(plan.rates[2]).toMatchObject({
+      mode: "transfer",
+      label: "Airport → hotel",
+      lead_hours: 12,
+      prices: {
+        night_extra: 1000,
+        vehicles: [
+          { name: "Car", max: 3, price: 2500 },
+          { name: "Van", max: 8, price: 4000 },
+        ],
+      },
+    });
+    expect(plan.seasons).toEqual([
+      { name: "Christmas", starts_on: "2026-12-24", ends_on: "2027-01-07", pct: 20, applies: "all" },
+    ]);
+  });
+
+  it("explains what to fix, by tab and row", () => {
+    const plan = planTourRates(
+      {
+        ...empty,
+        "Shared tours": [
+          row(7, {
+            tour: "Felucca at sunset",
+            office: "Cairo",
+            days: "Every day",
+            times: "8am",
+            adult: "sixty",
+            max: 12,
+            min: 1,
+            lead: 24,
+          }),
+        ],
+      },
+      tours,
+      offices,
+    );
+    expect(plan.problems).toEqual([
+      'Shared tours, row 7: no tour is called "Felucca at sunset" (names must match the tours list)',
+      'Shared tours, row 7: the adult price should be a price in US$, not "sixty"',
+      "Shared tours, row 7: a shared group takes 1 to 8 guests",
+    ]);
   });
 });
