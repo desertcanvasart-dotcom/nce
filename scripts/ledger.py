@@ -868,6 +868,27 @@ B4H2B = "Batch 4h-2b (20 Oct 2026): "
 STATUS.update({
  "DASH-B2B-004": ("Verified", B4H2B+'owners and reservations users send requests for the company; operators see them marked "Travel partner" and may offer at the trade rate (the trade plan is refused on customers\' requests); any owner or reservations user compares the offers and accepts one, with the client reference and selling price; the booking belongs to the company; finance users and customers see none of it (230, e2e)'),
 })
+B51 = "Batch 5-1 (20 Oct 2026): "
+STATUS.update({
+ "PAGE-060": ("Verified", B51+'/cruises/ with H1 "Compare Nile cruises", CruiseSearch, facet links and CruiseCards; CollectionPage, ItemList and BreadcrumbList; canonical and indexable (e2e marketplace)'),
+ "PAGE-061": ("Verified", B51+'/cruises/dahabiyas/: sailing vessels only (unit facets, e2e)'),
+ "PAGE-062": ("Verified", B51+'/cruises/motor-ships/: motor ships only (unit facets, e2e)'),
+ "PAGE-064": ("Verified", B51+'/cruises/luxury/: vessels whose category is luxury, not deluxe (ADR-093; unit facets, e2e)'),
+ "PAGE-066": ("Verified", B51+'/cruises/luxor-to-aswan/: vessels with a Luxor → Aswan itinerary (unit facets, e2e)'),
+ "PAGE-067": ("Verified", B51+'/cruises/aswan-to-luxor/: vessels with an Aswan → Luxor itinerary (unit facets, e2e)'),
+ "DASH-PUB-001": ("Verified", B51+'visitors browse published and showcase vessels with photo, type, route, nights and guests (e2e marketplace)'),
+ "DASH-PUB-002": ("In progress", B51+'cards show the published Nilecruz evaluation as NN/100; the full evaluation on the vessel page follows in 5-2'),
+ "DASH-PUB-004": ("Verified", B51+'"Compare" ticks on cards (up to three) open /cruises/compare/ with type, guests, cabins, decks, evaluation, from price and itineraries; noindex (unit, e2e)'),
+ "DASH-PUB-005": ("Verified", B51+'one "from" price per vessel where an operator supplied a rate (public_vessel_prices; 240, e2e)'),
+ "DASH-PUB-010": ("Verified", B51+'showcase and unbookable vessels stay listed as "Information only" with no price (240, unit, e2e)'),
+ "BRAND-026": ("Verified", B51+'cards always show the maximum guests and no stars; ratings only from verified reviews, none yet (unit, e2e)'),
+ "BRAND-028": ("Verified", B51+'cards show "NN/100 · Nilecruz evaluation"; external ratings are not on cards (unit, e2e)'),
+ "PERF-010": ("Verified", B51+'listings are cached under the catalogue tag (static facet pages, cached data for the hub), refreshed by operator and admin changes, feed pulls, the inventory API and a signed refresh route, and every ten minutes (e2e: a vessel taken off sale leaves the listing after a refresh)'),
+ "SEO-016": ("Verified", B51+'only the five listed facets exist; searches and comparisons are parameters canonical to the clean URL with noindex; unlisted facets 404 (unit, e2e)'),
+ "DATA-012": ("Verified", B51+'CruiseSearch routes, dates and match counts come from real schedules and future departures (unit, e2e)'),
+ "DATA-032": ("Verified", B51+'the lowest international per-person price for two over bookable departures in the next 12 months, with confirmed places, US$ before €; none otherwise (240)'),
+ "SEO-004": ("In progress", B51+'breadcrumbs and BreadcrumbList on the hub, facets and comparison; vessel pages follow in 5-2'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

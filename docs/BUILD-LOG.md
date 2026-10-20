@@ -982,3 +982,45 @@ The second 4h-2 PR. With it every Batch 4h requirement is Verified, and every da
   - `dashboard.spec`'s placeholder test now checks that the section is built.
 - **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); end-to-end with `CI=1`: 160 passed, none failed or flaky (97 skipped as usual).
 - **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2b-`): the partner's requests, one request with two offers, and accept; the operator's list and request with the travel-partner notice; at 375, 768 and 1440 in Day and Night. Long sample-sailing names (test run IDs) overflow headings at 375, as on earlier pages; real names are short.
+
+### Batch 5-1: The marketplace listings (branch `batch-05-marketplace`, stacked on 4h-2b; migration `20261020000500_public_listing`)
+
+The first of two Batch 5 PRs (ADR-093). 5-2 adds the vessel page, the deck selector, prices after sign-in and reserving. Until then, cards link to vessel pages that don't exist yet, so **5-1 and 5-2 should reach production together**.
+
+**Built:**
+- **The one public price** (`public_vessel_prices`, for visitors): per published or showcase vessel, the "from" price and whether anything is bookable. It is the lowest international per-person price for two sharing, over bookable departures in the next 12 months, on cabin types with confirmed places, US$ before €. Rates and inventory stay closed to visitors.
+- **Public data:** read as an anonymous visitor (no cookies), so row-level security decides what is public. It is cached under the `catalogue` tag:
+  - refreshed by vessel, cabin, schedule, rate, inventory, evaluation and operator-approval changes in the dashboards, by feed pulls and by the inventory API;
+  - refreshed by a signed `/api/internal/catalogue/refresh/` (the scheduler's secret, with its own message so a feed-pull signature can't be replayed);
+  - and refreshed every ten minutes, because confirmed inventory goes stale with time.
+  - Builds without a database (Lighthouse in CI) render an empty marketplace. Sample vessels never appear where indexing is on (production).
+- **`/cruises/`:** breadcrumb, H1 "Compare Nile cruises", CruiseSearch (routes, dates and match counts from real departures), the five facet links and the cards.
+  - A search is a parameter on the hub: canonical to `/cruises/`, `noindex`, with "N vessels · N matching departures".
+- **Five filtered pages**, static and refreshed like the data: `/cruises/dahabiyas/`, `/motor-ships/`, `/luxury/` (category luxury only), `/luxor-to-aswan/` and `/aswan-to-luxor/`. Other facet slugs return 404.
+- **Cards:** type, route and nights of the shortest itinerary, **maximum guests**, "NN/100 · Nilecruz evaluation" when published, and the "from" price per person or "Prices in preparation". Never stars. "Information only" for showcase or unbookable vessels, which show no price; "Sample data" on samples. A note explains the price basis and that gratuities are separate.
+- **Comparison:** "Compare" ticks (up to three; the card's checkbox can now be controlled by its parent) open `/cruises/compare/?v=…`, `noindex`. It shows type, guests, cabins, decks, evaluation, the "from" price and itineraries.
+- **Structured data:** BreadcrumbList, then CollectionPage with ItemList, escaped for script tags. No AggregateRating or Offer on listings.
+- **Photos:** signed links to the private media bucket, valid for a day (longer than any cached page), allowed in `next/image`.
+- Copy is English; `/es/` and `/ja/` show the same pages until Batch 10 (ADR-093).
+
+**Verified, and how:**
+- **Unit** (`marketplace.test.ts`, 13 tests):
+  - the five facets (all reserved slugs; luxury excludes deluxe; direction matters), sorting, and card props (guests, score, one price, no stars; "Information only" with no price);
+  - search routes and dates from real departures, the search form parsing, match counts;
+  - BreadcrumbList, a CollectionPage with no ratings or offers, script-safe JSON-LD, the comparison's slug rules, and refresh signatures kept apart from feed pulls.
+- **pgTAP** `240_public_listing` (10 checks):
+  - the lowest international two-sharing price, US$ before €, ignoring trade, local, single-occupancy, sold-out and next-year rates;
+  - showcase vessels are information only, private vessels absent, and rates and inventory still closed to visitors;
+  - stale inventory, a missing policy or a paused operator removes the price, which returns when the operator is approved;
+  - a € price stays in €.
+  - The full suite on a freshly reset database: 24 files, 389 checks.
+- **End-to-end** (`marketplace.spec.ts`, 8 tests):
+  - the signed refresh;
+  - the hub's card (60 guests, 80/100, US$1,000, sample flag, no stars), the showcase ship as information only, the canonical and structured data;
+  - the five facets and a 404 for an unlisted one;
+  - a search narrowed to one vessel and one departure, `noindex` with the clean canonical;
+  - comparing two vessels from the ticks;
+  - a vessel taken off sale disappearing after a refresh;
+  - axe on three screens in Day and Night.
+- **Full suites:** `pnpm verify` (321 unit tests, lint, types, format, build); end-to-end with `CI=1`: 167 passed, 1 flaky (an admin two-step sign-in in the cancellation accessibility test, which passed on retry).
+- **Screenshots:** 24 in `docs/screenshots/batch-05/` (prefix `5-1-`): the hub, `/luxury/`, `/aswan-to-luxor/` and a three-vessel comparison, at 375, 768 and 1440 in Day and Night.
