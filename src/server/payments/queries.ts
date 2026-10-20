@@ -53,14 +53,14 @@ export async function financeQueue() {
     db
       .from("payments")
       .select(
-        "id, amount_minor, currency, paid_on, reference, proof_path, created_at, reservation:reservations(id, reference, payment_due_at, org:organisations(display_name))",
+        "id, amount_minor, currency, paid_on, reference, proof_path, created_at, reservation:reservations(id, reference, payment_due_at, org:organisations!reservations_org_id_fkey(display_name))",
       )
       .eq("status", "reported")
       .order("created_at"),
     db
       .from("payments")
       .select(
-        "id, method, status, amount_minor, currency, paid_on, reference, receipt_number, created_at, reservation:reservations(id, reference, org:organisations(display_name))",
+        "id, method, status, amount_minor, currency, paid_on, reference, receipt_number, created_at, reservation:reservations(id, reference, org:organisations!reservations_org_id_fkey(display_name))",
       )
       .order("created_at", { ascending: false })
       .limit(100),
@@ -168,7 +168,7 @@ export async function cancellationQueue() {
   const { data, error } = await db
     .from("cancellation_requests")
     .select(
-      "id, status, requested_on, days_before, percent, currency, charge_minor, refund_minor, operator_review, reservation:reservations(id, reference, org:organisations(display_name))",
+      "id, status, requested_on, days_before, percent, currency, charge_minor, refund_minor, operator_review, reservation:reservations(id, reference, org:organisations!reservations_org_id_fkey(display_name))",
     )
     .in("status", ["requested", "refund_due"])
     .order("created_at");

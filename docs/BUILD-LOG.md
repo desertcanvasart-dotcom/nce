@@ -896,3 +896,46 @@ Brief approved by Faris as recommended (ADR-092): company rate, then trade, then
 - **Fixed after review:** re-approving an agency left the old pause reason on its page; approving now clears it (e2e checks).
 
 **Next:** 4h-2: reserving for clients, company requests and offers, company bookings and payments, client references, selling totals, and the client booking record.
+
+### Batch 4h-2a: Partners book for their clients (branch `batch-04h-2-bookings`, stacked on 4h-1; migration `20261020000300_partner_bookings`)
+
+**Split:** 4h-2 became two PRs. This one, **4h-2a**, covers reserving, company bookings and payments, client details and the client record, and meets the batch's exit criterion. Company requests and offers (DASH-B2B-004) follow in **4h-2b**.
+
+**Built:**
+- **Company bookings in the database:**
+  - `reservations.buyer_org_id`, `buyer_name` and `booked_by`. `offer_id` may now be empty, but only for a company booking (check constraint).
+  - `app.acts_for_reservation` replaces the customer-only checks in `report_payment`, `request_cancellation`, `withdraw_cancellation` and the proof uploads. Those functions were lifted from their current definitions with only that line changed.
+  - Roles: owners and finance users pay; owners and reservations users upload eligibility proof; anyone with a role asks to cancel.
+  - `app.can_read_reservation` adds the buyer company's people.
+- **Private client details:** `partner_booking_details` holds the client reference and the agency's selling total. Only the agency (and admins) can read it, and only owners and reservations users edit it. Operators never see it.
+- **`partner_reserve`:**
+  - only approved agencies' owners and reservations users can use it;
+  - it prices each cabin at the agency's rate (company, then trade, then public; children by bands, infants free) with `app.partner_cabin_price`, which mirrors `linePrice`;
+  - it checks the guests (adults by count, children by exact age on the departure date), takes the cabins under row locks, records passengers and client details, and notifies the operator ("Trade booking … from <agency>") and the agency.
+  - Rate plan: trade when a company or trade rate applies.
+- **Screens:**
+  - search results get a "Reserve" link;
+  - the reserve page books 1–5 cabins of the party, every guest named, with the client reference, the selling price and the terms ticked;
+  - **Company bookings** and the booking page: the client panel with the supplier total, selling price and difference; payment (card or transfer, for finance and owners), cancellation, and the full record;
+  - **Payments**; and the **client booking record** (agency name, client reference, trip, cabins, guests, the cancellation terms, the selling price, "Booked through Nilecruz" in small print).
+  - Operators see "Trade booking for <agency>" on the booking and in their list.
+  - Company bookings stay out of the booker's own My journey.
+- **Fixed on the way:** reservations now have two links to organisations, so four embeds through reservations (payments, cancellation queue, booking search) are hinted at the operator link. They would have failed at runtime.
+
+**Verified, and how:**
+- **pgTAP:** the new `220_partner_bookings` has 18 checks:
+  - finance users can't reserve; mismatched guest ages are refused;
+  - booking at the company rate as trade for the agency, with the cabin taken; a 7-year-old pays 50 %;
+  - finance users see the bookings and the selling total; the operator sees the booking but not the details; another agency sees nothing;
+  - reservations users edit the client reference, finance users can't;
+  - reservations users can't report payments, finance users can; reservations users ask to cancel, another agency can't;
+  - a paused agency can't reserve.
+  - 150, 160 and 170 still pass.
+- **End-to-end** (`partner-bookings.spec.ts`, **the batch exit criterion**) with the seeded Sample Partner team:
+  - the reservations user finds US$1,400 for two at the company rate and reserves for a client with a reference and a US$1,800 selling price, so the difference is US$400; there's no pay button for them, and the booking isn't in their own My journey;
+  - the finance user pays through a signed webhook, the booking is confirmed and listed in Payments, and they can't edit the client details;
+  - the owner's client record shows the agency, the client reference, US$1,800 and the guests, and never US$1,400 or bank details;
+  - the operator sees "Trade booking for Sample Partner" but not the selling price or client reference;
+  - axe on 5 screens in Day and Night.
+- **Full suites:** `pnpm verify` (308 unit tests, lint, types, build); pgTAP, all files; end-to-end with `CI=1`: 147 passed, 1 flaky (a catalogue test that passed on retry, load on this machine), the rest skipped as usual without the local stack.
+- **Screenshots:** 30 in `docs/screenshots/batch-04h/` (prefix `4h2-`): reserve, company bookings, booking, client record and payments, at 375, 768 and 1440 in Day and Night.

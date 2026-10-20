@@ -33,7 +33,7 @@ export default async function MyReservation({
   if (!isUuid(reservationId)) notFound();
   const session = await requireUser(`/dashboard/journey/reservations/${reservationId}/`);
   const r = await reservation(reservationId);
-  if (!r || r.customer_id !== session.userId) notFound();
+  if (!r || r.customer_id !== session.userId || r.buyer_org_id) notFound();
   const local = r.rate_plan === "egyptian_citizen" || r.rate_plan === "foreign_resident";
   const [bal, pays, requests, refunds, quote, bank] = await Promise.all([
     balance(r.id),

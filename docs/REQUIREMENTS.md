@@ -217,17 +217,17 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | DASH-B2B-001 | DG §Partner list | An approved partner can search available departures. | 4h | Verified | Batch 4h-1 (20 Oct 2026): Search departures by dates, route, nights and guests over bookable departures with fresh availability (partner_search; e2e) |
 | DASH-B2B-002 | DG §Partner list | An approved partner sees eligible trade and market-specific rates. | 4h | Verified | Batch 4h-1 (20 Oct 2026): company rate, then trade rate, then public rate, labelled (ADR-092; 210, unit, e2e "Your company rate") |
-| DASH-B2B-003 | DG §Partner list | A partner can reserve cabins for clients. | 4h | Planned |  |
+| DASH-B2B-003 | DG §Partner list | A partner can reserve cabins for clients. | 4h | Verified | Batch 4h-2a (20 Oct 2026): reservations users reserve 1–5 cabins from a search result at the agency's rate (partner_reserve: takes cabins under row locks, guests named, adults by count and children by age; 220, e2e) |
 | DASH-B2B-004 | DG §Partner list | A partner can submit company requests and compare offers. | 4h | Planned |  |
-| DASH-B2B-005 | DG §Partner list | A partner can view company bookings and payment records. | 4h | Planned |  |
-| DASH-B2B-006 | DG §Partner list | A partner can record passenger details and client references. | 4h | Planned |  |
-| DASH-B2B-007 | DG §Partner list | A partner can record an agency selling total and see the difference from the supplier total. | 4h | Planned |  |
-| DASH-B2B-008 | DG §Partner list | A partner can produce a client booking record. | 4h | Planned |  |
+| DASH-B2B-005 | DG §Partner list | A partner can view company bookings and payment records. | 4h | Verified | Batch 4h-2a (20 Oct 2026): Company bookings and Payments pages; deadlines, balances, card and transfer, receipts, cancellations from 4f at company level; finance users and owners pay (220, e2e three-role booking) |
+| DASH-B2B-006 | DG §Partner list | A partner can record passenger details and client references. | 4h | Verified | Batch 4h-2a (20 Oct 2026): every guest named at booking; client reference kept in partner_booking_details, editable by owners and reservations users, not finance (220, e2e) |
+| DASH-B2B-007 | DG §Partner list | A partner can record an agency selling total and see the difference from the supplier total. | 4h | Verified | Batch 4h-2a (20 Oct 2026): selling total and the difference from the supplier total on the booking; hidden from the operator and the client record shows only the selling price (220, e2e) |
+| DASH-B2B-008 | DG §Partner list | A partner can produce a client booking record. | 4h | Verified | Batch 4h-2a (20 Oct 2026): printable client booking record: agency name, client reference, trip, cabins, guests, cancellation terms, selling price; "Booked through Nilecruz" in small print; never the trade price or bank details (e2e) |
 | DASH-B2B-009 | DG §Partner list | A partner owner can invite team members and set their permissions. | 4h | Verified | Batch 4h-1 (20 Oct 2026): the owner invites colleagues who accept and land in the partner workspace (e2e); shared team page with operators |
 | DASH-B2B-010 | DG §Partner ¶teams | Team roles are company owner, reservations user and finance user, each with distinct permissions. | 4h | Verified | Batch 4h-1 (20 Oct 2026): owner, reservations and finance roles; no viewer (database trigger, 210); finance users can't search (210, e2e 403) |
 | DASH-B2B-011 | DG §Partner ¶access | Trade access requires admin approval. | 4h | Verified | Batch 4h-1 (20 Oct 2026): apply for trade access from the account with registration details; admin approval required before searching (210, e2e) |
 | DASH-B2B-012 | DG §Partner ¶access | A rate can be restricted to the trade channel or to one particular company. | 4h | Verified | Batch 4h-1 (20 Oct 2026): trade channel = rate plan trade; one company = partner_rates set by the operator; never visible to customers, the public or other agencies (210, e2e) |
-| DASH-B2B-013 | DG §Partner ¶access | Passenger-market eligibility (e.g. Egyptian-citizen rates) remains subject to verification. | 4h | Planned |  |
+| DASH-B2B-013 | DG §Partner ¶access | Passenger-market eligibility (e.g. Egyptian-citizen rates) remains subject to verification. | 4h | Verified | Batch 4h-2a (20 Oct 2026): local-rate eligibility proof stays with the reservation and can be uploaded by the agency's owner or reservations users (policy acts_for_reservation); verified by the operator as before |
 
 ## Dashboard guide (PAY)
 

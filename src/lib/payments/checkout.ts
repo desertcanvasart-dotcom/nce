@@ -14,8 +14,10 @@ export function checkoutParams(r: {
   customerEmail: string;
   siteUrl: string;
   nowSeconds: number;
+  /** Where Stripe returns to; a travel partner's booking page for company bookings (DASH-B2B-005). */
+  returnPath?: string;
 }) {
-  const base = `${r.siteUrl.replace(/\/$/, "")}/dashboard/journey/reservations/${r.reservationId}/`;
+  const base = `${r.siteUrl.replace(/\/$/, "")}${r.returnPath ?? `/dashboard/journey/reservations/${r.reservationId}/`}`;
   return {
     mode: "payment" as const,
     customer_email: r.customerEmail,

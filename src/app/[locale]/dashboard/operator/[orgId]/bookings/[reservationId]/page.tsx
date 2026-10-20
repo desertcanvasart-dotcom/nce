@@ -39,6 +39,7 @@ export default async function OperatorBooking({ params }: { params: Promise<{ or
         <Link href={`/dashboard/operator/${orgId}/bookings/`}>← Bookings</Link>
       </p>
       <h1 className={ui.pageTitle}>Reservation {r.reference}</h1>
+      {r.buyer_name ? <p className={ui.muted}>Trade booking for {r.buyer_name}, a Nilecruz travel partner.</p> : null}
       {bal ? <PaymentPanel bal={bal} pays={pays} rule={r.deadline_rule} status={r.status} /> : null}
       {canRemind && r.status === "awaiting_payment" ? (
         <ActionForm
