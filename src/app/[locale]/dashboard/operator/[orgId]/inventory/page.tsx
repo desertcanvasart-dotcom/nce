@@ -10,6 +10,8 @@ import { connectionsFor, pastePreview } from "@/server/connections/queries";
 import { freshnessHours } from "@/server/product/queries";
 import { FEED_STATUS, HealthTable, RunsTable } from "../../../_connections/Tables";
 import { RowTable } from "../../../_connections/RowTable";
+import { operatorContacts, replySla, replyStats } from "@/server/requests/queries";
+import { Contacts, ReplyStats } from "../../../_requests/Bits";
 import { isUuid } from "../../../sections";
 import { applyPaste, createKey, discardPaste, previewPaste, removeFeed, revokeKey, saveFeed } from "./actions";
 
@@ -23,10 +25,13 @@ export default async function InventoryConnections({ params, searchParams }: Pro
   if (!isUuid(orgId)) notFound();
   await requireOrgRole(orgId, ["owner"], { kind: "operator", returnTo: `/dashboard/operator/${orgId}/inventory/` });
   const sp = await searchParams;
-  const [c, run, hours] = await Promise.all([
+  const [c, run, hours, contacts, stats, sla] = await Promise.all([
     connectionsFor(orgId),
     sp.run && isUuid(sp.run) ? pastePreview(orgId, sp.run) : null,
     freshnessHours(),
+    operatorContacts(orgId),
+    replyStats(orgId),
+    replySla(orgId),
   ]);
   const activeKeys = c.keys.filter((k) => !k.revoked_at);
   const formatHref = `/dashboard/operator/${orgId}/inventory/format/`;
@@ -48,6 +53,9 @@ export default async function InventoryConnections({ params, searchParams }: Pro
           {hoursText(hours.manual)}. Older availability is shown to travellers as “to be confirmed” and can’t be reserved.
         </p>
       </Section>
+
+      <ReplyStats stats={stats} slaHours={sla} />
+      <Contacts orgId={orgId} contacts={contacts} canEdit admin={false} />
 
       <Section title="Paste JSON or XML" id="paste">
         {run && run.status === "previewed" ? (

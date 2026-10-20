@@ -7,6 +7,8 @@ import { offerView } from "@/lib/bookings/bookings";
 import { nowMs } from "@/lib/product/departures";
 import { requireOrgRole } from "@/server/auth";
 import { orgOffers, visibleRequests } from "@/server/bookings/queries";
+import { orgBookingRequests, REQUEST_STATUS } from "@/server/requests/queries";
+import { CairoTime } from "@/components/shell/CairoTime";
 import { guestsText, OFFER_BADGE } from "../../../_bookings/OfferSummary";
 import { isUuid } from "../../../sections";
 
@@ -18,13 +20,32 @@ export default async function RequestsAndOffers({ params }: { params: Promise<{ 
     kind: "operator",
     returnTo: `/dashboard/operator/${orgId}/offers/`,
   });
-  const [requests, offers] = await Promise.all([visibleRequests(), orgOffers(orgId)]);
+  const [requests, offers, booking] = await Promise.all([visibleRequests(), orgOffers(orgId), orgBookingRequests(orgId)]);
+  const waiting = booking.filter((b) => b.status === "waiting" || b.status === "held");
   const now = nowMs();
   const open = requests.filter((r) => r.status === "open");
 
   return (
     <>
       <h1 className={ui.pageTitle}>Requests and offers</h1>
+      <Section title={`Booking requests to answer (${waiting.length})`} id="booking">
+        <p className={ui.muted}>
+          Customers asking to book your cabins. The same request arrives by email with one-tap answers; answering here works too.
+        </p>
+        {booking.length ? (
+          <ul className={ui.list}>
+            {booking.slice(0, 30).map((b) => (
+              <li key={b.id}>
+                <Link href={`/dashboard/operator/${orgId}/requests/booking/${b.id}/`}>{b.reference}</Link> · {b.vessel?.name} ·{" "}
+                {b.departure?.departs_on} · {b.guest_count} guests · asked <CairoTime value={b.created_at} />{" "}
+                <Badge tone={REQUEST_STATUS[b.status]!.tone}>{REQUEST_STATUS[b.status]!.text}</Badge>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={ui.muted}>No booking requests yet.</p>
+        )}
+      </Section>
       <Section title={`Open requests (${open.length})`} id="requests">
         <p className={ui.muted}>
           Requests whose route, dates and nights fit one of your published sailings. You see the trip and the guests’ ages; the

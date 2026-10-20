@@ -115,6 +115,22 @@ export function verifyRefresh(
   return timingSafeEqual(Buffer.from(refreshSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
 }
 
+// ── Booking-request tick (ADR-099): reminders, alerts and the digest; the same secret, its own message ───────
+export function requestsTickSignature(secret: string, timestamp: string): string {
+  return createHmac("sha256", secret).update(`requests-tick.${timestamp}`).digest("hex");
+}
+
+export function verifyRequestsTick(
+  secret: string,
+  timestamp: string,
+  signatureHex: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): boolean {
+  if (!/^\d{9,11}$/.test(timestamp) || !/^[0-9a-f]{64}$/.test(signatureHex)) return false;
+  if (Math.abs(nowSeconds - Number(timestamp)) > TOLERANCE_SECONDS) return false;
+  return timingSafeEqual(Buffer.from(requestsTickSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
+}
+
 // ── Outbound webhooks (SEC-009; sent from Batch 4e) ────────────────────────────────────────────────────────
 // Signed the same way, with Nilecruz's own Ed25519 key; operators verify with our published public key.
 export function webhookCanonical(timestamp: string, eventId: string, body: string): string {
