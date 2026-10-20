@@ -43,7 +43,8 @@ export default async function MyTours() {
         >
           <p className={ui.muted}>
             {sg.reservation.vessel}: {sg.reservation.route}, {sg.reservation.departsOn} to {sg.reservation.returnsOn}. Tours with
-            places on the days of your sailing.
+            places on the days of your sailing
+            {sg.reservation.sailingPeriod === "morning" ? ", and the day before: your ship sails in the morning" : ""}.
           </p>
           <ul className={ui.list}>
             {sg.tours.map((t) => (

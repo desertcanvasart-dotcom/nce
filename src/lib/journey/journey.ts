@@ -1,3 +1,4 @@
+import { dayBefore } from "@/lib/product/sailing-time";
 import { cairoDate } from "@/lib/tours/tours";
 
 /**
@@ -21,6 +22,10 @@ export type JReservation = {
   proof: "none" | "submitted" | "verified" | "rejected";
   /** A cancellation request waiting on Nilecruz (requested, or approved with a refund still to come). */
   cancellationOpen: boolean;
+  /** PROPOSED-019: where and when the ship sails on the first day, if the operator has said. */
+  origin?: string;
+  sailingPeriod?: "morning" | "noon" | "evening" | null;
+  sailsAt?: string | null;
 };
 export type JTourOrder = {
   id: string;
@@ -197,9 +202,12 @@ export type TourOption = {
   sessions: { startsAt: string; placesLeft: number }[];
 };
 
-/** Bookable tours linked to the cruise's schedule, with a session with places on a day of the sailing. */
+/**
+ * Bookable tours linked to the cruise's schedule, with a session with places on a day of the sailing. A morning
+ * sailing (PROPOSED-019) adds the day before: guests arrive then, so it's a sightseeing day and an arrival day.
+ */
 export function suggestTours(
-  sailing: { scheduleId: string; departsOn: string; returnsOn: string },
+  sailing: { scheduleId: string; departsOn: string; returnsOn: string; morning?: boolean },
   tours: TourOption[],
   now: Date,
 ): { id: string; name: string; days: string[] }[] {
@@ -211,9 +219,10 @@ export function suggestTours(
     for (const s of tour.sessions) {
       if (s.placesLeft <= 0 || Date.parse(s.startsAt) <= t) continue;
       const day = cairoDate(s.startsAt);
+      const first = sailing.morning ? dayBefore(sailing.departsOn) : sailing.departsOn;
       const fits = tour.airportService
-        ? day === sailing.departsOn || day === sailing.returnsOn
-        : day >= sailing.departsOn && day <= sailing.returnsOn;
+        ? day === first || day === sailing.departsOn || day === sailing.returnsOn
+        : day >= first && day <= sailing.returnsOn;
       if (fits) days.add(day);
     }
     if (days.size) out.push({ id: tour.id, name: tour.name, days: [...days].sort() });

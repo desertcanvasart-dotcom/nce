@@ -13,6 +13,7 @@ import { dbProblem, failed, formObject, problemsFrom, saved } from "@/server/cat
 import { getDb } from "@/server/db";
 import { requireProductEditor } from "@/server/product/guard";
 import { productPaths } from "./paths";
+import { periodOf, type SailingPeriod } from "@/lib/product/sailing-time";
 
 /**
  * Product actions (DASH-ADM-048–056, 074–085, DASH-OPR-008–012, DATA-015, 022, 023).
@@ -213,6 +214,8 @@ const scheduleInput = z.object({
     .string()
     .optional()
     .transform((v) => v === "yes"),
+  sailing_period: z.enum(["", "morning", "noon", "evening"]).optional(),
+  sails_at: z.string().trim().max(5).optional(),
 });
 
 export async function saveSchedule(
@@ -236,9 +239,20 @@ export async function saveSchedule(
   const d = input.data;
   if (d.origin.toLowerCase() === d.destination.toLowerCase() && d.nights < 2)
     return failed("A round trip needs at least two nights.");
+  // PROPOSED-019: a time decides the period; a period alone is enough. The database checks the same.
+  const time = d.sails_at || null;
+  const timePeriod = time ? periodOf(time) : null;
+  if (time && !timePeriod) return failed("Give the sailing time as HH:MM, for example 08:00.");
+  const period = (d.sailing_period || null) as SailingPeriod | null;
+  if (period && timePeriod && period !== timePeriod)
+    return failed(
+      `${time} is ${timePeriod === "noon" ? "around noon" : `in the ${timePeriod}`}; choose that, or correct the time.`,
+    );
   const db = await getDb();
   const row = {
     vessel_id: vesselId,
+    sailing_period: timePeriod ?? period,
+    sails_at: time,
     code: d.code,
     origin: d.origin,
     destination: d.destination,
