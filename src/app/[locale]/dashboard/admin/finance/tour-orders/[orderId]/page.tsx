@@ -38,11 +38,17 @@ export default async function AdminTourOrder({ params }: { params: Promise<{ ord
           </div>
           <div>
             <dt className={ui.label}>Starts</dt>
-            <dd><CairoTime value={o.starts_at} /></dd>
+            <dd>
+              <CairoTime value={o.starts_at} />
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Session</dt>
-            <dd>{TOUR_MODE[o.mode]}{o.label ? ` · ${o.label}` : ""}{o.vehicle ? ` · ${o.vehicle}` : ""}</dd>
+            <dd>
+              {TOUR_MODE[o.mode]}
+              {o.label ? ` · ${o.label}` : ""}
+              {o.vehicle ? ` · ${o.vehicle}` : ""}
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Guests</dt>

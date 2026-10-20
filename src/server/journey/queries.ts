@@ -23,9 +23,7 @@ export async function journeyRecords(userId: string) {
       .order("created_at", { ascending: false }),
     db
       .from("tour_orders")
-      .select(
-        "id, reference, status, total_minor, currency, hold_until, cancel_state, starts_at, tour:tours(name)",
-      )
+      .select("id, reference, status, total_minor, currency, hold_until, cancel_state, starts_at, tour:tours(name)")
       .eq("customer_id", userId),
     db
       .from("cruise_requests")

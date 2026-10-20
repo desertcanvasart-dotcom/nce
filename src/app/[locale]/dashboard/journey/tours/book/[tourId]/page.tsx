@@ -25,7 +25,7 @@ export default async function BookTour({ params }: { params: Promise<{ tourId: s
   const open = t.sessions.filter((s) => s.placesLeft > 0);
   const own = t.cancellation_bands as CancellationBand[];
   // ADR-097: free until 48 hours before, then 100 %, unless the tour sets its own.
-  const bands = own.length || !t.rates.length ? own : STANDARD_TOUR_BANDS;
+  const bands = own.length > 0 || t.rates.length === 0 ? own : STANDARD_TOUR_BANDS;
   const policy = (
     <>
       <h3 className={ui.subTitle}>Cancellation policy</h3>

@@ -50,9 +50,7 @@ export async function requireOrgRole(
   }: { kind?: Company["kind"]; allowPending?: boolean; allowPaused?: boolean; returnTo?: string } = {},
 ): Promise<{ session: Session; company: Company }> {
   const session = await requireUser(returnTo ?? "/dashboard/");
-  const company = resolveWorkspaces(session).find(
-    (w): w is Company => "orgId" in w && w.orgId === orgId,
-  );
+  const company = resolveWorkspaces(session).find((w): w is Company => "orgId" in w && w.orgId === orgId);
   if (!company || (kind && company.kind !== kind)) forbidden();
   if (roles !== "any" && !roles.includes(company.teamRole)) forbidden();
   if (!allowPending && company.status !== "approved" && !(allowPaused && company.status === "paused")) forbidden();

@@ -708,3 +708,16 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Hot-air balloon** (PAGE-095): information only until Faris names a supplier and a price.
 - **Before the rate sheet returns:** tours show "Prices coming soon" (information only); nothing is bookable with made-up prices.
 - **Two pull requests:** 7-1 (destinations, tour pages as information, About, how we choose vessels, Contact, slug redirects) and 7-2 (calendar booking, rates, the offices' dashboard, the rate-sheet import).
+
+### ADR-098 How the tour calendar fills the gaps in the rate sheet (Batch 7-2; proposed, for Faris to confirm)
+Choices made while building ADR-097 where the sheet or the brief didn't say:
+- **Private children:** the sheet gives "Child 6–11 (% of adult)". Children 3–5 pay the same percentage; under-3s are free and don't count towards the party size.
+- **Shared children:** if the child 6–11 price is left empty, children pay the adult price; if the 3–5 price is empty, they're free.
+- **Flexible start times** ("flexible" in the sheet): any quarter hour from 05:00 to 22:45 for tours, round the clock for transfers and meet and assist.
+- **Transfers and meet and assist** run every day, with 12 hours' notice unless the sheet says otherwise. Tours default to 24 hours.
+- **A start the office can't run:** the office cancels it in its dashboard with a reason; every booking on it is cancelled and paid ones are approved for a full refund, which finance issues through the usual refund page.
+- **Office logins:** Nilecruz admins add them (one per office). Offices don't invite their own staff yet.
+- **Not built yet (follow-ups):**
+  - a shared start below its minimum is not converted automatically; the minimum is stored, and the office or Nilecruz offers the private tour at the shared price by hand (ADR-097);
+  - the calendar doesn't yet suggest the days the customer's cruise is moored nearby (ADR-097);
+  - the Programs tab (multi-day sightseeing that follows a cruise) isn't imported: programs stay as they are until their pricing is designed.
