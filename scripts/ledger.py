@@ -218,8 +218,8 @@ PUB = [
  ("§Public ¶1", "Visitors see starting prices where an operator supplied them.", "5"),
  ("§Public ¶2", "Visitors can browse tour pages.", "7"),
  ("§Public ¶2", "Visitors can begin planning a request without an account.", "8"),
- ("§Public ¶3", "Exact departure rates and additional cabin details require an account.", "8"),
- ("§Public ¶3", "Reserving or sending a personal request requires an account.", "8"),
+ ("§Public ¶3", "Exact departure rates and additional cabin details require an account.", "5"),  # ADR-093: brought forward from Batch 8
+ ("§Public ¶3", "Reserving or sending a personal request requires an account.", "5"),  # ADR-093: brought forward from Batch 8
  ("§Public ¶3", "Information-only listings stay visible without implying prices or stock.", "5"),
  ("§Public ¶4", "A read-only MCP layer offers cruise search, comparison and availability.", "8"),
  ("§Public ¶4", "The MCP layer applies the same account and pricing restrictions and cannot book or administer.", "8"),
@@ -460,7 +460,7 @@ X = {
  ("Faris 17 Oct 2026 (ADR-020)", "Card data never reaches our servers (Stripe-hosted fields or Checkout); non-production uses Stripe test mode only.", "4f"),
  ("Faris 17 Oct 2026 (ADR-021); Q4", "One page per vessel shows all its itineraries with a selector; the itinerary is a parameter canonical to the vessel URL.", "5"),
  ("Faris 17 Oct 2026 (ADR-025); Q3", "Public pages show one 'from' price per vessel: the lowest available cabin category, per person, with currency and what is included; other categories show no price.", "5"),
- ("Faris 17 Oct 2026 (ADR-025); Q3", "Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates).", "8"),
+ ("Faris 17 Oct 2026 (ADR-025); Q3", "Prices for every cabin category and departure date appear only to signed-in customers (and to eligible partners at their rates).", "5"),  # ADR-093: brought forward from Batch 8
  ("Faris 17 Oct 2026 (ADR-025)", "Vessel-page Offer schema uses the public 'from' price only (AggregateOffer lowPrice and priceCurrency).", "5"),
  ("Faris 17 Oct 2026 (ADR-026); Q51", "Nilecruz is the merchant of record: card payments go to the Nilecruz Stripe account, not to operators.", "4f"),
  ("Faris 17 Oct 2026 (ADR-026); Q18", "Commission is 10% of each verified cruise payment, stored as a setting; it is reversed in proportion to any refund and never applies to gratuities.", "4f"),
@@ -867,6 +867,27 @@ STATUS.update({
 B4H2B = "Batch 4h-2b (20 Oct 2026): "
 STATUS.update({
  "DASH-B2B-004": ("Verified", B4H2B+'owners and reservations users send requests for the company; operators see them marked "Travel partner" and may offer at the trade rate (the trade plan is refused on customers\' requests); any owner or reservations user compares the offers and accepts one, with the client reference and selling price; the booking belongs to the company; finance users and customers see none of it (230, e2e)'),
+})
+B51 = "Batch 5-1 (20 Oct 2026): "
+STATUS.update({
+ "PAGE-060": ("Verified", B51+'/cruises/ with H1 "Compare Nile cruises", CruiseSearch, facet links and CruiseCards; CollectionPage, ItemList and BreadcrumbList; canonical and indexable (e2e marketplace)'),
+ "PAGE-061": ("Verified", B51+'/cruises/dahabiyas/: sailing vessels only (unit facets, e2e)'),
+ "PAGE-062": ("Verified", B51+'/cruises/motor-ships/: motor ships only (unit facets, e2e)'),
+ "PAGE-064": ("Verified", B51+'/cruises/luxury/: vessels whose category is luxury, not deluxe (ADR-093; unit facets, e2e)'),
+ "PAGE-066": ("Verified", B51+'/cruises/luxor-to-aswan/: vessels with a Luxor → Aswan itinerary (unit facets, e2e)'),
+ "PAGE-067": ("Verified", B51+'/cruises/aswan-to-luxor/: vessels with an Aswan → Luxor itinerary (unit facets, e2e)'),
+ "DASH-PUB-001": ("Verified", B51+'visitors browse published and showcase vessels with photo, type, route, nights and guests (e2e marketplace)'),
+ "DASH-PUB-002": ("In progress", B51+'cards show the published Nilecruz evaluation as NN/100; the full evaluation on the vessel page follows in 5-2'),
+ "DASH-PUB-004": ("Verified", B51+'"Compare" ticks on cards (up to three) open /cruises/compare/ with type, guests, cabins, decks, evaluation, from price and itineraries; noindex (unit, e2e)'),
+ "DASH-PUB-005": ("Verified", B51+'one "from" price per vessel where an operator supplied a rate (public_vessel_prices; 240, e2e)'),
+ "DASH-PUB-010": ("Verified", B51+'showcase and unbookable vessels stay listed as "Information only" with no price (240, unit, e2e)'),
+ "BRAND-026": ("Verified", B51+'cards always show the maximum guests and no stars; ratings only from verified reviews, none yet (unit, e2e)'),
+ "BRAND-028": ("Verified", B51+'cards show "NN/100 · Nilecruz evaluation"; external ratings are not on cards (unit, e2e)'),
+ "PERF-010": ("Verified", B51+'listings are cached under the catalogue tag (static facet pages, cached data for the hub), refreshed by operator and admin changes, feed pulls, the inventory API and a signed refresh route, and every ten minutes (e2e: a vessel taken off sale leaves the listing after a refresh)'),
+ "SEO-016": ("Verified", B51+'only the five listed facets exist; searches and comparisons are parameters canonical to the clean URL with noindex; unlisted facets 404 (unit, e2e)'),
+ "DATA-012": ("Verified", B51+'CruiseSearch routes, dates and match counts come from real schedules and future departures (unit, e2e)'),
+ "DATA-032": ("Verified", B51+'the lowest international per-person price for two over bookable departures in the next 12 months, with confirmed places, US$ before €; none otherwise (240)'),
+ "SEO-004": ("In progress", B51+'breadcrumbs and BreadcrumbList on the hub, facets and comparison; vessel pages follow in 5-2'),
 })
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

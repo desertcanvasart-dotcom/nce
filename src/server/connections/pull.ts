@@ -2,6 +2,7 @@ import "server-only";
 import { FormatError, LIMITS, parseInventory } from "@/lib/connections/format";
 import { FetchProblem, safeFetch } from "@/lib/connections/safe-fetch";
 import { getAdminDb } from "@/server/db/admin";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 import { FEED_LIMITS, fetchPolicy } from "./policy";
 
 type Feed = { id: string; org_id: string; url: string };
@@ -31,6 +32,7 @@ export async function pullFeed(feed: Feed): Promise<PullOutcome> {
     });
     if (dbError) throw dbError;
     const out = data as { changed: number; failed: number };
+    if (out.changed) revalidateCatalogue();
     return { ok: true, changed: out.changed, failed: out.failed };
   } catch (e) {
     if (e instanceof FetchProblem) error = e.message;

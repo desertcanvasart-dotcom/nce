@@ -99,6 +99,22 @@ export function verifyPull(
   return timingSafeEqual(Buffer.from(pullSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
 }
 
+// ── Refreshing the public marketplace (PERF-010): the same secret, its own message, so a pull can't be replayed as one
+export function refreshSignature(secret: string, timestamp: string): string {
+  return createHmac("sha256", secret).update(`catalogue-refresh.${timestamp}`).digest("hex");
+}
+
+export function verifyRefresh(
+  secret: string,
+  timestamp: string,
+  signatureHex: string,
+  nowSeconds = Math.floor(Date.now() / 1000),
+): boolean {
+  if (!/^\d{9,11}$/.test(timestamp) || !/^[0-9a-f]{64}$/.test(signatureHex)) return false;
+  if (Math.abs(nowSeconds - Number(timestamp)) > TOLERANCE_SECONDS) return false;
+  return timingSafeEqual(Buffer.from(refreshSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
+}
+
 // ── Outbound webhooks (SEC-009; sent from Batch 4e) ────────────────────────────────────────────────────────
 // Signed the same way, with Nilecruz's own Ed25519 key; operators verify with our published public key.
 export function webhookCanonical(timestamp: string, eventId: string, body: string): string {

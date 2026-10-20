@@ -3320,6 +3320,15 @@ export type Database = {
         Args: { input: Json; label?: string; target_org: string };
         Returns: string;
       };
+      public_vessel_prices: {
+        Args: never;
+        Returns: {
+          amount_minor: number;
+          bookable: boolean;
+          currency: string;
+          vessel_id: string;
+        }[];
+      };
       record_manual_payment: {
         Args: {
           amount: number;

@@ -3,6 +3,7 @@ import { FormatError, LIMITS, parseInventory } from "@/lib/connections/format";
 import { IDEMPOTENCY_KEY, KEY_ID, sha256Hex, verifyRequest } from "@/lib/connections/signature";
 import { getAdminDb } from "@/server/db/admin";
 import type { Json } from "@/server/db/database.types";
+import { revalidateCatalogue } from "@/server/marketplace/revalidate";
 
 /**
  * POST /api/v1/inventory/ (DASH-OPR-026, SEC-008, SEC-009). Every call is signed with the operator's private key
@@ -136,6 +137,7 @@ export async function handleInventoryPost(request: Request): Promise<Response> {
     status = 422;
     body = { error: { code: "format", message: e.message } };
   }
+  if (status < 300) revalidateCatalogue();
   await Promise.all([
     db
       .from("api_idempotency")
