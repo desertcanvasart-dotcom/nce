@@ -1503,6 +1503,47 @@ export type Database = {
           },
         ];
       };
+      operator_aliases: {
+        Row: {
+          created_at: string;
+          created_by: string | null;
+          id: string;
+          kind: string;
+          org_id: string;
+          sheet_name: string;
+          target: string;
+          vessel_slug: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          kind: string;
+          org_id: string;
+          sheet_name: string;
+          target: string;
+          vessel_slug?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          created_by?: string | null;
+          id?: string;
+          kind?: string;
+          org_id?: string;
+          sheet_name?: string;
+          target?: string;
+          vessel_slug?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "operator_aliases_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       operator_contacts: {
         Row: {
           created_at: string;
@@ -1552,18 +1593,27 @@ export type Database = {
       };
       operator_settings: {
         Row: {
+          clean_imports: number;
           org_id: string;
           reply_sla_hours: number;
+          sheet_ack: boolean;
+          sheet_auto_confirm: boolean;
           updated_at: string;
         };
         Insert: {
+          clean_imports?: number;
           org_id: string;
           reply_sla_hours?: number;
+          sheet_ack?: boolean;
+          sheet_auto_confirm?: boolean;
           updated_at?: string;
         };
         Update: {
+          clean_imports?: number;
           org_id?: string;
           reply_sla_hours?: number;
+          sheet_ack?: boolean;
+          sheet_auto_confirm?: boolean;
           updated_at?: string;
         };
         Relationships: [
@@ -2777,6 +2827,105 @@ export type Database = {
           },
         ];
       };
+      sheet_ingests: {
+        Row: {
+          auto_confirmed: boolean;
+          body_text: string | null;
+          channel: Database["public"]["Enums"]["sheet_channel"];
+          content_type: string | null;
+          created_at: string;
+          edited: boolean;
+          error: string | null;
+          file_name: string | null;
+          file_path: string | null;
+          id: string;
+          notes: Json;
+          org_id: string | null;
+          parser_version: string | null;
+          raw_rows: Json | null;
+          received_at: string;
+          reviewed_at: string | null;
+          reviewer: string | null;
+          rows: Json | null;
+          run_id: string | null;
+          sender: string | null;
+          sheet_date: string | null;
+          size_bytes: number | null;
+          status: Database["public"]["Enums"]["sheet_status"];
+          unmatched: Json;
+          updated_at: string;
+        };
+        Insert: {
+          auto_confirmed?: boolean;
+          body_text?: string | null;
+          channel: Database["public"]["Enums"]["sheet_channel"];
+          content_type?: string | null;
+          created_at?: string;
+          edited?: boolean;
+          error?: string | null;
+          file_name?: string | null;
+          file_path?: string | null;
+          id?: string;
+          notes?: Json;
+          org_id?: string | null;
+          parser_version?: string | null;
+          raw_rows?: Json | null;
+          received_at?: string;
+          reviewed_at?: string | null;
+          reviewer?: string | null;
+          rows?: Json | null;
+          run_id?: string | null;
+          sender?: string | null;
+          sheet_date?: string | null;
+          size_bytes?: number | null;
+          status?: Database["public"]["Enums"]["sheet_status"];
+          unmatched?: Json;
+          updated_at?: string;
+        };
+        Update: {
+          auto_confirmed?: boolean;
+          body_text?: string | null;
+          channel?: Database["public"]["Enums"]["sheet_channel"];
+          content_type?: string | null;
+          created_at?: string;
+          edited?: boolean;
+          error?: string | null;
+          file_name?: string | null;
+          file_path?: string | null;
+          id?: string;
+          notes?: Json;
+          org_id?: string | null;
+          parser_version?: string | null;
+          raw_rows?: Json | null;
+          received_at?: string;
+          reviewed_at?: string | null;
+          reviewer?: string | null;
+          rows?: Json | null;
+          run_id?: string | null;
+          sender?: string | null;
+          sheet_date?: string | null;
+          size_bytes?: number | null;
+          status?: Database["public"]["Enums"]["sheet_status"];
+          unmatched?: Json;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "sheet_ingests_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sheet_ingests_run_id_fkey";
+            columns: ["run_id"];
+            isOneToOne: false;
+            referencedRelation: "inventory_runs";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       tour_orders: {
         Row: {
           ages: number[];
@@ -3729,6 +3878,7 @@ export type Database = {
           unpaid_charge_minor: number;
         }[];
       };
+      confirm_sheet: { Args: { auto?: boolean; ingest: string }; Returns: Json };
       create_api_key: {
         Args: { key_label: string; key_public: string; target_org: string };
         Returns: {
@@ -3877,6 +4027,7 @@ export type Database = {
         Args: { input: Json; label?: string; target_org: string };
         Returns: string;
       };
+      preview_sheet: { Args: { ingest: string }; Returns: string };
       public_party_price: {
         Args: { ages: number[]; cab: string; cur: string; dep: string };
         Returns: number;
@@ -3919,6 +4070,10 @@ export type Database = {
       };
       record_tour_manual_refund: {
         Args: { amount: number; how: string; ref: string; target: string };
+        Returns: undefined;
+      };
+      reject_sheet: {
+        Args: { ingest: string; why: string };
         Returns: undefined;
       };
       reject_submission: {
@@ -4224,6 +4379,8 @@ export type Database = {
       safety_status: "open" | "under_review" | "resolved";
       sailing_period: "morning" | "noon" | "evening";
       session_kind: "shared" | "private";
+      sheet_channel: "email" | "whatsapp" | "upload";
+      sheet_status: "received" | "unknown_sender" | "preview" | "confirmed" | "rejected" | "failed";
       submission_event: "created" | "edited" | "submitted" | "changes_requested" | "approved" | "rejected";
       submission_status: "draft" | "submitted" | "changes_requested" | "approved" | "rejected";
       team_role: "owner" | "reservations" | "finance" | "viewer";
@@ -4389,6 +4546,8 @@ export const Constants = {
       safety_status: ["open", "under_review", "resolved"],
       sailing_period: ["morning", "noon", "evening"],
       session_kind: ["shared", "private"],
+      sheet_channel: ["email", "whatsapp", "upload"],
+      sheet_status: ["received", "unknown_sender", "preview", "confirmed", "rejected", "failed"],
       submission_event: ["created", "edited", "submitted", "changes_requested", "approved", "rejected"],
       submission_status: ["draft", "submitted", "changes_requested", "approved", "rejected"],
       team_role: ["owner", "reservations", "finance", "viewer"],

@@ -4,6 +4,7 @@ import { siteUrl } from "@/lib/env";
 import { actionToken, readToken, tokenHash } from "@/lib/requests/tokens";
 import { getAdminDb } from "@/server/db/admin";
 import { serverEnv } from "@/server/env";
+import { receiveSheet } from "@/server/sheets/ingest";
 import { sendWhatsAppText, whatsappOn } from "./send";
 
 /**
@@ -19,11 +20,52 @@ export function validMetaSignature(raw: string, header: string | null): boolean 
   return want.length === got.length && timingSafeEqual(want, got);
 }
 
-type Inbound = {
-  entry?: {
-    changes?: { value?: { messages?: { from: string; type: string; button?: { payload?: string; text?: string } }[] } }[];
-  }[];
+type Message = {
+  from: string;
+  type: string;
+  button?: { payload?: string; text?: string };
+  document?: { id: string; filename?: string; mime_type?: string };
+  image?: { id: string; mime_type?: string };
+  text?: { body?: string };
 };
+type Inbound = { entry?: { changes?: { value?: { messages?: Message[] } }[] }[] };
+
+/** Media sent to us: Meta gives an id; its short-lived URL is fetched with the token. */
+async function media(id: string): Promise<Buffer | null> {
+  const auth = { Authorization: `Bearer ${serverEnv.WHATSAPP_TOKEN}` };
+  const info = (await (
+    await fetch(`https://graph.facebook.com/v21.0/${id}`, { headers: auth, signal: AbortSignal.timeout(15_000) })
+  ).json()) as { url?: string };
+  if (!info.url) return null;
+  return Buffer.from(await (await fetch(info.url, { headers: auth, signal: AbortSignal.timeout(30_000) })).arrayBuffer());
+}
+
+const EXT: Record<string, string> = {
+  "image/png": "png",
+  "image/jpeg": "jpg",
+  "application/pdf": "pdf",
+  "text/csv": "csv",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "application/vnd.ms-excel": "xls",
+};
+
+/** Part B: a vacancy sheet sent on WhatsApp (a file, a photo, or the vacancies typed out over several lines). */
+async function sheetFrom(m: Message): Promise<boolean> {
+  const sender = `+${m.from}`;
+  const file = m.type === "document" ? m.document : m.type === "image" ? m.image : undefined;
+  if (file) {
+    const bytes = await media(file.id);
+    if (!bytes) return false;
+    const name = (m.type === "document" ? m.document?.filename : undefined) ?? `sheet.${EXT[file.mime_type ?? ""] ?? "jpg"}`;
+    await receiveSheet({ channel: "whatsapp", sender, fileName: name, contentType: file.mime_type ?? null, bytes });
+    return true;
+  }
+  if (m.type === "text" && (m.text?.body ?? "").split("\n").length >= 3) {
+    await receiveSheet({ channel: "whatsapp", sender, fileName: null, contentType: null, bytes: null, bodyText: m.text!.body! });
+    return true;
+  }
+  return false;
+}
 
 const DONE: Record<string, string> = {
   confirmed: "Confirmed. The customer is asked to pay; the booking appears in your Nilecruz dashboard.",
@@ -37,7 +79,15 @@ export async function handleWhatsApp(body: Inbound): Promise<number> {
   let handled = 0;
   for (const change of body.entry?.flatMap((e) => e.changes ?? []) ?? []) {
     for (const m of change.value?.messages ?? []) {
-      if (m.type !== "button" || !m.button?.payload || !secret) continue;
+      if (m.type !== "button") {
+        try {
+          if (await sheetFrom(m)) handled++;
+        } catch {
+          // Too large or a type we don't take: nothing to keep.
+        }
+        continue;
+      }
+      if (!m.button?.payload || !secret) continue;
       const from = `+${m.from}`;
       const meta = { kind: "booking_request.whatsapp_reply" };
       const t = readToken(secret, m.button.payload);

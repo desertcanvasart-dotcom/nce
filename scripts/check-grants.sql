@@ -37,6 +37,8 @@ with intended(table_name, grantee, privileges) as (
     ('booking_requests', 'authenticated', 'SELECT'), ('booking_request_guests', 'authenticated', 'SELECT'),
     ('outbound_messages', 'authenticated', 'SELECT'),
     ('used_action_tokens', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Operator loop B: sheets are read by admins and the operator's team; catalogue admins update them (RLS).
+    ('sheet_ingests', 'authenticated', 'SELECT,UPDATE'), ('sheet_ingests', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -50,7 +52,7 @@ with intended(table_name, grantee, privileges) as (
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
-                    'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings']) t,
+                    'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'

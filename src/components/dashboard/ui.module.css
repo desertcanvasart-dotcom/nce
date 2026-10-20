@@ -350,3 +350,17 @@ a.counter:hover {
 .prewrap {
   white-space: pre-line;
 }
+
+/* ADR-099: a sheet's original image, and the rows a sheet changes. */
+.preview {
+  display: block;
+  max-width: 100%;
+  max-height: 32rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.highlight td {
+  background: var(--accent-soft);
+}

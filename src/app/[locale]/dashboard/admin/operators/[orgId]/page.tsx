@@ -15,6 +15,8 @@ import { FEED_STATUS, HealthTable, RunsTable } from "../../../_connections/Table
 import { connectVessel, decideFeed, disconnectVessel, revokeOperatorKey, setOperatorStatus } from "../actions";
 import { operatorContacts, orgBookingRequests, replySla, replyStats, REQUEST_STATUS } from "@/server/requests/queries";
 import { setReplySla } from "../../../_requests/actions";
+import { setSheetSettings } from "../../sheets/actions";
+import { Checkboxes } from "@/components/dashboard/ui";
 import { Contacts, ReplyStats } from "../../../_requests/Bits";
 
 const STATUS_LABEL = {
@@ -48,6 +50,11 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
     orgBookingRequests(orgId),
   ]);
   const open = booking.filter((b) => b.status === "waiting" || b.status === "held");
+  const { data: sheetSettings } = await db
+    .from("operator_settings")
+    .select("clean_imports, sheet_auto_confirm, sheet_ack")
+    .eq("org_id", orgId)
+    .maybeSingle();
   const { feed } = connections;
   const emails = await emailsFor((members ?? []).map((m) => m.user_id));
   const reg = (org.registration ?? {}) as Record<string, string>;
@@ -278,6 +285,25 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
       </Section>
       <ReplyStats stats={stats} slaHours={sla} />
       <Contacts orgId={orgId} contacts={contacts} canEdit={canEdit} admin />
+      <Section title="Vacancy sheets" id="sheets">
+        <p className={ui.muted}>
+          {sheetSettings?.clean_imports ?? 0} clean imports in a row. Auto-confirm can be switched on after 4; even then a sheet
+          waits for review unless every check passes. An import that needed fixing switches it off again.
+        </p>
+        {canEdit ? (
+          <ActionForm action={setSheetSettings.bind(null, orgId)} submit="Save sheet settings" variant="outline">
+            <Checkboxes
+              legend="Sheets from this operator"
+              name="options"
+              options={[
+                { value: "auto", label: "Confirm automatically when every check passes" },
+                { value: "ack", label: "Tell the sender how many rows were updated" },
+              ]}
+              checked={[...(sheetSettings?.sheet_auto_confirm ? ["auto"] : []), ...(sheetSettings?.sheet_ack ? ["ack"] : [])]}
+            />
+          </ActionForm>
+        ) : null}
+      </Section>
     </>
   );
 }

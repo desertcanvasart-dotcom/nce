@@ -1,6 +1,8 @@
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Section, ui } from "@/components/dashboard/ui";
 import { facts, shownLines, type RequestSummary } from "@/lib/requests/message";
+import { CairoTime } from "@/components/shell/CairoTime";
+import { getDb } from "@/server/db";
 import { addContact, removeContact } from "./actions";
 
 /** ADR-099: shared pieces of the booking-request screens. */
@@ -135,6 +137,31 @@ export function Contacts({
           />
         </ActionForm>
       ) : null}
+    </Section>
+  );
+}
+
+/** Part B: the last vacancy sheet Nilecruz received from this operator, on its connection health. */
+export async function LastSheet({ orgId }: { orgId: string }) {
+  const db = await getDb();
+  const { data } = await db
+    .from("sheet_ingests")
+    .select("received_at, sheet_date, status, channel")
+    .eq("org_id", orgId)
+    .order("received_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return (
+    <Section title="Vacancy sheets" id="sheets">
+      {data ? (
+        <p>
+          Last sheet received <CairoTime value={data.received_at} /> by {data.channel}
+          {data.sheet_date ? `, dated ${data.sheet_date}` : ""}:{" "}
+          {data.status === "confirmed" ? "confirmed" : data.status === "rejected" ? "not used" : "being checked by Nilecruz"}.
+        </p>
+      ) : (
+        <p className={ui.muted}>No sheet received yet. See the format page for where to send it.</p>
+      )}
     </Section>
   );
 }

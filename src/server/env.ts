@@ -34,6 +34,16 @@ const schema = z.object({
   WHATSAPP_PHONE_NUMBER_ID: z.string().regex(/^\d+$/).optional(),
   WHATSAPP_APP_SECRET: z.string().min(16).optional(),
   WHATSAPP_VERIFY_TOKEN: z.string().min(16).optional(),
+  // Part B (Faris, 21 Oct: Claude reads the sheets). Without the key, only plain-table spreadsheets are read.
+  ANTHROPIC_API_KEY: z.string().min(20).optional(),
+  // Resend's signing secret for the inbound-email webhook (Svix, "whsec_…").
+  RESEND_WEBHOOK_SECRET: z
+    .string()
+    .regex(/^whsec_/)
+    .optional(),
+  // Shown to operators on the format page: where to send their weekly sheet.
+  SHEETS_EMAIL_ADDRESS: z.email().optional(),
+  WHATSAPP_DISPLAY_NUMBER: z.string().max(20).optional(),
 });
 
 export const serverEnv = schema.parse({
@@ -53,4 +63,8 @@ export const serverEnv = schema.parse({
   WHATSAPP_PHONE_NUMBER_ID: process.env.WHATSAPP_PHONE_NUMBER_ID || undefined,
   WHATSAPP_APP_SECRET: process.env.WHATSAPP_APP_SECRET || undefined,
   WHATSAPP_VERIFY_TOKEN: process.env.WHATSAPP_VERIFY_TOKEN || undefined,
+  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || undefined,
+  RESEND_WEBHOOK_SECRET: process.env.RESEND_WEBHOOK_SECRET || undefined,
+  SHEETS_EMAIL_ADDRESS: process.env.SHEETS_EMAIL_ADDRESS || undefined,
+  WHATSAPP_DISPLAY_NUMBER: process.env.WHATSAPP_DISPLAY_NUMBER || undefined,
 });

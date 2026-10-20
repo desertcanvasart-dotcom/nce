@@ -11,7 +11,7 @@ import { freshnessHours } from "@/server/product/queries";
 import { FEED_STATUS, HealthTable, RunsTable } from "../../../_connections/Tables";
 import { RowTable } from "../../../_connections/RowTable";
 import { operatorContacts, replySla, replyStats } from "@/server/requests/queries";
-import { Contacts, ReplyStats } from "../../../_requests/Bits";
+import { Contacts, LastSheet, ReplyStats } from "../../../_requests/Bits";
 import { isUuid } from "../../../sections";
 import { applyPaste, createKey, discardPaste, previewPaste, removeFeed, revokeKey, saveFeed } from "./actions";
 
@@ -54,6 +54,7 @@ export default async function InventoryConnections({ params, searchParams }: Pro
         </p>
       </Section>
 
+      <LastSheet orgId={orgId} />
       <ReplyStats stats={stats} slaHours={sla} />
       <Contacts orgId={orgId} contacts={contacts} canEdit admin={false} />
 
