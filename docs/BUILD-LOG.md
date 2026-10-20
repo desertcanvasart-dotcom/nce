@@ -1218,3 +1218,31 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - `silo-links.spec.ts` (31 tests): the CI link check on all 23 built education pages; the calculator's total changing with a choice, its "not quotes" footnote, sample flag and WebApplication data; route guides without a price breakdown or table.
   - Full run with `CI=1` on a production build against the local database: 207 passed, none failed or flaky.
 - **Screenshots:** 36 in `docs/screenshots/batch-06/` (prefix `6-2-`): the prices pillar, the calculator, the guide pillar, Luxor to Aswan, when to go and tipping, at 375, 768 and 1440 in Day and Night.
+
+## 20 Oct 2026 · Batch 7-1 · Destinations, tour pages and trust pages (first of two PRs, ADR-097)
+
+**Branch:** `batch-07-destinations-tours` (from `main`). One migration (`contact_messages`).
+
+**Built:**
+- **Destinations** (PAGE-074, 076, 083, 085, 086, 090): the pillar in river order, and Luxor, Edfu, Kom Ombo, Aswan and Abu Simbel, each with what to see, an illustrated scene until photos arrive, FAQs, the closing cruise row and TouristDestination data.
+- **Vessel pages** now list their stops, linking each built destination (SEO-013), and link transfers to `/tours-extras/transfers/` (DATA-018).
+- **Tours as pages** (PAGE-093, 094, 095, 099; DASH-PUB-006, DASH-ADM-072):
+  - every published tour has `/tours-extras/{slug}/`; the hub shows cards without the full itinerary;
+  - the three workbook rows use the workbook's URLs, and tours they cover redirect to them;
+  - no tour is bookable yet: each says "Prices coming soon" and links Contact until rates are imported in 7-2;
+  - the balloon page is information only (no supplier yet).
+- **Live tour URLs** from nilecruz.com redirect permanently to their new pages (SEO-022).
+- **About, How we choose vessels, Contact** (PAGE-101, 102, 106): the weights table comes from the scoring code; Contact saves messages to a new admin inbox (Dashboard → Messages) with a honeypot field; email notices come in Batch 8.
+- **Copy:** 13 more pages drafted (36 in all), loaded into Sanity development as "Draft for review".
+- The link map writes the brand as Nilecruz everywhere.
+
+**Verified, and how:**
+- **Unit:** `destinations-tours.test.ts` (stops, tour URLs, redirects, links); `pnpm verify`: 396 tests.
+- **pgTAP:** 27 files on a reset database, including `270_contact_messages` (visitors can send, only admins read and file); `060_privileges` allows that one visitor write.
+- **End-to-end** (`CI=1`, production build, local database): 227 passed, 2 failed, both test faults, now fixed:
+  - the "nothing bookable" check matched the cruise row's "Save Sample Bookings Ship" button; it now looks for buttons starting with Book or Reserve;
+  - the link check didn't expect the hub's tour cards; tour pages from the hub are now allowed, like vessel pages from cruise cards.
+  - Both specs re-run: 53 passed.
+- **Screenshots:** 48 in `docs/screenshots/batch-07/` (prefix `7-1-`): destinations, Aswan, the tours hub, the Abu Simbel day trip, transfers, About, How we choose vessels and Contact, at 375, 768 and 1440 in Day and Night.
+
+**Next:** 7-2, booking tours by calendar with the rate sheet.

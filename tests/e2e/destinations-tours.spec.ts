@@ -40,7 +40,7 @@ test("tour pages explain the tour and say prices are coming; nothing is bookable
   await page.goto("/tours-extras/abu-simbel-day-trip-from-aswan-by-road/");
   await page.waitForURL(/\/tours-extras\/abu-simbel-day-trip\/$/); // one page per tour (SEO-022)
   await expect(page.getByText("Prices coming soon.")).toBeVisible();
-  await expect(page.getByRole("button", { name: /book|reserve/i })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /^(book|reserve)\b/i })).toHaveCount(0); // not the cruise row's "Save …" buttons
 });
 
 test("live nilecruz.com tour addresses redirect to their new page [SEO-022]", async ({ page }) => {
