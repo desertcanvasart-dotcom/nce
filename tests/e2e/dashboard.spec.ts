@@ -153,8 +153,9 @@ test.describe("cross-role access is refused with 403 (SEC-002, DASH-ROLE-002–0
 
 test.describe("admins need two-step sign-in (SEC-015, ADR-064)", () => {
   // Completing two-step ends the same person's other password-only sessions (Supabase Auth), so tests that
-  // share a seeded admin account run one after another rather than knocking each other out.
-  test.describe.configure({ mode: "serial" });
+  // share a seeded admin account run one after another rather than knocking each other out. A second sign-in to the
+  // same account waits for the next 30-second code window, so each test gets time for that wait.
+  test.describe.configure({ mode: "serial", timeout: 90_000 });
 
   test("a catalogue admin sees catalogue sections, not finance", async ({ page }) => {
     await signInAdmin(page, "catalogue@nilecruz.test");
