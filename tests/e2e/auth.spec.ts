@@ -109,6 +109,44 @@ test.describe("sign-in and sign-out (SEC-005)", () => {
   });
 });
 
+test.describe("the public header follows the session (SEC-005, PERF-010)", () => {
+  test("a signed-out visitor sees Sign in; a signed-in one sees Account and Sign out", async ({ page }) => {
+    const header = page.getByRole("banner");
+    await page.goto("/cruises/");
+    await expect(header.getByRole("link", { name: "Sign in" })).toBeVisible();
+    await expect(header.getByRole("button", { name: "Sign out" })).toHaveCount(0);
+
+    await signIn(page, "customer@example.test");
+    // A statically generated page stays the cached one: the header asks for the session on the client.
+    const res = await page.goto("/cruises/dahabiyas/");
+    expect(res?.headers()["cache-control"] ?? "").not.toMatch(/no-store|private/);
+    await expect(header.getByRole("button", { name: "Sign out" })).toBeVisible();
+    await page.goto("/cruises/");
+    await expect(header.getByRole("link", { name: "Account" })).toHaveAttribute("href", "/dashboard/");
+    await expect(header.getByRole("button", { name: "Sign out" })).toBeVisible();
+    await expect(header.getByRole("link", { name: "Sign in" })).toHaveCount(0);
+
+    await header.getByRole("link", { name: "Account" }).click();
+    await expect(page).toHaveURL(/\/dashboard\/journey\/$/);
+
+    await page.goto("/es/cruises/");
+    await header.getByRole("button", { name: "Cerrar sesión" }).click();
+    await expect(page).toHaveURL(/\/es\/$/);
+    await expect(header.getByRole("link", { name: "Iniciar sesión" })).toBeVisible();
+    await page.goto("/dashboard/");
+    await expect(page).toHaveURL(/\/account\/sign-in\/\?next=/);
+  });
+
+  test("without JavaScript the header falls back to Sign in, even when signed in", async ({ browser }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    await signIn(page, "customer@example.test");
+    await page.goto("/cruises/");
+    await expect(page.getByRole("banner").getByRole("link", { name: "Sign in" })).toBeVisible();
+    await ctx.close();
+  });
+});
+
 test.describe("password reset and account security (SEC-014, DASH-CUS-013)", () => {
   test("a forgotten password is reset through a single-use link", async ({ page }) => {
     const user = await newUser("reset");
