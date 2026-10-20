@@ -1076,3 +1076,16 @@ The second Batch 5 PR, and the batch's exit criterion: listing → vessel → si
 - **Full suites:** `pnpm verify` (331 unit tests, lint, types, format, build); end-to-end with `CI=1`: 174 passed, none failed or flaky.
 - **Screenshots:** 30 in `docs/screenshots/batch-05/` (prefix `5-2-`): the vessel page, the information-only ship, and the three reserve steps signed in, at 375, 768 and 1440 in Day and Night.
 - **Noticed, not changed:** the public header shows "Sign in" even when signed in (it doesn't read the session yet; since Batch 1).
+
+### Fix: the public header follows the session (branch `fix/header-session-state`, stacked on 5-2, no migration)
+
+**What changed:** the public header said "Sign in" to everyone, signed in or not (since Batch 1). Now a signed-in visitor sees **Account** (their dashboard) and **Sign out**.
+- Public pages stay static and cached (PERF-010): the server still renders "Sign in", and a small client island (`HeaderAccount`) asks the new `GET /api/session/` (`{ signedIn }`, `private, no-store`) after load. The session cookies stay httpOnly and Supabase is still never used from the browser (SEC-005).
+- `/api/session/` makes no network call for visitors without a session cookie; otherwise it validates the token with `getUser()`, so a revoked cookie counts as signed out.
+- **Sign out** posts to this language's `/account/sign-out/` (same-origin POST, SEC-005). **Account** goes to `/dashboard/` (English only, DASH-BND-006).
+- Without JavaScript the header keeps "Sign in", which leads signed-in visitors on to their dashboard.
+- NavBar's `account` prop also accepts a render function given the link's class.
+
+**Verified, and how:**
+- **End-to-end** (`auth.spec.ts`, "the public header follows the session", 2 tests): signed out, `/cruises/` shows Sign in; signed in, it shows Account (to `/dashboard/`, then My journey) and Sign out, and a statically generated page (`/cruises/dahabiyas/`) still isn't served `no-store`/`private`; Sign out from `/es/cruises/` lands on `/es/` with "Iniciar sesión" and the session is gone; without JavaScript a signed-in visitor still sees Sign in.
+- `pnpm verify` (331 unit tests, lint, types, format); `pnpm build` keeps the `/cruises/{slug}/` pages static (●); `/cruises/` was already rendered per request for its search parameters, with its data cached under the catalogue tag.

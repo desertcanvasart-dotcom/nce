@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cx } from "../lib/cx";
@@ -12,8 +13,11 @@ export type NavBarProps = {
   /** Seven links or fewer, with "Why prices differ" always visible (BRAND-025). */
   links: NavLink[];
   cta: NavLink;
-  /** A quiet text link before the call to action, e.g. "Sign in" (Batch 4a). */
-  account?: NavLink;
+  /**
+   * A quiet text link before the call to action, e.g. "Sign in" (Batch 4a), or a render function given the
+   * link's class, for account links that change with the session (the site header's HeaderAccount).
+   */
+  account?: NavLink | ((className?: string) => ReactNode);
   /** Transparent with on-media text, used inside Hero over a photo or scene. */
   overMedia?: boolean;
 };
@@ -36,11 +40,7 @@ export function NavBar({ links, cta, account, overMedia }: NavBarProps) {
           <summary className={styles.menuButton}>{t("menuOpen")}</summary>
           <nav aria-label={t("mainNav")} className={styles.menuPanel}>
             <MenuLinks links={links} />
-            {account ? (
-              <Link href={account.href} className={styles.account}>
-                {account.label}
-              </Link>
-            ) : null}
+            {renderAccount(account, styles.account)}
             <Link href={cta.href} className={styles.cta}>
               {cta.label}
             </Link>
@@ -55,11 +55,7 @@ export function NavBar({ links, cta, account, overMedia }: NavBarProps) {
           <span className={styles.tagline}>{t("tagline")}</span>
         </Link>
         <div className={styles.end}>
-          {account ? (
-            <Link href={account.href} className={cx(styles.account, styles.desktopOnly)}>
-              {account.label}
-            </Link>
-          ) : null}
+          {renderAccount(account, cx(styles.account, styles.desktopOnly))}
           <Link href={cta.href} className={cx(styles.cta, styles.desktopOnly)}>
             {cta.label}
           </Link>
@@ -69,5 +65,15 @@ export function NavBar({ links, cta, account, overMedia }: NavBarProps) {
         <NavLinks links={links} />
       </nav>
     </header>
+  );
+}
+
+function renderAccount(account: NavBarProps["account"], className: string | undefined): ReactNode {
+  if (!account) return null;
+  if (typeof account === "function") return account(className);
+  return (
+    <Link href={account.href} className={className}>
+      {account.label}
+    </Link>
   );
 }

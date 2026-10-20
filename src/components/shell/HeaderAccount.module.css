@@ -1,0 +1,12 @@
+/* The form takes no box of its own, so the button sits in the header's row or menu like the links. */
+.form {
+  display: contents;
+}
+
+/* Looks like the account link beside it. */
+.button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
