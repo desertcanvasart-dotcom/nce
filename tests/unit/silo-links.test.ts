@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { DRAFT_PAGES } from "@/content/pages";
+import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
+import { ROUTE_STOPS } from "@/content/routes";
 import { profileWithStats } from "@/content/vessel-types";
 import { houseStyleProblems, splitUp, toSections } from "@/lib/content/editorial";
 import { applySearch, parseSearch, type ListingVessel } from "@/lib/marketplace/listing";
-import { faqJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
+import { faqJsonLd, webApplicationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import {
   BUILT,
   bridges,
@@ -57,7 +59,8 @@ describe("the link map from the workbook (SEO-008–011)", () => {
     ]);
     expect(siblings("/vessels/dahabiya/a-day-on-board/")).toEqual([]); // its siblings are Phase 2 and 3
     expect(siblings("/vessels/compare/").length).toBeLessThanOrEqual(3);
-    expect(bridges("/vessels/").map((l) => l.href)).toEqual(["/cruises/"]); // /nile-cruise-prices/ isn't built yet
+    expect(bridges("/vessels/").map((l) => l.href)).toEqual(["/nile-cruise-prices/", "/cruises/"]);
+    expect(bridges("/nile-cruise-guide/routes/").map((l) => l.href)).toEqual([]); // the Nile map (Batch 7) isn't built yet
   });
 
   it("ends each page with its matching listing, or all cruises when that facet isn't built", () => {
@@ -129,5 +132,33 @@ describe("structured data and the site search (SEO-028)", () => {
   it("emits FAQPage only for pages with questions", () => {
     expect(faqJsonLd({ ...DRAFT_PAGES.P027!, faqs: [] })).toBeNull();
     expect(faqJsonLd(DRAFT_PAGES.P027!)).toMatchObject({ "@type": "FAQPage" });
+  });
+});
+
+describe("Prices Explained and the Guide (Batch 6-2)", () => {
+  it("builds prices from maintained factors, flagged and footnoted (DATA-008)", () => {
+    for (const f of PRICE_FACTORS) expect(f.options.length).toBeGreaterThan(1);
+    for (const preset of [PRICE_PRESETS.low, PRICE_PRESETS.high]) {
+      expect(preset).toHaveLength(PRICE_FACTORS.length);
+      preset.forEach((i, n) => expect(PRICE_FACTORS[n]!.options[i], `preset option ${n}`).toBeDefined());
+    }
+    const total = (p: number[]) => p.reduce((t, i, n) => t + PRICE_FACTORS[n]!.options[i]!.amount, 0);
+    expect(total(PRICE_PRESETS.low)).toBeLessThan(total(PRICE_PRESETS.high));
+    expect(PRICE_FOOTNOTE).toMatch(/not quotes/);
+    expect(PRICE_FOOTNOTE).toMatch(/gratuities/i);
+  });
+
+  it("route guides list stops, never prices (SEO-023)", () => {
+    for (const [url, r] of Object.entries(ROUTE_STOPS)) {
+      expect(BUILT.has(url), url).toBe(true);
+      expect(JSON.stringify(r.stops)).not.toMatch(/US\$|€|E£|\bprice\b/i);
+    }
+  });
+
+  it("the calculator is a free web application (PAGE-059)", () => {
+    expect(webApplicationJsonLd("Nile cruise price calculator", "https://x")).toMatchObject({
+      "@type": "WebApplication",
+      offers: { price: "0" },
+    });
   });
 });
