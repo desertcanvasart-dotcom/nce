@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { isoWeekday, returnDate, sailingDates } from "@/lib/product/departures";
 import {
+  hoursText,
   ageOn,
   currenciesFor,
   DEFAULT_CHILD_BANDS,
@@ -144,10 +145,14 @@ describe("promotions (DASH-ADM-074–078)", () => {
 
 describe("freshness (ADR-079)", () => {
   const now = Date.parse("2026-10-18T12:00:00Z");
-  it("feed and API data expire after 2 hours, manual after 24", () => {
+  it("feed and API data expire after 2 hours, manual and pasted after 7 days (ADR-095)", () => {
     expect(isFresh("2026-10-18T10:30:00Z", "feed", now)).toBe(true);
     expect(isFresh("2026-10-18T09:59:00Z", "api", now)).toBe(false);
-    expect(isFresh("2026-10-17T13:00:00Z", "manual", now)).toBe(true);
-    expect(isFresh("2026-10-17T11:00:00Z", "manual", now)).toBe(false);
+    expect(isFresh("2026-10-11T13:00:00Z", "manual", now)).toBe(true);
+    expect(isFresh("2026-10-11T11:00:00Z", "manual", now)).toBe(false);
+    expect(isFresh("2026-10-11T11:00:00Z", "paste", now)).toBe(false);
+  });
+  it("says a threshold in words", () => {
+    expect([hoursText(1), hoursText(2), hoursText(24), hoursText(168)]).toEqual(["1 hour", "2 hours", "24 hours", "7 days"]);
   });
 });

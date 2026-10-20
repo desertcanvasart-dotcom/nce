@@ -6,7 +6,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { dateWindow, nowMs, sailingDates, WEEKDAYS } from "@/lib/product/departures";
-import { isFresh, RATE_PLANS } from "@/lib/product/pricing";
+import { hoursText, isFresh, RATE_PLANS } from "@/lib/product/pricing";
 import { requireProductEditor } from "@/server/product/guard";
 import { approvedPartners, cabinTypes, departureGrid, freshnessHours, schedule as getSchedule } from "@/server/product/queries";
 import { getDb } from "@/server/db";
@@ -204,8 +204,8 @@ export async function SchedulePage({
           variant="ghost"
         >
           <p className={ui.hint}>
-            Availability entered by hand counts as confirmed for {hours.manual} hours; after that it shows as “to be confirmed”
-            and can’t be reserved.
+            Availability entered by hand counts as confirmed for {hoursText(hours.manual)}; after that it shows as “to be
+            confirmed” and can’t be reserved.
           </p>
         </ActionForm>
 
