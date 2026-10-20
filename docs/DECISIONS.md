@@ -693,3 +693,18 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
 - **Trust links:** pages link to "Our Egyptologists" through the linking engine once that page exists (Batch 7).
 - **Felucca:** stays out (ADR-008). `/vessels/felucca/` isn't built, and the workbook's links to it are dropped.
 - **Two pull requests:** 6-1 (Sanity templates, linking engine and CI link check, home, the Vessels silo) and 6-2 (Prices Explained with the calculator, and the Guide).
+
+### ADR-097 Destinations, tours and trust pages; tours booked by calendar (Accepted; Faris 20 Oct 2026, Batch 7 brief, all as recommended)
+- **Tours are booked by calendar, from rates** (Faris, 20 Oct): the customer picks a date, a start time, shared or private and the party size.
+  - Shared tours are per person, up to 8 guests per slot; parties of 9 or more book private.
+  - Private tours are per person by party size; transfers are private only and per vehicle; meet and assist is per party.
+  - The suppliers are Nilecruz's Luxor and Aswan offices.
+- **Confirmation:** a paid tour booking is confirmed at once; the office sees it in its dashboard.
+- **A shared tour below its minimum:** offered as a private tour at the shared price.
+- **Offices:** one login per office (Luxor, Aswan), seeing only its own tours' bookings.
+- **Tour cancellation:** free until 48 hours before, then 100 %, unless a tour sets its own.
+- **Booking window:** up to 12 months ahead, at least 24 hours before the start, unless a tour says otherwise.
+- **Tours without a cruise:** allowed for anyone signed in; the calendar suggests days the customer's cruise is moored nearby.
+- **Hot-air balloon** (PAGE-095): information only until Faris names a supplier and a price.
+- **Before the rate sheet returns:** tours show "Prices coming soon" (information only); nothing is bookable with made-up prices.
+- **Two pull requests:** 7-1 (destinations, tour pages as information, About, how we choose vessels, Contact, slug redirects) and 7-2 (calendar booking, rates, the offices' dashboard, the rate-sheet import).
