@@ -834,6 +834,14 @@ STATUS.update({
  "DATA-027": ("Verified", B4F2C+'tour orders paid by card through Stripe Checkout as separate payments, recorded only from the signed webhook, once (190, e2e); checked live against the Stripe sandbox: US$200 paid on Checkout, the real event recorded once, order confirmed with a receipt, no cruise payment'),
  "DATA-041": ("Verified", B4F2C+'tour orders are Nilecruz\'s own sales: no operator payable and no commission entry (190; e2e checks no cruise payment row)'),
 })
+B4G = "Batch 4g (20 Oct 2026): "
+STATUS.update({
+ "DASH-CUS-001": ("Verified", B4G+'the customer workspace and its Overview heading are "My journey" (e2e)'),
+ "DASH-CUS-002": ("Verified", B4G+'sections Overview, Requests and offers, Bookings, Tours and sightseeing, Past trips, Account (ADR-091; e2e checks the nav in order); URLs unchanged'),
+ "DASH-CUS-003": ("Verified", B4G+'Overview: actions (pay, finish a held tour payment, eligibility proof, live offers; open cancellations and reported transfers shown as waiting) by deadline, next trip with its tours, coming up; journeyState() unit-tested per scenario; e2e on a seeded customer shows exactly their 4 actions and 4 upcoming items, another customer sees none'),
+ "DASH-CUS-011": ("Verified", B4G+'"Suggested for your cruise": bookable tours linked to the cruise schedule with places on a sailing day; airport services only on embarkation and disembarkation days (unit, e2e); booking and orders from 4f-2c'),
+ "DASH-CUS-012": ("Verified", B4G+'Past trips: finished and cancelled reservations, past tours and lapsed holds, closed and expired requests (accepted ones show as bookings); Cairo date boundary unit-tested; e2e'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

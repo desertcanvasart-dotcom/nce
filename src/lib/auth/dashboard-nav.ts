@@ -45,13 +45,14 @@ const PARTNER: NavItem[] = [
   { slug: "team", label: "Team", batch: "4h", roles: [] },
 ];
 
+// DASH-CUS-002, ADR-091: the guide's sections. Offers live inside Requests and offers; URLs are unchanged.
 const JOURNEY: NavItem[] = [
-  { slug: "", label: "My journey", batch: "4g" },
-  { slug: "requests", label: "Cruise requests", batch: "4e" },
-  { slug: "offers", label: "Offers", batch: "4e" },
-  { slug: "reservations", label: "Reservations and payments", batch: "4f" },
+  { slug: "", label: "Overview", batch: "4g" },
+  { slug: "requests", label: "Requests and offers", batch: "4e" },
+  { slug: "reservations", label: "Bookings", batch: "4f" },
   { slug: "tours", label: "Tours and sightseeing", batch: "4g" },
   { slug: "past", label: "Past trips", batch: "4g" },
+  { slug: "account", label: "Account", batch: "4g" },
 ];
 
 function allowed(item: NavItem, role: AdminRole | TeamRole | null, top: AdminRole | TeamRole): boolean {

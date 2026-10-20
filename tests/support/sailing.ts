@@ -123,5 +123,14 @@ export async function sampleReservations(opts: {
     refs.push(ref as string);
     ids.push((await db.from("reservations").select("id").eq("reference", ref).single()).data!.id);
   }
-  return { ids, refs, departureId: d!.id, cabinTypeId: c!.id, vesselId: v.id as string };
+  return {
+    ids,
+    refs,
+    departureId: d!.id,
+    cabinTypeId: c!.id,
+    vesselId: v.id as string,
+    scheduleId: s!.id as string,
+    origin,
+    destination,
+  };
 }

@@ -784,3 +784,45 @@
 - tour prices, dates and suppliers;
 - ES/JA review;
 - approval to import the tours on staging.
+
+## 20 Oct 2026 · Batch 4f merged; Batch 4g · My journey
+
+**4f:** PRs #17, #18 and #19 are merged, and staging is deployed: the data deploy passed and the new pages are served.
+- **Fixed while merging (on #19):**
+  - two date-sensitive tests: a pgTAP tour session and the e2e sample sailing used UTC days, so they broke just after midnight in Cairo and across the 30 Oct summer-time change. Both now use Cairo dates and noon times;
+  - the deploy's privileges check didn't list the five new tables (ADR-061).
+- Decisions recorded as **ADR-090** (payments and tours, 19 Oct) and **ADR-091** (My journey sections).
+- **PROPOSED-019**, sailing time of day, is approved for right after 4g.
+
+### Batch 4g: My journey (branch `batch-04g-my-journey`, no migration)
+
+**Built:**
+- **Sections** (DASH-CUS-001, 002, ADR-091): Overview, Requests and offers (the offers list is linked from it), Bookings (cruise reservations, then tour orders), Tours and sightseeing, Past trips, Account (goes to Account security). URLs are unchanged.
+- **Overview** (DASH-CUS-003):
+  - **Needs your attention:** finish paying a held tour, live offers (with the first expiry), pay a reservation (with its deadline as the last day), eligibility proof for a local rate. Open cancellations and reported transfers are shown as waiting on Nilecruz, with nothing to do. Soonest first.
+  - **Next trip,** with the tours booked for it.
+  - **Coming up:** cruises and tours by date.
+  - **Notices,** as before.
+  - Worked out by `journeyState()` (`src/lib/journey/journey.ts`), from the customer's own records read under RLS. The clock is read on the server, not while rendering.
+- **Tours that fit the cruise** (DASH-CUS-011): "Suggested for your cruise NC-…" lists bookable tours linked to that cruise's schedule, with places on a sailing day. Airport transfers and Meet and Assist are suggested only for embarkation and disembarkation days.
+- **Past trips** (DASH-CUS-012):
+  - finished or cancelled reservations;
+  - past tours and lapsed holds;
+  - closed or expired requests. Accepted ones already show as bookings.
+
+**Verified, and how:**
+- **Unit:** 13 tests for `journeyState()` and `suggestTours()`:
+  - each action and its order; nothing for a new customer;
+  - a cancellation replaces other actions; a reported transfer covers only what it covers;
+  - a lapsed hold is past; offers counted only while live;
+  - the next trip and its tours; a cruise under way stays current until the Cairo day after it ends (tested at 23:30 and 00:30 Cairo);
+  - past lists; suggestions by schedule link and sailing day.
+- **End-to-end** (`journey.spec.ts`, the exit criterion): a seeded customer with an unpaid, a paid, a cancelled and a local-rate reservation, a past trip, an open request with an offer, a closed request and a held tour order.
+  - The Overview shows exactly their 4 actions in order, the next trip with its tour, and 4 items coming up.
+  - Bookings shows 5 reservations and 1 tour order; the tour is suggested for the right cruise on the right day.
+  - Past trips shows exactly the cancelled and the finished cruise and the closed request.
+  - Another customer sees none of it; axe in Day and Night.
+- **Full suites on a clean database:** verify; pgTAP 19 files and 314 checks; e2e 140 passed, 97 skipped. One existing admin two-step test passed on retry.
+- **Screenshots:** 30 in `docs/screenshots/batch-04g/`. Fixed after review: reservation deadlines read "by end of 27 Oct 2026, Cairo" instead of "28 Oct 00:00", and "Coming up" lines start with the reservation reference.
+
+**Next:** PROPOSED-019, the sailing time of day, then Batch 4h (travel partners).

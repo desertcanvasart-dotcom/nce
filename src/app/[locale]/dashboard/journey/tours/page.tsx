@@ -3,13 +3,14 @@ import { Badge } from "@/components/ds/Badge/Badge";
 import { Section, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireUser } from "@/server/auth";
+import { journey } from "@/server/journey/queries";
 import { bookableTours, myTourOrders } from "@/server/tours/orders";
 import { money, TOUR_ORDER_BADGE } from "../../_bookings/TourOrderBits";
 
-/** Tours and sightseeing for the customer: their tour orders, and the tours they can book (DASH-PAY-014). */
+/** Tours and sightseeing (DASH-CUS-011, DASH-PAY-014): tour orders, tours that fit each upcoming cruise, and all bookable tours. */
 export default async function MyTours() {
   const session = await requireUser("/dashboard/journey/tours/");
-  const [orders, tours] = await Promise.all([myTourOrders(session.userId), bookableTours()]);
+  const [orders, tours, j] = await Promise.all([myTourOrders(session.userId), bookableTours(), journey(session.userId)]);
   return (
     <>
       <h1 className={ui.pageTitle}>Tours and sightseeing</h1>
@@ -34,6 +35,25 @@ export default async function MyTours() {
           <p className={ui.muted}>No tour orders yet.</p>
         )}
       </Section>
+      {j.suggestions.map((sg) => (
+        <Section
+          key={sg.reservation.id}
+          title={`Suggested for your cruise ${sg.reservation.reference}`}
+          id={`for-${sg.reservation.id}`}
+        >
+          <p className={ui.muted}>
+            {sg.reservation.vessel}: {sg.reservation.route}, {sg.reservation.departsOn} to {sg.reservation.returnsOn}. Tours with
+            places on the days of your sailing.
+          </p>
+          <ul className={ui.list}>
+            {sg.tours.map((t) => (
+              <li key={t.id}>
+                <Link href={`/dashboard/journey/tours/book/${t.id}/`}>{t.name}</Link> · {t.days.join(", ")}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ))}
       <Section title="Book a tour" id="book">
         {tours.length ? (
           <ul className={ui.list}>
