@@ -855,6 +855,15 @@ STATUS.update({
  "DASH-B2B-011": ("Verified", B4H1+'apply for trade access from the account with registration details; admin approval required before searching (210, e2e)'),
  "DASH-B2B-012": ("Verified", B4H1+'trade channel = rate plan trade; one company = partner_rates set by the operator; never visible to customers, the public or other agencies (210, e2e)'),
 })
+B4H2A = "Batch 4h-2a (20 Oct 2026): "
+STATUS.update({
+ "DASH-B2B-003": ("Verified", B4H2A+'reservations users reserve 1–5 cabins from a search result at the agency\'s rate (partner_reserve: takes cabins under row locks, guests named, adults by count and children by age; 220, e2e)'),
+ "DASH-B2B-005": ("Verified", B4H2A+'Company bookings and Payments pages; deadlines, balances, card and transfer, receipts, cancellations from 4f at company level; finance users and owners pay (220, e2e three-role booking)'),
+ "DASH-B2B-006": ("Verified", B4H2A+'every guest named at booking; client reference kept in partner_booking_details, editable by owners and reservations users, not finance (220, e2e)'),
+ "DASH-B2B-007": ("Verified", B4H2A+'selling total and the difference from the supplier total on the booking; hidden from the operator and the client record shows only the selling price (220, e2e)'),
+ "DASH-B2B-008": ("Verified", B4H2A+'printable client booking record: agency name, client reference, trip, cabins, guests, cancellation terms, selling price; "Booked through Nilecruz" in small print; never the trade price or bank details (e2e)'),
+ "DASH-B2B-013": ("Verified", B4H2A+'local-rate eligibility proof stays with the reservation and can be uploaded by the agency\'s owner or reservations users (policy acts_for_reservation); verified by the operator as before'),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
