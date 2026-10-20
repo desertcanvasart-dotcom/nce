@@ -7,6 +7,8 @@
  *   assist   per party, by party size
  * Seasons raise or lower the price by a percentage between two dates. Amounts are US cents.
  */
+import { cairoOffsetHours } from "@/lib/time/cairo";
+
 export type TourMode = "shared" | "private" | "transfer" | "assist";
 
 export type TourRate =
@@ -103,3 +105,61 @@ export const STANDARD_TOUR_BANDS = [
   { from_days: 2, percent: 0 },
   { from_days: 0, percent: 100 },
 ];
+
+/** A Cairo wall-clock day and time ("2026-11-02", "08:00") as a UTC instant, as the database stores starts. */
+export function cairoInstant(day: string, time: string): string {
+  const wall = Date.parse(`${day}T${time}:00Z`);
+  // Egypt changes clocks at midnight, so the offset two hours before the wall time is the one in force.
+  const off = cairoOffsetHours(new Date(wall - 2 * 3_600_000));
+  return new Date(wall - off * 3_600_000).toISOString();
+}
+
+/** A rate row from the database (prices in its snake_case JSON) as the page's TourRate. */
+export type RateRow = {
+  id: string;
+  mode: TourMode;
+  label: string;
+  days: number[];
+  start_times: string[];
+  lead_hours: number;
+  max_guests: number;
+  min_guests: number;
+  prices: unknown;
+};
+export function rateFromRow(r: RateRow): TourRate {
+  // The database checks the shape (app.valid_tour_prices), so the fields the mode needs are there.
+  const p = r.prices as {
+    adult: number;
+    child611: number;
+    child35: number;
+    tiers: { min: number; max: number | null; pp: number }[] & { max: number; price: number }[];
+    child_pct: number;
+    vehicles: { name: string; max: number; price: number }[];
+    night_extra: number;
+  };
+  switch (r.mode) {
+    case "shared":
+      return {
+        mode: "shared",
+        adult: p.adult,
+        child611: p.child611,
+        child35: p.child35,
+        maxGuests: r.max_guests,
+        minGuests: r.min_guests,
+      };
+    case "private":
+      return { mode: "private", tiers: p.tiers, childPct: p.child_pct };
+    case "transfer":
+      return { mode: "transfer", vehicles: p.vehicles, nightExtra: p.night_extra };
+    default:
+      return { mode: "assist", tiers: p.tiers };
+  }
+}
+
+/** Quarter hours for a flexible start (05:00 to 22:45; transfers and meet and assist round the clock). */
+export function flexibleTimes(mode: TourMode): string[] {
+  const out: string[] = [];
+  const [from, to] = mode === "transfer" || mode === "assist" ? [0, 24] : [5, 23];
+  for (let h = from; h < to; h++) for (const m of ["00", "15", "30", "45"]) out.push(`${String(h).padStart(2, "0")}:${m}`);
+  return out;
+}

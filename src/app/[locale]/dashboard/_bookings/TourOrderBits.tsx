@@ -19,4 +19,6 @@ export const guestsLabel = (ages: number[]) =>
   `${ages.length} ${ages.length === 1 ? "guest" : "guests"}${ages.some((a) => a < 18) ? ` (ages ${ages.join(", ")})` : ""}`;
 
 export const SESSION_KIND = { shared: "Shared", private: "Private" } as const;
+/** ADR-097: how a tour order is run. */
+export const TOUR_MODE = { shared: "Shared", private: "Private", transfer: "Private transfer", assist: "Meet and assist" } as const;
 export const PRICING = { per_guest: "per guest (under-3s free)", per_group: "for the whole party" } as const;

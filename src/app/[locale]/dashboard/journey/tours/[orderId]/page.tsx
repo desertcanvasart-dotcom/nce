@@ -9,7 +9,7 @@ import { requireUser } from "@/server/auth";
 import { tourCancelQuote, tourOrder } from "@/server/tours/orders";
 import { isUuid } from "../../../sections";
 import { cancelTourOrder, startTourCheckout } from "../../actions";
-import { guestsLabel, money, SESSION_KIND, TOUR_CANCEL, TOUR_ORDER_BADGE } from "../../../_bookings/TourOrderBits";
+import { guestsLabel, money, TOUR_CANCEL, TOUR_MODE, TOUR_ORDER_BADGE } from "../../../_bookings/TourOrderBits";
 
 /** One tour order for its customer: pay, receipt, cancel (DASH-PAY-014, DATA-027). */
 export default async function MyTourOrder({
@@ -48,11 +48,17 @@ export default async function MyTourOrder({
           </div>
           <div>
             <dt className={ui.label}>Starts</dt>
-            <dd>{o.session ? <CairoTime value={o.session.starts_at} /> : "—"}</dd>
+            <dd>
+              <CairoTime value={o.starts_at} />
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Session</dt>
-            <dd>{o.session ? SESSION_KIND[o.session.kind] : "—"}</dd>
+            <dd>
+              {TOUR_MODE[o.mode]}
+              {o.label ? ` · ${o.label}` : ""}
+              {o.vehicle ? ` · ${o.vehicle}` : ""}
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Guests</dt>

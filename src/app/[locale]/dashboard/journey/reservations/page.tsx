@@ -45,7 +45,7 @@ export default async function MyReservations() {
                 <Link href={`/dashboard/journey/tours/${o.id}/`}>
                   {o.reference} · {o.tour?.name}
                 </Link>{" "}
-                · {o.session ? <CairoTime value={o.session.starts_at} /> : null}{" "}
+                · <CairoTime value={o.starts_at} />{" "}
                 <Badge tone={TOUR_ORDER_BADGE[o.status].tone}>{TOUR_ORDER_BADGE[o.status].text}</Badge>
               </li>
             ))}

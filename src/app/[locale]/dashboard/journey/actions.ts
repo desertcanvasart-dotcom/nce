@@ -9,6 +9,7 @@ import { priceToMinor } from "@/lib/connections/format";
 import { env } from "@/lib/env";
 import { cardPayable, checkoutParams, tourCheckoutParams } from "@/lib/payments/checkout";
 import { formatCairo } from "@/lib/time/cairo";
+import { cairoInstant } from "@/lib/tours/calendar";
 import { ageOn } from "@/lib/product/pricing";
 import { requireUser } from "@/server/auth";
 import { failed, formObject, saved } from "@/server/catalogue/form";
@@ -239,14 +240,40 @@ export async function orderTour(tourId: string, _prev: ActionState, fd: FormData
   redirect(`${TOURS}${data}/`);
 }
 
+/** ADR-097: book a start picked on the calendar. The database prices it again and holds the places for 60 minutes. */
+export async function orderTourSlot(tourId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireUser(`${TOURS}book/${tourId}/`);
+  const f = formObject(fd, ["terms"]);
+  if (!(f.terms as string[]).includes("yes")) return failed("Tick that you have read the terms and the cancellation policy.");
+  const day = String(f.day ?? "");
+  const time = String(f.time ?? "");
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !/^\d{2}:\d{2}$/.test(time)) return failed("Choose a date and a start time.");
+  const ages = String(f.ages ?? "")
+    .split(",")
+    .filter(Boolean)
+    .map(Number);
+  if (!ages.length || ages.some((a) => !Number.isInteger(a) || a < 0 || a > 120)) return failed("Say who is coming.");
+  const lead = String(f.lead ?? "").trim();
+  if (lead.length < 2) return failed("Give the lead guest's full name.");
+  const db = await getDb();
+  const { data, error } = await db.rpc("order_tour_slot", {
+    rate: String(f.rate ?? ""),
+    starts: cairoInstant(day, time),
+    guest_ages: ages,
+    lead,
+    order_notes: String(f.notes ?? "").slice(0, 1000),
+    terms_read: true,
+  });
+  if (error) return connectionProblem(error);
+  redirect(`${TOURS}${data}/`);
+}
+
 export async function startTourCheckout(orderId: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
   const session = await requireUser(`${TOURS}${orderId}/`);
   const db = await getDb();
   const { data: o } = await db
     .from("tour_orders")
-    .select(
-      "id, reference, customer_id, status, currency, total_minor, hold_until, tour:tours(name), session:tour_sessions(starts_at)",
-    )
+    .select("id, reference, customer_id, status, currency, total_minor, hold_until, starts_at, tour:tours(name)")
     .eq("id", orderId)
     .maybeSingle();
   if (!o || o.customer_id !== session.userId) return failed("Order not found.");
@@ -260,7 +287,7 @@ export async function startTourCheckout(orderId: string, _prev: ActionState, _fd
       orderId,
       reference: o.reference,
       tourName: o.tour?.name ?? "Tour",
-      startsLabel: o.session ? formatCairo(o.session.starts_at) : "",
+      startsLabel: formatCairo(o.starts_at),
       totalMinor: Number(o.total_minor),
       currency: o.currency,
       customerEmail: session.email,

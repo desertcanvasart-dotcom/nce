@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { openDays, placesLeft, quoteTour, seasonPct, type TourRate } from "@/lib/tours/calendar";
+import {
+  cairoInstant,
+  flexibleTimes,
+  openDays,
+  placesLeft,
+  quoteTour,
+  rateFromRow,
+  seasonPct,
+  type TourRate,
+} from "@/lib/tours/calendar";
 
 const shared: TourRate = { mode: "shared", adult: 6000, child611: 3000, child35: 1500, maxGuests: 8, minGuests: 2 };
 const priv: TourRate = {
@@ -23,7 +32,13 @@ const transfer: TourRate = {
   ],
   nightExtra: 1000,
 };
-const assist: TourRate = { mode: "assist", tiers: [{ max: 2, price: 3000 }, { max: 6, price: 4500 }] };
+const assist: TourRate = {
+  mode: "assist",
+  tiers: [
+    { max: 2, price: 3000 },
+    { max: 6, price: 4500 },
+  ],
+};
 
 describe("tour prices by basis (ADR-097)", () => {
   it("prices shared per person, children by age, under 3s free", () => {
@@ -85,5 +100,25 @@ describe("open days", () => {
   it("skips tomorrow when the lead time is 48 hours", () => {
     const days = openDays({ today: "2026-10-20", days: [1, 2, 3, 4, 5, 6, 7], leadHours: 48, nowHour: 15 });
     expect(days[0]).toBe("2026-10-23");
+  });
+});
+
+describe("from the database to the page", () => {
+  it("turns a Cairo day and time into the instant the database stores, in winter and summer time", () => {
+    expect(cairoInstant("2026-12-01", "08:00")).toBe("2026-12-01T06:00:00.000Z");
+    expect(cairoInstant("2027-07-01", "08:00")).toBe("2027-07-01T05:00:00.000Z");
+  });
+  it("reads a rate's snake_case prices", () => {
+    const row = { id: "r", label: "", days: [1], start_times: [], lead_hours: 24, max_guests: 8, min_guests: 1 };
+    expect(rateFromRow({ ...row, mode: "private", prices: { tiers: [{ min: 1, max: null, pp: 100 }], child_pct: 50 } })).toEqual({
+      mode: "private",
+      tiers: [{ min: 1, max: null, pp: 100 }],
+      childPct: 50,
+    });
+    expect(rateFromRow({ ...row, mode: "transfer", prices: { vehicles: [], night_extra: 5 } })).toMatchObject({ nightExtra: 5 });
+  });
+  it("offers quarter hours for flexible starts, round the clock for transfers", () => {
+    expect(flexibleTimes("private")[0]).toBe("05:00");
+    expect(flexibleTimes("transfer")).toHaveLength(96);
   });
 });
