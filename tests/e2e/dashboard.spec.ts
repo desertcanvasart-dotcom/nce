@@ -77,13 +77,13 @@ test.describe("navigation changes with role (DASH-ROLE-006, 007, 008)", () => {
     expect(await sections(page)).toEqual(["Overview", "Company bookings", "Payments"]);
   });
 
-  test("a section that a later batch builds says so", async ({ page }) => {
-    // Travel partners' company requests and offers arrive with 4h-2b.
+  test("every partner section is built: Requests and offers opens the company's requests [DASH-B2B-004]", async ({ page }) => {
     await signIn(page, "reservations@partner.test");
     const nav = page.getByRole("navigation", { name: /sections/ });
     await nav.getByRole("link", { name: "Requests and offers" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Requests and offers" })).toBeVisible();
-    await expect(page.getByText(/arrives in a later release \(planned for Batch 4h\)/)).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Ask operators for offers" })).toBeVisible();
+    await expect(page.getByText(/arrives in a later release/)).toHaveCount(0);
     await expect(nav.getByRole("link", { name: "Requests and offers" })).toHaveAttribute("aria-current", "page");
   });
 
