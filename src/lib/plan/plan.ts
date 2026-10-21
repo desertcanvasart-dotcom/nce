@@ -50,6 +50,12 @@ export function planProblems(p: Plan, today: string): string[] {
     out.push("Give children's ages as numbers separated by commas, for example 7, 4.");
   else if (p.childAges.split(",").some((a) => a.trim() && Number(a) >= 18))
     out.push("Children are under 18; count older guests as adults.");
+  // The request form's cabin rules (lib/bookings), so a plan never fails after sign-up.
+  const ages = /^\s*\d{1,2}(\s*,\s*\d{1,2})*\s*$/.test(p.childAges) ? p.childAges.split(",").map(Number) : [];
+  if (p.cabins > p.adults + ages.length) out.push("Ask for at least one cabin and no more cabins than guests.");
+  else if (p.cabins > p.adults + ages.filter((a) => a >= 12).length) out.push("Each cabin needs a guest aged 12 or over.");
+  if (p.adults + ages.filter((a) => a >= 3).length > p.cabins * 3)
+    out.push("A cabin sleeps at most 3 (infants under 3 don’t count). Ask for more cabins.");
   if (p.budget.trim() && !/^\d+([.,]\d{1,2})?$/.test(p.budget.trim().replace(/,(?=\d{3})/g, "")))
     out.push("Give the budget as an amount, for example 3000.");
   return out;

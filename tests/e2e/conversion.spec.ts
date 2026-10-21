@@ -53,7 +53,10 @@ test("a visitor plans a cruise, signs up, sends it, and the offer is emailed (PA
   await plan.getByLabel("Longest stay (nights)").fill("2");
   await plan.getByRole("button", { name: "Send to operators" }).click();
   await expect(plan.getByRole("alert")).toContainText("Nights are 1 to 21");
+  // Four guests from 3 years old don't fit one cabin, as the request form would say after sign-up.
+  await expect(plan.getByRole("alert")).toContainText("A cabin sleeps at most 3");
   await plan.getByLabel("Longest stay (nights)").fill("6");
+  await plan.getByLabel("Cabins").fill("2");
 
   // The plan is kept on this device: a reload brings it back.
   await page.reload();
@@ -78,6 +81,7 @@ test("a visitor plans a cruise, signs up, sends it, and the offer is emailed (PA
   await expect(page).toHaveURL(/\/dashboard\/journey\/requests\/\?.*nmin=3/);
   const form = page.locator("section", { has: page.locator("h2#new") });
   await expect(form.getByLabel("Adults (18 and over)")).toHaveValue("3");
+  await expect(form.getByLabel("Cabins")).toHaveValue("2");
   await expect(form.getByLabel("Children’s ages")).toHaveValue("7");
   await expect(form.getByLabel("Longest stay (nights)")).toHaveValue("6");
   await expect(form.getByLabel(/Anything else operators should know/)).toHaveValue(`Quiet cabin please ${RUN}`);
@@ -100,13 +104,16 @@ test("a visitor plans a cruise, signs up, sends it, and the offer is emailed (PA
     dep: S.departureId,
     plan: "international",
     cur: "USD",
-    cabins: [{ cabin_type_id: S.cabinTypeId, adults: 3, child_ages: [7], price_minor: 300000 }],
-    total: 300000,
-    list_total: 300000,
+    cabins: [
+      { cabin_type_id: S.cabinTypeId, adults: 2, child_ages: [], price_minor: 200000 },
+      { cabin_type_id: S.cabinTypeId, adults: 1, child_ages: [7], price_minor: 150000 },
+    ],
+    total: 350000,
+    list_total: 350000,
     note: "",
     inclusions_text: "",
     terms_text: "Sample terms.",
-    eligibility: "Three adults and a child.",
+    eligibility: "Three adults and a child, in two cabins.",
     expires_in_hours: 72,
   });
   if (error) throw error;
