@@ -19,10 +19,13 @@ export const cormorant = Cormorant_Garamond({
   variable: "--font-face-cormorant",
 });
 
+// PERF-002 (Batch 11): body text doesn't swap fonts after first paint. Swapping re-wrapped the intro paragraph where
+// the size-matched fallback (Arial) isn't installed, as on Linux and Android, a 0.06 layout shift. Jost is preloaded,
+// so it usually arrives in time; when it doesn't, that page keeps the fallback and later pages use the cached font.
 export const jost = Jost({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
-  display: "swap",
+  display: "optional",
   variable: "--font-face-jost",
 });
 

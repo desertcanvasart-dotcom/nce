@@ -1897,3 +1897,12 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **Database:** `390_security_review` (11 checks) and `070` pass; the grants check shows no differences.
 - **End-to-end:** 158 passed, covering `a11y-all`, `brand-facts`, and the specs for sign-in, sheets, booking requests, partners, journey, the vessel page, MCP, interactions and connections.
 - **Lighthouse:** run locally as above.
+
+### Follow-up (22 Oct 2026): CI's Lighthouse findings
+
+- **When to go:** blocking time was still 502 ms on CI's machine. The calendar's 365 days now render on the server as plain markup, and one small client component (`CalendarKeys`) adds the keyboard, focus, hover and click behaviour with a single set of listeners on the grid. React no longer hydrates 365 buttons. Measured locally: TBT about 50 ms (was 236–500). The keyboard test still passes, and without JavaScript every day keeps its words.
+- **Luxor, CLS 0.064 in CI:** the body font (Jost) swapping in re-wrapped the intro paragraph. CI's Linux machine has no Arial, which the size-matched fallback is built on; Android phones don't either.
+  - **The fix:** Jost now uses `font-display: optional`. It's preloaded, so it usually shows; when it's late, that page keeps the fallback, with no jump, and later pages use the cached font.
+  - **Result:** CLS 0 on both pages.
+  - The headings' font (Cormorant) keeps `swap`; its shift was 0.0006.
+- **Database CI:** the new test assumed bank details were set, which a fresh database doesn't have. It now checks a setting that always exists.

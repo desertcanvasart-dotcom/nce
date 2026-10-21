@@ -55,7 +55,7 @@ select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is((select count(*)::int from public.platform_settings where key = 'commission_bp'), 0, 'a customer cannot read the commission');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000010');
 select is((select count(*)::int from public.platform_settings where key = 'commission_bp'), 0, '... nor an operator');
-select is((select count(*)::int from public.platform_settings where key = 'bank_transfer'), 1, 'the bank details stay readable');
+select is((select count(*)::int from public.platform_settings where key = 'freshness_hours'), 1, 'other settings stay readable');
 
 -- One operator per sheet address.
 reset role;
