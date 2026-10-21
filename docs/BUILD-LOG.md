@@ -1571,3 +1571,27 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - `8-3a-`: the admin's Sightseeing section and the operator's schedule with "what's included" and the Package choice;
   - each at 375, 768 and 1440, in Day and Night.
 - **Operator page screenshots:** `scripts/operator-shots.ts` (and `.py` for the WebP files) takes the eight screens from the local system. The test suite's sample names (long numbers, a "NOPE" cabin code, warning banners) aren't fit for a public page, so they aren't published yet. A tidy sample set comes first.
+
+### Operator page screenshots published (21 Oct 2026, PAGE-107)
+
+- **A tidy sample set:** `scripts/operator-sample.ts` builds one on the local seed (run right after `supabase db reset`). It makes "Sample Dahabiya Nefertari" for Sample Operator A: Esna to Aswan, 4 nights, Saturdays, with a Double and a Suite. It has:
+  - eight sailings with prices;
+  - free cabins entered by hand;
+  - an allotment of suites;
+  - one pasted update (for connection health);
+  - a guest's booking request waiting for an answer;
+  - a clean weekly sheet, waiting for review.
+- **The screenshots:** `scripts/operator-shots.ts` took eight screens from it:
+  - the one-tap reply page;
+  - the booking request;
+  - free cabins per sailing;
+  - the cabin types;
+  - connection health;
+  - allotments;
+  - the format page;
+  - the sheet preview.
+
+  `scripts/operator-shots.py` turned them into WebP in `public/images/operators/` (276 KB in all, loaded as the reader scrolls). The admin banner "Email isn't set up" is removed before each capture; it only appears on a machine without an email key.
+- **Each image** shows at its own size, never wider than the column.
+- **The screenshot script** now loads lazy images before a full-page capture, which would otherwise leave them blank.
+- **Checked in the browser:** all eight load, each with alt text of 90 to 138 characters. The page's screenshots are retaken (`8-op-*`).

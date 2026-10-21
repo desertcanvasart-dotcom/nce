@@ -47,6 +47,12 @@ async function signIn(page: Page, email: string, admin = false) {
 }
 
 async function shoot(target: Locator, name: string) {
+  // The admin banner "Email isn’t set up on this server" only shows locally (no email key); staging and production have one.
+  await target.page().evaluate(() =>
+    document.querySelectorAll('[role="alert"]').forEach((e) => {
+      if (e.textContent?.includes("Email isn’t set up")) e.remove();
+    }),
+  );
   await target.scrollIntoViewIfNeeded();
   await target.page().waitForTimeout(300);
   await target.screenshot({ path: `${out}/${name}.png` });
@@ -93,7 +99,7 @@ async function main() {
   await page.goto(`${op}/schedules/${vesselId}/${scheduleId}/`);
   await shoot(section(page, "rates"), "dashboard-inventory");
   await page.goto(`${op}/cabins/${vesselId}/`);
-  await shoot(page.locator("main").last(), "dashboard-cabins");
+  await shoot(section(page, "cabins"), "dashboard-cabins");
   await page.goto(`${op}/inventory/`);
   await shoot(section(page, "health"), "connection-health");
   await shoot(section(page, "allotments"), "allotments");
