@@ -113,7 +113,7 @@ export async function operatorOverview(orgId: string) {
     .limit(400);
   const name = new Map((vessels ?? []).map((v) => [v.id, v.name]));
   const hours = await freshnessHours();
-  const fresh = (i: { confirmed_at: string; source: "manual" | "paste" | "feed" | "api" }) =>
+  const fresh = (i: { confirmed_at: string; source: keyof typeof FRESHNESS_HOURS }) =>
     isFresh(i.confirmed_at, i.source, Date.now(), hours);
   const issues: { vessel: string; text: string; href: string }[] = [];
   for (const d of (deps ?? []).slice(0, 120)) {

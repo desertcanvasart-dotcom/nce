@@ -120,7 +120,14 @@ export async function connectionIssues(orgId: string): Promise<string[]> {
   return issues;
 }
 
-export const ROUTE_LABEL = { manual: "Manual entry", paste: "Paste", feed: "Feed", api: "API" } as const;
+export const ROUTE_LABEL = {
+  manual: "Manual entry",
+  paste: "Paste",
+  feed: "Feed",
+  api: "API",
+  tap: "Request answer",
+  sheet: "Vacancy sheet",
+} as const;
 
 /** Admin overview (DASH-ADM-006) and the operators list (DASH-ADM-045). */
 export async function adminConnectionCounts() {

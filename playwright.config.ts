@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { ACTION_LINK_TEST_SECRET } from "./tests/support/requests";
 import { ensureFeedCertificate, FEED_PULL_TEST_SECRET, FEED_TEST_ORIGIN, FEED_TLS } from "./tests/support/feed-tls";
 import { STRIPE_WEBHOOK_TEST_SECRET } from "./tests/support/stripe";
 
@@ -32,6 +33,12 @@ export default defineConfig({
       STRIPE_WEBHOOK_SECRET: STRIPE_WEBHOOK_TEST_SECRET,
       // Empty overrides a sandbox key in .env.local, so local runs match CI.
       STRIPE_SECRET_KEY: "",
+      // ADR-099: booking-request links are signed with a test secret; no email or WhatsApp leaves the machine
+      // (messages are recorded in outbound_messages as skipped).
+      ACTION_LINK_SECRET: ACTION_LINK_TEST_SECRET,
+      RESEND_API_KEY: "",
+      WHATSAPP_ENABLED: "false",
+      ADMIN_ALERT_EMAIL: "alerts@nilecruz.test",
     },
   },
 });

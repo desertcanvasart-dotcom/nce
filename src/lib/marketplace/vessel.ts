@@ -163,7 +163,12 @@ export type DeparturePrice = {
   triple: number | null;
   placesLeft: number | null;
   bookable: boolean;
+  /** ADR-099: instant (feed, API or the operator's answer, ≤ 2 h), request (manual or sheet, ≤ 7 days), or neither. */
+  mode: BookingMode;
 };
+export type BookingMode = "instant" | "request" | "unconfirmed" | "sold_out";
+export const canBook = (r: Pick<DeparturePrice, "bookable" | "mode">) =>
+  r.bookable && (r.mode === "instant" || r.mode === "request");
 
 /** One currency per departure and cabin: US$ when there is one, else € (ADR-093). */
 export function preferredPrices(rows: DeparturePrice[]): DeparturePrice[] {
@@ -183,10 +188,21 @@ export function perPersonFor(p: DeparturePrice, ages: number[]): number | null {
   return beds === 1 ? p.single : beds === 2 ? p.double : beds === 3 ? p.triple : null;
 }
 
-/** BRAND-003: scarcity only from confirmed inventory, and only when it's genuinely low. */
-export function scarcity(placesLeft: number | null): string | undefined {
-  if (placesLeft === null || placesLeft <= 0) return undefined;
-  return placesLeft <= 3 ? `Only ${placesLeft} cabin${placesLeft === 1 ? "" : "s"} left` : undefined;
+/**
+ * BRAND-003, ADR-099: what a cabin says about its availability. Exact numbers never come from manual or sheet data;
+ * "Last few cabins" only from instant data with 2 or fewer free.
+ */
+export function availabilityLabel(r: Pick<DeparturePrice, "placesLeft" | "mode">, confirmHours: number): string {
+  switch (r.mode) {
+    case "sold_out":
+      return "Sold out";
+    case "unconfirmed":
+      return "To be confirmed";
+    case "request":
+      return `Available · confirmed within ${confirmHours} h`;
+    default:
+      return r.placesLeft !== null && r.placesLeft <= 2 ? "Last few cabins" : "Instant confirmation";
+  }
 }
 
 /**

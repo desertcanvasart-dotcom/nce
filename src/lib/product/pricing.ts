@@ -99,8 +99,18 @@ export function promotedPrice(rateMinor: number, currency: string, p: Promotion)
   }
 }
 
-/** ADR-079, ADR-095: is availability recent enough to reserve? Defaults; admins change them on Admin → Settings. */
-export const FRESHNESS_HOURS: Record<"manual" | "paste" | "feed" | "api", number> = { manual: 168, paste: 168, feed: 2, api: 2 };
+/**
+ * ADR-079, ADR-095, ADR-099: is availability recent enough to reserve? Defaults; admins change them on Admin → Settings.
+ * `tap` is an operator's answer to a booking request; `sheet` a vacancy sheet Nilecruz read and confirmed.
+ */
+export const FRESHNESS_HOURS: Record<"manual" | "paste" | "feed" | "api" | "tap" | "sheet", number> = {
+  manual: 168,
+  paste: 168,
+  feed: 2,
+  api: 2,
+  tap: 2,
+  sheet: 168,
+};
 /** "2 hours", "24 hours", "7 days": a freshness threshold in words. */
 export function hoursText(h: number): string {
   if (h >= 48 && h % 24 === 0) return `${h / 24} days`;

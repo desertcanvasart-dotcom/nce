@@ -41,6 +41,11 @@ test.beforeAll(async () => {
     amount_minor: 70000,
   });
   if (error) throw error;
+  // From a feed, just confirmed: instant (ADR-100; manual data becomes a booking request for agents too).
+  await adminDb()
+    .from("inventory")
+    .update({ source: "feed", confirmed_at: new Date().toISOString() })
+    .eq("departure_id", S.departureId);
 });
 
 test("the reservations user books for a client at the company rate [DASH-B2B-003, 006, 007]", async ({ page }) => {

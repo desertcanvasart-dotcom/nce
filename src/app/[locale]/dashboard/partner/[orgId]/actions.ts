@@ -15,6 +15,7 @@ import { failed, formObject, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
 import { getStripe } from "@/server/payments/stripe";
+import { notifyNewRequest } from "@/server/requests/dispatch";
 
 /**
  * Travel partners book for clients (DASH-B2B-003, 005–008, ADR-092). The database checks each role again:
@@ -33,13 +34,24 @@ function sellingFrom(f: Record<string, string | string[]>): { ok: true; minor: n
   return minor === null ? { ok: false } : { ok: true, minor };
 }
 
-export async function partnerReserve(
-  orgId: string,
-  plan: { departureId: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] },
-  _prev: ActionState,
-  fd: FormData,
-): Promise<ActionState> {
+type Plan = { departureId: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] };
+
+/**
+ * ADR-100: cabins on manual or sheet data: a booking request in the agency's name. The operator confirms with one tap,
+ * and the booking is then the agency's, at its rate, with its client reference.
+ */
+export async function partnerRequestBooking(orgId: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: `/dashboard/partner/${orgId}/search/` });
+  return partnerBook(orgId, plan, fd, "request");
+}
+
+export async function partnerReserve(orgId: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: `/dashboard/partner/${orgId}/search/` });
+  return partnerBook(orgId, plan, fd, "reserve");
+}
+
+/** Both paths: the guests and client details from the form; the database checks everything again. */
+async function partnerBook(orgId: string, plan: Plan, fd: FormData, how: "reserve" | "request"): Promise<ActionState> {
   const f = formObject(fd, ["terms"]);
   if (!(f.terms as string[]).includes("yes"))
     return failed("Tick that the client has read the terms and the cancellation policy.");
@@ -60,6 +72,21 @@ export async function partnerReserve(
   const selling = sellingFrom(f);
   if (!selling.ok) return failed("Give your selling price as an amount, for example 2600.");
   const db = await getDb();
+  if (how === "request") {
+    const { data: id, error } = await db.rpc("partner_request_booking", {
+      org: orgId,
+      dep: plan.departureId,
+      cur: plan.currency,
+      cabins: Array.from({ length: plan.cabins }, () => ({ cabin_type_id: plan.cabinTypeId, ages: plan.ages })),
+      guests,
+      client_ref: String(f.client_reference ?? "").slice(0, 120),
+      selling_total: selling.minor ?? 0,
+      terms_read: true,
+    });
+    if (error) return connectionProblem(error);
+    await notifyNewRequest(id as string);
+    redirect(`/dashboard/partner/${orgId}/requests/booking/${id}/`);
+  }
   const { data: ref, error } = await db.rpc("partner_reserve", {
     org: orgId,
     dep: plan.departureId,

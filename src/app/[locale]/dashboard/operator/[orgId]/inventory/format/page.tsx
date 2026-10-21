@@ -4,6 +4,7 @@ import { Section, ui } from "@/components/dashboard/ui";
 import { FORMAT_ID, LIMITS } from "@/lib/connections/format";
 import { env } from "@/lib/env";
 import { requireOrgRole } from "@/server/auth";
+import { serverEnv } from "@/server/env";
 import { codesForOrg } from "@/server/connections/queries";
 import { isUuid } from "../../../../sections";
 
@@ -110,6 +111,25 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
         feed format of the earlier Nilecruz marketplace and adds cabin-type codes, occupancy, rate plans and the time each
         availability was confirmed. Format identifier: <code>{FORMAT_ID}</code>.
       </p>
+
+      <Section title="No system? Send us your weekly sheet" id="sheet">
+        <p>
+          Keep sending the vacancy sheet you already send agents: Excel, CSV, PDF or a photo, by email
+          {serverEnv.SHEETS_EMAIL_ADDRESS ? (
+            <>
+              {" "}
+              to <a href={`mailto:${serverEnv.SHEETS_EMAIL_ADDRESS}`}>{serverEnv.SHEETS_EMAIL_ADDRESS}</a>
+            </>
+          ) : null}
+          {serverEnv.WHATSAPP_DISPLAY_NUMBER ? ` or on WhatsApp to ${serverEnv.WHATSAPP_DISPLAY_NUMBER}` : ""}. We read it into
+          this format and a Nilecruz admin checks it before your availability changes. Send it from an address or number listed as
+          a contact on your Inventory connections page, so we know it’s yours.
+        </p>
+        <p className={ui.muted}>
+          Sheet availability counts as confirmed for 7 days. Customers then send booking requests, which you confirm with one tap
+          from the email.
+        </p>
+      </Section>
 
       <Section title="Your codes" id="codes">
         <p>Use these exactly. Cabin types and schedules are set up in your dashboard; feeds and the API never create them.</p>

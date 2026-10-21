@@ -721,3 +721,52 @@ Choices made while building ADR-097 where the sheet or the brief didn't say:
 - **Not built yet (follow-ups):**
   - a shared start below its minimum is not converted automatically; the minimum is stored, and the Nilecruz office offers the private tour at the shared price by hand (agreed by Faris, 21 Oct);
   - the Programs tab (multi-day sightseeing that follows a cruise) isn't imported: programs stay as they are until their pricing is designed.
+
+### ADR-099 The operator loop: one-tap booking requests, sheets in, the reservable rule (Accepted; Faris 21 Oct 2026)
+Faris's task "Close the operator-connection gaps", with his answers to the Part 0 questions (`docs/briefs/BATCH-08-OPERATOR-LOOP.md`).
+- **Email:** Resend, for sending and for the inbound sheets address.
+- **Payment (Part C):**
+  - Instant booking only from feed, API or an operator's answer (`tap`), no older than 2 hours.
+  - Manual and sheet data no older than 7 days become a **booking request**. The customer pays once the operator confirms.
+  - Older data stays "to be confirmed"; none free shows sold out.
+  - Exact counts appear only for instant data, and "Last few cabins" only for instant data with 2 or fewer free.
+  - Allotments don't exist yet, so that row is skipped.
+- **Sheets:** read by Claude (`claude-opus-5-5`, structured output) when they aren't plain tables. Plain tables are read directly. Sheets carry cabin counts, not guests' details.
+- **Booking requests (Part A):**
+  - One message per request to the operator's request contacts (falling back to its owners and reservations staff), with four answers: Confirm, Decline, Hold 72h, Offer other.
+  - Links are HMAC-signed over request, action and expiry; single use; valid 7 days.
+  - Confirm, decline and hold apply only from a one-button page, so mail scanners change nothing.
+  - Every answer is timed and writes availability through `app.apply_inventory_rows` as `tap`. A decline sets that cabin type to 0 free; a hold takes the cabins and gives them back after 72 hours.
+  - The reply time is per operator (6 hours by default). There is a reminder at the reply time, an admin alert at twice it, and a 09:00 Cairo digest.
+  - Metrics cover 90 days. Customers see "confirmed within X h": the median rounded up, at least 4, and 24 until 5 answers.
+- **Decided while building:**
+  - **WhatsApp buttons** are quick replies carrying signed tokens, because WhatsApp allows only two link buttons. A tap is answered on the webhook straight away, with no confirmation page (a person tapped it). "Offer other" replies with the form's link.
+  - **Link format** is `id~action~expiry~signature`: a dot in the last path segment makes the router treat it as a file.
+  - **Customer's guests** are kept apart from the request (`booking_request_guests`). The operator sees names only on the confirmed reservation.
+  - **Offer other:** the customer takes it in one click when the number of cabins is unchanged; otherwise they send a new request.
+  - **Sheet previews** last 48 hours (pastes keep 2 hours).
+  - **"Above the cabin type's total"** uses the ship's total cabins (per row and per sailing), because cabin types have no count of their own.
+  - **Clean imports:** one needing fixes resets the count and switches auto-confirm off.
+  - **Old .xls files** can't be read (no safe reader). Admins ask for .xlsx, CSV or PDF.
+  - **No sheet AI key:** without `ANTHROPIC_API_KEY`, only plain-table sheets are read.
+  - **Not changed:** travel partners' bookings (`partner_reserve`) and the three existing routes.
+- **Not built:**
+  - webhooks to operators, CSV import for operators, channel managers (out of scope);
+  - automatic conversion of a shared start below its minimum (ADR-098).
+
+### ADR-100 Allotments, and the reservable rule for travel partners (Accepted; Faris 21 Oct 2026)
+Faris: "apply the new rule for travel agents as well; add the allotments functionality."
+- **Travel partners** follow ADR-099's rule.
+  - They book instantly only from an allotment, or from feed, API or an operator's answer within 2 hours.
+  - Manual or sheet data within 7 days becomes a **booking request in the agency's name**, at its rate, with its client reference and selling price. The operator confirms it with one tap, and it becomes the agency's trade booking, paid by its deadline.
+  - Search and reserve show no counts from manual data.
+  - The agency's owners and reservations staff can take the operator's other offer or withdraw; finance staff can read.
+  - Accepting an operator's priced **offer** is unchanged, because the offer is itself the operator's confirmation.
+- **Allotments:** cabins an operator contracts to Nilecruz, per sailing, for one cabin type over a range of departure dates. Each has a release period, 14 days before departure by default.
+  - Until release, allotment cabins book instantly for customers and travel partners, whatever the age of the operator's other data.
+  - Bookings take allotment cabins first, then instant availability.
+  - A booked allotment cabin is marked on the booking and counted against the allotment, not the operator's availability figure. A cancellation gives it back.
+  - After the release date, unsold allotment cabins stop counting; nothing is sent to the operator.
+  - Catalogue admins enter allotments and can switch them off on the operator's page; the operator reads them, with each sailing's booked count, on its connection health.
+  - Two bookings can't share the last allotment cabin: there is one lock per sailing and cabin type.
+  - Operators are told when a booking came from the allotment.

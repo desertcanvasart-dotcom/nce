@@ -23,6 +23,8 @@ const row = (over: Partial<SearchRow>): SearchRow => ({
   child_bands: DEFAULT_CHILD_BANDS,
   gratuity_usd_minor: null,
   tier: "trade",
+  booking_mode: "instant",
+  operator_org_id: "op1",
   ...over,
 });
 
@@ -38,6 +40,8 @@ describe("partner search results (DASH-B2B-001, 002)", () => {
         name: "Double",
         deck: "Main",
         available: 3,
+        mode: "instant",
+        operatorOrgId: "op1",
         currency: "USD",
         price: { ok: true, totalMinor: 160000, tier: "trade" },
       },

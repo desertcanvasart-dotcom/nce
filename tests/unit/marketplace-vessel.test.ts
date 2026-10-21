@@ -6,7 +6,8 @@ import {
   pickItinerary,
   preferredPrices,
   requestDefaults,
-  scarcity,
+  availabilityLabel,
+  canBook,
   touristTripJsonLd,
   vesselH1,
   type DeparturePrice,
@@ -129,6 +130,7 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
     triple: 90000,
     placesLeft: 4,
     bookable: true,
+    mode: "instant",
     ...over,
   });
 
@@ -144,12 +146,20 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
     expect(perPersonFor(row({}), [30, 30, 8])).toBe(90000);
   });
 
-  it("says a few cabins are left only when inventory says so", () => {
-    expect(scarcity(2)).toBe("Only 2 cabins left");
-    expect(scarcity(1)).toBe("Only 1 cabin left");
-    expect(scarcity(9)).toBeUndefined();
-    expect(scarcity(null)).toBeUndefined();
-    expect(scarcity(0)).toBeUndefined();
+  it("says what a cabin's availability is; exact numbers never from manual or sheet data (ADR-099)", () => {
+    expect(availabilityLabel(row({ placesLeft: 2 }), 6)).toBe("Last few cabins");
+    expect(availabilityLabel(row({ placesLeft: 3 }), 6)).toBe("Instant confirmation");
+    expect(availabilityLabel(row({ mode: "request", placesLeft: null }), 6)).toBe("Available · confirmed within 6 h");
+    expect(availabilityLabel(row({ mode: "sold_out", placesLeft: 0 }), 6)).toBe("Sold out");
+    expect(availabilityLabel(row({ mode: "unconfirmed", placesLeft: null }), 6)).toBe("To be confirmed");
+  });
+
+  it("books instant and request cabins; never sold out or unconfirmed ones", () => {
+    expect(canBook(row({}))).toBe(true);
+    expect(canBook(row({ mode: "request" }))).toBe(true);
+    expect(canBook(row({ mode: "sold_out" }))).toBe(false);
+    expect(canBook(row({ mode: "unconfirmed" }))).toBe(false);
+    expect(canBook(row({ bookable: false }))).toBe(false);
   });
 });
 

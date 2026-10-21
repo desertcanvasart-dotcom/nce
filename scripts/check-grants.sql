@@ -33,6 +33,12 @@ with intended(table_name, grantee, privileges) as (
     -- Batch 7-2: tour rates and seasons are public (prices, ADR-087); closed starts are read by the office and admins.
     ('tour_rates', 'anon', 'SELECT'), ('tour_seasons', 'anon', 'SELECT'), ('tour_slot_closures', 'authenticated', 'SELECT'),
     ('tour_slot_closures', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Operator loop A: booking requests, their guests and messages are read by people, written through functions.
+    ('booking_requests', 'authenticated', 'SELECT'), ('booking_request_guests', 'authenticated', 'SELECT'),
+    ('outbound_messages', 'authenticated', 'SELECT'),
+    ('used_action_tokens', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Operator loop B: sheets are read by admins and the operator's team; catalogue admins update them (RLS).
+    ('sheet_ingests', 'authenticated', 'SELECT,UPDATE'), ('sheet_ingests', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -46,14 +52,15 @@ with intended(table_name, grantee, privileges) as (
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
-                    'partner_rates', 'tour_rates', 'tour_seasons']) t,
+                    'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['cruise_requests', 'offers', 'offer_cabins', 'reservations', 'reservation_cabins', 'passengers',
                     'eligibility_proofs', 'notifications', 'payments', 'commission_entries', 'payouts',
                     'cancellation_requests', 'refunds', 'tour_orders', 'tour_payments', 'tour_refunds',
-                    'partner_booking_details', 'contact_messages']) t
+                    'partner_booking_details', 'contact_messages', 'booking_requests', 'booking_request_guests',
+                    'outbound_messages']) t
 ),
 actual as (
   select table_name::text, grantee::text, string_agg(privilege_type, ',' order by privilege_type) as privileges

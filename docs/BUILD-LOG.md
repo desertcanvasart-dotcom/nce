@@ -1312,3 +1312,93 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - End-to-end: a new test in `tour-calendar.spec.ts`. The calendar, journey and tour order specs pass, 15 tests.
 
 **Next:** Faris's filled rate sheet (staging dry run first), then Batch 8.
+
+## 21 Oct 2026 · Operator loop (Batch 8-1): one-tap booking requests, the reservable rule, vacancy sheets (ADR-099)
+
+**Branch:** `batch-08-1-operator-loop`, stacked on 7-2. Four migrations: `inventory_sources`, `booking_requests`, `reservable_rule`, `sheet_ingest`. Part 0's report and Faris's answers are in `docs/briefs/BATCH-08-OPERATOR-LOOP.md`.
+
+**Built:**
+- **Part A, booking requests answered with one tap:**
+  - **Contacts:** operator contacts who need no login, and a per-operator reply time (6 hours by default, set by admins).
+  - **The request:** a booking request is for one sailing's cabins and guests.
+    - The operator gets one email (Resend; recorded as skipped without a key) with Confirm, Decline, Hold 72h and Offer other as signed links.
+    - Links are single use and last 7 days. They open a one-button page, so opening a link alone changes nothing.
+    - WhatsApp sends the same as quick replies (signed webhook), behind `WHATSAPP_ENABLED`, off. The template text for Meta is in `docs/whatsapp-templates.md`.
+  - **Answers:** every answer is timed and writes availability as `tap` through the existing write path.
+    - Confirm makes the reservation through the same path as a direct booking (one shared function; direct booking unchanged).
+    - Decline sets that cabin type to 0 free.
+    - Hold takes the cabins and releases them after 72 hours.
+    - Offer other lets the customer take another date or cabin type.
+  - **Chasing answers:** a reminder at the reply time, an admin alert (email and a "Phone the operator" flag) at twice it, and a 09:00 Cairo digest. They come from a signed scheduler call.
+  - **Metrics:** 90-day reply metrics and a data-accuracy score, on the admin operator page and the operator's connection health. Customers see "confirmed within X hours".
+- **Part C, the reservable rule:**
+  - Instant booking only from feed, API or `tap` data no older than 2 hours. Manual and sheet data within 7 days become a booking request, paid once confirmed (Faris, 21 Oct).
+  - Exact counts appear only for instant data. Sold-out dates suggest nearby dates and similar ships.
+  - Travel partners' bookings are unchanged; there are no allotments.
+- **Part B, vacancy sheets:**
+  - **Intake:** email (Resend inbound, Svix-signed webhook, files fetched from Resend's API), WhatsApp media, and admin upload (.xlsx, .csv, .pdf, .jpg, .png, up to 15 MB). Every raw file is kept privately.
+  - **Reading:** plain tables are read directly. Other sheets are read by Claude (`claude-opus-5-5`, structured output, sheet treated as data).
+  - **Names:** per-operator aliases are learnt when an admin maps a name.
+  - **Preview:** the existing preview (48 hours), with the original, changed values and rows no longer listed (shown only).
+  - **Confirming:** rows apply as `sheet`, dated by the sheet; newer data is never overwritten.
+  - **Auto-confirm:** after 4 clean imports, and only when every check passes. An optional acknowledgement goes to the sender.
+  - **Operator pages:** a "No system? Send us your weekly sheet" section on the format page, and the last sheet received on connection health.
+- **Docs:**
+  - `docs/OPERATOR-LOOP-ADMIN-GUIDE.md` (reviewing sheets, mapping names, auto-confirm, reply times);
+  - new settings in `.env.example`;
+  - ADR-099.
+
+**Verified, and how:**
+- **Unit:** `pnpm verify` runs 439 tests. New: links (signing, tampering, expiry), messages and digest, availability labels, dates, the plain-table reader, name mapping and aliases, auto-confirm checks.
+- **pgTAP:** 31 files, 495 checks on a reset database:
+  - `290_booking_requests`: each answer's effect, single-use links, holds expiring, reminder then escalation, metrics, who sees what;
+  - `300_reservable_rule`: each kind of data;
+  - `310_sheet_ingest`: preview, confirm as sheet, no overwrite, auto-confirm gate, who reviews.
+  - `250` and `260` now use feed data, since they test instant booking.
+  - The grants check shows no differences.
+- **End-to-end** (`CI=1`, production build, fresh database): 242 passed, none failed. New tests:
+  - `booking-requests.spec.ts` covers:
+    - manual data becoming a request on the vessel page;
+    - the operator's message, with no guest names;
+    - Confirm from the email link without signing in, then the link showing the recorded answer;
+    - the customer paying after confirmation;
+    - decline;
+    - reminder then admin alert.
+  - `sheets.spec.ts`: a real Excel sheet uploaded, one name mapped and saved as an alias, confirmed, availability as `sheet`.
+- **Screenshots:** 24 in `docs/screenshots/batch-08/` (prefix `8-1-`): the operator's reply page, the customer's request, the operator's request page and its connection health, at 375, 768 and 1440 in Day and Night.
+
+**Not verified here:**
+- real email sending and inbound mail (needs the Resend account and DNS);
+- WhatsApp (needs Meta approval);
+- the AI reader on real sheets (needs `ANTHROPIC_API_KEY`);
+- the 8-weeks × 5-operators sheet test (needs the sheets).
+
+### Operator loop follow-up (21 Oct 2026): allotments, and the rule for travel partners (ADR-100)
+
+**Built:**
+- **Allotments:**
+  - cabins contracted to Nilecruz per sailing, with a release period;
+  - book instantly for customers and travel partners until release; marked on each booked cabin; freed by cancellation;
+  - a lock per sailing and cabin type, so the last allotment cabin can't go twice;
+  - entered and switched off by catalogue admins on the operator's page; read by the operator with booked counts per sailing.
+- **Travel partners:**
+  - instant only from an allotment or instant data;
+  - otherwise a booking request in the agency's name, at its rate, with its client reference and selling price;
+  - the operator's message names the agency; confirming makes the agency's trade booking;
+  - the agency's request page and list (take the other offer, withdraw);
+  - search shows booking modes and no counts from manual data.
+- **Shared booking step:** one step takes cabins for every booking path (customers, travel partners, operator-confirmed).
+
+**Verified:**
+- **pgTAP:** 32 files, 515 checks. `320_allotments_agents` (20 checks) covers:
+  - who enters allotments;
+  - instant from an allotment despite old data, and the release period;
+  - counting, and cancellation giving a cabin back;
+  - the operator's usage view;
+  - travel partners refused instant booking on manual data;
+  - a partner request confirmed into the agency's booking.
+  - `220` now uses feed data. The grants check shows no differences.
+- **End-to-end:** `allotments-agents.spec.ts` (2 tests):
+  - an admin adds an allotment, a customer books from it instantly (old operator data), and the operator sees "1 of 2 booked";
+  - a partner's request is confirmed from the email link and becomes the agency's booking with its client reference.
+  - `partner-bookings.spec.ts` passes with feed data.

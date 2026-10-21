@@ -4,6 +4,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Notice, Section, ui } from "@/components/dashboard/ui";
 import { requireUser } from "@/server/auth";
 import { myRequests, routeOptions } from "@/server/bookings/queries";
+import { myBookingRequests, REQUEST_STATUS } from "@/server/requests/queries";
 import { requestDefaults } from "@/lib/marketplace/vessel";
 import { RequestFields } from "../../_bookings/RequestFields";
 import { createRequest } from "../actions";
@@ -20,8 +21,13 @@ export default async function MyRequests({
 }: {
   searchParams: Promise<{ route?: string; from?: string; nights?: string }>;
 }) {
-  await requireUser("/dashboard/journey/requests/");
-  const [requests, routes, sp] = await Promise.all([myRequests(), routeOptions(), searchParams]);
+  const session = await requireUser("/dashboard/journey/requests/");
+  const [requests, routes, sp, booking] = await Promise.all([
+    myRequests(),
+    routeOptions(),
+    searchParams,
+    myBookingRequests(session.userId),
+  ]);
   const defaults = requestDefaults(sp, routes);
 
   return (
@@ -34,6 +40,20 @@ export default async function MyRequests({
         A request asks operators for personal offers. Operators whose cruises fit can reply, and you choose. It isn’t an auction:
         no offer and no lowest price is guaranteed.
       </Notice>
+
+      {booking.length ? (
+        <Section title="Booking requests" id="booking">
+          <p className={ui.muted}>Cabins you asked to book; the operator confirms they exist before you pay.</p>
+          <ul className={ui.list}>
+            {booking.map((b) => (
+              <li key={b.id}>
+                <Link href={`/dashboard/journey/requests/booking/${b.id}/`}>{b.reference}</Link> · {b.vessel?.name} ·{" "}
+                {b.departure?.departs_on} <Badge tone={REQUEST_STATUS[b.status]!.tone}>{REQUEST_STATUS[b.status]!.text}</Badge>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       <Section title="Your requests" id="mine">
         {requests.length ? (
