@@ -84,6 +84,7 @@ test("its operator says what's included and adds a price with sightseeing", asyn
   await rates.getByLabel("Package").selectOption("with_sightseeing");
   await rates.getByLabel("Price per person").fill("1400");
   await rates.getByRole("button", { name: "Apply to matching departures" }).click();
+  await expect(rates.getByText(/Updated \d+ departure/)).toBeVisible();
   await page.goto(`${schedule}${departureId}/`);
   await expect(page.getByRole("list", { name: "Prices with sightseeing" })).toContainText(
     "With sightseeing · International · double · US$1,400",

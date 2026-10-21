@@ -1557,3 +1557,17 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - unit: the calendar shows days only up to the window.
 - **Verified:** pgTAP, 35 files and 556 checks on a reset database; the grants check shows no differences; `pnpm verify` runs 475 tests.
 - **Not run:** the full end-to-end suite. Docker Desktop shut down again before the build.
+
+### Local verification (21 Oct 2026): full end-to-end, screenshots
+
+- **Why Docker kept stopping:** each run began by stopping whatever held ports 3000 and 3100. Faris's `open-webui` container publishes port 3000, so that killed Docker Desktop. Runs no longer stop anything on those ports.
+- **Full end-to-end** (`CI=1`, production build, reset database): 254 passed, with two test faults, both fixed:
+  - **The 10-wrong-passwords test** waited for Next's page announcer (also an "alert"), so it fired the 11th try before the 10th failure was counted. It now waits for the "don't match" message. The limit itself works: the database refused correctly when asked directly.
+  - **The sightseeing test** left the page before the price was saved. It now waits for "Updated".
+
+  Both specs pass after the fixes (9 tests).
+- **Screenshots** in `docs/screenshots/batch-08/`:
+  - `8-2a-`: Plan my cruise, the customer's My journey and Account security, the admin's Messages;
+  - `8-3a-`: the admin's Sightseeing section and the operator's schedule with "what's included" and the Package choice;
+  - each at 375, 768 and 1440, in Day and Night.
+- **Operator page screenshots:** `scripts/operator-shots.ts` (and `.py` for the WebP files) takes the eight screens from the local system. The test suite's sample names (long numbers, a "NOPE" cabin code, warning banners) aren't fit for a public page, so they aren't published yet. A tidy sample set comes first.

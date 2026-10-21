@@ -158,7 +158,8 @@ test("after 10 wrong passwords an account's sign-in waits, even with the right o
   const user = await newUser("limited");
   for (let i = 0; i < 10; i++) {
     await signIn(page, user.email, "wrong-password-123", "/account/sign-in/", { expectFailure: true });
-    await expect(page.getByRole("alert")).toBeVisible();
+    // Wait for the answer itself (counted on the server), not Next's page announcer, which is also an alert.
+    await expect(page.getByText("That email and password don't match an account.")).toBeVisible();
   }
   await signIn(page, user.email, user.password, "/account/sign-in/", { expectFailure: true });
   await expect(page.getByText("Too many attempts. Wait a few minutes and try again.")).toBeVisible();
