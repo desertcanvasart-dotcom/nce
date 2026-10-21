@@ -104,6 +104,9 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   // One public price; cabins show facts only (ADR-025).
   await expect(page.getByText("US$1,000", { exact: true })).toHaveCount(1);
   await expect(page.getByText(/per person, two sharing/)).toHaveCount(0);
+  // The head as search engines see it, on a fresh load: after a client-side navigation the listing's canonical can
+  // linger while the vessel page's metadata streams in.
+  await page.reload();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/cruises/${slug}/$`));
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
   expect(ld).toContain('"TouristTrip"');
@@ -115,6 +118,7 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await page.getByRole("link", { name: `${S.origin} → ${S.destination}, 7 nights` }).click();
   await expect(page.getByText(`to check-out on day 8 in ${S.destination}.`)).toBeVisible();
   expect(page.url()).toContain("?itinerary=CX7");
+  await page.reload();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/cruises/${slug}/$`));
 });
 
