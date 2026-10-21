@@ -16,6 +16,7 @@ import { connectVessel, decideFeed, disconnectVessel, revokeOperatorKey, setOper
 import { operatorContacts, orgBookingRequests, replySla, replyStats, REQUEST_STATUS } from "@/server/requests/queries";
 import { setReplySla } from "../../../_requests/actions";
 import { setSheetSettings } from "../../sheets/actions";
+import { Allotments } from "../../../_allotments/Allotments";
 import { Checkboxes } from "@/components/dashboard/ui";
 import { Contacts, ReplyStats } from "../../../_requests/Bits";
 
@@ -283,6 +284,7 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
           </ActionForm>
         ) : null}
       </Section>
+      <Allotments orgId={orgId} canEdit={canEdit} />
       <ReplyStats stats={stats} slaHours={sla} />
       <Contacts orgId={orgId} contacts={contacts} canEdit={canEdit} admin />
       <Section title="Vacancy sheets" id="sheets">

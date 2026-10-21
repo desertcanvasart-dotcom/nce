@@ -753,3 +753,20 @@ Faris's task "Close the operator-connection gaps", with his answers to the Part 
 - **Not built:**
   - webhooks to operators, CSV import for operators, channel managers (out of scope);
   - automatic conversion of a shared start below its minimum (ADR-098).
+
+### ADR-100 Allotments, and the reservable rule for travel partners (Accepted; Faris 21 Oct 2026)
+Faris: "apply the new rule for travel agents as well; add the allotments functionality."
+- **Travel partners** follow ADR-099's rule.
+  - They book instantly only from an allotment, or from feed, API or an operator's answer within 2 hours.
+  - Manual or sheet data within 7 days becomes a **booking request in the agency's name**, at its rate, with its client reference and selling price. The operator confirms it with one tap, and it becomes the agency's trade booking, paid by its deadline.
+  - Search and reserve show no counts from manual data.
+  - The agency's owners and reservations staff can take the operator's other offer or withdraw; finance staff can read.
+  - Accepting an operator's priced **offer** is unchanged, because the offer is itself the operator's confirmation.
+- **Allotments:** cabins an operator contracts to Nilecruz, per sailing, for one cabin type over a range of departure dates. Each has a release period, 14 days before departure by default.
+  - Until release, allotment cabins book instantly for customers and travel partners, whatever the age of the operator's other data.
+  - Bookings take allotment cabins first, then instant availability.
+  - A booked allotment cabin is marked on the booking and counted against the allotment, not the operator's availability figure. A cancellation gives it back.
+  - After the release date, unsold allotment cabins stop counting; nothing is sent to the operator.
+  - Catalogue admins enter allotments and can switch them off on the operator's page; the operator reads them, with each sailing's booked count, on its connection health.
+  - Two bookings can't share the last allotment cabin: there is one lock per sailing and cabin type.
+  - Operators are told when a booking came from the allotment.

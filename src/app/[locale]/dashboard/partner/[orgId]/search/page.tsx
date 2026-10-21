@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { availabilityLabel } from "@/lib/marketplace/vessel";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ds/Button/Button";
 import { formatMoney } from "@/components/ds/lib/format";
@@ -36,6 +37,7 @@ export default async function PartnerSearch({
   const nights = q.nights && /^\d{1,2}$/.test(q.nights) ? Number(q.nights) : null;
 
   let results: ReturnType<typeof groupSearch> | null = null;
+  const confirmHours = new Map<string, number>();
   let problem: string | null = null;
   if (from && to) {
     if (childAges === null) problem = "Give children's ages as whole numbers under 18, separated by commas.";
@@ -52,6 +54,12 @@ export default async function PartnerSearch({
       });
       if (error) problem = error.message;
       else results = groupSearch((data ?? []) as unknown as SearchRow[], { adults, childAges });
+      // ADR-100: how long each operator usually takes to confirm a booking request.
+      const ops = [...new Set((results ?? []).flatMap((d) => d.cabins.map((c) => c.operatorOrgId)))];
+      for (const op of ops) {
+        const { data: h } = await db.rpc("operator_confirm_hours", { target_org: op });
+        confirmHours.set(op, Number(h ?? 24));
+      }
     }
   }
   const money = (m: number, c: string) => formatMoney({ amount: m, currency: c }, "en");
@@ -102,7 +110,8 @@ export default async function PartnerSearch({
               <ul className={ui.list}>
                 {d.cabins.map((c) => (
                   <li key={`${c.cabinTypeId}-${c.currency}`}>
-                    {c.name}, {c.deck} deck · {c.available} {c.available === 1 ? "cabin" : "cabins"} left ·{" "}
+                    {c.name}, {c.deck} deck ·{" "}
+                    {availabilityLabel({ mode: c.mode, placesLeft: c.available }, confirmHours.get(c.operatorOrgId) ?? 24)} ·{" "}
                     {c.price.ok ? (
                       <>
                         <strong>{money(c.price.totalMinor, c.currency)}</strong>{" "}
@@ -110,7 +119,7 @@ export default async function PartnerSearch({
                         <Link
                           href={`/dashboard/partner/${orgId}/reserve/?dep=${d.departureId}&cabin=${c.cabinTypeId}&cur=${c.currency}&adults=${adults}&children=${encodeURIComponent(q.children ?? "")}`}
                         >
-                          Reserve
+                          {c.mode === "instant" ? "Reserve" : "Request"}
                         </Link>
                       </>
                     ) : (

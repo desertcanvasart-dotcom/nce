@@ -4,6 +4,7 @@ import { Badge } from "@/components/ds/Badge/Badge";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Notice, Section, ui } from "@/components/dashboard/ui";
 import { requireOrgRole } from "@/server/auth";
+import { companyBookingRequests, REQUEST_STATUS } from "@/server/requests/queries";
 import { companyRequests, routeOptions } from "@/server/bookings/queries";
 import { guestsText } from "../../../_bookings/OfferSummary";
 import { RequestFields } from "../../../_bookings/RequestFields";
@@ -21,7 +22,7 @@ export default async function CompanyRequests({ params }: { params: Promise<{ or
   const { orgId } = await params;
   if (!isUuid(orgId)) notFound();
   await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: `/dashboard/partner/${orgId}/requests/` });
-  const [requests, routes] = await Promise.all([companyRequests(orgId), routeOptions()]);
+  const [requests, routes, booking] = await Promise.all([companyRequests(orgId), routeOptions(), companyBookingRequests(orgId)]);
   const base = `/dashboard/partner/${orgId}/requests/`;
 
   return (
@@ -31,6 +32,22 @@ export default async function CompanyRequests({ params }: { params: Promise<{ or
         A request asks operators for offers for your client. Operators see that it comes from a travel partner and may offer at
         the trade rate. Anyone in your company who books can compare the offers and accept one.
       </Notice>
+
+      {booking.length ? (
+        <Section title="Booking requests" id="booking">
+          <p className={ui.muted}>Cabins you asked to book; the operator confirms they exist before you pay.</p>
+          <ul className={ui.list}>
+            {booking.map((b) => (
+              <li key={b.id}>
+                <Link href={`/dashboard/partner/${orgId}/requests/booking/${b.id}/`}>{b.reference}</Link> · {b.vessel?.name} ·{" "}
+                {b.departure?.departs_on}
+                {b.client_reference ? ` · ${b.client_reference}` : ""}{" "}
+                <Badge tone={REQUEST_STATUS[b.status]!.tone}>{REQUEST_STATUS[b.status]!.text}</Badge>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       <Section title="Company requests" id="mine">
         {requests.length ? (

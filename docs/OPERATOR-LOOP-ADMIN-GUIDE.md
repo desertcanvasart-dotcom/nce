@@ -70,3 +70,32 @@ Even when auto-confirm is on, a sheet waits for review unless every check passes
 Any import that needed fixing switches auto-confirm off again.
 
 **Acknowledgement:** the same section can send the sender a short "Received: N rows updated" reply after confirmation. It is off by default.
+
+## Allotments
+
+An allotment is cabins an operator contracts to Nilecruz: a number of cabins **per sailing**, of one cabin type on one ship, for departures between two dates. Each sailing's allotment is released a number of days before departure (14 by default).
+
+**Adding one:** go to Admin → Operators → (operator) → Allotments, and give:
+
+- the ship and cabin type;
+- the first and last departure dates;
+- the cabins per sailing;
+- the release in days;
+- the contract reference.
+
+Switch an allotment off there too; bookings already made stay.
+
+**What it does:**
+
+- Until a sailing's release date, its allotment cabins book instantly for customers and travel partners, even when the operator's own availability is old or comes from a manual entry or sheet. Customers see "Instant confirmation", or "Last few cabins" when 2 or fewer are left.
+- Bookings use allotment cabins first, then instant availability. They don't change the operator's own availability figure, and the operator is told the booking came from the allotment.
+- A cancelled booking gives its cabin back to the allotment.
+- After the release date, unsold cabins simply stop counting: the cabins are the operator's again.
+- The operator sees its allotments, and how many cabins are booked on each coming sailing, on its Inventory connections page.
+
+## Travel partners
+
+Travel partners follow the same rule as customers.
+
+- **Instant:** from an allotment, or from availability a feed, the API or an operator's answer confirmed in the last 2 hours.
+- **Booking request:** otherwise, the partner sends a booking request in its company's name, at its rate, with its client reference. The operator gets the usual one-tap message, which names the partner. Once confirmed, it becomes the partner's trade booking, paid by its deadline.

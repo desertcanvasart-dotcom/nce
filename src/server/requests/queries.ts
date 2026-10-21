@@ -28,12 +28,26 @@ export async function orgBookingRequests(orgId: string) {
   return data ?? [];
 }
 
+/** ADR-100: a travel partner company's booking requests. */
+export async function companyBookingRequests(orgId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("booking_requests")
+    .select(`${LIST}, client_reference`)
+    .eq("buyer_org_id", orgId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  return data ?? [];
+}
+
 export async function myBookingRequests(customerId: string) {
   const db = await getDb();
   const { data, error } = await db
     .from("booking_requests")
     .select(LIST)
     .eq("customer_id", customerId)
+    .is("buyer_org_id", null) // a travel partner's requests live in the agency's workspace
     .order("created_at", { ascending: false })
     .limit(50);
   if (error) throw error;

@@ -19,13 +19,16 @@ export type SearchRow = {
   cabin_name: string;
   deck: string;
   max_occupancy: number;
-  available: number;
+  /** Cabins bookable instantly (allotment or instant data); null when the operator confirms first (ADR-100). */
+  available: number | null;
   occupancy: number;
   currency: string;
   amount_minor: number;
   child_bands: Band[];
   gratuity_usd_minor: number | null;
   tier: "company" | "trade" | "public";
+  booking_mode: "instant" | "request";
+  operator_org_id: string;
 };
 
 export const TIER_LABEL = { company: "Your company rate", trade: "Trade rate", public: "Public rate" } as const;
@@ -34,7 +37,9 @@ export type PricedCabin = {
   cabinTypeId: string;
   name: string;
   deck: string;
-  available: number;
+  available: number | null;
+  mode: "instant" | "request";
+  operatorOrgId: string;
   currency: string;
   /** Price for this cabin's guests, or why it can't be priced. */
   price: { ok: true; totalMinor: number; tier: SearchRow["tier"] } | { ok: false; reason: string };
@@ -90,6 +95,8 @@ export function groupSearch(rows: SearchRow[], guests: { adults: number; childAg
       name: first.cabin_name,
       deck: first.deck,
       available: first.available,
+      mode: first.booking_mode,
+      operatorOrgId: first.operator_org_id,
       currency: first.currency,
       price: priced.ok ? { ok: true, totalMinor: priced.priceMinor, tier } : { ok: false, reason: priced.reason },
     });

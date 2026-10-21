@@ -1372,3 +1372,33 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - WhatsApp (needs Meta approval);
 - the AI reader on real sheets (needs `ANTHROPIC_API_KEY`);
 - the 8-weeks × 5-operators sheet test (needs the sheets).
+
+### Operator loop follow-up (21 Oct 2026): allotments, and the rule for travel partners (ADR-100)
+
+**Built:**
+- **Allotments:**
+  - cabins contracted to Nilecruz per sailing, with a release period;
+  - book instantly for customers and travel partners until release; marked on each booked cabin; freed by cancellation;
+  - a lock per sailing and cabin type, so the last allotment cabin can't go twice;
+  - entered and switched off by catalogue admins on the operator's page; read by the operator with booked counts per sailing.
+- **Travel partners:**
+  - instant only from an allotment or instant data;
+  - otherwise a booking request in the agency's name, at its rate, with its client reference and selling price;
+  - the operator's message names the agency; confirming makes the agency's trade booking;
+  - the agency's request page and list (take the other offer, withdraw);
+  - search shows booking modes and no counts from manual data.
+- **Shared booking step:** one step takes cabins for every booking path (customers, travel partners, operator-confirmed).
+
+**Verified:**
+- **pgTAP:** 32 files, 515 checks. `320_allotments_agents` (20 checks) covers:
+  - who enters allotments;
+  - instant from an allotment despite old data, and the release period;
+  - counting, and cancellation giving a cabin back;
+  - the operator's usage view;
+  - travel partners refused instant booking on manual data;
+  - a partner request confirmed into the agency's booking.
+  - `220` now uses feed data. The grants check shows no differences.
+- **End-to-end:** `allotments-agents.spec.ts` (2 tests):
+  - an admin adds an allotment, a customer books from it instantly (old operator data), and the operator sees "1 of 2 booked";
+  - a partner's request is confirmed from the email link and becomes the agency's booking with its client reference.
+  - `partner-bookings.spec.ts` passes with feed data.

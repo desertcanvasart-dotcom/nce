@@ -9,7 +9,7 @@ import { requireOrgRole } from "@/server/auth";
 import { policyFor } from "@/server/bookings/queries";
 import { getDb } from "@/server/db";
 import { isUuid } from "../../../sections";
-import { partnerReserve } from "../actions";
+import { partnerRequestBooking, partnerReserve } from "../actions";
 
 type Query = { dep?: string; cabin?: string; cur?: string; adults?: string; children?: string; cabins?: string };
 
@@ -42,6 +42,11 @@ export default async function PartnerReserve({
   )[0];
   const cabin = found?.cabins.find((c) => c.cabinTypeId === q.cabin && c.currency === q.cur);
   const policy = await policyFor(q.dep);
+  // ADR-100: cabins on manual or sheet data are confirmed by the operator before the agency pays.
+  const requesting = cabin?.mode === "request";
+  const { data: hours } =
+    requesting && cabin ? await db.rpc("operator_confirm_hours", { target_org: cabin.operatorOrgId }) : { data: null };
+  const most = requesting ? 5 : (cabin?.available ?? 0);
   const base = `/dashboard/partner/${orgId}/`;
   const ages = [...Array(adults).fill(30), ...childAges];
   const per = ages.length;
@@ -63,8 +68,10 @@ export default async function PartnerReserve({
         <>
           <Section title={`${found.vessel} · ${found.route}, ${found.nights} nights`} id="sailing">
             <p>
-              {found.departsOn} to {found.returnsOn} · {cabin.name}, {cabin.deck} deck · {cabin.available}{" "}
-              {cabin.available === 1 ? "cabin" : "cabins"} left
+              {found.departsOn} to {found.returnsOn} · {cabin.name}, {cabin.deck} deck ·{" "}
+              {requesting
+                ? `available, confirmed by the operator within ${Number(hours ?? 24)} h`
+                : `${cabin.available} ${cabin.available === 1 ? "cabin" : "cabins"} to book now`}
             </p>
             <p>
               {cabins} {cabins === 1 ? "cabin" : "cabins"} ×{" "}
@@ -75,7 +82,7 @@ export default async function PartnerReserve({
             <p className={ui.muted}>
               Cabins with these guests:{" "}
               {[1, 2, 3, 4, 5]
-                .filter((n) => n <= cabin.available)
+                .filter((n) => n <= most)
                 .map((n) =>
                   n === cabins ? (
                     <strong key={n}> {n} </strong>
@@ -99,15 +106,21 @@ export default async function PartnerReserve({
           </Section>
           <Section title="Guests and client" id="guests">
             <ActionForm
-              action={partnerReserve.bind(null, orgId, {
+              action={(requesting ? partnerRequestBooking : partnerReserve).bind(null, orgId, {
                 departureId: q.dep,
                 cabinTypeId: q.cabin,
                 currency: q.cur,
                 cabins,
                 ages: [...Array(adults).fill(30), ...childAges],
               })}
-              submit="Reserve"
+              submit={requesting ? "Send booking request" : "Reserve"}
             >
+              {requesting ? (
+                <Notice>
+                  The operator confirms these cabins before you pay, usually within {Number(hours ?? 24)} hours. Nothing is
+                  charged until then.
+                </Notice>
+              ) : null}
               <p className={ui.muted}>
                 Full names as in passports and dates of birth for all {cabins * per} guests; ages on the departure date must
                 match. The first guest is the lead passenger.
@@ -142,8 +155,9 @@ export default async function PartnerReserve({
                 checked={[]}
               />
               <p className={ui.muted}>
-                Reserving checks the cabins are still free and holds them for {company.orgName}. Payment is due by the deadline
-                shown on the booking.
+                {requesting
+                  ? `We send the request to the operator now. When they confirm, the booking is ${company.orgName}'s and payment is due by its deadline.`
+                  : `Reserving checks the cabins are still free and holds them for ${company.orgName}. Payment is due by the deadline shown on the booking.`}
               </p>
             </ActionForm>
           </Section>

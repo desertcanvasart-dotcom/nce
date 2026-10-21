@@ -101,6 +101,30 @@ export async function setReplySla(orgId: string, _prev: ActionState, fd: FormDat
 }
 
 const custPage = (id: string) => `/dashboard/journey/requests/booking/${id}/`;
+const partnerPage = (orgId: string, id: string) => `/dashboard/partner/${orgId}/requests/booking/${id}/`;
+
+/** ADR-100: a travel partner takes the operator's other offer, or withdraws its request. */
+export async function partnerAcceptAlternative(
+  orgId: string,
+  id: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: partnerPage(orgId, id) });
+  const db = await getDb();
+  const { data, error } = await db.rpc("customer_accept_alternative", { req: id });
+  if (error) return connectionProblem(error);
+  redirect(`/dashboard/partner/${orgId}/bookings/${data}/`);
+}
+
+export async function partnerWithdrawRequest(orgId: string, id: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
+  await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: partnerPage(orgId, id) });
+  const db = await getDb();
+  const { error } = await db.rpc("customer_withdraw_booking_request", { req: id });
+  if (error) return connectionProblem(error);
+  revalidatePath(partnerPage(orgId, id));
+  return saved("Request withdrawn.");
+}
 
 export async function acceptAlternative(id: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
   await requireUser(custPage(id));
