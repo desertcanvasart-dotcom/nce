@@ -1402,3 +1402,47 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - an admin adds an allotment, a customer books from it instantly (old operator data), and the operator sees "1 of 2 booked";
   - a partner's request is confirmed from the email link and becomes the agency's booking with its client reference.
   - `partner-bookings.spec.ts` passes with feed data.
+
+## 21 Oct 2026 · Batch 8-2a · Plan my cruise, emails behind every notice, rate limits (ADR-101)
+
+**Branch:** `batch-08-2-conversion`, stacked on the operator loop. One migration, `20261024000100_conversion`. Brief: `docs/briefs/BATCH-08.md` (approved with the recommended answers).
+
+**Built:**
+- **Plan my cruise** (`/plan-my-cruise/`, PAGE-105, DASH-PUB-007):
+  - route, dates, nights, guests and children's ages, cabins, budget and notes, with no account and no email asked for;
+  - the plan stays on the device only, and comes back on the next visit; "Start again" forgets it;
+  - mistakes are explained in the request form's own words before anything leaves the page;
+  - "Send to operators" asks for sign-in or sign-up. Signing in keeps the plan in the address. After sign-up, My journey offers "Continue with your plan" from the device copy.
+  - The request form opens with every field filled in, to check and send. Once handed over, the device copy is forgotten.
+  - ContactPage data, the workbook's links, and the header's existing button.
+- **Emails behind every notice** (DASH-BND-007, PROPOSED-005), English for now:
+  - each notice goes to its person, or to its company's team by role (finance too for payments and cancellations), or for Nilecruz to `ADMIN_ALERT_EMAIL`;
+  - the subject is the notice; the body says what to do next and links to the page;
+  - sent on the scheduler's tick (every minute, only when something waits); a failed send is retried up to 3 times within a day;
+  - operators' booking requests and admins' escalations aren't sent twice (the dispatcher already emails them);
+  - people can turn off optional emails (offer updates, holds) under Account → Emails from Nilecruz; bookings, payments, cancellations and reminders always go;
+  - a new Contact message tells the admins;
+  - payment deadline reminders 3 days and 1 day before, and on the day, each once.
+  - **Without a sender** (`RESEND_API_KEY` and `EMAIL_FROM`), admins see a banner on every admin page, every message is recorded as not sent, and Messages → Email delivery shows the 24-hour counts and recent problems.
+- **Rate limits and bots** (SEC-006):
+  - limits per address (hashed with a server secret, never stored) and per account: sign-in, 10 wrong passwords per email in 15 minutes, sign-up, password reset, Contact, requests, booking requests and operator replies;
+  - too many tries says to wait, never a bare error;
+  - a hidden field on sign-up, password reset and Contact: a bot that fills it gets the normal answer and nothing is kept;
+  - Turnstile only if bots get through (ADR-101).
+
+**Verified, and how:**
+- **Unit:** `pnpm verify`, 450 tests. New in `conversion.test.ts`: the plan's rules and defaults, the hand-over to the request form, malformed addresses, each email's wording, links and escaping, which emails are optional, who gets money emails.
+- **pgTAP:** `330_conversion` (13 checks): rate-limit counting and looking, emails waiting and marked, optional emails only for oneself, the Contact notice, a reminder sent once. The grants check shows no differences.
+- **End-to-end:** `conversion.spec.ts`:
+  - an anonymous visitor plans, signs up, continues with the plan, sends it, an operator offers, and the offer email is recorded for them;
+  - signing in keeps the plan;
+  - 10 wrong passwords make the right one wait;
+  - a bot sign-up looks sent and makes no account;
+  - admins see the missing-sender banner and Email delivery;
+  - axe in Day and Night.
+- **Screenshots:** `docs/screenshots/batch-08/` (prefix `8-2a-`).
+
+**Not verified here:**
+- real sending (needs the Resend account and DNS);
+- sign-in emails through Resend (a Supabase setting on staging, with Faris's OK);
+- staging, while Railway isn't deploying.
