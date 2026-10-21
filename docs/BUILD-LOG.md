@@ -1765,3 +1765,48 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 
   `marketplace-vessel`, `components`, `sightseeing` and `interactions` pass. `silo-links` fails locally only on the Abu Simbel page's booking link, which comes from the tour rates imported into the local database.
 - **Screenshots:** `docs/screenshots/batch-09/9-2a-*`: a vessel page and the Luxor–Aswan route guide in full, plus the deck view, both mooring states and the voyage, at 375, 768 and 1440 px in Day and Night.
+
+## 21 Oct 2026 · Batch 10-1 · SEO plumbing: translated pages, hreflang, sitemaps, the crawl checks
+
+**Brief:** `docs/briefs/BATCH-10.md`, approved by Faris with the recommended answers:
+- untranslated pages show English with a note and are `noindex`;
+- natives review the keyword lists;
+- the old site may be crawled read-only;
+- 10-1 first.
+
+**Built:**
+- **The translated-page rule:** `src/lib/seo/translations.ts` lists, per language, the pages whose whole content is translated and reviewed. It's empty today: no page body is translated yet. Editorial content loads only the English article, and vessel, listing and booking pages have English text in their components.
+  - **Until a page is listed:** its `/es/` and `/ja/` versions show English under a short note in the visitor's language, with the content marked `lang="en"`. They are `noindex`, have the English page as canonical, and stay out of hreflang and the sitemaps.
+  - **Once listed:** the page becomes indexable in that language and joins hreflang and that language's sitemap. Nothing else needs switching on.
+- **SEO-007, hreflang:** `pageMetadata` emits each translated language plus x-default, the same set from every language.
+- **I18N-004, the language switch:** it links straight to the same page in each language. Before, the English link went through `/en/…` and a redirect.
+  - **Deviation from the brief:** the brief said an untranslated page's switch would go to that language's home page. It goes to the same page instead, which shows English with the note. You keep your place, and the switch never takes you somewhere unexpected.
+- **SEO-019, sitemaps:**
+  - `/sitemap.xml` is an index of `/sitemaps/sitemap/{en,es,ja}.xml`, linked from `robots.txt` in production;
+  - each lists the built pages, the operators page, and published real (non-sample) vessels and tours, translated ones only, each with its hreflang;
+  - the comparison page, dashboards and sample data are never listed;
+  - built on request and cached, so new vessels appear without a rebuild.
+- **The crawl checks (SEO-003, 005, 017, 018, I18N-003):** `tests/e2e/seo-crawl.spec.ts` crawls from home on every pull request and fails on:
+  - an unreachable built page;
+  - more than 3 clicks or 3 folders deep;
+  - not exactly one H1;
+  - invalid JSON-LD;
+  - a missing workbook schema type.
+  
+  It also crawls `/es/` and `/ja/` and fails on any internal link that leaves the language (the switch's own links are excluded).
+- **What the crawl found, and fixed:**
+  - the footer linked to `/our-egyptologists/` and `/reviews/`, which aren't built: the footer now links only to pages that exist;
+  - the routes, destinations and tours hubs lacked CollectionPage and ItemList: they now list their pages;
+  - destinations lacked TouristAttraction: each now names its main sight (Karnak Temple, Temple of Horus, Kom Ombo Temple, Philae Temple, Abu Simbel temples);
+  - tours without a price correctly have no Offer, and the check allows that.
+- **From 9-2a's CI:** the vessel page test now checks the canonical on a fresh load. After a client-side navigation, the listing's canonical briefly lingers; crawlers always load fresh.
+
+**Verified:**
+- **Unit:**
+  - `seo-plumbing.test.ts` (8): translated lists, hreflang, the untranslated metadata, sitemap filtering, the crawler's parsing;
+  - `robots.test.ts`: the sitemap line.
+  
+  `pnpm verify`: 500 tests.
+- **End-to-end:** `seo-crawl.spec.ts` and `shell.spec.ts`: 26 passed on a production build. The shell test now expects an untranslated home page to point its canonical at English.
+- **Local environment:** the local database stalled (statement timeouts), so the wider suite couldn't run cleanly here. I restarted only its container. Docker has 3.8 GB, and the analytics container uses the most CPU. CI runs the full suite on a fresh database.
+- **Screenshots:** `docs/screenshots/batch-10/10-1-*`: the Spanish About page and the Japanese guide pillar with the note, at 375, 768 and 1440 px in Day and Night.

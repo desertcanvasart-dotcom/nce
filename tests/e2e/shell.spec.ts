@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { isTranslated } from "@/lib/seo/translations";
 import { expectNoSeriousA11yIssues, locales, setTheme } from "./helpers";
 
 for (const { code, prefix } of locales) {
@@ -10,7 +11,12 @@ for (const { code, prefix } of locales) {
       expect(res?.status()).toBe(200);
       await expect(page.locator("html")).toHaveAttribute("lang", code);
       await expect(page.locator("h1")).toHaveCount(1);
-      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`${prefix}/$`));
+      // Batch 10: a home page not yet translated points its canonical at the English home.
+      const own = isTranslated("/", code);
+      await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+        "href",
+        new RegExp(`^https?://[^/]+${own ? prefix : ""}/$`),
+      );
       await expect(page.locator("header")).toBeVisible();
       await expect(page.locator("footer")).toBeVisible();
       await expect(page.locator("main#main")).toBeVisible();

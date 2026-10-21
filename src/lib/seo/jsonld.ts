@@ -63,7 +63,7 @@ export function webApplicationJsonLd(name: string, url: string) {
 }
 
 /** PAGE-074–090: a destination and its main sight (SEO, workbook schema TouristDestination · TouristAttraction). */
-export function touristDestinationJsonLd(name: string, description: string, url: string) {
+export function touristDestinationJsonLd(name: string, description: string, url: string, sight?: string) {
   return {
     "@context": "https://schema.org",
     "@type": "TouristDestination",
@@ -71,8 +71,18 @@ export function touristDestinationJsonLd(name: string, description: string, url:
     description,
     url,
     containedInPlace: { "@type": "Country", name: "Egypt" },
+    ...(sight ? { includesAttraction: { "@type": "TouristAttraction", name: sight } } : {}),
   };
 }
+
+/** Each destination's main sight, the one every cruise visits (TouristAttraction in the workbook's schema column). */
+export const MAIN_SIGHT: Record<string, string> = {
+  "/destinations/luxor/": "Karnak Temple",
+  "/destinations/edfu/": "Temple of Horus",
+  "/destinations/kom-ombo/": "Kom Ombo Temple",
+  "/destinations/aswan/": "Philae Temple",
+  "/destinations/abu-simbel/": "Abu Simbel temples",
+};
 
 /** PAGE-101, 106: About and Contact pages, each with the organisation. */
 export function companyPageJsonLd(type: "AboutPage" | "ContactPage", name: string, url: string, site: string) {

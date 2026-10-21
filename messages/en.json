@@ -17,7 +17,8 @@
     "themeShortLight": "Day",
     "signIn": "Sign in",
     "account": "Account",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "untranslated": "This page isn’t translated yet, so it’s shown in English."
   },
   "nav": {
     "cruises": "Cruises",

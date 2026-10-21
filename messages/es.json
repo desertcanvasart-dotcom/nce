@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2 and 4a. Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
@@ -18,7 +18,8 @@
     "themeShortLight": "Día",
     "signIn": "Iniciar sesión",
     "account": "Cuenta",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "untranslated": "Esta página aún no está traducida, así que la mostramos en inglés."
   },
   "nav": {
     "cruises": "Cruceros",

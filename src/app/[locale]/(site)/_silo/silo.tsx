@@ -22,8 +22,8 @@ import { routing, type Locale } from "@/i18n/routing";
 import { tourUrl, WORKBOOK_TOURS } from "@/lib/content/tours";
 import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
-import { jsonLdScript } from "@/lib/marketplace/listing";
-import { companyPageJsonLd, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
+import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
+import { companyPageJsonLd, MAIN_SIGHT, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
 import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING, sentence } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
 import { editorialPage, vesselTypeStats } from "@/server/content/pages";
@@ -201,7 +201,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         <Scene time="dawn" temple vessel="sail" label={`${row.h1} from the river`} />
       </div>
     );
-    if (url !== "/destinations/") extra = ld(touristDestinationJsonLd(row.h1, description, absoluteUrl(locale, url)));
+    if (url !== "/destinations/")
+      extra = ld(touristDestinationJsonLd(row.h1, description, absoluteUrl(locale, url), MAIN_SIGHT[url]));
   } else if (url === "/tours-extras/") {
     lead = <TourCards tours={tours} />;
   } else if (WORKBOOK_TOURS[url]) {
@@ -268,6 +269,15 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         closing={closing ? <ClosingCruises all={all} listing={closingListing(url)} type={TYPE_OF[url]} /> : null}
       />
       {extra}
+      {/* SEO-005: a hub lists its pages (CollectionPage with an ItemList), as its workbook row asks. */}
+      {row.schema.includes("CollectionPage")
+        ? ld(
+            collectionJsonLd(
+              { name: row.h1, description, url: absoluteUrl(locale, url) },
+              children(url).map((l) => ({ name: LINK_MAP[l.href]?.h1 ?? l.anchor, url: absoluteUrl(locale, l.href) })),
+            ),
+          )
+        : null}
     </>
   );
 }
