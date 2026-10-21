@@ -7,6 +7,7 @@ import { DIMENSIONS } from "@/lib/evaluation/method";
 import { jsonLdScript } from "@/lib/marketplace/listing";
 import {
   formatDay,
+  stopsFor,
   touristTripJsonLd,
   VERDICT_TEXT,
   vesselH1,
@@ -228,12 +229,33 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
 /** One itinerary: check-in to check-out (DATA-018), the sailing time (PROPOSED-019), the days and the next departures. */
 function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerary; locale: Locale }) {
   const sails = sailingTimeText(it.sailingPeriod, it.sailsAt, it.origin);
+  const stops = stopsFor(it.origin, it.destination).filter((st) => isBuilt(st.href));
   return (
     <div className={styles.section}>
       <p>
-        From check-in on day 1 in {it.origin} to check-out on day {it.nights + 1} in {it.destination}. Airport and hotel
-        transfers, flights and tours aren’t included; they are booked separately.
+        From check-in on day 1 in {it.origin} to check-out on day {it.nights + 1} in {it.destination}.{" "}
+        {/* DATA-018: transfers are separate, and sold on their own page. */}
+        {isBuilt("/tours-extras/transfers/") ? (
+          <>
+            <Link href="/tours-extras/transfers/">Airport and hotel transfers</Link>, flights and tours aren’t included; they are
+            booked separately.
+          </>
+        ) : (
+          "Airport and hotel transfers, flights and tours aren’t included; they are booked separately."
+        )}
       </p>
+      {stops.length ? (
+        <p>
+          {/* SEO-013: the destinations this itinerary stops at. */}
+          Stops:{" "}
+          {stops.map((st, i) => (
+            <span key={st.href}>
+              {i ? " · " : ""}
+              <Link href={st.href}>{st.name}</Link>
+            </span>
+          ))}
+        </p>
+      ) : null}
       {sails ? <p>{sails}.</p> : null}
       {arriveDayBefore(it.sailingPeriod) ? <p className={styles.note}>{dayBeforeTip(it.origin)}</p> : null}
       {it.days.length ? (

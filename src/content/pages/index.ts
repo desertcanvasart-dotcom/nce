@@ -23,6 +23,19 @@ import P050 from "./P050.json";
 import P051 from "./P051.json";
 import P057 from "./P057.json";
 import P059 from "./P059.json";
+import P074 from "./P074.json";
+import P076 from "./P076.json";
+import P083 from "./P083.json";
+import P085 from "./P085.json";
+import P086 from "./P086.json";
+import P090 from "./P090.json";
+import P093 from "./P093.json";
+import P094 from "./P094.json";
+import P095 from "./P095.json";
+import P099 from "./P099.json";
+import P101 from "./P101.json";
+import P102 from "./P102.json";
+import P106 from "./P106.json";
 
 /** The drafted pages in the repository (ADR-096): Sanity's seed, and the fallback where Sanity isn't configured. */
 export const DRAFT_PAGES: Record<string, EditorialPage> = {
@@ -50,4 +63,17 @@ export const DRAFT_PAGES: Record<string, EditorialPage> = {
   P051: P051 as EditorialPage,
   P057: P057 as EditorialPage,
   P059: P059 as EditorialPage,
+  P074: P074 as EditorialPage,
+  P076: P076 as EditorialPage,
+  P083: P083 as EditorialPage,
+  P085: P085 as EditorialPage,
+  P086: P086 as EditorialPage,
+  P090: P090 as EditorialPage,
+  P093: P093 as EditorialPage,
+  P094: P094 as EditorialPage,
+  P095: P095 as EditorialPage,
+  P099: P099 as EditorialPage,
+  P101: P101 as EditorialPage,
+  P102: P102 as EditorialPage,
+  P106: P106 as EditorialPage,
 };

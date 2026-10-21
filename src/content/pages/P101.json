@@ -1,0 +1,33 @@
+{
+  "id": "P101",
+  "title": "About Nilecruz",
+  "standfirst": "Nilecruz explains Nile cruises before you sail and lets you book them. We publish our own evaluation of each vessel and show one honest starting price.",
+  "sections": [
+    {
+      "heading": "What we do",
+      "paragraphs": [
+        "Independent operators supply the vessels, cabins, sailings and prices. We explain how vessels differ, evaluate them against the same criteria, and show reviews from other sites separately with their source."
+      ]
+    },
+    {
+      "heading": "How booking works",
+      "paragraphs": [
+        "When you book a cruise, the operator sells and provides it, and Nilecruz makes the booking and takes your payment as the operator’s booking agent. Tours and transfers around your cruise are run by our offices in Luxor and Aswan."
+      ]
+    },
+    {
+      "heading": "Who we are",
+      "paragraphs": ["Nilecruz is operated by the company named in our terms. The full company details will be published here."]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is Nilecruz a cruise operator?",
+      "a": "No. Operators run the vessels; Nilecruz explains them, evaluates them and books them as the operator’s agent."
+    }
+  ],
+  "seoTitle": "About Nilecruz",
+  "seoDescription": "Who Nilecruz is: a marketplace that explains Nile cruises, evaluates vessels and books them as the operators' agent.",
+  "sample": false,
+  "review": "draft"
+}

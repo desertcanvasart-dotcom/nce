@@ -4,7 +4,8 @@
 
 Writes src/lib/seo/link-map.json: one entry per row of "Silo map", keyed by URL, with the row's id, silo, level, parent,
 H1, page type, primary keyword, phase, and its links (up, down, across, bridges) as URLs. The workbook stays outside the
-repository; the JSON is the reviewed copy CI checks against. Felucca rows are dropped (ADR-008, ADR-096).
+repository; the JSON is the reviewed copy CI checks against. Felucca rows are dropped (ADR-008, ADR-096), and the old
+spelling "nilecrz" in H1s and keywords is written as Nilecruz (ADR-022).
 """
 import json
 import re
@@ -17,6 +18,13 @@ src = Path(sys.argv[1] if len(sys.argv) > 1 else "../nce/nilecrz-site-silo.xlsx"
 out = Path(__file__).resolve().parent.parent / "src/lib/seo/link-map.json"
 URL = re.compile(r"/[a-z0-9\-/]*")
 DROPPED = re.compile(r"felucca")  # ADR-008: felucca removed from the site
+
+
+BRAND = re.compile(r"nilecrz", re.I)  # ADR-022: the brand is Nilecruz; "nilecrz" is only the design system's package name
+
+
+def brand(text):
+    return BRAND.sub(lambda m: "Nilecruz" if m.group(0)[0].isupper() else "nilecruz", text or "")
 
 
 def urls(text):
@@ -50,9 +58,9 @@ for r in rows[1:]:
         "silo": r[col["Silo"]],
         "level": r[col["Level"]],
         "parent": parent if parent.startswith("/") else None,
-        "h1": r[col["Page H1"]],
+        "h1": BRAND.sub("Nilecruz", r[col["Page H1"]] or ""),
         "type": r[col["Page type"]],
-        "keyword": r[col["Primary keyword"]],
+        "keyword": brand(r[col["Primary keyword"]]),
         "phase": r[col["Phase"]],
         "down": section(same, "down"),
         "across": section(same, "across"),

@@ -61,3 +61,31 @@ export function webApplicationJsonLd(name: string, url: string) {
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   };
 }
+
+/** PAGE-074–090: a destination and its main sight (SEO, workbook schema TouristDestination · TouristAttraction). */
+export function touristDestinationJsonLd(name: string, description: string, url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    name,
+    description,
+    url,
+    containedInPlace: { "@type": "Country", name: "Egypt" },
+  };
+}
+
+/** PAGE-101, 106: About and Contact pages, each with the organisation. */
+export function companyPageJsonLd(type: "AboutPage" | "ContactPage", name: string, url: string, site: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": type,
+    name,
+    url,
+    about: { "@type": "Organization", name: "Nilecruz", url: `${site}/` },
+  };
+}
+
+/** A tour page. No Offer until the tour has real prices (7-2, ADR-097). */
+export function tourJsonLd(name: string, description: string | null, url: string) {
+  return { "@context": "https://schema.org", "@type": "TouristTrip", name, description: description ?? undefined, url };
+}

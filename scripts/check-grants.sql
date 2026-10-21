@@ -28,6 +28,8 @@ with intended(table_name, grantee, privileges) as (
     ('tour_orders', 'authenticated', 'SELECT'), ('tour_payments', 'authenticated', 'SELECT'), ('tour_refunds', 'authenticated', 'SELECT'),
     -- Batch 4h-2: the agency's client reference and selling total; read by the agency, edited by its owner and reservations users.
     ('partner_booking_details', 'authenticated', 'SELECT,UPDATE'),
+    -- Batch 7-1: Contact messages: anyone sends; admins read and file them (filing is a column grant, not listed here).
+    ('contact_messages', 'anon', 'INSERT'), ('contact_messages', 'authenticated', 'INSERT,SELECT'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
@@ -48,7 +50,7 @@ with intended(table_name, grantee, privileges) as (
   from unnest(array['cruise_requests', 'offers', 'offer_cabins', 'reservations', 'reservation_cabins', 'passengers',
                     'eligibility_proofs', 'notifications', 'payments', 'commission_entries', 'payouts',
                     'cancellation_requests', 'refunds', 'tour_orders', 'tour_payments', 'tour_refunds',
-                    'partner_booking_details']) t
+                    'partner_booking_details', 'contact_messages']) t
 ),
 actual as (
   select table_name::text, grantee::text, string_agg(privilege_type, ',' order by privilege_type) as privileges

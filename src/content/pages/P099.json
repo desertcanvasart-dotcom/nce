@@ -1,0 +1,33 @@
+{
+  "id": "P099",
+  "title": "Airport and hotel transfers",
+  "standfirst": "Private transfers between the airport or your hotel and your ship in Luxor and Aswan, run by our offices there. Transfers are always private, priced per vehicle, and booked separately from the cruise. They are among our [[up]].",
+  "sections": [
+    {
+      "heading": "How transfers work",
+      "paragraphs": [
+        "A driver meets you at the airport or your hotel and takes you to your ship, or the reverse. The vehicle depends on your party: a car, a van or a minibus. Prices are coming soon."
+      ]
+    },
+    {
+      "heading": "Meet and assist",
+      "paragraphs": [
+        "A representative can also meet you at the airport on arrival, or help you check in on departure. It is sold separately from the transfer."
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Are transfers included in a cruise?",
+      "a": "No. A cruise runs from check-in to check-out; transfers are booked separately."
+    },
+    {
+      "q": "Is a transfer shared with other guests?",
+      "a": "No. Transfers are always private."
+    }
+  ],
+  "seoTitle": "Luxor and Aswan airport transfers",
+  "seoDescription": "Private airport and hotel transfers to your Nile cruise ship in Luxor and Aswan, priced per vehicle.",
+  "sample": false,
+  "review": "draft"
+}

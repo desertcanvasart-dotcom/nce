@@ -5,10 +5,11 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 /**
  * The CI link check (SEO-008–014, ADR-096): every built education page against its row in the silo workbook
  * (src/lib/seo/link-map.json). Links in the page's main content must be the row's own (up, down, across, bridges, the
- * closing listing) or vessel pages from the cruise cards; every one of them must exist; anchors are never "click here"
+ * closing listing), vessel pages from the cruise cards or tour pages from the hub's tour cards; every one of them must exist; anchors are never "click here"
  * or a bare URL.
  */
 const EDUCATION = [...BUILT].filter((u) => !u.startsWith("/cruises/"));
+const isTourPage = (h: string) => /^\/tours-extras\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h];
 // Home and the pillars link to many pages; each link is fetched to prove it exists.
 test.describe.configure({ timeout: 90_000 });
 
@@ -33,7 +34,10 @@ for (const url of EDUCATION) {
     const allowed = allowedLinks(url);
     for (const { href } of links) {
       const isVesselPage = /^\/cruises\/[a-z0-9-]+\/$/.test(href) && !LINK_MAP[href];
-      if (isVesselPage || href === "/cruises/compare/" || href.startsWith("/account/")) continue;
+      // DASH-PUB-006: the tours hub has a card for every published tour, each with its own page.
+      if (url === "/tours-extras/" && isTourPage(href)) continue;
+      // Utility links (sign-in, contact) are not silo links.
+      if (isVesselPage || href === "/cruises/compare/" || href.startsWith("/account/") || href === "/contact/") continue;
       if (url === "/") {
         // Home links the pillars and featured hubs.
         expect(BUILT.has(href) || href === "/", `${href} on home`).toBe(true);
@@ -47,11 +51,12 @@ for (const url of EDUCATION) {
       expect(text.toLowerCase(), `anchor to ${href}`).not.toMatch(/^(click here|here|read more|https?:\/\/)/);
     }
 
-    // No silo link to a page that doesn't exist (ADR-093). Vessel pages in the cruise row are the marketplace tests'
-    // job: other specs change test vessels straight in the database, so a cached row can briefly name one.
+    // No silo link to a page that doesn't exist (ADR-093). Vessel pages in the cruise row and tour cards are the
+    // marketplace and tour tests' job: other specs change test data straight in the database, so a cached row can
+    // briefly name one.
     const statuses = await Promise.all(
       [...hrefs]
-        .filter((h) => !h.startsWith("/account/") && !(/^\/cruises\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h]))
+        .filter((h) => !h.startsWith("/account/") && !(/^\/cruises\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h]) && !isTourPage(h))
         .map(async (h) => [h, (await request.get(h)).status()] as const),
     );
     for (const [href, status] of statuses) expect(status, `${url} → ${href}`).toBe(200);

@@ -440,6 +440,42 @@ export type Database = {
           },
         ];
       };
+      contact_messages: {
+        Row: {
+          created_at: string;
+          email: string;
+          handled_at: string | null;
+          handled_by: string | null;
+          id: string;
+          message: string;
+          name: string;
+          topic: Database["public"]["Enums"]["contact_topic"];
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          handled_at?: string | null;
+          handled_by?: string | null;
+          id?: string;
+          message: string;
+          name: string;
+          topic?: Database["public"]["Enums"]["contact_topic"];
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          handled_at?: string | null;
+          handled_by?: string | null;
+          id?: string;
+          message?: string;
+          name?: string;
+          topic?: Database["public"]["Enums"]["contact_topic"];
+          user_id?: string | null;
+        };
+        Relationships: [];
+      };
       cruise_requests: {
         Row: {
           adults: number;
@@ -3618,6 +3654,7 @@ export type Database = {
         | "contemporary_design";
       cancellation_status: "requested" | "withdrawn" | "rejected" | "refund_due" | "closed";
       commission_kind: "payment" | "reversal";
+      contact_topic: "cruise" | "booking" | "vessel" | "partner" | "other";
       departure_status: "scheduled" | "cancelled";
       evaluation_verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
       feed_status: "pending" | "active" | "paused" | "rejected";
@@ -3780,6 +3817,7 @@ export const Constants = {
       ],
       cancellation_status: ["requested", "withdrawn", "rejected", "refund_due", "closed"],
       commission_kind: ["payment", "reversal"],
+      contact_topic: ["cruise", "booking", "vessel", "partner", "other"],
       departure_status: ["scheduled", "cancelled"],
       evaluation_verdict: ["recommended", "recommended_with_reservations", "not_recommended"],
       feed_status: ["pending", "active", "paused", "rejected"],

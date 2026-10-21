@@ -1,0 +1,36 @@
+{
+  "id": "P085",
+  "title": "Kom Ombo",
+  "standfirst": "Kom Ombo’s temple stands right on the riverbank and is unusual in being double: one half for the crocodile god Sobek, one for the falcon-headed Haroeris. It is one of the stops in our guide to [[up]].",
+  "sections": [
+    {
+      "heading": "The double temple",
+      "paragraphs": [
+        "The temple is built symmetrically, with two entrances, two sanctuaries and two sets of halls, one for each god. It dates from the Ptolemaic period."
+      ]
+    },
+    {
+      "heading": "The Crocodile Museum",
+      "paragraphs": ["Beside the temple, a small museum shows mummified crocodiles found nearby, linked to the worship of Sobek."]
+    },
+    {
+      "heading": "The visit",
+      "paragraphs": ["Ships moor next to the temple, so it is an easy walk. Many cruises visit in the late afternoon or evening."]
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How long is the visit to Kom Ombo?",
+      "a": "About an hour, with the museum."
+    },
+    {
+      "q": "Why is it a double temple?",
+      "a": "It was dedicated to two gods, Sobek and Haroeris, each with their own half."
+    }
+  ],
+  "seoTitle": "Kom Ombo temple on a Nile cruise",
+  "seoDescription": "Kom Ombo's double temple to Sobek and Haroeris, the Crocodile Museum, and how a Nile cruise visits them.",
+  "sample": false,
+  "review": "draft",
+  "upAnchor": "Nile cruise stops"
+}
