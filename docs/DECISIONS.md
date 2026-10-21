@@ -783,13 +783,24 @@ Faris: "apply the new rule for travel agents as well; add the allotments functio
   - eligibility proofs are verified by operators (ADR-088), so "proof to verify" emails go to the operator, not to admins;
   - emails are built from the dashboard notices, so every notice also reaches the inbox.
 
-### ADR-102 Sightseeing in cruise rates: excluded, except for approved vessels (Accepted; Faris 21 Oct 2026)
-- **Context:** Most Nile cruise rates exclude sightseeing. Some vessels, mostly dahabiyas, sell their rates with sightseeing included. Faris: Nilecruz is a tour operator and sells the tours itself. "They excel in accommodation and we excel in tours."
+### ADR-102 Sightseeing: two prices on every sailing; who provides it depends on the vessel (Accepted; Faris 21 Oct 2026)
+- **Context:**
+  - Most Nile cruise rates exclude sightseeing; some vessels, mostly dahabiyas, sell with sightseeing included.
+  - Faris: Nilecruz is a tour operator and keeps the tours. "They excel in accommodation and we excel in tours."
 - **Decision:**
-  - A cruise rate excludes sightseeing by default, and Nilecruz sells sightseeing as its own tours and programmes.
-  - Only a vessel that already sells with sightseeing included gets the option. Nilecruz admins switch it on for that vessel after checking; operators can't turn it on themselves.
-  - With the option on, the operator states per itinerary what is included: the guide, the entrance fees and the sites. This is shown wherever the price is: the vessel page, the cards, the comparison, the booking summary and the assistants' answers.
-  - Nilecruz's own sightseeing programme isn't suggested for those sailings, so guests don't pay twice. Other extras still are.
-  - ADR-011 still holds. The fare may include the operator's own sightseeing, but Nilecruz never adds its tours into the cruise total (DATA-017).
-- **Open:** whether one cabin can carry both a cruise-only and a with-sightseeing price. This goes into the brief that builds it.
-- **Status:** decided, not built. It will be proposed in the next brief.
+  - Every sailing shows travellers two prices: **cruise only**, and **cruise with sightseeing**.
+  - **Approved vessels** are the ones that already sell with sightseeing included. Nilecruz admins switch the approval on per vessel after checking; operators can't turn it on themselves.
+    - The "with sightseeing" price is the operator's own rate that includes sightseeing.
+    - It is one booking and one payment, all for the operator, like any cruise booking.
+    - The operator states per itinerary what's included: the guide, the entrance fees and the sites.
+  - **All other vessels:**
+    - The "with sightseeing" price is the cruise fare plus Nilecruz's sightseeing programme for that itinerary (the rate sheet's Programs tab: per person, by party size, children by age).
+    - The programme is a separate Nilecruz order with its own payment, beside the cruise reservation.
+  - The cruise total never includes Nilecruz's tours (ADR-011, DATA-017). An approved vessel's fare may include its own sightseeing.
+  - For a sailing booked with an approved vessel's included sightseeing, Nilecruz's programme isn't offered, so guests don't pay twice; other extras still are.
+- **For the brief that builds it:**
+  - how the two prices show on cards, vessel pages, search and the "from" price;
+  - booking both parts together (one checkout with two payments, or one after the other);
+  - cancelling one part without the other;
+  - sailings whose itinerary has no Nilecruz programme yet (show cruise only).
+- **Status:** decided, not built.
