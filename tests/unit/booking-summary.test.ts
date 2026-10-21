@@ -21,3 +21,37 @@ describe("the gratuity on booking summaries (DATA-016, ADR-010)", () => {
     expect(gratuityText(800, { nights: 4, ages: [1] })).not.toContain("for this party");
   });
 });
+
+describe("an approved vessel's price with sightseeing (ADR-102)", () => {
+  it("shows on its card as a badge, beside the cruise-only price", async () => {
+    const { toCard } = await import("@/lib/marketplace/listing");
+    const card = toCard({
+      id: "v",
+      slug: "sample-dahab",
+      name: "Sample Dahabiya",
+      type: "sail",
+      category: null,
+      maxGuests: 12,
+      cabinCount: 6,
+      deckCount: 2,
+      sample: false,
+      showcase: false,
+      summary: null,
+      itineraries: [],
+      from: { amount: 145000, currency: "USD" },
+      fromWithSightseeing: { amount: 175000, currency: "USD" },
+      bookable: true,
+    });
+    expect(card.price).toEqual({ amount: 145000, currency: "USD" });
+    expect(card.badges).toContainEqual({ label: "With sightseeing from US$1,750", tone: "success" });
+  });
+  it("says what's included in plain words", async () => {
+    const { sightseeingText } = await import("@/lib/marketplace/vessel");
+    expect(sightseeingText({ guide: true, ticketsIncluded: true, sites: ["Esna Temple", "Edfu Temple"], note: null })).toBe(
+      "An Egyptologist guide, entrance fees included; visiting Esna Temple, Edfu Temple.",
+    );
+    expect(sightseeingText({ guide: false, ticketsIncluded: false, sites: ["Kom Ombo Temple"], note: null })).toBe(
+      "Entrance fees not included; visiting Kom Ombo Temple.",
+    );
+  });
+});

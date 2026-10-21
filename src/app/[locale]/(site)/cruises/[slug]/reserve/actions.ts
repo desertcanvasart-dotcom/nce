@@ -11,7 +11,16 @@ import { getDb } from "@/server/db";
 import { rateLimit, tooMany } from "@/server/security/rate-limit";
 import { notifyNewRequest } from "@/server/requests/dispatch";
 
-type Plan = { departureId: string; departsOn: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] };
+type Plan = {
+  departureId: string;
+  departsOn: string;
+  cabinTypeId: string;
+  currency: string;
+  cabins: number;
+  ages: number[];
+  /** ADR-102: with the vessel's own sightseeing (approved vessels; the database checks). */
+  package?: "cruise" | "with_sightseeing";
+};
 
 /** The guests from the form, checked against the cabins (DATA-020). */
 function guestsFrom(plan: Plan, fd: FormData): { guests: Passenger[] } | { problem: string } {
@@ -54,7 +63,11 @@ export async function customerRequestBooking(slug: string, plan: Plan, _prev: Ac
   const { data: id, error } = await db.rpc("customer_request_booking", {
     dep: plan.departureId,
     cur: plan.currency,
-    cabins: Array.from({ length: plan.cabins }, () => ({ cabin_type_id: plan.cabinTypeId, ages: plan.ages })),
+    cabins: Array.from({ length: plan.cabins }, () => ({
+      cabin_type_id: plan.cabinTypeId,
+      ages: plan.ages,
+      package: plan.package ?? "cruise",
+    })),
     guests: g.guests,
     terms_read: true,
   });
@@ -73,7 +86,11 @@ export async function customerReserve(slug: string, plan: Plan, _prev: ActionSta
   const { data: ref, error } = await db.rpc("customer_reserve", {
     dep: plan.departureId,
     cur: plan.currency,
-    cabins: Array.from({ length: plan.cabins }, () => ({ cabin_type_id: plan.cabinTypeId, ages: plan.ages })),
+    cabins: Array.from({ length: plan.cabins }, () => ({
+      cabin_type_id: plan.cabinTypeId,
+      ages: plan.ages,
+      package: plan.package ?? "cruise",
+    })),
     guests,
     terms_read: true,
   });

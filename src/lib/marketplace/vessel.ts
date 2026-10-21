@@ -27,7 +27,20 @@ export type VesselItinerary = {
   days: { day: number; title: string; body: string }[];
   /** Future scheduled departure dates, ascending. */
   departures: string[];
+  /** ADR-102: what the vessel's own sightseeing includes on this itinerary (approved vessels only). */
+  sightseeing?: Sightseeing;
 };
+
+export type Sightseeing = { guide: boolean; ticketsIncluded: boolean; sites: string[]; note: string | null };
+
+/** "An Egyptologist guide, entrance fees included: Karnak, Edfu …" */
+export function sightseeingText(s: Sightseeing): string {
+  const parts = [
+    s.guide ? "an Egyptologist guide" : null,
+    s.ticketsIncluded ? "entrance fees included" : "entrance fees not included",
+  ];
+  return `${parts.filter(Boolean).join(", ")}; visiting ${s.sites.join(", ")}.`.replace(/^./, (c) => c.toUpperCase());
+}
 
 export type VesselPage = {
   id: string;
@@ -65,6 +78,8 @@ export type VesselPage = {
   }[];
   from?: Money;
   bookable: boolean;
+  /** ADR-102: the vessel's own "from" price with sightseeing (approved vessels only). */
+  fromWithSightseeing?: Money;
 };
 
 /** The itinerary in the URL (`?itinerary=CODE`, canonical to the vessel URL, DATA-031), else the shortest. */

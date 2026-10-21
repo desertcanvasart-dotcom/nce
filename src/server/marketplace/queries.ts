@@ -81,6 +81,10 @@ async function loadListing(): Promise<ListingVessel[]> {
         })),
       from: p?.amount_minor && p.currency ? { amount: Number(p.amount_minor), currency: p.currency } : undefined,
       bookable: !!p?.bookable,
+      fromWithSightseeing:
+        p?.sightseeing_amount_minor && p.sightseeing_currency
+          ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }
+          : undefined,
     });
   }
   return out;
@@ -117,6 +121,14 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
   const ev = [...v.evaluations].sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))[0];
   const p = (prices ?? []).find((x) => x.vessel_id === v.id);
   const en = v.vessel_translations.find((t) => t.locale === "en");
+  // ADR-102: what an approved vessel's sightseeing includes (row-level security shows approved vessels' only).
+  const { data: incl } = await db
+    .from("schedule_sightseeing")
+    .select("schedule_id, guide, tickets_included, sites, note")
+    .in(
+      "schedule_id",
+      v.schedules.map((s) => s.id),
+    );
   return {
     id: v.id,
     slug: v.slug,
@@ -164,6 +176,10 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
           .filter((d) => d.status === "scheduled" && d.departs_on > today)
           .map((d) => d.departs_on)
           .sort(),
+        sightseeing: (() => {
+          const x = (incl ?? []).find((i) => i.schedule_id === s.id);
+          return x ? { guide: x.guide, ticketsIncluded: x.tickets_included, sites: x.sites, note: x.note } : undefined;
+        })(),
       })),
     evaluation: ev
       ? {
@@ -186,6 +202,10 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     })),
     from: p?.amount_minor && p.currency ? { amount: Number(p.amount_minor), currency: p.currency } : undefined,
     bookable: !!p?.bookable,
+    fromWithSightseeing:
+      p?.sightseeing_amount_minor && p.sightseeing_currency
+        ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }
+        : undefined,
   };
 }
 

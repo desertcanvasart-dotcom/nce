@@ -90,6 +90,9 @@ export default async function Compare({ params, searchParams }: Props) {
               {row("From, per person", (v) =>
                 v.bookable && v.from ? formatMoney(v.from, locale) : v.bookable ? "Prices on request" : "Information only",
               )}
+              {row("With sightseeing, from", (v) =>
+                v.bookable && v.fromWithSightseeing ? formatMoney(v.fromWithSightseeing, locale) : "Cruise only",
+              )}
               {row("Itineraries", (v) =>
                 v.itineraries.length ? (
                   <ul>

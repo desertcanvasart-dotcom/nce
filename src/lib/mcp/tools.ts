@@ -8,7 +8,7 @@ import { z } from "zod";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import { COMPARE_MAX } from "@/lib/marketplace/listing";
 import type { VesselPage } from "@/lib/marketplace/vessel";
-import { VERDICT_TEXT } from "@/lib/marketplace/vessel";
+import { sightseeingText, VERDICT_TEXT } from "@/lib/marketplace/vessel";
 
 export type SailingMode = { scheduleId: string; departsOn: string; returnsOn: string; mode: string };
 
@@ -69,6 +69,8 @@ async function searchCruises(a: z.infer<typeof searchInput>, d: McpData) {
       type: TYPE_TEXT[v.type],
       evaluation: v.evaluation ?? null,
       from_price: v.bookable ? money(v.from) : null,
+      // ADR-102: the vessel's own price with sightseeing, where Nilecruz approved it to sell that way.
+      from_price_with_sightseeing: v.bookable ? money(v.fromWithSightseeing) : null,
       bookable_on_nilecruz: v.bookable,
       itineraries: its.map((i) => ({
         route: `${i.origin} to ${i.destination}`,
@@ -109,6 +111,7 @@ function facts(v: VesselPage, site: string) {
         }
       : null,
     from_price: v.bookable ? money(v.from) : null,
+    from_price_with_sightseeing: v.bookable ? money(v.fromWithSightseeing) : null,
     // DATA-016: paid on board, never online and never in a price.
     gratuity:
       v.gratuityUsdMinor === null
@@ -129,6 +132,7 @@ async function getVessel(a: z.infer<typeof vesselInput>, d: McpData) {
       route: `${i.origin} to ${i.destination}`,
       nights: i.nights,
       days: i.days.map((x) => ({ day: x.day, title: x.title })),
+      sightseeing_with_the_vessel: i.sightseeing ? sightseeingText(i.sightseeing) : null,
       next_departures: i.departures.slice(0, 6),
     })),
   };

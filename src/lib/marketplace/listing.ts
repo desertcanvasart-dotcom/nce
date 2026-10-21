@@ -3,6 +3,7 @@
  * unit-tested. Copy is English for now; Batch 10 translates it (ADR-093).
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
+import { formatMoney } from "@/components/ds/lib/format";
 import type { Money, VesselType } from "@/components/ds/lib/types";
 
 export type Itinerary = {
@@ -34,6 +35,8 @@ export type ListingVessel = {
   from?: Money;
   /** False: information only. No price, availability or reserve button (DASH-PUB-010). */
   bookable: boolean;
+  /** ADR-102: the vessel's own "from" price with sightseeing, when Nilecruz approved it to sell that way. */
+  fromWithSightseeing?: Money;
 };
 
 // ── Facets (SEO-016): only these filtered listings exist and are indexable ──────────────────────────────────
@@ -132,7 +135,10 @@ export function toCard(v: ListingVessel): GridCard {
     // ADR-025: the one public price, only for a vessel that can be booked; information-only listings show none.
     price: v.bookable ? v.from : undefined,
     image: v.image,
-    badges,
+    badges:
+      v.bookable && v.fromWithSightseeing
+        ? [...badges, { label: `With sightseeing from ${formatMoney(v.fromWithSightseeing, "en")}`, tone: "success" as const }]
+        : badges,
   };
 }
 

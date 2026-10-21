@@ -2715,12 +2715,14 @@ export type Database = {
           id: string;
           offer_id: string | null;
           org_id: string;
+          package: string;
           payment_due_at: string;
           policy: Json;
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
           request_id: string | null;
           seller_name: string | null;
+          sightseeing: Json | null;
           status: Database["public"]["Enums"]["reservation_status"];
           terms: string;
           total_minor: number;
@@ -2744,12 +2746,14 @@ export type Database = {
           id?: string;
           offer_id?: string | null;
           org_id: string;
+          package?: string;
           payment_due_at: string;
           policy: Json;
           rate_plan: Database["public"]["Enums"]["rate_plan"];
           reference: string;
           request_id?: string | null;
           seller_name?: string | null;
+          sightseeing?: Json | null;
           status?: Database["public"]["Enums"]["reservation_status"];
           terms: string;
           total_minor: number;
@@ -2773,12 +2777,14 @@ export type Database = {
           id?: string;
           offer_id?: string | null;
           org_id?: string;
+          package?: string;
           payment_due_at?: string;
           policy?: Json;
           rate_plan?: Database["public"]["Enums"]["rate_plan"];
           reference?: string;
           request_id?: string | null;
           seller_name?: string | null;
+          sightseeing?: Json | null;
           status?: Database["public"]["Enums"]["reservation_status"];
           terms?: string;
           total_minor?: number;
@@ -4327,7 +4333,13 @@ export type Database = {
       };
       preview_sheet: { Args: { ingest: string }; Returns: string };
       public_party_price: {
-        Args: { ages: number[]; cab: string; cur: string; dep: string };
+        Args: {
+          ages: number[];
+          cab: string;
+          cur: string;
+          dep: string;
+          pkg?: string;
+        };
         Returns: number;
       };
       public_sailing_modes: {
@@ -4346,6 +4358,8 @@ export type Database = {
           amount_minor: number;
           bookable: boolean;
           currency: string;
+          sightseeing_amount_minor: number;
+          sightseeing_currency: string;
           vessel_id: string;
         }[];
       };
@@ -4625,7 +4639,7 @@ export type Database = {
         Returns: undefined;
       };
       vessel_departure_prices: {
-        Args: { target: string };
+        Args: { pkg?: string; target: string };
         Returns: {
           bookable: boolean;
           booking_mode: string;

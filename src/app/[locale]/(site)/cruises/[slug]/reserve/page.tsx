@@ -15,6 +15,7 @@ import {
   formatDay,
   perPersonFor,
   pickItinerary,
+  sightseeingText,
   preferredPrices,
   availabilityLabel,
   canBook,
@@ -30,7 +31,15 @@ import { getDb } from "@/server/db";
 import { publicVessel } from "@/server/marketplace/queries";
 import { customerRequestBooking, customerReserve } from "./actions";
 
-type Query = { itinerary?: string; dep?: string; cabin?: string; adults?: string; children?: string; cabins?: string };
+type Query = {
+  itinerary?: string;
+  dep?: string;
+  cabin?: string;
+  adults?: string;
+  children?: string;
+  cabins?: string;
+  pkg?: string;
+};
 type Props = { params: Promise<{ locale: Locale; slug: string }>; searchParams: Promise<Query> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -53,8 +62,10 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
   const v = await publicVessel(slug);
   if (!v) notFound();
   const it = pickItinerary(v.itineraries, q.itinerary);
+  // ADR-102: an approved vessel sells this itinerary with its own sightseeing too; the traveller chooses first.
+  const pkg = it?.sightseeing && q.pkg === "with_sightseeing" ? ("with_sightseeing" as const) : ("cruise" as const);
   const db = await getDb();
-  const { data } = await db.rpc("vessel_departure_prices", { target: v.id });
+  const { data } = await db.rpc("vessel_departure_prices", { target: v.id, pkg });
   const rows: DeparturePrice[] = preferredPrices(
     (data ?? []).map((r) => ({
       departureId: r.departure_id,
@@ -81,7 +92,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
   const cabinType = chosen ? v.cabins.find((c) => c.id === chosen.cabinTypeId) : undefined;
   const base = `/cruises/${slug}/reserve/`;
   const keep = (extra: Record<string, string>) =>
-    `${base}?${new URLSearchParams({ ...(it ? { itinerary: it.code } : {}), ...extra }).toString()}`;
+    `${base}?${new URLSearchParams({ ...(it ? { itinerary: it.code } : {}), ...(pkg === "with_sightseeing" ? { pkg } : {}), ...extra }).toString()}`;
 
   let quote: number | null = null;
   if (chosen && cabinType && chosen.bookable && ages.filter((a) => a >= 3).length <= cabinType.maxOccupancy) {
@@ -90,6 +101,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       cab: chosen.cabinTypeId,
       cur: chosen.currency,
       ages,
+      pkg,
     });
     quote = p === null || p === undefined ? null : Number(p);
   }
@@ -153,6 +165,36 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               </li>
             ))}
           </ul>
+        </nav>
+      ) : null}
+
+      {it?.sightseeing ? (
+        <nav aria-label="Package" className={styles.facets}>
+          <ul>
+            {(
+              [
+                ["cruise", "Cruise only"],
+                ["with_sightseeing", "With sightseeing"],
+              ] as const
+            ).map(([value, label]) => (
+              <li key={value}>
+                {value === pkg ? (
+                  <span aria-current="page">{label}</span>
+                ) : (
+                  <Link
+                    href={`${base}?${new URLSearchParams({ itinerary: it.code, ...(value === "with_sightseeing" ? { pkg: value } : {}) }).toString()}`}
+                  >
+                    {label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+          <p className={styles.note}>
+            {pkg === "with_sightseeing"
+              ? `The vessel's own sightseeing is in the price: ${sightseeingText(it.sightseeing)}`
+              : "Cruise only: add sightseeing with this vessel by choosing “With sightseeing”."}
+          </p>
         </nav>
       ) : null}
 
@@ -227,6 +269,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
           ) : null}
           <form method="get" action={base} className={styles.reserveForm}>
             {it ? <input type="hidden" name="itinerary" value={it.code} /> : null}
+            {pkg === "with_sightseeing" ? <input type="hidden" name="pkg" value={pkg} /> : null}
             <input type="hidden" name="dep" value={dep[0]!.departureId} />
             <p className={styles.schematic}>
               Schematic: not a floor plan. Choose a cabin type on a deck; your cabin number is assigned by the operator.
@@ -347,8 +390,10 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             {perPersonFor(chosen, ages)
               ? `${formatMoney({ amount: perPersonFor(chosen, ages)!, currency: chosen.currency }, locale)} per adult; `
               : ""}
-            children are priced by age. The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked
-            separately.
+            children are priced by age.{" "}
+            {pkg === "with_sightseeing"
+              ? "The total holds the cruise fare and the vessel's own sightseeing; transfers, flights and other tours are booked separately."
+              : "The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked separately."}
           </p>
           {chosen.mode === "instant" && (chosen.placesLeft ?? 0) < cabinsWanted ? (
             <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>
@@ -372,6 +417,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 action={(chosen.mode === "request" ? customerRequestBooking : customerReserve).bind(null, slug, {
                   departureId: chosen.departureId,
                   departsOn: chosen.departsOn,
+                  package: pkg,
                   cabinTypeId: chosen.cabinTypeId,
                   currency: chosen.currency,
                   cabins: cabinsWanted,
