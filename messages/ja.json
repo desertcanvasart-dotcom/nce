@@ -299,7 +299,12 @@
       "twoStepRemove": "2段階認証をオフにする",
       "devicesTitle": "端末",
       "devicesBody": "この端末を含め、すべてのスマートフォンとパソコンからログアウトします。",
-      "signOutEverywhere": "すべての端末からログアウト"
+      "signOutEverywhere": "すべての端末からログアウト",
+      "emailsTitle": "Nilecruzからのメール",
+      "emailsNote": "予約、お支払い、お支払い期限、キャンセルについては必ずメールでお知らせします。それ以外（更新されたオファー、予約リクエストの進捗）は停止できます。",
+      "optionalEmails": "更新されたオファーと予約リクエストの進捗もメールで受け取る",
+      "saveEmails": "保存",
+      "emailsSaved": "メールの設定を保存しました。"
     },
     "notices": {
       "emailChanged": "メールアドレスを変更しました。",

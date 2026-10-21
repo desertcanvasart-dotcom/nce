@@ -18,7 +18,7 @@ async function record(row: {
   providerId?: string;
   error?: string;
   meta: Meta;
-}) {
+}): Promise<"sent" | "skipped" | "failed"> {
   await getAdminDb()
     .from("outbound_messages")
     .insert({
@@ -33,6 +33,7 @@ async function record(row: {
       provider_id: row.providerId ?? null,
       error: row.error?.slice(0, 1000) ?? null,
     });
+  return row.status;
 }
 
 /** A message that couldn't be sent for a reason on our side (no signing secret, no alert address). */

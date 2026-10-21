@@ -1,4 +1,5 @@
 import { ActionForm } from "@/components/dashboard/ActionForm";
+import { Honeypot } from "@/components/forms/Honeypot";
 import { Input, Select, TextArea } from "@/components/dashboard/ui";
 import styles from "@/components/editorial/editorial.module.css";
 import { sendContactMessage } from "./actions";
@@ -24,12 +25,7 @@ export function ContactForm() {
           ]}
         />
         <TextArea label="Message" name="message" rows={6} required maxLength={4000} />
-        <div className={styles.trap} aria-hidden="true">
-          <label>
-            Leave this empty
-            <input name="website" tabIndex={-1} autoComplete="off" />
-          </label>
-        </div>
+        <Honeypot />
         <p className={styles.muted}>We use your details only to reply to you.</p>
       </ActionForm>
     </section>

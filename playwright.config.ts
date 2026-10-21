@@ -39,6 +39,9 @@ export default defineConfig({
       RESEND_API_KEY: "",
       WHATSAPP_ENABLED: "false",
       ADMIN_ALERT_EMAIL: "alerts@nilecruz.test",
+      // SEC-006: every test runs from one address, so limits by address are off here; limits per account and per email
+      // (failed sign-ins) stay on and are tested.
+      RATE_LIMIT_ADDRESSES: "off",
     },
   },
 });

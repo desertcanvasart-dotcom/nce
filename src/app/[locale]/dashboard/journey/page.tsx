@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ds/Badge/Badge";
 import { Section, ui } from "@/components/dashboard/ui";
+import { SavedPlan } from "@/components/plan/SavedPlan";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireUser } from "@/server/auth";
 import { notices } from "@/server/bookings/queries";
@@ -21,6 +22,7 @@ export default async function JourneyHome() {
     <>
       <h1 className={ui.pageTitle}>My journey</h1>
       <p className={ui.muted}>Your requests, offers, bookings and tours, in one place.</p>
+      <SavedPlan today={new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" })} />
 
       <Section title="Needs your attention" id="actions">
         {j.actions.length ? (

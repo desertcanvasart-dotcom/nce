@@ -299,7 +299,12 @@
       "twoStepRemove": "Desactivar la verificación en dos pasos",
       "devicesTitle": "Dispositivos",
       "devicesBody": "Cierra la sesión en todos los teléfonos y ordenadores, también en este.",
-      "signOutEverywhere": "Cerrar sesión en todas partes"
+      "signOutEverywhere": "Cerrar sesión en todas partes",
+      "emailsTitle": "Correos de Nilecruz",
+      "emailsNote": "Siempre le escribimos sobre reservas, pagos, plazos de pago y cancelaciones. Puede desactivar los demás: ofertas actualizadas y el avance de las solicitudes de reserva.",
+      "optionalEmails": "Escríbanme también sobre ofertas actualizadas y el avance de las solicitudes de reserva",
+      "saveEmails": "Guardar",
+      "emailsSaved": "Preferencias de correo guardadas."
     },
     "notices": {
       "emailChanged": "Tu correo ha cambiado.",

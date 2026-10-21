@@ -991,6 +991,13 @@ for _id, _note in {
  "DASH-PAY-014": "calendar orders paid by card through the signed webhook; standard cancellation 48 h unless the tour sets its own; the office can cancel a start and everyone on it is refunded in full (280, e2e)",
 }.items():
     STATUS[_id] = (STATUS[_id][0], STATUS[_id][1] + "; " + B72 + _note)
+B82A = "Batch 8-2a (21 Oct 2026): "
+STATUS.update({
+ "PAGE-105": ("Verified", B82A+"/plan-my-cruise/: the plan form, kept on the device only; ContactPage data; drafted copy for review; link check (silo-links.spec, conversion.spec)"),
+ "DASH-PUB-007": ("Verified", B82A+"plan without an account; after sign-in (address kept) or sign-up (My journey offers the saved plan) the request form opens filled in (unit conversion.test, e2e conversion.spec)"),
+ "DASH-BND-007": ("Verified", B82A+"every notice also emailed (English, ADR-101); without RESEND_API_KEY/EMAIL_FROM each is recorded as not sent and admins see a banner and Email delivery counts (pgTAP 330, e2e conversion.spec); real sending needs the Resend account"),
+ "SEC-006": ("Verified", B82A+"limits per hashed address and per account on sign-in (10 wrong passwords per email), sign-up, password reset, Contact, requests, booking requests and operator replies; hidden field on sign-up, password reset and Contact (pgTAP 330, e2e conversion.spec); Turnstile only if bots get through (ADR-101)"),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

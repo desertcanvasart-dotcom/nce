@@ -14,6 +14,7 @@ import { getAdminDb } from "@/server/db/admin";
 import { serverEnv } from "@/server/env";
 import { recordSkipped, sendEmail, sendWhatsAppTemplate, whatsappOn } from "@/server/messaging/send";
 import { emailsFor } from "@/server/teams/people";
+import { sendPendingNotices } from "@/server/messaging/notices";
 
 /**
  * ADR-099: sending booking requests to operators and chasing answers. Runs with the admin client: it acts for no
@@ -180,7 +181,9 @@ export async function runTick({ digest = false }: { digest?: boolean } = {}) {
     await db.rpc("service_mark_booking_request", { req: d.request_id, what: d.due });
   }
   const digests = digest ? await sendDigests() : 0;
-  return { reminded, escalated, digests };
+  // ADR-101: the emails behind dashboard notices go out on the same tick.
+  const notices = await sendPendingNotices();
+  return { reminded, escalated, digests, notices };
 }
 
 /** 09:00 Cairo, per operator with something open: waiting requests and holds ending today. */

@@ -9,6 +9,10 @@ import { AccountFrame, Notice } from "../AccountFrame";
 import styles from "../account.module.css";
 import { ChangeEmailForm, ChangePasswordForm, SignOutEverywhereForm, TwoStepSetup } from "../forms";
 import { accountMetadata } from "../meta";
+import { ActionForm } from "@/components/dashboard/ActionForm";
+import { Checkboxes } from "@/components/dashboard/ui";
+import { getDb } from "@/server/db";
+import { setOptionalEmails } from "./actions";
 
 type Props = {
   params: Promise<{ locale: Locale }>;
@@ -30,6 +34,8 @@ export default async function SecurityPage({ params, searchParams }: Props) {
   const t = await getTranslations("account");
   const admin = session.platformRole === "admin";
   const shown = NOTICES.find((n) => n === notice);
+  const db = await getDb();
+  const { data: profile } = await db.from("profiles").select("optional_emails").eq("id", session.userId).maybeSingle();
 
   return (
     <AccountFrame title={t("security.title")} lede={t("security.lede")}>
@@ -49,6 +55,21 @@ export default async function SecurityPage({ params, searchParams }: Props) {
           {t("security.emailTitle")}
         </h2>
         <ChangeEmailForm />
+      </section>
+
+      <section className={styles.section} aria-labelledby="sec-emails">
+        <h2 id="sec-emails" className={styles.sectionTitle}>
+          {t("security.emailsTitle")}
+        </h2>
+        <p className={styles.note}>{t("security.emailsNote")}</p>
+        <ActionForm action={setOptionalEmails} submit={t("security.saveEmails")} variant="outline">
+          <Checkboxes
+            legend={t("security.emailsTitle")}
+            name="optional"
+            options={[{ value: "yes", label: t("security.optionalEmails") }]}
+            checked={profile?.optional_emails === false ? [] : ["yes"]}
+          />
+        </ActionForm>
       </section>
 
       <section className={styles.section} aria-labelledby="sec-password">

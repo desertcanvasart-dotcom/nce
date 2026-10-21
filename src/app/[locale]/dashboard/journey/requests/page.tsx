@@ -6,6 +6,7 @@ import { requireUser } from "@/server/auth";
 import { myRequests, routeOptions } from "@/server/bookings/queries";
 import { myBookingRequests, REQUEST_STATUS } from "@/server/requests/queries";
 import { requestDefaults } from "@/lib/marketplace/vessel";
+import { SavedPlan } from "@/components/plan/SavedPlan";
 import { RequestFields } from "../../_bookings/RequestFields";
 import { createRequest } from "../actions";
 
@@ -15,20 +16,31 @@ const STATUS = {
   closed: { tone: "neutral", text: "Closed" },
 } as const;
 
+const PLAN_KEYS = new Set([
+  "route",
+  "from",
+  "to",
+  "nights",
+  "nmin",
+  "nmax",
+  "adults",
+  "children",
+  "cabins",
+  "budget",
+  "cur",
+  "notes",
+]);
+
 /** DASH-CUS-004, 014, 015, DASH-CUS-002 (ADR-091): ask operators for offers and follow each request with its offers. */
-export default async function MyRequests({
-  searchParams,
-}: {
-  searchParams: Promise<{ route?: string; from?: string; nights?: string }>;
-}) {
-  const session = await requireUser("/dashboard/journey/requests/");
-  const [requests, routes, sp, booking] = await Promise.all([
-    myRequests(),
-    routeOptions(),
-    searchParams,
-    myBookingRequests(session.userId),
-  ]);
+export default async function MyRequests({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  // A plan from Plan my cruise comes in the address; it survives the sign-in (DASH-PUB-007).
+  const sp = await searchParams;
+  const planned = Object.entries(sp).filter((e): e is [string, string] => PLAN_KEYS.has(e[0]) && typeof e[1] === "string");
+  const back = planned.length ? `?${new URLSearchParams(planned).toString()}#new` : "";
+  const session = await requireUser(`/dashboard/journey/requests/${back}`);
+  const [requests, routes, booking] = await Promise.all([myRequests(), routeOptions(), myBookingRequests(session.userId)]);
   const defaults = requestDefaults(sp, routes);
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
 
   return (
     <>
@@ -36,6 +48,8 @@ export default async function MyRequests({
       <p>
         <Link href="/dashboard/journey/offers/">All offers you have received</Link>
       </p>
+      {/* Only Plan my cruise sends a range of nights; a vessel page's link leaves a saved plan alone. */}
+      <SavedPlan today={today} handedOver={"nmin" in sp} />
       <Notice>
         A request asks operators for personal offers. Operators whose cruises fit can reply, and you choose. It isn’t an auction:
         no offer and no lowest price is guaranteed.

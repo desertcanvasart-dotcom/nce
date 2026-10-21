@@ -210,23 +210,50 @@ export function availabilityLabel(r: Pick<DeparturePrice, "placesLeft" | "mode">
  * that exists), a two-week window from the first departure and the itinerary's nights. Anything else is ignored.
  */
 export function requestDefaults(
-  sp: { route?: string; from?: string; nights?: string },
+  sp: Record<string, string | undefined>,
   routes: { origin: string; destination: string }[],
-): { route?: string; earliest?: string; latest?: string; nights?: number } {
+): {
+  route?: string;
+  earliest?: string;
+  latest?: string;
+  nights?: number;
+  nightsMin?: number;
+  nightsMax?: number;
+  adults?: number;
+  childAges?: string;
+  cabins?: number;
+  budget?: string;
+  currency?: string;
+  notes?: string;
+} {
+  const day = (v?: string) => (v && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : undefined);
+  const int = (v: string | undefined, lo: number, hi: number) => {
+    const n = Number(v);
+    return Number.isInteger(n) && n >= lo && n <= hi ? n : undefined;
+  };
   const route = routes.some((r) => `${r.origin}→${r.destination}` === sp.route) ? sp.route : undefined;
-  const from = sp.from && /^\d{4}-\d{2}-\d{2}$/.test(sp.from) ? sp.from : undefined;
-  const nights = Number(sp.nights);
-  let latest: string | undefined;
-  if (from) {
+  const from = day(sp.from);
+  let latest = day(sp.to);
+  if (from && !latest) {
     const d = new Date(`${from}T00:00:00Z`);
     d.setUTCDate(d.getUTCDate() + 14);
     latest = d.toISOString().slice(0, 10);
   }
+  const nights = int(sp.nights, 1, 21);
+  // From Plan my cruise (PAGE-105): every field of the plan, checked again by the form when it's sent.
   return {
     route,
     earliest: from,
     latest,
-    nights: Number.isInteger(nights) && nights >= 1 && nights <= 21 ? nights : undefined,
+    nights,
+    nightsMin: int(sp.nmin, 1, 21) ?? nights,
+    nightsMax: int(sp.nmax, 1, 21) ?? nights,
+    adults: int(sp.adults, 1, 30),
+    childAges: sp.children && /^\d{1,2}(,\d{1,2})*$/.test(sp.children) ? sp.children.split(",").join(", ") : undefined,
+    cabins: int(sp.cabins, 1, 30),
+    budget: sp.budget && /^\d+([.,]\d{1,2})?$/.test(sp.budget) ? sp.budget : undefined,
+    currency: sp.cur && ["USD", "EUR", "EGP"].includes(sp.cur) ? sp.cur : undefined,
+    notes: sp.notes ? sp.notes.slice(0, 1000) : undefined,
   };
 }
 

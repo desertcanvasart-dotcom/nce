@@ -16,13 +16,16 @@ import { failed, formObject, saved } from "@/server/catalogue/form";
 import { parseRequest } from "@/server/bookings/request-form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
+import { rateLimit, tooMany } from "@/server/security/rate-limit";
 import { getStripe } from "@/server/payments/stripe";
 
 /** My journey: cruise requests, accepting offers, eligibility proof (DASH-CUS-004–007, 014, 015, ADR-088). */
 const REQUESTS = "/dashboard/journey/requests/";
 
 export async function createRequest(_prev: ActionState, fd: FormData): Promise<ActionState> {
-  await requireUser(REQUESTS);
+  const session = await requireUser(REQUESTS);
+  const limit = await rateLimit("request", `user:${session.userId}`);
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const parsed = parseRequest(fd);
   if (!parsed.ok) return parsed.state;
   const db = await getDb();

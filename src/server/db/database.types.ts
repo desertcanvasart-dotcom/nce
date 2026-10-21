@@ -1418,6 +1418,9 @@ export type Database = {
       notifications: {
         Row: {
           created_at: string;
+          email_attempts: number;
+          email_status: string;
+          emailed_at: string | null;
           id: string;
           kind: string;
           link: string | null;
@@ -1428,6 +1431,9 @@ export type Database = {
         };
         Insert: {
           created_at?: string;
+          email_attempts?: number;
+          email_status?: string;
+          emailed_at?: string | null;
           id?: string;
           kind: string;
           link?: string | null;
@@ -1438,6 +1444,9 @@ export type Database = {
         };
         Update: {
           created_at?: string;
+          email_attempts?: number;
+          email_status?: string;
+          emailed_at?: string | null;
           id?: string;
           kind?: string;
           link?: string | null;
@@ -2179,6 +2188,7 @@ export type Database = {
           full_name: string | null;
           id: string;
           locale: string;
+          optional_emails: boolean;
           platform_role: Database["public"]["Enums"]["platform_role"];
           updated_at: string;
         };
@@ -2188,6 +2198,7 @@ export type Database = {
           full_name?: string | null;
           id: string;
           locale?: string;
+          optional_emails?: boolean;
           platform_role?: Database["public"]["Enums"]["platform_role"];
           updated_at?: string;
         };
@@ -2197,6 +2208,7 @@ export type Database = {
           full_name?: string | null;
           id?: string;
           locale?: string;
+          optional_emails?: boolean;
           platform_role?: Database["public"]["Enums"]["platform_role"];
           updated_at?: string;
         };
@@ -2452,6 +2464,24 @@ export type Database = {
           },
         ];
       };
+      rate_limit_hits: {
+        Row: {
+          bucket: string;
+          hits: number;
+          window_start: string;
+        };
+        Insert: {
+          bucket: string;
+          hits?: number;
+          window_start: string;
+        };
+        Update: {
+          bucket?: string;
+          hits?: number;
+          window_start?: string;
+        };
+        Relationships: [];
+      };
       rates: {
         Row: {
           amount_minor: number;
@@ -2634,6 +2664,32 @@ export type Database = {
           },
           {
             foreignKeyName: "reservation_cabins_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      reservation_reminders: {
+        Row: {
+          reservation_id: string;
+          sent_at: string;
+          which: string;
+        };
+        Insert: {
+          reservation_id: string;
+          sent_at?: string;
+          which: string;
+        };
+        Update: {
+          reservation_id?: string;
+          sent_at?: string;
+          which?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "reservation_reminders_reservation_id_fkey";
             columns: ["reservation_id"];
             isOneToOne: false;
             referencedRelation: "reservations";
@@ -4346,6 +4402,19 @@ export type Database = {
       service_mark_booking_request: {
         Args: { req: string; what: string };
         Returns: undefined;
+      };
+      service_mark_notice_email: {
+        Args: { notice: string; outcome: string };
+        Returns: undefined;
+      };
+      service_rate_limit: {
+        Args: {
+          add?: boolean;
+          bucket: string;
+          max_hits: number;
+          window_seconds: number;
+        };
+        Returns: number;
       };
       service_record_feed_failure: {
         Args: { feed: string; problem: string };

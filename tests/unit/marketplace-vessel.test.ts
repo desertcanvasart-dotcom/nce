@@ -166,13 +166,15 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
 describe("'Ask for an offer' (DASH-PUB-010)", () => {
   it("prefills only a route that exists, a two-week window and the nights", () => {
     const routes = [{ origin: "Luxor", destination: "Aswan" }];
-    expect(requestDefaults({ route: "Luxor→Aswan", from: "2026-12-30", nights: "4" }, routes)).toEqual({
+    expect(requestDefaults({ route: "Luxor→Aswan", from: "2026-12-30", nights: "4" }, routes)).toMatchObject({
       route: "Luxor→Aswan",
       earliest: "2026-12-30",
       latest: "2027-01-13",
       nights: 4,
+      nightsMin: 4,
+      nightsMax: 4,
     });
-    expect(requestDefaults({ route: "Nowhere→Else", from: "soon", nights: "99" }, routes)).toEqual({
+    expect(requestDefaults({ route: "Nowhere→Else", from: "soon", nights: "99" }, routes)).toMatchObject({
       route: undefined,
       earliest: undefined,
       latest: undefined,

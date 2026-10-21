@@ -298,7 +298,12 @@
       "twoStepRemove": "Turn off two-step sign-in",
       "devicesTitle": "Devices",
       "devicesBody": "Sign out on every phone and computer, including this one.",
-      "signOutEverywhere": "Sign out everywhere"
+      "signOutEverywhere": "Sign out everywhere",
+      "emailsTitle": "Emails from Nilecruz",
+      "emailsNote": "We always email you about bookings, payments, payment deadlines and cancellations. You can turn off the others: updated offers and progress on booking requests.",
+      "optionalEmails": "Also email me about updated offers and booking request progress",
+      "saveEmails": "Save",
+      "emailsSaved": "Email settings saved."
     },
     "notices": {
       "emailChanged": "Your email has been changed.",
