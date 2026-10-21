@@ -106,7 +106,7 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
               Sign in to see every cabin’s price for every departure, and reserve. The “from” price is per person for two sharing
               the lowest-priced cabin with places left.
               {v.gratuityUsdMinor
-                ? ` Crew gratuities of ${formatMoney({ amount: v.gratuityUsdMinor, currency: "USD" }, locale)} per person per night are separate and paid on board.`
+                ? ` Crew gratuities of ${formatMoney({ amount: v.gratuityUsdMinor, currency: "USD" }, locale)} per person per night are separate, paid on board at check-out.`
                 : ""}
             </p>
           </>

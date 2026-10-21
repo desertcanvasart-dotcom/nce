@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ds/Badge/Badge";
 import { formatMoney } from "@/components/ds/lib/format";
 import { SailingTime } from "./SailingTime";
+import { gratuityText, partyAges } from "@/lib/product/pricing";
 import { ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { offerView, type OfferView } from "@/lib/bookings/bookings";
@@ -88,8 +89,7 @@ export function OfferSummary({ o, now, title }: { o: OfferRow; now: number; titl
       <p className={ui.muted}>For: {o.eligibility_conditions}</p>
       {o.gratuity_usd_minor ? (
         <p className={ui.muted}>
-          Crew gratuity: {money(o.gratuity_usd_minor, "USD")} per person (aged 3 and over) per night, paid on board, not in the
-          total.
+          {gratuityText(o.gratuity_usd_minor, s ? { nights: s.nights, ages: partyAges(o.offer_cabins) } : undefined)}
         </p>
       ) : null}
     </article>

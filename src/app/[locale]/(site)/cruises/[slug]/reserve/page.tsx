@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input } from "@/components/dashboard/ui";
+import { gratuityText } from "@/lib/product/pricing";
 import { formatMoney } from "@/components/ds/lib/format";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/marketplace/marketplace.module.css";
@@ -330,13 +331,24 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 <strong>{formatMoney({ amount: quote * cabinsWanted, currency: chosen.currency }, locale)}</strong>
               </dd>
             </div>
+            {v.gratuityUsdMinor && it ? (
+              <div>
+                <dt>Crew gratuity</dt>
+                <dd>
+                  {gratuityText(v.gratuityUsdMinor, {
+                    nights: it.nights,
+                    ages: Array.from({ length: cabinsWanted }, () => ages).flat(),
+                  })}
+                </dd>
+              </div>
+            ) : null}
           </dl>
           <p className={styles.note}>
             {perPersonFor(chosen, ages)
               ? `${formatMoney({ amount: perPersonFor(chosen, ages)!, currency: chosen.currency }, locale)} per adult; `
               : ""}
-            children are priced by age. The total holds the fare only: crew gratuities are paid on board, and transfers, flights
-            and tours are booked separately.
+            children are priced by age. The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked
+            separately.
           </p>
           {chosen.mode === "instant" && (chosen.placesLeft ?? 0) < cabinsWanted ? (
             <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>

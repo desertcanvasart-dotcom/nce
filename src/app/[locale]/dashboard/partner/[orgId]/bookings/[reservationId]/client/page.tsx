@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatMoney } from "@/components/ds/lib/format";
+import { gratuityText, partyAges } from "@/lib/product/pricing";
 import { ui } from "@/components/dashboard/ui";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import { requireOrgRole } from "@/server/auth";
@@ -85,8 +86,7 @@ export default async function ClientRecord({ params }: { params: Promise<{ orgId
         </ul>
         {r.gratuity_usd_minor ? (
           <p className={ui.muted}>
-            Crew gratuity: {formatMoney({ amount: r.gratuity_usd_minor, currency: "USD" }, "en")} per person (aged 3 and over) per
-            night, paid on board.
+            {gratuityText(r.gratuity_usd_minor, s ? { nights: s.nights, ages: partyAges(r.reservation_cabins) } : undefined)}
           </p>
         ) : null}
         <h2 className={ui.subTitle}>Cancellation</h2>

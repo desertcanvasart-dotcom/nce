@@ -2,6 +2,8 @@
  * Pricing rules decided by Faris (ADR-010, ADR-012, ADR-018, ADR-082). All money is integer minor units.
  * Quotes for bookings (4e) are built from these functions; they are unit-tested at every boundary.
  */
+import { formatMoney } from "@/components/ds/lib/format";
+
 export type Band = { from: number; to: number | null; percent: number };
 export type RatePlan = "international" | "egyptian_citizen" | "foreign_resident" | "trade";
 
@@ -65,6 +67,24 @@ export const MIN_GRATUITY_USD_MINOR = 500;
 export function gratuityUsdMinor(perPersonPerNightMinor: number, nights: number, ages: number[]): number {
   if (perPersonPerNightMinor < MIN_GRATUITY_USD_MINOR) throw new Error("The gratuity is at least US$5 per person per night.");
   return perPersonPerNightMinor * nights * ages.filter((a) => a >= 3).length;
+}
+
+/** Guests on a booking as ages: adults count as 30 (always aged 3 and over), children by their ages. */
+export const partyAges = (cabins: { adults: number; child_ages: number[] }[]): number[] =>
+  cabins.flatMap((c) => [...Array<number>(c.adults).fill(30), ...c.child_ages]);
+
+/**
+ * DATA-016 (ADR-010): the gratuity's own line, worded the same on every summary: per person per night, the party's total
+ * when the party and nights are known, paid on board at check-out, never charged online and never in the amount due.
+ */
+export function gratuityText(perPersonPerNightMinor: number, party?: { nights: number; ages: number[] }): string {
+  const usd = (m: number) => formatMoney({ amount: m, currency: "USD" });
+  const counted = party ? party.ages.filter((a) => a >= 3).length : 0;
+  const total =
+    party && counted
+      ? `, ${usd(perPersonPerNightMinor * party.nights * counted)} for this party over ${party.nights} nights`
+      : "";
+  return `Crew gratuity: ${usd(perPersonPerNightMinor)} per person (aged 3 and over) per night${total}. Paid on board at check-out; never charged online and not part of the amount due.`;
 }
 
 /** ADR-082: E£ only for the Egyptian-citizen and foreign-resident plans. */

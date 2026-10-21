@@ -998,6 +998,14 @@ STATUS.update({
  "DASH-BND-007": ("Verified", B82A+"every notice also emailed (English, ADR-101); without RESEND_API_KEY/EMAIL_FROM each is recorded as not sent and admins see a banner and Email delivery counts (pgTAP 330, e2e conversion.spec); real sending needs the Resend account"),
  "SEC-006": ("Verified", B82A+"limits per hashed address and per account on sign-in (10 wrong passwords per email), sign-up, password reset, Contact, requests, booking requests and operator replies; hidden field on sign-up, password reset and Contact (pgTAP 330, e2e conversion.spec); Turnstile only if bots get through (ADR-101)"),
 })
+B82B = "Batch 8-2b (21 Oct 2026): "
+STATUS.update({
+ "DASH-PUB-011": ("Built", B82B+"read-only MCP at /api/mcp/ (Streamable HTTP, stateless JSON): search_cruises, get_vessel, compare_vessels, sailing_availability, each answer linking to the page (unit mcp.test; pgTAP 340 and e2e mcp.spec to run)"),
+ "DASH-PUB-012": ("Built", B82B+"no login, the cached public data a visitor's pages read: 'from' prices only, booking modes without counts (public_sailing_modes), no tool books, requests or changes anything; limited per address (unit mcp.test; pgTAP 340, e2e mcp.spec to run)"),
+ "DATA-011": ("Built", B82B+"reviewed every summary (vessel page, reserve, partner reserve, offers, reservations, receipts, client sheet): fares from the rates, the policy from the departure's vessel, the total the sum of the cabin lines (pgTAP 340 to run)"),
+ "DATA-016": ("Built", B82B+"one gratuity line on every summary, 'paid on board at check-out', with the party's total where known; never in the amount due (unit booking-summary.test; pgTAP 340 to run)"),
+ "DATA-017": ("Built", B82B+"the cruise total and its card checkout hold the fare only; tours have their own orders and checkout (pgTAP 340 to run)"),
+})
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

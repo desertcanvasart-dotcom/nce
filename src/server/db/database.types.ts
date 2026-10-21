@@ -4215,6 +4215,16 @@ export type Database = {
         Args: { ages: number[]; cab: string; cur: string; dep: string };
         Returns: number;
       };
+      public_sailing_modes: {
+        Args: { target: string };
+        Returns: {
+          booking_mode: string;
+          departs_on: string;
+          departure_id: string;
+          returns_on: string;
+          schedule_id: string;
+        }[];
+      };
       public_vessel_prices: {
         Args: never;
         Returns: {
