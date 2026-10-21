@@ -59,3 +59,8 @@ export async function rateLimit(
 /** "Too many tries. Try again in 12 minutes." */
 export const tooMany = (retryAfter: number) =>
   `Too many tries. Try again in ${Math.max(1, Math.ceil(retryAfter / 60))} minute${retryAfter > 60 ? "s" : ""}.`;
+
+/** SEC-006: the hidden field from `<Honeypot />` was filled in, so a bot sent the form. */
+export function trapFilled(fd: FormData): boolean {
+  return String(fd.get("website") ?? "").trim() !== "";
+}

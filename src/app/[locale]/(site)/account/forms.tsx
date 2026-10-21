@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useActionState } from "react";
 import { Button } from "@/components/ds/Button/Button";
 import { TextField } from "@/components/ds/TextField/TextField";
+import { Honeypot } from "@/components/forms/Honeypot";
 import { Link } from "@/i18n/navigation";
 import {
   changeEmail,
@@ -123,6 +124,7 @@ export function SignUpForm() {
         hint={t("signUp.passwordHint")}
         error={err("password")}
       />
+      <Honeypot />
       <Button variant="primary" type="submit" disabled={pending} block>
         {t("signUp.submit")}
       </Button>
@@ -178,6 +180,7 @@ export function ResetRequestForm() {
         defaultValue={state.values?.email}
         error={err("email")}
       />
+      <Honeypot />
       <Button variant="primary" type="submit" disabled={pending} block>
         {t("reset.submit")}
       </Button>

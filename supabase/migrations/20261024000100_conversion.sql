@@ -26,7 +26,7 @@ begin
   if max_hits < 1 or window_seconds < 10 or window_seconds > 86400 then raise exception 'Bad limit' using errcode = '22023'; end if;
   if add then
     insert into public.rate_limit_hits as h (bucket, window_start, hits) values (service_rate_limit.bucket, start, 1)
-    on conflict (bucket, window_start) do update set hits = h.hits + 1
+    on conflict on constraint rate_limit_hits_pkey do update set hits = h.hits + 1
     returning hits into n;
   else
     select coalesce((select hits from public.rate_limit_hits h where h.bucket = service_rate_limit.bucket and h.window_start = start), 0) into n;

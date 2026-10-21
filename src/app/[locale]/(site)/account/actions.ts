@@ -7,7 +7,7 @@ import { safeNextPath } from "@/lib/auth/next-path";
 import { env, siteUrl } from "@/lib/env";
 import { localizedPath } from "@/lib/seo/metadata";
 import { allowAnonymous, landingPath, requireUser } from "@/server/auth";
-import { rateLimit } from "@/server/security/rate-limit";
+import { rateLimit, trapFilled } from "@/server/security/rate-limit";
 import { getDb } from "@/server/db";
 import {
   changeEmailInput,
@@ -97,7 +97,8 @@ export async function signUp(_prev: FormState, fd: FormData): Promise<FormState>
   const input = parseInput(signUpInput, raw);
   if (!input.ok) return invalid(input.errors, { email: raw.email, full_name: raw.full_name });
   const { email, password, full_name, locale } = input.data;
-
+  // A bot filled the hidden field: the same answer as a real sign-up, and no account.
+  if (trapFilled(fd)) return { status: "sent", message: "checkEmail", values: { email } };
   if (!(await rateLimit("sign-up")).ok) return { status: "error", message: "rateLimited", values: { email, full_name } };
   const db = await getDb();
   const { error } = await db.auth.signUp({
@@ -131,6 +132,7 @@ export async function requestPasswordReset(_prev: FormState, fd: FormData): Prom
   allowAnonymous();
   const input = parseInput(emailOnly, form(fd));
   if (!input.ok) return invalid(input.errors, { email: String(fd.get("email") ?? "") });
+  if (trapFilled(fd)) return { status: "sent", message: "checkEmail" };
   if (!(await rateLimit("password-reset")).ok) return { status: "error", message: "rateLimited" };
   const db = await getDb();
   const { error } = await db.auth.resetPasswordForEmail(input.data.email, { redirectTo: confirmUrl(input.data.locale) });

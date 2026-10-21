@@ -5,7 +5,7 @@ import type { ActionState } from "@/components/dashboard/ActionForm";
 import { allowAnonymous } from "@/server/auth";
 import { failed, formObject, problemsFrom, saved } from "@/server/catalogue/form";
 import { getDb } from "@/server/db";
-import { rateLimit, tooMany } from "@/server/security/rate-limit";
+import { rateLimit, tooMany, trapFilled } from "@/server/security/rate-limit";
 
 /** PAGE-106: a message from the Contact page, kept for admins (ADR-097). Email notifications come in Batch 8. */
 const input = z.object({
@@ -17,9 +17,9 @@ const input = z.object({
 
 export async function sendContactMessage(_prev: ActionState, fd: FormData): Promise<ActionState> {
   allowAnonymous();
-  const f = formObject(fd);
   // A field people never see: bots fill it in. Answer as if it worked, and keep nothing.
-  if (String(f.website ?? "").trim()) return saved("Thank you. We reply by email, usually within one working day.");
+  if (trapFilled(fd)) return saved("Thank you. We reply by email, usually within one working day.");
+  const f = formObject(fd);
   const limit = await rateLimit("contact");
   if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const r = input.safeParse(f);
