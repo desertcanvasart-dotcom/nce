@@ -73,6 +73,8 @@ export function mapRows(
  */
 export function autoConfirmProblems(input: {
   operatorKnown: boolean;
+  /** How the sheet arrived; emailed sheets always wait for an admin (SEC-011). */
+  channel?: "email" | "whatsapp" | "upload";
   unmatched: number;
   rows: MappedRow[];
   ships: OperatorShip[];
@@ -84,6 +86,8 @@ export function autoConfirmProblems(input: {
 }): string[] {
   const problems: string[] = [];
   if (!input.operatorKnown) problems.push("The sender isn't a known contact of an operator.");
+  // An email's From address can be forged; WhatsApp senders are vouched for by Meta's signature.
+  if (input.channel === "email") problems.push("Emailed sheets are confirmed by an admin: an email's sender can be forged.");
   if (input.unmatched > 0)
     problems.push(`${input.unmatched} name${input.unmatched === 1 ? "" : "s"} not mapped by an existing alias.`);
   const total = new Map(input.ships.map((s) => [s.slug, s.cabinCount]));

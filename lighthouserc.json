@@ -6,19 +6,25 @@
       "url": [
         "http://localhost:3200/",
         "http://localhost:3200/es/",
-        "http://localhost:3200/ja/",
+        "http://localhost:3200/cruises/",
+        "http://localhost:3200/cruises/sample-sail-one/",
+        "http://localhost:3200/nile-cruise-guide/when-to-go/",
+        "http://localhost:3200/destinations/luxor/",
+        "http://localhost:3200/tours-extras/abu-simbel-day-trip/",
+        "http://localhost:3200/operators/connect/",
         "http://localhost:3200/terms/",
         "http://localhost:3200/account/sign-in/"
       ],
       "numberOfRuns": 3,
       "settings": {
-        "onlyCategories": ["performance", "accessibility", "best-practices"]
+        "onlyCategories": ["performance", "accessibility", "best-practices"],
+        "throttlingMethod": "devtools"
       }
     },
     "assert": {
       "assertions": {
         "largest-contentful-paint": [
-          "warn",
+          "error",
           {
             "maxNumericValue": 2500,
             "aggregationMethod": "median-run"

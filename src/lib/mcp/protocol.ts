@@ -50,10 +50,14 @@ export async function handleMessage(m: Message, d: McpData): Promise<Reply | nul
   }
 }
 
+export const MAX_BATCH = 10;
+
 /** A POST body: one message or a batch. Returns the JSON to send, or null when nothing needs answering (202). */
 export async function handleBody(body: unknown, d: McpData): Promise<unknown> {
   if (Array.isArray(body)) {
     if (!body.length) return fail(null, -32600, "Invalid request");
+    // SEC-011: one request counts once against the rate limit, so a batch is kept small.
+    if (body.length > MAX_BATCH) return fail(null, -32600, `At most ${MAX_BATCH} messages in a batch`);
     const replies = (await Promise.all(body.map((m) => handleMessage((m ?? {}) as Message, d)))).filter(Boolean);
     return replies.length ? replies : null;
   }

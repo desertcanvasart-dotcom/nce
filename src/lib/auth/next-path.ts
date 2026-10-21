@@ -14,6 +14,8 @@ export function safeNextPath(raw: string | null | undefined, fallback = "/dashbo
   try {
     const u = new URL(v, "http://n.invalid");
     if (u.origin !== "http://n.invalid") return fallback;
+    // SEC-011: "/.//evil.com" normalises to "//evil.com", which a browser reads as another site.
+    if (u.pathname.startsWith("//")) return fallback;
     if (u.pathname.startsWith("/account/") || /^\/(es|ja)\/account\//.test(u.pathname)) return fallback;
     return u.pathname + u.search + u.hash;
   } catch {

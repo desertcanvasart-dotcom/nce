@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import type { ActionState } from "@/components/dashboard/ActionForm";
 import { priceToMinor } from "@/lib/connections/format";
 import { passengersProblem, type Passenger } from "@/lib/bookings/bookings";
+import { partySchema, PLAN_PROBLEM, planSchema } from "@/lib/bookings/plan";
 import { env } from "@/lib/env";
 import { ageOn } from "@/lib/product/pricing";
 import { checkoutParams } from "@/lib/payments/checkout";
@@ -53,6 +54,7 @@ export async function partnerReserve(orgId: string, plan: Plan, _prev: ActionSta
 
 /** Both paths: the guests and client details from the form; the database checks everything again. */
 async function partnerBook(orgId: string, plan: Plan, fd: FormData, how: "reserve" | "request"): Promise<ActionState> {
+  if (!planSchema.safeParse(plan).success) return failed(PLAN_PROBLEM);
   const f = formObject(fd, ["terms"]);
   if (!(f.terms as string[]).includes("yes"))
     return failed("Tick that the client has read the terms and the cancellation policy.");
@@ -91,6 +93,10 @@ async function partnerBook(orgId: string, plan: Plan, fd: FormData, how: "reserv
     await notifyNewRequest(id as string);
     redirect(`/dashboard/partner/${orgId}/requests/booking/${id}/`);
   }
+  // SEC-011: reserving holds cabins at once; limited per person like booking requests.
+  const { data: me } = await db.auth.getUser();
+  const limit = await rateLimit("reserve", `user:${me.user?.id}`);
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const { data: ref, error } = await db.rpc("partner_reserve", {
     org: orgId,
     dep: plan.departureId,
@@ -300,6 +306,7 @@ export async function partnerAcceptOffer(
     kind: "partner",
     returnTo: `${requests(orgId)}${requestId}/accept/${offerId}/`,
   });
+  if (!partySchema.safeParse(offered).success) return failed(PLAN_PROBLEM);
   const f = formObject(fd, ["terms"]);
   if (!(f.terms as string[]).includes("yes"))
     return failed("Tick that the client has read the terms and the cancellation policy.");

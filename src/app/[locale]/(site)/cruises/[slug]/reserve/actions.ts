@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import type { ActionState } from "@/components/dashboard/ActionForm";
 import { passengersProblem, type Passenger } from "@/lib/bookings/bookings";
+import { PLAN_PROBLEM, planSchema } from "@/lib/bookings/plan";
 import { ageOn } from "@/lib/product/pricing";
 import { requireUser } from "@/server/auth";
 import { failed, formObject } from "@/server/catalogue/form";
@@ -55,6 +56,7 @@ function guestsFrom(plan: Plan, fd: FormData): { guests: Passenger[] } | { probl
  */
 export async function customerRequestBooking(slug: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
   const session = await requireUser(`/cruises/${slug}/reserve/`);
+  if (!planSchema.safeParse(plan).success) return failed(PLAN_PROBLEM);
   const limit = await rateLimit("booking-request", `user:${session.userId}`);
   if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const g = guestsFrom(plan, fd);
@@ -78,7 +80,11 @@ export async function customerRequestBooking(slug: string, plan: Plan, _prev: Ac
 
 /** DASH-PUB-009, ADR-093: a signed-in customer reserves at the published rate; the database re-checks everything. */
 export async function customerReserve(slug: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
-  await requireUser(`/cruises/${slug}/reserve/`);
+  const session = await requireUser(`/cruises/${slug}/reserve/`);
+  if (!planSchema.safeParse(plan).success) return failed(PLAN_PROBLEM);
+  // SEC-011: reserving holds cabins at once, so one account can't hold a sailing's cabins over and over.
+  const limit = await rateLimit("reserve", `user:${session.userId}`);
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const g = guestsFrom(plan, fd);
   if ("problem" in g) return failed(g.problem);
   const guests = g.guests;

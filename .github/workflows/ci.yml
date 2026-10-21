@@ -14,6 +14,10 @@ env:
   NEXT_TELEMETRY_DISABLED: "1"
   NEXT_PUBLIC_SITE_URL: http://localhost:3100
 
+# SEC-011 (Batch 11): the workflow token can only read the repository.
+permissions:
+  contents: read
+
 jobs:
   quality:
     name: Types, lint, format, unit tests
@@ -107,8 +111,13 @@ jobs:
       - uses: actions/setup-node@v7
         with: { node-version-file: .nvmrc, cache: pnpm }
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - run: pnpm lhci
+      # PERF-001–003 (Batch 11): the key templates need data, so Lighthouse measures against the seeded local database.
+      - uses: supabase/setup-cli@v1
+        with: { version: 2.111.0 }
+      - name: Start local Supabase with the seed
+        run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,mailpit
+      - run: pnpm with-local-db pnpm build
+      - run: pnpm with-local-db pnpm lhci
       - uses: actions/upload-artifact@v7
         if: always()
         # .lighthouseci starts with a dot; upload-artifact skips hidden paths unless told otherwise.

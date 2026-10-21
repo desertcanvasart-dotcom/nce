@@ -1,5 +1,6 @@
 "use server";
 
+import { partySchema, PLAN_PROBLEM } from "@/lib/bookings/plan";
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -53,6 +54,7 @@ export async function acceptOffer(
   fd: FormData,
 ): Promise<ActionState> {
   await requireUser(`${REQUESTS}${requestId}/accept/${offerId}/`);
+  if (!partySchema.safeParse(offered).success) return failed(PLAN_PROBLEM);
   const f = formObject(fd, ["terms"]);
   const total = offered.adults + offered.childAges.length;
   const guests: Passenger[] = Array.from({ length: total }, (_, i) => ({

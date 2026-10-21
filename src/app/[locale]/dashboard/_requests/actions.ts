@@ -68,6 +68,8 @@ export async function addContact(orgId: string, admin: boolean, _prev: ActionSta
     sheets: r.data.roles.includes("sheets"),
     whatsapp_opt_in_at: r.data.whatsapp && r.data.opt_in.includes("yes") ? new Date().toISOString() : null,
   });
+  if (error?.code === "23505")
+    return failed("That email or WhatsApp number is already another operator's contact. Ask Nilecruz if it should move.");
   if (error) return dbProblem(error);
   revalidatePath(contactsPage(orgId, admin));
   return saved("Contact added.");

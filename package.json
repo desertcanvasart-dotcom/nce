@@ -36,11 +36,13 @@
     "import:tours": "tsx --env-file-if-exists=.env.local scripts/import-tours.ts",
     "import:tour-rates": "tsx --env-file-if-exists=.env.local scripts/import-tour-rates.ts",
     "with-local-db": "tsx scripts/with-local-supabase.ts",
-    "grant-role": "tsx --env-file-if-exists=.env.local scripts/grant-role.ts"
+    "grant-role": "tsx --env-file-if-exists=.env.local scripts/grant-role.ts",
+    "launch:check": "tsx scripts/launch-check.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.137.0",
     "@sanity/client": "^8.9.0",
+    "@sentry/nextjs": "11.4.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.118.0",
     "exceljs": "^4.4.0",

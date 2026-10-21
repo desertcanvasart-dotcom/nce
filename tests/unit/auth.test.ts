@@ -60,6 +60,10 @@ describe("safe return paths (no open redirects)", () => {
     "//evil.example/",
     "/\\evil.example",
     "%2F%2Fevil.example",
+    // SEC-011: paths that normalise to "//host".
+    "/.//evil.example",
+    "/a/..//evil.example",
+    "/%2e//evil.example",
     "javascript:alert(1)",
     "/account/sign-in/",
     "/es/account/security/",

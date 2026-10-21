@@ -23,17 +23,33 @@ const KINDS: Record<string, "xlsx" | "xls" | "csv" | "pdf" | "jpg" | "png"> = {
   png: "png",
 };
 export const ACCEPTED = ".xlsx,.xls,.csv,.pdf,.jpg,.jpeg,.png";
+const STORED_TYPE: Record<string, string> = {
+  xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  xls: "application/vnd.ms-excel",
+  csv: "text/csv",
+  pdf: "application/pdf",
+  jpg: "image/jpeg",
+  png: "image/png",
+};
 const kindOf = (name: string | null) => (name ? KINDS[name.toLowerCase().split(".").pop() ?? ""] : undefined);
 const safeName = (name: string) => name.replace(/[^A-Za-z0-9._-]+/g, "_").slice(-120) || "sheet";
 
-/** The operator whose contact sent it: an email address or WhatsApp number on operator_contacts. */
+/**
+ * The operator whose contact sent it: an email address or WhatsApp number on operator_contacts. The address is matched
+ * exactly (SEC-011, Batch 11): LIKE wildcards in a sender are escaped, so "%@%" matches nothing.
+ */
 async function operatorFor(sender: string | null): Promise<string | null> {
   if (!sender) return null;
   const db = getAdminDb();
   const s = sender.trim().toLowerCase();
   const { data } = s.startsWith("+")
     ? await db.from("operator_contacts").select("org_id").eq("whatsapp", s).limit(1).maybeSingle()
-    : await db.from("operator_contacts").select("org_id").ilike("email", s).limit(1).maybeSingle();
+    : await db
+        .from("operator_contacts")
+        .select("org_id")
+        .ilike("email", s.replace(/[\\%_]/g, "\\$&"))
+        .limit(1)
+        .maybeSingle();
   return data?.org_id ?? null;
 }
 
@@ -70,7 +86,8 @@ export async function receiveSheet(input: {
     const path = `${row.id}/${safeName(input.fileName)}`;
     const { error: up } = await db.storage
       .from("sheets")
-      .upload(path, input.bytes, { contentType: input.contentType ?? "application/octet-stream" });
+      // SEC-011: the sender's content type isn't trusted; the type comes from the accepted file extension.
+      .upload(path, input.bytes, { contentType: STORED_TYPE[kindOf(input.fileName) ?? ""] ?? "application/octet-stream" });
     if (up) throw up;
     await db.from("sheet_ingests").update({ file_path: path }).eq("id", row.id);
   }
@@ -243,6 +260,7 @@ async function maybeAutoConfirm(id: string) {
   );
   const problems = autoConfirmProblems({
     operatorKnown: s.channel === "upload" || !!s.org_id,
+    channel: s.channel as "email" | "whatsapp" | "upload",
     unmatched: (s.unmatched as unknown[]).length,
     rows: s.rows as never,
     ships: op.ships,

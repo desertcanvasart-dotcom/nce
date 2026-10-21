@@ -175,8 +175,19 @@ export async function setNewPassword(_prev: FormState, fd: FormData): Promise<Fo
   redirect(await landingPath("/dashboard/"));
 }
 
-/** Checks the current password on a separate, throwaway session, so the person's own session (and two-step level) stays. */
-async function currentPasswordIsRight(email: string, password: string): Promise<boolean> {
+/**
+ * Checks the current password on a separate, throwaway session, so the person's own session (and two-step level) stays.
+ * Wrong tries are limited per account (SEC-011): the check runs from our server, so Supabase sees one address.
+ */
+async function currentPasswordIsRight(email: string, password: string): Promise<boolean | "limited"> {
+  const who = `email:${email.toLowerCase()}`;
+  if (!(await rateLimit("password-check", who, { peek: true })).ok) return "limited";
+  const right = await probePassword(email, password);
+  if (!right) await rateLimit("password-check", who);
+  return right;
+}
+
+async function probePassword(email: string, password: string): Promise<boolean> {
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const key = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return false;
@@ -191,9 +202,9 @@ export async function changePassword(_prev: FormState, fd: FormData): Promise<Fo
   const session = await requireUser("/account/security/");
   const input = parseInput(changePasswordInput, form(fd));
   if (!input.ok) return invalid(input.errors);
-  if (!(await currentPasswordIsRight(session.email, input.data.current))) {
-    return { status: "error", fields: { current: "currentPasswordWrong" } };
-  }
+  const right = await currentPasswordIsRight(session.email, input.data.current);
+  if (right === "limited") return { status: "error", message: "rateLimited" };
+  if (!right) return { status: "error", fields: { current: "currentPasswordWrong" } };
   const db = await getDb();
   const { error } = await db.auth.updateUser({ password: input.data.password });
   if (error?.code === "same_password") return { status: "error", fields: { password: "passwordReuse" } };
@@ -205,9 +216,9 @@ export async function changeEmail(_prev: FormState, fd: FormData): Promise<FormS
   const session = await requireUser("/account/security/");
   const input = parseInput(changeEmailInput, form(fd));
   if (!input.ok) return invalid(input.errors, { email: String(fd.get("email") ?? "") });
-  if (!(await currentPasswordIsRight(session.email, input.data.current))) {
-    return { status: "error", fields: { current: "currentPasswordWrong" }, values: { email: input.data.email } };
-  }
+  const right = await currentPasswordIsRight(session.email, input.data.current);
+  if (right === "limited") return { status: "error", message: "rateLimited", values: { email: input.data.email } };
+  if (!right) return { status: "error", fields: { current: "currentPasswordWrong" }, values: { email: input.data.email } };
   const db = await getDb();
   const { error } = await db.auth.updateUser({ email: input.data.email }, { emailRedirectTo: confirmUrl(input.data.locale) });
   if (error?.code?.startsWith("over_")) return { status: "error", message: "rateLimited" };
@@ -230,12 +241,17 @@ export async function startTwoStep(_prev: FormState, _fd: FormData): Promise<For
 }
 
 export async function verifyTwoStep(prev: FormState, fd: FormData): Promise<FormState> {
-  await requireUser("/account/security/");
+  const session = await requireUser("/account/security/");
   const input = parseInput(verifyFactorInput, form(fd));
   if (!input.ok) return { ...prev, status: "enrol", fields: errorKeys(input.errors) };
+  const who = `user:${session.userId}`;
+  if (!(await rateLimit("two-step", who, { peek: true })).ok) return { ...prev, status: "enrol", message: "rateLimited" };
   const db = await getDb();
   const { error } = await db.auth.mfa.challengeAndVerify({ factorId: input.data.factorId, code: input.data.code });
-  if (error) return { ...prev, status: "enrol", message: "codeWrong", fields: undefined };
+  if (error) {
+    await rateLimit("two-step", who);
+    return { ...prev, status: "enrol", message: "codeWrong", fields: undefined };
+  }
   redirect(safeNextPath(input.data.next, page(input.data.locale, "/account/security", "?notice=twoStepOn")));
 }
 
@@ -256,15 +272,21 @@ export async function removeTwoStep(_prev: FormState, fd: FormData): Promise<For
 }
 
 export async function twoStepSignIn(_prev: FormState, fd: FormData): Promise<FormState> {
-  await requireUser("/account/two-step/");
+  const session = await requireUser("/account/two-step/");
   const input = parseInput(twoStepInput, form(fd));
   if (!input.ok) return invalid(input.errors);
+  // SEC-011: wrong codes are limited per account (someone holding a stolen password can't keep guessing).
+  const who = `user:${session.userId}`;
+  if (!(await rateLimit("two-step", who, { peek: true })).ok) return { status: "error", message: "rateLimited" };
   const db = await getDb();
   const { data: factors } = await db.auth.mfa.listFactors();
   const factor = factors?.totp.find((f) => f.status === "verified");
   if (!factor) redirect(page(input.data.locale, "/account/security", "?setup=two-step"));
   const { error } = await db.auth.mfa.challengeAndVerify({ factorId: factor.id, code: input.data.code });
-  if (error) return { status: "error", message: "codeWrong" };
+  if (error) {
+    await rateLimit("two-step", who);
+    return { status: "error", message: "codeWrong" };
+  }
   redirect(await landingPath(safeNextPath(input.data.next)));
 }
 

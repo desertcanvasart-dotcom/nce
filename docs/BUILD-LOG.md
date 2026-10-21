@@ -1836,3 +1836,64 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 **Verified:**
 - `http.spec.ts` follows every live address: the trailing-slash hop (308), then the 301 to its new page, which answers. 8 passed.
 - `seo.test.ts` checks the rule order: filters before the plain `/explore`, catch-alls last. `pnpm verify` passes.
+
+## 22 Oct 2026 · Batch 11-1 · Hardening: performance, accessibility, security, errors, launch checks
+
+**Brief:** `docs/briefs/BATCH-11.md`, approved by Faris with the recommended answers:
+- Sentry, EU, free plan;
+- daily backups at launch, point-in-time recovery once real money flows;
+- a person runs the VoiceOver script;
+- 11-1 now.
+
+**Performance (PERF-001–003):**
+- **What changed in CI:** Lighthouse now measures 10 key templates (home, Spanish home, listing, a vessel page, an article, a destination, a tour, the operators page, terms, sign-in) against a seeded local database. LCP over 2.5 s is now a failure.
+- **What I found:** the first run "failed" LCP everywhere (3.0–3.5 s), but the browser's own trace put LCP at the first paint, about 0.12 s.
+  - Lighthouse's simulated throttling estimates LCP from the network graph, and on these pages it charged the early font and script downloads to it.
+  - Re-measured with real (devtools) throttling: LCP is 0.9–1.7 s and CLS is about 0, with the original fonts.
+  - Preloading or changing the fonts made no difference, so the fonts stay as they were.
+- **The decision:** the CI config uses devtools throttling, with this reason recorded. The deployed-site workflow keeps its own settings.
+- **Blocking time:** When to go's calendar created a date formatter for every one of its 365 labels on every render. It now shares one, and works the labels out once, which also makes hovering cheap.
+- **Watch:** each listing card draws illustrated art while there are no photos, about 190 elements per card. With 100 published vessels the listing would be heavy; paging at about 24 cards is recommended before the catalogue grows.
+
+**Accessibility (A11Y-011):**
+- axe runs on every built page, in Day and Night, in CI (`a11y-all.spec.ts`, once per run).
+- **Keyboard:** every control on the home page, a vessel page, sign-in and When to go shows a visible focus ring (cards and itinerary stops draw theirs on the card or the dot). The suite already drives the compare tray, deck view, calendar and choosing a cabin keyboard-only.
+- `docs/A11Y-SCREEN-READER.md`: a 30-minute VoiceOver script for the human pass, with a results table.
+
+**Security (SEC-011):** `docs/SECURITY-REVIEW.md`. Three read-only reviews (database, server, dependencies and config), each finding checked in the code.
+- **Fixed:**
+  - **High:** emailed vacancy sheets could be credited to any operator. The sender is now matched exactly, emailed sheets never auto-confirm, and an address belongs to one operator.
+  - open redirect after sign-in;
+  - notifications could be rewritten and re-sent;
+  - availability could be marked as fresh API data by a direct write;
+  - alternative offers never lapsed;
+  - admin roles weren't kept apart;
+  - booking forms trusted their arguments, and reserving had no rate limit;
+  - no limit on two-step codes or current-password checks;
+  - the commission rate was readable by any signed-in user;
+  - Lows: column grants, MCP size and batch caps, a constant-time WhatsApp token, stored sheet file types, read-only CI tokens.
+- **Decided for 11-2 or launch:**
+  - database-level caps on direct calls;
+  - the forwarded address on Railway;
+  - the production auth settings;
+  - paused companies' powers;
+  - invite limits;
+  - SHA-pinned actions.
+- **Migration** `20261029000100_security_review`, pgTAP `390_security_review` (11 checks). `070_admin_roles` was updated, since a catalogue admin's profile edit now changes nothing instead of raising an error.
+
+**Errors (ENG-014):** Sentry for server, edge and browser errors, tagged with the release (the commit Railway deploys). It's off until `SENTRY_DSN` / `NEXT_PUBLIC_SENTRY_DSN` are set.
+- **While off:** the browser SDK isn't even downloaded, and the CSP allows Sentry's host only when a DSN is set.
+- **Privacy:** no personal data is sent (users, cookies, headers, bodies and query strings are all off).
+- **Version:** pinned to 11.4.0, out for more than two weeks.
+
+**Honest facts (BRAND-010):** `brand-facts.spec.ts`: the listing's size signal and the price's "Why?", the vessel page's facts and evaluation status, the comparison's rows, the tour's timings.
+
+**Showcase check (DATA-025):** `pnpm launch:check` reads, with the public key, what any visitor can see, and fails on public sample or showcase data. Locally it correctly fails on the test leftovers.
+
+**The launch checklist:** `docs/LAUNCH.md`, step by step with owners and checks, from content and production accounts to DNS, the old site's redirects, indexing, the first week and rollback. Faris signs it off.
+
+**Verified:**
+- **Unit:** `pnpm verify` passes, 506 tests: `launch.test.ts`, `auth.test.ts` (open redirect), `sheets.test.ts` (email never auto-confirms).
+- **Database:** `390_security_review` (11 checks) and `070` pass; the grants check shows no differences.
+- **End-to-end:** 158 passed, covering `a11y-all`, `brand-facts`, and the specs for sign-in, sheets, booking requests, partners, journey, the vessel page, MCP, interactions and connections.
+- **Lighthouse:** run locally as above.

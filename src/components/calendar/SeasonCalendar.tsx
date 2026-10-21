@@ -6,14 +6,16 @@ import styles from "./SeasonCalendar.module.css";
 
 const DAY = 86_400_000;
 const add = (d: string, n: number) => new Date(Date.parse(`${d}T00:00:00Z`) + n * DAY).toISOString().slice(0, 10);
-const long = (d: string) =>
-  new Date(`${d}T12:00:00Z`).toLocaleDateString("en-GB", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+// One formatter for every date (PERF-003): creating one per call made the 365 labels the page's slowest work.
+const LONG = new Intl.DateTimeFormat("en-GB", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const MONTH = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
+const long = (d: string) => LONG.format(new Date(`${d}T12:00:00Z`));
 const SEASON = {
   festive: "Christmas and New Year",
   premium: "a premium period",
@@ -47,6 +49,18 @@ export function SeasonCalendar({ today, periods }: { today: string; periods: Pre
     }
     return out;
   }, [today]);
+  // Each day's words and shade, worked out once rather than on every hover.
+  const days = useMemo(
+    () =>
+      new Map(
+        months.flatMap(([, ds]) =>
+          ds.map(
+            (d) => [d, { text: dayText(today, d, periods), kind: d <= today ? "past" : deadlineRule(d, periods).rule }] as const,
+          ),
+        ),
+      ),
+    [months, today, periods],
+  );
   const [active, setActive] = useState(add(today, 1));
   const grid = useRef<HTMLDivElement>(null);
   const shown = months.flatMap(([, ds]) => ds);
@@ -68,12 +82,12 @@ export function SeasonCalendar({ today, periods }: { today: string; periods: Pre
       move(shown.at(-1)!);
     }
   };
-  const kind = (d: string) => (d <= today ? "past" : deadlineRule(d, periods).rule);
+  const kind = (d: string) => days.get(d)!.kind;
   return (
     <section className={styles.calendar} aria-labelledby="season-calendar">
       <h2 id="season-calendar">Seasons and payment deadlines</h2>
       <p className={styles.status} role="status" aria-live="polite">
-        {dayText(today, active, periods)}
+        {days.get(active)?.text ?? dayText(today, active, periods)}
       </p>
       <ul className={styles.legend}>
         <li>
@@ -89,9 +103,7 @@ export function SeasonCalendar({ today, periods }: { today: string; periods: Pre
       <div ref={grid} className={styles.months}>
         {months.map(([month, ds]) => (
           <div key={month} className={styles.month}>
-            <p className={styles.monthName}>
-              {new Date(`${month}-01T12:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })}
-            </p>
+            <p className={styles.monthName}>{MONTH.format(new Date(`${month}-01T12:00:00Z`))}</p>
             <div className={styles.weekdays} aria-hidden="true">
               {["M", "T", "W", "T", "F", "S", "S"].map((w, i) => (
                 <span key={i}>{w}</span>
@@ -107,7 +119,7 @@ export function SeasonCalendar({ today, periods }: { today: string; periods: Pre
                     data-day={d}
                     tabIndex={d === active ? 0 : -1}
                     className={`${styles.day} ${styles[k === "premium" ? "festive" : k]}`}
-                    aria-label={dayText(today, d, periods)}
+                    aria-label={days.get(d)!.text}
                     aria-pressed={d === active}
                     onKeyDown={onKey}
                     onFocus={() => setActive(d)}
