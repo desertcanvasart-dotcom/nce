@@ -7,6 +7,8 @@ export const PROPOSAL_FIELDS = [
   { key: "max_guests", label: "Guests" },
   { key: "deck_count", label: "Decks" },
   { key: "year_built", label: "Year built" },
+  { key: "mooring", label: "Mooring" },
+  { key: "shared_spaces", label: "Shared spaces" },
   { key: "description_en", label: "Description (English)" },
 ] as const;
 export type ProposalKey = (typeof PROPOSAL_FIELDS)[number]["key"];

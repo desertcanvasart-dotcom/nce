@@ -1,0 +1,103 @@
+.explainer {
+  margin: 0 0 var(--space-4);
+  max-width: 640px;
+}
+
+.toggle {
+  display: inline-flex;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-3);
+  padding: var(--space-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+
+.toggle button {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.toggle button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-primary);
+}
+
+.toggle button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: var(--offset);
+}
+
+.figure {
+  margin: 0 0 var(--space-3);
+}
+
+.figure figcaption {
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+.drawing {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+}
+
+.water {
+  fill: var(--surface-sunk);
+}
+
+.bank {
+  fill: var(--accent-soft);
+}
+
+.palm {
+  fill: var(--ink-muted);
+  opacity: 0.6;
+}
+
+.ship {
+  fill: var(--surface-raised);
+  stroke: var(--line-strong);
+  stroke-width: 1.5;
+}
+
+.yours {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.label {
+  fill: var(--ink);
+  font-size: var(--type-micro-size);
+}
+
+.labelEnd {
+  fill: var(--ink);
+  font-size: var(--type-micro-size);
+  text-anchor: end;
+}
+
+.labelOn {
+  fill: var(--on-primary);
+  font-size: var(--type-micro-size);
+  text-anchor: middle;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .figure {
+    animation: fade var(--dur-2) var(--ease-river);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

@@ -95,7 +95,7 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.getByText(`Plan to arrive in ${S.origin} the day before.`)).toBeVisible();
   await expect(page.getByText("Board and sail")).toBeVisible();
   await expect(page.getByText(/Schematic: not a floor plan/)).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Main deck" })).toBeVisible();
+  await expect(page.getByRole("tab", { name: "Main deck" })).toBeVisible();
   await expect(page.getByText("80/100").first()).toBeVisible();
   // EXP-009: the score unfolds into its seven dimensions.
   await expect(page.getByRole("img", { name: /^Evaluation 80 out of 100: / })).toBeVisible();

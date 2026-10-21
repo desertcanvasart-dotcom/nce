@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DeckPlan } from "@/components/marketplace/DeckPlan";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { ActionForm } from "@/components/dashboard/ActionForm";
@@ -290,13 +291,18 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               That cabin can’t take this party on this departure. Choose another cabin or change the guests.
             </p>
           ) : null}
+          {/* EXP-002: the decks, each cabin type coloured by how it books on this sailing; choosing one ticks it below. */}
+          <DeckPlan
+            cabins={v.cabins.filter((c) => dep.some((r) => r.cabinTypeId === c.id))}
+            maxGuests={v.maxGuests}
+            sharedSpaces={v.sharedSpaces}
+            modes={Object.fromEntries(dep.map((r) => [r.cabinTypeId, r.mode]))}
+            chooseInForm
+          />
           <form method="get" action={base} className={styles.reserveForm}>
             {it ? <input type="hidden" name="itinerary" value={it.code} /> : null}
             {pkg !== "cruise" ? <input type="hidden" name="pkg" value={pkg} /> : null}
             <input type="hidden" name="dep" value={dep[0]!.departureId} />
-            <p className={styles.schematic}>
-              Schematic: not a floor plan. Choose a cabin type on a deck; your cabin number is assigned by the operator.
-            </p>
             {deckGroups(v.cabins.filter((c) => dep.some((r) => r.cabinTypeId === c.id))).map((g) => (
               <fieldset key={g.deck} className={styles.deck}>
                 <legend>{g.deck} deck</legend>

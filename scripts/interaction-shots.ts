@@ -1,5 +1,5 @@
 /**
- * Batch 9-1: screenshots of the interactions in their open states (EXP-001, 004, 006, 009), at 375, 768 and 1440 px, in
+ * Batches 9-1 and 9-2a: screenshots of the interactions in their open states (EXP-001–006, 009), at 375, 768 and 1440 px, in
  * Day and Night. Needs a running server with the local sample data: pnpm -s tsx scripts/interaction-shots.ts
  */
 import { mkdirSync } from "node:fs";
@@ -33,11 +33,24 @@ async function main() {
       await cal.locator('button[aria-pressed="true"]').focus();
       await page.keyboard.press("ArrowDown");
       await cal.screenshot({ path: name("season-calendar") });
+      await page.evaluate(() => localStorage.removeItem("nc-compare-v1"));
       await page.goto(`${base}/cruises/sample-dahabiya-nefertari/`);
       const radar = page.getByRole("img", { name: /^Evaluation / });
       await radar.scrollIntoViewIfNeeded();
       await page.waitForTimeout(1200);
       await radar.screenshot({ path: name("evaluation-radar") });
+      // Batch 9-2a: the deck view with a cabin type open, both mooring states, the voyage part-way.
+      const cabins = page.locator("#cabins");
+      await cabins.getByRole("tabpanel").getByRole("button").first().click();
+      await cabins.screenshot({ path: name("deck-view").replace("9-1-", "9-2a-") });
+      const mooring = page.locator("#mooring");
+      await mooring.screenshot({ path: name("mooring-private").replace("9-1-", "9-2a-") });
+      await mooring.getByRole("button", { name: "Rafted, six abreast" }).click();
+      await page.waitForTimeout(500);
+      await mooring.screenshot({ path: name("mooring-rafted").replace("9-1-", "9-2a-") });
+      await page.evaluate(() => document.querySelectorAll("#itinerary ol > li")[2]?.scrollIntoView({ block: "center" }));
+      await page.waitForTimeout(1200);
+      await page.screenshot({ path: name("voyage").replace("9-1-", "9-2a-") });
       await page.close();
     }
   }

@@ -31,6 +31,8 @@ const page: VesselPage = {
   maxGuests: 60,
   cabinCount: 30,
   deckCount: 4,
+  mooring: null,
+  sharedSpaces: [],
   yearBuilt: 2019,
   sample: true,
   showcase: false,

@@ -6,6 +6,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { BEST_FOR, CATEGORIES, VESSEL_TYPE_LABEL } from "@/lib/catalogue/categories";
+import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 import { VERDICTS } from "@/lib/evaluation/method";
 import { requireAdmin } from "@/server/auth";
 import { approvedOperators, vesselForEditor } from "@/server/catalogue/queries";
@@ -199,6 +200,15 @@ export default async function VesselEditor({ params, searchParams }: Props) {
               checked={v.best_for}
               hint="Editorial labels chosen by Nilecruz; never derived from scores."
             />
+            <Select
+              label="Mooring"
+              name="mooring"
+              placeholder="Not given"
+              defaultValue={v.mooring}
+              options={MOORING}
+              hint="Usually set by the operator in a submission; check it against what you know."
+            />
+            <Checkboxes legend="Shared spaces" name="shared_spaces" options={SHARED_SPACES} checked={v.shared_spaces} />
           </ActionForm>
         ) : (
           <dl className={ui.grid}>

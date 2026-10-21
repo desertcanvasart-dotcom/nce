@@ -20,6 +20,7 @@ import { arriveDayBefore, dayBeforeTip, sailingTimeText } from "@/lib/product/sa
 import { isBuilt, keywordText, LINK_MAP } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { MooringExplainer } from "@/components/mooring/MooringExplainer";
 import { DeckPlan } from "./DeckPlan";
 import { ItinerarySwitch } from "./ItinerarySwitch";
 import { AddToCompare, CompareTray } from "./CompareTray";
@@ -185,8 +186,15 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
 
       <section className={styles.section} id="cabins">
         <h2>Cabins and decks</h2>
-        <DeckPlan cabins={v.cabins} />
+        <DeckPlan cabins={v.cabins} maxGuests={v.maxGuests} sharedSpaces={v.sharedSpaces} />
       </section>
+
+      {v.mooring ? (
+        <section className={styles.section} id="mooring">
+          <h2>Where it moors</h2>
+          <MooringExplainer practice={v.mooring} />
+        </section>
+      ) : null}
 
       <section className={styles.section} id="evaluation">
         <h2>Nilecruz evaluation</h2>
@@ -317,6 +325,7 @@ function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerar
       {arriveDayBefore(it.sailingPeriod) ? <p className={styles.note}>{dayBeforeTip(it.origin)}</p> : null}
       {it.days.length ? (
         <ItineraryTimeline
+          scroll
           vessel={v.type}
           stops={it.days.map((d) => ({
             day: d.day,

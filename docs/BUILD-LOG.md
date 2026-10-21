@@ -1717,3 +1717,51 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **End-to-end:** `interactions.spec.ts` covers the "Why?" sheet from a card (opens, explains, closes with Escape); the tray filled to three with the keyboard, refusing a fourth, removing one, following you to a vessel page and opening the comparison; the calendar by keyboard with its status line; axe in Day and Night. `marketplace-vessel.spec.ts` checks the radar. The affected specs pass on a production build.
 - **Full end-to-end:** not run cleanly locally. The local database holds Faris's imported tour rates and the demo data, which some older tests don't expect ("Prices coming soon", the tour page's links). CI runs the full suite on a fresh database.
 - **Screenshots:** `docs/screenshots/batch-09/9-1-*`. These include full pages of the listing, a vessel page and When to go, plus the open states: the "Why?" sheet, the tray, the calendar and the radar. All are at 375, 768 and 1440 px, in Day and Night (`scripts/interaction-shots.ts`). The listing shows test ships left behind by a local test run.
+
+## 21 Oct 2026 · Batch 9-2a · The deck view, the voyage and the mooring explainer (EXP-002, EXP-003, EXP-005)
+
+**Brief:** `docs/briefs/BATCH-09.md` (approved). 9-2 is split in two: 9-2a builds everything that works from the data we already hold; 9-2b adds the operators' real deck plan images with admin hotspots, once the brochures arrive.
+
+**Built:**
+- **Data:**
+  - `vessels.mooring` (private riverbank, alongside other ships, or it varies) and `vessels.shared_spaces` (sun deck, pool, jacuzzi, dining room, lounge, bar, spa, gym, library; nothing else is accepted);
+  - operators propose both in their vessel submission and they apply when Nilecruz approves (`approve_submission`);
+  - admins set them in the catalogue editor.
+- **EXP-002, the deck view:**
+  - a schematic profile of the decks;
+  - deck tabs (arrow keys, Home and End);
+  - cabin-type buttons that open each type's facts;
+  - "Up to N guests share the sun deck, pool and dining room";
+  - never numbered cabins.
+  - On the reserve page, after choosing a departure, each cabin type shows how it books on that sailing: instant, confirmed by the operator, or sold out. "Choose …" ticks the same cabin in the booking form below.
+  - Without JavaScript: the plain list of decks.
+- **EXP-003, the voyage:** the itinerary on vessel pages and route guides now lists every day beneath a pinned river. The boat sails to the day you're reading, and clicking a stop scrolls to its day. Play and the arrow keys still work. With reduced motion the boat jumps and the page doesn't smooth-scroll. Without JavaScript the days are an ordered list.
+- **EXP-005, the mooring explainer:**
+  - a two-state toggle with arrow keys: rafted six abreast, or a private riverbank, drawn from above;
+  - on vessel pages that state their practice, it opens on that practice and says it in words;
+  - without JavaScript both drawings show.
+
+**Not yet:**
+- the `/vessels/mooring-explained/` page (it needs its copy);
+- deck plan images and hotspots (9-2b);
+- EXP-007 (as in 9-1).
+
+**Verified:**
+- **pgTAP:** `380_mooring_spaces` (6 checks) covers:
+  - applied on approval;
+  - kept when a later proposal leaves them out;
+  - unknown spaces and practices refused;
+  - visitors read them on published vessels.
+
+  `090_submissions` still passes; grants are unchanged. Count-based isolation tests need a reset database locally, as before.
+- **Unit:** `deck-mooring.test.ts` (4) covers booking states, the shared-spaces sentence, deck grouping and the lists. `pnpm verify`: 492 tests.
+- **End-to-end:** `deck-voyage-mooring.spec.ts` covers:
+  - the deck view with the keyboard only;
+  - the mooring toggle with arrow keys;
+  - the voyage under reduced motion;
+  - the no-JavaScript fallbacks;
+  - choosing a cabin type from the deck view on the reserve page;
+  - axe in Day and Night.
+
+  `marketplace-vessel`, `components`, `sightseeing` and `interactions` pass. `silo-links` fails locally only on the Abu Simbel page's booking link, which comes from the tour rates imported into the local database.
+- **Screenshots:** `docs/screenshots/batch-09/9-2a-*`: a vessel page and the Luxor–Aswan route guide in full, plus the deck view, both mooring states and the voyage, at 375, 768 and 1440 px in Day and Night.

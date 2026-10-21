@@ -21,7 +21,7 @@ export default async function SubmissionReview({ params }: { params: Promise<{ i
   const { data: s } = await db
     .from("vessel_submissions")
     .select(
-      "id, status, proposal, vessel_id, org:organisations(id, display_name), vessel:vessels(name, type, route_text, cabin_count, max_guests, deck_count, year_built, vessel_translations(locale, description)), vessel_submission_events(id, event, message, occurred_at)",
+      "id, status, proposal, vessel_id, org:organisations(id, display_name), vessel:vessels(name, type, route_text, cabin_count, max_guests, deck_count, year_built, mooring, shared_spaces, vessel_translations(locale, description)), vessel_submission_events(id, event, message, occurred_at)",
     )
     .eq("id", id)
     .maybeSingle();
@@ -36,6 +36,8 @@ export default async function SubmissionReview({ params }: { params: Promise<{ i
         max_guests: String(s.vessel.max_guests ?? ""),
         deck_count: String(s.vessel.deck_count ?? ""),
         year_built: String(s.vessel.year_built ?? ""),
+        mooring: s.vessel.mooring ?? "",
+        shared_spaces: s.vessel.shared_spaces.join(","),
         description_en: s.vessel.vessel_translations.find((t) => t.locale === "en")?.description ?? "",
       }
     : {};

@@ -266,3 +266,43 @@
     display: block;
   }
 }
+
+/* EXP-003: the river stays pinned while the days scroll beneath it. */
+.scrolling .map {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  background: var(--surface);
+}
+
+.days {
+  display: grid;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dayItem {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--line);
+  transition: border-color var(--dur-2);
+}
+
+.dayItem[aria-current="step"] {
+  border-top: 2px solid var(--accent);
+}
+
+.dayItem h3 {
+  margin: 0 0 var(--space-2);
+}
+
+@media (max-width: 600px) {
+  .dayItem {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+}

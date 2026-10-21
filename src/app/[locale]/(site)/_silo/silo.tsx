@@ -168,7 +168,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     // SEO-023: a route guide shows the days and the vessels, never a price grid.
     lead = (
       <>
-        <ItineraryTimeline vessel={ROUTE_STOPS[url].vessel} stops={ROUTE_STOPS[url].stops} />
+        <ItineraryTimeline scroll vessel={ROUTE_STOPS[url].vessel} stops={ROUTE_STOPS[url].stops} />
         {compare}
       </>
     );
