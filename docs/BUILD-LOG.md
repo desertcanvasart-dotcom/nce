@@ -1440,7 +1440,8 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - a bot sign-up looks sent and makes no account;
   - admins see the missing-sender banner and Email delivery;
   - axe in Day and Night.
-- **Screenshots:** `docs/screenshots/batch-08/` (prefix `8-2a-`).
+- **Screenshots:** to follow in `docs/screenshots/batch-08/` (prefix `8-2a-`); local Docker was stopped by an update during this run.
+- **Local end-to-end:** not run for the same reason; CI runs the full suite on this pull request.
 
 **Not verified here:**
 - real sending (needs the Resend account and DNS);
