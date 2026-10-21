@@ -58,7 +58,8 @@ create table public.sightseeing_rates (
   rate_plan public.rate_plan not null default 'international',
   currency public.currency_code not null check (currency in ('USD', 'EUR', 'EGP')),
   amount_minor bigint not null check (amount_minor > 0),
-  child_bands jsonb not null,
+  -- As on rates (DATA-022): filled with the operator's bands on insert, never changed after.
+  child_bands jsonb not null default '[]'::jsonb,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (departure_id, cabin_type_id, occupancy, rate_plan, currency),
@@ -84,7 +85,11 @@ begin
       raise exception 'Occupancy % is more than this cabin allows (%)', new.occupancy, cab.max_occupancy using errcode = '23514';
     end if;
     new.vessel_id := dep_vessel;
-    if tg_op = 'INSERT' then new.child_bands := coalesce(new.child_bands, app.child_bands_for_vessel(dep_vessel)); end if;
+    if tg_op = 'INSERT' and (new.child_bands is null or new.child_bands = '[]'::jsonb) then
+      new.child_bands := app.child_bands_for_vessel(dep_vessel);
+    elsif tg_op = 'UPDATE' then
+      new.child_bands := old.child_bands;
+    end if;
   else
     select vessel_id into dep_vessel from public.schedules where id = new.schedule_id;
     if dep_vessel is null then raise exception 'No such itinerary' using errcode = '23503'; end if;

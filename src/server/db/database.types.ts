@@ -2932,6 +2932,51 @@ export type Database = {
           },
         ];
       };
+      schedule_sightseeing: {
+        Row: {
+          guide: boolean;
+          note: string | null;
+          schedule_id: string;
+          sites: string[];
+          tickets_included: boolean;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          guide: boolean;
+          note?: string | null;
+          schedule_id: string;
+          sites: string[];
+          tickets_included: boolean;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          guide?: boolean;
+          note?: string | null;
+          schedule_id?: string;
+          sites?: string[];
+          tickets_included?: boolean;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "schedule_sightseeing_schedule_id_fkey";
+            columns: ["schedule_id"];
+            isOneToOne: true;
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "schedule_sightseeing_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       schedules: {
         Row: {
           active: boolean;
@@ -3080,6 +3125,70 @@ export type Database = {
             columns: ["run_id"];
             isOneToOne: false;
             referencedRelation: "inventory_runs";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      sightseeing_rates: {
+        Row: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands: Json;
+          created_at: string;
+          currency: string;
+          departure_id: string;
+          id: string;
+          occupancy: number;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency: string;
+          departure_id: string;
+          id?: string;
+          occupancy: number;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          amount_minor?: number;
+          cabin_type_id?: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency?: string;
+          departure_id?: string;
+          id?: string;
+          occupancy?: number;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "sightseeing_rates_cabin_type_id_fkey";
+            columns: ["cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sightseeing_rates_departure_id_fkey";
+            columns: ["departure_id"];
+            isOneToOne: false;
+            referencedRelation: "departures";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "sightseeing_rates_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
             referencedColumns: ["id"];
           },
         ];
@@ -3914,78 +4023,6 @@ export type Database = {
           },
         ];
       };
-      schedule_sightseeing: {
-        Row: {
-          tickets_included: boolean;
-          guide: boolean;
-          note: string | null;
-          schedule_id: string;
-          sites: string[];
-          updated_at: string;
-          vessel_id: string;
-        };
-        Insert: {
-          tickets_included: boolean;
-          guide: boolean;
-          note?: string | null;
-          schedule_id: string;
-          sites: string[];
-          updated_at?: string;
-          vessel_id?: string;
-        };
-        Update: {
-          tickets_included?: boolean;
-          guide?: boolean;
-          note?: string | null;
-          schedule_id?: string;
-          sites?: string[];
-          updated_at?: string;
-          vessel_id?: string;
-        };
-        Relationships: [];
-      };
-      sightseeing_rates: {
-        Row: {
-          amount_minor: number;
-          cabin_type_id: string;
-          child_bands: Json;
-          created_at: string;
-          currency: string;
-          departure_id: string;
-          id: string;
-          occupancy: number;
-          rate_plan: Database["public"]["Enums"]["rate_plan"];
-          updated_at: string;
-          vessel_id: string;
-        };
-        Insert: {
-          amount_minor: number;
-          cabin_type_id: string;
-          child_bands?: Json;
-          created_at?: string;
-          currency: string;
-          departure_id: string;
-          id?: string;
-          occupancy: number;
-          rate_plan?: Database["public"]["Enums"]["rate_plan"];
-          updated_at?: string;
-          vessel_id?: string;
-        };
-        Update: {
-          amount_minor?: number;
-          cabin_type_id?: string;
-          child_bands?: Json;
-          created_at?: string;
-          currency?: string;
-          departure_id?: string;
-          id?: string;
-          occupancy?: number;
-          rate_plan?: Database["public"]["Enums"]["rate_plan"];
-          updated_at?: string;
-          vessel_id?: string;
-        };
-        Relationships: [];
-      };
       vessels: {
         Row: {
           best_for: Database["public"]["Enums"]["best_for_label"][];
@@ -4293,10 +4330,6 @@ export type Database = {
         Args: { ages: number[]; cab: string; cur: string; dep: string };
         Returns: number;
       };
-      set_sightseeing_approval: {
-        Args: { approved: boolean; target: string };
-        Returns: undefined;
-      };
       public_sailing_modes: {
         Args: { target: string };
         Returns: {
@@ -4542,6 +4575,10 @@ export type Database = {
         Returns: undefined;
       };
       session_places_left: { Args: { sess: string }; Returns: number };
+      set_sightseeing_approval: {
+        Args: { approved: boolean; target: string };
+        Returns: undefined;
+      };
       stripe_refund_plan: {
         Args: { target: string };
         Returns: {
