@@ -782,3 +782,14 @@ Faris: "apply the new rule for travel agents as well; add the allotments functio
 - **Decided while building:**
   - eligibility proofs are verified by operators (ADR-088), so "proof to verify" emails go to the operator, not to admins;
   - emails are built from the dashboard notices, so every notice also reaches the inbox.
+
+### ADR-102 Sightseeing in cruise rates: excluded, except for approved vessels (Accepted; Faris 21 Oct 2026)
+- **Context:** Most Nile cruise rates exclude sightseeing. Some vessels, mostly dahabiyas, sell their rates with sightseeing included. Faris: Nilecruz is a tour operator and sells the tours itself. "They excel in accommodation and we excel in tours."
+- **Decision:**
+  - A cruise rate excludes sightseeing by default, and Nilecruz sells sightseeing as its own tours and programmes.
+  - Only a vessel that already sells with sightseeing included gets the option. Nilecruz admins switch it on for that vessel after checking; operators can't turn it on themselves.
+  - With the option on, the operator states per itinerary what is included: the guide, the entrance fees and the sites. This is shown wherever the price is: the vessel page, the cards, the comparison, the booking summary and the assistants' answers.
+  - Nilecruz's own sightseeing programme isn't suggested for those sailings, so guests don't pay twice. Other extras still are.
+  - ADR-011 still holds. The fare may include the operator's own sightseeing, but Nilecruz never adds its tours into the cruise total (DATA-017).
+- **Open:** whether one cabin can carry both a cruise-only and a with-sightseeing price. This goes into the brief that builds it.
+- **Status:** decided, not built. It will be proposed in the next brief.
