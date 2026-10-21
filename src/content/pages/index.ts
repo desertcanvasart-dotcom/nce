@@ -35,6 +35,7 @@ import P095 from "./P095.json";
 import P099 from "./P099.json";
 import P101 from "./P101.json";
 import P102 from "./P102.json";
+import P105 from "./P105.json";
 import P106 from "./P106.json";
 
 /** The drafted pages in the repository (ADR-096): Sanity's seed, and the fallback where Sanity isn't configured. */
@@ -75,5 +76,6 @@ export const DRAFT_PAGES: Record<string, EditorialPage> = {
   P099: P099 as EditorialPage,
   P101: P101 as EditorialPage,
   P102: P102 as EditorialPage,
+  P105: P105 as EditorialPage,
   P106: P106 as EditorialPage,
 };

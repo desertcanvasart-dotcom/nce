@@ -29,6 +29,7 @@ import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
 import { editorialPage, vesselTypeStats } from "@/server/content/pages";
 import { publicTours } from "@/server/content/tours";
 import { ContactForm } from "../contact/ContactForm";
+import { PlanForm } from "@/components/plan/PlanForm";
 import { publicListing } from "@/server/marketplace/queries";
 
 /**
@@ -225,6 +226,17 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     extra = ld(companyPageJsonLd("AboutPage", row.h1, absoluteUrl(locale, url), siteUrl));
   } else if (url === "/contact/") {
     lead = <ContactForm />;
+    extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
+  } else if (url === "/plan-my-cruise/") {
+    // PAGE-105, DASH-PUB-007: plan without an account; the routes are the published itineraries'.
+    const routes = [
+      ...new Map(
+        all.flatMap((v) =>
+          v.itineraries.map((i) => [`${i.origin}→${i.destination}`, { origin: i.origin, destination: i.destination }]),
+        ),
+      ).values(),
+    ].sort((a, b) => `${a.origin}${a.destination}`.localeCompare(`${b.origin}${b.destination}`));
+    lead = <PlanForm routes={routes} today={new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" })} />;
     extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
   }
 

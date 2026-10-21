@@ -75,12 +75,13 @@ export const BUILT = new Set<string>([
   "/about/",
   "/how-we-choose-vessels/",
   "/contact/",
+  "/plan-my-cruise/",
 ]);
 
 export const isBuilt = (url: string) => BUILT.has(url);
 
-/** Pages that don't end with the cruise row (SEO-012 is for informational pages): the Contact form. */
-export const NO_CLOSING = new Set(["/contact/"]);
+/** Pages that don't end with the cruise row (SEO-012 is for informational pages): the Contact and planning forms. */
+export const NO_CLOSING = new Set(["/contact/", "/plan-my-cruise/"]);
 
 export type Link = { href: string; anchor: string };
 
@@ -116,6 +117,7 @@ const PILLAR_NAMES: Record<string, string> = {
   "/about/": "About Nilecruz",
   "/how-we-choose-vessels/": "How we choose vessels",
   "/contact/": "Contact",
+  "/plan-my-cruise/": "Plan my cruise",
 };
 
 /** SEO-008: home → pillar → … → this page. */

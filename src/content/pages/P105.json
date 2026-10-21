@@ -1,0 +1,24 @@
+{
+  "id": "P105",
+  "title": "Plan my cruise",
+  "standfirst": "Tell us when you'd like to sail, for how long and who is coming. Operators whose cruises fit can send you personal offers, and you choose.",
+  "sections": [],
+  "faqs": [
+    {
+      "q": "Do I need an account to plan?",
+      "a": "No. Your plan stays on this device while you work on it. You sign in or create an account only to send it, so operators can reply to you."
+    },
+    {
+      "q": "Does a plan commit me to anything?",
+      "a": "No. Operators send offers; nothing is booked until you accept one, and nothing is paid until then."
+    },
+    {
+      "q": "How soon do operators reply?",
+      "a": "Operators whose cruises fit your dates and route can reply as soon as they see your request. We email you when an offer arrives."
+    }
+  ],
+  "seoTitle": "Plan my Nile cruise",
+  "seoDescription": "Plan a Nile cruise in a minute: dates, nights, guests and budget. Operators whose cruises fit send you personal offers.",
+  "sample": false,
+  "review": "draft"
+}

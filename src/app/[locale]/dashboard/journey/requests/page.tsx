@@ -16,11 +16,7 @@ const STATUS = {
 } as const;
 
 /** DASH-CUS-004, 014, 015, DASH-CUS-002 (ADR-091): ask operators for offers and follow each request with its offers. */
-export default async function MyRequests({
-  searchParams,
-}: {
-  searchParams: Promise<{ route?: string; from?: string; nights?: string }>;
-}) {
+export default async function MyRequests({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const session = await requireUser("/dashboard/journey/requests/");
   const [requests, routes, sp, booking] = await Promise.all([
     myRequests(),
