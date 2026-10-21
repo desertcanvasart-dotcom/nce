@@ -26,7 +26,7 @@ export default async function MyTours() {
                 <Link href={`/dashboard/journey/tours/${o.id}/`}>
                   {o.reference} · {o.tour?.name}
                 </Link>{" "}
-                · {o.session ? <CairoTime value={o.session.starts_at} /> : null} · {money(o.total_minor, o.currency)}{" "}
+                · <CairoTime value={o.starts_at} /> · {money(o.total_minor, o.currency)}{" "}
                 <Badge tone={TOUR_ORDER_BADGE[o.status].tone}>{TOUR_ORDER_BADGE[o.status].text}</Badge>
               </li>
             ))}
@@ -60,8 +60,14 @@ export default async function MyTours() {
           <ul className={ui.list}>
             {tours.map((t) => (
               <li key={t.id}>
-                <Link href={`/dashboard/journey/tours/book/${t.id}/`}>{t.name}</Link> · {t.location} · next date{" "}
-                <CairoTime value={t.nextStart} />
+                <Link href={`/dashboard/journey/tours/book/${t.id}/`}>{t.name}</Link> · {t.location} ·{" "}
+                {t.nextStart ? (
+                  <>
+                    next date <CairoTime value={t.nextStart} />
+                  </>
+                ) : (
+                  "choose a date"
+                )}
               </li>
             ))}
           </ul>

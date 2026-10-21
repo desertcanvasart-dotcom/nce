@@ -8,7 +8,7 @@ import { requireAdmin } from "@/server/auth";
 import { tourOrder } from "@/server/tours/orders";
 import { isUuid } from "../../../../sections";
 import { decideTourCancellation, issueTourCardRefund, recordTourManualRefund } from "../../actions";
-import { guestsLabel, money, SESSION_KIND, TOUR_CANCEL, TOUR_ORDER_BADGE } from "../../../../_bookings/TourOrderBits";
+import { guestsLabel, money, TOUR_CANCEL, TOUR_MODE, TOUR_ORDER_BADGE } from "../../../../_bookings/TourOrderBits";
 
 /** DASH-PAY-014: a tour order for finance admins: payments, and the cancellation decision and refund. */
 export default async function AdminTourOrder({ params }: { params: Promise<{ orderId: string }> }) {
@@ -38,11 +38,17 @@ export default async function AdminTourOrder({ params }: { params: Promise<{ ord
           </div>
           <div>
             <dt className={ui.label}>Starts</dt>
-            <dd>{o.session ? <CairoTime value={o.session.starts_at} /> : "—"}</dd>
+            <dd>
+              <CairoTime value={o.starts_at} />
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Session</dt>
-            <dd>{o.session ? SESSION_KIND[o.session.kind] : "—"}</dd>
+            <dd>
+              {TOUR_MODE[o.mode]}
+              {o.label ? ` · ${o.label}` : ""}
+              {o.vehicle ? ` · ${o.vehicle}` : ""}
+            </dd>
           </div>
           <div>
             <dt className={ui.label}>Guests</dt>

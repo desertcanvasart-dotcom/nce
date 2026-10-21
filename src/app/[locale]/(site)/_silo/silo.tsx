@@ -187,7 +187,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   } else if (url === "/tours-extras/") {
     lead = <TourCards tours={tours} />;
   } else if (WORKBOOK_TOURS[url]) {
-    // DASH-PUB-006: each covered tour's details; booking opens with the calendar in 7-2.
+    // DASH-PUB-006: each covered tour's details, with prices and the calendar link once it has rates (ADR-097).
     const covered = WORKBOOK_TOURS[url].map((slug) => tours.find((t) => t.slug === slug)).filter((t) => !!t);
     lead = covered.length ? (
       <>
@@ -196,7 +196,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         ))}
       </>
     ) : null;
-    extra = ld(tourJsonLd(row.h1, description, absoluteUrl(locale, url)));
+    const prices = covered.map((t) => t.fromMinor).filter((m): m is number => m !== null);
+    extra = ld(tourJsonLd(row.h1, description, absoluteUrl(locale, url), prices.length ? Math.min(...prices) : null));
   } else if (url === "/how-we-choose-vessels/") {
     // PAGE-102: the evaluation method's weights, straight from the code that scores vessels.
     lead = (
@@ -271,7 +272,9 @@ export async function TourPage({ params }: { params: SiloParams }) {
       <TourDetails tour={tour} heading={false} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(tourJsonLd(tour.name, tour.description, absoluteUrl(locale, url))) }}
+        dangerouslySetInnerHTML={{
+          __html: jsonLdScript(tourJsonLd(tour.name, tour.description, absoluteUrl(locale, url), tour.fromMinor)),
+        }}
       />
     </article>
   );

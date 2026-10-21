@@ -23,9 +23,7 @@ export async function journeyRecords(userId: string) {
       .order("created_at", { ascending: false }),
     db
       .from("tour_orders")
-      .select(
-        "id, reference, status, total_minor, currency, hold_until, cancel_state, tour:tours(name), session:tour_sessions(starts_at)",
-      )
+      .select("id, reference, status, total_minor, currency, hold_until, cancel_state, starts_at, tour:tours(name)")
       .eq("customer_id", userId),
     db
       .from("cruise_requests")
@@ -68,7 +66,7 @@ export async function journeyRecords(userId: string) {
     reference: o.reference,
     status: o.status,
     tourName: o.tour?.name ?? "Tour",
-    startsAt: o.session?.starts_at ?? o.hold_until,
+    startsAt: o.starts_at,
     holdUntil: o.hold_until,
     totalMinor: Number(o.total_minor),
     currency: o.currency,

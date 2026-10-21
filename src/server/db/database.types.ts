@@ -2521,15 +2521,20 @@ export type Database = {
           customer_id: string;
           hold_until: string;
           id: string;
+          label: string | null;
           lead_name: string;
+          mode: Database["public"]["Enums"]["tour_rate_mode"];
           notes: string | null;
           policy: Json;
+          rate_id: string | null;
           reference: string;
-          session_id: string;
+          session_id: string | null;
+          starts_at: string;
           status: Database["public"]["Enums"]["tour_order_status"];
           total_minor: number;
           tour_id: string;
           updated_at: string;
+          vehicle: string | null;
         };
         Insert: {
           ages: number[];
@@ -2550,15 +2555,20 @@ export type Database = {
           customer_id: string;
           hold_until: string;
           id?: string;
+          label?: string | null;
           lead_name: string;
+          mode: Database["public"]["Enums"]["tour_rate_mode"];
           notes?: string | null;
           policy: Json;
+          rate_id?: string | null;
           reference: string;
-          session_id: string;
+          session_id?: string | null;
+          starts_at: string;
           status?: Database["public"]["Enums"]["tour_order_status"];
           total_minor: number;
           tour_id: string;
           updated_at?: string;
+          vehicle?: string | null;
         };
         Update: {
           ages?: number[];
@@ -2579,17 +2589,29 @@ export type Database = {
           customer_id?: string;
           hold_until?: string;
           id?: string;
+          label?: string | null;
           lead_name?: string;
+          mode?: Database["public"]["Enums"]["tour_rate_mode"];
           notes?: string | null;
           policy?: Json;
+          rate_id?: string | null;
           reference?: string;
-          session_id?: string;
+          session_id?: string | null;
+          starts_at?: string;
           status?: Database["public"]["Enums"]["tour_order_status"];
           total_minor?: number;
           tour_id?: string;
           updated_at?: string;
+          vehicle?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "tour_orders_rate_id_fkey";
+            columns: ["rate_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_rates";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "tour_orders_session_id_fkey";
             columns: ["session_id"];
@@ -2652,6 +2674,68 @@ export type Database = {
             columns: ["order_id"];
             isOneToOne: false;
             referencedRelation: "tour_orders";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_rates: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          currency: string;
+          days: number[];
+          id: string;
+          label: string;
+          lead_hours: number;
+          max_guests: number;
+          min_guests: number;
+          mode: Database["public"]["Enums"]["tour_rate_mode"];
+          prices: Json;
+          start_times: string[];
+          tickets_included: boolean | null;
+          tour_id: string;
+          updated_at: string;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          currency?: string;
+          days?: number[];
+          id?: string;
+          label?: string;
+          lead_hours?: number;
+          max_guests?: number;
+          min_guests?: number;
+          mode: Database["public"]["Enums"]["tour_rate_mode"];
+          prices: Json;
+          start_times?: string[];
+          tickets_included?: boolean | null;
+          tour_id: string;
+          updated_at?: string;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          currency?: string;
+          days?: number[];
+          id?: string;
+          label?: string;
+          lead_hours?: number;
+          max_guests?: number;
+          min_guests?: number;
+          mode?: Database["public"]["Enums"]["tour_rate_mode"];
+          prices?: Json;
+          start_times?: string[];
+          tickets_included?: boolean | null;
+          tour_id?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_rates_tour_id_fkey";
+            columns: ["tour_id"];
+            isOneToOne: false;
+            referencedRelation: "tours";
             referencedColumns: ["id"];
           },
         ];
@@ -2743,6 +2827,36 @@ export type Database = {
           },
         ];
       };
+      tour_seasons: {
+        Row: {
+          applies: string;
+          created_at: string;
+          ends_on: string;
+          id: string;
+          name: string;
+          pct: number;
+          starts_on: string;
+        };
+        Insert: {
+          applies?: string;
+          created_at?: string;
+          ends_on: string;
+          id?: string;
+          name: string;
+          pct: number;
+          starts_on: string;
+        };
+        Update: {
+          applies?: string;
+          created_at?: string;
+          ends_on?: string;
+          id?: string;
+          name?: string;
+          pct?: number;
+          starts_on?: string;
+        };
+        Relationships: [];
+      };
       tour_sessions: {
         Row: {
           capacity: number;
@@ -2792,6 +2906,38 @@ export type Database = {
             columns: ["tour_id"];
             isOneToOne: false;
             referencedRelation: "tours";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      tour_slot_closures: {
+        Row: {
+          closed_by: string | null;
+          created_at: string;
+          rate_id: string;
+          reason: string;
+          starts_at: string;
+        };
+        Insert: {
+          closed_by?: string | null;
+          created_at?: string;
+          rate_id: string;
+          reason: string;
+          starts_at: string;
+        };
+        Update: {
+          closed_by?: string | null;
+          created_at?: string;
+          rate_id?: string;
+          reason?: string;
+          starts_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "tour_slot_closures_rate_id_fkey";
+            columns: ["rate_id"];
+            isOneToOne: false;
+            referencedRelation: "tour_rates";
             referencedColumns: ["id"];
           },
         ];
@@ -2891,6 +3037,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["tour_kind"];
           location: string;
           name: string;
+          office_id: string | null;
           slug: string;
           standalone: boolean;
           supplier_id: string | null;
@@ -2908,6 +3055,7 @@ export type Database = {
           kind: Database["public"]["Enums"]["tour_kind"];
           location: string;
           name: string;
+          office_id?: string | null;
           slug: string;
           standalone?: boolean;
           supplier_id?: string | null;
@@ -2925,6 +3073,7 @@ export type Database = {
           kind?: Database["public"]["Enums"]["tour_kind"];
           location?: string;
           name?: string;
+          office_id?: string | null;
           slug?: string;
           standalone?: boolean;
           supplier_id?: string | null;
@@ -2937,6 +3086,13 @@ export type Database = {
             columns: ["destination_id"];
             isOneToOne: false;
             referencedRelation: "destinations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tours_office_id_fkey";
+            columns: ["office_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
             referencedColumns: ["id"];
           },
           {
@@ -3310,12 +3466,27 @@ export type Database = {
         Args: { horizon?: string; target: string };
         Returns: number;
       };
+      office_cancel_slot: {
+        Args: { rate: string; starts: string; why: string };
+        Returns: number;
+      };
       order_tour: {
         Args: {
           guest_ages: number[];
           lead: string;
           order_notes: string;
           sess: string;
+          terms_read: boolean;
+        };
+        Returns: string;
+      };
+      order_tour_slot: {
+        Args: {
+          guest_ages: number[];
+          lead: string;
+          order_notes: string;
+          rate: string;
+          starts: string;
           terms_read: boolean;
         };
         Returns: string;
@@ -3591,6 +3762,22 @@ export type Database = {
         }[];
       };
       tour_is_bookable: { Args: { target: string }; Returns: boolean };
+      tour_slot_quote: {
+        Args: { guest_ages: number[]; rate: string; starts: string };
+        Returns: {
+          places_left: number;
+          total_minor: number;
+          vehicle: string;
+        }[];
+      };
+      tour_slots: {
+        Args: { from_day: string; rate: string; to_day: string };
+        Returns: {
+          closed: boolean;
+          starts_at: string;
+          taken: number;
+        }[];
+      };
       verify_payment: {
         Args: {
           decision: Database["public"]["Enums"]["payment_status"];
@@ -3662,7 +3849,7 @@ export type Database = {
       inventory_source: "manual" | "paste" | "feed" | "api";
       offer_status: "sent" | "superseded" | "withdrawn" | "accepted" | "closed";
       operator_review: "pending" | "confirmed" | "contested";
-      org_kind: "operator" | "partner" | "nilecruz";
+      org_kind: "operator" | "partner" | "nilecruz" | "tour_office";
       org_status: "applied" | "approved" | "paused" | "rejected";
       payment_method: "card" | "transfer" | "manual";
       payment_status: "reported" | "verified" | "rejected" | "refunded";
@@ -3683,6 +3870,7 @@ export type Database = {
       tour_cancel_state: "requested" | "refused" | "approved";
       tour_kind: "museum_visit" | "excursion" | "evening_tour" | "transfer" | "other";
       tour_order_status: "awaiting_payment" | "confirmed" | "cancelled";
+      tour_rate_mode: "shared" | "private" | "transfer" | "assist";
       vessel_category: "basic" | "standard" | "superior" | "deluxe" | "luxury";
       vessel_type: "sail" | "motor" | "steam";
       visibility: "private" | "showcase" | "published";
@@ -3825,7 +4013,7 @@ export const Constants = {
       inventory_source: ["manual", "paste", "feed", "api"],
       offer_status: ["sent", "superseded", "withdrawn", "accepted", "closed"],
       operator_review: ["pending", "confirmed", "contested"],
-      org_kind: ["operator", "partner", "nilecruz"],
+      org_kind: ["operator", "partner", "nilecruz", "tour_office"],
       org_status: ["applied", "approved", "paused", "rejected"],
       payment_method: ["card", "transfer", "manual"],
       payment_status: ["reported", "verified", "rejected", "refunded"],
@@ -3846,6 +4034,7 @@ export const Constants = {
       tour_cancel_state: ["requested", "refused", "approved"],
       tour_kind: ["museum_visit", "excursion", "evening_tour", "transfer", "other"],
       tour_order_status: ["awaiting_payment", "confirmed", "cancelled"],
+      tour_rate_mode: ["shared", "private", "transfer", "assist"],
       vessel_category: ["basic", "standard", "superior", "deluxe", "luxury"],
       vessel_type: ["sail", "motor", "steam"],
       visibility: ["private", "showcase", "published"],

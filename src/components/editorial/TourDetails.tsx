@@ -4,7 +4,8 @@ import styles from "./editorial.module.css";
 
 /**
  * One tour's facts (DASH-PUB-006): what it is, the steps, what's included and not, where it starts and its cancellation
- * terms. Booking opens with the calendar in 7-2: until then, "Prices coming soon" (ADR-097).
+ * terms. With an office and rates it shows its prices and links to the booking calendar; until then, "Prices coming
+ * soon" (ADR-097).
  */
 export function TourDetails({ tour, heading = true }: { tour: PublicTour; heading?: boolean }) {
   return (
@@ -58,10 +59,24 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
           <strong>Cancellation:</strong> {tour.cancellationTerms}
         </p>
       ) : null}
-      <p className={styles.booking}>
-        <strong>Prices coming soon.</strong> Booking opens when our office’s rates are loaded. Until then,{" "}
-        <Link href="/contact/">contact us</Link> to ask about this tour.
-      </p>
+      {tour.bookable ? (
+        <div className={styles.booking}>
+          <ul>
+            {tour.prices.map((l) => (
+              <li key={l}>{l}</li>
+            ))}
+          </ul>
+          <p>
+            <Link href={`/dashboard/journey/tours/book/${tour.id}/`}>Choose a date for {tour.name}</Link>: pick shared or private
+            and your party, and see the price at once. High-season changes show when you pick a date.
+          </p>
+        </div>
+      ) : (
+        <p className={styles.booking}>
+          <strong>Prices coming soon.</strong> Booking opens when our office’s rates are loaded. Until then,{" "}
+          <Link href="/contact/">contact us</Link> to ask about this tour.
+        </p>
+      )}
     </section>
   );
 }

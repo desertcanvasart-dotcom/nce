@@ -6,7 +6,8 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { bandLines, TOUR_KINDS, type CancellationBand } from "@/lib/tours/tours";
 import { requireAdmin } from "@/server/auth";
-import { allSchedules, destinationsList, suppliers, tourForEditor } from "@/server/tours/queries";
+import { allSchedules, destinationsList, suppliers, tourForEditor, tourOffices } from "@/server/tours/queries";
+import { priceLine, rateFromRow } from "@/lib/tours/calendar";
 import { isUuid } from "../../../sections";
 import {
   deleteTourPhoto,
@@ -28,11 +29,12 @@ export default async function TourEditor({ params }: { params: Promise<{ tourId:
   if (!isUuid(tourId)) notFound();
   const session = await requireAdmin(["catalogue", "content"], `/dashboard/admin/tours/${tourId}/`);
   const canManage = session.adminRole === "super" || session.adminRole === "catalogue";
-  const [t, supplierList, destinations, schedules] = await Promise.all([
+  const [t, supplierList, destinations, schedules, offices] = await Promise.all([
     tourForEditor(tourId),
     suppliers(),
     destinationsList(),
     allSchedules(),
+    tourOffices(),
   ]);
   if (!t) notFound();
   const bands = t.cancellation_bands as CancellationBand[];
@@ -109,6 +111,14 @@ export default async function TourEditor({ params }: { params: Promise<{ tourId:
                 options={supplierList.map((s) => ({ value: s.id, label: s.name }))}
                 hint="Private to admins. Add suppliers on the Suppliers page."
               />
+              <Select
+                label="Office"
+                name="office_id"
+                placeholder="Not chosen yet"
+                defaultValue={t.office_id}
+                options={offices.map((o) => ({ value: o.id, label: o.display_name }))}
+                hint="The Nilecruz office that runs it. It sees this tour's bookings in its own dashboard."
+              />
             </div>
             <Checkboxes
               legend="Selling"
@@ -125,8 +135,8 @@ export default async function TourEditor({ params }: { params: Promise<{ tourId:
           </ActionForm>
         ) : (
           <p>
-            {t.duration_minutes} minutes · supplier {t.supplier?.name ?? "not chosen"} ·{" "}
-            {t.standalone ? "sold on its own" : "with cruises only"}
+            {t.duration_minutes} minutes · supplier {t.supplier?.name ?? "not chosen"} · office{" "}
+            {t.office?.display_name ?? "not chosen"} · {t.standalone ? "sold on its own" : "with cruises only"}
             {t.adults_only ? " · adults only" : ""}
           </p>
         )}
@@ -192,6 +202,31 @@ export default async function TourEditor({ params }: { params: Promise<{ tourId:
           </Section>
         );
       })}
+
+      <Section title="Rates" id="rates">
+        <p className={ui.muted}>
+          Booked on the calendar (ADR-097). Rates come from the rate sheet: <code>pnpm import:tour-rates</code>. With no bands
+          below, the standard rule applies: free until 48 hours before, then 100 %.
+        </p>
+        {t.tour_rates.length ? (
+          <ul className={ui.list}>
+            {t.tour_rates.map((r) => (
+              <li key={r.id}>
+                {priceLine(rateFromRow(r)).text}
+                {r.label ? ` · ${r.label}` : ""} ·{" "}
+                {r.start_times.length ? r.start_times.map((x) => x.slice(0, 5)).join(", ") : "flexible start"}
+                {r.days.length < 7
+                  ? ` · ${r.days.map((d) => ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][d - 1]).join(", ")}`
+                  : " · every day"}
+                {` · book ${r.lead_hours} h ahead`}
+                {r.active ? "" : " · off"}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={ui.muted}>No rates yet: the tour shows “Prices coming soon”.</p>
+        )}
+      </Section>
 
       <Section title="Cancellation bands" id="bands">
         <p className={ui.muted}>

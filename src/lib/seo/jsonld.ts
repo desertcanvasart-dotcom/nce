@@ -85,7 +85,23 @@ export function companyPageJsonLd(type: "AboutPage" | "ContactPage", name: strin
   };
 }
 
-/** A tour page. No Offer until the tour has real prices (7-2, ADR-097). */
-export function tourJsonLd(name: string, description: string | null, url: string) {
-  return { "@context": "https://schema.org", "@type": "TouristTrip", name, description: description ?? undefined, url };
+/** A tour page; an Offer with its lowest price once it has real rates (ADR-097). */
+export function tourJsonLd(name: string, description: string | null, url: string, fromMinor: number | null = null) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    name,
+    description: description ?? undefined,
+    url,
+    offers:
+      fromMinor === null
+        ? undefined
+        : {
+            "@type": "Offer",
+            price: (fromMinor / 100).toFixed(2),
+            priceCurrency: "USD",
+            url,
+            availability: "https://schema.org/InStock",
+          },
+  };
 }

@@ -982,6 +982,15 @@ STATUS.update({
  "SEO-013": ("Verified", B52+"type facet; "+B61+"type hub; "+B71+"and each destination its itinerary stops at (unit stopsFor, e2e)"),
  "DATA-018": ("Verified", B52+"check-in to check-out, transfers not included; "+B71+"linked to /tours-extras/transfers/ (e2e)"),
 })
+B72 = "Batch 7-2 (20 Oct 2026): "
+for _id, _note in {
+ "DASH-ADM-067": "tours booked by calendar from rates (days, start times or flexible, lead time, up to 12 months); fixed sessions kept for earlier orders (280, tour-calendar.spec)",
+ "DASH-ADM-068": "shared starts take at most 8 and close at 8, even with parties booking at once; private, transfers and meet and assist never fill them (280, db-api tour-slot-concurrency, e2e)",
+ "DASH-ADM-069": "rates priced per person (shared, children by age), per person by party size (private), per vehicle (transfers), per party (meet and assist), seasons by %; the database prices as the page does (unit, 280)",
+ "DASH-ADM-073": "or bookable on the calendar with an office and rates; Prices coming soon until then (unit readiness, e2e)",
+ "DASH-PAY-014": "calendar orders paid by card through the signed webhook; standard cancellation 48 h unless the tour sets its own; the office can cancel a start and everyone on it is refunded in full (280, e2e)",
+}.items():
+    STATUS[_id] = (STATUS[_id][0], STATUS[_id][1] + "; " + B72 + _note)
 DEFERRED = {
  "PAGE-039": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",
  "PAGE-040": "Felucca removed from the site (Faris 17 Oct 2026, ADR-008)",

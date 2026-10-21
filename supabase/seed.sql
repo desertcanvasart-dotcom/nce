@@ -28,7 +28,9 @@ begin
     ('00000000-0000-4000-a000-000000000030'::uuid, 'owner@partner.test',         'Sample Partner Owner'),
     ('00000000-0000-4000-a000-000000000031'::uuid, 'reservations@partner.test',  'Sample Partner Reservations'),
     ('00000000-0000-4000-a000-000000000032'::uuid, 'finance@partner.test',       'Sample Partner Finance'),
-    ('00000000-0000-4000-a000-000000000040'::uuid, 'customer@example.test',      'Sample Customer')
+    ('00000000-0000-4000-a000-000000000040'::uuid, 'customer@example.test',      'Sample Customer'),
+    ('00000000-0000-4000-a000-000000000050'::uuid, 'office@luxor-office.test',   'Sample Luxor Office'),
+    ('00000000-0000-4000-a000-000000000051'::uuid, 'office@aswan-office.test',   'Sample Aswan Office')
   ) as t(id, email, full_name) loop
     insert into auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at,
       raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, recovery_token,
@@ -58,7 +60,10 @@ insert into public.organisations (id, kind, status, display_name) values
   ('00000000-0000-4000-b000-000000000001', 'nilecruz', 'approved', 'Nilecruz'),
   ('00000000-0000-4000-b000-00000000000a', 'operator', 'approved', 'Sample Operator A'),
   ('00000000-0000-4000-b000-00000000000b', 'operator', 'applied', 'Sample Operator B'),
-  ('00000000-0000-4000-b000-0000000000c1', 'partner', 'approved', 'Sample Partner');
+  ('00000000-0000-4000-b000-0000000000c1', 'partner', 'approved', 'Sample Partner'),
+  -- ADR-097: the offices that run Nilecruz's tours.
+  ('00000000-0000-4000-b000-0000000000d1', 'tour_office', 'approved', 'Sample Luxor Office'),
+  ('00000000-0000-4000-b000-0000000000d2', 'tour_office', 'approved', 'Sample Aswan Office');
 
 insert into public.memberships (org_id, user_id, team_role) values
   ('00000000-0000-4000-b000-00000000000a', '00000000-0000-4000-a000-000000000010', 'owner'),
@@ -68,7 +73,9 @@ insert into public.memberships (org_id, user_id, team_role) values
   ('00000000-0000-4000-b000-00000000000b', '00000000-0000-4000-a000-000000000020', 'owner'),
   ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-a000-000000000030', 'owner'),
   ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-a000-000000000031', 'reservations'),
-  ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-a000-000000000032', 'finance');
+  ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-a000-000000000032', 'finance'),
+  ('00000000-0000-4000-b000-0000000000d1', '00000000-0000-4000-a000-000000000050', 'owner'),
+  ('00000000-0000-4000-b000-0000000000d2', '00000000-0000-4000-a000-000000000051', 'owner');
 
 -- Destinations use the common English names (BRAND-009); they are real places, flagged sample until copy is written.
 insert into public.destinations (id, slug, name, visibility, is_sample) values

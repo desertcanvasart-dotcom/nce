@@ -4,6 +4,7 @@
  * lives at /tours-extras/{tour slug}/. Prices come with the calendar booking in 7-2 (ADR-097).
  */
 export type PublicTour = {
+  id: string;
   slug: string;
   name: string;
   kind: "museum_visit" | "excursion" | "evening_tour" | "transfer" | "other";
@@ -17,6 +18,10 @@ export type PublicTour = {
   exclusions: string[];
   meetingPoint: string | null;
   cancellationTerms: string | null;
+  /** ADR-097: bookable on the calendar (an office and rates); its price lines, and the lowest price in US cents. */
+  bookable: boolean;
+  prices: string[];
+  fromMinor: number | null;
 };
 
 /** Workbook tour page → the tours it covers. */

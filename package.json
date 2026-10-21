@@ -34,6 +34,7 @@
     "seed:content": "tsx --env-file-if-exists=.env.local scripts/seed-content.ts",
     "links:map": "/usr/local/bin/python3 -I scripts/link-map.py ../nce/nilecrz-site-silo.xlsx",
     "import:tours": "tsx --env-file-if-exists=.env.local scripts/import-tours.ts",
+    "import:tour-rates": "tsx --env-file-if-exists=.env.local scripts/import-tour-rates.ts",
     "with-local-db": "tsx scripts/with-local-supabase.ts",
     "grant-role": "tsx --env-file-if-exists=.env.local scripts/grant-role.ts"
   },
