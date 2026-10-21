@@ -38,6 +38,7 @@
     "egyptologists": "Nuestros egiptólogos",
     "reviews": "Opiniones de viajeros",
     "planMyCruise": "Planificar mi crucero",
+    "forOperators": "Para operadores",
     "contact": "Contacto",
     "prices": "Precios de los cruceros por el Nilo",
     "terms": "Condiciones de uso",
@@ -353,6 +354,7 @@
       "applyPartner": "Solicitar acceso como agencia"
     },
     "apply": {
+      "howConnect": "Cómo se conectan los operadores con Nilecruz",
       "title": "Solicitar como operador",
       "lede": "¿Tienes una compañía de cruceros por el Nilo? Solicítalo aquí. Nilecruz revisa cada compañía antes de que pueda vender en el mercado; te escribimos cuando termine la revisión.",
       "company": "Nombre de la compañía (como lo conocen los viajeros)",
