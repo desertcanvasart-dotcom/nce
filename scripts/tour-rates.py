@@ -16,10 +16,12 @@ TABS = {
     "Private tours": ["tour", "office", "days", "times", "p1", "p2", "p34", "p58", "p914", "p15", "child_pct", "lead", "notes"],
     "Transfers": ["tour", "office", "label", "car", "van", "minibus", "night", "lead", "notes"],
     "Meet and assist": ["tour", "office", "label", "t14", "t58", "t914", "lead", "notes"],
+    # ADR-102: Nilecruz's sightseeing programmes, booked with their cruise.
+    "Programs": ["tour", "office", "p1", "p2", "p34", "p58", "p914", "child_pct", "notes"],
     "Seasons": ["name", "from", "to", "pct", "applies", "notes"],
     "Questions": ["n", "question", "answer", "recommended"],
 }
-HEADERS = {"Tour", "Transfer", "Service", "Season", "#"}
+HEADERS = {"Tour", "Transfer", "Service", "Season", "#", "Program"}
 PRICES = {"adult", "p1", "p2", "p34", "p58", "p914", "p15", "car", "van", "minibus", "t14", "t58", "t914"}
 
 

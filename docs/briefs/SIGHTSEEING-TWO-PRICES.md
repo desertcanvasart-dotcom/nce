@@ -1,6 +1,6 @@
 # Brief: two prices on every sailing, cruise only and with sightseeing (ADR-102)
 
-**Status:** awaiting Faris's approval · **Asked for:** Faris, 21 Oct 2026 · **Size:** L (two pull requests) · **Branch:** `sightseeing-two-prices`, from the operator page
+**Status:** approved by Faris 21 Oct 2026 with the recommended answers · **Asked for:** Faris, 21 Oct 2026 · **Size:** L (two pull requests) · **Branch:** `sightseeing-two-prices`, from the operator page
 
 **Goal:** a traveller sees two prices on every sailing and books either one.
 
@@ -42,7 +42,7 @@ Nilecruz keeps the tours: an operator can sell sightseeing only if an admin has 
   It's required before the with-sightseeing rate can be shown.
 - **Feeds, the API and sheets:**
   - the inventory format gets an optional `package` on each rate; v1 documents without it mean cruise only, so nothing breaks;
-  - the sheet reader recognises "incl. sightseeing" columns;
+  - vacancy sheets carry only free cabins, never prices, so they need no change (found while building 8-3a);
   - the format page explains it.
 - **Withdrawing approval:** with-sightseeing rates stop showing; bookings already made keep what they bought.
 

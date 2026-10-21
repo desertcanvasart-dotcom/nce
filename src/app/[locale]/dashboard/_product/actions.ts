@@ -396,6 +396,8 @@ const bulkInput = z.object({
   rate_plan: z.enum(["international", "egyptian_citizen", "foreign_resident", "trade"]),
   // DASH-B2B-012: a trade price for one approved travel partner only.
   partner: z.string().trim().optional(),
+  // ADR-102: "with_sightseeing" only on vessels Nilecruz approved (the database refuses it otherwise).
+  package: z.enum(["cruise", "with_sightseeing"]).default("cruise"),
   currency: z.enum(["USD", "EUR", "EGP"]),
   amount: z
     .string()
@@ -456,7 +458,22 @@ export async function bulkUpdate(
     const r = await db.from("inventory").upsert(rows, { onConflict: "departure_id,cabin_type_id" });
     if (r.error) return dbProblem(r.error);
   }
-  if (d.amount !== null && d.partner) {
+  if (d.amount !== null && d.package === "with_sightseeing") {
+    if (d.partner) return failed("A price with sightseeing is for every guest, not one travel partner.");
+    const rows = targets.map((t) => ({
+      departure_id: t.id,
+      cabin_type_id: d.cabin_type_id,
+      vessel_id: vesselId,
+      occupancy: d.occupancy,
+      rate_plan: d.rate_plan,
+      currency: d.currency,
+      amount_minor: d.amount!,
+    }));
+    const r = await db
+      .from("sightseeing_rates")
+      .upsert(rows, { onConflict: "departure_id,cabin_type_id,occupancy,rate_plan,currency" });
+    if (r.error) return dbProblem(r.error);
+  } else if (d.amount !== null && d.partner) {
     if (d.rate_plan !== "trade") return failed("A price for one travel partner uses the Trade plan.");
     if (d.currency === "EGP") return failed("Travel partner prices are in US$ or €.");
     const rows = targets.map((t) => ({
@@ -796,4 +813,72 @@ export async function savePolicy(orgId: string | null, vesselId: string, _prev: 
   return saved(
     "Cancellation policy saved. Travellers read and accept it before reserving; the charges are calculated with payments.",
   );
+}
+
+const sightseeingInput = z.object({
+  guide: z.array(z.string()),
+  entrance_fees: z.array(z.string()),
+  sites: z
+    .string()
+    .trim()
+    .transform((v) =>
+      v
+        .split(/[\n,]/)
+        .map((x) => x.trim())
+        .filter(Boolean),
+    )
+    .refine((v) => v.length >= 1 && v.length <= 40, "list 1 to 40 sites, one per line")
+    .refine((v) => v.every((x) => x.length <= 120), "keep each site under 120 characters"),
+  note: z.string().trim().max(1000),
+});
+
+/** ADR-102: what an approved vessel's itinerary includes with sightseeing: guide, entrance fees, the sites. */
+export async function saveScheduleSightseeing(
+  orgId: string | null,
+  vesselId: string,
+  scheduleId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  const { vessel } = await requireProductEditor(vesselId, p.schedule(scheduleId), { orgId: orgId ?? undefined });
+  if (!vessel.sightseeing_approved_at) return failed("Nilecruz sells sightseeing for this vessel.");
+  const input = sightseeingInput.safeParse(formObject(fd, ["guide", "entrance_fees"]));
+  if (!input.success) return problemsFrom(input.error, { sites: "Sites visited", note: "Note" });
+  const d = input.data;
+  const db = await getDb();
+  const { error } = await db.from("schedule_sightseeing").upsert(
+    {
+      schedule_id: scheduleId,
+      vessel_id: vesselId,
+      guide: d.guide.includes("yes"),
+      entrance_fees: d.entrance_fees.includes("yes"),
+      sites: d.sites,
+      note: d.note || null,
+    },
+    { onConflict: "schedule_id" },
+  );
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
+  return saved("Saved what the sightseeing includes.");
+}
+
+export async function deleteSightseeingRate(
+  orgId: string | null,
+  vesselId: string,
+  scheduleId: string,
+  departureId: string,
+  rateId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.departure(scheduleId, departureId), { orgId: orgId ?? undefined });
+  const db = await getDb();
+  const { error } = await db.from("sightseeing_rates").delete().eq("id", rateId).eq("departure_id", departureId);
+  if (error) return dbProblem(error);
+  revalidatePath(p.departure(scheduleId, departureId));
+  revalidateCatalogue();
+  return saved("Rate with sightseeing removed.");
 }

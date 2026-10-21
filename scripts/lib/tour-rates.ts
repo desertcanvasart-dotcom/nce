@@ -6,13 +6,16 @@ export type SheetRow = { row: number } & Record<string, string | number | boolea
 export type Sheet = Record<
   "Shared tours" | "Private tours" | "Transfers" | "Meet and assist" | "Seasons" | "Questions",
   SheetRow[]
->;
+> & {
+  /** ADR-102: older sheets have no Programs tab. */
+  Programs?: SheetRow[];
+};
 export type KnownTour = { id: string; name: string };
 export type Office = { id: string; display_name: string };
 
 export type RatePlan = {
   tour_id: string;
-  mode: "shared" | "private" | "transfer" | "assist";
+  mode: "shared" | "private" | "transfer" | "assist" | "program";
   label: string;
   days: number[];
   start_times: string[];
@@ -22,6 +25,8 @@ export type RatePlan = {
   tickets_included: boolean | null;
   prices: Record<string, unknown>;
 };
+/** ADR-102: a programme goes with the itineraries its name gives ("3-Night …: Aswan to Luxor"); admins can change them. */
+export type ProgrammeLink = { tour_id: string; nights: number; origin: string; destination: string };
 export type SeasonPlan = { name: string; starts_on: string; ends_on: string; pct: number; applies: string };
 
 const DAY = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -212,6 +217,47 @@ export function planTourRates(sheet: Sheet, tours: KnownTour[], offices: Office[
     }
   }
 
+  // ADR-102: the Programs tab. A programme runs with its sailing (no days or start times of its own), entrance fees
+  // included, children 3–5 at 25 % and 6–11 at the sheet's percentage (50 % unless it says otherwise).
+  const programmes: ProgrammeLink[] = [];
+  for (const r of sheet.Programs ?? []) {
+    const where = `Programs, row ${r.row}`;
+    const tourId = byName.get(String(r.tour ?? "").toLowerCase());
+    if (!tourId) problems.push(`${where}: no tour is called "${String(r.tour)}" (names must match the tours list)`);
+    // "Aswan + Luxor": the first office named handles it (Nilecruz admins handle programme orders).
+    const names = String(r.office ?? "")
+      .toLowerCase()
+      .split(/\s*(?:\+|,|&|\/|\band\b)\s*/)
+      .filter(Boolean);
+    const office = names.map((n) => offices.find((o) => o.display_name.toLowerCase().includes(n))).find(Boolean);
+    if (!office) problems.push(`${where}: offices "${String(r.office ?? "")}" should name Luxor or Aswan`);
+    const tiers = TIERS.filter(([k]) => k !== "p15").flatMap(([k, min, max]) => {
+      const pp = cents("Programs", r, k, `the price for ${min === max ? min : `${min}–${max}`}`);
+      return pp ? [{ min, max, pp }] : [];
+    });
+    if (!tiers.length) problems.push(`${where}: no party-size prices`);
+    const child = r.child_pct === null || r.child_pct === undefined ? 50 : pct(r.child_pct);
+    if (!(child >= 0 && child <= 100)) problems.push(`${where}: the child percentage should be 0 to 100 %`);
+    if (!tourId || !office || !tiers.length) continue;
+    if (officeOf.has(tourId) && officeOf.get(tourId) !== office.id)
+      problems.push(`${where}: ${String(r.tour)} has two different offices`);
+    else officeOf.set(tourId, office.id);
+    rates.push({
+      tour_id: tourId,
+      mode: "program",
+      label: "",
+      days: [1, 2, 3, 4, 5, 6, 7],
+      start_times: [],
+      lead_hours: 24,
+      max_guests: 8,
+      min_guests: 1,
+      tickets_included: true,
+      prices: { tiers, child_pct: child, child35_pct: 25 },
+    });
+    const m = /(\d+)-night\b.*:\s*(.+?)\s+to\s+(.+?)\s*$/i.exec(String(r.tour));
+    if (m) programmes.push({ tour_id: tourId, nights: Number(m[1]), origin: m[2]!, destination: m[3]! });
+  }
+
   const seasons: SeasonPlan[] = [];
   for (const r of sheet.Seasons) {
     const p = pct(r.pct);
@@ -233,5 +279,5 @@ export function planTourRates(sheet: Sheet, tours: KnownTour[], offices: Office[
     dupes.add(k);
   }
   const answers = sheet.Questions.map((q) => `${String(q.n)}. ${String(q.question)} → ${String(q.answer)}`);
-  return { rates, seasons, offices: officeOf, problems, answers };
+  return { rates, seasons, offices: officeOf, programmes, problems, answers };
 }

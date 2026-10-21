@@ -3914,6 +3914,78 @@ export type Database = {
           },
         ];
       };
+      schedule_sightseeing: {
+        Row: {
+          entrance_fees: boolean;
+          guide: boolean;
+          note: string | null;
+          schedule_id: string;
+          sites: string[];
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          entrance_fees: boolean;
+          guide: boolean;
+          note?: string | null;
+          schedule_id: string;
+          sites: string[];
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Update: {
+          entrance_fees?: boolean;
+          guide?: boolean;
+          note?: string | null;
+          schedule_id?: string;
+          sites?: string[];
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [];
+      };
+      sightseeing_rates: {
+        Row: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands: Json;
+          created_at: string;
+          currency: string;
+          departure_id: string;
+          id: string;
+          occupancy: number;
+          rate_plan: Database["public"]["Enums"]["rate_plan"];
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          amount_minor: number;
+          cabin_type_id: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency: string;
+          departure_id: string;
+          id?: string;
+          occupancy: number;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Update: {
+          amount_minor?: number;
+          cabin_type_id?: string;
+          child_bands?: Json;
+          created_at?: string;
+          currency?: string;
+          departure_id?: string;
+          id?: string;
+          occupancy?: number;
+          rate_plan?: Database["public"]["Enums"]["rate_plan"];
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [];
+      };
       vessels: {
         Row: {
           best_for: Database["public"]["Enums"]["best_for_label"][];
@@ -3931,6 +4003,8 @@ export type Database = {
           route_text: string | null;
           showcase_reason: string | null;
           showcase_until: string | null;
+          sightseeing_approved_at: string | null;
+          sightseeing_approved_by: string | null;
           slug: string;
           source_ref: string | null;
           type: Database["public"]["Enums"]["vessel_type"];
@@ -3954,6 +4028,8 @@ export type Database = {
           route_text?: string | null;
           showcase_reason?: string | null;
           showcase_until?: string | null;
+          sightseeing_approved_at?: string | null;
+          sightseeing_approved_by?: string | null;
           slug: string;
           source_ref?: string | null;
           type: Database["public"]["Enums"]["vessel_type"];
@@ -3977,6 +4053,8 @@ export type Database = {
           route_text?: string | null;
           showcase_reason?: string | null;
           showcase_until?: string | null;
+          sightseeing_approved_at?: string | null;
+          sightseeing_approved_by?: string | null;
           slug?: string;
           source_ref?: string | null;
           type?: Database["public"]["Enums"]["vessel_type"];
@@ -4214,6 +4292,10 @@ export type Database = {
       public_party_price: {
         Args: { ages: number[]; cab: string; cur: string; dep: string };
         Returns: number;
+      };
+      set_sightseeing_approval: {
+        Args: { approved: boolean; target: string };
+        Returns: undefined;
       };
       public_sailing_modes: {
         Args: { target: string };
@@ -4593,7 +4675,7 @@ export type Database = {
       tour_cancel_state: "requested" | "refused" | "approved";
       tour_kind: "museum_visit" | "excursion" | "evening_tour" | "transfer" | "other";
       tour_order_status: "awaiting_payment" | "confirmed" | "cancelled";
-      tour_rate_mode: "shared" | "private" | "transfer" | "assist";
+      tour_rate_mode: "shared" | "private" | "transfer" | "assist" | "program";
       vessel_category: "basic" | "standard" | "superior" | "deluxe" | "luxury";
       vessel_type: "sail" | "motor" | "steam";
       visibility: "private" | "showcase" | "published";
@@ -4760,7 +4842,7 @@ export const Constants = {
       tour_cancel_state: ["requested", "refused", "approved"],
       tour_kind: ["museum_visit", "excursion", "evening_tour", "transfer", "other"],
       tour_order_status: ["awaiting_payment", "confirmed", "cancelled"],
-      tour_rate_mode: ["shared", "private", "transfer", "assist"],
+      tour_rate_mode: ["shared", "private", "transfer", "assist", "program"],
       vessel_category: ["basic", "standard", "superior", "deluxe", "luxury"],
       vessel_type: ["sail", "motor", "steam"],
       visibility: ["private", "showcase", "published"],

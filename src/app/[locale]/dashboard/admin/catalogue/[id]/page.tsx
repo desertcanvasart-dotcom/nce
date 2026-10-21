@@ -19,6 +19,7 @@ import {
   saveDetails,
   savePhoto,
   setSafetyStatus,
+  setSightseeingApproval,
   setVisibility,
   uploadPhoto,
 } from "../actions";
@@ -128,6 +129,34 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           </p>
         </Section>
       ) : null}
+
+      <Section title="Sightseeing" id="sightseeing">
+        {v.sightseeing_approved_at ? (
+          <p>
+            <Badge tone="success">Sells with sightseeing included</Badge> Approved <CairoTime value={v.sightseeing_approved_at} />
+            . The operator can enter a price with sightseeing beside the cruise-only price, and says per itinerary what it
+            includes.
+          </p>
+        ) : (
+          <p className={ui.muted}>
+            Nilecruz sells sightseeing for this vessel: travellers see the cruise-only price and the cruise with Nilecruz’s
+            programme. Approve only a vessel that already sells its rates with sightseeing included (ADR-102).
+          </p>
+        )}
+        {canEdit ? (
+          v.sightseeing_approved_at ? (
+            <ActionForm action={setSightseeingApproval.bind(null, id, false)} submit="Withdraw approval" variant="ghost">
+              <p className={ui.hint}>Its with-sightseeing prices stop showing. Bookings already made keep what they bought.</p>
+            </ActionForm>
+          ) : (
+            <ActionForm
+              action={setSightseeingApproval.bind(null, id, true)}
+              submit="Approve to sell with sightseeing"
+              variant="outline"
+            />
+          )
+        ) : null}
+      </Section>
 
       <Section title="Details" id="details">
         {canEdit ? (

@@ -322,3 +322,27 @@ export async function setSafetyStatus(id: string, obsId: string, _prev: ActionSt
   revalidateCatalogue();
   return saved("Status updated.");
 }
+
+/**
+ * ADR-102: approve (or withdraw) a vessel to sell with sightseeing included. Only for vessels that already sell that
+ * way; for every other vessel Nilecruz sells the sightseeing. Withdrawing hides its with-sightseeing rates; bookings
+ * already made keep what they bought.
+ */
+export async function setSightseeingApproval(
+  id: string,
+  approve: boolean,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  await requireAdmin([...CATALOGUE], editor(id));
+  const db = await getDb();
+  const { error } = await db.rpc("set_sightseeing_approval", { target: id, approved: approve });
+  if (error) return dbProblem(error);
+  revalidatePath(editor(id));
+  revalidateCatalogue();
+  return saved(
+    approve
+      ? "Approved: the operator can now enter rates with sightseeing and say what they include."
+      : "Approval withdrawn: Nilecruz sells sightseeing for this vessel again.",
+  );
+}

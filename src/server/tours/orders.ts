@@ -65,6 +65,8 @@ export async function calendarFor(tourId: string) {
       .select("id, mode, label, days, start_times, lead_hours, max_guests, min_guests, prices")
       .eq("tour_id", tourId)
       .eq("active", true)
+      // ADR-102: a programme is booked with its cruise, never on the tour's own calendar.
+      .neq("mode", "program")
       .order("mode")
       .order("label"),
     db.from("tour_seasons").select("starts_on, ends_on, pct, applies"),

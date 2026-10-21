@@ -226,7 +226,10 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
             Price per person: <code>occupancy</code> 1, 2 or 3 guests (at most what the cabin sleeps), <code>plan</code> one of
             international, egyptian_citizen, foreign_resident or trade, <code>currency</code> USD, EUR or EGP (E£ only for the
             Egyptian-citizen and foreign-resident plans), <code>price</code> with at most two decimals. Rates you don’t send stay
-            as they are. Child prices and the crew gratuity are set in your dashboard.
+            as they are. Child prices and the crew gratuity are set in your dashboard. <code>package</code> (optional):{" "}
+            <code>cruise</code> (the default) or <code>with_sightseeing</code>, a price that includes the vessel’s own
+            sightseeing. Only vessels Nilecruz has approved to sell that way can send <code>with_sightseeing</code>; for every
+            other vessel Nilecruz sells the sightseeing.
           </dd>
         </dl>
         <p className={ui.muted}>

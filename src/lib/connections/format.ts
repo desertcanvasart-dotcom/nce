@@ -22,7 +22,15 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,6})?)?(Z|[+-]\d{2}:\d{2})$/;
 const PRICE = /^\d{1,8}(\.\d{1,2})?$/;
 
-export type RateIn = { occupancy: number; plan: RatePlan; currency: (typeof CURRENCIES)[number]; amount_minor: number };
+/** ADR-102: "with_sightseeing" only for vessels Nilecruz has approved; without "package" a rate is cruise only. */
+export const PACKAGES = ["cruise", "with_sightseeing"] as const;
+export type RateIn = {
+  occupancy: number;
+  plan: RatePlan;
+  currency: (typeof CURRENCIES)[number];
+  amount_minor: number;
+  package: (typeof PACKAGES)[number];
+};
 export type InventoryRow = {
   label: string;
   vessel: string;
@@ -228,13 +236,22 @@ function toRow(vessel: string, date: string, schedule: string | null, k: RawCabi
     const plan = text(field(r, "plan")) as RatePlan | null;
     const currency = text(field(r, "currency"))?.toUpperCase() ?? null;
     const amount = priceToMinor(field(r, "price"));
+    const pkg = text(field(r, "package"))?.toLowerCase() ?? "cruise";
     const bad: string[] = [];
     if (occupancy === null) bad.push("“occupancy” must be 1, 2 or 3 guests");
     if (!plan || !PLANS.includes(plan)) bad.push(`“plan” must be one of ${PLANS.join(", ")}`);
     if (!currency || !(CURRENCIES as readonly string[]).includes(currency)) bad.push("“currency” must be USD, EUR or EGP");
     if (amount === null) bad.push("“price” must be a positive amount per person with at most two decimals, such as 1250.00");
+    if (!(PACKAGES as readonly string[]).includes(pkg)) bad.push("“package” must be cruise or with_sightseeing");
     if (bad.length) errors.push(`A rate can’t be read: ${bad.join("; ")}.`);
-    else rates.push({ occupancy: occupancy!, plan: plan!, currency: currency as RateIn["currency"], amount_minor: amount! });
+    else
+      rates.push({
+        occupancy: occupancy!,
+        plan: plan!,
+        currency: currency as RateIn["currency"],
+        amount_minor: amount!,
+        package: pkg as RateIn["package"],
+      });
   }
   if (!k.rates.length && k.legacyPrice !== undefined) {
     warnings.push("The cabin’s “price” was ignored: give prices as “rates” with occupancy, plan and currency (format v1).");

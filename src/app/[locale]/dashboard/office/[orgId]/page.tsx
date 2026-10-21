@@ -9,7 +9,13 @@ import { cairoDay, officeBookings } from "@/server/tours/office";
 import { isUuid } from "../../sections";
 import { cancelStart } from "./actions";
 
-const MODE = { shared: "Shared", private: "Private", transfer: "Transfer", assist: "Meet and assist" } as Record<string, string>;
+const MODE = {
+  shared: "Shared",
+  private: "Private",
+  transfer: "Transfer",
+  assist: "Meet and assist",
+  program: "Sightseeing programme",
+} as Record<string, string>;
 const DAYS = 14;
 const shift = (day: string, n: number) => new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
 const ages = (a: number[]) => {

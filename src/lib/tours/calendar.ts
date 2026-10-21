@@ -9,11 +9,13 @@
  */
 import { cairoOffsetHours } from "@/lib/time/cairo";
 
-export type TourMode = "shared" | "private" | "transfer" | "assist";
+/** ADR-102: "program" is Nilecruz's sightseeing programme, priced like a private tour and booked with its cruise. */
+export type TourMode = "shared" | "private" | "transfer" | "assist" | "program";
 
 export type TourRate =
   | { mode: "shared"; adult: number; child611: number; child35: number; maxGuests: number; minGuests: number }
   | { mode: "private"; tiers: { min: number; max: number | null; pp: number }[]; childPct: number; child35Pct: number }
+  | { mode: "program"; tiers: { min: number; max: number | null; pp: number }[]; childPct: number; child35Pct: number }
   | { mode: "transfer"; vehicles: { name: string; max: number; price: number }[]; nightExtra: number }
   | { mode: "assist"; tiers: { max: number; price: number }[] };
 
@@ -54,10 +56,18 @@ export function quoteTour(rate: TourRate, ages: number[], day: string, time: str
     const adults = ages.filter((a) => a >= 12).length;
     lines.push(`${adults} × ${usd(rate.adult)} per adult`);
     if (ages.length > adults) lines.push("children by age; under 3 free");
-  } else if (rate.mode === "private") {
+  } else if (rate.mode === "private" || rate.mode === "program") {
     const party = ages.filter((a) => a >= 3).length;
     const tier = rate.tiers.find((t) => party >= t.min && (t.max === null || party <= t.max));
-    if (!tier) return { ok: false, problem: "There is no private price for this party size." };
+    // ADR-102: programmes stop at 14 guests on the sheet; bigger groups are quoted by hand.
+    if (!tier)
+      return {
+        ok: false,
+        problem:
+          rate.mode === "program"
+            ? "For a group this size, ask us: Nilecruz quotes the sightseeing by hand."
+            : "There is no private price for this party size.",
+      };
     const share = (a: number) => (a >= 12 ? 100 : a >= 6 ? rate.childPct : a >= 3 ? rate.child35Pct : 0);
     for (const a of ages) total += Math.round((tier.pp * share(a)) / 100);
     lines.push(`${usd(tier.pp)} per adult for a party of ${party}`);
@@ -150,8 +160,9 @@ export function rateFromRow(r: RateRow): TourRate {
         minGuests: r.min_guests,
       };
     case "private":
-      // Faris, 21 Oct: children 3–5 pay 25 % on private tours unless a rate says otherwise.
-      return { mode: "private", tiers: p.tiers, childPct: p.child_pct, child35Pct: p.child35_pct ?? 25 };
+    case "program":
+      // Faris, 21 Oct: children 3–5 pay 25 % on private tours and programmes unless a rate says otherwise.
+      return { mode: r.mode, tiers: p.tiers, childPct: p.child_pct, child35Pct: p.child35_pct ?? 25 };
     case "transfer":
       return { mode: "transfer", vehicles: p.vehicles, nightExtra: p.night_extra };
     default:
@@ -176,6 +187,10 @@ export function priceLine(rate: TourRate): { text: string; from: number } {
     case "private": {
       const low = Math.min(...rate.tiers.map((t) => t.pp));
       return { text: `Private: from ${usd(low)} per person, less for bigger parties`, from: low };
+    }
+    case "program": {
+      const low = Math.min(...rate.tiers.map((t) => t.pp));
+      return { text: `Sightseeing programme: from ${usd(low)} per person, booked with its cruise`, from: low };
     }
     case "transfer": {
       const low = Math.min(...rate.vehicles.map((v) => v.price));

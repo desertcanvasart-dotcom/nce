@@ -16,11 +16,18 @@ import {
 import { shipIn, type CruiseDay } from "@/lib/tours/cruise-days";
 import styles from "./TourCalendar.module.css";
 
-const MODE = { shared: "Shared group", private: "Private tour", transfer: "Private transfer", assist: "Meet and assist" };
+const MODE = {
+  shared: "Shared group",
+  private: "Private tour",
+  transfer: "Private transfer",
+  assist: "Meet and assist",
+  program: "Sightseeing programme",
+};
 const HINT = {
   shared: "Join a small group: at most 8 guests.",
   private: "Your own guide and vehicle.",
   transfer: "Priced per vehicle, one way.",
+  program: "Booked together with its cruise.",
   assist: "Priced per party.",
 };
 const WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

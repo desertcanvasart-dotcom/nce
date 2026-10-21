@@ -476,6 +476,11 @@ X = {
  ("Faris 17 Oct 2026 (ADR-030); Q55", "As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver.", "4f"),
  ("Faris 17 Oct 2026 (ADR-053); PROPOSED-015", "Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris.", "3"),
  ("Faris 17 Oct 2026 (ADR-051)", "Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates.", "3"),
+ ("Faris 21 Oct 2026 (ADR-102)", "Only Nilecruz super and catalogue admins approve a vessel to sell with sightseeing included (vessels that already sell that way); operators can't approve themselves; approving and withdrawing are recorded.", "8"),
+ ("Faris 21 Oct 2026 (ADR-102)", "An approved vessel's operator enters a price with sightseeing beside the cruise-only price, and says per itinerary what it includes (guide, entrance fees, sites); every path (dashboard, paste, feed, API) refuses a with-sightseeing price for a vessel that isn't approved.", "8"),
+ ("Faris 21 Oct 2026 (ADR-102)", "Nilecruz's sightseeing programmes are priced from the rate sheet's Programs tab (per person by party size, children by age, entrance fees included), linked to their itineraries, and booked only together with a cruise.", "8"),
+ ("Faris 21 Oct 2026 (ADR-102)", "Every sailing shows two prices, cruise only and cruise with sightseeing (an approved vessel's own rate, otherwise the cruise plus Nilecruz's programme), on vessel pages, cards, search, comparison and the assistants' answers.", "8"),
+ ("Faris 21 Oct 2026 (ADR-102)", "Booking with Nilecruz's programme makes a cruise reservation and a programme order paid in one checkout as two payments; cancelling the cruise cancels the programme; no programme is offered with an approved vessel's included sightseeing.", "8"),
 ],
 }
 for p, items in X.items():
@@ -1000,6 +1005,12 @@ STATUS.update({
  "DASH-PUB-007": ("Verified", B82A+"plan without an account; after sign-in (address kept) or sign-up (My journey offers the saved plan) the request form opens filled in (unit conversion.test, e2e conversion.spec)"),
  "DASH-BND-007": ("Verified", B82A+"every notice also emailed (English, ADR-101); without RESEND_API_KEY/EMAIL_FROM each is recorded as not sent and admins see a banner and Email delivery counts (pgTAP 330, e2e conversion.spec); real sending needs the Resend account"),
  "SEC-006": ("Verified", B82A+"limits per hashed address and per account on sign-in (10 wrong passwords per email), sign-up, password reset, Contact, requests, booking requests and operator replies; hidden field on sign-up, password reset and Contact (pgTAP 330, e2e conversion.spec); Turnstile only if bots get through (ADR-101)"),
+})
+B83A = "Batch 8-3a (21 Oct 2026): "
+STATUS.update({
+ "DATA-046": ("Built", B83A+"vessels.sightseeing_approved_at/by, set_sightseeing_approval for super and catalogue admins, guard trigger; admin switch on the vessel editor (pgTAP 350, e2e sightseeing.spec to run)"),
+ "DATA-047": ("Built", B83A+"sightseeing_rates and schedule_sightseeing refused unless approved; package on format v1 rates through apply_inventory_rows; operator Package choice and 'what's included' form (unit connections, pgTAP 350, e2e sightseeing.spec to run)"),
+ "DATA-048": ("Built", B83A+"tour rate mode 'program' priced like private tours; the Programs tab imported with itinerary links; programmes kept off tours' own calendars (unit tour-calendar, pgTAP 350 to run)"),
 })
 B82C = "Operator page (21 Oct 2026): "
 STATUS["PAGE-107"] = ("Built", B82C+"/operators/connect/ with the six ways, comparison, booking rule, FAQ data and the IT section; footer and application-page links; drafted copy for review (unit operator-connect.test, e2e operator-connect.spec); screenshots to take")
