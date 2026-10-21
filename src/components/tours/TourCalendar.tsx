@@ -41,6 +41,7 @@ export function TourCalendar({
   rates,
   seasons,
   taken,
+  horizonDays = 365,
   closed,
   now,
   adultsOnly,
@@ -50,6 +51,8 @@ export function TourCalendar({
   rates: RateRow[];
   seasons: Season[];
   taken: Record<string, number>;
+  /** How many days ahead a tour can be booked on its own. */
+  horizonDays?: number;
   closed: string[];
   now: string;
   adultsOnly: boolean;
@@ -82,7 +85,7 @@ export function TourCalendar({
     .map(Number)
     .filter((a) => Number.isInteger(a) && a >= 0 && a < 12);
   const ages = [...Array<number>(Math.max(adults, 0)).fill(30), ...childAges];
-  const open = new Set(openDays({ today, days: row.days, leadHours: row.lead_hours, nowHour }));
+  const open = new Set(openDays({ today, days: row.days, leadHours: row.lead_hours, nowHour, horizonDays }));
   const times = (d: string) =>
     (row.start_times.length ? row.start_times : flexibleTimes(row.mode)).filter(
       (t) =>

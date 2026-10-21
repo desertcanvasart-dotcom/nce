@@ -384,3 +384,11 @@ describe("Nilecruz's sightseeing programmes (ADR-102)", () => {
     ]);
   });
 });
+
+describe("the booking window (Faris's rate sheet: 7 days)", () => {
+  it("opens days from the lead time to the horizon only", () => {
+    const days = openDays({ today: "2027-02-01", days: [1, 2, 3, 4, 5, 6, 7], leadHours: 24, nowHour: 10, horizonDays: 7 });
+    expect(days[0]).toBe("2027-02-03");
+    expect(days.at(-1)).toBe("2027-02-08");
+  });
+});

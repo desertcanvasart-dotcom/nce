@@ -1,6 +1,8 @@
 -- Batch 7-2: tours booked by calendar (ADR-097).
 begin;
-select plan(29);
+select plan(31);
+-- These checks book up to 20 days ahead; the booking window (7 days, Faris's sheet) is checked at the end.
+update public.platform_settings set value = '365' where key = 'tour_horizon_days';
 
 create function pg_temp.as_user(uid uuid) returns void language plpgsql as $$
 begin
@@ -77,7 +79,7 @@ select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d90
 select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d901-000000000001', now() + interval '2 hours', '{30}') $$,
   '22023', null, 'not within the lead time');
 select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d901-000000000001', pg_temp.at(400, '08:00'), '{30}') $$,
-  '22023', 'Book up to 12 months ahead', 'not more than 12 months ahead');
+  '22023', 'Book up to 365 days ahead', 'not more than 12 months ahead');
 select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d901-000000000004', pg_temp.at(10, '08:00'), '{30}') $$,
   '22023', 'This tour can''t be booked', 'a private tour isn''t on sale');
 
@@ -133,6 +135,15 @@ select results_eq($$ select status::text, cancel_state::text, cancel_refund_mino
   'the paid order is approved for a full refund through the usual refund flow');
 select throws_ok($$ select * from public.tour_slot_quote('00000000-0000-4000-d901-000000000001', pg_temp.at(10, '08:00'), '{40}') $$,
   '22023', 'This start has been cancelled by the office', 'a cancelled start takes no new bookings');
+
+-- The booking window: tours booked on their own up to 7 days ahead (Faris's rate sheet).
+select set_config('request.jwt.claims', '', true);
+select set_config('role', 'postgres', true);
+update public.platform_settings set value = '7' where key = 'tour_horizon_days';
+select is(app.slot_problem((select r from public.tour_rates r where r.id = '00000000-0000-4000-d901-000000000002'), pg_temp.at(7, '10:00')),
+  null, 'a tour can be booked 7 days ahead');
+select is(app.slot_problem((select r from public.tour_rates r where r.id = '00000000-0000-4000-d901-000000000002'), pg_temp.at(8, '10:00')),
+  'Book up to 7 days ahead', 'but not 8');
 
 select * from finish();
 rollback;

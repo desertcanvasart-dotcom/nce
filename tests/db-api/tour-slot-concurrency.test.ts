@@ -50,8 +50,8 @@ beforeAll(async () => {
     .single();
   if (re) throw re;
   rateId = r.id;
-  // 08:00 Cairo, 20 days out (winter or summer time alike).
-  const day = new Date(Date.now() + 20 * 86_400_000).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+  // 08:00 Cairo, 5 days out (inside the 7-day booking window; winter or summer time alike).
+  const day = new Date(Date.now() + 5 * 86_400_000).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
   const { cairoInstant } = await import("@/lib/tours/calendar");
   starts = cairoInstant(day, "08:00");
   for (let i = 0; i < PARTIES; i++) {

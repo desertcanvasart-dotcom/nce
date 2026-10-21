@@ -1542,3 +1542,18 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - regenerating the database types (added by hand).
 
 **Next:** 8-3b, the two prices for travellers, and booking and paying both parts.
+
+### Follow-up (21 Oct 2026): your rate sheet loaded locally; tours bookable 7 days ahead
+
+- **The sheet:** `pnpm import:tour-rates` loaded your sheet into the local database: 16 rates on the 9 imported tours, including both programmes. They link to no itinerary locally because the sample ships don't sail those routes; on staging they will.
+- **The booking window** (Questions tab, answer 3; ADR-102 question 5):
+  - a tour booked on its own can be booked up to **7 days** ahead;
+  - it's a setting, `tour_horizon_days`, used by the database check and by the calendar customers see;
+  - programmes go with their cruise and don't use it.
+- **Tests:**
+  - pgTAP `280`: day 7 open, day 8 refused; the older checks there run with the window open;
+  - the calendar end-to-end test opens the window for its run and sets it back;
+  - the concurrency test books 5 days ahead;
+  - unit: the calendar shows days only up to the window.
+- **Verified:** pgTAP, 35 files and 556 checks on a reset database; the grants check shows no differences; `pnpm verify` runs 475 tests.
+- **Not run:** the full end-to-end suite. Docker Desktop shut down again before the build.

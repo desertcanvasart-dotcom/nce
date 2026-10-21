@@ -92,11 +92,20 @@ export function quoteTour(rate: TourRate, ages: number[], day: string, time: str
   return { ok: true, total, lines, vehicle };
 }
 
-/** ADR-097: bookable from the lead time (24 hours by default) up to 12 months ahead, on the days the tour runs. */
-export function openDays(opts: { today: string; days: number[]; leadHours: number; nowHour: number }): string[] {
+/**
+ * ADR-097: bookable from the lead time (24 hours by default) up to the booking horizon (Faris's sheet: 7 days; 365 when
+ * unset), on the days the tour runs.
+ */
+export function openDays(opts: {
+  today: string;
+  days: number[];
+  leadHours: number;
+  nowHour: number;
+  horizonDays?: number;
+}): string[] {
   const out: string[] = [];
   const start = new Date(`${opts.today}T00:00:00Z`);
-  for (let i = 0; i <= 365; i++) {
+  for (let i = 0; i <= (opts.horizonDays ?? 365); i++) {
     const d = new Date(start);
     d.setUTCDate(d.getUTCDate() + i);
     const iso = d.toISOString().slice(0, 10);
