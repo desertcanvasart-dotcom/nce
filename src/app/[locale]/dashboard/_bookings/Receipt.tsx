@@ -50,8 +50,8 @@ export function Receipt({ p }: { p: NonNullable<Awaited<ReturnType<typeof paymen
       </dl>
       <p className={ui.muted}>
         This receipt confirms Nilecruz received this payment for the reservation, as booking agent for the operator, who sells and
-        provides the cruise. Nilecruz’s commission is included in the price. The crew gratuity is paid on board and isn’t
-        included.
+        provides the cruise. Nilecruz’s commission is included in the price. The crew gratuity is paid on board at check-out and
+        isn’t included.
       </p>
     </article>
   );

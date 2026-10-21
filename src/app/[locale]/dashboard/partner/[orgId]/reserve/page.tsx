@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { gratuityText } from "@/lib/product/pricing";
 import { notFound } from "next/navigation";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { formatMoney } from "@/components/ds/lib/format";
@@ -77,8 +78,16 @@ export default async function PartnerReserve({
               {cabins} {cabins === 1 ? "cabin" : "cabins"} ×{" "}
               {formatMoney({ amount: cabin.price.totalMinor, currency: cabin.currency }, "en")} ={" "}
               <strong>{formatMoney({ amount: cabin.price.totalMinor * cabins, currency: cabin.currency }, "en")}</strong>{" "}
-              <span className={ui.muted}>({TIER_LABEL[cabin.price.tier]}; the crew gratuity is paid on board)</span>
+              <span className={ui.muted}>({TIER_LABEL[cabin.price.tier]})</span>
             </p>
+            {found.gratuityUsdMinor ? (
+              <p className={ui.muted}>
+                {gratuityText(found.gratuityUsdMinor, {
+                  nights: found.nights,
+                  ages: Array.from({ length: cabins }, () => [...Array<number>(adults).fill(30), ...childAges]).flat(),
+                })}
+              </p>
+            ) : null}
             <p className={ui.muted}>
               Cabins with these guests:{" "}
               {[1, 2, 3, 4, 5]

@@ -194,3 +194,22 @@ export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v1"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });
+
+async function loadSailingModes(vesselId: string) {
+  const db = visitorDb();
+  if (!db) return [];
+  const { data, error } = await db.rpc("public_sailing_modes", { target: vesselId });
+  if (error) throw error;
+  return (data ?? []).map((r) => ({
+    scheduleId: r.schedule_id,
+    departsOn: r.departs_on,
+    returnsOn: r.returns_on,
+    mode: r.booking_mode,
+  }));
+}
+
+/** DASH-PUB-011: each sailing's booking mode as a visitor may see it (no prices, no counts), cached like the listing. */
+export const publicSailingModes = unstable_cache(loadSailingModes, ["public-sailing-modes-v1"], {
+  tags: [CATALOGUE_TAG],
+  revalidate: CATALOGUE_SECONDS,
+});

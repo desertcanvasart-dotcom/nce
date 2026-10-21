@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ds/Badge/Badge";
 import { formatMoney } from "@/components/ds/lib/format";
+import { gratuityText, partyAges } from "@/lib/product/pricing";
 import { Section, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
@@ -71,8 +72,7 @@ export function ReservationRecord({ r }: { r: Res }) {
         </dl>
         {r.gratuity_usd_minor ? (
           <p className={ui.muted}>
-            Crew gratuity: {money(r.gratuity_usd_minor, "USD")} per person (aged 3 and over) per night, paid on board, not in the
-            total.
+            {gratuityText(r.gratuity_usd_minor, s ? { nights: s.nights, ages: partyAges(r.reservation_cabins) } : undefined)}
           </p>
         ) : null}
       </Section>

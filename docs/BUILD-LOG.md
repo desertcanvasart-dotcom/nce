@@ -1447,3 +1447,32 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - real sending (needs the Resend account and DNS);
 - sign-in emails through Resend (a Supabase setting on staging, with Faris's OK);
 - staging, while Railway isn't deploying.
+
+## 21 Oct 2026 · Batch 8-2b · Read-only MCP for assistants, booking summary checks (ADR-101)
+
+**Branch:** `batch-08-3-mcp-summary`, stacked on 8-2a. One migration, `20261025000100_mcp`.
+
+**Built:**
+- **MCP for assistants** (DASH-PUB-011, 012), at `/api/mcp/`:
+  - Streamable HTTP, stateless: each POST is a JSON-RPC message answered with JSON. No login, no sessions, no resources or prompts.
+  - Four tools, all marked read-only:
+    - `search_cruises`: by origin, destination, dates, nights, vessel type and guests;
+    - `get_vessel`: facts, the Nilecruz evaluation, cabin types, the gratuity and the itinerary by day;
+    - `compare_vessels`: two or three side by side;
+    - `sailing_availability`: each sailing's booking mode (instant, confirmed by the operator, sold out, to be confirmed).
+  - **Restrictions:** it reads the same cached public data a visitor's pages read. It shows only the "from" price, with no per-sailing prices and no cabin counts. A new public function, `public_sailing_modes`, gives the modes without either.
+  - **Limits:** no tool books, requests or changes anything; an unknown tool says so. Every answer links to its page. 120 calls a minute per address, and bodies up to 64 KB.
+- **Booking summary checks** (DATA-011, 016, 017):
+  - **Reviewed:** the vessel page, the customer and partner reserve pages, offers, reservations, receipts and the agency's client sheet.
+  - **Fares:** they come from the rates, and the policy from the departure's vessel. The total is the sum of the cabin lines, and the card checkout charges only the reservation's outstanding balance. Tours have their own orders and checkout.
+  - **Fixed:** the gratuity is now one shared line everywhere: per person per night, the party's total where it's known, and "paid on board at check-out; never charged online and not part of the amount due". The customer and partner reserve pages showed no gratuity line before.
+
+**Verified, and how:**
+- **Unit:** `pnpm verify`, 462 tests. New tests:
+  - `mcp.test.ts`: the protocol, the tool list, no price for vessels that can't be booked, modes without counts, compare limits, booking refused, bad arguments explained;
+  - `booking-summary.test.ts`: the gratuity line and the party's ages.
+
+**Not verified yet:** local Docker kept stopping while an update downloaded. Still to run:
+- `340_mcp_summary` (pgTAP): modes for anyone, prices still signed-in only, no price or count columns, nothing for unpublished vessels, a booking's total equal to its cabin lines without the gratuity;
+- `mcp.spec.ts` (end-to-end), and screenshots;
+- regenerating the database types (the new function's type was added by hand).
