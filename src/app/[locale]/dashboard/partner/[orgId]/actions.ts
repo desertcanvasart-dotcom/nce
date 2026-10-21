@@ -14,6 +14,7 @@ import { parseRequest } from "@/server/bookings/request-form";
 import { failed, formObject, saved } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
+import { rateLimit, tooMany } from "@/server/security/rate-limit";
 import { getStripe } from "@/server/payments/stripe";
 import { notifyNewRequest } from "@/server/requests/dispatch";
 
@@ -73,6 +74,9 @@ async function partnerBook(orgId: string, plan: Plan, fd: FormData, how: "reserv
   if (!selling.ok) return failed("Give your selling price as an amount, for example 2600.");
   const db = await getDb();
   if (how === "request") {
+    const { data: me } = await db.auth.getUser();
+    const limit = await rateLimit("booking-request", `user:${me.user?.id}`);
+    if (!limit.ok) return failed(tooMany(limit.retryAfter));
     const { data: id, error } = await db.rpc("partner_request_booking", {
       org: orgId,
       dep: plan.departureId,
@@ -249,7 +253,9 @@ export async function partnerRequestCancellation(
 
 /** DASH-B2B-004: a request for the company. Operators see it as from a travel partner and may offer at the trade rate. */
 export async function partnerCreateRequest(orgId: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
-  await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: requests(orgId) });
+  const { session } = await requireOrgRole(orgId, ["owner", "reservations"], { kind: "partner", returnTo: requests(orgId) });
+  const limit = await rateLimit("request", `user:${session.userId}`);
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const parsed = parseRequest(fd);
   if (!parsed.ok) return parsed.state;
   const db = await getDb();

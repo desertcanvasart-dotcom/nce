@@ -770,3 +770,15 @@ Faris: "apply the new rule for travel agents as well; add the allotments functio
   - Catalogue admins enter allotments and can switch them off on the operator's page; the operator reads them, with each sailing's booked count, on its connection health.
   - Two bookings can't share the last allotment cabin: there is one lock per sailing and cabin type.
   - Operators are told when a booking came from the allotment.
+
+### ADR-101 Conversion layer (Accepted; Faris 21 Oct 2026, Batch 8 brief, all as recommended)
+- **Emails:** English for now; in the site language once Spanish and Japanese translations exist.
+- **Payment reminders:** 3 days and 1 day before the deadline, and on the day.
+- **Sign-in emails** (sign-in, confirmation, password) go through Resend, set in Supabase on staging.
+- **Bots:** rate limits and hidden honeypot fields now; Cloudflare Turnstile only if bots get through.
+- **MCP:** public data only, no login, the same as a visitor without an account; signed-in prices later.
+- **Plan my cruise:** the plan stays in the browser and no email is asked for until sign-up.
+- **Two pull requests:** 8-2a (Plan my cruise, emails, rate limits) and 8-2b (MCP, booking summary checks).
+- **Decided while building:**
+  - eligibility proofs are verified by operators (ADR-088), so "proof to verify" emails go to the operator, not to admins;
+  - emails are built from the dashboard notices, so every notice also reaches the inbox.

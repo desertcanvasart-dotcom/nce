@@ -7,6 +7,7 @@ import { safeNextPath } from "@/lib/auth/next-path";
 import { env, siteUrl } from "@/lib/env";
 import { localizedPath } from "@/lib/seo/metadata";
 import { allowAnonymous, landingPath, requireUser } from "@/server/auth";
+import { rateLimit } from "@/server/security/rate-limit";
 import { getDb } from "@/server/db";
 import {
   changeEmailInput,
@@ -71,9 +72,16 @@ export async function signIn(_prev: FormState, fd: FormData): Promise<FormState>
   if (!input.ok) return invalid(input.errors, { email: String(fd.get("email") ?? "") });
   const { email, password, locale, next } = input.data;
 
+  // SEC-006: tries from this address, and failed tries for this email (password guessing), are limited.
+  const who = `email:${email.toLowerCase()}`;
+  if (!(await rateLimit("sign-in")).ok || !(await rateLimit("sign-in-failed", who, { peek: true })).ok)
+    return { status: "error", message: "rateLimited", values: { email } };
   const db = await getDb();
   const { error } = await db.auth.signInWithPassword({ email, password });
-  if (error) return { status: "error", message: authMessage(error.code), values: { email } };
+  if (error) {
+    if (error.code === "invalid_credentials") await rateLimit("sign-in-failed", who);
+    return { status: "error", message: authMessage(error.code), values: { email } };
+  }
 
   const target = safeNextPath(next);
   const { data: level } = await db.auth.mfa.getAuthenticatorAssuranceLevel();
@@ -90,6 +98,7 @@ export async function signUp(_prev: FormState, fd: FormData): Promise<FormState>
   if (!input.ok) return invalid(input.errors, { email: raw.email, full_name: raw.full_name });
   const { email, password, full_name, locale } = input.data;
 
+  if (!(await rateLimit("sign-up")).ok) return { status: "error", message: "rateLimited", values: { email, full_name } };
   const db = await getDb();
   const { error } = await db.auth.signUp({
     email,
@@ -107,6 +116,7 @@ export async function resendConfirmation(_prev: FormState, fd: FormData): Promis
   allowAnonymous();
   const input = parseInput(emailOnly, form(fd));
   if (!input.ok) return invalid(input.errors);
+  if (!(await rateLimit("password-reset")).ok) return { status: "error", message: "rateLimited" };
   const db = await getDb();
   const { error } = await db.auth.resend({
     type: "signup",
@@ -121,6 +131,7 @@ export async function requestPasswordReset(_prev: FormState, fd: FormData): Prom
   allowAnonymous();
   const input = parseInput(emailOnly, form(fd));
   if (!input.ok) return invalid(input.errors, { email: String(fd.get("email") ?? "") });
+  if (!(await rateLimit("password-reset")).ok) return { status: "error", message: "rateLimited" };
   const db = await getDb();
   const { error } = await db.auth.resetPasswordForEmail(input.data.email, { redirectTo: confirmUrl(input.data.locale) });
   if (error?.code?.startsWith("over_")) return { status: "error", message: "rateLimited" };

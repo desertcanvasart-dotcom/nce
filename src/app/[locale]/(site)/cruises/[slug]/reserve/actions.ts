@@ -8,6 +8,7 @@ import { requireUser } from "@/server/auth";
 import { failed, formObject } from "@/server/catalogue/form";
 import { connectionProblem } from "@/server/connections/form";
 import { getDb } from "@/server/db";
+import { rateLimit, tooMany } from "@/server/security/rate-limit";
 import { notifyNewRequest } from "@/server/requests/dispatch";
 
 type Plan = { departureId: string; departsOn: string; cabinTypeId: string; currency: string; cabins: number; ages: number[] };
@@ -44,7 +45,9 @@ function guestsFrom(plan: Plan, fd: FormData): { guests: Passenger[] } | { probl
  * one-tap answers; the customer pays once it's confirmed.
  */
 export async function customerRequestBooking(slug: string, plan: Plan, _prev: ActionState, fd: FormData): Promise<ActionState> {
-  await requireUser(`/cruises/${slug}/reserve/`);
+  const session = await requireUser(`/cruises/${slug}/reserve/`);
+  const limit = await rateLimit("booking-request", `user:${session.userId}`);
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const g = guestsFrom(plan, fd);
   if ("problem" in g) return failed(g.problem);
   const db = await getDb();

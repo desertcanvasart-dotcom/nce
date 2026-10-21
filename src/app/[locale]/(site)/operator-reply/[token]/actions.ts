@@ -5,6 +5,7 @@ import type { ActionState } from "@/components/dashboard/ActionForm";
 import { allowAnonymous } from "@/server/auth";
 import { failed, formObject, saved } from "@/server/catalogue/form";
 import { answerFromLink } from "@/server/requests/reply";
+import { rateLimit, tooMany } from "@/server/security/rate-limit";
 
 /** ADR-099: the one button on a signed link's page. The link is the permission; nobody signs in. */
 const STATUS_TEXT: Record<string, string> = {
@@ -21,6 +22,8 @@ export async function answerLink(
   fd: FormData,
 ): Promise<ActionState> {
   allowAnonymous();
+  const limit = await rateLimit("operator-reply");
+  if (!limit.ok) return failed(tooMany(limit.retryAfter));
   const f = formObject(fd);
   let alt: { departure_id?: string; cabin_type_id?: string; cabins: number; note?: string } | undefined;
   if (token.split("~")[1] === "other") {

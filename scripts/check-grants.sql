@@ -39,6 +39,8 @@ with intended(table_name, grantee, privileges) as (
     ('used_action_tokens', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     -- Operator loop B: sheets are read by admins and the operator's team; catalogue admins update them (RLS).
     ('sheet_ingests', 'authenticated', 'SELECT,UPDATE'), ('sheet_ingests', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Batch 8-2a: rate-limit counters and reminder marks are written by the server only.
+    ('rate_limit_hits', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('reservation_reminders', 'service_role', 'INSERT,SELECT'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
