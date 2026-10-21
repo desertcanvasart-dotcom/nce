@@ -1,0 +1,3 @@
+# False positive (21 Oct 2026): local dev-server settings with empty and placeholder values, no real key;
+# the file is no longer tracked.
+b5c0bea81d495b3904aebada0db61dbb952144a0:.claude/launch.json:generic-api-key:18
