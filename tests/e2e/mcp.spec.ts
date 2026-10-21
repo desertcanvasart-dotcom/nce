@@ -43,6 +43,7 @@ test("booking through MCP is refused, and only POST is accepted", async ({ reque
   expect(r.result).toMatchObject({ isError: true });
   expect(JSON.stringify(r.result)).toContain("only read");
   expect((await request.get("/api/mcp/")).status()).toBe(405);
-  const bad = await request.post("/api/mcp/", { data: "not json", headers: { "Content-Type": "application/json" } });
+  // Raw bytes: Playwright would send a plain string as a JSON string, which is valid JSON.
+  const bad = await request.post("/api/mcp/", { data: Buffer.from("not json"), headers: { "Content-Type": "application/json" } });
   expect(bad.status()).toBe(400);
 });
