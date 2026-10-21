@@ -97,7 +97,9 @@ test("an admin adds an allotment; its cabins book instantly though the operator'
   const op = await (await browser.newContext()).newPage();
   await signIn(op, "owner@operator-a.test");
   await op.goto(`/dashboard/operator/${ORG.operatorA}/inventory/#allotments`);
-  await expect(op.getByText(`${A.departsOn}: 1 of 2 booked`)).toBeVisible();
+  // Scoped to this run's ship: CI runs the suite twice on one database, so earlier allotments are listed too.
+  const mine = op.locator("li", { hasText: `Sample Cancel Ship ${RUN}al · Double` });
+  await expect(mine.getByText(`${A.departsOn}: 1 of 2 booked`)).toBeVisible();
   await expect(op.getByRole("button", { name: "Add allotment" })).toHaveCount(0); // read-only for the operator
 });
 
