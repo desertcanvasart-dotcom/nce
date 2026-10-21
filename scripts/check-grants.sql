@@ -32,6 +32,8 @@ with intended(table_name, grantee, privileges) as (
     ('contact_messages', 'anon', 'INSERT'), ('contact_messages', 'authenticated', 'INSERT,SELECT'),
     -- Batch 7-2: tour rates and seasons are public (prices, ADR-087); closed starts are read by the office and admins.
     ('tour_rates', 'anon', 'SELECT'), ('tour_seasons', 'anon', 'SELECT'), ('tour_slot_closures', 'authenticated', 'SELECT'),
+    -- Batch 8-3a: what an approved vessel's sightseeing includes is public (shown beside the price).
+    ('schedule_sightseeing', 'anon', 'SELECT'),
     ('tour_slot_closures', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     -- Operator loop A: booking requests, their guests and messages are read by people, written through functions.
     ('booking_requests', 'authenticated', 'SELECT'), ('booking_request_guests', 'authenticated', 'SELECT'),
@@ -54,7 +56,8 @@ with intended(table_name, grantee, privileges) as (
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
-                    'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments']) t,
+                    'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments',
+                    'sightseeing_rates', 'schedule_sightseeing']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'

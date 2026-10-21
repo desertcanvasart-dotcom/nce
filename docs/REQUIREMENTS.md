@@ -28,9 +28,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEC | 15 |
 | SEO | 30 |
 | I18N | 12 |
-| DATA | 45 |
+| DATA | 50 |
 | EXP | 10 |
-| **Total** | **527** |
+| **Total** | **532** |
 
 ## Dashboard guide (ROLE)
 
@@ -643,6 +643,11 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DATA-043 | Faris 17 Oct 2026 (ADR-030); Q55 | As a fallback, an admin can approve a manual payment (e.g. bank transfer) for any booking, recorded with method, reference and approver. | 4f | Verified | Batch 4f-1 (18 Oct 2026): finance admins record manual payments with method, reference and approver (record_manual_payment; 160) |
 | DATA-044 | Faris 17 Oct 2026 (ADR-053); PROPOSED-015 | Egyptologist profiles exist as a translatable CMS content type (name, photo, qualifications, languages, bio); names, bios and photos come from Faris. | 3 | Verified | Batch 3 (17 Oct 2026): studio/schemaTypes/documents/egyptologist.ts (field-level EN/ES/JA, photo consent required); schema validates (pnpm studio:check). Content from Faris: CONTENT-NEEDED #13 |
 | DATA-045 | Faris 17 Oct 2026 (ADR-051) | Imported vessels are mapped to wind (dahabiya), engine (powered, Lake Nasser) or steam; steam vessels are confirmed by Faris, never guessed; the import lists candidates. | 3 | Verified | Batch 3 (17 Oct 2026): scripts/lib/vessel-import.ts; vessel-import.test.ts; Faris confirmed the Sudan as the only steamer (ADR-060): 3 Sudan records steam, Karim, Misr and Sphinx stay motor |
+| DATA-046 | Faris 21 Oct 2026 (ADR-102) | Only Nilecruz super and catalogue admins approve a vessel to sell with sightseeing included (vessels that already sell that way); operators can't approve themselves; approving and withdrawing are recorded. | 8 | Built | Batch 8-3a (21 Oct 2026): vessels.sightseeing_approved_at/by, set_sightseeing_approval for super and catalogue admins, guard trigger; admin switch on the vessel editor (pgTAP 350, e2e sightseeing.spec to run) |
+| DATA-047 | Faris 21 Oct 2026 (ADR-102) | An approved vessel's operator enters a price with sightseeing beside the cruise-only price, and says per itinerary what it includes (guide, entrance fees, sites); every path (dashboard, paste, feed, API) refuses a with-sightseeing price for a vessel that isn't approved. | 8 | Built | Batch 8-3a (21 Oct 2026): sightseeing_rates and schedule_sightseeing refused unless approved; package on format v1 rates through apply_inventory_rows; operator Package choice and 'what's included' form (unit connections, pgTAP 350, e2e sightseeing.spec to run) |
+| DATA-048 | Faris 21 Oct 2026 (ADR-102) | Nilecruz's sightseeing programmes are priced from the rate sheet's Programs tab (per person by party size, children by age, entrance fees included), linked to their itineraries, and booked only together with a cruise. | 8 | Built | Batch 8-3a (21 Oct 2026): tour rate mode 'program' priced like private tours; the Programs tab imported with itinerary links; programmes kept off tours' own calendars (unit tour-calendar, pgTAP 350 to run) |
+| DATA-049 | Faris 21 Oct 2026 (ADR-102) | Every sailing shows two prices, cruise only and cruise with sightseeing (an approved vessel's own rate, otherwise the cruise plus Nilecruz's programme), on vessel pages, cards, search, comparison and the assistants' answers. | 8 | Planned |  |
+| DATA-050 | Faris 21 Oct 2026 (ADR-102) | Booking with Nilecruz's programme makes a cruise reservation and a programme order paid in one checkout as two payments; cancelling the cruise cancels the programme; no programme is offered with an approved vessel's included sightseeing. | 8 | Planned |  |
 
 ## EXP
 

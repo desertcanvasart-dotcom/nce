@@ -151,3 +151,21 @@ export async function approvedPartners() {
   const { data } = await db.rpc("approved_partners");
   return data ?? [];
 }
+
+/** ADR-102: what an approved vessel's itinerary includes (null until the operator says). */
+export async function scheduleSightseeing(scheduleId: string) {
+  const db = await getDb();
+  const { data } = await db.from("schedule_sightseeing").select("*").eq("schedule_id", scheduleId).maybeSingle();
+  return data;
+}
+
+/** ADR-102: an approved vessel's own with-sightseeing rates on one departure. */
+export async function sightseeingRatesFor(departureId: string) {
+  const db = await getDb();
+  const { data } = await db
+    .from("sightseeing_rates")
+    .select("id, cabin_type_id, occupancy, rate_plan, currency, amount_minor")
+    .eq("departure_id", departureId)
+    .order("occupancy");
+  return data ?? [];
+}

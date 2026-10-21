@@ -74,6 +74,7 @@ export default async function BookTour({ params }: { params: Promise<{ tourId: s
               rates={t.rates}
               seasons={t.seasons}
               taken={t.taken}
+              horizonDays={t.horizonDays}
               closed={t.closed}
               now={new Date().toISOString()}
               adultsOnly={t.adults_only}

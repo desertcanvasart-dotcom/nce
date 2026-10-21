@@ -803,4 +803,4 @@ Faris: "apply the new rule for travel agents as well; add the allotments functio
   - booking both parts together (one checkout with two payments, or one after the other);
   - cancelling one part without the other;
   - sailings whose itinerary has no Nilecruz programme yet (show cruise only).
-- **Status:** decided, not built.
+- **Status:** 8-3a built 21 Oct 2026: approval, prices with sightseeing, what's included, bookable programme prices. 8-3b (the two prices for travellers, booking both parts) is next.

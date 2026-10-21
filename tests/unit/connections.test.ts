@@ -81,8 +81,8 @@ describe("inventory format v1 (ADR-080)", () => {
       available: 4,
       confirmed_at: "2027-03-01T07:30:00.000Z",
       rates: [
-        { occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050 },
-        { occupancy: 1, plan: "egyptian_citizen", currency: "EGP", amount_minor: 4500000 },
+        { occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050, package: "cruise" },
+        { occupancy: 1, plan: "egyptian_citizen", currency: "EGP", amount_minor: 4500000, package: "cruise" },
       ],
       errors: [],
     });
@@ -97,7 +97,42 @@ describe("inventory format v1 (ADR-080)", () => {
       available: 4,
       confirmed_at: "2027-03-01T07:30:00.000Z",
     });
-    expect(row!.rates).toEqual([{ occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050 }]);
+    expect(row!.rates).toEqual([
+      { occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050, package: "cruise" },
+    ]);
+  });
+
+  it("reads a with-sightseeing rate, and refuses an unknown package (ADR-102)", () => {
+    const doc = (pkg: string) =>
+      JSON.stringify({
+        cruises: [
+          {
+            id: "sample-dahab",
+            availability: [
+              {
+                date: "2027-03-01",
+                cabins: [
+                  {
+                    type: "DBL",
+                    available: 2,
+                    rates: [
+                      { occupancy: 2, plan: "international", currency: "USD", price: 900 },
+                      { occupancy: 2, plan: "international", currency: "USD", price: 1200, package: pkg },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      });
+    const [ok] = parseInventory(doc("with_sightseeing"));
+    expect(ok!.rates.map((r) => [r.package, r.amount_minor])).toEqual([
+      ["cruise", 90000],
+      ["with_sightseeing", 120000],
+    ]);
+    const [bad] = parseInventory(doc("all-inclusive"));
+    expect(bad!.errors.join(" ")).toContain("“package” must be cruise or with_sightseeing");
   });
 
   it("refuses XML with entity declarations: external entities and billion laughs (SEC-007)", () => {

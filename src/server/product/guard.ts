@@ -9,6 +9,8 @@ export type ProductVessel = {
   type: "sail" | "motor" | "steam";
   operator_org_id: string | null;
   gratuity_usd_minor: number | null;
+  /** ADR-102: set when Nilecruz approved the vessel to sell with sightseeing included. */
+  sightseeing_approved_at: string | null;
 };
 
 /**
@@ -28,7 +30,7 @@ export async function requireProductEditor(
   const db = await getDb();
   const { data: vessel } = await db
     .from("vessels")
-    .select("id, name, type, operator_org_id, gratuity_usd_minor")
+    .select("id, name, type, operator_org_id, gratuity_usd_minor, sightseeing_approved_at")
     .eq("id", vesselId)
     .maybeSingle();
   if (!vessel) notFound();

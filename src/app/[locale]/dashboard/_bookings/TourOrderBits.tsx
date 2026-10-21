@@ -25,5 +25,6 @@ export const TOUR_MODE = {
   private: "Private",
   transfer: "Private transfer",
   assist: "Meet and assist",
+  program: "Sightseeing programme",
 } as const;
 export const PRICING = { per_guest: "per guest (under-3s free)", per_group: "for the whole party" } as const;

@@ -16,11 +16,18 @@ import {
 import { shipIn, type CruiseDay } from "@/lib/tours/cruise-days";
 import styles from "./TourCalendar.module.css";
 
-const MODE = { shared: "Shared group", private: "Private tour", transfer: "Private transfer", assist: "Meet and assist" };
+const MODE = {
+  shared: "Shared group",
+  private: "Private tour",
+  transfer: "Private transfer",
+  assist: "Meet and assist",
+  program: "Sightseeing programme",
+};
 const HINT = {
   shared: "Join a small group: at most 8 guests.",
   private: "Your own guide and vehicle.",
   transfer: "Priced per vehicle, one way.",
+  program: "Booked together with its cruise.",
   assist: "Priced per party.",
 };
 const WEEK = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -34,6 +41,7 @@ export function TourCalendar({
   rates,
   seasons,
   taken,
+  horizonDays = 365,
   closed,
   now,
   adultsOnly,
@@ -43,6 +51,8 @@ export function TourCalendar({
   rates: RateRow[];
   seasons: Season[];
   taken: Record<string, number>;
+  /** How many days ahead a tour can be booked on its own. */
+  horizonDays?: number;
   closed: string[];
   now: string;
   adultsOnly: boolean;
@@ -75,7 +85,7 @@ export function TourCalendar({
     .map(Number)
     .filter((a) => Number.isInteger(a) && a >= 0 && a < 12);
   const ages = [...Array<number>(Math.max(adults, 0)).fill(30), ...childAges];
-  const open = new Set(openDays({ today, days: row.days, leadHours: row.lead_hours, nowHour }));
+  const open = new Set(openDays({ today, days: row.days, leadHours: row.lead_hours, nowHour, horizonDays }));
   const times = (d: string) =>
     (row.start_times.length ? row.start_times : flexibleTimes(row.mode)).filter(
       (t) =>

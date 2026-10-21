@@ -275,3 +275,120 @@ describe("the rate sheet (pnpm import:tour-rates)", () => {
     ]);
   });
 });
+
+describe("Nilecruz's sightseeing programmes (ADR-102)", () => {
+  const programme: TourRate = {
+    mode: "program",
+    tiers: [
+      { min: 1, max: 1, pp: 33700 },
+      { min: 2, max: 2, pp: 21600 },
+      { min: 3, max: 4, pp: 17800 },
+      { min: 5, max: 8, pp: 14400 },
+      { min: 9, max: 14, pp: 12800 },
+    ],
+    childPct: 50,
+    child35Pct: 25,
+  };
+  it("prices a party like a private tour: by party size, children by age, under 3 free", () => {
+    const q = quoteTour(programme, [40, 38, 8, 4, 1], "2027-02-12", "08:00");
+    expect(q).toMatchObject({ ok: true, total: 17800 * 2 + 8900 + 4450 });
+  });
+  it("sends groups over 14 to Nilecruz for a quote", () => {
+    const q = quoteTour(
+      programme,
+      Array.from({ length: 15 }, () => 30),
+      "2027-02-12",
+      "08:00",
+    );
+    expect(q).toEqual({ ok: false, problem: "For a group this size, ask us: Nilecruz quotes the sightseeing by hand." });
+  });
+  it("reads a programme row from the database like a private one", () => {
+    const r = rateFromRow({
+      id: "r",
+      mode: "program",
+      label: "",
+      days: [1, 2, 3, 4, 5, 6, 7],
+      start_times: [],
+      lead_hours: 24,
+      max_guests: 8,
+      min_guests: 1,
+      prices: { tiers: [{ min: 1, max: null, pp: 10000 }], child_pct: 50 },
+    });
+    expect(r).toEqual({ mode: "program", tiers: [{ min: 1, max: null, pp: 10000 }], childPct: 50, child35Pct: 25 });
+  });
+  it("loads the Programs tab: prices by party size, entrance fees included, the first office named, its itineraries", () => {
+    const plan = planTourRates(
+      {
+        "Shared tours": [],
+        "Private tours": [],
+        Transfers: [],
+        "Meet and assist": [],
+        Seasons: [],
+        Questions: [],
+        Programs: [
+          {
+            row: 6,
+            tour: "3-Night Nile Cruise Sightseeing: Aswan to Luxor",
+            office: "Aswan + Luxor",
+            p1: 337,
+            p2: 216,
+            p34: 178,
+            p58: 144,
+            p914: 128,
+            child_pct: 0.5,
+            notes: null,
+          },
+          {
+            row: 7,
+            tour: "Unknown programme",
+            office: "Cairo",
+            p1: null,
+            p2: null,
+            p34: null,
+            p58: null,
+            p914: null,
+            child_pct: null,
+          },
+        ],
+      },
+      [{ id: "p3", name: "3-Night Nile Cruise Sightseeing: Aswan to Luxor" }],
+      [
+        { id: "lx", display_name: "Nilecruz Luxor Office" },
+        { id: "as", display_name: "Nilecruz Aswan Office" },
+      ],
+    );
+    expect(plan.rates).toEqual([
+      expect.objectContaining({
+        tour_id: "p3",
+        mode: "program",
+        tickets_included: true,
+        prices: {
+          tiers: [
+            { min: 1, max: 1, pp: 33700 },
+            { min: 2, max: 2, pp: 21600 },
+            { min: 3, max: 4, pp: 17800 },
+            { min: 5, max: 8, pp: 14400 },
+            { min: 9, max: 14, pp: 12800 },
+          ],
+          child_pct: 50,
+          child35_pct: 25,
+        },
+      }),
+    ]);
+    expect(plan.offices.get("p3")).toBe("as");
+    expect(plan.programmes).toEqual([{ tour_id: "p3", nights: 3, origin: "Aswan", destination: "Luxor" }]);
+    expect(plan.problems).toEqual([
+      'Programs, row 7: no tour is called "Unknown programme" (names must match the tours list)',
+      'Programs, row 7: offices "Cairo" should name Luxor or Aswan',
+      "Programs, row 7: no party-size prices",
+    ]);
+  });
+});
+
+describe("the booking window (Faris's rate sheet: 7 days)", () => {
+  it("opens days from the lead time to the horizon only", () => {
+    const days = openDays({ today: "2027-02-01", days: [1, 2, 3, 4, 5, 6, 7], leadHours: 24, nowHour: 10, horizonDays: 7 });
+    expect(days[0]).toBe("2027-02-03");
+    expect(days.at(-1)).toBe("2027-02-08");
+  });
+});

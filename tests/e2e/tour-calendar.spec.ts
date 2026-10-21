@@ -46,8 +46,14 @@ async function pickDay(page: Page) {
   await page.getByRole("button", { name: new RegExp(`^${dayLabel}(,|$)`) }).click();
 }
 
+test.afterAll(async () => {
+  await adminDb().from("platform_settings").update({ value: 7 }).eq("key", "tour_horizon_days");
+});
+
 test.beforeAll(async () => {
   const db = adminDb();
+  // These tests book 9 days and more ahead; the 7-day window (Faris's sheet) is checked in pgTAP 280.
+  await db.from("platform_settings").update({ value: 365 }).eq("key", "tour_horizon_days");
   const { data: t, error } = await db
     .from("tours")
     .insert({

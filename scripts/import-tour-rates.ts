@@ -7,6 +7,7 @@
  *
  * Production is refused. Each row sets its tour's office and replaces that tour's rate for the mode (and direction);
  * the Seasons tab replaces all seasons. Tours are not published here: an admin publishes each one when it's ready.
+ * The Programs tab (ADR-102) also links each programme to the itineraries its name gives, adding to any links there.
  */
 import { createClient } from "@supabase/supabase-js";
 import { execFileSync } from "node:child_process";
@@ -47,11 +48,12 @@ async function main() {
     }),
   ) as Sheet;
   const db = connect();
-  const [{ data: tours, error: e1 }, { data: offices, error: e2 }] = await Promise.all([
+  const [{ data: tours, error: e1 }, { data: offices, error: e2 }, { data: schedules, error: e6 }] = await Promise.all([
     db.from("tours").select("id, name"),
     db.from("organisations").select("id, display_name").eq("kind", "tour_office"),
+    db.from("schedules").select("id, origin, destination, nights, vessel:vessels(name)").eq("active", true),
   ]);
-  if (e1 ?? e2) throw e1 ?? e2;
+  if (e1 ?? e2 ?? e6) throw e1 ?? e2 ?? e6;
   const plan = planTourRates(sheet, tours ?? [], offices ?? []);
   const name = new Map((tours ?? []).map((t) => [t.id, t.name]));
   if (plan.answers.length) console.log(`Answers on the Questions tab:\n- ${plan.answers.join("\n- ")}\n`);
@@ -63,6 +65,18 @@ async function main() {
     `${plan.rates.length} rates for ${plan.offices.size} tours, ${plan.seasons.length} seasons:\n` +
       plan.rates.map((r) => `- ${name.get(r.tour_id)}: ${r.mode}${r.label ? ` (${r.label})` : ""}`).join("\n"),
   );
+  const same = (a: string, b: string) => a.trim().toLowerCase() === b.trim().toLowerCase();
+  const links = plan.programmes.flatMap((p) =>
+    (schedules ?? [])
+      .filter((x) => x.nights === p.nights && same(x.origin, p.origin) && same(x.destination, p.destination))
+      .map((x) => ({ tour_id: p.tour_id, schedule_id: x.id })),
+  );
+  for (const p of plan.programmes) {
+    const n = links.filter((l) => l.tour_id === p.tour_id).length;
+    console.log(
+      `- ${name.get(p.tour_id)} goes with ${n} itinerar${n === 1 ? "y" : "ies"} (${p.nights} nights, ${p.origin} to ${p.destination})`,
+    );
+  }
   if (!apply) {
     console.log(`\nDry run: nothing changed. Add --apply to load them into ${target}.`);
     return;
@@ -81,6 +95,12 @@ async function main() {
   if (plan.seasons.length) {
     const { error: e5 } = await db.from("tour_seasons").insert(plan.seasons);
     if (e5) throw e5;
+  }
+  if (links.length) {
+    const { error: e7 } = await db
+      .from("tour_schedules")
+      .upsert(links, { onConflict: "tour_id,schedule_id", ignoreDuplicates: true });
+    if (e7) throw e7;
   }
   console.log(`\nLoaded into ${target}. Publish each tour in the dashboard when its page is ready; then refresh the catalogue.`);
 }

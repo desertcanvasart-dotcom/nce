@@ -1504,3 +1504,56 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   `pnpm verify`: 469 tests.
 - **Seen in the browser** at 375, 768 and 1440 in Day and Night (`docs/screenshots/batch-08/8-op-*`).
 - **Not run yet:** `operator-connect.spec.ts` (sections, table, anchors, alt text, FAQ data, footer only, axe in Day and Night) needs the local database for the full suite.
+
+## 21 Oct 2026 · Batch 8-3a · Sightseeing: approved vessels, prices with sightseeing, bookable programme prices (ADR-102)
+
+**Branch:** `sightseeing-two-prices`, stacked on the operator page. Brief: `docs/briefs/SIGHTSEEING-TWO-PRICES.md`, approved with the recommended answers. Two migrations: `20261026000100_programme_mode`, `20261026000200_sightseeing`.
+
+**Built:**
+- **Approval** (DATA-046):
+  - `vessels.sightseeing_approved_at` / `_by`, set only through `set_sightseeing_approval`, by super and catalogue admins in a two-step session;
+  - a guard stops anyone else changing them, and the vessels audit records each change;
+  - a "Sightseeing" section on the admin vessel editor: approve, or withdraw (its prices with sightseeing stop showing; bookings keep what they bought).
+- **Prices with sightseeing** (DATA-047):
+  - **The tables:**
+    - `sightseeing_rates`: the same shape as `rates`, so the dozen cruise-only readers are untouched;
+    - `schedule_sightseeing`: what each itinerary includes (guide, entrance fees, sites, note).
+  - **The rule:** both refuse any vessel that isn't approved, whoever writes.
+  - **Format v1:** each rate takes an optional `package` (`cruise` by default, or `with_sightseeing`). `apply_inventory_rows` refuses `with_sightseeing` for a vessel that isn't approved and writes each package to its own table. Paste, feed, API and one-tap all use it. The format page explains it.
+  - **Vacancy sheets:** they carry no prices, so nothing changes there; the brief is corrected.
+  - **Operator screens:**
+    - on approved vessels: a "Sightseeing" section (what's included, required before those prices show), a "Package" choice in the rate form, and the with-sightseeing prices listed and removable on each departure;
+    - on other vessels: "Nilecruz sells the sightseeing for this vessel".
+- **Programmes** (DATA-048):
+  - **Pricing:** a new tour rate kind, `program`, priced like private tours: per person by party size, children 3–5 at 25 % and 6–11 at 50 %, under 3 free. Groups over 14 are told to ask Nilecruz.
+  - **Kept for 8-3b:** programmes aren't bookable on their own and stay off tours' calendars until 8-3b books them with a cruise.
+  - **The import:** `pnpm import:tour-rates` now reads the Programs tab, with entrance fees included and the first office named. It links each programme to the itineraries its name gives (3 nights Aswan → Luxor, 4 nights Luxor → Aswan). The dry run on your sheet gives 16 rates with nothing to fix.
+
+**Verified:**
+- **Unit:** `pnpm verify`, 474 tests. New:
+  - the `package` field;
+  - programme prices (party sizes, children, groups over 14);
+  - the programme row;
+  - the Programs tab (prices, office, links, error messages).
+- **Not run yet** (local Docker is down):
+  - `350_sightseeing` (pgTAP, 18 checks): who approves, every path refused for vessels that aren't approved, both prices landing in their own places, inclusions public only while approved, programmes not bookable on their own;
+  - `sightseeing.spec.ts` (end-to-end: admin approves, the operator enters inclusions and a with-sightseeing price, a vessel that isn't approved shows the note);
+  - the grants check;
+  - regenerating the database types (added by hand).
+
+**Next:** 8-3b, the two prices for travellers, and booking and paying both parts.
+
+### Follow-up (21 Oct 2026): your rate sheet loaded locally; tours bookable 7 days ahead
+
+- **The sheet:** `pnpm import:tour-rates` loaded your sheet into the local database: 16 rates on the 9 imported tours, including both programmes. They link to no itinerary locally because the sample ships don't sail those routes; on staging they will.
+- **The booking window** (Questions tab, answer 3; ADR-102 question 5):
+  - a tour booked on its own can be booked up to **7 days** ahead;
+  - it's a setting, `tour_horizon_days`, used by the database check and by the calendar customers see;
+  - programmes go with their cruise and don't use it.
+- **Tests:**
+  - pgTAP `280`: day 7 open, day 8 refused; the older checks there run with the window open;
+  - the calendar end-to-end test opens the window for its run and sets it back;
+  - the concurrency test books 5 days ahead;
+  - unit: the calendar shows days only up to the window.
+- **Verified:** pgTAP, 35 files and 556 checks on a reset database; the grants check shows no differences; `pnpm verify` runs 475 tests.
+- **Not run:** the full end-to-end suite. Docker Desktop shut down again before the build.

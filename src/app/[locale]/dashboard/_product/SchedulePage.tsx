@@ -8,7 +8,15 @@ import { CairoTime } from "@/components/shell/CairoTime";
 import { dateWindow, nowMs, sailingDates, WEEKDAYS } from "@/lib/product/departures";
 import { hoursText, isFresh, RATE_PLANS } from "@/lib/product/pricing";
 import { requireProductEditor } from "@/server/product/guard";
-import { approvedPartners, cabinTypes, departureGrid, freshnessHours, schedule as getSchedule } from "@/server/product/queries";
+import {
+  approvedPartners,
+  cabinTypes,
+  departureGrid,
+  freshnessHours,
+  schedule as getSchedule,
+  scheduleSightseeing,
+  sightseeingRatesFor,
+} from "@/server/product/queries";
 import { getDb } from "@/server/db";
 import {
   addPeriod,
@@ -16,10 +24,12 @@ import {
   confirmAvailability,
   deletePartnerRate,
   deleteRate,
+  deleteSightseeingRate,
   generate,
   removePeriod,
   saveItineraryDay,
   saveSchedule,
+  saveScheduleSightseeing,
   setDepartureStatus,
 } from "./actions";
 import { productPaths } from "./paths";
@@ -44,11 +54,13 @@ export async function SchedulePage({
   const { today } = dateWindow(0);
   const start = from && /^\d{4}-\d{2}-\d{2}$/.test(from) ? from : today;
   const end = dateWindow(62, start).until;
-  const [cabins, grid, hours, partners] = await Promise.all([
+  const approved = !!vessel.sightseeing_approved_at;
+  const [cabins, grid, hours, partners, included] = await Promise.all([
     cabinTypes(vesselId),
     departureGrid(scheduleId, start, end),
     freshnessHours(),
     approvedPartners(),
+    approved ? scheduleSightseeing(scheduleId) : Promise.resolve(null),
   ]);
   const active = cabins.filter((c) => c.active);
   const horizon = dateWindow(400).until;
@@ -143,6 +155,46 @@ export async function SchedulePage({
         </ActionForm>
       </Section>
 
+      <Section title="Sightseeing" id="sightseeing">
+        {approved ? (
+          <>
+            <p className={ui.muted}>
+              Nilecruz approved this vessel to sell with sightseeing included. Travellers see your cruise-only price and your
+              price with sightseeing; say here what the sightseeing on this itinerary includes. It shows beside the price.
+            </p>
+            <ActionForm action={saveScheduleSightseeing.bind(null, orgId, vesselId, scheduleId)} submit="Save what’s included">
+              <Checkboxes
+                legend="Included"
+                name="guide"
+                options={[{ value: "yes", label: "An Egyptologist guide" }]}
+                checked={included?.guide ? ["yes"] : []}
+              />
+              <Checkboxes
+                legend="Entrance fees"
+                name="tickets_included"
+                options={[{ value: "yes", label: "Temple and site entrance fees are included" }]}
+                checked={included?.tickets_included ? ["yes"] : []}
+              />
+              <TextArea
+                label="Sites visited"
+                name="sites"
+                rows={5}
+                required
+                defaultValue={included?.sites.join("\n") ?? ""}
+                hint="One per line, for example Karnak Temple."
+              />
+              <TextArea label="Note (optional)" name="note" rows={2} maxLength={1000} defaultValue={included?.note ?? ""} />
+            </ActionForm>
+            {!included ? <Notice tone="error">Prices with sightseeing don’t show until you say what they include.</Notice> : null}
+          </>
+        ) : (
+          <p className={ui.muted}>
+            Nilecruz sells the sightseeing for this vessel: enter cruise-only prices here. Travellers also see the cruise with
+            Nilecruz’s sightseeing programme, booked separately.
+          </p>
+        )}
+      </Section>
+
       <Section title="Availability and prices" id="rates">
         {!active.length ? <Notice>Add cabin types first.</Notice> : null}
         <p className={ui.muted}>
@@ -172,6 +224,17 @@ export async function SchedulePage({
               ]}
             />
             <Select label="Rate plan" name="rate_plan" defaultValue="international" options={RATE_PLANS} />
+            {approved ? (
+              <Select
+                label="Package"
+                name="package"
+                defaultValue="cruise"
+                options={[
+                  { value: "cruise", label: "Cruise only" },
+                  { value: "with_sightseeing", label: "With sightseeing" },
+                ]}
+              />
+            ) : null}
             <Select
               label="Only for one travel partner"
               name="partner"
@@ -308,7 +371,11 @@ export async function DeparturePage({
     .eq("schedule_id", scheduleId)
     .maybeSingle();
   if (!d) notFound();
-  const [cabins, partners] = await Promise.all([cabinTypes(vesselId), approvedPartners()]);
+  const [cabins, partners, withSightseeing] = await Promise.all([
+    cabinTypes(vesselId),
+    approvedPartners(),
+    sightseeingRatesFor(departureId),
+  ]);
   const partnerName = (id: string) => partners.find((x) => x.id === id)?.display_name ?? "A travel partner";
   return (
     <>
@@ -351,6 +418,26 @@ export async function DeparturePage({
             ) : (
               <p className={ui.muted}>No prices.</p>
             )}
+            {withSightseeing.filter((r) => r.cabin_type_id === c.id).length ? (
+              <ul className={ui.list} aria-label="Prices with sightseeing">
+                {withSightseeing
+                  .filter((r) => r.cabin_type_id === c.id)
+                  .map((r) => (
+                    <li key={r.id} className={ui.actions}>
+                      <span>
+                        With sightseeing · {RATE_PLANS.find((x) => x.value === r.rate_plan)?.label} ·{" "}
+                        {["", "single", "double", "triple"][r.occupancy]} ·{" "}
+                        {formatMoney({ amount: Number(r.amount_minor), currency: r.currency }, "en")} per person
+                      </span>
+                      <ActionForm
+                        action={deleteSightseeingRate.bind(null, orgId, vesselId, scheduleId, departureId, r.id)}
+                        submit="Remove"
+                        variant="ghost"
+                      />
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
             {d.partner_rates.filter((r) => r.cabin_type_id === c.id).length ? (
               <ul className={ui.list} aria-label="Company rates">
                 {d.partner_rates

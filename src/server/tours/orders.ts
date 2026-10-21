@@ -59,15 +59,18 @@ export async function tourForOrdering(tourId: string) {
  */
 export async function calendarFor(tourId: string) {
   const db = await getDb();
-  const [{ data: rates }, { data: seasons }] = await Promise.all([
+  const [{ data: rates }, { data: seasons }, { data: horizon }] = await Promise.all([
     db
       .from("tour_rates")
       .select("id, mode, label, days, start_times, lead_hours, max_guests, min_guests, prices")
       .eq("tour_id", tourId)
       .eq("active", true)
+      // ADR-102: a programme is booked with its cruise, never on the tour's own calendar.
+      .neq("mode", "program")
       .order("mode")
       .order("label"),
     db.from("tour_seasons").select("starts_on, ends_on, pct, applies"),
+    db.from("platform_settings").select("value").eq("key", "tour_horizon_days").maybeSingle(),
   ]);
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
   const until = new Date(Date.now() + 62 * 86_400_000).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
@@ -82,6 +85,8 @@ export async function calendarFor(tourId: string) {
     }
   }
   return {
+    // Faris's sheet: tours booked on their own up to 7 days ahead (the database checks it again).
+    horizonDays: Number(horizon?.value ?? 365),
     rates: (rates ?? []).map((r) => ({ ...r, start_times: r.start_times.map((x) => x.slice(0, 5)) })),
     seasons: (seasons ?? []).map((x) => ({
       from: x.starts_on,
