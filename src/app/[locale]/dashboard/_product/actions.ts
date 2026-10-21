@@ -817,7 +817,7 @@ export async function savePolicy(orgId: string | null, vesselId: string, _prev: 
 
 const sightseeingInput = z.object({
   guide: z.array(z.string()),
-  entrance_fees: z.array(z.string()),
+  tickets_included: z.array(z.string()),
   sites: z
     .string()
     .trim()
@@ -843,7 +843,7 @@ export async function saveScheduleSightseeing(
   const p = productPaths(orgId, vesselId);
   const { vessel } = await requireProductEditor(vesselId, p.schedule(scheduleId), { orgId: orgId ?? undefined });
   if (!vessel.sightseeing_approved_at) return failed("Nilecruz sells sightseeing for this vessel.");
-  const input = sightseeingInput.safeParse(formObject(fd, ["guide", "entrance_fees"]));
+  const input = sightseeingInput.safeParse(formObject(fd, ["guide", "tickets_included"]));
   if (!input.success) return problemsFrom(input.error, { sites: "Sites visited", note: "Note" });
   const d = input.data;
   const db = await getDb();
@@ -852,7 +852,7 @@ export async function saveScheduleSightseeing(
       schedule_id: scheduleId,
       vessel_id: vesselId,
       guide: d.guide.includes("yes"),
-      entrance_fees: d.entrance_fees.includes("yes"),
+      tickets_included: d.tickets_included.includes("yes"),
       sites: d.sites,
       note: d.note || null,
     },

@@ -3916,7 +3916,7 @@ export type Database = {
       };
       schedule_sightseeing: {
         Row: {
-          entrance_fees: boolean;
+          tickets_included: boolean;
           guide: boolean;
           note: string | null;
           schedule_id: string;
@@ -3925,7 +3925,7 @@ export type Database = {
           vessel_id: string;
         };
         Insert: {
-          entrance_fees: boolean;
+          tickets_included: boolean;
           guide: boolean;
           note?: string | null;
           schedule_id: string;
@@ -3934,7 +3934,7 @@ export type Database = {
           vessel_id?: string;
         };
         Update: {
-          entrance_fees?: boolean;
+          tickets_included?: boolean;
           guide?: boolean;
           note?: string | null;
           schedule_id?: string;

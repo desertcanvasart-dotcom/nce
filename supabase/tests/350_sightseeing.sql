@@ -1,7 +1,7 @@
 -- Batch 8-3a (ADR-102): only approved vessels sell with sightseeing; Nilecruz's programmes are priced and booked with
 -- their cruise.
 begin;
-select plan(18);
+select plan(19);
 
 create function pg_temp.as_user(uid uuid, aal text default 'aal1') returns void language plpgsql as $$
 begin
@@ -34,19 +34,20 @@ create function pg_temp.sight_rate() returns void language sql as $$
   insert into public.sightseeing_rates (departure_id, cabin_type_id, occupancy, currency, amount_minor)
   values ('00000000-0000-4000-e700-000000000003', '00000000-0000-4000-e700-000000000011', 2, 'USD', 150000)
 $$;
+-- The cruise-only price, plus (unless pkg is null) a second price in that package.
 create function pg_temp.api(pkg text) returns jsonb language sql as $$
   select app.apply_inventory_rows('00000000-0000-4000-b000-00000000000a', 'api', jsonb_build_array(jsonb_build_object(
     'vessel', 'sample-sight-dahab', 'date', current_date + 30, 'cabin', 'DBL', 'available', 3,
-    'rates', jsonb_build_array(
-      jsonb_build_object('occupancy', 2, 'plan', 'international', 'currency', 'USD', 'amount_minor', 100000),
-      jsonb_build_object('occupancy', 2, 'plan', 'international', 'currency', 'USD', 'amount_minor', 140000, 'package', pkg)))), false)
+    'rates', jsonb_build_array(jsonb_build_object('occupancy', 2, 'plan', 'international', 'currency', 'USD', 'amount_minor', 100000))
+      || case when pkg is null then '[]'::jsonb else jsonb_build_array(
+           jsonb_build_object('occupancy', 2, 'plan', 'international', 'currency', 'USD', 'amount_minor', 140000, 'package', pkg)) end)), false)
 $$;
 grant execute on function pg_temp.sight_rate() to authenticated;
 
 -- Not approved: the operator can't add a price with sightseeing by any path, nor approve itself.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000010');
 select throws_ok($$ select pg_temp.sight_rate() $$, '42501', null, 'an operator can''t add a price with sightseeing to a vessel that isn''t approved');
-select throws_ok($$ insert into public.schedule_sightseeing (schedule_id, guide, entrance_fees, sites)
+select throws_ok($$ insert into public.schedule_sightseeing (schedule_id, guide, tickets_included, sites)
   values ('00000000-0000-4000-e700-000000000002', true, true, '{Edfu}') $$, '42501', null, '… nor say what it includes');
 select throws_ok($$ update public.vessels set sightseeing_approved_at = now() where id = '00000000-0000-4000-e700-000000000001' $$,
   '42501', null, '… nor approve its own vessel');
@@ -56,7 +57,8 @@ select pg_temp.as_postgres();
 select is((pg_temp.api('with_sightseeing') -> 'results' -> 0 ->> 'status'), 'error', 'the API refuses a with-sightseeing price for it');
 select is((select count(*)::int from public.rates where departure_id = '00000000-0000-4000-e700-000000000003'), 0,
   '… and applies nothing from that row');
-select is((pg_temp.api('cruise') -> 'results' -> 0 ->> 'status'), 'new', 'cruise-only prices are as before');
+select is((pg_temp.api(null) -> 'results' -> 0 ->> 'status'), 'new', 'cruise-only prices are as before');
+select is((pg_temp.api('cruise') -> 'results' -> 0 ->> 'status'), 'error', 'the same cruise price twice is refused, as before');
 
 -- Only super and catalogue admins approve, in a two-step session.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000008', 'aal2');
@@ -71,7 +73,7 @@ select isnt((select sightseeing_approved_by from public.vessels where id = '0000
 -- Approved: the operator's price with sightseeing and what it includes; the API writes both prices.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000010');
 select lives_ok($$ select pg_temp.sight_rate() $$, 'the operator adds a price with sightseeing');
-select lives_ok($$ insert into public.schedule_sightseeing (schedule_id, guide, entrance_fees, sites)
+select lives_ok($$ insert into public.schedule_sightseeing (schedule_id, guide, tickets_included, sites)
   values ('00000000-0000-4000-e700-000000000002', true, true, '{Esna Temple, Edfu Temple, Kom Ombo Temple}') $$, '… and says what it includes');
 select pg_temp.as_postgres();
 select is((pg_temp.api('with_sightseeing') -> 'results' -> 0 ->> 'status'), 'changed', 'the API now takes a with-sightseeing price');

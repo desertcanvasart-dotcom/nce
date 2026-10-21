@@ -41,7 +41,7 @@ create table public.schedule_sightseeing (
   schedule_id uuid primary key references public.schedules (id) on delete cascade,
   vessel_id uuid not null references public.vessels (id) on delete cascade,
   guide boolean not null,
-  entrance_fees boolean not null,
+  tickets_included boolean not null,
   sites text[] not null check (cardinality(sites) between 1 and 40),
   note text check (length(note) <= 1000),
   updated_at timestamptz not null default now()

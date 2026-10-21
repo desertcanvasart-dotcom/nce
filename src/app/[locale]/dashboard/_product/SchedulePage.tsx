@@ -171,9 +171,9 @@ export async function SchedulePage({
               />
               <Checkboxes
                 legend="Entrance fees"
-                name="entrance_fees"
+                name="tickets_included"
                 options={[{ value: "yes", label: "Temple and site entrance fees are included" }]}
-                checked={included?.entrance_fees ? ["yes"] : []}
+                checked={included?.tickets_included ? ["yes"] : []}
               />
               <TextArea
                 label="Sites visited"
