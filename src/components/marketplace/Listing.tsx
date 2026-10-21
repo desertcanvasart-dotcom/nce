@@ -9,11 +9,13 @@ import {
   toCard,
   VESSEL_OPTIONS,
   type ListingVessel,
+  headlineItinerary,
 } from "@/lib/marketplace/listing";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import { vesselIcon } from "@/components/ds/lib/types";
 import { Breadcrumbs, type Trail } from "./Breadcrumbs";
 import { ListingGrid } from "./ListingGrid";
+import { PriceWhy } from "./PriceWhy";
 import styles from "./marketplace.module.css";
 
 type Props = {
@@ -83,7 +85,37 @@ export function Listing(p: Props) {
         {p.vessels.length} vessel{p.vessels.length === 1 ? "" : "s"}
         {p.matchCount !== undefined ? ` · ${p.matchCount} matching departure${p.matchCount === 1 ? "" : "s"}` : ""}
       </p>
-      {p.vessels.length ? <ListingGrid cards={p.vessels.map(toCard)} /> : <p className={styles.empty}>{p.empty}</p>}
+      {p.vessels.length ? (
+        <ListingGrid
+          cards={p.vessels.map(toCard)}
+          why={Object.fromEntries(
+            p.vessels
+              .filter((v) => v.bookable && v.from)
+              .map((v) => {
+                const it = headlineItinerary(v);
+                return [
+                  v.slug,
+                  <PriceWhy
+                    key={v.slug}
+                    facts={{
+                      price: v.from!,
+                      vesselType: v.type,
+                      maxGuests: v.maxGuests,
+                      nights: it?.nights,
+                      nextDeparture: it?.departures[0],
+                      gratuityUsdMinor: null,
+                      sightseeing: v.fromWithSightseeing
+                        ? { by: v.sightseeingBy ?? "vessel", from: v.fromWithSightseeing }
+                        : undefined,
+                    }}
+                  />,
+                ];
+              }),
+          )}
+        />
+      ) : (
+        <p className={styles.empty}>{p.empty}</p>
+      )}
       <p className={styles.note}>
         Prices are per person, for two sharing a cabin, in the operator’s currency. Crew gratuities are separate and paid on
         board. Prices for every cabin and date appear after you sign in.

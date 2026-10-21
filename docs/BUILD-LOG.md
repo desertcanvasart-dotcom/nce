@@ -1696,3 +1696,22 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 **Not built:**
 - paying the programme by bank transfer (tour orders are card-only today; a transfer covers the cruise);
 - programmes for travel agencies (cruise only, as the brief says).
+
+## 21 Oct 2026 · Batch 9-1 · Signature interactions: the price's "Why?", the compare tray, the season calendar, the evaluation radar (EXP-001, 004, 006, 009)
+
+**Brief:** `docs/briefs/BATCH-09.md`, approved by Faris with the recommended answers (build EXP-001–007 and 009; skip 008 and 010; 9-1 first).
+
+**Built:**
+- **EXP-001, why this price:** a "Why US$…?" button beside every card's price and the vessel page's from-price. It opens a native popover (a bottom sheet on phones) that says what the price is (per person, two sharing, the lowest-priced cabin with places left, check-in to check-out), how many guests share the boat, the season of the next sailing, the "with sightseeing" option and who provides it (ADR-102), and what isn't included (crew gratuity).
+  - **Deviation from the spec:** EXPERIENCE.md describes a counting-up build-up by cost factor (guiding, dining, mooring…). Operators don't give us a cost breakdown, and inventing one would mean showing numbers we made up. So the explanation is made only of facts we hold. The build-up by factor can come when real factor data exists (DATA-008).
+- **EXP-004, the compare tray:** ticking "Compare" on a card, or "Add to compare" on a vessel page, fills a tray that rises from the bottom, holds three at most (and says so), lets you remove each, and opens the existing side-by-side page. It's kept in the browser (`nc-compare-v1`), so it follows you from listings to vessel pages.
+- **EXP-006, the season and deadline calendar:** on When to go, six months of days, each saying its season and the deadline you'd face if you booked today ("Book today and pay in full by …"), from the same `paymentDeadline` rules as booking (ADR-027) and the published premium periods. Arrow keys, Home and End move between days; a status line reads the chosen day; a legend explains the three shades.
+- **EXP-009, the evaluation radar:** the vessel page's Nilecruz score as an SVG radar of its seven dimensions, unfolding from the centre as it comes into view (not with reduced motion). The table beside it stays the exact, accessible version.
+
+**Not in 9-1:**
+- **EXP-007** (card-to-vessel transition): Next.js 16 has no stable switch for cross-page view transitions yet. Revisit in 9-2.
+- **EXP-008, EXP-010:** skipped, as the brief says.
+
+**Verified:**
+- **Unit:** `interactions.test.ts` (8 tests) covers the radar's geometry, the price's explanation lines and seasons, the tray's limit and safe read-back, and the calendar's deadline text against `paymentDeadline`. `pnpm verify`: 488 tests.
+- **End-to-end:** `interactions.spec.ts` covers the "Why?" sheet from a card (opens, explains, closes with Escape); the tray filled to three with the keyboard, refusing a fourth, removing one, following you to a vessel page and opening the comparison; the calendar by keyboard with its status line; axe in Day and Night. `marketplace-vessel.spec.ts` checks the radar. The affected specs pass on a production build.

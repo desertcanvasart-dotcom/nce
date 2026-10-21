@@ -105,22 +105,6 @@
   list-style: none;
 }
 
-.compareBar {
-  position: sticky;
-  bottom: var(--space-4);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-4);
-  min-height: 0;
-  color: var(--ink);
-}
-
-.compareBar:empty {
-  display: none;
-}
-
 .compareLink {
   padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-pill);
@@ -163,13 +147,6 @@
   .page {
     gap: var(--space-5);
   }
-}
-
-.compareBar > span {
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-pill);
-  background: var(--surface-raised);
-  box-shadow: 0 0 0 1px var(--line);
 }
 
 /* The vessel page */
@@ -423,4 +400,92 @@
   background: var(--surface);
   color: var(--ink);
   font: inherit;
+}
+
+/* EXP-001: "Why this price?" under a card. */
+.why {
+  margin-top: var(--space-2);
+}
+
+/* EXP-004: the compare tray, on every listing and vessel page. */
+.tray {
+  position: sticky;
+  bottom: var(--space-3);
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-float);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tray {
+    animation: trayRise var(--dur-2) var(--ease-river);
+  }
+}
+
+@keyframes trayRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.trayList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trayList li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+
+.trayRemove,
+.trayClear {
+  border: 0;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.trayRemove {
+  width: 32px;
+  height: 32px;
+  font-size: var(--type-body-l-size);
+}
+
+.trayClear {
+  margin-left: auto;
+  text-decoration: underline;
+}
+
+.trayStatus {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+.trayStatus:empty {
+  display: none;
 }

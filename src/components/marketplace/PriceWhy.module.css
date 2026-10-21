@@ -1,0 +1,89 @@
+.trigger {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: var(--type-caption-size);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.sheet {
+  max-width: min(420px, calc(100vw - var(--space-5)));
+  margin: auto;
+  padding: var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  color: var(--ink);
+  box-shadow: var(--shadow-float);
+}
+
+.sheet::backdrop {
+  background: var(--scrim);
+}
+
+/* A bottom sheet on phones. */
+@media (max-width: 640px) {
+  .sheet {
+    inset: auto 0 0;
+    max-width: 100vw;
+    width: 100vw;
+    margin: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .sheet:popover-open {
+    animation: rise var(--dur-2) var(--ease-river);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+}
+
+.label {
+  margin: var(--space-3) 0 var(--space-1);
+  color: var(--ink-muted);
+  font-size: var(--type-label-size);
+}
+
+.lines {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-4);
+}
+
+.more {
+  margin: var(--space-3) 0 0;
+}
+
+.close {
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}

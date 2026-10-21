@@ -97,10 +97,12 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.getByText(/Schematic: not a floor plan/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Main deck" })).toBeVisible();
   await expect(page.getByText("80/100").first()).toBeVisible();
+  // EXP-009: the score unfolds into its seven dimensions.
+  await expect(page.getByRole("img", { name: /^Evaluation 80 out of 100: / })).toBeVisible();
   await expect(page.getByText("Recommended", { exact: false }).first()).toBeVisible();
   await expect(page.locator("#ratings")).toContainText("4.5 of 5 on Sample Review Site, 120 reviews");
   // One public price; cabins show facts only (ADR-025).
-  await expect(page.getByText("US$1,000")).toHaveCount(1);
+  await expect(page.getByText("US$1,000", { exact: true })).toHaveCount(1);
   await expect(page.getByText(/per person, two sharing/)).toHaveCount(0);
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/cruises/${slug}/$`));
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");

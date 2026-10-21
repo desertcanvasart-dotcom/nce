@@ -1,0 +1,127 @@
+"use client";
+
+import { useMemo, useRef, useState, type KeyboardEvent } from "react";
+import { deadlineRule, paymentDeadline, type PremiumPeriod } from "@/lib/payments/deadlines";
+import styles from "./SeasonCalendar.module.css";
+
+const DAY = 86_400_000;
+const add = (d: string, n: number) => new Date(Date.parse(`${d}T00:00:00Z`) + n * DAY).toISOString().slice(0, 10);
+const long = (d: string) =>
+  new Date(`${d}T12:00:00Z`).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+const SEASON = {
+  festive: "Christmas and New Year",
+  premium: "a premium period",
+  winter: "the main season",
+  summer: "summer",
+} as const;
+
+/** What the calendar says for a sailing date, booked today (EXP-006), from the same rules as booking (ADR-027). */
+export function dayText(today: string, day: string, periods: PremiumPeriod[]): string {
+  if (day <= today) return `${long(day)} has passed.`;
+  const r = deadlineRule(day, periods);
+  const d = paymentDeadline(today, day, periods);
+  return `Sail on ${long(day)}: ${r.period ?? SEASON[r.rule]}. Book today and pay in full by ${long(d.dueOn)}.`;
+}
+
+/**
+ * EXP-006: twelve months of sailing dates shaded by season, with the payment deadline you'd face if you booked today.
+ * One keyboard stop: the arrow keys move by a day or a week, Home and End to the ends.
+ */
+export function SeasonCalendar({ today, periods }: { today: string; periods: PremiumPeriod[] }) {
+  // This month and the next eleven, every day.
+  const months = useMemo(() => {
+    const out: [string, string[]][] = [];
+    let d = today.slice(0, 8) + "01";
+    while (out.length < 12 || out.at(-1)![0] === d.slice(0, 7)) {
+      const k = d.slice(0, 7);
+      if (out.at(-1)?.[0] === k) out.at(-1)![1].push(d);
+      else if (out.length < 12) out.push([k, [d]]);
+      else break;
+      d = add(d, 1);
+    }
+    return out;
+  }, [today]);
+  const [active, setActive] = useState(add(today, 1));
+  const grid = useRef<HTMLDivElement>(null);
+  const shown = months.flatMap(([, ds]) => ds);
+  const move = (to: string) => {
+    if (!shown.includes(to)) return;
+    setActive(to);
+    grid.current?.querySelector<HTMLButtonElement>(`[data-day="${to}"]`)?.focus();
+  };
+  const onKey = (e: KeyboardEvent) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: 7, ArrowUp: -7 }[e.key];
+    if (step) {
+      e.preventDefault();
+      move(add(active, step));
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      move(shown[0]!);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      move(shown.at(-1)!);
+    }
+  };
+  const kind = (d: string) => (d <= today ? "past" : deadlineRule(d, periods).rule);
+  return (
+    <section className={styles.calendar} aria-labelledby="season-calendar">
+      <h2 id="season-calendar">Seasons and payment deadlines</h2>
+      <p className={styles.status} role="status" aria-live="polite">
+        {dayText(today, active, periods)}
+      </p>
+      <ul className={styles.legend}>
+        <li>
+          <span className={styles.summer} /> Summer: pay within 14 days of booking
+        </li>
+        <li>
+          <span className={styles.winter} /> Main season: within 7 days
+        </li>
+        <li>
+          <span className={styles.festive} /> Christmas, New Year and premium periods: within 3 days
+        </li>
+      </ul>
+      <div ref={grid} className={styles.months}>
+        {months.map(([month, ds]) => (
+          <div key={month} className={styles.month}>
+            <p className={styles.monthName}>
+              {new Date(`${month}-01T12:00:00Z`).toLocaleDateString("en-GB", { month: "long", year: "numeric", timeZone: "UTC" })}
+            </p>
+            <div className={styles.weekdays} aria-hidden="true">
+              {["M", "T", "W", "T", "F", "S", "S"].map((w, i) => (
+                <span key={i}>{w}</span>
+              ))}
+            </div>
+            <div className={styles.days} style={{ ["--offset" as string]: (new Date(`${ds[0]}T12:00:00Z`).getUTCDay() + 6) % 7 }}>
+              {ds.map((d) => {
+                const k = kind(d);
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    data-day={d}
+                    tabIndex={d === active ? 0 : -1}
+                    className={`${styles.day} ${styles[k === "premium" ? "festive" : k]}`}
+                    aria-label={dayText(today, d, periods)}
+                    aria-pressed={d === active}
+                    onKeyDown={onKey}
+                    onFocus={() => setActive(d)}
+                    onMouseEnter={() => setActive(d)}
+                    onClick={() => setActive(d)}
+                  >
+                    {Number(d.slice(8))}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}

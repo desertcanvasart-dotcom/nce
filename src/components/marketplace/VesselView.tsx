@@ -3,6 +3,7 @@ import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTi
 import { formatMoney } from "@/components/ds/lib/format";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+import { EvaluationRadar } from "@/components/evaluation/EvaluationRadar";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { jsonLdScript } from "@/lib/marketplace/listing";
 import {
@@ -21,6 +22,8 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { DeckPlan } from "./DeckPlan";
 import { ItinerarySwitch } from "./ItinerarySwitch";
+import { AddToCompare, CompareTray } from "./CompareTray";
+import { PriceWhy } from "./PriceWhy";
 import styles from "./marketplace.module.css";
 
 const TYPE = { sail: "Sailing dahabiya", motor: "Motor cruise ship", steam: "Paddle steamer" } as const;
@@ -93,7 +96,29 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
         </div>
         <div>
           <dt>From, per person</dt>
-          <dd>{v.bookable && v.from ? formatMoney(v.from, locale) : v.bookable ? "Prices on request" : "Information only"}</dd>
+          <dd>
+            <span>
+              {v.bookable && v.from ? formatMoney(v.from, locale) : v.bookable ? "Prices on request" : "Information only"}
+            </span>
+            {v.bookable && v.from ? (
+              <>
+                {" "}
+                <PriceWhy
+                  facts={{
+                    price: v.from,
+                    vesselType: v.type,
+                    maxGuests: v.maxGuests,
+                    nights: it?.nights,
+                    nextDeparture: it?.departures[0],
+                    gratuityUsdMinor: v.gratuityUsdMinor,
+                    sightseeing: v.fromWithSightseeing
+                      ? { by: v.sightseeingBy ?? "vessel", from: v.fromWithSightseeing }
+                      : undefined,
+                  }}
+                />
+              </>
+            ) : null}
+          </dd>
         </div>
         {v.bookable && v.fromWithSightseeing ? (
           <div>
@@ -104,6 +129,7 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
       </dl>
 
       <section className={styles.cta} aria-label="Prices and booking">
+        <AddToCompare vessel={{ slug: v.slug, name: v.name }} />
         {v.bookable ? (
           <>
             <Link className={styles.primary} href={reserve}>
@@ -173,6 +199,15 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
               Assessed on {formatDay(v.evaluation.assessedOn, locale)} by {v.evaluation.evaluator}, against seven weighted
               dimensions.
             </p>
+            <EvaluationRadar
+              score={v.evaluation.score}
+              axes={DIMENSIONS.map((d) => ({
+                key: d.key,
+                label: d.label,
+                weight: d.weight,
+                points: v.evaluation!.dimensions[d.key] ?? 0,
+              }))}
+            />
             <dl className={styles.dimensions}>
               {DIMENSIONS.map((d) => {
                 const points = v.evaluation!.dimensions[d.key] ?? 0;
@@ -229,6 +264,7 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: jsonLdScript(touristTripJsonLd(v, it, absoluteUrl(locale, path))) }}
       />
+      <CompareTray />
     </div>
   );
 }
