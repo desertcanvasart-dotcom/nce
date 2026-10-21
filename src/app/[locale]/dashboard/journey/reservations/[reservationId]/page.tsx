@@ -12,7 +12,15 @@ import { requireUser } from "@/server/auth";
 import { reservation } from "@/server/bookings/queries";
 import { ReservationRecord } from "../../../_bookings/ReservationRecord";
 import { isUuid } from "../../../sections";
-import { reportTransfer, requestCancellation, startCheckout, uploadProof, withdrawCancellation } from "../../actions";
+import {
+  addProgramme,
+  reportTransfer,
+  requestCancellation,
+  startCheckout,
+  uploadProof,
+  withdrawCancellation,
+} from "../../actions";
+import { getDb } from "@/server/db";
 import { cancellationOutcome } from "@/lib/payments/cancellation";
 
 const PROOF = {
@@ -44,6 +52,23 @@ export default async function MyReservation({
     cancellationQuote(r.id),
     bankDetails(),
   ]);
+  // ADR-102: Nilecruz's sightseeing programme with this cruise: the linked order, or the one that can be added.
+  const db = await getDb();
+  const ages = r.reservation_cabins.flatMap((c) => [...Array<number>(c.adults).fill(30), ...c.child_ages]);
+  const [{ data: linked }, { data: offer }] = await Promise.all([
+    db
+      .from("tour_orders")
+      .select("id, reference, status, total_minor, currency, tour:tours(name)")
+      .eq("reservation_id", r.id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    r.package === "cruise" && r.status !== "cancelled"
+      ? db.rpc("programme_quote", { dep: r.departure_id, ages })
+      : Promise.resolve({ data: null }),
+  ]);
+  const programme = linked && linked.status !== "cancelled" ? linked : null;
+  const canAdd = !programme && !!offer?.[0] && offer[0].currency === r.currency;
   const open = requests.find((c) => c.status === "requested" || c.status === "refund_due");
   const owing = r.status === "awaiting_payment" && !open && !!bal && bal.outstanding_minor > 0;
   const canCancel = r.status !== "cancelled" && !open && !!quote;
@@ -72,7 +97,21 @@ export default async function MyReservation({
       {owing ? (
         <Section title="Pay" id="pay">
           {cardPayable(r.currency) ? (
-            <ActionForm action={startCheckout.bind(null, r.id)} submit="Pay the balance by card">
+            <ActionForm
+              action={startCheckout.bind(null, r.id)}
+              submit={
+                programme?.status === "awaiting_payment"
+                  ? "Pay the cruise and the sightseeing by card"
+                  : "Pay the balance by card"
+              }
+            >
+              {programme?.status === "awaiting_payment" ? (
+                <p>
+                  One payment page, two bookings: the cruise’s balance, and{" "}
+                  {formatMoney({ amount: Number(programme.total_minor), currency: programme.currency }, "en")} for Nilecruz’s{" "}
+                  {programme.tour?.name ?? "sightseeing programme"} ({programme.reference}).
+                </p>
+              ) : null}
               <Checkboxes
                 legend="Before paying"
                 name="policy"
@@ -106,6 +145,32 @@ export default async function MyReservation({
               <input id="transfer-proof" name="proof" type="file" accept="application/pdf,image/jpeg,image/png" />
             </div>
           </ActionForm>
+        </Section>
+      ) : null}
+      {programme || canAdd ? (
+        <Section title="Sightseeing" id="sightseeing">
+          {programme ? (
+            <p>
+              Nilecruz’s{" "}
+              <Link href={`/dashboard/journey/tours/${programme.id}/`}>{programme.tour?.name ?? "sightseeing programme"}</Link> ·{" "}
+              {programme.reference} · {formatMoney({ amount: Number(programme.total_minor), currency: programme.currency }, "en")}{" "}
+              ·{" "}
+              {programme.status === "awaiting_payment"
+                ? owing
+                  ? "paid together with the cruise above"
+                  : "waiting for payment on its own page"
+                : "paid and confirmed"}
+              . It’s a separate booking with Nilecruz; if the cruise is cancelled, it’s cancelled and refunded in full.
+            </p>
+          ) : (
+            <ActionForm action={addProgramme.bind(null, r.id)} submit="Add the sightseeing programme" variant="outline">
+              <p>
+                Add Nilecruz’s {offer![0]!.tour_name}, with an Egyptologist guide and entrance fees, for{" "}
+                {formatMoney({ amount: Number(offer![0]!.total_minor), currency: offer![0]!.currency }, "en")} for your party.
+                It’s a separate booking with Nilecruz, cancelled and refunded with the cruise if the cruise is cancelled.
+              </p>
+            </ActionForm>
+          )}
         </Section>
       ) : null}
       <CancellationPanel

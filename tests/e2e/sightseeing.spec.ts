@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { adminDb, LOCAL, newUser, ORG, signIn, signInAdmin } from "../support/local-auth";
+import { paidCruiseAndProgrammeEvent } from "../support/stripe";
 
 test.skip(!LOCAL, "needs the local Supabase stack: pnpm with-local-db pnpm test:e2e");
 test.describe.configure({ mode: "serial", timeout: 180_000 });
@@ -184,4 +185,123 @@ test("a customer books an approved vessel with its sightseeing, at that price (8
   await expect(page.getByText(/With the vessel’s sightseeing: An Egyptologist guide/)).toBeVisible();
   const { data: r } = await db.from("reservations").select("package, total_minor").eq("departure_id", d!.id).single();
   expect(r).toEqual({ package: "with_sightseeing", total_minor: 260000 });
+});
+
+test("a customer books a cruise with Nilecruz's programme and pays both on one page (8-3b-2)", async ({ page, request }) => {
+  const db = adminDb();
+  const slug = `sample-prog-${RUN}`;
+  const { data: v } = await db
+    .from("vessels")
+    .insert({
+      slug,
+      name: `Sample Programme Ship ${RUN}`,
+      type: "motor",
+      visibility: "published",
+      published_at: new Date().toISOString(),
+      operator_org_id: ORG.operatorA,
+      is_sample: true,
+    })
+    .select("id")
+    .single();
+  const { data: c } = await db
+    .from("cabin_types")
+    .insert({ vessel_id: v!.id, code: "DBL", name: "Double", deck: "Main", max_occupancy: 2, balcony: false })
+    .select("id")
+    .single();
+  const { data: s } = await db
+    .from("schedules")
+    .insert({
+      vessel_id: v!.id,
+      code: "LX4",
+      origin: "Luxor",
+      destination: "Aswan",
+      nights: 4,
+      sailing_days: [1, 2, 3, 4, 5, 6, 7],
+    })
+    .select("id")
+    .single();
+  const day = (n: number) => new Date(Date.now() + n * 86_400_000).toISOString().slice(0, 10);
+  const { data: d } = await db
+    .from("departures")
+    .insert({ schedule_id: s!.id, vessel_id: v!.id, departs_on: day(45), returns_on: day(49) })
+    .select("id")
+    .single();
+  await db.from("inventory").insert({
+    departure_id: d!.id,
+    cabin_type_id: c!.id,
+    vessel_id: v!.id,
+    available: 4,
+    confirmed_at: new Date().toISOString(),
+    source: "feed",
+  });
+  await db.from("rates").insert({
+    departure_id: d!.id,
+    cabin_type_id: c!.id,
+    vessel_id: v!.id,
+    occupancy: 2,
+    rate_plan: "international",
+    currency: "USD",
+    amount_minor: 100000,
+  });
+  await db.from("cancellation_policies").insert({ vessel_id: v!.id, bands: [{ from_days: 0, percent: 100 }] });
+  const { data: t } = await db
+    .from("tours")
+    .insert({
+      slug: `sample-sightseeing-${RUN}`,
+      kind: "other",
+      name: `Sample 4-Night Sightseeing ${RUN}`,
+      location: "Luxor–Aswan",
+      duration_minutes: 5760,
+      visibility: "published",
+      is_sample: true,
+      office_id: "00000000-0000-4000-b000-0000000000d1",
+    })
+    .select("id")
+    .single();
+  await db.from("tour_schedules").insert({ tour_id: t!.id, schedule_id: s!.id });
+  await db.from("tour_rates").insert({
+    tour_id: t!.id,
+    mode: "program",
+    prices: {
+      tiers: [
+        { min: 1, max: 1, pp: 45400 },
+        { min: 2, max: 14, pp: 28900 },
+      ],
+      child_pct: 50,
+      child35_pct: 25,
+    },
+  });
+
+  const customer = await newUser("programme-customer");
+  await signIn(page, customer.email, customer.password);
+  await page.goto(
+    `/cruises/${slug}/reserve/?itinerary=LX4&pkg=with_programme&dep=${d!.id}&cabin=${c!.id}&adults=2&children=&cabins=1`,
+  );
+  await expect(page.getByText(`US$578 · Sample 4-Night Sightseeing ${RUN}, a separate booking with Nilecruz`)).toBeVisible();
+  await expect(page.getByText("US$2,578", { exact: true })).toBeVisible(); // together: US$2,000 + US$578
+  await page.getByLabel("Cabin 1, guest 1: full name").fill("Sample Guest One");
+  await page.getByLabel("Date of birth").first().fill("1975-03-14");
+  await page.getByLabel("Cabin 1, guest 2: full name").fill("Sample Guest Two");
+  await page.getByLabel("Date of birth").nth(1).fill("1978-08-02");
+  await page.getByLabel("I have read the terms and the cancellation policy").check();
+  await page.getByRole("button", { name: "Reserve" }).click();
+  await expect(page).toHaveURL(/\/dashboard\/journey\/reservations\/[0-9a-f-]{36}\/$/);
+  const reservationId = page.url().match(/reservations\/([0-9a-f-]{36})\//)![1]!;
+  const sightseeing = page.locator("section", { has: page.getByRole("heading", { name: "Sightseeing" }) });
+  await expect(sightseeing).toContainText("paid together with the cruise above");
+  await expect(page.getByRole("button", { name: "Pay the cruise and the sightseeing by card" })).toBeVisible();
+
+  // One Stripe payment for both, recorded as two payments.
+  const { data: order } = await db.from("tour_orders").select("id, total_minor").eq("reservation_id", reservationId).single();
+  expect(Number(order!.total_minor)).toBe(57800);
+  const ev = paidCruiseAndProgrammeEvent(reservationId, order!.id, 200000, 57800, "usd", `${RUN}prog`);
+  const r = await request.post("/api/stripe/webhook/", {
+    data: ev.payload,
+    headers: { "stripe-signature": ev.signature, "content-type": "application/json" },
+  });
+  expect(await r.json()).toMatchObject({ result: ["recorded", "recorded"] });
+  await page.reload();
+  await expect(sightseeing).toContainText("paid and confirmed");
+  const { data: res } = await db.from("reservations").select("status").eq("id", reservationId).single();
+  expect(res!.status).toBe("confirmed");
 });

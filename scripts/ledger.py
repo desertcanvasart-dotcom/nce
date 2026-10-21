@@ -1013,7 +1013,8 @@ STATUS.update({
  "DATA-048": ("Built", B83A+"tour rate mode 'program' priced like private tours; the Programs tab imported with itinerary links; programmes kept off tours' own calendars (unit tour-calendar, pgTAP 350 to run)"),
 })
 B83B1 = "Batch 8-3b-1 (21 Oct 2026): "
-STATUS["DATA-049"] = ("In progress", B83B1+"approved vessels: the with-sightseeing 'from' price on cards (badge), the vessel page, comparison and MCP; the reserve page's package choice and booking at that price (pgTAP 360, e2e sightseeing.spec). Nilecruz's programme for other vessels comes in 8-3b-2")
+STATUS["DATA-049"] = ("Built", B83B1+"approved vessels' own price with sightseeing, and (8-3b-2) every other vessel's cruise plus Nilecruz's programme: the 'from' price on cards, the vessel page, comparison, MCP and a /cruises/ filter; the reserve page's choice (pgTAP 360, 370; e2e sightseeing.spec)")
+STATUS["DATA-050"] = ("Built", "Batch 8-3b-2 (21 Oct 2026): the programme a tour order linked to the reservation, held until the cruise's deadline; one card checkout recorded as two payments; cancelled and refunded with the cruise; added later from My journey; none with an approved vessel's own sightseeing (pgTAP 370, e2e sightseeing.spec). Bank transfer for the programme not yet")
 B82C = "Operator page (21 Oct 2026): "
 STATUS["PAGE-107"] = ("Built", B82C+"/operators/connect/ with the six ways, comparison, booking rule, FAQ data and the IT section; footer and application-page links; drafted copy for review (unit operator-connect.test, e2e operator-connect.spec); screenshots to take")
 B82B = "Batch 8-2b (21 Oct 2026): "

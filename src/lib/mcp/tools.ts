@@ -26,6 +26,10 @@ const MODE_TEXT: Record<string, string> = {
   sold_out: "Sold out",
   unconfirmed: "To be confirmed: ask Nilecruz",
 };
+const SIGHTSEEING_BY = {
+  vessel: "the vessel, in its own price",
+  nilecruz: "Nilecruz's sightseeing programme, a separate booking paid with the cruise",
+} as const;
 const day = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "a date as yyyy-mm-dd");
 const slug = z.string().regex(/^[a-z0-9-]{1,120}$/, "a vessel's slug, as search_cruises gives it");
 
@@ -71,6 +75,7 @@ async function searchCruises(a: z.infer<typeof searchInput>, d: McpData) {
       from_price: v.bookable ? money(v.from) : null,
       // ADR-102: the vessel's own price with sightseeing, where Nilecruz approved it to sell that way.
       from_price_with_sightseeing: v.bookable ? money(v.fromWithSightseeing) : null,
+      sightseeing_by: v.bookable && v.fromWithSightseeing ? SIGHTSEEING_BY[v.sightseeingBy ?? "vessel"] : null,
       bookable_on_nilecruz: v.bookable,
       itineraries: its.map((i) => ({
         route: `${i.origin} to ${i.destination}`,
@@ -112,6 +117,7 @@ function facts(v: VesselPage, site: string) {
       : null,
     from_price: v.bookable ? money(v.from) : null,
     from_price_with_sightseeing: v.bookable ? money(v.fromWithSightseeing) : null,
+    sightseeing_by: v.bookable && v.fromWithSightseeing ? SIGHTSEEING_BY[v.sightseeingBy ?? "vessel"] : null,
     // DATA-016: paid on board, never online and never in a price.
     gratuity:
       v.gratuityUsdMinor === null
@@ -133,6 +139,9 @@ async function getVessel(a: z.infer<typeof vesselInput>, d: McpData) {
       nights: i.nights,
       days: i.days.map((x) => ({ day: x.day, title: x.title })),
       sightseeing_with_the_vessel: i.sightseeing ? sightseeingText(i.sightseeing) : null,
+      sightseeing_with_nilecruz: i.programme
+        ? { programme: i.programme.name, from_per_person_for_two: money({ amount: i.programme.ppForTwoMinor, currency: "USD" }) }
+        : null,
       next_departures: i.departures.slice(0, 6),
     })),
   };

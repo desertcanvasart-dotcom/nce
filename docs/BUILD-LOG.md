@@ -1640,3 +1640,59 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - cancelling the cruise cancels the programme;
 - adding it later from My journey;
 - the search filter.
+
+## 21 Oct 2026 · Batch 8-3b-2 · The cruise with Nilecruz's sightseeing programme (ADR-102)
+
+**Branch:** `batch-08-3b-two-prices` (with 8-3b-1). One migration, `20261027000200_programme_booking`.
+
+**Built:**
+- **Which programme:**
+  - `app.programme_rate_for(departure)` finds the one for the sailing's itinerary: published, with an office and an active programme rate;
+  - none for a vessel approved to sell its own sightseeing, so nothing is sold twice;
+  - programmes are priced like private tours (`app.tour_slot_price` now covers `program`);
+  - groups over 14 are told to ask Nilecruz.
+- **Booking it with the cruise:** a third package, `with_programme`.
+  - The cruise is a cruise-only reservation, at its own price.
+  - `app.add_programme` makes the programme a tour order linked to it (`tour_orders.reservation_id`): the whole party, starting on the sailing's first day, and held until the cruise's payment deadline (not the usual 60 minutes).
+  - One programme per reservation.
+  - The programme is priced in US$, so it goes with a US$ booking.
+  - It works for direct bookings and for booking requests, where it's added when the operator confirms.
+- **Adding it later:** `customer_add_programme`, up to 2 days before the cruise, from a "Sightseeing" section on the reservation page.
+- **One payment page, two payments:**
+  - the reservation's card checkout carries the unpaid programme as a second line, with both amounts in the metadata;
+  - the webhook records the cruise as the reservation's payment and the programme as the tour order's;
+  - a part that can't be taken goes back to the card on its own.
+- **Cancelled together:** when the cruise is cancelled (or released unpaid), its programme is cancelled. A paid programme is approved for a full refund through finance's tour refund page, as an office's cancelled start is. The programme alone uses the tour's own cancellation.
+- **What travellers see:**
+  - the "with sightseeing" from-price is the cruise plus the programme for two (`public_vessel_prices.sightseeing_by` says vessel or Nilecruz);
+  - the vessel page names the programme and its price;
+  - the reserve page's "With sightseeing" shows the cruise, "Sightseeing by Nilecruz" and "Together";
+  - the reservation page shows the programme, or offers to add it;
+  - the Pay button says "Pay the cruise and the sightseeing by card";
+  - the assistants' (MCP) answers say who provides the sightseeing;
+  - a "With sightseeing" filter on /cruises/.
+
+**Verified:**
+- **pgTAP:** `370_programme_booking` (13 checks) covers:
+  - the from-price;
+  - the programme's price for a couple;
+  - the currency rule;
+  - booked together as two orders, held until the cruise's deadline;
+  - one programme per cruise;
+  - one payment recorded as two;
+  - confirmed when paid;
+  - cancelled and refunded with the cruise;
+  - added later;
+  - none on an approved vessel.
+
+  All 37 files (580 checks) pass on a reset database, and the grants check shows no differences.
+- **Unit:** the two-line checkout and its metadata, one line without a programme, the filter. `pnpm verify`: 480 tests.
+- **End-to-end:** `sightseeing.spec.ts` covers a cruise with the programme:
+  - US$578 for two, US$2,578 together;
+  - the reservation's Sightseeing section;
+  - one signed payment recorded as two, with the cruise confirmed and the programme paid.
+- **Full end-to-end** (`CI=1`, production build, reset database): 259 passed, none failed. The sheet upload test needed one retry; it timed out at the admin sign-in, before anything this change touches.
+
+**Not built:**
+- paying the programme by bank transfer (tour orders are card-only today; a transfer covers the cruise);
+- programmes for travel agencies (cruise only, as the brief says).

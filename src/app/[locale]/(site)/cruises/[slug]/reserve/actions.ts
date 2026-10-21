@@ -18,8 +18,8 @@ type Plan = {
   currency: string;
   cabins: number;
   ages: number[];
-  /** ADR-102: with the vessel's own sightseeing (approved vessels; the database checks). */
-  package?: "cruise" | "with_sightseeing";
+  /** ADR-102: with the vessel's own sightseeing, or with Nilecruz's programme (the database checks). */
+  package?: "cruise" | "with_sightseeing" | "with_programme";
 };
 
 /** The guests from the form, checked against the cabins (DATA-020). */

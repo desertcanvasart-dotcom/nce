@@ -133,6 +133,13 @@ export async function startCheckout(reservationId: string, _prev: ActionState, f
   if (outstanding <= 0) return failed("Nothing is outstanding.");
   const stripe = getStripe();
   if (!stripe) return failed("Card payments aren't switched on yet. Report a bank transfer below, or try again later.");
+  // ADR-102: Nilecruz's sightseeing programme booked with this cruise is paid on the same page.
+  const { data: programme } = await db
+    .from("tour_orders")
+    .select("id, reference, total_minor, currency, tour:tours(name)")
+    .eq("reservation_id", reservationId)
+    .eq("status", "awaiting_payment")
+    .maybeSingle();
   const checkout = await stripe.checkout.sessions.create(
     checkoutParams({
       reservationId,
@@ -143,6 +150,15 @@ export async function startCheckout(reservationId: string, _prev: ActionState, f
       customerEmail: session.email,
       siteUrl: env.NEXT_PUBLIC_SITE_URL,
       nowSeconds: Math.floor(Date.now() / 1000),
+      programme:
+        programme && programme.currency === r.currency
+          ? {
+              orderId: programme.id,
+              reference: programme.reference,
+              name: programme.tour?.name ?? "Sightseeing programme",
+              amountMinor: Number(programme.total_minor),
+            }
+          : undefined,
     }),
   );
   if (!checkout.url) return failed("Stripe didn't return a payment page. Try again.");
@@ -316,4 +332,14 @@ export async function cancelTourOrder(orderId: string, _prev: ActionState, fd: F
   if (error) return connectionProblem(error);
   revalidatePath(`${TOURS}${orderId}/`);
   return saved("Done.");
+}
+
+/** ADR-102: add Nilecruz's sightseeing programme to a booked cruise; paid with the cruise, or on its own if that's paid. */
+export async function addProgramme(reservationId: string, _prev: ActionState, _fd: FormData): Promise<ActionState> {
+  await requireUser(`/dashboard/journey/reservations/${reservationId}/`);
+  const db = await getDb();
+  const { error } = await db.rpc("customer_add_programme", { res: reservationId });
+  if (error) return connectionProblem(error);
+  revalidatePath(`/dashboard/journey/reservations/${reservationId}/`);
+  return saved("Added. Pay it below with the cruise, or on its own page if the cruise is already paid.");
 }

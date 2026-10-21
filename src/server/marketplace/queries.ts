@@ -85,6 +85,7 @@ async function loadListing(): Promise<ListingVessel[]> {
         p?.sightseeing_amount_minor && p.sightseeing_currency
           ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }
           : undefined,
+      sightseeingBy: (p?.sightseeing_by as "vessel" | "nilecruz" | null) ?? undefined,
     });
   }
   return out;
@@ -103,7 +104,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     db
       .from("vessels")
       .select(
-        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, is_sample, visibility, vessel_translations(locale, summary, description), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), cabin_types(id, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, active, sailing_period, sails_at, schedule_days(day_number, locale, title, description), departures(departs_on, status))",
+        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), cabin_types(id, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, active, sailing_period, sails_at, schedule_days(day_number, locale, title, description), departures(departs_on, status))",
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -121,6 +122,25 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
   const ev = [...v.evaluations].sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))[0];
   const p = (prices ?? []).find((x) => x.vessel_id === v.id);
   const en = v.vessel_translations.find((t) => t.locale === "en");
+  // ADR-102: Nilecruz's sightseeing programme for each itinerary (published, with an office and an active programme
+  // rate); none for a vessel that sells its own. Priced per person for a party of two (the database prices the party).
+  const { data: progs } = await db
+    .from("tour_schedules")
+    .select("schedule_id, tour:tours!inner(name, slug, visibility, office_id, tour_rates(mode, active, prices))")
+    .in(
+      "schedule_id",
+      v.schedules.map((s) => s.id),
+    );
+  const programmeFor = (scheduleId: string) => {
+    for (const row of progs ?? []) {
+      if (row.schedule_id !== scheduleId || row.tour.visibility !== "published" || !row.tour.office_id) continue;
+      const rate = row.tour.tour_rates.find((r) => r.mode === "program" && r.active);
+      const tiers = (rate?.prices as { tiers?: { min: number; max: number | null; pp: number }[] } | undefined)?.tiers ?? [];
+      const two = tiers.find((t) => 2 >= t.min && (t.max === null || 2 <= t.max));
+      if (two) return { name: row.tour.name, slug: row.tour.slug, ppForTwoMinor: two.pp };
+    }
+    return undefined;
+  };
   // ADR-102: what an approved vessel's sightseeing includes (row-level security shows approved vessels' only).
   const { data: incl } = await db
     .from("schedule_sightseeing")
@@ -180,6 +200,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
           const x = (incl ?? []).find((i) => i.schedule_id === s.id);
           return x ? { guide: x.guide, ticketsIncluded: x.tickets_included, sites: x.sites, note: x.note } : undefined;
         })(),
+        programme: v.sightseeing_approved_at ? undefined : programmeFor(s.id),
       })),
     evaluation: ev
       ? {
@@ -206,6 +227,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
       p?.sightseeing_amount_minor && p.sightseeing_currency
         ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }
         : undefined,
+    sightseeingBy: (p?.sightseeing_by as "vessel" | "nilecruz" | null) ?? undefined,
   };
 }
 

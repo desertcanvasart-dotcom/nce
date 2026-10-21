@@ -55,3 +55,71 @@ describe("an approved vessel's price with sightseeing (ADR-102)", () => {
     );
   });
 });
+
+describe("the cruise with Nilecruz's programme (ADR-102, 8-3b-2)", () => {
+  it("pays both on one Stripe page, as two lines, with the amounts the webhook splits by", async () => {
+    const { checkoutParams } = await import("@/lib/payments/checkout");
+    const p = checkoutParams({
+      reservationId: "res-1",
+      reference: "NC-ABCDEF",
+      vesselName: "Sample Ship",
+      outstandingMinor: 200000,
+      currency: "USD",
+      customerEmail: "guest@example.test",
+      siteUrl: "https://nilecruz.example",
+      nowSeconds: 1_800_000_000,
+      programme: { orderId: "ord-1", reference: "NT-ABCDEF", name: "4-Night Sightseeing", amountMinor: 57800 },
+    });
+    expect(p.line_items.map((l) => l.price_data.unit_amount)).toEqual([200000, 57800]);
+    expect(p.line_items[1]!.price_data.product_data).toEqual({
+      name: "Tour order NT-ABCDEF",
+      description: "4-Night Sightseeing: sightseeing with Nilecruz",
+    });
+    expect(p.metadata).toMatchObject({
+      reservation_id: "res-1",
+      programme_order_id: "ord-1",
+      cruise_amount: "200000",
+      programme_amount: "57800",
+    });
+  });
+  it("is one line, as before, without a programme", async () => {
+    const { checkoutParams } = await import("@/lib/payments/checkout");
+    const p = checkoutParams({
+      reservationId: "res-1",
+      reference: "NC-ABCDEF",
+      vesselName: "Sample Ship",
+      outstandingMinor: 200000,
+      currency: "USD",
+      customerEmail: "guest@example.test",
+      siteUrl: "https://nilecruz.example",
+      nowSeconds: 1_800_000_000,
+    });
+    expect(p.line_items).toHaveLength(1);
+    expect(p.metadata).toEqual({ reservation_id: "res-1", reference: "NC-ABCDEF" });
+  });
+  it("filters the cruises to those with a sightseeing price", async () => {
+    const { applySearch, parseSearch } = await import("@/lib/marketplace/listing");
+    const base = {
+      category: null,
+      maxGuests: 40,
+      cabinCount: 20,
+      deckCount: 3,
+      sample: false,
+      showcase: false,
+      summary: null,
+      itineraries: [],
+      bookable: true,
+      type: "motor" as const,
+    };
+    const q = parseSearch({ sightseeing: "1" });
+    expect(q.sightseeing).toBe(true);
+    const found = applySearch(
+      [
+        { ...base, id: "a", slug: "a", name: "A", fromWithSightseeing: { amount: 128900, currency: "USD" } },
+        { ...base, id: "b", slug: "b", name: "B" },
+      ],
+      q,
+    );
+    expect(found.vessels.map((v) => v.slug)).toEqual(["a"]);
+  });
+});

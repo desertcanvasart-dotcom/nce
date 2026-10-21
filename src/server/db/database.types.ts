@@ -3226,6 +3226,7 @@ export type Database = {
           policy: Json;
           rate_id: string | null;
           reference: string;
+          reservation_id: string | null;
           session_id: string | null;
           starts_at: string;
           status: Database["public"]["Enums"]["tour_order_status"];
@@ -3260,6 +3261,7 @@ export type Database = {
           policy: Json;
           rate_id?: string | null;
           reference: string;
+          reservation_id?: string | null;
           session_id?: string | null;
           starts_at: string;
           status?: Database["public"]["Enums"]["tour_order_status"];
@@ -3294,6 +3296,7 @@ export type Database = {
           policy?: Json;
           rate_id?: string | null;
           reference?: string;
+          reservation_id?: string | null;
           session_id?: string | null;
           starts_at?: string;
           status?: Database["public"]["Enums"]["tour_order_status"];
@@ -3308,6 +3311,13 @@ export type Database = {
             columns: ["rate_id"];
             isOneToOne: false;
             referencedRelation: "tour_rates";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "tour_orders_reservation_id_fkey";
+            columns: ["reservation_id"];
+            isOneToOne: false;
+            referencedRelation: "reservations";
             referencedColumns: ["id"];
           },
           {
@@ -4176,6 +4186,7 @@ export type Database = {
         }[];
       };
       customer_accept_alternative: { Args: { req: string }; Returns: string };
+      customer_add_programme: { Args: { res: string }; Returns: string };
       customer_request_booking: {
         Args: {
           cabins: Json;
@@ -4332,6 +4343,16 @@ export type Database = {
         Returns: string;
       };
       preview_sheet: { Args: { ingest: string }; Returns: string };
+      programme_quote: {
+        Args: { ages: number[]; dep: string };
+        Returns: {
+          currency: string;
+          rate_id: string;
+          total_minor: number;
+          tour_name: string;
+          tour_slug: string;
+        }[];
+      };
       public_party_price: {
         Args: {
           ages: number[];
@@ -4359,6 +4380,7 @@ export type Database = {
           bookable: boolean;
           currency: string;
           sightseeing_amount_minor: number;
+          sightseeing_by: string;
           sightseeing_currency: string;
           vessel_id: string;
         }[];
