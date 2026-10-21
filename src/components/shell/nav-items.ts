@@ -16,6 +16,8 @@ export const footerCompany = [
   { key: "reviews", href: "/reviews" },
   { key: "planMyCruise", href: "/plan-my-cruise" },
   { key: "contact", href: "/contact" },
+  // PAGE-107 (Faris, 21 Oct 2026): for operators, in the footer only.
+  { key: "forOperators", href: "/operators/connect" },
 ] as const;
 
 export const footerExplore = [

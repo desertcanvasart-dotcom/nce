@@ -1476,3 +1476,31 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - `340_mcp_summary` (pgTAP): modes for anyone, prices still signed-in only, no price or count columns, nothing for unpublished vessels, a booking's total equal to its cabin lines without the gratuity;
 - `mcp.spec.ts` (end-to-end), and screenshots;
 - regenerating the database types (the new function's type was added by hand).
+
+## 21 Oct 2026 · How operators connect (PAGE-107, Faris's request)
+
+**Branch:** `operator-connect-page`, stacked on 8-2b. Brief: `docs/briefs/OPERATOR-CONNECT-PAGE.md`, with Faris's answers: `/operators/connect/`, detailed for non-technical readers, no commission, footer only.
+
+**Built:**
+- **The page** `/operators/connect/`:
+  - an intro, then a few words explained (availability, sailing, instant booking, booking request, dashboard);
+  - the six ways compared in one table (work, freshness, how guests book), which becomes cards on a phone;
+  - one section per way: best for, what you do step by step, what Nilecruz does, how often, notes and screenshots. The ways are the weekly sheet, one-tap answers, the dashboard, a feed, the API and allotments.
+  - The one-tap section covers what the email shows (and never shows), each of the four buttons, the hold, the reply time, the reminder and the admin's call, the morning digest, the 7-day links and answer times.
+  - Then the booking rule (ADR-099), what Nilecruz never does, how to start, six questions with FAQPage data, and a section for the operator's IT person with a short JSON sample.
+- **Copy:** in `src/content/operator-connect.ts`, marked "Draft for review". Every fact is checked against the code. There is no commission and no commercial terms; the WhatsApp parts say "coming soon".
+- **Links:** "For operators" in the footer (EN, ES and JA labels; ES and JA for the translators to check), and a link from the operator application page.
+- **Screenshots from the system:** each image appears once its file exists in `public/images/operators/`. They are still to take from sample data, when the local database is running.
+
+**Verified:**
+- **Unit:** `operator-connect.test.ts` (6 tests) checks:
+  - six ways, each with steps, Nilecruz's part, frequency and a screenshot with real alt text;
+  - every one-tap detail;
+  - the booking rule's numbers;
+  - no commission or percentages;
+  - house style;
+  - the FAQ.
+
+  `pnpm verify`: 469 tests.
+- **Seen in the browser** at 375, 768 and 1440 in Day and Night (`docs/screenshots/batch-08/8-op-*`).
+- **Not run yet:** `operator-connect.spec.ts` (sections, table, anchors, alt text, FAQ data, footer only, axe in Day and Night) needs the local database for the full suite.

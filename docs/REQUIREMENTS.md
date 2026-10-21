@@ -18,7 +18,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | Dashboard guide (PAY) | 14 |
 | Dashboard guide (PUB) | 12 |
 | Dashboard guide (BND) | 8 |
-| PAGE | 106 |
+| PAGE | 107 |
 | COMP | 22 |
 | TOK | 12 |
 | BRAND | 28 |
@@ -30,7 +30,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | I18N | 12 |
 | DATA | 45 |
 | EXP | 10 |
-| **Total** | **526** |
+| **Total** | **527** |
 
 ## Dashboard guide (ROLE)
 
@@ -388,6 +388,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | PAGE-104 | silo.xlsx Silo map P104 | `/reviews/` (Trust, P2): H1 "Guest reviews"; components TextField · Button · SectionHeading; schema WebPage (no self-serving review stars); links per row (same-silo + bridges); primary keyword "nilecrz reviews". | 12 | Planned |  |
 | PAGE-105 | silo.xlsx Silo map P105 | `/plan-my-cruise/` (Lead form, P1): H1 "Plan my cruise"; components TextField · Button · SectionHeading; schema ContactPage; links per row (same-silo + bridges); primary keyword "nilecrz plan my cruise". | 8 | Verified | Batch 8-2a (21 Oct 2026): /plan-my-cruise/: the plan form, kept on the device only; ContactPage data; drafted copy for review; link check (silo-links.spec, conversion.spec) |
 | PAGE-106 | silo.xlsx Silo map P106 | `/contact/` (Company, P1): H1 "Contact"; components TextField · Button · SectionHeading; schema ContactPage · Organization; links per row (same-silo + bridges); primary keyword "nilecrz contact". | 7 | Verified | Batch 7-1 (21 Oct 2026): Contact: form to an admin inbox (Messages); ContactPage data; drafted copy for review; link check (silo-links.spec, destinations-tours.spec) |
+| PAGE-107 | Faris 21 Oct 2026 (brief OPERATOR-CONNECT-PAGE) | `/operators/connect/`: every way an operator can connect (weekly sheet, one-tap answers, dashboard, feed, API, allotments), step by step for non-technical readers, with screenshots from the system (sample data); how each way affects booking; FAQPage; no commission or commercial terms; linked from the footer only. | 8 | Built | Operator page (21 Oct 2026): /operators/connect/ with the six ways, comparison, booking rule, FAQ data and the IT section; footer and application-page links; drafted copy for review (unit operator-connect.test, e2e operator-connect.spec); screenshots to take |
 
 ## COMP
 

@@ -37,6 +37,7 @@
     "egyptologists": "Our Egyptologists",
     "reviews": "Guest reviews",
     "planMyCruise": "Plan my cruise",
+    "forOperators": "For operators",
     "contact": "Contact",
     "prices": "Nile cruise prices",
     "terms": "Terms of use",
@@ -352,6 +353,7 @@
       "applyPartner": "Apply as a travel partner"
     },
     "apply": {
+      "howConnect": "How operators connect to Nilecruz",
       "title": "Apply as an operator",
       "lede": "Run a Nile cruise company? Apply here. Nilecruz checks every company before it can sell through the marketplace; we email you when the check is done.",
       "company": "Company name (as travellers know it)",

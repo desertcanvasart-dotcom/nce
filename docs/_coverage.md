@@ -15,15 +15,15 @@
 | 5 | 34 | 0 |
 | 6 | 37 | 1 |
 | 7 | 16 | 0 |
-| 8 | 9 | 0 |
+| 8 | 10 | 0 |
 | 9 | 11 | 0 |
 | 10 | 13 | 0 |
 | 11 | 9 | 0 |
 | 12 | 49 | 0 |
 | 13 | 13 | 2 |
-| **Sum** | **526** | **3** |
-| **Ledger total** | **526** | |
-| **Distinct IDs** | **526** | |
+| **Sum** | **527** | **3** |
+| **Ledger total** | **527** | |
+| **Distinct IDs** | **527** | |
 
 | Batch | Breakdown |
 |---|---|
@@ -42,7 +42,7 @@
 | 5 | BRAND 3, DASH-BND 2, DASH-CUS 2, DASH-PUB 8, DATA 7, PAGE 7, PERF 1, SEO 4 |
 | 6 | DATA 2, PAGE 25, SEO 10 |
 | 7 | DASH-ADM 1, DASH-PUB 1, PAGE 13, SEO 1 |
-| 8 | DASH-BND 1, DASH-PUB 3, DATA 3, PAGE 1, SEC 1 |
+| 8 | DASH-BND 1, DASH-PUB 3, DATA 3, PAGE 2, SEC 1 |
 | 9 | EXP 10, PERF 1 |
 | 10 | DASH-BND 1, I18N 5, SEO 7 |
 | 11 | A11Y 1, BRAND 1, DATA 1, ENG 2, PERF 3, SEC 1 |
