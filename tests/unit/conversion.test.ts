@@ -13,12 +13,29 @@ describe("Plan my cruise (PAGE-105, DASH-PUB-007)", () => {
     expect(planProblems(p, TODAY)).toEqual([]);
   });
   it("says what to fix, in plain words", () => {
-    const p = { ...emptyPlan(TODAY), earliest: "2026-10-20", nightsMin: 8, nightsMax: 4, childAges: "7, 19", budget: "lots" };
+    const p = {
+      ...emptyPlan(TODAY),
+      earliest: "2026-10-20",
+      nightsMin: 8,
+      nightsMax: 4,
+      childAges: "7, 19",
+      cabins: 2,
+      budget: "lots",
+    };
     expect(planProblems(p, TODAY)).toEqual([
       "The earliest departure must be after today.",
       "Nights are 1 to 21, the shortest no longer than the longest.",
       "Children are under 18; count older guests as adults.",
       "Give the budget as an amount, for example 3000.",
+    ]);
+  });
+  it("checks the party against cabins the way the request form does", () => {
+    const p = { ...emptyPlan(TODAY), adults: 3, childAges: "7" };
+    expect(planProblems(p, TODAY)).toEqual(["A cabin sleeps at most 3 (infants under 3 don’t count). Ask for more cabins."]);
+    expect(planProblems({ ...p, cabins: 2 }, TODAY)).toEqual([]);
+    expect(planProblems({ ...p, childAges: "7, 1", adults: 2 }, TODAY)).toEqual([]);
+    expect(planProblems({ ...p, adults: 1, childAges: "7", cabins: 2 }, TODAY)).toEqual([
+      "Each cabin needs a guest aged 12 or over.",
     ]);
   });
   it("opens the request form with every field of the plan", () => {
