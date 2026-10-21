@@ -17,6 +17,8 @@ export type RequestSummary = {
   /** What our data showed for each cabin type when the request was made. */
   shown: { cabin: string; available: number | null; source: string | null; confirmedAt: string | null }[];
   createdAt: string;
+  /** A travel partner asking for its client (ADR-100). */
+  agency?: string | null;
 };
 export type Links = { confirm: string; decline: string; hold: string; other: string };
 export type Email = { subject: string; text: string; html: string };
@@ -56,6 +58,7 @@ export function facts(s: RequestSummary): string[] {
     `Cruise: ${s.origin} to ${s.destination}, embarking ${date(s.departsOn)}, ${s.nights} nights`,
     `Cabins: ${s.lines.map((l) => `${l.count} × ${l.cabin}`).join(", ")}`,
     `Guests: ${s.guests}${s.nationality ? ` (lead guest's nationality: ${s.nationality})` : ""}`,
+    ...(s.agency ? [`Travel partner: ${s.agency} (trade booking)`] : []),
     `Request: ${s.reference}`,
   ];
 }

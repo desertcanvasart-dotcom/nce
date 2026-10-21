@@ -3,6 +3,79 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      allotments: {
+        Row: {
+          active: boolean;
+          cabin_type_id: string;
+          cabins: number;
+          contract_ref: string | null;
+          created_at: string;
+          created_by: string | null;
+          ends_on: string;
+          id: string;
+          notes: string | null;
+          org_id: string;
+          release_days: number;
+          starts_on: string;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          active?: boolean;
+          cabin_type_id: string;
+          cabins: number;
+          contract_ref?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          ends_on: string;
+          id?: string;
+          notes?: string | null;
+          org_id: string;
+          release_days?: number;
+          starts_on: string;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          active?: boolean;
+          cabin_type_id?: string;
+          cabins?: number;
+          contract_ref?: string | null;
+          created_at?: string;
+          created_by?: string | null;
+          ends_on?: string;
+          id?: string;
+          notes?: string | null;
+          org_id?: string;
+          release_days?: number;
+          starts_on?: string;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "allotments_cabin_type_id_fkey";
+            columns: ["cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "allotments_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "allotments_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       api_idempotency: {
         Row: {
           api_key_id: string | null;
@@ -157,7 +230,10 @@ export type Database = {
       booking_requests: {
         Row: {
           alternative: Json | null;
+          buyer_name: string | null;
+          buyer_org_id: string | null;
           cabins: Json;
+          client_reference: string | null;
           created_at: string;
           currency: string;
           customer_id: string;
@@ -176,6 +252,7 @@ export type Database = {
           responded_contact: string | null;
           response: string | null;
           response_channel: string | null;
+          selling_total_minor: number | null;
           shown: Json;
           status: Database["public"]["Enums"]["booking_request_status"];
           total_minor: number;
@@ -184,7 +261,10 @@ export type Database = {
         };
         Insert: {
           alternative?: Json | null;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cabins: Json;
+          client_reference?: string | null;
           created_at?: string;
           currency: string;
           customer_id: string;
@@ -203,6 +283,7 @@ export type Database = {
           responded_contact?: string | null;
           response?: string | null;
           response_channel?: string | null;
+          selling_total_minor?: number | null;
           shown?: Json;
           status?: Database["public"]["Enums"]["booking_request_status"];
           total_minor: number;
@@ -211,7 +292,10 @@ export type Database = {
         };
         Update: {
           alternative?: Json | null;
+          buyer_name?: string | null;
+          buyer_org_id?: string | null;
           cabins?: Json;
+          client_reference?: string | null;
           created_at?: string;
           currency?: string;
           customer_id?: string;
@@ -230,6 +314,7 @@ export type Database = {
           responded_contact?: string | null;
           response?: string | null;
           response_channel?: string | null;
+          selling_total_minor?: number | null;
           shown?: Json;
           status?: Database["public"]["Enums"]["booking_request_status"];
           total_minor?: number;
@@ -237,6 +322,13 @@ export type Database = {
           vessel_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "booking_requests_buyer_org_id_fkey";
+            columns: ["buyer_org_id"];
+            isOneToOne: false;
+            referencedRelation: "organisations";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "booking_requests_departure_id_fkey";
             columns: ["departure_id"];
@@ -2494,6 +2586,7 @@ export type Database = {
       reservation_cabins: {
         Row: {
           adults: number;
+          allotment_id: string | null;
           cabin_name: string;
           cabin_type_id: string;
           child_ages: number[];
@@ -2504,6 +2597,7 @@ export type Database = {
         };
         Insert: {
           adults: number;
+          allotment_id?: string | null;
           cabin_name: string;
           cabin_type_id: string;
           child_ages: number[];
@@ -2514,6 +2608,7 @@ export type Database = {
         };
         Update: {
           adults?: number;
+          allotment_id?: string | null;
           cabin_name?: string;
           cabin_type_id?: string;
           child_ages?: number[];
@@ -2523,6 +2618,13 @@ export type Database = {
           reservation_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: "reservation_cabins_allotment_id_fkey";
+            columns: ["allotment_id"];
+            isOneToOne: false;
+            referencedRelation: "allotments";
+            referencedColumns: ["id"];
+          },
           {
             foreignKeyName: "reservation_cabins_cabin_type_id_fkey";
             columns: ["cabin_type_id"];
@@ -3846,6 +3948,16 @@ export type Database = {
         Args: { guests: Json; target: string; terms_read: boolean };
         Returns: string;
       };
+      allotment_usage: {
+        Args: { target: string };
+        Returns: {
+          booked: number;
+          cabins: number;
+          departs_on: string;
+          departure_id: string;
+          released: boolean;
+        }[];
+      };
       apply_as_operator: {
         Args: { display_name: string; legal_name: string; registration: Json };
         Returns: string;
@@ -3975,6 +4087,19 @@ export type Database = {
         };
         Returns: string;
       };
+      partner_request_booking: {
+        Args: {
+          cabins: Json;
+          client_ref: string;
+          cur: string;
+          dep: string;
+          guests: Json;
+          org: string;
+          selling_total: number;
+          terms_read: boolean;
+        };
+        Returns: string;
+      };
       partner_reserve: {
         Args: {
           cabins: Json;
@@ -4001,6 +4126,7 @@ export type Database = {
         Returns: {
           amount_minor: number;
           available: number;
+          booking_mode: string;
           cabin_name: string;
           cabin_type_id: string;
           child_bands: Json;
@@ -4013,6 +4139,7 @@ export type Database = {
           max_occupancy: number;
           nights: number;
           occupancy: number;
+          operator_org_id: string;
           origin: string;
           returns_on: string;
           sailing_period: string;

@@ -40,7 +40,7 @@ grant execute on function pg_temp.cabins(integer), pg_temp.guests() to authentic
 
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select results_eq($$ select right(cabin_type_id::text, 1), booking_mode, places_left from public.vessel_departure_prices('00000000-0000-4000-e200-000000000001') order by 1 $$,
-  $$ values ('1', 'instant', 3), ('2', 'request', null::int), ('3', 'unconfirmed', null::int), ('4', 'sold_out', 0), ('5', 'instant', 2), ('6', 'unconfirmed', null::int) $$,
+  $$ values ('1', 'instant', 3), ('2', 'request', null::int), ('3', 'unconfirmed', null::int), ('4', 'sold_out', null::int), ('5', 'instant', 2), ('6', 'unconfirmed', null::int) $$,
   'each cabin''s booking mode, with places left only from instant data');
 
 -- Instant: feed or API, or an operator's answer, within 2 hours.

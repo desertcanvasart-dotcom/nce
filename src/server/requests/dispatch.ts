@@ -36,7 +36,7 @@ export async function requestSummary(
   const { data: r } = await db
     .from("booking_requests")
     .select(
-      "id, reference, org_id, status, hold_until, cabins, guest_count, lead_nationality, shown, created_at, operator:organisations(display_name), vessel:vessels(name), departure:departures(departs_on, schedule:schedules(origin, destination, nights))",
+      "id, reference, org_id, status, hold_until, cabins, guest_count, lead_nationality, shown, created_at, buyer_name, operator:organisations!booking_requests_org_id_fkey(display_name), vessel:vessels(name), departure:departures(departs_on, schedule:schedules(origin, destination, nights))",
     )
     .eq("id", requestId)
     .maybeSingle();
@@ -74,6 +74,7 @@ export async function requestSummary(
       confirmedAt: s.confirmed_at,
     })),
     createdAt: r.created_at,
+    agency: r.buyer_name,
   };
 }
 
@@ -189,7 +190,7 @@ export async function sendDigests(now = new Date()): Promise<number> {
   const { data: open } = await db
     .from("booking_requests")
     .select(
-      "id, org_id, reference, status, hold_until, operator:organisations(display_name), vessel:vessels(name), departure:departures(departs_on)",
+      "id, org_id, reference, status, hold_until, operator:organisations!booking_requests_org_id_fkey(display_name), vessel:vessels(name), departure:departures(departs_on)",
     )
     .in("status", ["waiting", "held"]);
   const byOrg = new Map<string, NonNullable<typeof open>>();
