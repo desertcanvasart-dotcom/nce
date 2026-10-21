@@ -9,6 +9,15 @@
         "export PATH=$HOME/.nvm/versions/node/v22.23.3/bin:$PATH && ENABLE_DEV_ROUTES=true pnpm with-local-db pnpm dev --port 3100"
       ],
       "port": 3100
+    },
+    {
+      "name": "nilecruz-nodb",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-lc",
+        "export PATH=$HOME/.nvm/versions/node/v22.23.3/bin:$PATH && NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:55421 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_local SUPABASE_SECRET_KEY=sb_secret_local RESEND_API_KEY= ANTHROPIC_API_KEY= STRIPE_SECRET_KEY= NEXT_PUBLIC_SITE_URL=http://localhost:3101 pnpm dev --port 3101"
+      ],
+      "port": 3101
     }
   ]
 }
