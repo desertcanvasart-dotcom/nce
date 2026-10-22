@@ -32,14 +32,22 @@ describe("page metadata (SEO-002, SEO-006)", () => {
 describe("live-site redirects (SEO-021, ADR-028)", () => {
   it("send every live URL to a silo URL with a trailing slash", () => {
     for (const r of liveSiteRedirects) expect(r.destination).toMatch(/^\/[a-z0-9-/]+\/$/);
-    const pages = liveSiteRedirects.map((r) => r.source).filter((s) => !s.startsWith("/tours/"));
-    expect(pages.sort()).toEqual(
+    const pages = liveSiteRedirects.filter((r) => !r.has && !r.source.includes("/:id") && !r.source.startsWith("/tours/"));
+    expect(pages.map((r) => r.source).sort()).toEqual(
       ["/account", "/compare", "/explore", "/how-we-score", "/independence", "/match", "/request", "/tours"].sort(),
     );
+    // The live listing's filters go to the matching pages, before the plain /explore rule.
+    const explore = liveSiteRedirects.filter((r) => r.source === "/explore").map((r) => r.destination);
+    expect(explore).toEqual(["/cruises/dahabiyas/", "/cruises/motor-ships/", "/cruises/"]);
+    // Any other live tour or vessel address, last.
+    expect(liveSiteRedirects.slice(-2)).toEqual([
+      { source: "/tours/:id", destination: "/tours-extras/" },
+      { source: "/cruise/:id", destination: "/cruises/" },
+    ]);
   });
 
   it("send each live tour page to its one new page (SEO-022)", () => {
-    const tours = liveSiteRedirects.filter((r) => r.source.startsWith("/tours/"));
+    const tours = liveSiteRedirects.filter((r) => r.source.startsWith("/tours/") && !r.source.includes(":"));
     expect(tours).toHaveLength(7);
     expect(tours.find((r) => r.source.endsWith("0007"))?.destination).toBe("/tours-extras/abu-simbel-day-trip/");
     expect(tours.find((r) => r.source.endsWith("0003"))?.destination).toBe("/tours-extras/transfers/");

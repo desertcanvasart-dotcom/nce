@@ -1810,3 +1810,29 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **End-to-end:** `seo-crawl.spec.ts` and `shell.spec.ts`: 26 passed on a production build. The shell test now expects an untranslated home page to point its canonical at English.
 - **Local environment:** the local database stalled (statement timeouts), so the wider suite couldn't run cleanly here. I restarted only its container. Docker has 3.8 GB, and the analytics container uses the most CPU. CI runs the full suite on a fresh database.
 - **Screenshots:** `docs/screenshots/batch-10/10-1-*`: the Spanish About page and the Japanese guide pillar with the note, at 375, 768 and 1440 px in Day and Night.
+
+## 21 Oct 2026 · Batch 10-2a · The old site's addresses, and the keyword drafts
+
+**Brief:** `docs/briefs/BATCH-10.md` (approved). 10-2 is split in two: 10-2a needs no one's input; 10-2b (Spanish slugs, I18N-002) follows once the keyword lists are reviewed.
+
+**Built:**
+- **SEO-021, the live site read (read-only):**
+  - its sitemap lists only 9 pages;
+  - its pages link a few more, including the filter links;
+  - its scripts build `/cruise/{id}` and `/tours/{id}` addresses;
+  - it answers every address with a page, real or not, and its vessel IDs come from its `/api/`, which its `robots.txt` closes.
+  
+  The full table is in `docs/imports/live-site-urls.md`.
+- **The redirects (`src/lib/redirects.ts`):**
+  - **new:** `/explore?boat=dahabiya` and `?boat=powered` go to the dahabiya and motor-ship listings;
+  - **new:** any other `/tours/{id}` goes to the tours hub, and every `/cruise/{id}` to the listing;
+  - nothing is marked gone (410), since every address has a sensible home;
+  - **vessel by vessel:** possible later, if the old site's vessel export, with its IDs, turns up.
+- **I18N-012, the keyword drafts:** `docs/drafts/keywords-es-ja.xlsx`, one row per built page, in translation order (pillars and hubs, money pages, supporting).
+  - Each row has a Spanish search term, address and title, and a Japanese search term and title. Japanese pages keep English addresses (ADR-022).
+  - Each language has a Yes/Change column and a note column, with a "How to review" sheet.
+  - These are drafts, not validated against search volumes: no keyword tool was available.
+
+**Verified:**
+- `http.spec.ts` follows every live address: the trailing-slash hop (308), then the 301 to its new page, which answers. 8 passed.
+- `seo.test.ts` checks the rule order: filters before the plain `/explore`, catch-alls last. `pnpm verify` passes.

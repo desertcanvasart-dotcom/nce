@@ -566,7 +566,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEO-018 | Linking rules: Orphan check | A crawler run after each release finds no orphan pages. | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts`: no orphan built page; runs in CI on every pull request |
 | SEO-019 | ARCH §Routing | XML sitemaps per locale list only indexable URLs. | 10 | Verified | Batch 10-1: /sitemap.xml index, /sitemaps/sitemap/{en,es,ja}.xml, indexable and translated pages only, with hreflang; `seo-plumbing.test.ts`, `seo-crawl.spec.ts` |
 | SEO-020 | ARCH §Routing | robots.txt disallows dashboards, account, API and MCP paths. | 1 | Verified | Batch 1 (17 Oct 2026): unit tests/unit/robots.test.ts; e2e staging noindex |
-| SEO-021 | silo.md §Assumptions | Current nilecruz.com URLs redirect (301) to their silo equivalents. | 10 | Planned |  |
+| SEO-021 | silo.md §Assumptions | Current nilecruz.com URLs redirect (301) to their silo equivalents. | 10 | Verified | Batch 10-2: the live site read (sitemap, links, address patterns), `docs/imports/live-site-urls.md`; every address 301s to its new page, which answers (`http.spec.ts`) |
 | SEO-022 | silo.md §Assumptions | Tours & Extras slugs are reconciled with any live nilecruz.com tour URLs. | 7 | Verified | Batch 7-1 (21 Oct 2026): the seven live nilecruz.com /tours/{id} addresses redirect (301) to each tour's one page; tours a workbook page covers redirect to it (unit, e2e) |
 | SEO-023 | silo.md §Cannibalisation | Route guides carry no price grid and listings carry no long itinerary text. | 6 | Verified | Batch 6-2 (21 Oct 2026): route guides show stops and vessels with no price grid (unit, e2e) |
 | SEO-024 | silo.md §Cannibalisation | A vessel-type hub shows at most three CruiseCards, then links to its listing. | 6 | Verified | Batch 6-1 (21 Oct 2026): vessel-type hubs show at most three cruise cards, then link to the listing (unit, e2e) |
@@ -592,7 +592,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | I18N-009 | BRAND-BOOK §Multilingual | Japanese falls back to Noto Serif JP / Noto Sans JP through the family stacks. | 1 | Verified | Batch 1 (17 Oct 2026): generated stacks keep Noto JP names; ja screenshots (ADR-035) |
 | I18N-010 | CLAUDE.md §6 | Numbers, dates and money format per locale while keeping brand formats in English. | 2 | Verified | Batch 2 (17 Oct 2026): format.test.ts locale cases (es, ja) |
 | I18N-011 | CLAUDE.md §6 | Translatable content (CMS and database) is stored per locale with a fallback rule. | 3 | Verified | Batch 3 (17 Oct 2026): *_translations tables (en/es/ja); pickTranslation English fallback + data-helpers.test.ts; Sanity document-level and field-level translations, English required |
-| I18N-012 | silo.md §Assumptions | Spanish and Japanese keywords are validated before translated pages are written. | 10 | Planned |  |
+| I18N-012 | silo.md §Assumptions | Spanish and Japanese keywords are validated before translated pages are written. | 10 | In progress | Batch 10-2: drafts for the 45 built pages in `docs/drafts/keywords-es-ja.xlsx`, waiting for the native reviewers (not yet validated against search volumes) |
 
 ## DATA
 

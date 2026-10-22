@@ -6,16 +6,45 @@ test("URLs without a trailing slash redirect to the slash form (SEO-001)", async
   expect(res.headers()["location"]).toBe("/terms/");
 });
 
-test("live-site URLs 301 to their silo equivalents (SEO-021)", async ({ request }) => {
-  for (const [from, to] of [
-    ["/explore/", "/cruises/"],
-    ["/how-we-score/", "/how-we-choose-vessels/"],
-    ["/independence/", "/how-we-choose-vessels/"],
-  ]) {
-    const res = await request.get(from!, { maxRedirects: 0 });
-    expect(res.status()).toBe(301);
-    expect(res.headers()["location"]).toBe(to);
+/**
+ * SEO-021, SEO-022 (Batch 10-2): every address found on the live nilecruz.com (docs/imports/live-site-urls.md) 301s to
+ * its new page (after the trailing-slash hop), and that page answers. Its sitemap, its links, the filter links, and the detail-page patterns it builds.
+ */
+const LIVE: [string, string][] = [
+  ["/explore", "/cruises/"],
+  ["/explore?boat=dahabiya", "/cruises/dahabiyas/?boat=dahabiya"],
+  ["/explore?boat=powered", "/cruises/motor-ships/?boat=powered"],
+  ["/explore?nights=4", "/cruises/?nights=4"],
+  ["/explore?route=lake", "/cruises/?route=lake"],
+  ["/how-we-score", "/how-we-choose-vessels/"],
+  ["/independence", "/how-we-choose-vessels/"],
+  ["/match", "/plan-my-cruise/"],
+  ["/request", "/plan-my-cruise/"],
+  ["/tours", "/tours-extras/"],
+  ["/compare", "/cruises/compare/"],
+  ["/account?login=customer", "/dashboard/?login=customer"],
+  ["/tours/17100001-0000-4000-8000-000000000007", "/tours-extras/abu-simbel-day-trip/"],
+  ["/tours/00000000-0000-4000-8000-0000000000ff", "/tours-extras/"],
+  ["/cruise/00000000-0000-4000-8000-0000000000ff", "/cruises/"],
+];
+
+test("every live-site address 301s to its new page, which answers (SEO-021, SEO-022)", async ({ request }) => {
+  for (const [from, to] of LIVE) {
+    // Two hops: the trailing slash first (308, SEO-001), then the 301 to the new page.
+    const [path, query] = from.split("?");
+    const slashed = `${path}/${query ? `?${query}` : ""}`;
+    const first = await request.get(from, { maxRedirects: 0 });
+    expect(first.status(), from).toBe(308);
+    expect(first.headers()["location"], from).toBe(slashed);
+    const res = await request.get(slashed, { maxRedirects: 0 });
+    expect(res.status(), slashed).toBe(301);
+    expect(res.headers()["location"], slashed).toBe(to);
+    // The new page loads (the dashboard sends visitors to sign in first).
+    const end = await request.get(to);
+    expect(end.status(), to).toBe(200);
   }
+  // Pages with the same address keep it, with the trailing slash.
+  for (const p of ["/privacy", "/terms", "/"]) expect((await request.get(p)).status()).toBe(200);
 });
 
 test("security headers are set (SEC-012)", async ({ request }) => {
