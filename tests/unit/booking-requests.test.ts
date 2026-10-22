@@ -126,4 +126,16 @@ describe("the daily digest", () => {
     expect(m.text).toContain("- NQ-AAAAAA · Sample Ship · Mon, 2 Nov 2026: https://x/1");
     expect(m.text).toContain("- NQ-BBBBBB · Sample Ship · until 31 Oct 17:00 Cairo: https://x/2");
   });
+  it("lists the holds Nilecruz placed that end today, even with nothing else open (ADR-103)", () => {
+    const m = digestEmail(
+      "Sample Operator",
+      [],
+      [],
+      [{ vessel: "Sample Ship", cabin: "Suite", departsOn: "2026-11-02", cabins: 2, holdUntil: "2026-10-31T15:00:00Z" }],
+      "https://x/holds",
+    )!;
+    expect(m.subject).toBe("Nilecruz today: 0 waiting, 1 holds ending");
+    expect(m.text).toContain("- Sample Ship · Suite · Mon, 2 Nov 2026 · 2 cabins · until 17:00 Cairo");
+    expect(m.text).toContain("All holds: https://x/holds");
+  });
 });

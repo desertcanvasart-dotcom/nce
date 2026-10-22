@@ -19,6 +19,7 @@ import {
   sightseeingText,
   preferredPrices,
   availabilityLabel,
+  availabilityUpdated,
   canBook,
   type BookingMode,
   type DeparturePrice,
@@ -88,6 +89,8 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       placesLeft: r.places_left,
       bookable: r.bookable,
       mode: r.booking_mode as BookingMode,
+      supplement: Number(r.supplement_minor ?? 0),
+      confirmedAt: r.confirmed_at,
     })),
   ).filter((r) => r.scheduleId === it?.id);
   const departures = [...new Set(rows.map((r) => r.departureId))].map((id) => rows.filter((r) => r.departureId === id));
@@ -124,6 +127,13 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
     if (row) programme = { name: row.tour_name, total: Number(row.total_minor), currency: row.currency };
   }
   const policy = chosen ? await policyFor(chosen.departureId) : null;
+  // ADR-103: what the supplements are, for the chosen cabin and currency.
+  const supplements =
+    chosen && chosen.supplement
+      ? ((await db.rpc("sailing_supplements", { dep: chosen.departureId })).data ?? [])
+          .filter((s) => s.currency === chosen.currency && (s.cabin_type_id === null || s.cabin_type_id === chosen.cabinTypeId))
+          .map((s) => s.name)
+      : [];
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
   const periods = await premiumPeriods();
   // ADR-099: how long the operator usually takes to confirm a booking request.
@@ -326,8 +336,12 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                             ? `${formatMoney({ amount: r.double, currency: r.currency }, locale)} per person, two sharing`
                             : ""}
                           {r.single ? ` · ${formatMoney({ amount: r.single, currency: r.currency }, locale)} alone` : ""}
+                          {r.supplement
+                            ? ` · plus ${formatMoney({ amount: r.supplement, currency: r.currency }, locale)} per adult in supplements`
+                            : ""}
                         </small>
                         <em>{label}</em>
+                        {r.confirmedAt && r.mode !== "sold_out" ? <small>{availabilityUpdated(r.confirmedAt)}</small> : null}
                       </span>
                     </label>
                   );
@@ -449,11 +463,14 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               ? `${formatMoney({ amount: perPersonFor(chosen, ages)!, currency: chosen.currency }, locale)} per adult; `
               : ""}
             children are priced by age.{" "}
+            {chosen.supplement
+              ? `The total includes ${formatMoney({ amount: chosen.supplement, currency: chosen.currency }, locale)} per adult in compulsory supplements for these dates${supplements.length ? ` (${supplements.join(", ")})` : ""}. `
+              : ""}
             {pkg === "with_sightseeing"
               ? "The total holds the cruise fare and the vessel's own sightseeing; transfers, flights and other tours are booked separately."
               : "The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked separately."}
           </p>
-          {chosen.mode === "instant" && (chosen.placesLeft ?? 0) < cabinsWanted ? (
+          {chosen.mode === "instant" && chosen.placesLeft !== null && chosen.placesLeft < cabinsWanted ? (
             <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>
           ) : (
             <>

@@ -1,5 +1,5 @@
 import { ActionForm } from "@/components/dashboard/ActionForm";
-import { Checkboxes, Input, Section, ui } from "@/components/dashboard/ui";
+import { Checkboxes, Input, Notice, Section, ui } from "@/components/dashboard/ui";
 import { facts, shownLines, type RequestSummary } from "@/lib/requests/message";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { getDb } from "@/server/db";
@@ -29,12 +29,19 @@ type Stats = {
 const hm = (m: number | null) => (m === null ? "—" : m < 60 ? `${Math.round(m)} min` : `${(m / 60).toFixed(1)} h`);
 
 /** Reply metrics over the last 90 days: on the admin operator page and the operator's connection health. */
-export function ReplyStats({ stats, slaHours }: { stats: Stats; slaHours: number }) {
+export function ReplyStats({ stats, slaHours, accuracyLow = false }: { stats: Stats; slaHours: number; accuracyLow?: boolean }) {
   return (
     <Section title="Booking requests: answers" id="replies">
       <p className={ui.muted}>
         Last 90 days. Answer within {slaHours} hours: a reminder goes out then, and Nilecruz phones at twice that.
       </p>
+      {accuracyLow ? (
+        <Notice tone="error">
+          More than 20 % of requests were declined when our data showed space. Until that improves, availability entered by hand
+          or from a vacancy sheet shows to travellers as “to be confirmed” and can’t be requested. Instant data (feed, API, an
+          answer) and allotments are not affected.
+        </Notice>
+      ) : null}
       <dl className={ui.grid}>
         <div>
           <dt>Answered</dt>
@@ -58,7 +65,7 @@ export function ReplyStats({ stats, slaHours }: { stats: Stats; slaHours: number
         </div>
         <div>
           <dt>Customers are told</dt>
-          <dd>confirmed within {stats?.confirm_within_hours ?? 24} hours</dd>
+          <dd>{accuracyLow ? "to be confirmed" : `confirmed within ${stats?.confirm_within_hours ?? 24} hours`}</dd>
         </div>
       </dl>
     </Section>

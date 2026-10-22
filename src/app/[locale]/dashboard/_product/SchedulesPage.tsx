@@ -7,6 +7,7 @@ import { requireProductEditor } from "@/server/product/guard";
 import { schedulesOf } from "@/server/product/queries";
 import { saveSchedule } from "./actions";
 import { productPaths } from "./paths";
+import { SalesControls } from "./SalesControls";
 
 const days = (xs: number[]) => xs.map((d) => WEEKDAYS.find((w) => w.value === d)?.label.slice(0, 3)).join(", ");
 
@@ -48,6 +49,7 @@ export async function SchedulesPage({ orgId, vesselId }: { orgId: string | null;
           <ScheduleFields />
         </ActionForm>
       </Section>
+      <SalesControls orgId={orgId} vesselId={vesselId} />
     </>
   );
 }

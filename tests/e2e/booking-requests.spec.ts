@@ -165,6 +165,12 @@ test("Decline sets that cabin type to none free; a broken or expired link shows 
   await page.getByRole("button", { name: "Decline" }).click();
   await expect(page.getByText(/Declined\. We've marked those cabins as full/)).toBeVisible();
   expect(await available()).toEqual({ available: 0, source: "tap" });
+  // ADR-103: declines of cabins shown free count towards Sample Operator A's accuracy rung, and CI runs the suite twice
+  // on one database. Move this one out of the rung's 90-day window, so runs don't add up and mark A's data unreliable.
+  await adminDb()
+    .from("booking_requests")
+    .update({ created_at: new Date(Date.now() - 100 * 86_400_000).toISOString() })
+    .eq("id", id);
   await page.goto("/operator-reply/not-a-real-link/");
   await expect(page.getByRole("heading", { name: "This link isn’t valid" })).toBeVisible();
   const expired = actionToken(ACTION_LINK_TEST_SECRET, id, "confirm", Math.floor(Date.now() / 1000) - 8 * 86_400);

@@ -70,6 +70,12 @@ const cabinInput = z.object({
     .refine((v) => v === null || (Number.isFinite(v) && v > 0 && v < 1000), "a size in square metres"),
   bed_configuration: optText(120),
   max_occupancy: z.coerce.number().int().min(1, "1 to 3").max(3, "1 to 3"),
+  // ADR-103: optional; availability for this cabin type can't go above it.
+  cabin_count: z
+    .string()
+    .trim()
+    .transform((v) => (v === "" ? null : Number(v)))
+    .refine((v) => v === null || (Number.isInteger(v) && v >= 1 && v <= 400), "a whole number from 1 to 400"),
   view: optText(80),
   balcony: z
     .string()
@@ -102,6 +108,7 @@ const CABIN_LABELS = {
   size_m2: "Size",
   bed_configuration: "Beds",
   max_occupancy: "Maximum occupancy",
+  cabin_count: "Cabins of this type",
   view: "View",
   amenities: "Amenities",
 };
@@ -136,6 +143,7 @@ export async function saveCabin(
     size_m2: d.size_m2,
     bed_configuration: d.bed_configuration,
     max_occupancy: d.max_occupancy,
+    cabin_count: d.cabin_count,
     view: d.view,
     balcony: d.balcony,
     amenities: d.amenities,
@@ -881,4 +889,133 @@ export async function deleteSightseeingRate(
   revalidatePath(p.departure(scheduleId, departureId));
   revalidateCatalogue();
   return saved("Rate with sightseeing removed.");
+}
+
+// ── Stop-sales and supplements (ADR-103) ───────────────────────────────────────────────────────────────
+const dateRange = z
+  .object({
+    cabin_type_id: z
+      .string()
+      .trim()
+      .transform((v) => (v === "" ? null : v))
+      .refine((v) => v === null || /^[0-9a-f-]{36}$/.test(v), "a cabin type"),
+    starts_on: isoDate,
+    ends_on: isoDate,
+  })
+  .refine((v) => v.ends_on >= v.starts_on, { message: "a last date on or after the first", path: ["ends_on"] });
+
+/** Closes departures to new bookings and requests; allotment cabins stay open, and feeds or sheets don't lift it. */
+export async function addStopSale(
+  orgId: string | null,
+  vesselId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  const { vessel } = await requireProductEditor(vesselId, p.schedules, { orgId: orgId ?? undefined });
+  const input = dateRange.and(z.object({ reason: optText(500) })).safeParse(formObject(fd));
+  if (!input.success)
+    return problemsFrom(input.error, { cabin_type_id: "Cabin type", starts_on: "From", ends_on: "To", reason: "Reason" });
+  if (!vessel.operator_org_id) return failed("This vessel has no operator.");
+  const db = await getDb();
+  const { error } = await db.from("stop_sales").insert({
+    org_id: vessel.operator_org_id,
+    vessel_id: vesselId,
+    cabin_type_id: input.data.cabin_type_id,
+    starts_on: input.data.starts_on,
+    ends_on: input.data.ends_on,
+    reason: input.data.reason,
+  });
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedules);
+  revalidateCatalogue();
+  return saved("Sales stopped for those departures.");
+}
+
+export async function liftStopSale(
+  orgId: string | null,
+  vesselId: string,
+  id: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  const { session } = await requireProductEditor(vesselId, p.schedules, { orgId: orgId ?? undefined });
+  const db = await getDb();
+  const { error } = await db
+    .from("stop_sales")
+    .update({ lifted_at: new Date().toISOString(), lifted_by: session.userId })
+    .eq("id", id)
+    .eq("vessel_id", vesselId)
+    .is("lifted_at", null);
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedules);
+  revalidateCatalogue();
+  return saved("Stop-sale lifted. Those departures sell again.");
+}
+
+const supplementInput = dateRange.and(
+  z.object({
+    kind: z.enum(["gala_dinner", "peak"], { message: "gala dinner or peak dates" }),
+    name: z.string().trim().min(1, "required").max(120),
+    currency: z.enum(["USD", "EUR", "EGP"], { message: "US$, € or E£" }),
+    amount: money,
+  }),
+);
+
+/** A compulsory charge per guest on the nights it covers, added to the fare (children by the fare's age bands). */
+export async function addSupplement(
+  orgId: string | null,
+  vesselId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.schedules, { orgId: orgId ?? undefined });
+  const input = supplementInput.safeParse(formObject(fd));
+  if (!input.success)
+    return problemsFrom(input.error, {
+      cabin_type_id: "Cabin type",
+      starts_on: "First night",
+      ends_on: "Last night",
+      kind: "Kind",
+      name: "Name",
+      currency: "Currency",
+      amount: "Per guest",
+    });
+  const d = input.data;
+  if (d.amount <= 0) return failed("Per guest: an amount above 0.");
+  const db = await getDb();
+  const { error } = await db.from("supplements").insert({
+    vessel_id: vesselId,
+    cabin_type_id: d.cabin_type_id,
+    kind: d.kind,
+    name: d.name,
+    starts_on: d.starts_on,
+    ends_on: d.ends_on,
+    currency: d.currency,
+    amount_minor: d.amount,
+  });
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedules);
+  revalidateCatalogue();
+  return saved("Supplement added. New bookings of those nights include it.");
+}
+
+export async function setSupplementActive(
+  orgId: string | null,
+  vesselId: string,
+  id: string,
+  active: boolean,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.schedules, { orgId: orgId ?? undefined });
+  const db = await getDb();
+  const { error } = await db.from("supplements").update({ active }).eq("id", id).eq("vessel_id", vesselId);
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedules);
+  revalidateCatalogue();
+  return saved(active ? "Supplement switched back on." : "Supplement switched off. Bookings already made keep it.");
 }

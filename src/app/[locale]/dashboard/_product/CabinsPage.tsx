@@ -132,6 +132,7 @@ export async function CabinsPage({
                       <Link href={p.cabin(c.id)}>{c.name}</Link>{" "}
                       <span className={ui.muted}>
                         ({c.code} · sleeps {c.max_occupancy}
+                        {c.cabin_count ? ` · ${c.cabin_count} cabins` : ""}
                         {c.size_m2 ? ` · ${c.size_m2} m²` : ""}
                         {c.media.length ? ` · ${c.media.length} photo${c.media.length === 1 ? "" : "s"}` : " · no photo"}
                         {c.active ? "" : " · inactive"})
@@ -166,6 +167,7 @@ export function CabinFields({
     size_m2: number | null;
     bed_configuration: string | null;
     max_occupancy: number;
+    cabin_count: number | null;
     view: string | null;
     balcony: boolean;
     amenities: string[];
@@ -207,6 +209,13 @@ export function CabinFields({
           required
           defaultValue={value?.max_occupancy ?? 2}
           hint="1 to 3. Infants under 3 don’t count."
+        />
+        <Input
+          label="Cabins of this type"
+          name="cabin_count"
+          inputMode="numeric"
+          defaultValue={value?.cabin_count}
+          hint="On the ship. Availability for this type can’t go above it."
         />
         <Input label="Size (m²)" name="size_m2" inputMode="decimal" defaultValue={value?.size_m2} />
         <Input

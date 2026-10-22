@@ -187,6 +187,10 @@ export type DeparturePrice = {
   bookable: boolean;
   /** ADR-099: instant (feed, API or the operator's answer, ≤ 2 h), request (manual or sheet, ≤ 7 days), or neither. */
   mode: BookingMode;
+  /** ADR-103: compulsory supplements per adult on this sailing (gala dinners, peak dates), already in the party price. */
+  supplement: number;
+  /** ADR-103: when the operator's availability was last confirmed; null when none was entered. */
+  confirmedAt: string | null;
 };
 export type BookingMode = "instant" | "request" | "unconfirmed" | "sold_out";
 export const canBook = (r: Pick<DeparturePrice, "bookable" | "mode">) =>
@@ -225,6 +229,24 @@ export function availabilityLabel(r: Pick<DeparturePrice, "placesLeft" | "mode">
     default:
       return r.placesLeft !== null && r.placesLeft <= 2 ? "Last few cabins" : "Instant confirmation";
   }
+}
+
+/**
+ * ADR-103, the spec's "Availability updated [relative time]": how long ago a sailing's availability was confirmed, in
+ * words. Never in the future (clocks differ a little).
+ */
+export function availabilityUpdated(confirmedAt: string, now: Date = new Date()): string {
+  const minutes = Math.max(0, Math.floor((now.getTime() - Date.parse(confirmedAt)) / 60_000));
+  const ago = (n: number, unit: string) => `${n} ${unit}${n === 1 ? "" : "s"} ago`;
+  const when =
+    minutes < 1
+      ? "just now"
+      : minutes < 60
+        ? ago(minutes, "minute")
+        : minutes < 48 * 60
+          ? ago(Math.floor(minutes / 60), "hour")
+          : ago(Math.floor(minutes / (24 * 60)), "day");
+  return `Availability updated ${when}`;
 }
 
 /**

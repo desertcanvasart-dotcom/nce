@@ -117,4 +117,13 @@ describe("auto-confirm only when every check passes", () => {
     ).rows;
     expect(autoConfirmProblems({ ...base, rows: tooMany }).join(" ")).toMatch(/more than the ship's 6 cabins/);
   });
+  it("checks a cabin type's own count where the operator gave one (ADR-103)", () => {
+    const counted: OperatorShip[] = [
+      { ...ships[0]!, cabins: ships[0]!.cabins.map((c) => ({ ...c, cabinCount: c.code === "STE" ? 2 : null })) },
+    ];
+    const rows = mapRows([{ ship: "Sample Request Ship", date: "2026-11-02", cabin: "Suite", available: 3 }], counted, []).rows;
+    expect(autoConfirmProblems({ ...base, ships: counted, rows })).toEqual([
+      "Sample Request Ship · Suite on 2026-11-02: 3 free is more than the 2 cabins of this type.",
+    ]);
+  });
 });

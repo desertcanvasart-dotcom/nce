@@ -29,6 +29,10 @@ export type SearchRow = {
   tier: "company" | "trade" | "public";
   booking_mode: "instant" | "request";
   operator_org_id: string;
+  /** ADR-103: compulsory supplements per adult on this sailing, in this currency. */
+  supplement_minor: number;
+  /** ADR-103: when the operator's availability was last confirmed. */
+  confirmed_at: string | null;
 };
 
 export const TIER_LABEL = { company: "Your company rate", trade: "Trade rate", public: "Public rate" } as const;
@@ -41,8 +45,9 @@ export type PricedCabin = {
   mode: "instant" | "request";
   operatorOrgId: string;
   currency: string;
-  /** Price for this cabin's guests, or why it can't be priced. */
-  price: { ok: true; totalMinor: number; tier: SearchRow["tier"] } | { ok: false; reason: string };
+  /** Price for this cabin's guests, or why it can't be priced; the total includes the supplements. */
+  price: { ok: true; totalMinor: number; supplementMinor: number; tier: SearchRow["tier"] } | { ok: false; reason: string };
+  confirmedAt: string | null;
 };
 export type SearchDeparture = {
   departureId: string;
@@ -81,15 +86,23 @@ export function groupSearch(rows: SearchRow[], guests: { adults: number; childAg
     const first = list[0]!;
     // The tier that priced this party: the one for the occupancy the party fills.
     let tier: SearchRow["tier"] = first.tier;
-    const priced = linePrice(
-      { adults: guests.adults, childAges: guests.childAges, maxOccupancy: first.max_occupancy },
-      (occupancy) => {
-        const r = list.find((x) => x.occupancy === occupancy);
-        if (!r) return null;
-        tier = r.tier;
-        return { amountMinor: Number(r.amount_minor), bands: r.child_bands };
-      },
-    );
+    const line = { adults: guests.adults, childAges: guests.childAges, maxOccupancy: first.max_occupancy };
+    const priced = linePrice(line, (occupancy) => {
+      const r = list.find((x) => x.occupancy === occupancy);
+      if (!r) return null;
+      tier = r.tier;
+      return { amountMinor: Number(r.amount_minor), bands: r.child_bands };
+    });
+    // ADR-103: supplements per guest with the same age bands as the fare, as the database prices them.
+    const supp = Number(first.supplement_minor ?? 0);
+    const extra =
+      priced.ok && supp > 0
+        ? linePrice(line, (occupancy) => {
+            const r = list.find((x) => x.occupancy === occupancy);
+            return r ? { amountMinor: supp, bands: r.child_bands } : null;
+          })
+        : null;
+    const supplementMinor = extra?.ok ? extra.priceMinor : 0;
     deps.get(first.departure_id)!.cabins.push({
       cabinTypeId: first.cabin_type_id,
       name: first.cabin_name,
@@ -98,7 +111,10 @@ export function groupSearch(rows: SearchRow[], guests: { adults: number; childAg
       mode: first.booking_mode,
       operatorOrgId: first.operator_org_id,
       currency: first.currency,
-      price: priced.ok ? { ok: true, totalMinor: priced.priceMinor, tier } : { ok: false, reason: priced.reason },
+      price: priced.ok
+        ? { ok: true, totalMinor: priced.priceMinor + supplementMinor, supplementMinor, tier }
+        : { ok: false, reason: priced.reason },
+      confirmedAt: first.confirmed_at,
     });
   }
   return [...deps.values()]

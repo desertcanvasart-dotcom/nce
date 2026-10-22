@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { availabilityLabel } from "@/lib/marketplace/vessel";
+import { availabilityLabel, availabilityUpdated } from "@/lib/marketplace/vessel";
 import { notFound } from "next/navigation";
 import { Button } from "@/components/ds/Button/Button";
 import { formatMoney } from "@/components/ds/lib/format";
@@ -115,7 +115,11 @@ export default async function PartnerSearch({
                     {c.price.ok ? (
                       <>
                         <strong>{money(c.price.totalMinor, c.currency)}</strong>{" "}
-                        <span className={ui.muted}>({TIER_LABEL[c.price.tier]})</span> ·{" "}
+                        <span className={ui.muted}>
+                          ({TIER_LABEL[c.price.tier]}
+                          {c.price.supplementMinor ? `, with ${money(c.price.supplementMinor, c.currency)} in supplements` : ""})
+                        </span>{" "}
+                        · {c.confirmedAt ? <span className={ui.muted}>{availabilityUpdated(c.confirmedAt)} · </span> : null}
                         <Link
                           href={`/dashboard/partner/${orgId}/reserve/?dep=${d.departureId}&cabin=${c.cabinTypeId}&cur=${c.currency}&adults=${adults}&children=${encodeURIComponent(q.children ?? "")}`}
                         >

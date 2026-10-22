@@ -95,6 +95,13 @@ export async function operatorContacts(orgId: string) {
   return data ?? [];
 }
 
+/** ADR-103: set when the operator's data was wrong in more than 20 % of answered requests that it showed as free. */
+export async function dataAccuracyLow(orgId: string) {
+  const db = await getDb();
+  const { data } = await db.from("operator_settings").select("data_accuracy_low").eq("org_id", orgId).maybeSingle();
+  return data?.data_accuracy_low ?? false;
+}
+
 export async function replySla(orgId: string) {
   const db = await getDb();
   const { data } = await db.from("operator_settings").select("reply_sla_hours").eq("org_id", orgId).maybeSingle();

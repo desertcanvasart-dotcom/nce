@@ -131,8 +131,15 @@ export function verifyRequestsTick(
   return timingSafeEqual(Buffer.from(requestsTickSignature(secret, timestamp), "hex"), Buffer.from(signatureHex, "hex"));
 }
 
-// ── Outbound webhooks (SEC-009; sent from Batch 4e) ────────────────────────────────────────────────────────
+// ── Outbound webhooks (SEC-009; sent since ADR-103) ────────────────────────────────────────────────────────
 // Signed the same way, with Nilecruz's own Ed25519 key; operators verify with our published public key.
+
+/** The public key (base64 of the 32 raw bytes) to publish for a private key (PEM). */
+export function webhookPublicKey(privateKeyPem: string): string {
+  const jwk = createPublicKey(createPrivateKey(privateKeyPem)).export({ format: "jwk" });
+  return Buffer.from(jwk.x!, "base64url").toString("base64");
+}
+
 export function webhookCanonical(timestamp: string, eventId: string, body: string): string {
   return ["nilecruz-webhook-v1", timestamp, eventId, sha256Hex(body)].join("\n");
 }

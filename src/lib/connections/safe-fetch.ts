@@ -174,6 +174,9 @@ export type FetchOptions = {
   policy?: FetchPolicy;
   resolve?: Resolver;
   headers?: Record<string, string>;
+  /** POST sends `body` (webhooks, ADR-103); GET by default. */
+  method?: "GET" | "POST";
+  body?: string;
 };
 export type Fetched = { url: string; status: number; contentType: string; body: string };
 
@@ -196,11 +199,12 @@ function once(
     const req = lib.request(
       target,
       {
-        method: "GET",
+        method: o.method ?? "GET",
         headers: {
           "User-Agent": "Nilecruz-FeedPuller/1.0",
           Accept: "application/json, application/xml, text/xml",
           "Accept-Encoding": "identity",
+          ...(o.body !== undefined ? { "Content-Length": String(Buffer.byteLength(o.body)) } : {}),
           ...o.headers,
         },
         // Test origins skip the address check (they are local by design) and may use the test CA.
@@ -261,7 +265,7 @@ function once(
       if (e.code === "ECONNREFUSED") return reject(new FetchProblem("network", "The feed server refused the connection."));
       reject(new FetchProblem("network", "The feed server could not be reached."));
     });
-    req.end();
+    req.end(o.body);
   });
 }
 
@@ -291,4 +295,19 @@ export async function safeFetch(raw: string, o: FetchOptions): Promise<Fetched> 
       );
     return { url: current, status: r.status, contentType: r.contentType, body: r.body };
   }
+}
+
+/**
+ * POST to an operator-supplied address (webhooks, ADR-103), with the same address checks on the connection. Redirects
+ * are not followed: a 3xx is returned like any other answer, and the caller treats it as not delivered.
+ */
+export async function safePost(
+  raw: string,
+  body: string,
+  o: Omit<FetchOptions, "method" | "body" | "maxRedirects">,
+): Promise<number> {
+  const problem = urlProblem(raw, o.policy);
+  if (problem) throw new FetchProblem("address", problem);
+  const r = await once(new URL(raw), { ...o, method: "POST", body }, Date.now() + o.timeoutMs);
+  return r.status;
 }

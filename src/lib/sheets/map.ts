@@ -5,7 +5,12 @@
  * flagged in the preview for an admin to map, and the mapping is saved as a new alias.
  */
 export type SheetRow = { ship: string; date: string; cabin: string; available: number };
-export type OperatorShip = { slug: string; name: string; cabinCount: number | null; cabins: { code: string; name: string }[] };
+export type OperatorShip = {
+  slug: string;
+  name: string;
+  cabinCount: number | null;
+  cabins: { code: string; name: string; cabinCount?: number | null }[];
+};
 export type Alias = { kind: "vessel" | "cabin"; sheet_name: string; target: string; vessel_slug: string | null };
 
 export type MappedRow =
@@ -91,11 +96,16 @@ export function autoConfirmProblems(input: {
   if (input.unmatched > 0)
     problems.push(`${input.unmatched} name${input.unmatched === 1 ? "" : "s"} not mapped by an existing alias.`);
   const total = new Map(input.ships.map((s) => [s.slug, s.cabinCount]));
+  // ADR-103: a cabin type's own count, where the operator gave one.
+  const ofType = new Map(input.ships.flatMap((s) => s.cabins.map((c) => [`${s.slug}/${c.code}`, c.cabinCount ?? null])));
   const perSailing = new Map<string, number>();
   for (const r of input.rows) {
     if ("unmapped" in r) continue;
     const max = total.get(r.vessel);
-    if (max && r.available > max)
+    const typeMax = ofType.get(`${r.vessel}/${r.cabin}`);
+    if (typeMax && r.available > typeMax)
+      problems.push(`${r.label} on ${r.date}: ${r.available} free is more than the ${typeMax} cabins of this type.`);
+    else if (max && r.available > max)
       problems.push(`${r.label} on ${r.date}: ${r.available} free is more than the ship's ${max} cabins.`);
     const k = `${r.vessel}/${r.date}`;
     perSailing.set(k, (perSailing.get(k) ?? 0) + r.available);

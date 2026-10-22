@@ -15,6 +15,7 @@ import { serverEnv } from "@/server/env";
 import { recordSkipped, sendEmail, sendWhatsAppTemplate, whatsappOn } from "@/server/messaging/send";
 import { emailsFor } from "@/server/teams/people";
 import { sendPendingNotices } from "@/server/messaging/notices";
+import { sendDueWebhooks } from "@/server/connections/webhooks";
 
 /**
  * ADR-099: sending booking requests to operators and chasing answers. Runs with the admin client: it acts for no
@@ -188,7 +189,9 @@ export async function runTick({ digest = false }: { digest?: boolean } = {}) {
   const digests = digest ? await sendDigests() : 0;
   // ADR-101: the emails behind dashboard notices go out on the same tick.
   const notices = await sendPendingNotices();
-  return { reminded, escalated, digests, notices };
+  // ADR-103: and the webhooks queued for operators' systems.
+  const webhooks = await sendDueWebhooks();
+  return { reminded, escalated, digests, notices, webhooks };
 }
 
 /** 09:00 Cairo, per operator with something open: waiting requests and holds ending today. */
@@ -201,13 +204,26 @@ export async function sendDigests(now = new Date()): Promise<number> {
       "id, org_id, reference, status, hold_until, operator:organisations!booking_requests_org_id_fkey(display_name), vessel:vessels(name), departure:departures(departs_on)",
     )
     .in("status", ["waiting", "held"]);
+  // ADR-103: holds Nilecruz placed that end today (the operator's own answers are the requests above).
+  const { data: ours } = await db
+    .from("holds")
+    .select(
+      "org_id, cabins, expires_at, operator:organisations(display_name), vessel:vessels(name), cabin:cabin_types(name), departure:departures(departs_on)",
+    )
+    .eq("status", "active")
+    .is("booking_request_id", null);
+  const endingToday = (ours ?? []).filter(
+    (h) => new Date(h.expires_at).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" }) === today,
+  );
   const byOrg = new Map<string, NonNullable<typeof open>>();
   for (const r of open ?? []) byOrg.set(r.org_id, [...(byOrg.get(r.org_id) ?? []), r]);
+  for (const h of endingToday) if (!byOrg.has(h.org_id)) byOrg.set(h.org_id, []);
   let sent = 0;
   for (const [orgId, rows] of byOrg) {
     const link = (id: string) => `${siteUrl}/dashboard/operator/${orgId}/requests/booking/${id}/`;
+    const mine = endingToday.filter((h) => h.org_id === orgId);
     const mail = digestEmail(
-      rows[0]!.operator?.display_name ?? "Operator",
+      rows[0]?.operator?.display_name ?? mine[0]?.operator?.display_name ?? "Operator",
       rows
         .filter((r) => r.status === "waiting")
         .map((r) => ({
@@ -224,6 +240,14 @@ export async function sendDigests(now = new Date()): Promise<number> {
             new Date(r.hold_until).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" }) === today,
         )
         .map((r) => ({ reference: r.reference, vessel: r.vessel?.name ?? "", holdUntil: r.hold_until!, link: link(r.id) })),
+      mine.map((h) => ({
+        vessel: h.vessel?.name ?? "",
+        cabin: h.cabin?.name ?? "",
+        departsOn: h.departure?.departs_on ?? today,
+        cabins: h.cabins,
+        holdUntil: h.expires_at,
+      })),
+      `${siteUrl}/dashboard/operator/${orgId}/#holds`,
     );
     if (!mail) continue;
     for (const p of await recipients(orgId))

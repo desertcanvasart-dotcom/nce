@@ -371,10 +371,12 @@ export async function DeparturePage({
     .eq("schedule_id", scheduleId)
     .maybeSingle();
   if (!d) notFound();
-  const [cabins, partners, withSightseeing] = await Promise.all([
+  const [cabins, partners, withSightseeing, { data: counts }] = await Promise.all([
     cabinTypes(vesselId),
     approvedPartners(),
     sightseeingRatesFor(departureId),
+    // ADR-103: free / held / booked, and what decides how it sells.
+    db.rpc("sailing_inventory", { dep: departureId }),
   ]);
   const partnerName = (id: string) => partners.find((x) => x.id === id)?.display_name ?? "A travel partner";
   return (
@@ -387,13 +389,18 @@ export async function DeparturePage({
       </h1>
       {cabins.map((c) => {
         const inv = d.inventory.find((i) => i.cabin_type_id === c.id);
+        const n = counts?.find((x) => x.cabin_type_id === c.id);
         const rates = d.rates.filter((r) => r.cabin_type_id === c.id);
         return (
           <Section key={c.id} title={`${c.name} (${c.deck})`} id={`c-${c.id}`}>
             <p>
               {inv ? (
                 <>
-                  {inv.available} cabins available · confirmed <CairoTime value={inv.confirmed_at} /> ({inv.source})
+                  {inv.available} free · {n?.held ?? 0} held · {n?.booked ?? 0} booked
+                  {c.cabin_count ? ` (of ${c.cabin_count})` : ""} · confirmed <CairoTime value={inv.confirmed_at} /> ({inv.source}
+                  ){n?.allotment_left ? ` · ${n.allotment_left} left in the Nilecruz allotment` : ""}
+                  {n?.stop_sale ? " · stop-sale" : ""}
+                  {n?.freesale ? " · freesale" : ""}
                 </>
               ) : (
                 <span className={ui.muted}>No availability entered.</span>

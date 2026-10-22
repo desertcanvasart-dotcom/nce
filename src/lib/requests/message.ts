@@ -131,13 +131,22 @@ export function escalationEmail(s: RequestSummary, slaHours: number, adminLink: 
   };
 }
 
-/** 09:00 Cairo: what's open and which holds end today. Nothing when both are empty. */
+export type NilecruzHold = { vessel: string; cabin: string; departsOn: string; cabins: number; holdUntil: string };
+const cairoTime = (iso: string) =>
+  new Date(iso).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Cairo" });
+
+/**
+ * 09:00 Cairo: what's open and which holds end today, the operator's own answers and (ADR-103) cabins Nilecruz is
+ * holding. Nothing when all are empty.
+ */
 export function digestEmail(
   operator: string,
   open: { reference: string; vessel: string; departsOn: string; link: string }[],
   holdsEnding: { reference: string; vessel: string; holdUntil: string; link: string }[],
+  nilecruzHolds: NilecruzHold[] = [],
+  holdsLink = "",
 ): Email | null {
-  if (!open.length && !holdsEnding.length) return null;
+  if (!open.length && !holdsEnding.length && !nilecruzHolds.length) return null;
   const lines = [
     `Good morning, ${operator}.`,
     "",
@@ -152,14 +161,25 @@ export function digestEmail(
       ? [
           `Holds ending today (${holdsEnding.length}): confirm or let them go.`,
           ...holdsEnding.map(
-            (h) =>
-              `- ${h.reference} · ${h.vessel} · until ${day(h.holdUntil)} ${new Date(h.holdUntil).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Africa/Cairo" })} Cairo: ${h.link}`,
+            (h) => `- ${h.reference} · ${h.vessel} · until ${day(h.holdUntil)} ${cairoTime(h.holdUntil)} Cairo: ${h.link}`,
           ),
+          "",
+        ]
+      : []),
+    ...(nilecruzHolds.length
+      ? [
+          `Cabins Nilecruz is holding, ending today (${nilecruzHolds.length}): unless booked, they go back to your availability.`,
+          ...nilecruzHolds.map(
+            (h) =>
+              `- ${h.vessel} · ${h.cabin} · ${date(h.departsOn)} · ${h.cabins} ${h.cabins === 1 ? "cabin" : "cabins"} · until ${cairoTime(h.holdUntil)} Cairo`,
+          ),
+          ...(holdsLink ? [`All holds: ${holdsLink}`] : []),
         ]
       : []),
   ];
+  const ending = holdsEnding.length + nilecruzHolds.length;
   return {
-    subject: `Nilecruz today: ${open.length} waiting, ${holdsEnding.length} holds ending`,
+    subject: `Nilecruz today: ${open.length} waiting, ${ending} holds ending`,
     text: lines.join("\n"),
     html: lines.map((l) => (l ? `<p style="margin:0 0 6px">${esc(l)}</p>` : "<br>")).join("\n"),
   };

@@ -17,6 +17,8 @@ import { operatorContacts, orgBookingRequests, replySla, replyStats, REQUEST_STA
 import { setReplySla } from "../../../_requests/actions";
 import { setSheetSettings } from "../../sheets/actions";
 import { Allotments } from "../../../_allotments/Allotments";
+import { Freesales, Holds, Webhook } from "../../../_sales/Sales";
+import { freesaleHours } from "@/server/product/queries";
 import { Checkboxes } from "@/components/dashboard/ui";
 import { Contacts, ReplyStats } from "../../../_requests/Bits";
 
@@ -53,7 +55,7 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
   const open = booking.filter((b) => b.status === "waiting" || b.status === "held");
   const { data: sheetSettings } = await db
     .from("operator_settings")
-    .select("clean_imports, sheet_auto_confirm, sheet_ack")
+    .select("clean_imports, sheet_auto_confirm, sheet_ack, data_accuracy_low")
     .eq("org_id", orgId)
     .maybeSingle();
   const { feed } = connections;
@@ -285,7 +287,10 @@ export default async function OperatorPage({ params }: { params: Promise<{ orgId
         ) : null}
       </Section>
       <Allotments orgId={orgId} canEdit={canEdit} />
-      <ReplyStats stats={stats} slaHours={sla} />
+      <Freesales orgId={orgId} canEdit={canEdit} hours={await freesaleHours()} />
+      <Holds orgId={orgId} canEdit={canEdit} />
+      <ReplyStats stats={stats} slaHours={sla} accuracyLow={sheetSettings?.data_accuracy_low ?? false} />
+      <Webhook orgId={orgId} admin canEdit={canEdit} />
       <Contacts orgId={orgId} contacts={contacts} canEdit={canEdit} admin />
       <Section title="Vacancy sheets" id="sheets">
         <p className={ui.muted}>

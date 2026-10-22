@@ -804,3 +804,28 @@ Faris: "apply the new rule for travel agents as well; add the allotments functio
   - cancelling one part without the other;
   - sailings whose itinerary has no Nilecruz programme yet (show cruise only).
 - **Status:** 8-3a built 21 Oct 2026: approval, prices with sightseeing, what's included, bookable programme prices. 8-3b (the two prices for travellers, booking both parts) is next.
+
+### ADR-103 Closing seven gaps against the vessel onboarding spec (Accepted; Faris 22 Oct 2026)
+Faris asked for seven items the compliance review against "Nile Cruise Vessel Onboarding — Build Spec" (20 Oct 2026) found missing, and answered four choices the same day, all as recommended (`docs/briefs/VESSEL-SPEC-GAPS.md`).
+- **Context:** the spec places this machinery in a standalone vessel system. That system and Vessel Desk are still not built; everything here lives in nilecrz, on the existing tables.
+- **Decisions:**
+  - **Cabins per cabin type** (`cabin_types.cabin_count`), optional; checks fall back to the ship's total.
+  - **Freesale:** an admin-entered agreement per ship (or one cabin type) and range of departures. Manual, paste or sheet data no older than 72 hours (`platform_settings.freesale_hours`) then books instantly.
+  - **Stop-sale:** set by the operator's owners or reservations staff, or catalogue admins. Those cabins show sold out and can't be booked or requested. Feeds, the API and sheets don't lift it. **Allotment cabins stay open** (Faris: the contract holds until release). Lifting keeps the row.
+  - **Holds:** their own records. An operator's "Hold 72h" answer writes one (mirrored from `booking_requests`, which is unchanged). Catalogue admins place holds (1–168 hours), extend any active hold and release their own. **Travel partners don't place holds** (Faris).
+  - **Supplements:** kinds `gala_dinner` and `peak`, per guest per currency over the nights they cover. **Compulsory and in the cruise total** (Faris), so payment, commission and cancellation follow it. Children pay the same share as of the fare. No `single` kind: single-occupancy rates already exist. Offers stay priced by hand.
+  - **Webhooks: operators only** (Faris). One https address per operator. Events `inventory.changed` (not echoed for the operator's own feed or API changes; merged while waiting), `hold.expired` and `booking.confirmed` (no guests' names).
+    - Signed with Nilecruz's Ed25519 key (`WEBHOOK_SIGNING_KEY`), whose public key shows on the format page.
+    - Sent by the existing scheduler tick through the SSRF-safe fetch, retried for 24 hours.
+  - **Accuracy rung:** an operator whose data was wrong in more than 20 % of at least 5 answered requests it showed as free (90 days) has its manual and sheet availability shown as "to be confirmed". Refreshed on every answer and nightly.
+  - **"Availability updated …"** on each sailing of the reserve page and the partner search.
+- **Decided while building:**
+  - A webhook that answers a redirect isn't followed; it counts as not delivered.
+  - Without `WEBHOOK_SIGNING_KEY`, deliveries are recorded as failed attempts and give up after 24 hours; nothing unsigned is sent.
+  - The "from" price on cards doesn't include supplements: they are dated, and most sailings have none.
+  - Admin holds are placed from the operator's page by ship, cabin type and date; a ship with two sailings on one date is refused there.
+  - **Counts under a freesale:** freesale data books instantly, but a number of free cabins is still shown only from an allotment or live data (`app.shown_left`), never from a sheet or the dashboard, as ADR-099 and the spec require.
+  - **Holds for the whole team:** the operator's Overview lists active holds and shows free / held / booked per sailing, with stop-sales marked. Notices about a Nilecruz hold link there, because Inventory connections is for owners only.
+  - **The 09:00 digest** also lists holds Nilecruz placed that end that day.
+  - **The public operators page keeps six ways:** freesale sits with allotments.
+- **Not built:** the standalone vessel system and Vessel Desk; an append-only inventory history; webhooks for travel partners; converting an admin hold into a booking.
