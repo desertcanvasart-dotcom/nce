@@ -653,16 +653,16 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 
 | ID | Source | Requirement | Batch | Status | Evidence |
 |---|---|---|---|---|---|
-| EXP-001 | CLAUDE.md §7; EXPERIENCE.md | Live price build-up linked from every price: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
+| EXP-001 | CLAUDE.md §7; EXPERIENCE.md | Live price build-up linked from every price: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Verified | Batch 9-1: `PriceWhy` on cards and vessel pages, from facts (`price-why.ts`); `interactions.spec.ts`, `interactions.test.ts` |
 | EXP-002 | CLAUDE.md §7; EXPERIENCE.md | Vessel cutaway: who shares what, deck by deck: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
 | EXP-003 | CLAUDE.md §7; EXPERIENCE.md | Scroll-driven voyage Luxor → Aswan: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-004 | CLAUDE.md §7; EXPERIENCE.md | Compare tray that builds a side-by-side: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
+| EXP-004 | CLAUDE.md §7; EXPERIENCE.md | Compare tray that builds a side-by-side: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Verified | Batch 9-1: `CompareTray` on listings and vessel pages, kept in the browser; `interactions.spec.ts`, `marketplace.spec.ts` |
 | EXP-005 | CLAUDE.md §7; EXPERIENCE.md | Mooring explainer: rafted six abreast vs private bank: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-006 | CLAUDE.md §7; EXPERIENCE.md | Season & deadline calendar: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-007 | CLAUDE.md §7; EXPERIENCE.md | View Transitions card → vessel page: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-008 | CLAUDE.md §7; EXPERIENCE.md | Day/night theme following Egypt time: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-009 | CLAUDE.md §7; EXPERIENCE.md | Evaluation radar that unfolds per dimension: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
-| EXP-010 | CLAUDE.md §7; EXPERIENCE.md | Ambient river sound (off by default): built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned |  |
+| EXP-006 | CLAUDE.md §7; EXPERIENCE.md | Season & deadline calendar: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Verified | Batch 9-1: `SeasonCalendar` on When to go, from `paymentDeadline`; `interactions.spec.ts`, `interactions.test.ts` |
+| EXP-007 | CLAUDE.md §7; EXPERIENCE.md | View Transitions card → vessel page: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Planned | Approved 21 Oct 2026; not in 9-1: Next.js 16 has no stable switch for cross-page view transitions yet. Revisit in 9-2. |
+| EXP-008 | CLAUDE.md §7; EXPERIENCE.md | Day/night theme following Egypt time: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Deferred (skipped in the Batch 9 brief; Faris approved 21 Oct 2026) | |
+| EXP-009 | CLAUDE.md §7; EXPERIENCE.md | Evaluation radar that unfolds per dimension: built to its EXPERIENCE.md spec if Faris approves it. | 9 | Verified | Batch 9-1: `EvaluationRadar` on vessel pages; `marketplace-vessel.spec.ts`, `interactions.test.ts` |
+| EXP-010 | CLAUDE.md §7; EXPERIENCE.md | Ambient river sound (off by default): built to its EXPERIENCE.md spec if Faris approves it. | 9 | Deferred (skipped in the Batch 9 brief; Faris approved 21 Oct 2026) | |
 
 ## Proposed scope (not scheduled: needs Faris's approval)
 

@@ -1,0 +1,68 @@
+.radar {
+  margin: 0 0 var(--space-4);
+  max-width: 480px;
+}
+
+.radar svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.ring {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.spoke {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.axis {
+  fill: var(--ink-muted);
+  font-size: var(--type-micro-size);
+}
+
+.shape {
+  fill: var(--accent-soft);
+  fill-opacity: 0.7;
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.dot {
+  fill: var(--accent);
+}
+
+.caption {
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+/* Unfolds from the centre as it scrolls into view (where supported), or once on load. */
+@media (prefers-reduced-motion: no-preference) {
+  .unfold {
+    animation: unfold var(--dur-3) var(--ease-river) both;
+  }
+
+  @supports (animation-timeline: view()) {
+    .unfold {
+      animation-timeline: view();
+      animation-range: entry 10% cover 35%;
+    }
+  }
+}
+
+@keyframes unfold {
+  from {
+    transform: scale(0.05);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

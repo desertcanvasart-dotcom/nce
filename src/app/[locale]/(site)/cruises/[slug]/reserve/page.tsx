@@ -27,6 +27,8 @@ import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { requireUser } from "@/server/auth";
 import { policyFor } from "@/server/bookings/queries";
+import { premiumPeriods } from "@/server/payments/queries";
+import { paymentDeadline } from "@/lib/payments/deadlines";
 import { getDb } from "@/server/db";
 import { publicVessel } from "@/server/marketplace/queries";
 import { customerRequestBooking, customerReserve } from "./actions";
@@ -121,6 +123,8 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
     if (row) programme = { name: row.tour_name, total: Number(row.total_minor), currency: row.currency };
   }
   const policy = chosen ? await policyFor(chosen.departureId) : null;
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+  const periods = await premiumPeriods();
   // ADR-099: how long the operator usually takes to confirm a booking request.
   const { data: owner } = await db.from("vessels").select("operator_org_id").eq("id", v.id).maybeSingle();
   const { data: hours } = owner?.operator_org_id
@@ -241,7 +245,9 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   {prices.length ? (
                     <span>
                       from {formatMoney({ amount: Math.min(...prices), currency: first.currency }, locale)} per person, two
-                      sharing · {instant ? "instant confirmation" : `confirmed within ${confirmHours} h`}
+                      sharing · {instant ? "instant confirmation" : `confirmed within ${confirmHours} h`} · pay in full by{" "}
+                      {/* EXP-006: the deadline if booked today, by the same rules as the reservation (ADR-027). */}
+                      {formatDay(paymentDeadline(today, first.departsOn, periods).dueOn, locale)}
                     </span>
                   ) : (
                     <span className={styles.note}>{d.some((r) => r.mode === "sold_out") ? "sold out" : "to be confirmed"}</span>

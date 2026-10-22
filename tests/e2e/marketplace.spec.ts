@@ -123,7 +123,7 @@ test("a search narrows the hub to real departures and stays out of the index [DA
 test("ticking two vessels compares them side by side [DASH-PUB-004]", async ({ page }) => {
   await page.goto("/cruises/");
   await card(page, NAME).getByLabel("Compare").check();
-  await expect(page.getByText("Tick one more vessel to compare.")).toBeVisible();
+  await expect(page.getByText("Add one more vessel to compare.")).toBeVisible();
   await card(page, "Sample Motor Ship One").getByLabel("Compare").check();
   await page.getByRole("link", { name: "Compare 2 vessels" }).click();
   await page.waitForURL(/\/cruises\/compare\/\?v=/);

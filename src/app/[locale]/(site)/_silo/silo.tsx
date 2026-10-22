@@ -30,6 +30,9 @@ import { editorialPage, vesselTypeStats } from "@/server/content/pages";
 import { publicTours } from "@/server/content/tours";
 import { ContactForm } from "../contact/ContactForm";
 import { PlanForm } from "@/components/plan/PlanForm";
+import { SeasonCalendar } from "@/components/calendar/SeasonCalendar";
+import { RULE_WORDS } from "@/lib/payments/deadlines";
+import { publicPremiumPeriods } from "@/server/content/premium";
 import { publicListing } from "@/server/marketplace/queries";
 
 /**
@@ -174,6 +177,20 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       <div className={styles.scene}>
         <Scene time="day" vessel="motor" temple label="A Nile cruise ship passing a temple in the midday sun" />
       </div>
+    );
+    // EXP-006: the seasons and the payment deadline you'd face, from the same rules as booking.
+    extra = (
+      <>
+        <SeasonCalendar
+          today={new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" })}
+          periods={await publicPremiumPeriods()}
+        />
+        <ul className={styles.rules}>
+          {Object.values(RULE_WORDS).map((w) => (
+            <li key={w}>{w.replace(/^./, (c) => c.toUpperCase())}, and always before departure.</li>
+          ))}
+        </ul>
+      </>
     );
   } else if (url === "/nile-cruise-guide/" || url === "/nile-cruise-guide/planning/how-many-nights/") {
     lead = compare;
