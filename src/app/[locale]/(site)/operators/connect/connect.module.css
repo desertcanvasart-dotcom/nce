@@ -77,7 +77,9 @@
 }
 
 .figure img {
-  width: 100%;
+  /* Each screenshot at its own size, never wider than the column (a small one isn't stretched). */
+  width: auto;
+  max-width: 100%;
   height: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);

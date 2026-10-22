@@ -39,6 +39,12 @@ async function shoot(page: Page, name: string, theme: "light" | "dark") {
     await page.setViewportSize({ width, height: 900 });
     await page.waitForTimeout(300);
     await page.evaluate(() => document.fonts.ready);
+    // A full-page capture doesn't scroll, so lazy images would stay blank: load them first.
+    await page.evaluate(async () => {
+      const imgs = [...document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]')];
+      imgs.forEach((i) => (i.loading = "eager"));
+      await Promise.race([Promise.all(imgs.map((i) => i.decode().catch(() => null))), new Promise((r) => setTimeout(r, 5000))]);
+    });
     await page.screenshot({ path: `${outDir}/${name}-${width}-${theme === "light" ? "day" : "night"}.png`, fullPage: true });
   }
 }
@@ -71,6 +77,14 @@ async function main() {
         await page.goto(base + route, { waitUntil: "load" });
         await page.waitForTimeout(400);
         await page.evaluate(() => document.fonts.ready);
+        await page.evaluate(async () => {
+          const imgs = [...document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]')];
+          imgs.forEach((i) => (i.loading = "eager"));
+          await Promise.race([
+            Promise.all(imgs.map((i) => i.decode().catch(() => null))),
+            new Promise((r) => setTimeout(r, 5000)),
+          ]);
+        });
         const file = `${outDir}/${slug(route)}-${width}-${theme === "light" ? "day" : "night"}.png`;
         await page.screenshot({ path: file, fullPage: true });
         count++;
