@@ -13,6 +13,8 @@ const nextConfig: NextConfig = {
   trailingSlash: true, // SEO-001
   turbopack: { root: process.cwd() },
   poweredByHeader: false,
+  // ENG-014: errors are tagged with the release, the commit Railway deploys.
+  env: { NEXT_PUBLIC_RELEASE: process.env.RAILWAY_GIT_COMMIT_SHA?.slice(0, 12) || "local" },
   images: {
     // An object, not a URL: a URL pattern would demand an empty query, and signed links carry their token there.
     remotePatterns: supabase
@@ -43,7 +45,12 @@ const nextConfig: NextConfig = {
   async headers() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";
     const https = siteUrl.startsWith("https://") || (!!siteUrl && !/^https?:\/\//.test(siteUrl));
-    const headers = securityHeaders({ dev, https, supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL });
+    const headers = securityHeaders({
+      dev,
+      https,
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      sentryDsn: process.env.NEXT_PUBLIC_SENTRY_DSN?.trim() || undefined,
+    });
     if (!allowIndexing) headers.push({ key: "X-Robots-Tag", value: "noindex, nofollow" });
     return [{ source: "/:path*", headers }];
   },

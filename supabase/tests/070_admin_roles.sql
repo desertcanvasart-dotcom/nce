@@ -10,8 +10,10 @@ end $$;
 
 -- Catalogue admin (two-step) cannot raise a customer to admin.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000002', 'aal2');
-select throws_ok($$update public.profiles set platform_role = 'admin', admin_role = 'finance'
-  where id = '00000000-0000-4000-a000-000000000040'$$, '42501', null, 'catalogue admin cannot change roles');
+-- Since Batch 11 (SEC-011) only super admins write other people's profiles, so the row is out of reach.
+update public.profiles set platform_role = 'admin', admin_role = 'finance' where id = '00000000-0000-4000-a000-000000000040';
+select is((select platform_role::text from public.profiles where id = '00000000-0000-4000-a000-000000000040'), 'customer',
+  'catalogue admin cannot change roles');
 
 -- Super admin without two-step: the row is not even visible to change.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000001', 'aal1');

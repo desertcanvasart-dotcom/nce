@@ -19,6 +19,10 @@ concurrency:
   group: deploy-data
   cancel-in-progress: false
 
+# SEC-011 (Batch 11): the workflow token can only read the repository.
+permissions:
+  contents: read
+
 jobs:
   migrations:
     name: Apply migrations to staging

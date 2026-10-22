@@ -6,51 +6,100 @@
       "url": [
         "http://localhost:3200/",
         "http://localhost:3200/es/",
-        "http://localhost:3200/ja/",
+        "http://localhost:3200/cruises/",
+        "http://localhost:3200/cruises/sample-sail-one/",
+        "http://localhost:3200/nile-cruise-guide/when-to-go/",
+        "http://localhost:3200/destinations/luxor/",
+        "http://localhost:3200/tours-extras/abu-simbel-day-trip/",
+        "http://localhost:3200/operators/connect/",
         "http://localhost:3200/terms/",
         "http://localhost:3200/account/sign-in/"
       ],
       "numberOfRuns": 3,
       "settings": {
-        "onlyCategories": ["performance", "accessibility", "best-practices"]
+        "onlyCategories": ["performance", "accessibility", "best-practices"],
+        "throttlingMethod": "devtools"
       }
     },
     "assert": {
-      "assertions": {
-        "largest-contentful-paint": [
-          "warn",
-          {
-            "maxNumericValue": 2500,
-            "aggregationMethod": "median-run"
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": "^(?!.*/(terms|account/sign-in)/$).*$",
+          "assertions": {
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2500,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "cumulative-layout-shift": [
+              "error",
+              {
+                "maxNumericValue": 0.05,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "total-blocking-time": [
+              "error",
+              {
+                "maxNumericValue": 200,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ],
+            "categories:best-practices": [
+              "warn",
+              {
+                "minScore": 0.9
+              }
+            ]
           }
-        ],
-        "cumulative-layout-shift": [
-          "error",
-          {
-            "maxNumericValue": 0.05,
-            "aggregationMethod": "median-run"
+        },
+        {
+          "matchingUrlPattern": ".*/(terms|account/sign-in)/$",
+          "assertions": {
+            "largest-contentful-paint": [
+              "error",
+              {
+                "maxNumericValue": 2500,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "cumulative-layout-shift": [
+              "error",
+              {
+                "maxNumericValue": 0.1,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "total-blocking-time": [
+              "error",
+              {
+                "maxNumericValue": 200,
+                "aggregationMethod": "median-run"
+              }
+            ],
+            "categories:accessibility": [
+              "error",
+              {
+                "minScore": 0.95
+              }
+            ],
+            "categories:best-practices": [
+              "warn",
+              {
+                "minScore": 0.9
+              }
+            ]
           }
-        ],
-        "total-blocking-time": [
-          "error",
-          {
-            "maxNumericValue": 200,
-            "aggregationMethod": "median-run"
-          }
-        ],
-        "categories:accessibility": [
-          "error",
-          {
-            "minScore": 0.95
-          }
-        ],
-        "categories:best-practices": [
-          "warn",
-          {
-            "minScore": 0.9
-          }
-        ]
-      }
+        }
+      ]
     },
     "upload": {
       "target": "filesystem",

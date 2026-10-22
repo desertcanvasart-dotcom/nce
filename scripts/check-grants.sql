@@ -20,14 +20,14 @@ with intended(table_name, grantee, privileges) as (
     ('cruise_requests', 'authenticated', 'INSERT,SELECT,UPDATE'), ('offers', 'authenticated', 'SELECT'),
     ('offer_cabins', 'authenticated', 'SELECT'), ('reservations', 'authenticated', 'SELECT'),
     ('reservation_cabins', 'authenticated', 'SELECT'), ('passengers', 'authenticated', 'SELECT'),
-    ('eligibility_proofs', 'authenticated', 'INSERT,SELECT'), ('notifications', 'authenticated', 'SELECT,UPDATE'),
+    ('eligibility_proofs', 'authenticated', 'INSERT,SELECT'), ('notifications', 'authenticated', 'SELECT'),
     -- Batch 4f: money is read by people and written only through functions (ADR-089).
     ('payments', 'authenticated', 'SELECT'), ('commission_entries', 'authenticated', 'SELECT'), ('payouts', 'authenticated', 'SELECT'),
     -- Batch 4f-2: cancellations, refunds and tour orders likewise.
     ('cancellation_requests', 'authenticated', 'SELECT'), ('refunds', 'authenticated', 'SELECT'),
     ('tour_orders', 'authenticated', 'SELECT'), ('tour_payments', 'authenticated', 'SELECT'), ('tour_refunds', 'authenticated', 'SELECT'),
     -- Batch 4h-2: the agency's client reference and selling total; read by the agency, edited by its owner and reservations users.
-    ('partner_booking_details', 'authenticated', 'SELECT,UPDATE'),
+    ('partner_booking_details', 'authenticated', 'SELECT'),
     -- Batch 7-1: Contact messages: anyone sends; admins read and file them (filing is a column grant, not listed here).
     ('contact_messages', 'anon', 'INSERT'), ('contact_messages', 'authenticated', 'INSERT,SELECT'),
     -- Batch 7-2: tour rates and seasons are public (prices, ADR-087); closed starts are read by the office and admins.
@@ -44,10 +44,12 @@ with intended(table_name, grantee, privileges) as (
     -- Batch 8-2a: rate-limit counters and reminder marks are written by the server only.
     ('rate_limit_hits', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('reservation_reminders', 'service_role', 'INSERT,SELECT'),
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
-    ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
+    ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Batch 11 (SEC-011): users update only some columns of these (column grants, not listed here).
+    ('memberships', 'authenticated', 'DELETE,INSERT,SELECT'), ('memberships', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
-  from unnest(array['profiles', 'organisations', 'memberships', 'vessels', 'vessel_private', 'vessel_translations',
+  from unnest(array['profiles', 'organisations', 'vessels', 'vessel_private', 'vessel_translations',
                     'destinations', 'destination_translations', 'media', 'media_translations',
                     'evaluations', 'evaluation_translations', 'external_ratings', 'safety_observations',
                     'org_invitations', 'vessel_submissions', 'vessel_import_batches',

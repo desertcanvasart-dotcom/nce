@@ -18,6 +18,10 @@ export const LIMITS = {
   contact: { max: 5, window: 60 * 60 },
   request: { max: 10, window: 60 * 60 },
   "booking-request": { max: 10, window: 60 * 60 },
+  // SEC-011 (Batch 11): per account.
+  reserve: { max: 10, window: 60 * 60 },
+  "two-step": { max: 10, window: 15 * 60 },
+  "password-check": { max: 10, window: 15 * 60 },
   "operator-reply": { max: 30, window: 15 * 60 },
   mcp: { max: 120, window: 60 },
 } as const;

@@ -101,6 +101,11 @@ describe("auto-confirm only when every check passes", () => {
   });
   it("stops on each problem", () => {
     expect(autoConfirmProblems({ ...base, operatorKnown: false })).toHaveLength(1);
+    // SEC-011: an emailed sheet never confirms itself; WhatsApp and uploads still can.
+    expect(autoConfirmProblems({ ...base, channel: "email" })).toEqual([
+      "Emailed sheets are confirmed by an admin: an email's sender can be forged.",
+    ]);
+    expect(autoConfirmProblems({ ...base, channel: "whatsapp" })).toEqual([]);
     expect(autoConfirmProblems({ ...base, unmatched: 2 })[0]).toBe("2 names not mapped by an existing alias.");
     expect(autoConfirmProblems({ ...base, changedShare: 0.3 })[0]).toBe("The sheet changes 30 % of sailings (30 % or more).");
     expect(autoConfirmProblems({ ...base, sheetDate: null })[0]).toBe("The sheet has no date.");

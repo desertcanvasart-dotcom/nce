@@ -25,8 +25,10 @@ export async function handleMcpPost(request: Request): Promise<Response> {
   const limit = await rateLimit("mcp");
   if (!limit.ok)
     return rpcError(-32000, "Too many requests. Try again shortly.", 429, { "Retry-After": String(limit.retryAfter) });
+  // SEC-011: refuse by the declared size before reading, and count bytes, not characters.
+  if (Number(request.headers.get("content-length") ?? 0) > MAX_BODY) return rpcError(-32600, "Request too large", 413);
   const text = await request.text();
-  if (text.length > MAX_BODY) return rpcError(-32600, "Request too large", 413);
+  if (Buffer.byteLength(text) > MAX_BODY) return rpcError(-32600, "Request too large", 413);
   let body: unknown;
   try {
     body = JSON.parse(text);

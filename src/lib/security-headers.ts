@@ -4,8 +4,19 @@
  * dynamically and defeat static caching (PERF-010). The only inline script is the theme
  * bootstrap. Revisited in the Batch 11 security review (ADR-034).
  */
-export function securityHeaders({ dev, https, supabaseUrl }: { dev: boolean; https: boolean; supabaseUrl?: string }) {
-  const connect = ["'self'", supabaseUrl].filter(Boolean).join(" ");
+export function securityHeaders({
+  dev,
+  https,
+  supabaseUrl,
+  sentryDsn,
+}: {
+  dev: boolean;
+  https: boolean;
+  supabaseUrl?: string;
+  /** ENG-014: the browser reports errors to Sentry's ingest host, allowed only when a DSN is set. */
+  sentryDsn?: string;
+}) {
+  const connect = ["'self'", supabaseUrl, sentryDsn ? new URL(sentryDsn).origin : undefined].filter(Boolean).join(" ");
   const csp = [
     "default-src 'self'",
     `script-src 'self' 'unsafe-inline'${dev ? " 'unsafe-eval'" : ""}`,

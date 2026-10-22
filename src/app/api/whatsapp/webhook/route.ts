@@ -1,3 +1,4 @@
+import { createHash, timingSafeEqual } from "node:crypto";
 import { serverEnv } from "@/server/env";
 import { handleWhatsApp, validMetaSignature } from "@/server/messaging/whatsapp-inbound";
 
@@ -7,10 +8,14 @@ import { handleWhatsApp, validMetaSignature } from "@/server/messaging/whatsapp-
  */
 export const dynamic = "force-dynamic";
 
+/** Constant-time comparison (SEC-011): hashing first makes both sides the same length. */
+const sameSecret = (given: string | null, want: string) =>
+  !!given && timingSafeEqual(createHash("sha256").update(given).digest(), createHash("sha256").update(want).digest());
+
 export function GET(request: Request) {
   const u = new URL(request.url);
   const token = serverEnv.WHATSAPP_VERIFY_TOKEN;
-  if (token && u.searchParams.get("hub.mode") === "subscribe" && u.searchParams.get("hub.verify_token") === token)
+  if (token && u.searchParams.get("hub.mode") === "subscribe" && sameSecret(u.searchParams.get("hub.verify_token"), token))
     return new Response(u.searchParams.get("hub.challenge") ?? "", { status: 200 });
   return new Response("Forbidden", { status: 403 });
 }
