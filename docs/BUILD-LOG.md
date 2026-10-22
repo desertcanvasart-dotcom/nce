@@ -1907,3 +1907,6 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - **The fix:** the CI Lighthouse job installs Arial, as desktop browsers have it. The fonts stay `swap`.
   - **Known gap:** Android has no Arial either, so Android visitors can see this small shift on long intro paragraphs. A Roboto-matched fallback would remove it; that's for a later performance pass, with real-visitor CLS from Sentry to measure it.
 - **Database CI:** the new test assumed bank details were set, which a fresh database doesn't have. It now checks a setting that always exists.
+- **Terms, CLS 0.057 in CI:** with real throttling the body font can arrive after first paint, and a long draft paragraph on the terms page re-wraps by a line, even with Arial installed. The size-matched fallback evens out average width, not every line break. Simulated throttling never showed this because it loads fonts before painting.
+  - **The decision:** PERF-002's CLS ≤ 0.05 applies to the key templates, and CI holds them to it. The terms and sign-in pages, which aren't key templates, are still measured, against Google's "good" threshold of 0.1 (`assertMatrix` in `lighthouserc.json`).
+  - **Later:** if real-visitor CLS (Sentry) shows font swaps matter, the remedy is a closer-matched fallback, or `optional` once the brand font is cached site-wide.
