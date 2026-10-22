@@ -2,7 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@/components/ds/Badge/Badge";
 import { ActionForm } from "@/components/dashboard/ActionForm";
-import { Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
+import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
+import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { VESSEL_TYPE_LABEL } from "@/lib/catalogue/categories";
 import { EVENT_LABEL, type Proposal } from "@/lib/catalogue/proposal";
@@ -68,7 +69,22 @@ export default async function SubmissionPage({ params }: { params: Promise<{ org
               <Input label="Guests" name="max_guests" inputMode="numeric" defaultValue={p.max_guests} />
               <Input label="Decks" name="deck_count" inputMode="numeric" defaultValue={p.deck_count} />
               <Input label="Year built" name="year_built" inputMode="numeric" defaultValue={p.year_built} />
+              <Select
+                label="Mooring"
+                name="mooring"
+                placeholder="Not given"
+                defaultValue={p.mooring}
+                options={MOORING}
+                hint="Where the vessel usually moors at night. Travellers see this on its page."
+              />
             </div>
+            <Checkboxes
+              legend="Shared spaces"
+              name="shared_spaces"
+              options={SHARED_SPACES}
+              checked={p.shared_spaces ? p.shared_spaces.split(",") : []}
+              hint="The spaces all guests share. The vessel page says how many guests share them."
+            />
             <TextArea
               label="Description (English)"
               name="description_en"

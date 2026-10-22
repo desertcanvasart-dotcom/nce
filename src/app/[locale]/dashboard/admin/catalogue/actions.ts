@@ -60,7 +60,7 @@ export async function createVessel(_prev: ActionState, fd: FormData): Promise<Ac
 
 export async function saveDetails(id: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireAdmin([...CATALOGUE], editor(id));
-  const input = vesselDetailsInput.safeParse(formObject(fd, ["best_for"]));
+  const input = vesselDetailsInput.safeParse(formObject(fd, ["best_for", "shared_spaces"]));
   if (!input.success) {
     return problemsFrom(input.error, {
       name: "Name",
@@ -72,6 +72,8 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
       deck_count: "Decks",
       year_built: "Year built",
       best_for: "Best for",
+      mooring: "Mooring",
+      shared_spaces: "Shared spaces",
       operator_org_id: "Operator",
     });
   }
@@ -94,6 +96,8 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
       deck_count: d.deck_count,
       year_built: d.year_built,
       best_for: d.best_for as ("families" | "value")[],
+      mooring: d.mooring,
+      shared_spaces: d.shared_spaces,
       operator_org_id: d.operator_org_id,
     })
     .eq("id", id);

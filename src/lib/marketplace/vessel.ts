@@ -1,3 +1,4 @@
+import type { Mooring } from "@/lib/catalogue/mooring";
 /**
  * The vessel page (PAGE-072, Batch 5-2), kept free of I/O so it is unit-tested. English copy until Batch 10 (ADR-093).
  */
@@ -53,6 +54,9 @@ export type VesselPage = {
   maxGuests: number | null;
   cabinCount: number | null;
   deckCount: number | null;
+  /** EXP-005, EXP-002: how it moors, and the spaces all its guests share. */
+  mooring: Mooring | null;
+  sharedSpaces: string[];
   yearBuilt: number | null;
   sample: boolean;
   showcase: boolean;

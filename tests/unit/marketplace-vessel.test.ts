@@ -49,6 +49,8 @@ const page = (over: Partial<VesselPage> = {}): VesselPage => ({
   maxGuests: 60,
   cabinCount: 30,
   deckCount: 3,
+  mooring: null,
+  sharedSpaces: [],
   yearBuilt: null,
   sample: false,
   showcase: false,

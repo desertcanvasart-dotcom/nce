@@ -4050,10 +4050,12 @@ export type Database = {
           id: string;
           is_sample: boolean;
           max_guests: number | null;
+          mooring: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id: string | null;
           published_at: string | null;
           route_text: string | null;
+          shared_spaces: string[];
           showcase_reason: string | null;
           showcase_until: string | null;
           sightseeing_approved_at: string | null;
@@ -4075,10 +4077,12 @@ export type Database = {
           id?: string;
           is_sample?: boolean;
           max_guests?: number | null;
+          mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id?: string | null;
           published_at?: string | null;
           route_text?: string | null;
+          shared_spaces?: string[];
           showcase_reason?: string | null;
           showcase_until?: string | null;
           sightseeing_approved_at?: string | null;
@@ -4100,10 +4104,12 @@ export type Database = {
           id?: string;
           is_sample?: boolean;
           max_guests?: number | null;
+          mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name?: string;
           operator_org_id?: string | null;
           published_at?: string | null;
           route_text?: string | null;
+          shared_spaces?: string[];
           showcase_reason?: string | null;
           showcase_until?: string | null;
           sightseeing_approved_at?: string | null;
@@ -4723,6 +4729,7 @@ export type Database = {
       feed_status: "pending" | "active" | "paused" | "rejected";
       inventory_run_status: "previewed" | "applied" | "discarded" | "failed";
       inventory_source: "manual" | "paste" | "feed" | "api" | "tap" | "sheet";
+      mooring_practice: "private_bank" | "rafted" | "varies";
       offer_status: "sent" | "superseded" | "withdrawn" | "accepted" | "closed";
       operator_review: "pending" | "confirmed" | "contested";
       org_kind: "operator" | "partner" | "nilecruz" | "tour_office";
@@ -4890,6 +4897,7 @@ export const Constants = {
       feed_status: ["pending", "active", "paused", "rejected"],
       inventory_run_status: ["previewed", "applied", "discarded", "failed"],
       inventory_source: ["manual", "paste", "feed", "api", "tap", "sheet"],
+      mooring_practice: ["private_bank", "rafted", "varies"],
       offer_status: ["sent", "superseded", "withdrawn", "accepted", "closed"],
       operator_review: ["pending", "confirmed", "contested"],
       org_kind: ["operator", "partner", "nilecruz", "tour_office"],

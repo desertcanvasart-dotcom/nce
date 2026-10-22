@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import type { ActionState } from "@/components/dashboard/ActionForm";
+import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 import { PROPOSAL_FIELDS, type Proposal } from "@/lib/catalogue/proposal";
 import { requireOrgRole } from "@/server/auth";
 import { dbProblem, failed, problemsFrom, saved } from "@/server/catalogue/form";
@@ -28,6 +29,10 @@ const proposalInput = z.object({
   max_guests: intOrEmpty(1, 800),
   deck_count: intOrEmpty(1, 10),
   year_built: intOrEmpty(1850, 2100),
+  mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))], { message: "choose how the vessel moors" }),
+  shared_spaces: z
+    .string()
+    .refine((v) => v === "" || v.split(",").every((x) => SHARED_SPACES.some((s) => s.value === x)), "choose from the list"),
   description_en: z.string().trim().max(4000, "at most 4,000 characters"),
 });
 const LABELS = Object.fromEntries(PROPOSAL_FIELDS.map((f) => [f.key, f.label]));
@@ -45,7 +50,7 @@ export async function startSubmission(
     const { data: v } = await db
       .from("vessels")
       .select(
-        "name, type, route_text, cabin_count, max_guests, deck_count, year_built, operator_org_id, vessel_translations(locale, description)",
+        "name, type, route_text, cabin_count, max_guests, deck_count, year_built, mooring, shared_spaces, operator_org_id, vessel_translations(locale, description)",
       )
       .eq("id", vesselId)
       .maybeSingle();
@@ -58,6 +63,8 @@ export async function startSubmission(
       max_guests: v.max_guests?.toString() ?? "",
       deck_count: v.deck_count?.toString() ?? "",
       year_built: v.year_built?.toString() ?? "",
+      mooring: v.mooring ?? "",
+      shared_spaces: v.shared_spaces.join(","),
       description_en: v.vessel_translations.find((t) => t.locale === "en")?.description ?? "",
     };
   }
@@ -73,7 +80,11 @@ export async function startSubmission(
 
 export async function saveProposal(orgId: string, id: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireOrgRole(orgId, [...EDITORS], { kind: "operator", returnTo: one(orgId, id) });
-  const input = proposalInput.safeParse(Object.fromEntries(PROPOSAL_FIELDS.map((f) => [f.key, String(fd.get(f.key) ?? "")])));
+  const input = proposalInput.safeParse(
+    Object.fromEntries(
+      PROPOSAL_FIELDS.map((f) => [f.key, f.key === "shared_spaces" ? fd.getAll(f.key).join(",") : String(fd.get(f.key) ?? "")]),
+    ),
+  );
   if (!input.success) return problemsFrom(input.error, LABELS);
   const db = await getDb();
   const { data, error } = await db

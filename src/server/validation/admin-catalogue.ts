@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BEST_FOR, CATEGORIES } from "@/lib/catalogue/categories";
+import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 
 /** Admin catalogue editor inputs (DASH-ADM-013–019). Messages are shown to admins as written. */
 const optInt = (min: number, max: number) =>
@@ -28,6 +29,8 @@ export const vesselDetailsInput = z.object({
   deck_count: optInt(1, 10),
   year_built: optInt(1850, 2100),
   best_for: z.array(z.enum(BEST_FOR.map((b) => b.value) as [string, ...string[]])).max(10),
+  mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))]).transform((v) => (v === "" ? null : v)),
+  shared_spaces: z.array(z.enum(SHARED_SPACES.map((s) => s.value))).max(SHARED_SPACES.length),
   operator_org_id: z
     .string()
     .trim()
