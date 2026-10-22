@@ -17,11 +17,7 @@
       ],
       "numberOfRuns": 3,
       "settings": {
-        "onlyCategories": [
-          "performance",
-          "accessibility",
-          "best-practices"
-        ],
+        "onlyCategories": ["performance", "accessibility", "best-practices"],
         "throttlingMethod": "devtools"
       }
     },
