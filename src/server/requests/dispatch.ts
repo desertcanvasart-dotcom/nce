@@ -52,6 +52,8 @@ export async function requestSummary(
   const name = new Map((cabins ?? []).map((c) => [c.id, c.name]));
   const counts = new Map<string, number>();
   for (const c of r.cabins as { cabin_type_id: string }[]) counts.set(c.cabin_type_id, (counts.get(c.cabin_type_id) ?? 0) + 1);
+  // ADR-102: a guest who chose the vessel's own sightseeing; the operator sees it on every line.
+  const withSightseeing = (r.cabins as { package?: string }[]).some((c) => c.package === "with_sightseeing");
   return {
     reference: r.reference,
     orgId: r.org_id,
@@ -63,7 +65,10 @@ export async function requestSummary(
     destination: r.departure.schedule.destination,
     departsOn: r.departure.departs_on,
     nights: r.departure.schedule.nights,
-    lines: [...counts].map(([id, count]) => ({ cabin: name.get(id) ?? "Cabin", count })),
+    lines: [...counts].map(([id, count]) => ({
+      cabin: `${name.get(id) ?? "Cabin"}${withSightseeing ? ", with your sightseeing" : ""}`,
+      count,
+    })),
     guests: r.guest_count,
     nationality: r.lead_nationality,
     shown: (

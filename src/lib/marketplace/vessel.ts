@@ -27,7 +27,22 @@ export type VesselItinerary = {
   days: { day: number; title: string; body: string }[];
   /** Future scheduled departure dates, ascending. */
   departures: string[];
+  /** ADR-102: what the vessel's own sightseeing includes on this itinerary (approved vessels only). */
+  sightseeing?: Sightseeing;
+  /** ADR-102: Nilecruz's sightseeing programme for this itinerary (every other vessel), its price per person for two. */
+  programme?: { name: string; slug: string; ppForTwoMinor: number };
 };
+
+export type Sightseeing = { guide: boolean; ticketsIncluded: boolean; sites: string[]; note: string | null };
+
+/** "An Egyptologist guide, entrance fees included: Karnak, Edfu …" */
+export function sightseeingText(s: Sightseeing): string {
+  const parts = [
+    s.guide ? "an Egyptologist guide" : null,
+    s.ticketsIncluded ? "entrance fees included" : "entrance fees not included",
+  ];
+  return `${parts.filter(Boolean).join(", ")}; visiting ${s.sites.join(", ")}.`.replace(/^./, (c) => c.toUpperCase());
+}
 
 export type VesselPage = {
   id: string;
@@ -65,6 +80,9 @@ export type VesselPage = {
   }[];
   from?: Money;
   bookable: boolean;
+  /** ADR-102: the "from" price with sightseeing, by the vessel or with Nilecruz's programme (`sightseeingBy`). */
+  fromWithSightseeing?: Money;
+  sightseeingBy?: "vessel" | "nilecruz";
 };
 
 /** The itinerary in the URL (`?itinerary=CODE`, canonical to the vessel URL, DATA-031), else the shortest. */

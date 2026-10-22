@@ -11,6 +11,7 @@ import {
   touristTripJsonLd,
   VERDICT_TEXT,
   vesselH1,
+  sightseeingText,
   type VesselItinerary,
   type VesselPage,
 } from "@/lib/marketplace/vessel";
@@ -94,6 +95,12 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
           <dt>From, per person</dt>
           <dd>{v.bookable && v.from ? formatMoney(v.from, locale) : v.bookable ? "Prices on request" : "Information only"}</dd>
         </div>
+        {v.bookable && v.fromWithSightseeing ? (
+          <div>
+            <dt>With sightseeing, from</dt>
+            <dd>{formatMoney(v.fromWithSightseeing, locale)}</dd>
+          </div>
+        ) : null}
       </dl>
 
       <section className={styles.cta} aria-label="Prices and booking">
@@ -244,6 +251,20 @@ function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerar
           "Airport and hotel transfers, flights and tours aren’t included; they are booked separately."
         )}
       </p>
+      {it.sightseeing ? (
+        <p>
+          <strong>Also sold with the vessel’s own sightseeing:</strong> {sightseeingText(it.sightseeing)}
+          {it.sightseeing.note ? ` ${it.sightseeing.note}` : ""}
+        </p>
+      ) : it.programme ? (
+        <p>
+          {/* ADR-102: Nilecruz's programme, its own booking with Nilecruz, paid together with the cruise. */}
+          <strong>With sightseeing:</strong> add Nilecruz’s{" "}
+          <Link href={`/tours-extras/${it.programme.slug}/`}>{it.programme.name}</Link> when you book, from{" "}
+          {formatMoney({ amount: it.programme.ppForTwoMinor, currency: "USD" }, locale)} per person for two. It’s a separate
+          booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise.
+        </p>
+      ) : null}
       {stops.length ? (
         <p>
           {/* SEO-013: the destinations this itinerary stops at. */}

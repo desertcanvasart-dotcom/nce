@@ -3,6 +3,7 @@
  * unit-tested. Copy is English for now; Batch 10 translates it (ADR-093).
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
+import { formatMoney } from "@/components/ds/lib/format";
 import type { Money, VesselType } from "@/components/ds/lib/types";
 
 export type Itinerary = {
@@ -34,6 +35,12 @@ export type ListingVessel = {
   from?: Money;
   /** False: information only. No price, availability or reserve button (DASH-PUB-010). */
   bookable: boolean;
+  /**
+   * ADR-102: the "from" price with sightseeing: the vessel's own (approved vessels), or the cruise plus Nilecruz's
+   * programme for two (`sightseeingBy` says which).
+   */
+  fromWithSightseeing?: Money;
+  sightseeingBy?: "vessel" | "nilecruz";
 };
 
 // ── Facets (SEO-016): only these filtered listings exist and are indexable ──────────────────────────────────
@@ -132,7 +139,10 @@ export function toCard(v: ListingVessel): GridCard {
     // ADR-025: the one public price, only for a vessel that can be booked; information-only listings show none.
     price: v.bookable ? v.from : undefined,
     image: v.image,
-    badges,
+    badges:
+      v.bookable && v.fromWithSightseeing
+        ? [...badges, { label: `With sightseeing from ${formatMoney(v.fromWithSightseeing, "en")}`, tone: "success" as const }]
+        : badges,
   };
 }
 
@@ -185,7 +195,15 @@ export const VESSEL_OPTIONS: { id: string; label: string; type?: VesselType }[] 
   { id: "steam", label: "Paddle steamer", type: "steam" },
 ];
 
-export type SearchQuery = { route?: string; vessel?: string; date?: string; guests?: number; q?: string };
+export type SearchQuery = {
+  route?: string;
+  vessel?: string;
+  date?: string;
+  guests?: number;
+  q?: string;
+  /** ADR-102: only vessels with a "with sightseeing" price (their own or Nilecruz's programme). */
+  sightseeing?: boolean;
+};
 
 /** Reads the CruiseSearch GET form (route, vessel, date, adults, ages); anything unknown is ignored. */
 export function parseSearch(sp: Record<string, string | string[] | undefined>): SearchQuery {
@@ -204,10 +222,11 @@ export function parseSearch(sp: Record<string, string | string[] | undefined>): 
     vessel: VESSEL_OPTIONS.some((o) => o.id === vessel && o.type) ? vessel : undefined,
     date: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined,
     guests: guests || undefined,
+    sightseeing: one("sightseeing") === "1" || undefined,
   };
 }
 
-export const isSearching = (q: SearchQuery) => !!(q.route || q.vessel || q.date || q.guests || q.q);
+export const isSearching = (q: SearchQuery) => !!(q.route || q.vessel || q.date || q.guests || q.q || q.sightseeing);
 
 /** The vessels that fit, and how many departures fit (never invented, ADR-007). */
 export function applySearch(list: ListingVessel[], q: SearchQuery): { vessels: ListingVessel[]; departures: number } {
@@ -216,6 +235,7 @@ export function applySearch(list: ListingVessel[], q: SearchQuery): { vessels: L
   const vessels = list.filter((v) => {
     if (words.length && !words.every((w) => v.name.toLowerCase().includes(w))) return false;
     if (q.vessel && v.type !== q.vessel) return false;
+    if (q.sightseeing && !(v.bookable && v.fromWithSightseeing)) return false;
     if (q.guests && v.maxGuests && q.guests > v.maxGuests) return false;
     const its = v.itineraries.filter((i) => !q.route || routeId(i.origin, i.destination) === q.route);
     if (q.route && !its.length) return false;

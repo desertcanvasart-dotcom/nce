@@ -15,6 +15,7 @@ import {
   formatDay,
   perPersonFor,
   pickItinerary,
+  sightseeingText,
   preferredPrices,
   availabilityLabel,
   canBook,
@@ -30,7 +31,15 @@ import { getDb } from "@/server/db";
 import { publicVessel } from "@/server/marketplace/queries";
 import { customerRequestBooking, customerReserve } from "./actions";
 
-type Query = { itinerary?: string; dep?: string; cabin?: string; adults?: string; children?: string; cabins?: string };
+type Query = {
+  itinerary?: string;
+  dep?: string;
+  cabin?: string;
+  adults?: string;
+  children?: string;
+  cabins?: string;
+  pkg?: string;
+};
 type Props = { params: Promise<{ locale: Locale; slug: string }>; searchParams: Promise<Query> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -53,8 +62,15 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
   const v = await publicVessel(slug);
   if (!v) notFound();
   const it = pickItinerary(v.itineraries, q.itinerary);
+  // ADR-102: an approved vessel sells this itinerary with its own sightseeing too; the traveller chooses first.
+  // ADR-102: or, on every other vessel, the cruise with Nilecruz's programme (its own order, paid together).
+  const offer = it?.sightseeing ? ("with_sightseeing" as const) : it?.programme ? ("with_programme" as const) : null;
+  const pkg = offer && q.pkg === offer ? offer : ("cruise" as const);
   const db = await getDb();
-  const { data } = await db.rpc("vessel_departure_prices", { target: v.id });
+  const { data } = await db.rpc("vessel_departure_prices", {
+    target: v.id,
+    pkg: pkg === "with_sightseeing" ? pkg : "cruise",
+  });
   const rows: DeparturePrice[] = preferredPrices(
     (data ?? []).map((r) => ({
       departureId: r.departure_id,
@@ -81,7 +97,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
   const cabinType = chosen ? v.cabins.find((c) => c.id === chosen.cabinTypeId) : undefined;
   const base = `/cruises/${slug}/reserve/`;
   const keep = (extra: Record<string, string>) =>
-    `${base}?${new URLSearchParams({ ...(it ? { itinerary: it.code } : {}), ...extra }).toString()}`;
+    `${base}?${new URLSearchParams({ ...(it ? { itinerary: it.code } : {}), ...(pkg !== "cruise" ? { pkg } : {}), ...extra }).toString()}`;
 
   let quote: number | null = null;
   if (chosen && cabinType && chosen.bookable && ages.filter((a) => a >= 3).length <= cabinType.maxOccupancy) {
@@ -90,8 +106,19 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       cab: chosen.cabinTypeId,
       cur: chosen.currency,
       ages,
+      pkg: pkg === "with_sightseeing" ? pkg : "cruise",
     });
     quote = p === null || p === undefined ? null : Number(p);
+  }
+  // ADR-102: Nilecruz's programme for the whole party, priced by the database; a separate order paid with the cruise.
+  let programme: { name: string; total: number; currency: string } | null = null;
+  if (pkg === "with_programme" && chosen && quote !== null) {
+    const { data: pq } = await db.rpc("programme_quote", {
+      dep: chosen.departureId,
+      ages: Array.from({ length: cabinsWanted }, () => ages).flat(),
+    });
+    const row = pq?.[0];
+    if (row) programme = { name: row.tour_name, total: Number(row.total_minor), currency: row.currency };
   }
   const policy = chosen ? await policyFor(chosen.departureId) : null;
   // ADR-099: how long the operator usually takes to confirm a booking request.
@@ -153,6 +180,38 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               </li>
             ))}
           </ul>
+        </nav>
+      ) : null}
+
+      {it && offer ? (
+        <nav aria-label="Package" className={styles.facets}>
+          <ul>
+            {(
+              [
+                ["cruise", "Cruise only"],
+                [offer, "With sightseeing"],
+              ] as const
+            ).map(([value, label]) => (
+              <li key={value}>
+                {value === pkg ? (
+                  <span aria-current="page">{label}</span>
+                ) : (
+                  <Link
+                    href={`${base}?${new URLSearchParams({ itinerary: it.code, ...(value !== "cruise" ? { pkg: value } : {}) }).toString()}`}
+                  >
+                    {label}
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+          <p className={styles.note}>
+            {pkg === "with_sightseeing" && it.sightseeing
+              ? `The vessel's own sightseeing is in the price: ${sightseeingText(it.sightseeing)}`
+              : pkg === "with_programme" && it.programme
+                ? `With Nilecruz's ${it.programme.name}: a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise.`
+                : "Cruise only: choose “With sightseeing” to add it."}
+          </p>
         </nav>
       ) : null}
 
@@ -227,6 +286,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
           ) : null}
           <form method="get" action={base} className={styles.reserveForm}>
             {it ? <input type="hidden" name="itinerary" value={it.code} /> : null}
+            {pkg !== "cruise" ? <input type="hidden" name="pkg" value={pkg} /> : null}
             <input type="hidden" name="dep" value={dep[0]!.departureId} />
             <p className={styles.schematic}>
               Schematic: not a floor plan. Choose a cabin type on a deck; your cabin number is assigned by the operator.
@@ -331,6 +391,35 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 <strong>{formatMoney({ amount: quote * cabinsWanted, currency: chosen.currency }, locale)}</strong>
               </dd>
             </div>
+            {programme ? (
+              <>
+                <div>
+                  <dt>Sightseeing by Nilecruz</dt>
+                  <dd>
+                    {formatMoney({ amount: programme.total, currency: programme.currency }, locale)} · {programme.name}, a
+                    separate booking with Nilecruz
+                  </dd>
+                </div>
+                {programme.currency === chosen.currency ? (
+                  <div>
+                    <dt>Together</dt>
+                    <dd>
+                      <strong>
+                        {formatMoney({ amount: quote * cabinsWanted + programme.total, currency: chosen.currency }, locale)}
+                      </strong>{" "}
+                      paid on one page
+                    </dd>
+                  </div>
+                ) : (
+                  <div>
+                    <dt>Currency</dt>
+                    <dd>
+                      The sightseeing is priced in {programme.currency}; choose a cabin priced in {programme.currency} to add it.
+                    </dd>
+                  </div>
+                )}
+              </>
+            ) : null}
             {v.gratuityUsdMinor && it ? (
               <div>
                 <dt>Crew gratuity</dt>
@@ -347,8 +436,10 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             {perPersonFor(chosen, ages)
               ? `${formatMoney({ amount: perPersonFor(chosen, ages)!, currency: chosen.currency }, locale)} per adult; `
               : ""}
-            children are priced by age. The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked
-            separately.
+            children are priced by age.{" "}
+            {pkg === "with_sightseeing"
+              ? "The total holds the cruise fare and the vessel's own sightseeing; transfers, flights and other tours are booked separately."
+              : "The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked separately."}
           </p>
           {chosen.mode === "instant" && (chosen.placesLeft ?? 0) < cabinsWanted ? (
             <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>
@@ -372,6 +463,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 action={(chosen.mode === "request" ? customerRequestBooking : customerReserve).bind(null, slug, {
                   departureId: chosen.departureId,
                   departsOn: chosen.departsOn,
+                  package: pkg,
                   cabinTypeId: chosen.cabinTypeId,
                   currency: chosen.currency,
                   cabins: cabinsWanted,

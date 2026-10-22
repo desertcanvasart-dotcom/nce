@@ -32,6 +32,8 @@ type Props = {
   matchCount?: number;
   current?: string;
   empty: string;
+  /** ADR-102: the "With sightseeing" filter is on (the Cruises hub only). */
+  sightseeing?: boolean;
 };
 
 /** A /cruises/ listing (PAGE-060–067): breadcrumb, H1, search, the facet links and the cards. */
@@ -68,6 +70,13 @@ export function Listing(p: Props) {
               {p.current === f.slug ? <span aria-current="page">{f.h1}</span> : <Link href={`/cruises/${f.slug}/`}>{f.h1}</Link>}
             </li>
           ))}
+          <li>
+            {p.sightseeing ? (
+              <span aria-current="page">With sightseeing</span>
+            ) : (
+              <Link href="/cruises/?sightseeing=1">With sightseeing</Link>
+            )}
+          </li>
         </ul>
       </nav>
       <p className={styles.count}>

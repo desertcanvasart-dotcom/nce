@@ -32,6 +32,8 @@ export async function handleStripeWebhook(rawBody: string, signature: string): P
   // Tour orders are their own payments (DASH-PAY-014): never mixed with a cruise reservation.
   if (session.metadata?.tour_order_id) return handleTourPayment(session, event.id);
   const reservationId = session.metadata?.reservation_id;
+  // ADR-102: a cruise and Nilecruz's programme paid on one page are recorded as two payments.
+  if (reservationId && session.metadata?.programme_order_id) return handleCruiseAndProgramme(session, event.id);
   // "complete" isn't "paid": some methods settle later and send async_payment_succeeded.
   if (!reservationId || session.payment_status !== "paid" || !session.payment_intent) {
     return { status: 200, body: { received: true, pending: true } };
@@ -182,4 +184,77 @@ export async function issueTourRefund(
     return `Stripe issued refund ${refundId}, but it couldn't be recorded here. Record it as a manual refund with that reference.`;
   }
   return null;
+}
+
+/**
+ * ADR-102: one checkout for a cruise and Nilecruz's sightseeing programme. Each part is recorded on its own (the cruise
+ * as the reservation's payment, the programme as the tour order's), with the amounts the checkout was built with. A
+ * part that can't be taken (late, cancelled, changed) goes back to the card on its own; the other part stands.
+ */
+async function handleCruiseAndProgramme(session: Stripe.Checkout.Session, eventId: string): Promise<WebhookOutcome> {
+  const m = session.metadata!;
+  if (session.payment_status !== "paid" || !session.payment_intent)
+    return { status: 200, body: { received: true, pending: true } };
+  const intent = typeof session.payment_intent === "string" ? session.payment_intent : session.payment_intent.id;
+  const currency = (session.currency ?? "").toUpperCase();
+  const cruise = Number(m.cruise_amount);
+  const programme = Number(m.programme_amount);
+  const db = getAdminDb();
+  if (!(cruise > 0 && programme > 0) || cruise + programme !== (session.amount_total ?? 0)) {
+    console.error("stripe webhook: cruise and programme amounts don't add up", { event: eventId, intent });
+    return { status: 500, body: { error: "amounts_mismatch" } };
+  }
+  const parts = [
+    {
+      rpc: "service_card_payment" as const,
+      args: { res: m.reservation_id!, session_id: session.id, intent, amount: cruise, cur: currency },
+      refunded: async (refund: string) =>
+        db.rpc("service_card_refunded", {
+          res: m.reservation_id!,
+          session_id: session.id,
+          intent,
+          refund,
+          amount: cruise,
+          cur: currency,
+        }),
+      amount: cruise,
+      key: `late-cruise-${intent}`,
+    },
+    {
+      rpc: "service_tour_payment" as const,
+      args: { target: m.programme_order_id!, session_id: session.id, intent, amount: programme, cur: currency },
+      refunded: async (refund: string) =>
+        db.rpc("service_tour_refunded", {
+          target: m.programme_order_id!,
+          session_id: session.id,
+          intent,
+          refund,
+          amount: programme,
+          cur: currency,
+        }),
+      amount: programme,
+      key: `late-programme-${intent}`,
+    },
+  ];
+  const results: string[] = [];
+  for (const part of parts) {
+    const { data, error } =
+      part.rpc === "service_card_payment"
+        ? await db.rpc("service_card_payment", part.args as never)
+        : await db.rpc("service_tour_payment", part.args as never);
+    if (error?.code === "P0002" || error?.code === "22P02") {
+      console.error("stripe webhook: unknown booking", { event: eventId, intent, part: part.rpc });
+      results.push("unknown");
+      continue;
+    }
+    if (error) return { status: 500, body: { error: "record_failed" } }; // Stripe retries; recorded parts say "duplicate"
+    if (data === "refund") {
+      const stripe = getStripe();
+      if (!stripe) return { status: 500, body: { error: "refund_needed_but_stripe_not_configured" } };
+      const refund = await stripe.refunds.create({ payment_intent: intent, amount: part.amount }, { idempotencyKey: part.key });
+      await part.refunded(refund.id);
+    }
+    results.push(String(data));
+  }
+  return { status: 200, body: { received: true, result: results } };
 }

@@ -3,6 +3,7 @@ import { formatMoney } from "@/components/ds/lib/format";
 import { gratuityText, partyAges } from "@/lib/product/pricing";
 import { Section, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
+import { sightseeingText } from "@/lib/marketplace/vessel";
 import { bandLines, type CancellationBand } from "@/lib/tours/tours";
 import type { reservation } from "@/server/bookings/queries";
 import { guestsText, PLAN_LABEL } from "./OfferSummary";
@@ -59,6 +60,23 @@ export function ReservationRecord({ r }: { r: Res }) {
             <dt className={ui.label}>Rate</dt>
             <dd>{PLAN_LABEL[r.rate_plan] ?? r.rate_plan}</dd>
           </div>
+          {r.package === "with_sightseeing" ? (
+            <div>
+              <dt className={ui.label}>Package</dt>
+              <dd>
+                {/* ADR-102: the vessel's own sightseeing, as it was when booked. */}
+                With the vessel’s sightseeing
+                {r.sightseeing
+                  ? `: ${sightseeingText({
+                      guide: !!(r.sightseeing as { guide?: boolean }).guide,
+                      ticketsIncluded: !!(r.sightseeing as { tickets_included?: boolean }).tickets_included,
+                      sites: ((r.sightseeing as { sites?: string[] }).sites ?? []) as string[],
+                      note: null,
+                    })}`
+                  : ""}
+              </dd>
+            </div>
+          ) : null}
           <div>
             <dt className={ui.label}>Total</dt>
             <dd>
