@@ -125,14 +125,48 @@ export async function operatorOverview(orgId: string) {
       issues.push({ vessel: name.get(d.vessel_id) ?? "", text: `${d.departs_on}: availability needs confirming`, href });
     if (!rateCount) issues.push({ vessel: name.get(d.vessel_id) ?? "", text: `${d.departs_on}: no rates`, href });
   }
+  // ADR-103: held and booked cabins, and stop-sales, beside what's free on the next sailings.
+  const next = (deps ?? []).slice(0, 12);
+  const nextIds = next.map((d) => d.id);
+  const [{ data: holds }, { data: booked }, { data: stops }] = await Promise.all([
+    db.from("holds").select("departure_id, cabins").in("departure_id", nextIds).eq("status", "active"),
+    db
+      .from("reservations")
+      .select("departure_id, reservation_cabins(count)")
+      .in("departure_id", nextIds)
+      .neq("status", "cancelled"),
+    db
+      .from("stop_sales")
+      .select("vessel_id, cabin_type_id, starts_on, ends_on")
+      .in("vessel_id", ids)
+      .is("lifted_at", null)
+      .gte("ends_on", today),
+  ]);
+  const sum = (rows: { departure_id: string; n: number }[], dep: string) =>
+    rows.filter((r) => r.departure_id === dep).reduce((a, r) => a + r.n, 0);
+  const heldRows = (holds ?? []).map((h) => ({ departure_id: h.departure_id, n: h.cabins }));
+  const bookedRows = (booked ?? []).map((r) => ({
+    departure_id: r.departure_id,
+    n: (r.reservation_cabins as unknown as { count: number }[])[0]?.count ?? 0,
+  }));
+  const stopFor = (d: { vessel_id: string; departs_on: string }) =>
+    (stops ?? []).filter((s) => s.vessel_id === d.vessel_id && s.starts_on <= d.departs_on && d.departs_on <= s.ends_on);
   return {
-    upcoming: (deps ?? []).slice(0, 12).map((d) => ({
+    upcoming: next.map((d) => ({
       id: d.id,
       vessel: name.get(d.vessel_id) ?? "",
       departs_on: d.departs_on,
       returns_on: d.returns_on,
       route: d.schedule ? `${d.schedule.origin} → ${d.schedule.destination}` : "",
       available: d.inventory.reduce((a, i) => a + i.available, 0),
+      held: sum(heldRows, d.id),
+      booked: sum(bookedRows, d.id),
+      /** "all" when the whole ship is stopped, "some" when one or more cabin types are. */
+      stopSale: stopFor(d).some((s) => s.cabin_type_id === null)
+        ? ("all" as const)
+        : stopFor(d).length
+          ? ("some" as const)
+          : null,
     })),
     issues: issues.slice(0, 30),
   };
@@ -143,6 +177,13 @@ export async function freshnessHours(): Promise<typeof FRESHNESS_HOURS> {
   const db = await getDb();
   const { data } = await db.from("platform_settings").select("value").eq("key", "freshness_hours").maybeSingle();
   return { ...FRESHNESS_HOURS, ...((data?.value ?? {}) as Partial<typeof FRESHNESS_HOURS>) };
+}
+
+/** ADR-103: how recent manual or sheet availability must be to book instantly under a freesale. */
+export async function freesaleHours(): Promise<number> {
+  const db = await getDb();
+  const { data } = await db.from("platform_settings").select("value").eq("key", "freesale_hours").maybeSingle();
+  return typeof data?.value === "number" ? data.value : 72;
 }
 
 /** Approved travel partners by name, for company rates (DASH-B2B-012). Operators and admins only. */

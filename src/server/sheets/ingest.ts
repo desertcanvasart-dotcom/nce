@@ -99,14 +99,17 @@ async function operatorData(orgId: string) {
   const db = getAdminDb();
   const [{ data: org }, { data: vessels }, { data: aliases }] = await Promise.all([
     db.from("organisations").select("display_name").eq("id", orgId).single(),
-    db.from("vessels").select("slug, name, cabin_count, cabin_types(code, name, active)").eq("operator_org_id", orgId),
+    db
+      .from("vessels")
+      .select("slug, name, cabin_count, cabin_types(code, name, active, cabin_count)")
+      .eq("operator_org_id", orgId),
     db.from("operator_aliases").select("kind, sheet_name, target, vessel_slug").eq("org_id", orgId),
   ]);
   const ships: OperatorShip[] = (vessels ?? []).map((v) => ({
     slug: v.slug,
     name: v.name,
     cabinCount: v.cabin_count,
-    cabins: v.cabin_types.filter((c) => c.active).map((c) => ({ code: c.code, name: c.name })),
+    cabins: v.cabin_types.filter((c) => c.active).map((c) => ({ code: c.code, name: c.name, cabinCount: c.cabin_count })),
   }));
   return { name: org?.display_name ?? "Operator", ships, aliases: (aliases ?? []) as Alias[] };
 }

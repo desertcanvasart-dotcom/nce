@@ -99,3 +99,28 @@ Travel partners follow the same rule as customers.
 
 - **Instant:** from an allotment, or from availability a feed, the API or an operator's answer confirmed in the last 2 hours.
 - **Booking request:** otherwise, the partner sends a booking request in its company's name, at its rate, with its client reference. The operator gets the usual one-tap message, which names the partner. Once confirmed, it becomes the partner's trade booking, paid by its deadline.
+
+## Stop-sales, freesale, holds, supplements and webhooks (ADR-103)
+
+- **Stop-sales** are on the ship's **Routes, schedules and rates** page.
+  - The operator's owners and reservations staff (or you, from the catalogue) close a ship, or one cabin type, for a range of departures.
+  - Those cabins show **Sold out** and can't be booked or requested.
+  - A feed, the API or a sheet doesn't lift a stop-sale. **Lift** does, and the record stays.
+  - Cabins in a Nilecruz allotment stay open until their release date.
+- **Freesale** is under **Admin → Operators → (operator) → Freesale**.
+  - It is the operator's agreement that Nilecruz may sell down to zero without asking.
+  - Availability entered by hand, pasted or from a sheet in the last 72 hours then books instantly.
+- **Holds** are under **Admin → Operators → (operator) → Holds**.
+  - The list shows every active hold: the operator's "Hold 72h" answers, and holds you placed.
+  - **Place hold** takes cabins off availability for 1 to 168 hours.
+  - **Extend 24 h** works on any hold.
+  - **Release** works on your own holds. The operator's answers end with their request.
+  - Each departure's page shows free, held and booked cabins for every cabin type.
+- **Supplements** are on the ship's **Routes, schedules and rates** page: compulsory charges per guest, such as gala dinners or peak dates.
+  - A sailing on board any of the nights pays the supplement, in the booking total. Children pay the same share as of the fare.
+  - Bookings already made keep what they were charged.
+- **Webhooks** are under **Inventory connections → Webhooks** for the operator's owners, or on the operator's page for you.
+  - Nilecruz posts signed events to the operator's own system. The format page explains them and shows Nilecruz's public key.
+  - Nothing is sent until `WEBHOOK_SIGNING_KEY` is set.
+- **Data accuracy:** when more than 20 % of answered requests were declined although our data showed space (at least 5 such requests, 90 days), the operator's page says so.
+  - That operator's manual and sheet availability shows as "to be confirmed" until it recovers.

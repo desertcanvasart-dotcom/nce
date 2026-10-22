@@ -5,6 +5,7 @@ import { FORMAT_ID, LIMITS } from "@/lib/connections/format";
 import { env } from "@/lib/env";
 import { requireOrgRole } from "@/server/auth";
 import { serverEnv } from "@/server/env";
+import { webhookPublicKey } from "@/lib/connections/signature";
 import { codesForOrg } from "@/server/connections/queries";
 import { isUuid } from "../../../../sections";
 
@@ -99,6 +100,8 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
   await requireOrgRole(orgId, ["owner"], { kind: "operator", returnTo: `/dashboard/operator/${orgId}/inventory/format/` });
   const codes = await codesForOrg(orgId);
   const site = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  // ADR-103: what operators verify webhooks with; derived from the signing key, never the key itself.
+  const webhookKey = serverEnv.WEBHOOK_SIGNING_KEY ? webhookPublicKey(serverEnv.WEBHOOK_SIGNING_KEY) : null;
 
   return (
     <>
@@ -284,9 +287,56 @@ export default async function FormatDocument({ params }: { params: Promise<{ org
         <pre className={ui.code} aria-label="Example answer">
           {RESPONSE_EXAMPLE}
         </pre>
+      </Section>
+
+      <Section title="Webhooks from Nilecruz" id="webhooks">
+        <p>
+          Set an https address under <Link href={`/dashboard/operator/${orgId}/inventory/#webhooks`}>Webhooks</Link> and Nilecruz
+          sends a JSON POST to it for each of these events:
+        </p>
+        <ul className={ui.list}>
+          <li>
+            <code>inventory.changed</code>: availability for one sailing and cabin type changed on Nilecruz (a booking, a hold, a
+            vacancy sheet, an answer to a booking request). Changes your own feed or API call made aren’t sent back. Several
+            changes waiting to be sent are merged into one with the latest figures: <code>available</code>, <code>held</code>,{" "}
+            <code>source</code>, <code>confirmed_at</code> and <code>booking_mode</code>.
+          </li>
+          <li>
+            <code>hold.expired</code>: a hold ended without a booking; its cabins are free again.
+          </li>
+          <li>
+            <code>booking.confirmed</code>: a reservation is paid and confirmed: its reference, cabins with guests by age, the
+            lead passenger’s nationality and the total. Guests’ names are in your dashboard, never in a webhook.
+          </li>
+        </ul>
+        <p>
+          Sailings and cabin types are named as in format v1: <code>vessel</code> (the slug), <code>date</code>,{" "}
+          <code>schedule</code> and <code>cabin</code> codes. The body is <code>{`{"id", "type", "created_at", "data"}`}</code>.
+        </p>
+        <ul className={ui.list}>
+          <li>
+            <code>Nilecruz-Event-Id</code>: the event’s id; a retried delivery keeps it, so you can ignore one you’ve had.
+          </li>
+          <li>
+            <code>Nilecruz-Timestamp</code>: Unix time in seconds; refuse anything more than five minutes off.
+          </li>
+          <li>
+            <code>Nilecruz-Signature</code>: the Ed25519 signature, in base64, of these four lines joined by a line break (\n):{" "}
+            <code>nilecruz-webhook-v1</code>, the timestamp, the event id, and the SHA-256 of the body in lower-case hex.
+          </li>
+        </ul>
+        <p>
+          {webhookKey ? (
+            <>
+              Check it with Nilecruz’s public key (base64 of the 32 raw bytes): <code className={ui.wrap}>{webhookKey}</code>
+            </>
+          ) : (
+            "Nilecruz’s public key will be shown here once webhooks are switched on."
+          )}
+        </p>
         <p className={ui.muted}>
-          Webhooks from Nilecruz to your system arrive with reservations (Batch 4e). They are signed the same way with Nilecruz’s
-          own key, which will be published here.
+          Answer with any 2xx within 10 seconds. Anything else, or a redirect, is tried again after 1, 5 and 15 minutes, an hour,
+          then every 3 hours, for 24 hours.
         </p>
       </Section>
     </>

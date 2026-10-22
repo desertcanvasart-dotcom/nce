@@ -7,6 +7,7 @@ import {
   preferredPrices,
   requestDefaults,
   availabilityLabel,
+  availabilityUpdated,
   canBook,
   touristTripJsonLd,
   vesselH1,
@@ -133,6 +134,8 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
     placesLeft: 4,
     bookable: true,
     mode: "instant",
+    supplement: 0,
+    confirmedAt: null,
     ...over,
   });
 
@@ -154,6 +157,15 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
     expect(availabilityLabel(row({ mode: "request", placesLeft: null }), 6)).toBe("Available · confirmed within 6 h");
     expect(availabilityLabel(row({ mode: "sold_out", placesLeft: 0 }), 6)).toBe("Sold out");
     expect(availabilityLabel(row({ mode: "unconfirmed", placesLeft: null }), 6)).toBe("To be confirmed");
+  });
+
+  it("says how long ago availability was confirmed (ADR-103)", () => {
+    const now = new Date("2026-11-01T12:00:00Z");
+    expect(availabilityUpdated("2026-11-01T11:59:40Z", now)).toBe("Availability updated just now");
+    expect(availabilityUpdated("2026-11-01T11:59:00Z", now)).toBe("Availability updated 1 minute ago");
+    expect(availabilityUpdated("2026-11-01T09:00:00Z", now)).toBe("Availability updated 3 hours ago");
+    expect(availabilityUpdated("2026-10-30T12:00:00Z", now)).toBe("Availability updated 2 days ago");
+    expect(availabilityUpdated("2026-11-01T12:01:00Z", now)).toBe("Availability updated just now");
   });
 
   it("books instant and request cabins; never sold out or unconfirmed ones", () => {

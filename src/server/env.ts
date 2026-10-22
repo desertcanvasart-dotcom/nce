@@ -44,6 +44,8 @@ const schema = z.object({
   // Shown to operators on the format page: where to send their weekly sheet.
   SHEETS_EMAIL_ADDRESS: z.email().optional(),
   WHATSAPP_DISPLAY_NUMBER: z.string().max(20).optional(),
+  // ADR-103: Nilecruz's Ed25519 private key (PEM) for signing webhooks to operators. Without it nothing is sent.
+  WEBHOOK_SIGNING_KEY: z.string().includes("PRIVATE KEY").optional(),
 });
 
 export const serverEnv = schema.parse({
@@ -67,4 +69,5 @@ export const serverEnv = schema.parse({
   RESEND_WEBHOOK_SECRET: process.env.RESEND_WEBHOOK_SECRET || undefined,
   SHEETS_EMAIL_ADDRESS: process.env.SHEETS_EMAIL_ADDRESS || undefined,
   WHATSAPP_DISPLAY_NUMBER: process.env.WHATSAPP_DISPLAY_NUMBER || undefined,
+  WEBHOOK_SIGNING_KEY: process.env.WEBHOOK_SIGNING_KEY?.replace(/\\n/g, "\n") || undefined,
 });

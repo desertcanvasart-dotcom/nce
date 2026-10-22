@@ -9,6 +9,7 @@ import { connectionIssues } from "@/server/connections/queries";
 import { operatorOverview } from "@/server/product/queries";
 import { Notices } from "../../_bookings/Notices";
 import { isUuid } from "../../sections";
+import { Holds } from "../../_sales/Sales";
 import { markOrgNoticesRead } from "./offers/actions";
 
 /** DASH-OPR-001–005: the operator's own business at a glance: requests, offers, departures, inventory issues. */
@@ -57,7 +58,13 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
                   <th scope="col">Vessel</th>
                   <th scope="col">Route</th>
                   <th scope="col" className={ui.num}>
-                    Cabins available
+                    Free
+                  </th>
+                  <th scope="col" className={ui.num}>
+                    Held
+                  </th>
+                  <th scope="col" className={ui.num}>
+                    Booked
                   </th>
                 </tr>
               </thead>
@@ -66,9 +73,22 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
                   <tr key={d.id}>
                     <td data-label="Departs">{d.departs_on}</td>
                     <td data-label="Vessel">{d.vessel}</td>
-                    <td data-label="Route">{d.route}</td>
-                    <td data-label="Cabins available" className={ui.num}>
+                    <td data-label="Route">
+                      {d.route}
+                      {d.stopSale ? (
+                        <span className={ui.muted}>
+                          {d.stopSale === "all" ? " · sales stopped" : " · sales stopped for some cabins"}
+                        </span>
+                      ) : null}
+                    </td>
+                    <td data-label="Free" className={ui.num}>
                       {d.available}
+                    </td>
+                    <td data-label="Held" className={ui.num}>
+                      {d.held}
+                    </td>
+                    <td data-label="Booked" className={ui.num}>
+                      {d.booked}
                     </td>
                   </tr>
                 ))}
@@ -82,6 +102,8 @@ export default async function OperatorOverview({ params }: { params: Promise<{ o
           </p>
         )}
       </Section>
+      {/* ADR-103: every team member sees the holds (Inventory connections is for owners). */}
+      <Holds orgId={orgId} canEdit={false} />
       <Section title="Inventory issues" id="issues">
         {o.issues.length || connection.length ? (
           <ul className={ui.list}>

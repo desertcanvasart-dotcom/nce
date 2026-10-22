@@ -34,7 +34,7 @@ Each step has an owner and a check. Do them in order. Don't switch indexing on (
 
 | ✓ | Step | Owner | Check |
 |---|---|---|---|
-| ☐ | Variables set: Supabase URL and keys, `NEXT_PUBLIC_SITE_URL=https://nilecruz.com`, Stripe live keys and webhook secret, Resend key, `FEED_PULL_SECRET`, WhatsApp (if on), `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_ENVIRONMENT=production` | F | Railway → Variables, compared with `.env.example` |
+| ☐ | Variables set: Supabase URL and keys, `NEXT_PUBLIC_SITE_URL=https://nilecruz.com`, Stripe live keys and webhook secret, Resend key, `FEED_PULL_SECRET`, `WEBHOOK_SIGNING_KEY` (operators' webhooks, ADR-103), WhatsApp (if on), `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_ENVIRONMENT=production` | F | Railway → Variables, compared with `.env.example` |
 | ☐ | `ALLOW_INDEXING` **not** set yet | F | `robots.txt` on the Railway URL says `Disallow: /` |
 | ☐ | The scheduler's signed URLs in Supabase Vault point at production (tick, feed pull) | C, with F | Vault entries; the next tick logs a 200 |
 | ☐ | Deployed; `/api/health/` answers `{"ok":true}` | C | curl |

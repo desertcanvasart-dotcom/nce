@@ -117,6 +117,18 @@ export async function connectionIssues(orgId: string): Promise<string[]> {
       issues.push(`${ROUTE_LABEL[h.route]}: ${h.lastProblem}`);
     }
   }
+  // ADR-103: the accuracy rung, and webhooks whose last attempt failed.
+  const db = await getDb();
+  const [{ data: settings }, { data: hook }] = await Promise.all([
+    db.from("operator_settings").select("data_accuracy_low").eq("org_id", orgId).maybeSingle(),
+    db.from("webhook_endpoints").select("active, last_error, last_error_at, last_sent_at").eq("org_id", orgId).maybeSingle(),
+  ]);
+  if (settings?.data_accuracy_low)
+    issues.push(
+      "More than 20 % of booking requests were declined when your availability showed space: cabins entered by hand or from a sheet show as “to be confirmed” until that improves.",
+    );
+  if (hook?.active && hook.last_error && hook.last_error_at && (!hook.last_sent_at || hook.last_error_at > hook.last_sent_at))
+    issues.push(`Webhooks: ${hook.last_error}`);
   return issues;
 }
 

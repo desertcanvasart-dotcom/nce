@@ -101,6 +101,7 @@ export function ReservationRecord({ r }: { r: Res }) {
             .map((c) => (
               <li key={c.line}>
                 Cabin {c.line}: {c.cabin_name}, {c.deck} deck · {guestsText(c.adults, c.child_ages)} · {money(c.price_minor)}
+                {c.supplement_minor ? ` (including ${money(c.supplement_minor)} in supplements)` : ""}
               </li>
             ))}
         </ul>

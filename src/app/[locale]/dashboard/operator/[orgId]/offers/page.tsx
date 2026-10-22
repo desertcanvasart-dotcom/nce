@@ -11,6 +11,8 @@ import { orgBookingRequests, REQUEST_STATUS } from "@/server/requests/queries";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { guestsText, OFFER_BADGE } from "../../../_bookings/OfferSummary";
 import { isUuid } from "../../../sections";
+import { Notice } from "@/components/dashboard/ui";
+import { dataAccuracyLow } from "@/server/requests/queries";
 
 /** DASH-OPR-002, 003, 011: requests that fit this company's sailings, and its offers. No customer names (ADR-088). */
 export default async function RequestsAndOffers({ params }: { params: Promise<{ orgId: string }> }) {
@@ -20,7 +22,12 @@ export default async function RequestsAndOffers({ params }: { params: Promise<{ 
     kind: "operator",
     returnTo: `/dashboard/operator/${orgId}/offers/`,
   });
-  const [requests, offers, booking] = await Promise.all([visibleRequests(), orgOffers(orgId), orgBookingRequests(orgId)]);
+  const [requests, offers, booking, accuracyLow] = await Promise.all([
+    visibleRequests(),
+    orgOffers(orgId),
+    orgBookingRequests(orgId),
+    dataAccuracyLow(orgId),
+  ]);
   const waiting = booking.filter((b) => b.status === "waiting" || b.status === "held");
   const now = nowMs();
   const open = requests.filter((r) => r.status === "open");
@@ -45,7 +52,14 @@ export default async function RequestsAndOffers({ params }: { params: Promise<{ 
         ) : (
           <p className={ui.muted}>No booking requests yet.</p>
         )}
+        {accuracyLow ? (
+          <Notice tone="error">
+            More than 20 % of requests were declined when your availability showed space. Until that improves, cabins you enter by
+            hand or send on a vacancy sheet show to travellers as “to be confirmed”. Keeping your availability current fixes it.
+          </Notice>
+        ) : null}
       </Section>
+
       <Section title={`Open requests (${open.length})`} id="requests">
         <p className={ui.muted}>
           Requests whose route, dates and nights fit one of your published sailings. You see the trip and the guests’ ages; the

@@ -1910,3 +1910,67 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 - **Terms, CLS 0.057 in CI:** with real throttling the body font can arrive after first paint, and a long draft paragraph on the terms page re-wraps by a line, even with Arial installed. The size-matched fallback evens out average width, not every line break. Simulated throttling never showed this because it loads fonts before painting.
   - **The decision:** PERF-002's CLS ≤ 0.05 applies to the key templates, and CI holds them to it. The terms and sign-in pages, which aren't key templates, are still measured, against Google's "good" threshold of 0.1 (`assertMatrix` in `lighthouserc.json`).
   - **Later:** if real-visitor CLS (Sentry) shows font swaps matter, the remedy is a closer-matched fallback, or `optional` once the brand font is cached site-wide.
+
+## 22 Oct 2026 · Batch 11-2 · Vessel onboarding spec: seven gaps closed (ADR-103)
+
+**Why:** a compliance review against "Nile Cruise Vessel Onboarding — Build Spec" (20 Oct 2026) found seven items missing. Faris asked for them and answered four choices (brief `docs/briefs/VESSEL-SPEC-GAPS.md`, ADR-103). Branch `batch-11-2-vessel-spec-gaps`, stacked on 11-1.
+
+**Built:**
+- **Migrations:**
+  - `20261030000100_sale_modes`: cabins per cabin type, freesale, stop-sale, the accuracy rung, and the new booking mode.
+  - `20261030000200_holds`: holds, admin holds, expiry, free / held / booked.
+  - `20261030000300_supplements`: supplements in both price functions, each line's supplement, the confirmation time on prices and partner search.
+  - `20261030000400_webhooks`: endpoints, the delivery queue, three event triggers, claim and result functions for the tick.
+- **Operator and admin screens:**
+  - cabin count on the cabin type form;
+  - Stop-sales and Supplements on the ship's Routes, schedules and rates page;
+  - free / held / booked and stop-sale / freesale on each departure;
+  - Freesale, Holds and Webhooks on the admin operator page and (read-only, except webhooks) on Inventory connections;
+  - the accuracy warning in the reply metrics;
+  - the webhook section of the format page.
+- **Traveller screens:**
+  - the reserve page shows "Availability updated …", the supplement per adult on each cabin, and the supplements in the total;
+  - the partner search and reserve pages price and show supplements;
+  - the reservation record shows each line's supplement.
+- **Sending:** `src/server/connections/webhooks.ts` on the scheduler's tick, through `safePost` (the SSRF-safe fetch, no redirects), signed by `signWebhook` with `WEBHOOK_SIGNING_KEY`.
+
+**Verified:**
+- **Database:** `supabase db reset` and pgTAP: 630 tests pass, with the new `400_vessel_spec_gaps` (33 checks).
+- **Unit:** `pnpm verify` passes, 513 tests: new `webhooks.test.ts`, plus additions to `sheets`, `partner-search` and `marketplace-vessel`.
+- **In the browser (local database):**
+  - an operator's reservations user added a supplement and a stop-sale through the forms;
+  - the departure page showed free / held / booked and the stop-sale;
+  - the customer's reserve page showed the stopped Suite as sold out, the other cabin "Availability updated 3 hours ago", and a total of US$1,970 (2 × 900 + 2 × 85 gala supplement);
+  - the owner's Inventory connections showed the new sections and refused a private-network webhook address.
+
+**Not done / known gaps:**
+- On staging, set `WEBHOOK_SIGNING_KEY`; without it nothing is sent.
+- Lifting a stop-sale or releasing a hold removes its row, and the "lifted" / "released" message with it. The list ("No stop-sales.", the row gone) is the only confirmation.
+- **Still outside nilecrz's scope:** the standalone vessel system, Vessel Desk, an append-only inventory history.
+
+### Follow-up (22 Oct 2026): regressions, the operators page, the operator dashboard
+
+- **Regressions fixed:**
+  - Under a freesale, traveller pages showed exact counts from sheet or manual data. Counts now come from `app.shown_left`: allotment plus live data only. Booking under a freesale still works without a count. pgTAP 400 updated.
+  - The allotments end-to-end test failed because the admin operator page now has three forms with the same fields. The test now works inside the Allotments section.
+  - Notices about a Nilecruz hold linked to Inventory connections, which only owners can open. They now link to the Overview.
+- **Operator dashboard:**
+  - The Overview shows free, held and booked per sailing, marks stop-sales, and lists active holds for every team member.
+  - Inventory issues now include the accuracy rung and a failing webhook.
+  - Requests and offers shows the accuracy warning.
+  - The 09:00 digest includes holds Nilecruz placed that end that day (unit `booking-requests`).
+- **Public operators page (`/operators/connect/`):**
+  - The text is updated for freesale (with allotments, so still six ways), stop-sales, supplements, cabin counts, the accuracy rung, "availability updated" and webhooks.
+  - New questions on charters, gala dinners and webhooks.
+  - The screenshots were re-taken from local sample data, and the sample cabin types now have counts.
+- **Verified:**
+  - `pnpm verify` passes (514 unit tests); pgTAP passes (630).
+  - In the browser: the Overview showed a Nilecruz hold (5 free, 1 held), "sales stopped" on the next sailing, and the hold notice; the operators page showed the new sections.
+
+### Follow-up (22 Oct 2026): end-to-end spec and screenshots
+
+- **End-to-end:** `tests/e2e/vessel-spec-gaps.spec.ts`, 3 tests, all pass against the local database:
+  - the operator stops sales on one cabin type and adds a gala supplement through the forms; the departure page marks the stop-sale; the customer's reserve page shows that cabin type disabled, the supplement per adult and a total of US$2,170 (2 × 1,000 + 2 × 85); then lift and switch off;
+  - a catalogue admin (two-step sign-in) places a hold and adds a freesale on the admin operator page; a date with no sailing is refused in words; the operator's departure shows "3 free · 2 held" and "freesale"; the operator's Overview lists the hold with no Release button; releasing gives the cabins back;
+  - the owner's webhook address: a private-network address is refused, the test origin is saved, an empty address removes it.
+- **Screenshots:** `docs/screenshots/batch-11-2/`, 8 pages at 375 / 768 / 1440 in Day and Night (48 images), from the local sample set (`scripts/operator-sample.ts`, plus a sample stop-sale, gala supplement, hold, freesale and webhook on Sample Dahabiya Nefertari): the operator's Overview, ship page, two departures, Inventory connections and format page, the customer's reserve page and the admin operator page.

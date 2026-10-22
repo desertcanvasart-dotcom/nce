@@ -47,7 +47,8 @@ export default async function PartnerReserve({
   const requesting = cabin?.mode === "request";
   const { data: hours } =
     requesting && cabin ? await db.rpc("operator_confirm_hours", { target_org: cabin.operatorOrgId }) : { data: null };
-  const most = requesting ? 5 : (cabin?.available ?? 0);
+  // ADR-103: no count from manual or sheet data, even under a freesale; the booking itself checks what's left.
+  const most = requesting ? 5 : (cabin?.available ?? 5);
   const base = `/dashboard/partner/${orgId}/`;
   const ages = [...Array(adults).fill(30), ...childAges];
   const per = ages.length;
@@ -72,7 +73,9 @@ export default async function PartnerReserve({
               {found.departsOn} to {found.returnsOn} · {cabin.name}, {cabin.deck} deck ·{" "}
               {requesting
                 ? `available, confirmed by the operator within ${Number(hours ?? 24)} h`
-                : `${cabin.available} ${cabin.available === 1 ? "cabin" : "cabins"} to book now`}
+                : cabin.available === null
+                  ? "available to book now"
+                  : `${cabin.available} ${cabin.available === 1 ? "cabin" : "cabins"} to book now`}
             </p>
             <p>
               {cabins} {cabins === 1 ? "cabin" : "cabins"} ×{" "}
@@ -80,6 +83,12 @@ export default async function PartnerReserve({
               <strong>{formatMoney({ amount: cabin.price.totalMinor * cabins, currency: cabin.currency }, "en")}</strong>{" "}
               <span className={ui.muted}>({TIER_LABEL[cabin.price.tier]})</span>
             </p>
+            {cabin.price.supplementMinor ? (
+              <p className={ui.muted}>
+                Each cabin’s price includes {formatMoney({ amount: cabin.price.supplementMinor, currency: cabin.currency }, "en")}{" "}
+                in compulsory supplements for these dates (gala dinners or peak dates).
+              </p>
+            ) : null}
             {found.gratuityUsdMinor ? (
               <p className={ui.muted}>
                 {gratuityText(found.gratuityUsdMinor, {

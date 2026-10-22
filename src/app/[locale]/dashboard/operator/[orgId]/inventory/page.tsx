@@ -10,9 +10,11 @@ import { connectionsFor, pastePreview } from "@/server/connections/queries";
 import { freshnessHours } from "@/server/product/queries";
 import { FEED_STATUS, HealthTable, RunsTable } from "../../../_connections/Tables";
 import { RowTable } from "../../../_connections/RowTable";
-import { operatorContacts, replySla, replyStats } from "@/server/requests/queries";
+import { dataAccuracyLow, operatorContacts, replySla, replyStats } from "@/server/requests/queries";
 import { Contacts, LastSheet, ReplyStats } from "../../../_requests/Bits";
 import { Allotments } from "../../../_allotments/Allotments";
+import { Freesales, Holds, Webhook } from "../../../_sales/Sales";
+import { freesaleHours } from "@/server/product/queries";
 import { isUuid } from "../../../sections";
 import { applyPaste, createKey, discardPaste, previewPaste, removeFeed, revokeKey, saveFeed } from "./actions";
 
@@ -56,8 +58,11 @@ export default async function InventoryConnections({ params, searchParams }: Pro
       </Section>
 
       <Allotments orgId={orgId} canEdit={false} />
+      <Freesales orgId={orgId} canEdit={false} hours={await freesaleHours()} />
+      <Holds orgId={orgId} canEdit={false} />
       <LastSheet orgId={orgId} />
-      <ReplyStats stats={stats} slaHours={sla} />
+      <ReplyStats stats={stats} slaHours={sla} accuracyLow={await dataAccuracyLow(orgId)} />
+      <Webhook orgId={orgId} admin={false} />
       <Contacts orgId={orgId} contacts={contacts} canEdit admin={false} />
 
       <Section title="Paste JSON or XML" id="paste">

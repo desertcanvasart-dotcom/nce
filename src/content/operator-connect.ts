@@ -1,7 +1,8 @@
 /**
  * PAGE-107 (Faris, 21 Oct 2026): "How operators connect to Nilecruz", /operators/connect/. Every way an operator can put
  * cabins on Nilecruz, explained step by step for someone who isn't technical. Draft copy for Faris's review. Every fact
- * here matches what the system does (ADR-099 the reservable rule, ADR-100 allotments, the inventory format v1).
+ * here matches what the system does (ADR-099 the reservable rule, ADR-100 allotments, ADR-103 freesale, stop-sales,
+ * supplements, holds and webhooks, the inventory format v1).
  * Commission and commercial terms are never on this page: they are agreed with each operator.
  */
 export type Shot = { file: string; alt: string; width: number; height: number; caption: string };
@@ -53,6 +54,11 @@ export const GLOSSARY: { term: string; meaning: string }[] = [
     meaning: "The guest asks for a cabin and you confirm it first. The guest pays only after you confirm.",
   },
   { term: "Dashboard", meaning: "Your company’s private area on Nilecruz, opened with your email and password." },
+  { term: "Stop-sale", meaning: "Sailings you close to new bookings, for example for a charter or dry dock." },
+  {
+    term: "Supplement",
+    meaning: "A compulsory charge per guest on certain nights, such as a Christmas gala dinner, added to the cruise price.",
+  },
 ];
 
 export const WAYS: Way[] = [
@@ -72,6 +78,7 @@ export const WAYS: Way[] = [
     weDo: [
       "We read the sheet into our format. Plain tables are read directly; other layouts are read with the help of AI and always checked.",
       "A Nilecruz admin sees a preview: the original sheet beside what will change, which cabins became free or full, and anything that couldn’t be read. Nothing changes until it is confirmed.",
+      "We check that no sailing shows more free cabins than you have of that type, so a misread number can’t slip through.",
       "After four sheets in a row come through without a single problem, later sheets can be confirmed automatically, and only when every check passes. Anything unusual still waits for a person.",
       "If you like, we send a short note back saying the sheet was received and applied.",
     ],
@@ -116,7 +123,7 @@ export const WAYS: Way[] = [
       "Please answer within your reply time: 6 hours unless we agree another with you. If a request is still waiting at that time, we send a reminder; at twice that time a Nilecruz admin phones you. Every morning at 09:00 Cairo time you get one email listing the requests waiting for you and any holds ending that day.",
     notes: [
       "The buttons work for 7 days. Every answer is timed: guests see “usually confirmed within X hours”, based on how fast you really answer.",
-      "Over 90 days we also measure how often your sheet or dashboard was right when guests asked. Accurate availability means fewer declines and happier guests.",
+      "Over 90 days we also measure how often your sheet or dashboard was right when guests asked. If more than 1 in 5 requests are declined although your availability showed space, cabins from your sheet or dashboard show as “to be confirmed” until that improves. Your dashboard tells you when this happens.",
       "The same four buttons will arrive on WhatsApp as quick replies once WhatsApp approves our business messages.",
     ],
     shots: [
@@ -125,7 +132,7 @@ export const WAYS: Way[] = [
         "The page that opens from the email’s Confirm button: the request’s ship, date, cabins and guests, and one button to record the answer.",
         "The page that opens when you tap Confirm.",
         576,
-        504,
+        470,
       ),
       shot(
         "booking-request",
@@ -145,14 +152,18 @@ export const WAYS: Way[] = [
     booking: "Booking requests you confirm",
     bestFor: "Operators who want full control and have someone to keep it current.",
     steps: [
-      "Your dashboard has your ships, each ship’s cabin types (deck, size, beds, how many guests, view), its schedules (route, nights, days it sails) and the sailings that follow from them.",
+      "Your dashboard has your ships, each ship’s cabin types (deck, size, beds, how many guests, view, and how many cabins of that type), its schedules (route, nights, days it sails) and the sailings that follow from them.",
       "For each sailing you enter the price per person for one, two or three guests in a cabin, in US$ or €, and the number of free cabins of each type. Prices for children and the crew gratuity are set once for the ship.",
       "Your team can have several people with different roles: owner, reservations, finance and viewer. Each sees and changes only what their role allows.",
       "Whenever cabins sell elsewhere, change the number. You can also paste a whole list at once.",
+      "If a sailing can’t be sold, for a charter or dry dock, stop sales for the whole ship or one cabin type over a range of dates. Lift the stop-sale when you can sell again.",
+      "Add supplements for nights that cost more, such as a Christmas or New Year gala dinner or peak dates: an amount per guest, added to the price of every sailing on board those nights.",
     ],
     weDo: [
       "We show your prices and free cabins to guests and agents, and check them again at the moment someone books, so a cabin is never sold twice.",
       "Before a ship goes live, Nilecruz checks it is complete and publishes its evaluation. Your ship’s facts stay yours to update.",
+      "Stopped sailings show as sold out and can’t be booked or requested, even if a sheet or feed later lists them. Supplements are shown to guests and included in the price they pay.",
+      "Each sailing shows you how many cabins are free, held and booked.",
     ],
     update:
       "Whenever something changes. Numbers you enter count as up to date for 7 days; after that the sailing shows “to be confirmed”.",
@@ -162,7 +173,7 @@ export const WAYS: Way[] = [
         "The operator’s inventory page: each sailing’s cabin types with free cabins and when they were last confirmed.",
         "Free cabins per sailing, and when each was last confirmed.",
         1152,
-        1426,
+        1357,
       ),
       shot(
         "dashboard-cabins",
@@ -217,6 +228,7 @@ export const WAYS: Way[] = [
     weDo: [
       "We apply each update within seconds. Sending the same update twice changes nothing twice.",
       "Keys can be replaced at any time without stopping the connection.",
+      "If you give us a web address, we tell your system when something changes on Nilecruz: availability after a booking, a hold or an answer, a hold that expired, and a confirmed booking. Changes your own system sent aren’t sent back.",
     ],
     update: "Automatic, whenever something changes in your system.",
     shots: [
@@ -231,21 +243,25 @@ export const WAYS: Way[] = [
   },
   {
     id: "allotments",
-    title: "6. Give Nilecruz an allotment",
-    summary: "You contract a number of cabins on chosen sailings to Nilecruz. They book instantly until a release date.",
+    title: "6. Give Nilecruz an allotment or a freesale",
+    summary:
+      "You contract cabins on chosen sailings to Nilecruz, or let us sell your free cabins without asking. Either way, guests book instantly.",
     effort: "Low once agreed",
-    freshness: "Always bookable until release",
+    freshness: "Allotment: until release. Freesale: your sheet or dashboard within 72 hours",
     booking: "Instant booking",
     bestFor: "Operators who want their ship to book instantly without connecting a system.",
     steps: [
-      "We agree with you how many cabins of which type on which sailings, and how many days before departure unsold cabins return to you (the release period).",
-      "A Nilecruz admin enters the allotment. You see it in your dashboard, with how many of its cabins are booked on each sailing.",
+      "Allotment: we agree with you how many cabins of which type on which sailings, and how many days before departure unsold cabins return to you (the release period).",
+      "Freesale: you agree that we may sell your free cabins on chosen sailings without asking you first, down to the last one.",
+      "A Nilecruz admin enters the agreement. You see it in your dashboard, and for an allotment how many of its cabins are booked on each sailing.",
     ],
     weDo: [
-      "Guests and agents book allotment cabins instantly, even if your sheet is a few days old.",
-      "Once the release date passes, unsold cabins are yours again. A cancelled booking returns its cabin to the allotment.",
+      "Guests and agents book allotment cabins instantly, even if your sheet is a few days old, and even on dates you stopped sales: the cabins are contracted.",
+      "Once the release date passes, unsold allotment cabins are yours again. A cancelled booking returns its cabin to the allotment.",
+      "Under a freesale, cabins from a sheet or your dashboard updated in the last 72 hours book instantly, and you are told of each booking. Older numbers go back to booking requests until you update them.",
     ],
-    update: "Nothing to update while the allotment runs. Your other cabins keep using whichever way you chose above.",
+    update:
+      "Nothing to update while an allotment runs. A freesale needs your sheet or dashboard kept current, at least every 3 days.",
     shots: [
       shot(
         "allotments",
@@ -261,10 +277,12 @@ export const WAYS: Way[] = [
 export const BOOKING_RULE = {
   title: "How each way changes the way guests book",
   paragraphs: [
-    "Guests can book and pay at once only when we are sure the cabin is free right now: when it comes from your feed or API, from an answer you gave in the last 2 hours, or from an allotment.",
-    "Cabins from your sheet or your dashboard are shown as available for 7 days. Guests then send a booking request, you confirm it with one tap, and the guest pays after you confirm. Nobody pays for a cabin you haven’t confirmed.",
-    "After 7 days without news, a sailing shows “to be confirmed”, and guests can ask us about it.",
-    "Exact numbers of free cabins (such as “Last few cabins”) are only ever shown from your feed, your API, a one-tap answer in the last 2 hours, or an allotment.",
+    "Guests can book and pay at once only when we are sure the cabin is free right now: when it comes from your feed or API, from an answer you gave in the last 2 hours, from an allotment, or, under a freesale, from your sheet or dashboard updated in the last 72 hours.",
+    "Otherwise, cabins from your sheet or your dashboard are shown as available for 7 days. Guests then send a booking request, you confirm it with one tap, and the guest pays after you confirm. Nobody pays for a cabin you haven’t confirmed.",
+    "After 7 days without news, a sailing shows “to be confirmed”, and guests can ask us about it. The same happens while more than 1 in 5 of your answered requests are declined although your availability showed space.",
+    "Every sailing shows guests when its availability was last updated, so keeping it current pays off.",
+    "Sailings you stopped show as sold out, except cabins in a Nilecruz allotment.",
+    "Exact numbers of free cabins (such as “Last few cabins”) are only ever shown from your feed, your API, a one-tap answer in the last 2 hours, or an allotment. Never from your sheet or dashboard, even under a freesale.",
   ],
 };
 
@@ -308,6 +326,18 @@ export const FAQS: { q: string; a: string }[] = [
     a: "A Nilecruz admin checks every sheet before it changes anything, sees what changed and asks you if something looks wrong. Nothing is booked from a sheet without your confirmation.",
   },
   {
+    q: "What if a sailing is chartered or the ship is in dry dock?",
+    a: "Stop sales for those dates in your dashboard, for the whole ship or one cabin type. The sailings show as sold out until you lift it, whatever a sheet or feed says. Cabins in a Nilecruz allotment stay bookable until their release date.",
+  },
+  {
+    q: "Can I charge for a Christmas or New Year gala dinner?",
+    a: "Yes. Add it as a supplement in your dashboard: an amount per guest for the nights it covers. Guests see it and it is included in what they pay; children pay the same share as of the fare.",
+  },
+  {
+    q: "Can my booking system hear about bookings made on Nilecruz?",
+    a: "Yes. Give us a web address and we send your system a signed message when availability changes on Nilecruz, when a hold expires and when a booking is confirmed.",
+  },
+  {
     q: "What are the commercial terms?",
     a: "They are agreed with each operator. We talk them through with you when we review your application.",
   },
@@ -318,6 +348,7 @@ export const FOR_IT = {
   paragraphs: [
     "Feeds and the API use one format, Nilecruz inventory format v1, in JSON or XML. Each document lists your ships by their Nilecruz code, each sailing by date (and schedule code when a ship sails twice that day), the free cabins of each cabin type and, if you like, the prices per person for one to three guests.",
     "API updates are signed with an Ed25519 key you create in your dashboard and carry an idempotency key, so a retry never applies twice. Feeds are read over https every hour, up to 5 MB.",
+    "In the other direction, Nilecruz can send your system webhooks: inventory.changed, hold.expired and booking.confirmed, as signed JSON posts to an https address you choose, retried for 24 hours. They use the same ship, date and cabin codes, and never carry guests’ names.",
     "The full format, your own codes, examples and a signing example in Node.js are on the format page in your dashboard once you are approved.",
   ],
   sample: `{

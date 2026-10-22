@@ -62,12 +62,13 @@ test("an admin adds an allotment; its cabins book instantly though the operator'
   await signInAdmin(page, "product@nilecruz.test");
   await page.goto(`/dashboard/admin/operators/${ORG.operatorA}/#allotments`);
   const section = page.locator("#allotments").locator("..");
-  await page.getByLabel("Ship and cabin type").selectOption({ label: `Sample Cancel Ship ${RUN}al · Double` });
-  await page.locator('input[name="starts_on"]').fill(days(1));
-  await page.locator('input[name="ends_on"]').fill(days(90));
-  await page.getByLabel("Cabins per sailing").fill("2");
-  await page.getByLabel("Contract reference").fill(`SAMPLE-${RUN}`);
-  await page.getByRole("button", { name: "Add allotment" }).click();
+  // ADR-103: the page also has Freesale and Holds forms with the same fields, so stay inside Allotments.
+  await section.getByLabel("Ship and cabin type").selectOption({ label: `Sample Cancel Ship ${RUN}al · Double` });
+  await section.locator('input[name="starts_on"]').fill(days(1));
+  await section.locator('input[name="ends_on"]').fill(days(90));
+  await section.getByLabel("Cabins per sailing").fill("2");
+  await section.getByLabel("Contract reference").fill(`SAMPLE-${RUN}`);
+  await section.getByRole("button", { name: "Add allotment" }).click();
   await expect(page.getByText(/Allotment added/)).toBeVisible();
   await expect(section.getByText(`Sample Cancel Ship ${RUN}al · Double`).first()).toBeVisible();
 
