@@ -1901,8 +1901,9 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
 ### Follow-up (22 Oct 2026): CI's Lighthouse findings
 
 - **When to go:** blocking time was still 502 ms on CI's machine. The calendar's 365 days now render on the server as plain markup, and one small client component (`CalendarKeys`) adds the keyboard, focus, hover and click behaviour with a single set of listeners on the grid. React no longer hydrates 365 buttons. Measured locally: TBT about 50 ms (was 236–500). The keyboard test still passes, and without JavaScript every day keeps its words.
-- **Luxor, CLS 0.064 in CI:** the body font (Jost) swapping in re-wrapped the intro paragraph. CI's Linux machine has no Arial, which the size-matched fallback is built on; Android phones don't either.
-  - **The fix:** Jost now uses `font-display: optional`. It's preloaded, so it usually shows; when it's late, that page keeps the fallback, with no jump, and later pages use the cached font.
-  - **Result:** CLS 0 on both pages.
-  - The headings' font (Cormorant) keeps `swap`; its shift was 0.0006.
+- **Luxor, CLS 0.064 in CI:** the body font (Jost) swapping in re-wrapped the intro paragraph.
+  - **The cause:** the fonts' size-matched fallback is built on Arial, which Mac and Windows have and CI's Linux runner doesn't. Locally the shift was 0.
+  - **Tried and dropped:** `font-display: optional` removed the shift, but the brand font then often missed first paint (the visual parity check caught it).
+  - **The fix:** the CI Lighthouse job installs Arial, as desktop browsers have it. The fonts stay `swap`.
+  - **Known gap:** Android has no Arial either, so Android visitors can see this small shift on long intro paragraphs. A Roboto-matched fallback would remove it; that's for a later performance pass, with real-visitor CLS from Sentry to measure it.
 - **Database CI:** the new test assumed bank details were set, which a fresh database doesn't have. It now checks a setting that always exists.

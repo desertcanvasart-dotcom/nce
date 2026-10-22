@@ -116,6 +116,12 @@ jobs:
         with: { version: 2.111.0 }
       - name: Start local Supabase with the seed
         run: supabase start -x studio,imgproxy,edge-runtime,logflare,vector,supavisor,mailpit
+      # The fonts' size-matched fallback is built on Arial, which Mac and Windows have and the runner doesn't. Without
+      # it the body text re-wraps when the web font arrives (a 0.06 layout shift no desktop visitor sees).
+      - name: Install Arial (as desktop browsers have it)
+        run: |
+          echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
+          sudo apt-get update -qq && sudo apt-get install -y -qq ttf-mscorefonts-installer && fc-cache -f
       - run: pnpm with-local-db pnpm build
       - run: pnpm with-local-db pnpm lhci
       - uses: actions/upload-artifact@v7
