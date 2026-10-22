@@ -46,7 +46,11 @@ with intended(table_name, grantee, privileges) as (
     ('inventory_feeds', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_keys', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     ('inventory_runs', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'), ('api_idempotency', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
     -- Batch 11 (SEC-011): users update only some columns of these (column grants, not listed here).
-    ('memberships', 'authenticated', 'DELETE,INSERT,SELECT'), ('memberships', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
+    ('memberships', 'authenticated', 'DELETE,INSERT,SELECT'), ('memberships', 'service_role', 'DELETE,INSERT,SELECT,UPDATE'),
+    -- Batch 11-2 (ADR-103): stop-sales are lifted, never deleted; holds and webhook deliveries are written through functions.
+    ('stop_sales', 'authenticated', 'INSERT,SELECT,UPDATE'), ('stop_sales', 'service_role', 'INSERT,SELECT,UPDATE'),
+    ('holds', 'authenticated', 'SELECT'), ('holds', 'service_role', 'SELECT'),
+    ('webhook_deliveries', 'authenticated', 'SELECT'), ('webhook_deliveries', 'service_role', 'SELECT')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['profiles', 'organisations', 'vessels', 'vessel_private', 'vessel_translations',
@@ -59,7 +63,7 @@ with intended(table_name, grantee, privileges) as (
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
                     'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments',
-                    'sightseeing_rates', 'schedule_sightseeing']) t,
+                    'sightseeing_rates', 'schedule_sightseeing', 'freesales', 'supplements', 'webhook_endpoints']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
