@@ -274,7 +274,7 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | DASH-BND-003 | DG §Boundaries 3 | No screen implies numbered-cabin selection or a verified floor plan. | 5 | Verified | Batch 5-2 (20 Oct 2026): no screen draws numbered cabins or a floor plan; decks list cabin types only (e2e) |
 | DASH-BND-004 | DG §Boundaries 4 | The importer's scope (vessel profiles only) is stated in the import screen. | 4b | Verified | Batch 4b (18 Oct 2026): import screen states its scope (vessel profiles only); e2e |
 | DASH-BND-005 | DG §Boundaries 5 | External reviews are not collected or refreshed automatically; each shows its source and retrieval date. | 4b | Verified | Batch 4b (18 Oct 2026): external ratings entered by hand with source and date read; no automatic refresh |
-| DASH-BND-006 | DG §Boundaries 6 | Public surfaces are in EN/ES/JA; admin and operational interfaces may stay in English. | 10 | Planned |  |
+| DASH-BND-006 | DG §Boundaries 6 | Public surfaces are in EN/ES/JA; admin and operational interfaces may stay in English. | 10 | Verified | Batch 10-1: every built page renders under /es/ and /ja/ (crawl); untranslated content shows in English with a note; dashboards English |
 | DASH-BND-007 | DG §Boundaries 7 | Account-email sending depends on a configured sender and fails visibly, not silently, when it is missing. | 8 | Verified | Batch 8-2a (21 Oct 2026): every notice also emailed (English, ADR-101); without RESEND_API_KEY/EMAIL_FROM each is recorded as not sent and admins see a banner and Email delivery counts (pgTAP 330, e2e conversion.spec); real sending needs the Resend account |
 | DASH-BND-008 | DG §Boundaries 8 | Finance tracking is operational only; no accounting, bank settlement or automated refunds. | 4f | Verified | Batch 4f-1 (18 Oct 2026): operational tracking only: no accounting or bank settlement; payouts are records of transfers made elsewhere; refunds need admin approval (4f-2) |
 
@@ -548,11 +548,11 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | SEO-001 | silo.xlsx Read me C10 | URLs are lowercase, hyphenated and end with a trailing slash; non-slash variants redirect. | 1 | Verified | Batch 1 (17 Oct 2026): e2e trailing-slash 308; unit localizedPath |
 | SEO-002 | CLAUDE.md §5 | Each public page has a unique title and meta description from a metadata helper. | 1 | Verified | Batch 1 (17 Oct 2026): src/lib/seo/metadata.ts; e2e title present |
-| SEO-003 | CLAUDE.md §5 | Each public page has exactly one H1 (CI check). | 10 | Planned |  |
+| SEO-003 | CLAUDE.md §5 | Each public page has exactly one H1 (CI check). | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts` crawls every public page from home: exactly one H1 each |
 | SEO-004 | CLAUDE.md §5; Linking rules | Each public page shows a breadcrumb and emits BreadcrumbList. | 5 | Verified | Batch 5-1 (20 Oct 2026): hub, facets, comparison; Batch 5-2 (20 Oct 2026): vessel and reserve pages: visible breadcrumbs and BreadcrumbList (e2e) |
-| SEO-005 | CLAUDE.md §5 | Each page emits the schema types listed in its silo row (validated in CI). | 10 | Planned |  |
+| SEO-005 | CLAUDE.md §5 | Each page emits the schema types listed in its silo row (validated in CI). | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts` checks each built page has its silo row's schema types (Offer only where priced); hubs now emit CollectionPage + ItemList, destinations their TouristAttraction |
 | SEO-006 | CLAUDE.md §5 | Each page has a self-referencing canonical tag. | 1 | Verified | Batch 1 (17 Oct 2026): e2e canonical per locale; unit pageMetadata |
-| SEO-007 | silo.md §Languages | Each page has reciprocal hreflang for en, es, ja and x-default. | 10 | Planned |  |
+| SEO-007 | silo.md §Languages | Each page has reciprocal hreflang for en, es, ja and x-default. | 10 | Built | Batch 10-1: `hreflangAlternates` in `pageMetadata` (translated languages + x-default, both ways); `seo-plumbing.test.ts`. Spanish and Japanese join as each page's translation is approved (`TRANSLATED`). |
 | SEO-008 | Linking rules: Up | Each page links to its parent and pillar in the breadcrumb and once in the intro text. | 6 | Verified | Batch 6-2 (21 Oct 2026): breadcrumb and one link up in the intro; every Phase 1 education page is built and checked in CI against its workbook row (silo-links.spec, 31 tests) |
 | SEO-009 | Linking rules: Down | Pillars and hubs link to every child in card grids with the child's primary keyword as anchor. | 6 | Verified | Batch 6-2 (21 Oct 2026): pillars and hubs link every built child by its keyword; every Phase 1 education page is built and checked in CI against its workbook row (silo-links.spec, 31 tests) |
 | SEO-010 | Linking rules: Across | Supporting pages link to two or three siblings in the same hub in a 'Keep reading' block. | 6 | Verified | Batch 6-2 (21 Oct 2026): Keep reading: up to three built siblings; every Phase 1 education page is built and checked in CI against its workbook row (silo-links.spec, 31 tests) |
@@ -562,9 +562,9 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 | SEO-014 | Linking rules: Anchor text | Anchors use the target's primary keyword or a close variant, never 'click here' or a bare URL. | 6 | Verified | Batch 6-2 (21 Oct 2026): anchors are the target keyword or a close variant, never click here; every Phase 1 education page is built and checked in CI against its workbook row (silo-links.spec, 31 tests) |
 | SEO-015 | Linking rules: Navigation | Main nav shows the five pillars plus Cruises; the footer holds Trust pages and silo roots. | 1 | Verified | Batch 1 (17 Oct 2026): e2e main nav and footer link tests |
 | SEO-016 | Linking rules: Facets | Only listed /cruises/ facet pages are indexable; parameters canonicalise to the clean URL with noindex. | 5 | Verified | Batch 5-1 (20 Oct 2026): only the five listed facets exist; searches and comparisons are parameters canonical to the clean URL with noindex; unlisted facets 404 (unit, e2e) |
-| SEO-017 | silo.md rule 8; Orphan check | Every page is within three folders and three clicks of home (crawler check). | 10 | Planned |  |
-| SEO-018 | Linking rules: Orphan check | A crawler run after each release finds no orphan pages. | 10 | Planned |  |
-| SEO-019 | ARCH §Routing | XML sitemaps per locale list only indexable URLs. | 10 | Planned |  |
+| SEO-017 | silo.md rule 8; Orphan check | Every page is within three folders and three clicks of home (crawler check). | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts`: every built page within 3 clicks of home and 3 folders |
+| SEO-018 | Linking rules: Orphan check | A crawler run after each release finds no orphan pages. | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts`: no orphan built page; runs in CI on every pull request |
+| SEO-019 | ARCH §Routing | XML sitemaps per locale list only indexable URLs. | 10 | Verified | Batch 10-1: /sitemap.xml index, /sitemaps/sitemap/{en,es,ja}.xml, indexable and translated pages only, with hreflang; `seo-plumbing.test.ts`, `seo-crawl.spec.ts` |
 | SEO-020 | ARCH §Routing | robots.txt disallows dashboards, account, API and MCP paths. | 1 | Verified | Batch 1 (17 Oct 2026): unit tests/unit/robots.test.ts; e2e staging noindex |
 | SEO-021 | silo.md §Assumptions | Current nilecruz.com URLs redirect (301) to their silo equivalents. | 10 | Planned |  |
 | SEO-022 | silo.md §Assumptions | Tours & Extras slugs are reconciled with any live nilecruz.com tour URLs. | 7 | Verified | Batch 7-1 (21 Oct 2026): the seven live nilecruz.com /tours/{id} addresses redirect (301) to each tour's one page; tours a workbook page covers redirect to it (unit, e2e) |
@@ -583,8 +583,8 @@ Batch codes are defined in `BATCH-PLAN.md`. Every ID below sits in exactly one b
 |---|---|---|---|---|---|
 | I18N-001 | silo.md §Languages | English is served unprefixed; Spanish under /es/ and Japanese under /ja/. | 1 | Verified | Batch 1 (17 Oct 2026): e2e lang + URL per locale |
 | I18N-002 | silo.md §Languages; ADR-022 | Spanish pages use translated slugs; Japanese pages use the English (Latin-letter) slugs. | 10 | Planned |  |
-| I18N-003 | Linking rules: Languages | Internal links stay within the current language. | 10 | Planned |  |
-| I18N-004 | Linking rules: Languages | The language switch goes to the equivalent page via hreflang alternates. | 10 | Planned |  |
+| I18N-003 | Linking rules: Languages | Internal links stay within the current language. | 10 | Verified | Batch 10-1: `seo-crawl.spec.ts` crawls /es/ and /ja/: every internal link keeps the language |
+| I18N-004 | Linking rules: Languages | The language switch goes to the equivalent page via hreflang alternates. | 10 | Verified | Batch 10-1: `LanguageSwitch` links straight to the same page in each language (no redirect); `seo-crawl.spec.ts` |
 | I18N-005 | silo.md §Languages | Translation is plumbed in the order pillars/hubs, money pages, supporting articles. | 10 | Planned |  |
 | I18N-006 | CLAUDE.md §6 | UI strings live in next-intl message files, none hard-coded in components. | 1 | Verified | Batch 1 (17 Oct 2026): messages/{en,es,ja}.json, 47 keys each; copy lint scans them |
 | I18N-007 | BRAND-BOOK §Multilingual | No fixed-width buttons or labels; layouts tolerate ~30% longer Spanish. | 2 | Verified | Batch 2 (17 Oct 2026): Button labels wrap; e2e no sideways scroll at 375 px on every gallery page |

@@ -1,6 +1,11 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { isBuilt } from "@/lib/seo/links";
+import { EXTRA_PAGES } from "@/lib/seo/sitemap";
 import { footerCompany, footerExplore, footerLegal } from "./nav-items";
+
+/** Only pages that exist are linked (ADR-093): the egyptologists and reviews pages join when they are built. */
+const exists = (href: string) => isBuilt(`${href}/`) || EXTRA_PAGES.includes(`${href}/`);
 import styles from "./SiteFooter.module.css";
 
 /** Footer: Trust & Company pages and silo roots (SEO-015), plus the draft legal pages (ENG-019). */
@@ -17,21 +22,25 @@ export function SiteFooter({ locale }: { locale: string }) {
         <nav aria-label={t("footer.explore")}>
           <h2 className={styles.heading}>{t("footer.explore")}</h2>
           <ul className={styles.list}>
-            {footerExplore.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href}>{t(`${item.ns}.${item.key}`)}</Link>
-              </li>
-            ))}
+            {footerExplore
+              .filter((item) => exists(item.href))
+              .map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href}>{t(`${item.ns}.${item.key}`)}</Link>
+                </li>
+              ))}
           </ul>
         </nav>
         <nav aria-label={t("footer.company")}>
           <h2 className={styles.heading}>{t("footer.company")}</h2>
           <ul className={styles.list}>
-            {footerCompany.map((item) => (
-              <li key={item.href}>
-                <Link href={item.href}>{t(`footer.${item.key}`)}</Link>
-              </li>
-            ))}
+            {footerCompany
+              .filter((item) => exists(item.href))
+              .map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href}>{t(`footer.${item.key}`)}</Link>
+                </li>
+              ))}
           </ul>
         </nav>
         <nav aria-label={t("footer.legal")}>

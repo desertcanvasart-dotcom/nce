@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2 and 4a. Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "乗船前にわかる、ナイル川クルーズ",
@@ -18,7 +18,8 @@
     "themeShortLight": "昼",
     "signIn": "ログイン",
     "account": "アカウント",
-    "signOut": "ログアウト"
+    "signOut": "ログアウト",
+    "untranslated": "このページはまだ翻訳されていないため、英語で表示しています。"
   },
   "nav": {
     "cruises": "クルーズ",

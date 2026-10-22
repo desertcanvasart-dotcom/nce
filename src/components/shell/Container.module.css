@@ -25,3 +25,14 @@
     padding: 0 var(--space-4);
   }
 }
+
+/* Batch 10: the note on a Spanish or Japanese page that isn't translated yet. */
+.untranslated {
+  max-width: var(--container);
+  margin: var(--space-3) auto 0;
+  padding: var(--space-2) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+  color: var(--ink);
+  font-size: var(--type-caption-size);
+}
