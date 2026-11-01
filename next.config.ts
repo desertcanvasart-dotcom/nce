@@ -1,6 +1,5 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import { liveSiteRedirects } from "./src/lib/redirects";
 import { securityHeaders } from "./src/lib/security-headers";
 
 const dev = process.env.NODE_ENV !== "production";
@@ -38,9 +37,6 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
     // Vessel photos are uploaded through a server action (admins only); the storage bucket allows 15 MB.
     serverActions: { bodySizeLimit: "16mb" },
-  },
-  async redirects() {
-    return liveSiteRedirects.map((r) => ({ ...r, statusCode: 301 as const }));
   },
   async headers() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";

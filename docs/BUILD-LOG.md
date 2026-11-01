@@ -1974,3 +1974,22 @@ The second Batch 6 PR. With it, 35 of Batch 6's 37 requirements are Verified:
   - a catalogue admin (two-step sign-in) places a hold and adds a freesale on the admin operator page; a date with no sailing is refused in words; the operator's departure shows "3 free · 2 held" and "freesale"; the operator's Overview lists the hold with no Release button; releasing gives the cabins back;
   - the owner's webhook address: a private-network address is refused, the test origin is saved, an empty address removes it.
 - **Screenshots:** `docs/screenshots/batch-11-2/`, 8 pages at 375 / 768 / 1440 in Day and Night (48 images), from the local sample set (`scripts/operator-sample.ts`, plus a sample stop-sale, gala supplement, hold, freesale and webhook on Sample Dahabiya Nefertari): the operator's Overview, ship page, two departures, Inventory connections and format page, the customer's reserve page and the admin operator page.
+
+## 1 Nov 2026 · Moving nilecruz.com: redirects checked on both sites
+
+**Checked:** the live nilecruz.com (Railway, DNS at Namecheap) still has the 9 sitemap pages and links recorded in `docs/imports/live-site-urls.md`; nothing new. On the new production service every old address reaches a new page, except 4 tours whose pages are private drafts there (404 after the redirect).
+
+**Changed (branch `seo-cutover-redirects`):**
+- The live-site redirects moved from `next.config.ts` to the proxy (`liveSiteRedirect` in `src/lib/redirects.ts`), so they can:
+  - drop the old query;
+  - send a tour whose own page isn't published to `/tours-extras/` with a 302 (`tourPublished`, read as a visitor, kept 10 minutes) instead of a 404.
+- `www.` + the site's host 301s to the bare domain on every path, in the same hop as any live-site rule. Nothing did this before.
+- **Tried and dropped:** one hop instead of two, by turning off Next's slash redirect (`skipTrailingSlashRedirect`). Every `<Link>` then rendered without its slash (`/cruises`), so each internal link would have redirected.
+
+**Verified:**
+- `pnpm verify` passes, 516 unit tests (new: matching with and without the slash, by query; which tours need publishing).
+- A production build on a local port: every old address ends on its page in at most two hops; tour …0001 gives 302 → `/tours-extras/`; `www` gives 301 to the bare host for `/`, `/robots.txt`, `/api/health/` and `/explore/?boat=dahabiya` → `/cruises/dahabiyas/`; rendered links keep their slash.
+- **Not run here:** the end-to-end specs (`http.spec.ts`, `destinations-tours.spec.ts`, updated). Docker wasn't running, and `.env.local` points at staging; CI runs them on the pull request.
+
+**Before moving the domain:** `NEXT_PUBLIC_SITE_URL=https://nilecruz.com` and a redeploy (it's built into the pages), then `LAUNCH.md` §5–7.
+

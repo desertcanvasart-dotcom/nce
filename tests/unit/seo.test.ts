@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/env", () => ({ siteUrl: "https://nilecruz.com", indexingAllowed: true }));
 const { localizedPath, absoluteUrl, pageMetadata } = await import("@/lib/seo/metadata");
-const { liveSiteRedirects } = await import("@/lib/redirects");
+const { liveSiteRedirect, liveSiteRedirects } = await import("@/lib/redirects");
 
 describe("localised paths (I18N-001, SEO-001)", () => {
   it.each([
@@ -44,6 +44,24 @@ describe("live-site redirects (SEO-021, ADR-028)", () => {
       { source: "/tours/:id", destination: "/tours-extras/" },
       { source: "/cruise/:id", destination: "/cruises/" },
     ]);
+  });
+
+  it("match a live address with or without its slash, by its query, and nothing else", () => {
+    const q = (s = "") => new URLSearchParams(s);
+    expect(liveSiteRedirect("/explore", q("boat=dahabiya"))?.destination).toBe("/cruises/dahabiyas/");
+    expect(liveSiteRedirect("/explore/", q("boat=powered"))?.destination).toBe("/cruises/motor-ships/");
+    expect(liveSiteRedirect("/explore/", q("nights=3"))?.destination).toBe("/cruises/");
+    expect(liveSiteRedirect("/cruise/abc/", q())?.destination).toBe("/cruises/");
+    expect(liveSiteRedirect("/tours/zzz", q())?.destination).toBe("/tours-extras/");
+    for (const p of ["/", "/cruises/", "/tours-extras/transfers/", "/cruise/a/b/", "/explorer/"])
+      expect(liveSiteRedirect(p, q())).toBeNull();
+  });
+
+  it("mark the tours whose own page needs them published, and not the workbook pages", () => {
+    const tour = (end: string) => liveSiteRedirects.find((r) => r.source.endsWith(end));
+    expect(tour("0001")?.tour).toBe("4-night-sightseeing-luxor-to-aswan");
+    expect(tour("0007")?.tour).toBeUndefined();
+    expect(tour("0003")?.tour).toBeUndefined();
   });
 
   it("send each live tour page to its one new page (SEO-022)", () => {
