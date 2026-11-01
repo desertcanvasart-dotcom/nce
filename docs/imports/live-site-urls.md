@@ -33,7 +33,7 @@ The paths its `robots.txt` disallows (`/api/`, `/mcp`, `/dashboard`, `/account`,
 
 **Applied by the proxy** (`src/proxy.ts`, 1 Nov 2026), not `next.config.ts`:
 - the old query only picks the rule and is dropped (`/explore/?boat=dahabiya` → `/cruises/dahabiyas/`);
-- `www.nilecruz.com` 301s to `nilecruz.com` in the same hop as any of these rules, on every path (pages, files, API).
+- `www.nilecruz.com` 301s to `nilecruz.com` on every path (pages, files, API), keeping the path and query. That rule is in `next.config.ts`, not the proxy: Next rewrites a proxy redirect to the server's own address as a bare path (`/terms/`), which would keep the visitor on www.
 
 **Gone (410):** none. Every live address has a sensible new home.
 

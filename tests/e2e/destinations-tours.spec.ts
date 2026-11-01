@@ -51,13 +51,13 @@ test("live nilecruz.com tour addresses redirect to their new page [SEO-022]", as
   await expect(page).toHaveURL(/\/tours-extras\/transfers\/$/);
 });
 
-test("a live tour whose page isn't published yet goes to the tours page for now [SEO-022]", async ({ request }) => {
+test("a live tour whose page isn't published yet goes to the tours page for now [SEO-022]", async ({ request, baseURL }) => {
   // Private (or not imported): a 302, so nothing remembers it once the tour is published. Only this test asks the
   // proxy about this tour, so its 10-minute memory starts here.
   await adminDb().from("tours").update({ visibility: "private" }).eq("slug", "4-night-sightseeing-luxor-to-aswan");
   const res = await request.get("/tours/17100001-0000-4000-8000-000000000001/", { maxRedirects: 0 });
   expect(res.status()).toBe(302);
-  expect(new URL(res.headers()["location"]!).pathname).toBe("/tours-extras/");
+  expect(new URL(res.headers()["location"]!, baseURL).pathname).toBe("/tours-extras/");
 });
 
 test("the balloon is information only [PAGE-095]", async ({ page }) => {

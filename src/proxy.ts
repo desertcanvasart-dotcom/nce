@@ -3,38 +3,26 @@ import createMiddleware from "next-intl/middleware";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing } from "./i18n/routing";
 import { sessionCookieOptions } from "./lib/auth/cookies";
-import { siteUrl } from "./lib/env";
 import { liveSiteRedirect } from "./lib/redirects";
 import { tourPublished } from "./server/content/tour-published";
 
 const intl = createMiddleware(routing);
 
-const site = new URL(siteUrl);
-// Paths the proxy sees only on the www host (the second matcher): API routes, Next internals and files.
-const NOT_A_PAGE = /^\/(api|_next|_vercel|dev-parity)(\/|$)|\.[^/]*$/;
-
 /**
- * www to the bare domain, and a live nilecruz.com address to its new page (SEO-021), in one hop together. Next adds a
- * missing trailing slash before this runs (SEO-001); turning that off would also drop the slash from every `<Link>`.
+ * A live nilecruz.com address to its new page (SEO-021). Next adds a missing trailing slash before this runs (SEO-001);
+ * turning that off would also drop the slash from every `<Link>`. www is redirected in next.config.ts: Next shortens
+ * a proxy redirect to the server's own address into a bare path, which would keep the visitor on www.
  */
 async function redirectFor(request: NextRequest): Promise<NextResponse | null> {
-  const { pathname, search, searchParams } = request.nextUrl;
-  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host") ?? "";
-  const www = host === `www.${site.host}`;
-  if (NOT_A_PAGE.test(pathname)) return www ? NextResponse.redirect(new URL(pathname + search, site), 301) : null;
-
-  let target: string | null = null;
-  let status = 301;
-  const live = liveSiteRedirect(pathname, searchParams);
-  if (live) {
-    // The old query only picked the rule; the new pages don't read it. A tour that isn't published yet goes to the
-    // tours page for now (302, so nothing remembers it).
-    const unpublished = live.tour ? !(await tourPublished(live.tour)) : false;
-    target = unpublished ? "/tours-extras/" : live.destination;
-    status = unpublished ? 302 : 301;
-  } else if (www) target = pathname + search;
-  if (!target) return null;
-  return NextResponse.redirect(new URL(target, www ? site : request.nextUrl), status);
+  const live = liveSiteRedirect(request.nextUrl.pathname, request.nextUrl.searchParams);
+  if (!live) return null;
+  // The old query only picked the rule; the new pages don't read it. A tour that isn't published yet goes to the
+  // tours page for now (302, so nothing remembers it).
+  const unpublished = live.tour ? !(await tourPublished(live.tour)) : false;
+  return NextResponse.redirect(
+    new URL(unpublished ? "/tours-extras/" : live.destination, request.nextUrl),
+    unpublished ? 302 : 301,
+  );
 }
 
 /**
@@ -74,7 +62,6 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except API routes, Next internals, the dev-only parity frame and files with an extension; on the www
-  // host, everything (it all redirects to the bare domain).
-  matcher: ["/((?!api|_next|_vercel|dev-parity|.*\\..*).*)", { source: "/:path*", has: [{ type: "host", value: "www\\..+" }] }],
+  // Everything except API routes, Next internals, the dev-only parity frame and files with an extension.
+  matcher: "/((?!api|_next|_vercel|dev-parity|.*\\..*).*)",
 };

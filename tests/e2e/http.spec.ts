@@ -29,7 +29,7 @@ const LIVE: [string, string][] = [
   ["/cruise/00000000-0000-4000-8000-0000000000ff", "/cruises/"],
 ];
 
-test("every live-site address 301s to its new page, which answers (SEO-021, SEO-022)", async ({ request }) => {
+test("every live-site address 301s to its new page, which answers (SEO-021, SEO-022)", async ({ request, baseURL }) => {
   for (const [from, to] of LIVE) {
     // Two hops: the trailing slash first (308, SEO-001), then the 301 to the new page, without the old query.
     const [path, query] = from.split("?");
@@ -41,7 +41,7 @@ test("every live-site address 301s to its new page, which answers (SEO-021, SEO-
     }
     const res = await request.get(slashed, { maxRedirects: 0 });
     expect(res.status(), slashed).toBe(301);
-    const location = new URL(res.headers()["location"]!);
+    const location = new URL(res.headers()["location"]!, baseURL);
     expect(location.pathname + location.search, slashed).toBe(to);
     // The new page loads (the dashboard sends visitors to sign in first).
     const end = await request.get(to);
@@ -51,19 +51,19 @@ test("every live-site address 301s to its new page, which answers (SEO-021, SEO-
   for (const p of ["/privacy", "/terms", "/"]) expect((await request.get(p)).status()).toBe(200);
 });
 
-test("www goes to the bare domain, in the same hop as any live-site redirect (SEO-021)", async ({ request, baseURL }) => {
+test("www goes to the bare domain, keeping the path and query (SEO-021)", async ({ request, baseURL }) => {
   const site = new URL(process.env.NEXT_PUBLIC_SITE_URL ?? baseURL!).host;
   const cases: [string, string][] = [
     ["/", "/"],
     ["/terms/", "/terms/"],
-    ["/explore/?boat=dahabiya", "/cruises/dahabiyas/"],
+    ["/explore/?boat=dahabiya", "/explore/?boat=dahabiya"],
     ["/robots.txt", "/robots.txt"],
     ["/api/health/", "/api/health/"],
   ];
   for (const [from, to] of cases) {
     const res = await request.get(from, { maxRedirects: 0, headers: { host: `www.${site}` } });
     expect(res.status(), from).toBe(301);
-    const location = new URL(res.headers()["location"]!);
+    const location = new URL(res.headers()["location"]!, baseURL);
     expect(location.host, from).toBe(site);
     expect(location.pathname + location.search, from).toBe(to);
   }
