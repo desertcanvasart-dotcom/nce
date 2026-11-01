@@ -55,13 +55,14 @@ Each step has an owner and a check. Do them in order. Don't switch indexing on (
 |---|---|---|---|
 | ☐ | Lower DNS TTL a day before | F | registrar |
 | ☐ | Point `nilecruz.com` and `www` at Railway; HTTPS certificate issued | F | `https://nilecruz.com/api/health/` answers |
-| ☐ | `www` redirects to the bare domain | C | curl shows a 301 |
+| ☐ | `www` redirects to the bare domain (the proxy does it once `NEXT_PUBLIC_SITE_URL` is `https://nilecruz.com`; add `www` as a second domain on the Railway service) | C | curl shows a 301 |
 
 ## 6. The old site's addresses
 
 | ✓ | Step | Owner | Check |
 |---|---|---|---|
 | ☐ | Every address in `docs/imports/live-site-urls.md` 301s to its new page on the real domain | C | the same checks as `http.spec.ts`, run against `https://nilecruz.com` |
+| ☐ | The 4 live tours whose pages are private drafts (the 3- and 4-night sightseeing, Dendera, Abydos and Dendera) are published, or knowingly left on the 302 to `/tours-extras/` | F | each `/tours/{id}` lands on its tour's page |
 
 ## 7. Indexing on
 

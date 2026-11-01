@@ -22,14 +22,18 @@ The paths its `robots.txt` disallows (`/api/`, `/mcp`, `/dashboard`, `/account`,
 | `/match` | sitemap | `/plan-my-cruise/` |
 | `/request` | sitemap | `/plan-my-cruise/` |
 | `/tours` | sitemap, links | `/tours-extras/` |
-| `/tours/{id}`, the 7 live tours | `docs/imports/nilecruz-tours.json` | each tour's new page (SEO-022) |
+| `/tours/{id}`, the 7 live tours | `docs/imports/nilecruz-tours.json` | each tour's new page (SEO-022); a tour whose own page isn't published yet goes to `/tours-extras/` with a 302 until it is |
 | `/tours/{any other id}` | the tour page pattern | `/tours-extras/` |
 | `/cruise/{id}` | the vessel page pattern (`/cruise/${id}` in its scripts) | `/cruises/` |
 | `/compare` | links | `/cruises/compare/` |
 | `/account`, `/account?login=…` | links | `/dashboard/` (sign in first) |
 | `/privacy`, `/terms` | sitemap, links | the same pages (with the trailing slash) |
 
-**Two hops:** each address first gains its trailing slash (308, SEO-001), then 301s to its new page (`/explore` → `/explore/` → `/cruises/`). Search engines follow both.
+**Two hops:** each address first gains its trailing slash (308, SEO-001), then 301s to its new page (`/explore` → `/explore/` → `/cruises/`). Search engines follow both. One hop would need Next's slash redirect off, which also drops the slash from every `<Link>` (tried 1 Nov 2026), so it stays.
+
+**Applied by the proxy** (`src/proxy.ts`, 1 Nov 2026), not `next.config.ts`:
+- the old query only picks the rule and is dropped (`/explore/?boat=dahabiya` → `/cruises/dahabiyas/`);
+- `www.nilecruz.com` 301s to `nilecruz.com` on every path (pages, files, API), keeping the path and query. That rule is in `next.config.ts`, not the proxy: Next rewrites a proxy redirect to the server's own address as a bare path (`/terms/`), which would keep the visitor on www.
 
 **Gone (410):** none. Every live address has a sensible new home.
 

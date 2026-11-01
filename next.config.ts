@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
-import { liveSiteRedirects } from "./src/lib/redirects";
+import { normaliseSiteUrl } from "./src/lib/env";
 import { securityHeaders } from "./src/lib/security-headers";
 
 const dev = process.env.NODE_ENV !== "production";
@@ -8,6 +8,8 @@ const allowIndexing = process.env.ALLOW_INDEXING?.trim().toLowerCase() === "true
 // Vessel photos are signed links to the private media bucket (BRAND-014), served through the image optimiser.
 const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL.trim()) : null;
 const localSupabase = !!supabase && ["127.0.0.1", "localhost", "[::1]"].includes(supabase.hostname);
+// SEO-021: www.{site} → {site}, on every path, with its query. The site URL is built in, like the pages' links.
+const site = new URL(normaliseSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ?? "http://localhost:3000");
 
 const nextConfig: NextConfig = {
   trailingSlash: true, // SEO-001
@@ -40,7 +42,12 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "16mb" },
   },
   async redirects() {
-    return liveSiteRedirects.map((r) => ({ ...r, statusCode: 301 as const }));
+    const has = [{ type: "host" as const, value: `www.${site.hostname}`.replace(/\./g, "\\.") }];
+    return [
+      // Pages keep their trailing slash (Next matches without it); the home page, files and the rest as they are.
+      { source: "/:path((?:[^/]+/)*[^/.]+)", has, destination: `${site.origin}/:path/`, statusCode: 301 },
+      { source: "/:path*", has, destination: `${site.origin}/:path*`, statusCode: 301 },
+    ];
   },
   async headers() {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() ?? "";
