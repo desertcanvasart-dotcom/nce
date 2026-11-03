@@ -82,6 +82,19 @@ export async function departureGrid(scheduleId: string, from: string, to: string
   return data ?? [];
 }
 
+/** A dates-only schedule's coming sailings, cancelled ones included, for its list of dates. */
+export async function upcomingDepartures(scheduleId: string, from: string) {
+  const db = await getDb();
+  const { data } = await db
+    .from("departures")
+    .select("id, departs_on, returns_on, status")
+    .eq("schedule_id", scheduleId)
+    .gte("departs_on", from)
+    .order("departs_on")
+    .limit(200);
+  return data ?? [];
+}
+
 export async function promotionsOf(vesselId: string) {
   const db = await getDb();
   const { data } = await db
