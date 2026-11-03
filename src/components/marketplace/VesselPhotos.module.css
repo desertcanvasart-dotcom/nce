@@ -175,6 +175,34 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+/* How many photos there are, on the lead photo: shown on a phone, where the strip gives way to the price. */
+.badge {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  display: none;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--scrim);
+  color: var(--on-media);
+  font-size: var(--type-label-size);
+}
+
+@media (max-width: 720px) {
+  .hero .lead {
+    aspect-ratio: 16 / 9;
+  }
+
+  .hero .strip,
+  .hero .caption {
+    display: none;
+  }
+
+  .hero .badge {
+    display: block;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .frame:hover .media img {
     transform: none;

@@ -49,6 +49,11 @@ export function VesselPhotos({ photos, name, hero }: { photos: Photo[]; name: st
   const frame = (p: Photo, i: number, className: string | undefined, sizes: string, extra?: string) => (
     <button key={i} type="button" className={cx(styles.frame, className)} onClick={() => setOpen(i)}>
       <Media image={p} sizes={sizes} priority={i === 0} className={styles.media} />
+      {hero && i === 0 && n > 1 ? (
+        <span className={styles.badge} aria-hidden="true">
+          {t("photoCount", { n })}
+        </span>
+      ) : null}
       {extra ? (
         <span className={styles.more} aria-hidden="true">
           {extra}

@@ -63,7 +63,8 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
   const days = (ds: number[]) => list([...ds].sort((a, b) => a - b).map((d) => plural[d - 1]!));
   const its = v.itineraries;
   const nights = nightsOf(its);
-  const nightsList = list(nights.map(String));
+  // "3 and 4", "3 y 4"; Japanese joins lengths with a middle dot ("3・4泊").
+  const nightsList = locale === "ja" ? nights.join("・") : list(nights.map(String));
   const ends = [...new Set(its.flatMap((i) => [i.origin, i.destination]))].sort((a, b) => riverIndex(a) - riverIndex(b));
   const between = ends.length === 2;
   const sailings = its
@@ -284,7 +285,8 @@ export function VesselView({
             <VesselPhotos photos={v.photos} name={v.name} hero />
           </div>
         ) : null}
-        <dl className={styles.facts} aria-label={t("hero.facts")}>
+        {/* The price on its own, so a phone shows it with the main action right under the photo. */}
+        <dl className={styles.price}>
           {v.bookable && v.from ? (
             <div className={styles.priceFact}>
               <dt>{t("hero.fromPrice")}</dt>
@@ -311,6 +313,8 @@ export function VesselView({
               <dd>{t("hero.fromAbout", { price: w.money(price.perNight) })}</dd>
             </div>
           ) : null}
+        </dl>
+        <dl className={styles.facts} aria-label={t("hero.facts")}>
           {cabinsFact ? (
             <div>
               <dt>{t("hero.cabins")}</dt>
