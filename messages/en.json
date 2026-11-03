@@ -702,7 +702,9 @@
       "cabinsMain": "{n} cabins",
       "cabinsOther": "{n, plural, =1 {one} =2 {two} =3 {three} =4 {four} =5 {five} =6 {six} =7 {seven} =8 {eight} =9 {nine} other {#}} {name}",
       "dietsQ": "Does the kitchen cater for special diets?",
-      "dietsA": "Yes. It caters for {list} diets."
+      "dietsA": "Yes. It caters for {list} diets.",
+      "lengthLineMore": "{nights, plural, =1 {one} =2 {two} =3 {three} =4 {four} =5 {five} =6 {six} =7 {seven} other {#}}-night sailings leave {origin} for {destination} {days}",
+      "lengthAnd": ", and "
     },
     "similar": {
       "title": "Other boats to compare",

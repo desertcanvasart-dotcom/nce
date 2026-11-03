@@ -68,7 +68,8 @@ export function DeckLayoutView({
   const locale = useLocale();
   const uid = useId();
   const [own, setOwn] = useState<string | null>(null);
-  const [tapped, setTapped] = useState<{ deck: string; area: string } | null>(null);
+  // The block tapped last, and the cabin type chosen when it was: a newer choice of type replaces it in the caption.
+  const [tapped, setTapped] = useState<{ deck: string; area: string; with: string | null } | null>(null);
   const controlled = onPick !== undefined;
   const picked = controlled ? (chosen ?? null) : own;
   const pick = controlled ? onPick : setOwn;
@@ -107,7 +108,7 @@ export function DeckLayoutView({
     return a.cabin === picked ? `${base} ${styles.on}` : `${base} ${styles.dim}`;
   };
   const tap = (deck: string, a: DeckArea) => {
-    setTapped({ deck: t("deck.deck", { name: deck }), area: labelOf(a) });
+    setTapped({ deck: t("deck.deck", { name: deck }), area: labelOf(a), with: picked });
     if (a.cabin && drawn.some((c) => c.code === a.cabin)) pick(a.cabin === picked ? null : a.cabin);
   };
 
@@ -130,12 +131,12 @@ export function DeckLayoutView({
         </ul>
       ) : null}
       <p className={styles.detail} aria-live="polite">
-        {picked && name(picked) ? (
+        {tapped && tapped.with === picked && !(picked && tapped.area === name(picked)) ? (
+          t("deck.tapped", { deck: tapped.deck, area: tapped.area })
+        ) : picked && name(picked) ? (
           <>
             <strong>{name(picked)}</strong> · {t("deck.highlighted", { decks: decksText(picked) })}
           </>
-        ) : tapped ? (
-          t("deck.tapped", tapped)
         ) : (
           <span className={styles.muted}>{drawn.length ? t("deck.choose") : t("deck.tapHint")}</span>
         )}

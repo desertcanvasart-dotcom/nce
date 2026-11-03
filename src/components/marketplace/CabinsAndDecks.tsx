@@ -38,7 +38,7 @@ export function CabinsAndDecks({
   return (
     <>
       {cabins.length ? (
-        <ul className={styles.cabins} aria-label={t("cabins.types")}>
+        <ul className={`${styles.cabins} ${layoutStyles.palette}`} aria-label={t("cabins.types")}>
           {cabins.map((raw) => {
             const c = verifiedCabin(raw);
             const decks = layout && c.code && decksOf(layout, c.code).length ? decksOf(layout, c.code) : null;

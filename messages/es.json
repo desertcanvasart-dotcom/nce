@@ -703,7 +703,9 @@
       "cabinsMain": "{n} camarotes",
       "cabinsOther": "{n, plural, =1 {una} =2 {dos} =3 {tres} =4 {cuatro} =5 {cinco} =6 {seis} =7 {siete} =8 {ocho} =9 {nueve} other {#}} {name}",
       "dietsQ": "¿La cocina prepara dietas especiales?",
-      "dietsA": "Sí. Prepara dietas {list}."
+      "dietsA": "Sí. Prepara dietas {list}.",
+      "lengthLineMore": "los de {nights, plural, =1 {una noche} =2 {dos noches} =3 {tres noches} =4 {cuatro noches} =5 {cinco noches} =6 {seis noches} =7 {siete noches} other {# noches}} salen de {origin} hacia {destination} {days}",
+      "lengthAnd": ", y "
     },
     "similar": {
       "title": "Otros barcos para comparar",

@@ -703,7 +703,9 @@
       "cabinsMain": "客室{n}室",
       "cabinsOther": "{name}{n}室",
       "dietsQ": "特別な食事に対応していますか?",
-      "dietsA": "はい。{list}に対応しています。"
+      "dietsA": "はい。{list}に対応しています。",
+      "lengthLineMore": "{nights}泊のクルーズは{days}{origin}から{destination}へ向けて出航します",
+      "lengthAnd": "。また、"
     },
     "similar": {
       "title": "比較できるほかの船",

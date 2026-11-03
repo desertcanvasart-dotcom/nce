@@ -210,17 +210,20 @@ export function VesselView({
     faqs.push({ q: t("faq.costQ", { name: v.name }), a: t("faq.costBookableA", { price: formatMoney(v.from, locale) }) });
   faqs.push({ q: t("faq.bookQ"), a: v.bookable ? t("faq.bookYes") : t("faq.bookNo") });
   if (its.length) {
+    // "Four-night sailings leave Luxor for Aswan on Mondays, and three-night sailings leave Aswan …": longest first.
     const lines = [...its]
       .sort((a, b) => b.nights - a.nights)
-      .map((i) =>
-        t("faq.lengthLine", {
+      .map((i, n) =>
+        t(n ? "faq.lengthLineMore" : "faq.lengthLine", {
           nights: i.nights,
           origin: w.place(i.origin),
           destination: w.place(i.destination),
           days: i.sailingDays.length ? t("faq.lengthDays", { days: w.days(i.sailingDays) }) : t("faq.lengthDated"),
         }),
       );
-    const a = t("faq.lengthA", { lines: w.list(lines) });
+    const a = t("faq.lengthA", {
+      lines: lines.length === 2 ? lines.join(t("faq.lengthAnd")) : w.list(lines),
+    });
     faqs.push({ q: t("faq.lengthQ"), a: its.some((i) => i.sailingDays.length) ? `${a} ${t("faq.lengthPattern")}` : a });
   }
   if (v.cabinCount)

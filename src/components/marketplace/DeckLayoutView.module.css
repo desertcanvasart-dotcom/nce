@@ -1,5 +1,7 @@
-/* Deck colours, by day on ivory and at night on the river: brass for cabins, Nile blue for water, sand for open deck. */
-.view {
+/* Deck colours, by day on ivory and at night on the river: brass for cabins, Nile blue for water, sand for open deck.
+   `.palette` gives the same colours to the cabin cards' swatches outside the drawing. */
+.view,
+.palette {
   --deck-c0: color-mix(in srgb, var(--brass-300) 60%, var(--surface));
   --deck-c1: var(--brass-500);
   --deck-c2: color-mix(in srgb, var(--nile-300) 60%, var(--surface));
@@ -9,12 +11,15 @@
   --deck-room: color-mix(in srgb, var(--nile-300) 22%, var(--surface));
   --deck-outdoor: var(--surface-sunk);
   --deck-water: color-mix(in srgb, var(--nile-300) 75%, var(--surface));
+}
 
+.view {
   display: grid;
   gap: var(--space-4);
 }
 
-:global([data-theme="dark"]) .view {
+:global([data-theme="dark"]) .view,
+:global([data-theme="dark"]) .palette {
   --deck-c0: color-mix(in srgb, var(--brass-300) 42%, var(--surface-raised));
   --deck-c1: color-mix(in srgb, var(--brass-300) 72%, var(--surface-raised));
   --deck-c2: color-mix(in srgb, var(--nile-300) 40%, var(--surface-raised));
