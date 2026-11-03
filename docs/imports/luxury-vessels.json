@@ -1,0 +1,735 @@
+{
+  "source": "NileCruz_14_Luxury_Nile_Cruises.md (research edition, November 2026)",
+  "vessels": [
+    {
+      "slug": "movenpick-royal-lily",
+      "name": "Mövenpick MS Royal Lily",
+      "type": "motor",
+      "cabin_count": 60,
+      "shared_spaces": ["dining_room", "bar", "lounge", "sun_deck", "pool"],
+      "summary": "A five-star Mövenpick cruiser with 56 Standard Cabins of about 22 m² and four Royal Suites, sailing between Luxor and Aswan on three-, four- and seven-night cruises.",
+      "description": "The Mövenpick MS Royal Lily is a five-star deluxe Nile cruise ship offering an elegant journey between Luxor and Aswan. Contemporary furnishings, welcoming hospitality and comfortable cabins make it an easy way to discover the temples of Upper Egypt.\n\nAs one of Mövenpick's flagship Nile cruisers, Royal Lily spares guests the change of hotels between destinations. The ship sails past villages, fields, palm groves and historic towns, with the temples of Karnak and Luxor, the royal tombs of the West Bank, Edfu, Kom Ombo and Philae all within reach.\n\nOn board: a main restaurant and lounge bar, a sun deck with an outdoor pool, Nile-view seating, reception and cultural entertainment. Meals are full board, as the booked package sets out.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays, with seasonal gaps. This is the usual pattern, not live availability.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-royal-lily.html"],
+      "verification_note": "Reservations: royal.lily@movenpick.com. Confirm Royal Suite size, deck assignments, child policy, excursions and rates. The seven-night programme was not imported: it needs the supplier's own itinerary.",
+      "cabins": [
+        {
+          "code": "STD",
+          "name": "Standard Cabin",
+          "size_m2": 22,
+          "bed_configuration": "Queen or twin",
+          "max_occupancy": 2,
+          "view": "Nile view",
+          "balcony": false,
+          "cabin_count": 56,
+          "amenities": ["Bathtub", "Air conditioning", "Television", "Minibar", "Safe", "Tea and coffee", "Wi-Fi", "Telephone", "Daily housekeeping"],
+          "description": "Comfortable cabins of about 22 m² with modern furnishings and Nile-facing views, queen or twin beds and an en-suite bathroom with a bathtub."
+        },
+        {
+          "code": "RS",
+          "name": "Royal Suite",
+          "max_occupancy": 2,
+          "view": "Nile view",
+          "balcony": false,
+          "cabin_count": 4,
+          "amenities": ["Jacuzzi", "Living area", "Air conditioning", "Television", "Minibar", "Safe"],
+          "description": "Four upgraded suites with more space, elegant furnishings, a living area, a private bathroom with Jacuzzi and Nile views."
+        }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and have lunch on board. Visit Karnak Temple, famous for its Great Hypostyle Hall, then Luxor Temple. Dinner and overnight in Luxor." },
+            { "title": "Luxor West Bank", "description": "After breakfast, visit the Valley of the Kings, the Mortuary Temple of Queen Hatshepsut and the Colossi of Memnon. Back on board, sail south towards Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the Temple of Horus at Edfu, one of Egypt's best-preserved temples. Continue to Kom Ombo and its double temple of Sobek and Horus the Elder, then sail to Aswan." },
+            { "title": "Aswan", "description": "Visit the High Dam and Philae Temple. A felucca sail or other sightseeing may be arranged, depending on the package. Overnight in Aswan." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan", "description": "Embark in Aswan. Visit the High Dam and Philae Temple." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit the temples of Kom Ombo and Edfu, then sail north." },
+            { "title": "Luxor", "description": "Sightseeing in Luxor, including the West Bank, as the programme for the sailing sets out." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation. Whether the East Bank temples are visited before you leave depends on the sailing." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-royal-lotus",
+      "name": "Mövenpick MS Royal Lotus",
+      "type": "motor",
+      "cabin_count": 62,
+      "shared_spaces": ["dining_room", "lounge", "bar", "pool", "sun_deck"],
+      "summary": "A five-star Mövenpick cruiser with 60 cabins of about 22 m² and just two Royal Suites, sailing between Luxor and Aswan on three-, four- and seven-night cruises.",
+      "description": "The Mövenpick MS Royal Lotus is a luxury Nile cruise ship offering elegant accommodation between Luxor and Aswan. It combines panoramic scenery, welcoming service and comfortable cabins with access to Upper Egypt's great sites: the temples and royal tombs of Luxor, Edfu, Kom Ombo and Aswan.\n\nOn board: a main restaurant, lounge and bar, a pool and sun deck with outdoor seating, reception and entertainment. Meals are full board, as the booked package sets out; drinks and some extras are charged separately.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-royal-lotus.html"],
+      "verification_note": "Reservations: royal.lotus@movenpick.com. Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Confirm suite size, occupancy (some cabins may have a sofa bed) and entrance-fee inclusions. Seven-night programme not imported.",
+      "cabins": [
+        {
+          "code": "STD",
+          "name": "Standard / Deluxe Cabin",
+          "size_m2": 22,
+          "bed_configuration": "Queen or twin",
+          "max_occupancy": 2,
+          "view": "Nile view",
+          "balcony": false,
+          "cabin_count": 60,
+          "amenities": ["Bathtub", "Air conditioning", "Television", "Minibar", "Safe", "Tea and coffee", "Wi-Fi", "Daily housekeeping"],
+          "description": "Comfortable cabins of about 22 m² with queen or twin beds, Nile-facing views, individually controlled air conditioning and a private bathroom with a bathtub."
+        },
+        {
+          "code": "RS",
+          "name": "Royal Suite",
+          "max_occupancy": 2,
+          "view": "Nile view",
+          "balcony": false,
+          "cabin_count": 2,
+          "amenities": ["Living area", "Air conditioning", "Television", "Minibar", "Safe"],
+          "description": "Two spacious suites with more living space, elegant furnishings, a private bathroom and Nile views."
+        }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Luxor East Bank", "description": "Embark and have lunch. Explore Karnak Temple and Luxor Temple. Dinner and overnight in Luxor." },
+            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, Hatshepsut Temple and the other West Bank sites in the programme. Sail towards Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the Temple of Horus at Edfu, cruise on to Kom Ombo and explore its double temple. Continue to Aswan." },
+            { "title": "Aswan", "description": "Visit the High Dam and Philae Temple. Overnight in Aswan." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Aswan", "description": "Embark in Aswan. Visit the High Dam and Philae Temple." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit the temples of Kom Ombo and Edfu." },
+            { "title": "Luxor", "description": "Visit the monuments of Luxor, as the programme for the sailing sets out." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-sun-ray",
+      "rename_from": "movenpick-ms-sun-ray",
+      "name": "Mövenpick MS Sun Ray",
+      "type": "motor",
+      "cabin_count": 62,
+      "shared_spaces": ["pool", "sun_deck", "dining_room", "lounge", "bar", "library"],
+      "summary": "A five-star Mövenpick cruiser with a grand lobby, 54 cabins and four suite categories, leaving Luxor on Thursdays and Aswan on Mondays.",
+      "description": "The Mövenpick MS Sun Ray (also written Sunray) is a five-star deluxe Nile cruise ship with an impressive high-ceilinged entrance lobby, spacious public areas and contemporary furnishings. Its cruises link Luxor, Edfu, Kom Ombo and Aswan, combining temple visits with a relaxed atmosphere on board.\n\nLower-deck Classic Cabins look out through two fixed portholes; upper-deck cabins have larger windows, some of which partly open. There are two suites in each of four categories: Junior, Superior, Deluxe and Executive.\n\nOn board: an outdoor pool and sun deck, a main restaurant and lounge bar, a reading room and a playroom.\n\nFour-night cruises usually leave Luxor on Thursdays and three-night cruises leave Aswan on Mondays, a different week from most other Mövenpick ships. This is the usual pattern, not live availability.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html", "https://movenpick.accor.com/en/africa/egypt/nilecruisers.html"],
+      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Confirm the 62-cabin breakdown, upper-deck category names, sizes and counts, suite sizes and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'.",
+      "cabins": [
+        {
+          "code": "CLASSIC",
+          "name": "Classic Cabin",
+          "deck": "Lower deck",
+          "size_m2": 20,
+          "max_occupancy": 2,
+          "view": "Two fixed portholes (not opening)",
+          "balcony": false,
+          "amenities": ["Bathtub", "Hairdryer", "Air conditioning", "LED TV with satellite channels", "Espresso machine", "Tea and coffee", "Minibar", "Safe", "Telephone"],
+          "description": "Cabins of about 20 m² on the lower deck, facing the Nile through two fixed portholes, with a bathtub, espresso machine and satellite TV."
+        },
+        {
+          "code": "UPPER",
+          "name": "Upper-deck Cabin",
+          "deck": "Upper deck",
+          "max_occupancy": 2,
+          "view": "Large Nile-facing window, some partly opening",
+          "balcony": false,
+          "amenities": ["Air conditioning", "Television", "Minibar", "Safe"],
+          "description": "Cabins on the upper decks with larger Nile-facing windows, some partly opening, for a better view than the lower-deck portholes."
+        },
+        { "code": "JS", "name": "Junior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
+        { "code": "SS", "name": "Superior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Superior Suites, with upgraded space and furnishings." },
+        { "code": "DS", "name": "Deluxe Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Deluxe Suites, with upgraded space and furnishings." },
+        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Executive Suites, the ship's top category." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [4],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark in Luxor and visit Karnak and Luxor Temples." },
+            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, Hatshepsut Temple and the West Bank, then sail to Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit Edfu Temple and Kom Ombo Temple, then sail to Aswan." },
+            { "title": "Aswan", "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, when included in the programme." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Aswan", "description": "Embark in Aswan and go sightseeing." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit the temples of Kom Ombo and Edfu, then sail north." },
+            { "title": "Luxor", "description": "Visit the sites of Luxor, as the operator's programme sets out." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-sb-feddya",
+      "name": "Mövenpick SB Feddya",
+      "type": "sail",
+      "cabin_count": 4,
+      "shared_spaces": ["dining_room"],
+      "summary": "A boutique Mövenpick dahabiya with only four suites, sailing tailor-made six-night voyages from Luxor to Aswan with stops at El Kab, Ramadi Village and Gebel El Silsila.",
+      "description": "The Mövenpick SB Feddya is a boutique luxury dahabiya for an intimate sail between Luxor and Aswan. Inspired by Egypt's historic sailing boats, it combines personal hospitality, the feel of a private yacht and an unhurried cultural programme.\n\nWith only four suites, Feddya suits a private charter, couples, families or small groups. Its six-night voyage adds lesser-visited sites, El Kab, Ramadi Village and Gebel El Silsila, to the famous temples, with quiet island moorings along the way. The vessel docks at its own landing in Al Bughdadi, near Luxor.\n\nDepartures are tailor-made, subject to availability; there is no weekly sailing day.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-feddya.html", "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/movenpick-sb-feddya/pdf-2024/msa_d_0000255.pdf"],
+      "verification_note": "Reservations: Cruise.Feddya@movenpick.com. Tailor-made: the itinerary was imported inactive with no sailing weekday; never generate weekly departures. Get suite names, sizes, windows, bedding, occupancy and terraces from Mövenpick; don't copy them from other ships. Confirm charter terms, special tomb tickets (Seti I, Tutankhamun), guiding and transfers.",
+      "cabins": [
+        {
+          "code": "SUITE",
+          "name": "Suite",
+          "max_occupancy": 2,
+          "balcony": false,
+          "cabin_count": 4,
+          "amenities": [],
+          "description": "One of four private suites on this intimate dahabiya."
+        }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-6",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 6,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark around noon and have lunch, then explore Karnak and Luxor Temples. Dinner and overnight in Luxor." },
+            { "title": "West Bank and Esna", "description": "Visit the Valley of the Kings and Hatshepsut Temple. Sail to Esna and spend the night nearby." },
+            { "title": "El Kab and Edfu", "description": "Sail to El Kab, the ancient city of Nekheb, and explore its remains and tombs. Continue to Edfu for the night." },
+            { "title": "Edfu and Ramadi Village", "description": "Visit the Temple of Horus at Edfu. Sail on towards Ramadi Village for a barbecue dinner at the mooring." },
+            { "title": "Gebel El Silsila and Kom Ombo", "description": "Explore Gebel El Silsila, with its sandstone quarries, shrines and inscriptions. Continue to Kom Ombo Temple, then moor near El Sheikh Fadl Island." },
+            { "title": "Sailing towards Aswan", "description": "A day of sailing through the landscapes of Upper Egypt towards Aswan." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-ss-misr",
+      "name": "Mövenpick SS Misr",
+      "type": "motor",
+      "cabin_count": 24,
+      "year_built": 1918,
+      "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck", "pool"],
+      "summary": "A historic royal-era steamer, built in 1918, with 16 cabins (two of them singles) and eight suites, sailing between Luxor and Aswan.",
+      "description": "The Mövenpick SS Misr is a historic luxury Nile steamer with a royal-era atmosphere. Built in 1918 for the British Royal Navy and later converted into a luxury steamer associated with King Farouk, it recreates the golden age of river travel. Classic interiors and few cabins make it quite unlike a modern motor cruiser.\n\nThe ship is 63 m long and 13.8 m wide. It has 14 Outside Cabins of about 21 m², two Single Cabins of about 14.5 m² for travellers on their own (unusual on the Nile), six Suites of about 30 m² and two Panorama Suites of about 35 m².\n\nOn board: a main restaurant, a lounge and bar, a large sun deck with an outdoor pool, and elegant classic common rooms.\n\nFour-night cruises leave Luxor on Mondays on published dates; departures are selected dates, not a continuous weekly service.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-misr.html", "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/b4n0/pdf-2024/msa_d_0000261.pdf"],
+      "verification_note": "Reservations: Cruise.Misr@movenpick.com. Height 11.75 m. Published departures are selected dates, not every week: add only confirmed 2027 dates. The three-night Aswan–Luxor programme was not imported (no day-by-day detail). Confirm Panorama Suite bedding and windows.",
+      "cabins": [
+        { "code": "OUT", "name": "Outside Cabin", "size_m2": 21, "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 14, "amenities": [], "description": "Traditional-style cabins of about 21 m² with Nile views and historic character." },
+        { "code": "SGL", "name": "Single Cabin", "size_m2": 14.5, "max_occupancy": 1, "view": "Nile view", "balcony": false, "cabin_count": 2, "amenities": [], "description": "Two cabins of about 14.5 m² made for one traveller, a rare thing on a Nile cruise." },
+        { "code": "STE", "name": "Suite", "size_m2": 30, "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 6, "amenities": ["Living area"], "description": "Suites of about 30 m² with extra living space and refined, heritage-inspired furnishings." },
+        { "code": "PAN", "name": "Panorama Suite", "size_m2": 35, "max_occupancy": 2, "view": "Panoramic Nile view", "balcony": false, "cabin_count": 2, "amenities": ["Living area"], "description": "The two largest suites on board, about 35 m² each." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark around midday, have lunch and visit Karnak and Luxor Temples. Dinner and overnight." },
+            { "title": "West Bank and Esna", "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple. Sail towards Esna, with a welcome reception and dinner on board." },
+            { "title": "Edfu", "description": "Visit the Temple of Horus at Edfu. Sail towards Kom Ombo for dinner and the night." },
+            { "title": "Kom Ombo and Aswan", "description": "Explore Kom Ombo Temple and sail to Aswan. Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca near Kitchener's Island." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-dahabeya-amirat",
+      "rename_from": "sonesta-amirat",
+      "name": "Sonesta Dahabeya Amirat",
+      "type": "sail",
+      "cabin_count": 7,
+      "shared_spaces": ["dining_room", "sun_deck", "bar", "lounge", "jacuzzi"],
+      "summary": "A Sonesta dahabiya with five Deluxe Cabins and two terrace suites, sailing seven nights between Luxor and Aswan with island moorings, usually on Saturdays.",
+      "description": "Sonesta Dahabeya Amirat offers a graceful, traditional luxury sail between Luxor and Aswan. With only five Deluxe Cabins and two Elegant Suites, it feels more like a private yacht than a motor cruise. Its unhurried seven-night voyage adds island moorings and river landscapes to the classic monuments of Upper Egypt, and suits couples, small families and private groups.\n\nOn board: a dining room, a shaded sun deck with a bar, an indoor lounge and an open-air oriental-style Jacuzzi. Breakfast and lunch are usually buffets and dinner is à la carte; in-cabin dining runs until midnight.\n\nVoyages usually start on Saturdays, subject to the season. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-dahabeya-amirat", "https://www.sonesta.com/sonesta-dahabeya-amirat/itinerary"],
+      "verification_note": "Confirm seasonal dates, cabin and suite sizes, occupancy, charter terms and whether Gebel El Silsila is included or optional. Staging had 9 cabins on this record (Amirat II's number); corrected to 7.",
+      "cabins": [
+        { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "balcony": false, "cabin_count": 5, "amenities": ["Air conditioning", "Television with films", "Wi-Fi", "Telephone", "Electronic lock", "Minibar", "Safe", "Hairdryer", "Daily housekeeping"], "description": "Five cabins with individually controlled air conditioning, a television with films, Wi-Fi, a minibar and a safe." },
+        { "code": "ELS", "name": "Elegant Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two more spacious suites, each with a private terrace." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-7",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 7,
+          "sailing_days": [6],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and have lunch, then visit Karnak and Luxor Temples. Dinner and overnight in Luxor." },
+            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, the Valley of the Queens, Medinet Habu and the Colossi of Memnon. Sail towards Esna." },
+            { "title": "Sailing to Edfu", "description": "A peaceful day under sail towards Edfu, past the countryside, with a mooring at a Nile island." },
+            { "title": "Edfu", "description": "Visit the Temple of Horus. Continue towards Kom Ombo, with dinner near Maneeha Island." },
+            { "title": "Gebel El Silsila and Kom Ombo", "description": "An optional visit to Gebel El Silsila, then the double temple at Kom Ombo. Island mooring." },
+            { "title": "Sailing towards Aswan", "description": "Relax on board while sailing to Aswan; overnight near the Aswan bridge." },
+            { "title": "Aswan", "description": "Visit the High Dam, the Old Dam and Philae Temple, then return for the last evening on board." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-7",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 7,
+          "sailing_days": [6],
+          "active": true,
+          "days": [
+            { "title": "Aswan", "description": "Embark in Aswan." },
+            { "title": "Aswan: High Dam and Philae", "description": "Visit the High Dam, the Old Dam and Philae Temple, then sail towards Kom Ombo." },
+            { "title": "Kom Ombo and Gebel El Silsila", "description": "Visit Kom Ombo Temple, with an optional stop at Gebel El Silsila." },
+            { "title": "Edfu", "description": "Visit Edfu Temple and sail towards Esna." },
+            { "title": "Esna to Luxor", "description": "Continue through Esna to Luxor." },
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Visit Karnak and Luxor Temples." },
+            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, the Valley of the Queens, Medinet Habu and the Colossi of Memnon." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-dahabeya-amirat-ii",
+      "create": true,
+      "name": "Sonesta Dahabeya Amirat II",
+      "type": "sail",
+      "cabin_count": 9,
+      "shared_spaces": ["lounge", "dining_room", "sun_deck", "spa", "gym"],
+      "summary": "A nine-cabin Sonesta dahabiya with an elevator, spa and gym, and two Royal Suites with private terraces, sailing four nights in either direction between Luxor and Aswan.",
+      "description": "Sonesta Dahabeya Amirat II combines the romance of a traditional Nile sail with refined modern design. The intimate nine-cabin vessel suits travellers who want privacy and personal service. Unusually for a dahabiya, it has an elevator, a spa and fitness facilities.\n\nThere are five Executive Cabins of about 25 m², two Royal Suites with private Nile-facing terraces and two Executive Suites with a separate seating area. Butler service is available on request.\n\nOn board: a lounge and dining room, a sun deck with river views, a spa and fitness area, in-cabin dining and cultural entertainment. Four-night voyages run in both directions, with quiet island moorings.",
+      "source_urls": ["https://www.sonesta.com/sonesta-dahabeya-amirat-ii", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/itinerary"],
+      "verification_note": "Not on staging before this import (created). Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Verify 5 Executive Cabins, 2 Royal Suites, 2 Executive Suites (Sonesta's suite text is inconsistent), suite sizes and inclusions. Don't substitute Amirat's seven-night itinerary.",
+      "cabins": [
+        { "code": "EXC", "name": "Executive Cabin", "size_m2": 25, "max_occupancy": 2, "balcony": false, "cabin_count": 5, "amenities": ["Television", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer", "Tea and coffee", "Butler on request"], "description": "Five cabins of about 25 m² with individual climate control, a tea and coffee station, and butler service on request." },
+        { "code": "RS", "name": "Royal Suite", "max_occupancy": 2, "view": "Private Nile-facing terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two upgraded suites, each with a private terrace facing the Nile." },
+        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": ["Separate seating area"], "description": "Two spacious suites with a separate seating area." }
+      ],
+      "itineraries": [
+        {
+          "code": "ASW-LXR-4",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 4,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Aswan: Philae Temple", "description": "Embark around 11:00, have lunch and visit Philae Temple. Afternoon tea, Nubian entertainment and dinner on board." },
+            { "title": "Kom Ombo and Ramadi Island", "description": "Visit Kom Ombo Temple and sail to Ramadi Island, with an optional visit to Gebel El Silsila. Dinner on the island and overnight." },
+            { "title": "Edfu and Luxor", "description": "Visit the Temple of Horus at Edfu and continue to Luxor." },
+            { "title": "Luxor", "description": "Explore the West Bank, then Karnak and Luxor Temples. Evening entertainment and dinner." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Luxor", "description": "West Bank sightseeing in the morning, then embarkation at midday. After lunch, visit Karnak and Luxor Temples." },
+            { "title": "Abu El Arabi Island", "description": "Sail to Abu El Arabi Island and enjoy the quiet Nile landscapes at the island mooring." },
+            { "title": "Edfu and Ramadi Island", "description": "Visit Edfu Temple, then sail to Ramadi Island for dinner." },
+            { "title": "Gebel El Silsila, Kom Ombo and Aswan", "description": "An optional visit to Gebel El Silsila, then Kom Ombo Temple and the sail to Aswan. Nubian entertainment." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-moon-goddess",
+      "name": "Sonesta Moon Goddess",
+      "type": "motor",
+      "cabin_count": 53,
+      "shared_spaces": ["dining_room", "sun_deck", "pool", "lounge", "bar"],
+      "summary": "A Sonesta cruiser whose 49 Deluxe Cabins all have private balconies, plus four Presidential Suites, leaving Luxor on Mondays and Aswan on Fridays.",
+      "description": "The Sonesta Moon Goddess is a luxury motor cruiser with comfortable cabins, private balconies and classic Upper Egypt sightseeing. Guests explore Luxor, Edfu, Kom Ombo and Aswan and return to restaurants, a pool, a sun deck and cultural entertainment.\n\nIts 49 Deluxe Cabins open through sliding glass doors onto private balconies; four Presidential Suites add a private lounge. All cabins are non-smoking.\n\nOn board: a restaurant, sun deck and pool, a lounge bar, a welcome reception, a galabiya party, Nubian folklore, music and dancing.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-moon-goddess-nile-cruise-ship", "https://www.sonesta.com/sonesta-moon-goddess-nile-cruise-ship/itinerary"],
+      "verification_note": "Verify the balcony on each booked cabin, sizes, the departure calendar and inclusions. Seven-night round trips from Luxor and Aswan were not imported: they need Sonesta's own itineraries.",
+      "cabins": [
+        { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "view": "Private balcony with sliding glass doors", "balcony": true, "cabin_count": 49, "amenities": ["Private balcony", "Bathtub", "Wi-Fi", "Telephone", "Air conditioning", "Hairdryer", "Minibar", "Safe", "Television"], "description": "Deluxe cabins with sliding glass doors onto a private balcony and a bathroom with a bathtub. Non-smoking." },
+        { "code": "PRES", "name": "Presidential Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 4, "amenities": ["Private lounge"], "description": "Four more spacious suites with a private lounge. Non-smoking." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples. Afternoon tea, dinner and entertainment." },
+            { "title": "West Bank and Esna", "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple. Sail to Esna. Welcome cocktail and dinner." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit Edfu Temple and Kom Ombo Temple. Dinner and a galabiya party." },
+            { "title": "Aswan", "description": "Visit the High Dam, the granite quarries and Philae Temple. A felucca sail around Kitchener's Island, with views towards the Aga Khan Mausoleum. Nubian entertainment." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan", "description": "Embark and explore Aswan." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit the temples of Kom Ombo and Edfu." },
+            { "title": "Luxor", "description": "Continue to Luxor, with sightseeing as the programme for the sailing sets out." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-nile-goddess",
+      "name": "Sonesta Nile Goddess",
+      "type": "motor",
+      "cabin_count": 53,
+      "shared_spaces": ["dining_room", "lounge", "bar", "pool", "sun_deck"],
+      "summary": "A Sonesta cruiser with 47 Deluxe Cabins, some connecting, two Senator Suites with balconies and four Presidential Suites with terraces, leaving Luxor on Mondays and Aswan on Fridays.",
+      "description": "Sonesta Nile Goddess combines classic luxury Nile cruising with comfortable cabins and premium suites. The ship sails between Luxor and Aswan with temple excursions, dining on board, river views and entertainment. With connecting cabins and an elevator, it suits families as well as couples.\n\nIts 47 Deluxe Cabins have Nile views and a full-size bathtub. Two Senator Suites have private balconies and four Presidential Suites have private terraces. All cabins and suites are non-smoking.\n\nOn board: a main restaurant, a lounge bar, a pool and sun deck, an elevator, reception and cultural entertainment, with full-board dining.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-nile-goddess-cruise-ship", "https://www.sonesta.com/sonesta-nile-goddess-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-nile-goddess-cruise-ship/itinerary"],
+      "verification_note": "Verify terrace allocations, sizes and the sightseeing on disembarkation day. Staging had 57 cabins on this record; corrected to 53. Seven-night round trips not imported.",
+      "cabins": [
+        { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 47, "amenities": ["Full-size bathtub", "Air conditioning", "Television", "Music system", "Telephone", "Wi-Fi", "Minibar", "Safe", "Hairdryer", "Connecting cabins available"], "description": "Elegant Nile-view cabins with individual climate control and a full-size bathtub. Some connect, subject to allocation. Non-smoking." },
+        { "code": "SEN", "name": "Senator Suite", "max_occupancy": 2, "view": "Private balcony", "balcony": true, "cabin_count": 2, "amenities": ["Private balcony"], "description": "Two upgraded suites with a private balcony. Non-smoking." },
+        { "code": "PRES", "name": "Presidential Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 4, "amenities": ["Private terrace"], "description": "Four spacious suites with a private terrace. Non-smoking." }
+      ],
+      "itineraries": [
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan: felucca sail", "description": "Embark, have lunch and take a felucca sail. Captain's welcome reception and Nubian entertainment." },
+            { "title": "Aswan and Kom Ombo", "description": "Visit the High Dam, the granite quarries and Philae Temple. Sail to Kom Ombo and explore the temple, then continue towards Edfu. Galabiya party." },
+            { "title": "Edfu and Luxor", "description": "Visit the Temple of Horus at Edfu and continue to Luxor. Dinner and evening entertainment." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples." },
+            { "title": "West Bank and Esna", "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple, then sail to Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the temples of Edfu and Kom Ombo." },
+            { "title": "Aswan", "description": "Visit the High Dam, Philae Temple and the other Aswan sites in the programme." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-st-george-i",
+      "name": "Sonesta St. George I",
+      "type": "motor",
+      "cabin_count": 57,
+      "shared_spaces": ["dining_room", "lounge", "bar", "spa", "gym", "pool", "sun_deck"],
+      "summary": "A Sonesta cruiser with spa-style bathrooms, opening French windows and a full-service spa: 47 Deluxe Cabins and ten suites in three categories, leaving Luxor on Mondays and Aswan on Fridays.",
+      "description": "Sonesta St. George I is an upscale Nile cruiser with elegant interiors, spacious suites, wellness facilities and cultural sightseeing. Its Deluxe Cabins stand out for their spa-style bathrooms, with steam bath, Jacuzzi and water massage, and panoramic French windows that open.\n\nThere are 47 Deluxe Cabins, six Presidential Suites, three Elite Suites and one Royal Suite, the most exclusive on board.\n\nOn board: a main restaurant and lounge bars, a full-service spa and fitness centre, a pool and sun deck, panoramic lounges, reception and cultural entertainment.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/itinerary"],
+      "verification_note": "Confirm sizes, floor plans, decks and occupancy for every category, suite benefits, and the sightseeing on disembarkation day (onward transfers must allow time). Seven-night round trips not imported.",
+      "cabins": [
+        { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "view": "Opening panoramic French windows", "balcony": false, "cabin_count": 47, "amenities": ["Steam bath", "Jacuzzi", "Water massage", "43-inch LED TV", "Live sailing channel", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer"], "description": "Cabins with double-glazed panoramic French windows that open, a 43-inch TV with a live sailing channel, and a spa-style bathroom with steam bath, Jacuzzi and water massage." },
+        { "code": "PRES", "name": "Presidential Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 6, "amenities": ["Living area"], "description": "Six upgraded suites with extra living space and premium furnishings." },
+        { "code": "ELITE", "name": "Elite Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 3, "amenities": [], "description": "Three exclusive suites with more space and comfort." },
+        { "code": "ROYAL", "name": "Royal Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 1, "amenities": [], "description": "The ship's single Royal Suite, its most exclusive accommodation." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples. Tea, dinner and entertainment on board." },
+            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, Medinet Habu, Hatshepsut Temple and the Colossi of Memnon. Sail towards Esna; captain's welcome reception." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit Edfu Temple, then sail to Kom Ombo; the day may include a ship tour or cooking demonstration. Visit Kom Ombo Temple; oriental entertainment in the evening." },
+            { "title": "Aswan", "description": "Visit the High Dam and Philae Temple, take a motorboat on the Nile and see the Botanical Garden, as scheduled. Nubian entertainment in the evening." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan", "description": "The High Dam, Philae Temple and a motorboat trip; welcome reception and Nubian entertainment." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit both temples and sail towards Esna." },
+            { "title": "Luxor West Bank", "description": "The Valley of the Kings, Medinet Habu, Hatshepsut Temple and the Colossi of Memnon; dinner on board." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation. The programme may continue with Karnak and Luxor Temples after disembarkation, so allow time before onward travel." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-star-goddess",
+      "name": "Sonesta Star Goddess",
+      "type": "motor",
+      "cabin_count": 33,
+      "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck", "pool"],
+      "summary": "An all-suite Sonesta cruiser with 33 terrace suites named after composers (Beethoven, Mozart and Chopin), leaving Luxor on Saturdays and Aswan on Wednesdays.",
+      "description": "Sonesta Star Goddess is an exclusive all-suite Nile cruiser with only 33 suites, each with a private terrace. Named after classical composers, its Beethoven, Mozart and Chopin Suites give far more room than standard cabins. The ship pairs refined interiors and panoramic river views with fine dining and temple visits between Luxor and Aswan.\n\nThere are 27 Beethoven Suites of about 40 m², four Mozart Suites of about 35 m² and two Chopin Suites of about 52 m², the largest, with a spa-style bathroom. Every suite has double-glazed panoramic French windows.\n\nOn board: a main restaurant, a lounge bar, a sun deck with an outdoor pool and bar, barbecue facilities, reception and cultural entertainment.\n\nFour-night cruises usually leave Luxor on Saturdays and three-night cruises leave Aswan on Wednesdays. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship", "https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship/itinerary"],
+      "verification_note": "All-suite: never add a standard cabin category. Confirm suite availability per date and the sightseeing after disembarkation in Luxor. Seven-night round trips not imported.",
+      "cabins": [
+        { "code": "BEETHOVEN", "name": "Beethoven Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 27, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Live sailing channel", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer"], "description": "Spacious, well-appointed suites of about 40 m² with a private terrace and Nile views." },
+        { "code": "MOZART", "name": "Mozart Suite", "size_m2": 35, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 4, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "Intimate luxury suites of about 35 m² with a private terrace." },
+        { "code": "CHOPIN", "name": "Chopin Suite", "size_m2": 52, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace", "Steam bath", "Jacuzzi", "Water massage", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "The two largest suites, about 52 m², with a private terrace and a spa-style bathroom with steam bath, Jacuzzi and water massage." }
+      ],
+      "itineraries": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [6],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and explore Karnak and Luxor Temples. Dinner and entertainment." },
+            { "title": "Luxor West Bank", "description": "The Valley of the Kings, the Valley of the Queens and Hatshepsut Temple; sail towards Esna. Welcome reception." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the temples of Edfu and Kom Ombo; galabiya party in the evening." },
+            { "title": "Aswan", "description": "Visit the High Dam, the granite quarries and Philae Temple. A felucca sail around Kitchener's Island, with views of the Aga Khan Mausoleum. Nubian entertainment." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [3],
+          "active": true,
+          "days": [
+            { "title": "Aswan: felucca sail", "description": "Embark and take a felucca sail; welcome cocktail and Nubian entertainment." },
+            { "title": "Aswan and Kom Ombo", "description": "The High Dam, the granite quarries, Philae Temple and Kom Ombo Temple; sail towards Edfu." },
+            { "title": "Edfu and Luxor", "description": "Visit the Temple of Horus and sail towards Luxor; evening entertainment." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation. The programme includes temple visits after disembarkation, so allow time before onward travel." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "sonesta-sun-goddess",
+      "name": "Sonesta Sun Goddess",
+      "type": "motor",
+      "cabin_count": 30,
+      "year_built": 2020,
+      "shared_spaces": ["dining_room", "pool", "jacuzzi", "sun_deck", "bar", "lounge"],
+      "summary": "An all-suite Sonesta cruiser launched in 2020: 30 suites, every one with a private terrace, including Family, Executive and Royal Suites of about 60 m², leaving Luxor on Mondays and Aswan on Fridays.",
+      "description": "Sonesta Sun Goddess is an all-suite luxury Nile cruiser launched in 2020. Its 30 suites, each with a private terrace, make an intimate, contemporary base for exploring Luxor, Edfu, Kom Ombo and Aswan.\n\nThere are 26 Presidential Suites of about 40 m², and one Executive and one Royal Suite of about 60 m²; the Royal Suite has its own Jacuzzi. Two Family Suites of about 60 m² have connecting arrangements suited to families. All suites are non-smoking, and in-suite dining runs until midnight.\n\nOn board: a main restaurant, an outdoor pool and hot tub, a sun deck, a bar and lounge, entertainment and cultural excursions.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
+      "source_urls": ["https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship", "https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship/itinerary"],
+      "verification_note": "All-suite: no standard cabins. Confirm Family Suite layout and occupancy (imported as 3 guests), dates and excursions. Sonesta's seven-night page has inconsistent text; not imported. Staging also has a duplicate private record 'sun-goddess'.",
+      "cabins": [
+        { "code": "PRES", "name": "Presidential Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 26, "amenities": ["Private terrace", "Full-size bathtub", "Air conditioning", "LED TV", "Music system", "Minibar", "Safe", "Telephone", "Wi-Fi", "Hairdryer", "In-suite dining until midnight"], "description": "Spacious suites of about 40 m² with a private terrace and seating. Non-smoking." },
+        { "code": "FAMILY", "name": "Family Suite", "size_m2": 60, "max_occupancy": 3, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace", "Connecting arrangement", "Full-size bathtub"], "description": "Two suites of about 60 m² with an extra room and connecting arrangements suited to families. Non-smoking." },
+        { "code": "EXEC", "name": "Executive Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 1, "amenities": ["Private terrace", "Living area", "Full-size bathtub"], "description": "A premium suite of about 60 m² with generous living space and a private terrace. Non-smoking." },
+        { "code": "ROYAL", "name": "Royal Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 1, "amenities": ["Private terrace", "Jacuzzi", "Living area"], "description": "The ship's Royal Suite, about 60 m², with its own Jacuzzi and a terrace. Non-smoking." }
+      ],
+      "itineraries": [
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan: High Dam and Philae", "description": "Embark, visit the High Dam and Philae Temple and take a motorboat ride. Captain's reception and Nubian entertainment." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit both temples, then sail through Esna towards Luxor. Afternoon tea, dinner and a galabiya party." },
+            { "title": "Luxor", "description": "Explore the West Bank: the Valley of the Kings and Queens, Hatshepsut Temple and the Colossi of Memnon. The East Bank temples follow, as the programme for the sailing sets out." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples." },
+            { "title": "Luxor West Bank", "description": "Visit the West Bank, then sail to Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the temples of Edfu and Kom Ombo." },
+            { "title": "Aswan", "description": "Visit the High Dam, Philae Temple and the other Aswan sites in the programme." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "oberoi-philae",
+      "name": "The Oberoi Philae",
+      "type": "motor",
+      "cabin_count": 22,
+      "shared_spaces": ["dining_room", "lounge", "sun_deck"],
+      "summary": "An ultra-luxury Oberoi cruiser with only 22 cabins and suites from 36 m², Egyptologist-led sightseeing and private docking, on four- and six-night cruises that can add Dendera and Abydos.",
+      "description": "The Oberoi Philae is an ultra-luxury Nile cruiser for guests who want privacy, space, exceptional hospitality and carefully planned visits to the sites. With only 22 cabins and suites, private docking, professional Egyptologists and luxury vehicles for sightseeing, it is an intimate alternative to the usual cruise ship. Longer itineraries add Dendera and Abydos to the classic Luxor–Aswan journey.\n\nLuxury Cabins measure about 36 m², with king or twin beds and soundproof windows that open. Luxury Suites of about 55 m² add a separate living room, a changing room and a standalone bathtub. Luxury Suites with Terrace add a private terrace (about 85 m² in all) with a heated outdoor whirlpool.\n\nOn board: fine dining, a lounge, a sun deck, cultural talks and Wi-Fi. Guiding in other languages can be arranged with notice.",
+      "source_urls": ["https://www.oberoihotels.com/nile-cruise-philae/", "https://www.oberoihotels.com/nile-cruise-philae/accommodation/", "https://www.oberoihotels.com/nile-cruise-philae/itineraries/", "https://www.oberoihotels.com/nile-cruise-philae/sailing-dates/"],
+      "verification_note": "Reservations: reservations.philae@oberoihotels.com. Oberoi sails on published dates, not a weekly day, so the itineraries were imported inactive: add departures from the sailing-dates page and set the sailing days before activating. Low-water variants not imported (keep them separate). Category counts unknown. Confirm special tomb tickets and guide languages.",
+      "cabins": [
+        { "code": "LC", "name": "Luxury Cabin", "size_m2": 36, "bed_configuration": "King or twin", "max_occupancy": 2, "view": "Soundproof windows that open", "balcony": false, "amenities": ["Rain shower", "Living space", "Air conditioning", "Television", "Wi-Fi", "Tea and coffee", "Personal bar", "Safe", "Pillow menu"], "description": "Cabins of about 36 m² with king or twin beds, soundproof windows that open, a living space and a rain shower." },
+        { "code": "LS", "name": "Luxury Suite", "size_m2": 55, "bed_configuration": "King", "max_occupancy": 2, "view": "Nile-facing windows that open", "balcony": false, "amenities": ["Separate living room", "Changing room", "Standalone bathtub", "Separate shower"], "description": "Suites of about 55 m² with a king bedroom, a separate living room, a private changing room, a standalone bathtub and a separate shower." },
+        { "code": "LST", "name": "Luxury Suite with Terrace", "size_m2": 55, "bed_configuration": "King", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "amenities": ["Private terrace", "Heated outdoor whirlpool", "Sun lounger", "Separate living room", "Changing room"], "description": "Suites of about 55 m² inside (about 85 m² with the terrace), whose private terrace has a heated outdoor whirlpool and a sun lounger." }
+      ],
+      "itineraries": [
+        {
+          "code": "ASW-LXR-4",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 4,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Aswan: Nubian Museum", "description": "Embark around midday, have lunch and visit the Nubian Museum. Afternoon tea, cocktails and dinner; overnight in Aswan." },
+            { "title": "Philae, High Dam and Kom Ombo", "description": "Visit Philae Temple and the High Dam, then sail to Kom Ombo and its double temple. Continue to Edfu." },
+            { "title": "Edfu and Luxor", "description": "Visit the Temple of Horus at Edfu, pass through the Esna lock and sail to Luxor." },
+            { "title": "Luxor", "description": "The Valley of the Kings (with the tombs of Tutankhamun and Ramesses VI when included), Deir el-Medina, Medinet Habu and the Colossi of Memnon; Luxor and Karnak Temples in the afternoon." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples." },
+            { "title": "Luxor West Bank", "description": "Royal tombs and temples; sail towards Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the Temple of Horus and Kom Ombo Temple." },
+            { "title": "Aswan", "description": "Philae Temple, the High Dam and the Nubian Museum." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ASW-LXR-6",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 6,
+          "sailing_days": [1, 2, 3, 4, 5, 6, 7],
+          "active": false,
+          "days": [
+            { "title": "Aswan: Nubian Museum", "description": "Embark in Aswan and visit the Nubian Museum." },
+            { "title": "Philae, High Dam and Kom Ombo", "description": "Visit Philae Temple and the High Dam, then Kom Ombo." },
+            { "title": "Edfu and Esna", "description": "Visit Edfu and Esna, then sail to Luxor." },
+            { "title": "Luxor", "description": "The West Bank, then Karnak and Luxor Temples." },
+            { "title": "Dendera", "description": "Travel towards Qena to visit Dendera Temple." },
+            { "title": "Abydos", "description": "Abydos Temple and the Luxor Museum, depending on the route." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "oberoi-zahra",
+      "name": "The Oberoi Zahra",
+      "type": "motor",
+      "cabin_count": 28,
+      "shared_spaces": ["dining_room", "lounge", "sun_deck"],
+      "summary": "An ultra-luxury Oberoi cruiser with 28 cabins and suites, private heated whirlpools and a two-bedroom suite, Egyptologist-led sightseeing and three-, four- and seven-night cruises.",
+      "description": "The Oberoi Zahra is an ultra-luxury Nile cruiser with spacious rooms, private terraces, premium hospitality and unhurried visits to the sites. With only 28 cabins and suites, it is a peaceful, personal way to see the temples and tombs of Upper Egypt, with professional Egyptologists, private docking and premium vehicles for sightseeing.\n\nLuxury Cabins measure about 26.4 m², with king or twin beds, a picture-frame Nile window and a rain shower with a view. Luxury Suites have 50 m² inside and a terrace with a heated whirlpool, about 115 m² in all, plus a lounge and private dining area. The two-bedroom Luxury Suite, about 92 m², sleeps four.\n\nOn board: a fine restaurant and lounge, a sun deck, relaxation areas, cultural presentations and Wi-Fi.",
+      "source_urls": ["https://www.oberoihotels.com/nile-cruise-zahra/", "https://www.oberoihotels.com/nile-cruise-zahra/accommodation/", "https://www.oberoihotels.com/nile-cruise-zahra/itineraries/", "https://www.oberoihotels.com/nile-cruise-zahra/sailing-dates/"],
+      "verification_note": "The day-by-day itineraries were added to staging's existing test schedules ZLA4 and ZAL3, whose sailing days (Mon/Fri) and 100 departures were not set from Oberoi's dates. The two-bedroom suite sleeps 4 but cabins allow at most 3, so it was imported as 3. Seven-night and low-water itineraries not imported. Verify suite counts, departures, inclusions and cancellation terms. Staging also has a duplicate private record 'the-oberoi-zahra-luxury-nile-cruiser'.",
+      "cabins": [
+        { "code": "LC", "name": "Luxury Cabin", "size_m2": 26.4, "bed_configuration": "King or twin", "max_occupancy": 2, "view": "Picture-frame Nile window", "balcony": false, "amenities": ["Rain shower with a view", "Seating area", "Air conditioning", "Wi-Fi"], "description": "Cabins of about 26.4 m² with king or twin beds, a picture-frame Nile window and a rain shower with a view." },
+        { "code": "LS", "name": "Luxury Suite", "size_m2": 50, "bed_configuration": "King", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "amenities": ["Private terrace", "Heated whirlpool", "Separate lounge", "Private dining area", "Standalone bathtub", "Rain shower"], "description": "Suites with 50 m² inside and about 115 m² in all: a king bedroom, separate lounge, private dining area and an outdoor terrace with a heated whirlpool." },
+        { "code": "LS2", "name": "Luxury Suite with Two Bedrooms", "size_m2": 92, "max_occupancy": 3, "view": "Panoramic Nile views", "balcony": false, "amenities": ["Two bedrooms", "Living and dining areas"], "description": "About 92 m² with two bedrooms, living and dining areas and premium bathrooms. Sleeps four." }
+      ],
+      "itineraries": [
+        {
+          "code": "ZAL3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [5],
+          "active": true,
+          "days": [
+            { "title": "Aswan: High Dam and Philae", "description": "Embark around midday. Visit the High Dam and Philae Temple. Cocktails and dinner; sail towards Kom Ombo." },
+            { "title": "Kom Ombo and Edfu", "description": "Visit Kom Ombo Temple and Edfu Temple, then continue towards Esna." },
+            { "title": "Luxor", "description": "The West Bank, including the Valley of the Kings, Medinet Habu and the Colossi of Memnon; Karnak and Luxor Temples in the afternoon." },
+            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+          ]
+        },
+        {
+          "code": "ZLA4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [1],
+          "active": true,
+          "days": [
+            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark and visit Karnak and Luxor Temples." },
+            { "title": "Luxor West Bank", "description": "Explore the royal tombs and temples, then sail towards Esna." },
+            { "title": "Edfu and Kom Ombo", "description": "Visit the Temple of Horus and Kom Ombo Temple." },
+            { "title": "Aswan", "description": "Visit the High Dam and Philae Temple." },
+            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+          ]
+        }
+      ]
+    }
+  ]
+}
