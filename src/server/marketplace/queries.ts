@@ -201,7 +201,8 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
   const en = v.vessel_translations.find((t) => t.locale === "en");
   const own = v.vessel_translations.find((t) => t.locale === locale);
   // Each text in the page's language when it has been written, else in English.
-  const say = <K extends "summary" | "description" | "dining" | "good_for" | "less_suited_to">(k: K) => own?.[k] ?? en?.[k] ?? null;
+  const say = <K extends "summary" | "description" | "dining" | "good_for" | "less_suited_to">(k: K) =>
+    own?.[k] ?? en?.[k] ?? null;
   const listed = (k: "included" | "optional_extras" | "not_included") => (own?.[k]?.length ? own[k] : (en?.[k] ?? []));
   // ADR-102: Nilecruz's sightseeing programme for each itinerary (published, with an office and an active programme
   // rate); none for a vessel that sells its own. Priced per person for a party of two (the database prices the party).

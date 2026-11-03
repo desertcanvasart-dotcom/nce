@@ -180,7 +180,12 @@ describe("only confirmed facts are published", () => {
     expect(evaluationPublishable(undefined)).toBe(false);
   });
   it("hides a cabin's unconfirmed facts", () => {
-    const c = verifiedCabin({ ...cabin("std", "Upper", 22), bed: "Queen or twin", view: "Nile view", unverified: ["size", "bed", "max_guests", "view"] });
+    const c = verifiedCabin({
+      ...cabin("std", "Upper", 22),
+      bed: "Queen or twin",
+      view: "Nile view",
+      unverified: ["size", "bed", "max_guests", "view"],
+    });
     expect([c.sizeM2, c.bed, c.view, c.maxGuests]).toEqual([null, null, null, null]);
     expect(verifiedCabin(cabin("x", "Upper", 18)).maxGuests).toBe(2);
   });

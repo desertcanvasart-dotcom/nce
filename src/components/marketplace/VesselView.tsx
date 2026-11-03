@@ -91,7 +91,12 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
           "disjunction",
         )
       : null,
-    faqTotals: v.indicativePrice ? list(nights.map((n) => total(n, "price.totalMore")), "disjunction") : null,
+    faqTotals: v.indicativePrice
+      ? list(
+          nights.map((n) => total(n, "price.totalMore")),
+          "disjunction",
+        )
+      : null,
     title: nights.length ? t("meta.title", { name: v.name, nights: nightsList }) : t("meta.titleOne", { name: v.name }),
     description: !nights.length
       ? v.summary
@@ -131,7 +136,12 @@ export function VesselView({
 }) {
   const t = useTranslations("vesselPage");
   const tc = useTranslations("sailingCalendar");
-  const w = vesselWords(v, locale, (k, x) => t(k, x), (k) => t.raw(k));
+  const w = vesselWords(
+    v,
+    locale,
+    (k, x) => t(k, x),
+    (k) => t.raw(k),
+  );
   const path = `/cruises/${v.slug}/`;
   const askHref = `/cruises/${v.slug}/ask/`;
   const reserveHref = `/cruises/${v.slug}/reserve/`;
@@ -192,7 +202,10 @@ export function VesselView({
   // The questions only this vessel's data can answer, and only the ones it can.
   const faqs: { q: string; a: string }[] = [];
   if (price && w.faqTotals)
-    faqs.push({ q: t("faq.costQ", { name: v.name }), a: t("faq.costA", { price: w.money(price.perNight), totals: w.faqTotals }) });
+    faqs.push({
+      q: t("faq.costQ", { name: v.name }),
+      a: t("faq.costA", { price: w.money(price.perNight), totals: w.faqTotals }),
+    });
   else if (v.bookable && v.from)
     faqs.push({ q: t("faq.costQ", { name: v.name }), a: t("faq.costBookableA", { price: formatMoney(v.from, locale) }) });
   faqs.push({ q: t("faq.bookQ"), a: v.bookable ? t("faq.bookYes") : t("faq.bookNo") });
@@ -717,7 +730,12 @@ export function VesselView({
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdScript(
-            touristTripJsonLd(v, absoluteUrl(locale, path), { name: v.name, description: v.summary, image: ogImage, trip: w.trip }),
+            touristTripJsonLd(v, absoluteUrl(locale, path), {
+              name: v.name,
+              description: v.summary,
+              image: ogImage,
+              trip: w.trip,
+            }),
           ),
         }}
       />

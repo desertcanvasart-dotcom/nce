@@ -45,7 +45,9 @@ export async function askForOffer(slug: string, _prev: ActionState, fd: FormData
   const date = r.data.date || null;
   // The table keeps a message of at least a sentence; an empty note becomes a plain one for the admins.
   const message =
-    r.data.message && r.data.message.length >= 10 ? r.data.message : `${r.data.message ?? ""} Offer request for ${v.name}.`.trim();
+    r.data.message && r.data.message.length >= 10
+      ? r.data.message
+      : `${r.data.message ?? ""} Offer request for ${v.name}.`.trim();
   const db = await getDb();
   const { error } = await db.from("contact_messages").insert({
     name: r.data.name,

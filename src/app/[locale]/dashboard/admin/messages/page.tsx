@@ -24,7 +24,9 @@ export default async function MessagesPage() {
   const db = await getDb();
   const { data } = await db
     .from("contact_messages")
-    .select("id, name, email, topic, message, created_at, handled_at, route, nights, departs_on, guests, vessel:vessels(name, slug)")
+    .select(
+      "id, name, email, topic, message, created_at, handled_at, route, nights, departs_on, guests, vessel:vessels(name, slug)",
+    )
     .order("created_at", { ascending: false })
     .limit(200);
   const since = new Date(nowMs() - 86_400_000).toISOString();
@@ -78,7 +80,8 @@ export default async function MessagesPage() {
     <>
       <h1 className={ui.pageTitle}>Messages</h1>
       <p className={ui.muted}>
-        Sent from the Contact page and from “Ask for an offer” on vessel pages. Reply by email from your own mailbox, then mark the message as handled.
+        Sent from the Contact page and from “Ask for an offer” on vessel pages. Reply by email from your own mailbox, then mark
+        the message as handled.
       </p>
       <Section title={`Open (${open.length})`} id="open">
         {list(open, false)}

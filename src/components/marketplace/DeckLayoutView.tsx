@@ -23,8 +23,7 @@ const size = (bytes: number | null) =>
       : `${(bytes / 1_000_000).toFixed(1)} MB`;
 const kind = (name: string) => name.split(".").pop()?.toUpperCase() ?? "file";
 // A label goes inside an area only when it fits (about 10 units a letter, 19 for a Japanese character).
-const fits = (text: string, width: number) =>
-  [...text].reduce((n, c) => n + (/[　-鿿＀-￯]/.test(c) ? 19 : 10), 0) + 24 <= width;
+const fits = (text: string, width: number) => [...text].reduce((n, c) => n + (/[　-鿿＀-￯]/.test(c) ? 19 : 10), 0) + 24 <= width;
 
 /** The cabin types the drawing shows, biggest share first: the first gets the lightest shade, so words on it stay readable. */
 export function drawnCabins(layout: DeckLayout, cabins: VesselCabin[]): VesselCabin[] {
@@ -34,10 +33,12 @@ export function drawnCabins(layout: DeckLayout, cabins: VesselCabin[]): VesselCa
 }
 /** The shade a cabin type is drawn in, for its swatch elsewhere. */
 export const toneClass = (drawn: VesselCabin[], code: string) =>
-  styles[`c${Math.min(
-    drawn.findIndex((c) => c.code === code),
-    4,
-  )}`];
+  styles[
+    `c${Math.min(
+      drawn.findIndex((c) => c.code === code),
+      4,
+    )}`
+  ];
 
 /**
  * EXP-002 (9-2b): the vessel deck by deck, redrawn by Nilecruz from the operator's plan, in the site's own colours.

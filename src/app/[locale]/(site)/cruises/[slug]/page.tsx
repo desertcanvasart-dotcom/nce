@@ -30,7 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!v) return {};
   // The title and description cover every itinerary (DATA-031): no single sailing sets the page's identity.
   const t = await getTranslations({ locale, namespace: "vesselPage" });
-  const w = vesselWords(v, locale, (k, x) => t(k as never, x as never), (k) => t.raw(k as never));
+  const w = vesselWords(
+    v,
+    locale,
+    (k, x) => t(k as never, x as never),
+    (k) => t.raw(k as never),
+  );
   const meta = pageMetadata({
     locale,
     path: `/cruises/${v.slug}`,
