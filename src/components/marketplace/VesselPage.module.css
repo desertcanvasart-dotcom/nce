@@ -1,0 +1,617 @@
+/* The vessel page (PAGE-072), in the site's own language: hairlines, brass accents, display type for headings. */
+.page {
+  /* The section bar's height: anchors land below it, and sticky parts inside sections sit under it. */
+  --bar: 56px;
+
+  display: grid;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: var(--space-5) 0 var(--space-9);
+}
+
+.page section[id] {
+  scroll-margin-top: calc(var(--bar) + var(--space-3));
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line);
+  letter-spacing: var(--type-display-l-tracking);
+  overflow-wrap: anywhere;
+}
+
+.route {
+  margin: 0;
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+.lead {
+  max-width: var(--measure);
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+.muted {
+  margin: 0;
+  color: var(--ink-muted);
+}
+
+/* ── Hero: on a phone the name, then the photo, then the price and the main action. On a wide screen, the words on
+   the left and the photos on the right, so the first screen has the boat, its price and what to do next. ── */
+.hero {
+  display: grid;
+  grid-template-areas:
+    "head"
+    "photo"
+    "facts"
+    "actions"
+    "lead";
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.heroHead {
+  display: grid;
+  grid-area: head;
+  gap: var(--space-2);
+}
+
+.heroPhoto {
+  grid-area: photo;
+  min-width: 0;
+}
+
+.hero .lead {
+  grid-area: lead;
+}
+
+.facts {
+  display: grid;
+  grid-area: facts;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr));
+  gap: 0 var(--space-4);
+  margin: 0;
+}
+
+.facts div {
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--line);
+}
+
+.facts dt {
+  color: var(--ink-muted);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+}
+
+.facts dd {
+  margin: var(--space-1) 0 0;
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+/* The price leads the facts, across the row, in the price type. */
+.priceFact {
+  grid-column: 1 / -1;
+}
+
+.priceFact dd {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.actions {
+  display: grid;
+  grid-area: actions;
+  gap: var(--space-3);
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin: 0;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: var(--type-label-weight);
+  text-decoration: none;
+}
+
+.primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.secondary {
+  color: var(--ink);
+}
+
+.primary:focus-visible,
+.secondary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: var(--offset);
+}
+
+.status {
+  max-width: var(--measure);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+@media (width >= 1024px) {
+  .hero {
+    grid-template-areas:
+      "head photo"
+      "lead photo"
+      "facts photo"
+      "actions photo";
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: var(--space-7);
+  }
+}
+
+/* ── "Is this the right boat for you?": two or three short parts side by side. ── */
+.verdict {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.verdict h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+}
+
+.verdict dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.verdict dt {
+  color: var(--accent);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.verdict dd {
+  margin: var(--space-1) 0 0;
+}
+
+/* ── The section bar: stays at the top, scrolls sideways when it doesn't fit, the main action at its end. ── */
+.sectionNav {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  height: var(--bar);
+  margin: 0 calc(-1 * var(--space-4));
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.sectionNav ul {
+  display: flex;
+  flex: 1;
+  gap: var(--space-1);
+  min-width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none;
+}
+
+.sectionNav ul::-webkit-scrollbar {
+  display: none;
+}
+
+.sectionNav li {
+  flex: none;
+}
+
+.sectionNav ul a {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 var(--space-3);
+  border-bottom: 2px solid transparent;
+  color: var(--ink-muted);
+  font-size: var(--type-body-size);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sectionNav ul a:hover {
+  color: var(--ink);
+}
+
+.sectionNav ul a[aria-current="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+  font-weight: var(--type-label-weight);
+}
+
+.sectionNav a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+
+.navAction {
+  flex: none;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ── Sections ── */
+.section {
+  display: grid;
+  gap: var(--space-4);
+  min-width: 0;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.section h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(var(--type-heading-size), 4vw, 44px);
+  font-weight: var(--type-display-l-weight);
+  line-height: 1.1;
+}
+
+.section h3 {
+  margin: 0;
+}
+
+.section p {
+  max-width: var(--measure);
+  margin: 0;
+}
+
+.big {
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+.callout {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+.prose {
+  white-space: pre-line;
+}
+
+.sub {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.sub ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding-left: var(--space-5);
+}
+
+.lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: var(--space-4);
+}
+
+.lists ul {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+}
+
+/* The itinerary: the guide total for the cruise chosen sits right under the choice. */
+.itinerary {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.total {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+}
+
+.direction {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  font-size: var(--type-label-size);
+  line-height: var(--type-label-line);
+}
+
+.south {
+  color: var(--nile-600);
+}
+
+.north {
+  color: var(--brass-700);
+}
+
+:global([data-theme="dark"]) .south {
+  color: var(--nile-300);
+}
+
+:global([data-theme="dark"]) .north {
+  color: var(--brass-300);
+}
+
+/* Cabin types: a card each, the chosen one outlined like its cabins on the plan. */
+.cabins {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cabins > li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.cabins > li.cabinOn {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.cabins h3 {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  font-weight: 500;
+  line-height: var(--type-heading-line);
+}
+
+.cabinPhotos {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.cabinPhotos[data-count="2"] {
+  grid-template-columns: 1fr 1fr;
+}
+
+.cabinPhoto {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.cabinFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  color: var(--ink-muted);
+  list-style: none;
+}
+
+.showOnPlan {
+  justify-self: start;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.showOnPlan[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.showOnPlan:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: var(--offset);
+}
+
+/* The evaluation, once it may be published. */
+.score {
+  font-size: var(--type-body-l-size);
+}
+
+.dimensions {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 640px;
+  margin: 0;
+}
+
+.dimensions div {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) 2fr;
+  gap: var(--space-1) var(--space-3);
+  align-items: center;
+}
+
+.dimensions dd {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  margin: 0;
+}
+
+.dimensions meter {
+  flex: 1;
+  min-width: 0;
+}
+
+.dimensions span {
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.dimensions .dimensionNote {
+  grid-column: 2;
+  color: var(--ink-muted);
+}
+
+.trust {
+  color: var(--ink-muted);
+}
+
+/* Questions, as a plain list: the question in bold, its answer under it. */
+.faqs {
+  display: grid;
+  gap: var(--space-4);
+  max-width: var(--measure);
+  margin: 0;
+}
+
+.faqs dt {
+  font-weight: var(--type-label-weight);
+}
+
+.faqs dd {
+  margin: var(--space-1) 0 0;
+}
+
+/* Other boats to compare. */
+.similar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.similar li {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+.similar h3 {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  font-weight: 500;
+  line-height: var(--type-heading-line);
+}
+
+.similar h3 a {
+  color: var(--ink);
+}
+
+.similarPhoto {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+
+.badge {
+  justify-self: start;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  font-size: var(--type-label-size);
+}
+
+/* The closing call to action. */
+.final {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunk);
+}
+
+.final h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(var(--type-heading-size), 4vw, 44px);
+  line-height: 1.1;
+}
+
+.final p {
+  max-width: var(--measure);
+  margin: 0;
+}
+
+@media (width < 760px) {
+  .page {
+    gap: var(--space-5);
+  }
+
+  .title {
+    font-size: clamp(34px, 9vw, var(--type-display-l-size));
+  }
+
+  .navAction {
+    padding: var(--space-2) var(--space-3);
+  }
+}
