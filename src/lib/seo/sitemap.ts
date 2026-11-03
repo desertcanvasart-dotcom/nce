@@ -9,9 +9,12 @@ export const NOT_IN_SITEMAP = new Set(["/cruises/compare/"]);
 /** Built pages that live outside the silo workbook. */
 export const EXTRA_PAGES = ["/operators/connect/"];
 
-/** SEO-019: every indexable public page, unprefixed: the built pages plus published vessels and tours (no samples). */
-export function indexablePaths(vessels: string[], tours: string[]): string[] {
-  return [...new Set([...BUILT, ...EXTRA_PAGES, ...vessels, ...tours])].filter((p) => !NOT_IN_SITEMAP.has(p)).sort();
+/**
+ * SEO-019: every indexable public page, unprefixed: the built pages plus published vessels and tours (no samples), and
+ * the blog's indexable pages (ADR-105).
+ */
+export function indexablePaths(vessels: string[], tours: string[], blog: string[] = []): string[] {
+  return [...new Set([...BUILT, ...EXTRA_PAGES, ...vessels, ...tours, ...blog])].filter((p) => !NOT_IN_SITEMAP.has(p)).sort();
 }
 
 /** One language's sitemap: only the pages complete in that language, each with its hreflang set. */

@@ -8,6 +8,6 @@ describe("Sanity Studio configuration (I18N-011)", () => {
     expect(LOCALES[0]?.id).toBe(routing.defaultLocale);
   });
   it("translates the editorial pieces as whole documents", () => {
-    expect([...DOCUMENT_LOCALISED_TYPES].sort()).toEqual(["article", "destinationStory", "faq", "vesselTypeProfile"]);
+    expect([...DOCUMENT_LOCALISED_TYPES].sort()).toEqual(["article", "destinationStory", "faq", "post", "vesselTypeProfile"]);
   });
 });

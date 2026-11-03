@@ -1,4 +1,5 @@
 /** Structured data for education pages (Batch 6): Article, FAQPage, and on home Organization and WebSite (SEO-028). */
+import { BLOG_TOPICS, type BlogPost } from "@/lib/content/blog";
 import type { EditorialPage } from "@/lib/content/editorial";
 
 export function articleJsonLd(page: EditorialPage, url: string) {
@@ -14,8 +15,28 @@ export function articleJsonLd(page: EditorialPage, url: string) {
   };
 }
 
+/** ADR-105: a blog post, with its dates and byline (Nilecruz when no author is named). */
+export function blogPostingJsonLd(post: BlogPost, url: string, blogUrl: string) {
+  const publisher = { "@type": "Organization", name: "Nilecruz" };
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.seoDescription ?? post.standfirst,
+    url,
+    mainEntityOfPage: url,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt ?? post.publishedAt,
+    author: post.author ? { "@type": "Person", name: post.author } : publisher,
+    publisher,
+    articleSection: BLOG_TOPICS[post.topic].label,
+    isPartOf: { "@type": "Blog", name: "Nilecruz blog", url: blogUrl },
+    inLanguage: post.language,
+  };
+}
+
 /** FAQPage only when the page has questions. */
-export function faqJsonLd(page: EditorialPage) {
+export function faqJsonLd(page: Pick<EditorialPage, "faqs">) {
   if (!page.faqs.length) return null;
   return {
     "@context": "https://schema.org",

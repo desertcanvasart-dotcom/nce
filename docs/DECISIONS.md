@@ -838,3 +838,15 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - The operator's **original** (PDF or image) can be downloaded under the drawing, credited. Operators and catalogue admins upload or remove it; only Nilecruz admins edit the drawing.
   - Vessels without a drawing keep the deck-by-deck cabin list.
 - **Decided while building:** a malformed drawing is ignored rather than breaking the page; the reserve page keeps the cabin list, because there the cabin choice sits beside the booking form.
+
+### ADR-105 A blog for dated posts; the guide stays evergreen (Accepted; Islam 3 Nov 2026)
+- **Context:** the site had no blog. The guide (`/nile-cruise-guide/`) is the silo workbook's fixed set of evergreen pages, and Sanity's `article` only takes workbook rows (`pageId` P001–P106). Timely pieces (Esna lock closures, new vessels, season updates, finds, trip stories) had nowhere to go.
+- **Decision:**
+  - A blog at `/blog/` (index), `/blog/{slug}/` (posts, no dates or topics in the address) and `/blog/topics/{topic}/`. Topics: News, Seasons, Vessels, Egyptology, Trip stories. It sits outside the workbook, under home, like `/operators/connect/`.
+  - How-to and planning topics stay in the guide, so posts don't compete with guide pages. Every post names one guide page it leads to, and links to it.
+  - Posts are a new Sanity type, `post`, translated as whole documents. Only approved posts appear. A language without its own version shows English, `noindex`, until its path joins `TRANSLATED` (Batch 10, as for every page).
+  - The index and each topic page stay `noindex` and out of the sitemap until they hold three real (not sample) posts. Sample posts are never indexed.
+  - Posts carry BlogPosting (dates, byline, topic, language), BreadcrumbList and, with questions, FAQPage. The index and topics carry CollectionPage with an ItemList.
+  - The blog is linked from the footer only, and only once it has a post; the main navigation stays the pillars (SEO-015).
+- **Decided while building:** illustrated scenes stand in for photos (ADR-096), so the post type has no photo field yet; the body renders like the guide's (headings and paragraphs); no pagination until the index holds more than about 30 posts.
+
