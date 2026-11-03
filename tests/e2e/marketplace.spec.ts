@@ -3,6 +3,7 @@ import { refreshSignature } from "@/lib/connections/signature";
 import { routeId } from "@/lib/marketplace/listing";
 import { FEED_PULL_TEST_SECRET } from "../support/feed-tls";
 import { adminDb, LOCAL, newUser } from "../support/local-auth";
+import { insertEvaluation } from "../support/evaluation";
 import { sampleReservations } from "../support/sailing";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
@@ -39,19 +40,7 @@ test.beforeAll(async () => {
   const db = adminDb();
   const { error } = await db.from("vessels").update({ max_guests: 60, category: "luxury" }).eq("id", S.vesselId);
   if (error) throw error;
-  const fours = [4, 4, 4, 4];
-  const { error: ee } = await db.from("evaluations").insert({
-    vessel_id: S.vesselId,
-    assessed_on: "2026-10-01",
-    evaluator: "Sample evaluator",
-    verdict: "recommended",
-    scores: Object.fromEntries(
-      ["hygiene", "service", "food", "amenities", "management", "cabin_vessel", "cruise_experience"].map((d) => [d, fours]),
-    ),
-    published: true,
-    published_at: new Date().toISOString(),
-  });
-  if (ee) throw ee;
+  await insertEvaluation(db, S.vesselId);
 });
 
 test("the refresh route needs the scheduler's signature", async ({ request }) => {

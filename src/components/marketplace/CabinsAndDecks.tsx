@@ -6,13 +6,14 @@ import { Media } from "@/components/ds/Media/Media";
 import { decksOf, type DeckLayout } from "@/lib/marketplace/deck-layout";
 import { verifiedCabin, type VesselCabin, type VesselPage } from "@/lib/marketplace/vessel";
 import { DeckLayoutView, drawnCabins, toneClass } from "./DeckLayoutView";
+import { DeckView } from "./DeckView";
 import layoutStyles from "./DeckLayoutView.module.css";
 import styles from "./VesselPage.module.css";
 
 /**
  * Cabins and decks: a card per cabin type with its confirmed facts and photos only, above Nilecruz's deck plan.
  * Choosing a card (a button: mouse, touch or keyboard) lights its cabins up on the plan, and tapping a cabin on the
- * plan chooses its card. Without a drawn plan the cards stand alone, with the decks the operator gives.
+ * plan chooses its card. Without a drawn plan the cards come before the deck-by-deck schematic.
  */
 export function CabinsAndDecks({
   cabins,
@@ -99,13 +100,21 @@ export function CabinsAndDecks({
           picked={picked}
           onPick={setPicked}
         />
-      ) : original ? (
-        <p>
-          <a href={original.url} download={original.name}>
-            {t("deck.download")}
-          </a>
-        </p>
-      ) : null}
+      ) : (
+        <>
+          {/* No drawn plan yet: the decks as a schematic, the operator's own plan to download when there is one. */}
+          {cabins.length ? (
+            <DeckView cabins={cabins.map(verifiedCabin)} maxGuests={maxGuests} sharedSpaces={sharedSpaces} />
+          ) : null}
+          {original ? (
+            <p>
+              <a href={original.url} download={original.name}>
+                {t("deck.download")}
+              </a>
+            </p>
+          ) : null}
+        </>
+      )}
     </>
   );
 }

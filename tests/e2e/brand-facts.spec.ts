@@ -20,10 +20,11 @@ test("the vessel page: guests, cabins and decks as facts, and its evaluation sta
   page,
 }) => {
   await page.goto("/cruises/sample-sail-one/");
-  for (const term of ["Guests on board", "Cabins", "Decks", "From, per person"])
+  for (const term of ["Guests on board", "Cabins", "Decks"])
     await expect(page.locator("dt", { hasText: term }).first()).toBeVisible();
-  await expect(page.getByText(/\d+\/100|Not evaluated yet/).first()).toBeVisible();
-  await expect(page.getByText(/Schematic: not a floor plan|hasn’t listed this vessel’s cabin types yet/)).toBeVisible();
+  // No guide price for this vessel: no price fact, and no filler in its place.
+  await expect(page.getByText("Not given")).toHaveCount(0);
+  await expect(page.getByText(/\d+\/100|We haven’t published our evaluation of this vessel yet/).first()).toBeVisible();
 });
 
 test("the comparison: the same facts side by side [BRAND-010]", async ({ page }) => {

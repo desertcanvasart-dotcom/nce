@@ -291,7 +291,7 @@ export function VesselView({
             <div className={styles.priceFact}>
               <dt>{t("hero.fromPrice")}</dt>
               <dd>
-                {formatMoney(v.from, locale)}{" "}
+                <span>{formatMoney(v.from, locale)}</span>{" "}
                 <PriceWhy
                   facts={{
                     price: v.from,
@@ -462,10 +462,10 @@ export function VesselView({
         <section className={styles.section} id="itinerary" aria-labelledby="itinerary-h">
           <h2 id="itinerary-h">{t("itinerary.title")}</h2>
           <ItinerarySwitch
-            defaultCode={[...its].sort((a, b) => b.nights - a.nights)[0]!.code}
+            defaultCode={[...its].sort((a, b) => a.nights - b.nights || a.code.localeCompare(b.code))[0]!.code}
             label={t("itinerary.choose")}
             panels={[...its]
-              .sort((a, b) => b.nights - a.nights || a.code.localeCompare(b.code))
+              .sort((a, b) => a.nights - b.nights || a.code.localeCompare(b.code))
               .map((i) => ({
                 code: i.code,
                 nights: formatNights(i.nights, locale),
