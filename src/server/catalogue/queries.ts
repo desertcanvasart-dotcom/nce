@@ -119,7 +119,7 @@ export async function vesselForEditor(id: string) {
   const { data: v, error } = await db
     .from("vessels")
     .select(
-      "*, operator:organisations(id, display_name, status), vessel_translations(locale, summary, description), vessel_private(*), media(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt)), evaluations(id, assessed_on, evaluator, verdict, overall_score, published, method_version), external_ratings(*), safety_observations(*)",
+      "*, operator:organisations(id, display_name, status), vessel_translations(locale, summary, description, dining), vessel_private(*), media(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt)), evaluations(id, assessed_on, evaluator, verdict, overall_score, published, method_version), external_ratings(*), safety_observations(*)",
     )
     .eq("id", id)
     .maybeSingle();

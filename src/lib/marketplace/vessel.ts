@@ -66,6 +66,9 @@ export type VesselPage = {
   showcase: boolean;
   summary: string | null;
   description: string | null;
+  /** Food on board, and the diets the kitchen caters for. */
+  dining?: string | null;
+  dietaryOptions?: string[];
   gratuityUsdMinor: number | null;
   photos: { src: string; alt: string; width: number; height: number }[];
   cabins: VesselCabin[];

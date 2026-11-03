@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { BEST_FOR, CATEGORIES } from "@/lib/catalogue/categories";
+import { DIETARY_OPTIONS } from "@/lib/catalogue/dining";
 import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 
 /** Admin catalogue editor inputs (DASH-ADM-013–019). Messages are shown to admins as written. */
@@ -31,6 +32,7 @@ export const vesselDetailsInput = z.object({
   best_for: z.array(z.enum(BEST_FOR.map((b) => b.value) as [string, ...string[]])).max(10),
   mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))]).transform((v) => (v === "" ? null : v)),
   shared_spaces: z.array(z.enum(SHARED_SPACES.map((s) => s.value))).max(SHARED_SPACES.length),
+  dietary_options: z.array(z.enum(DIETARY_OPTIONS.map((o) => o.value))).max(DIETARY_OPTIONS.length),
   operator_org_id: z
     .string()
     .trim()
@@ -47,6 +49,12 @@ export const descriptionsInput = z.object({
   description_en: optText(4000),
   description_es: optText(4000),
   description_ja: optText(4000),
+});
+
+export const diningInput = z.object({
+  dining_en: optText(2000),
+  dining_es: optText(2000),
+  dining_ja: optText(2000),
 });
 
 export const photoInput = z.object({

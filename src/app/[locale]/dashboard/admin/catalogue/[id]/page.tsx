@@ -6,6 +6,7 @@ import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { BEST_FOR, CATEGORIES, VESSEL_TYPE_LABEL } from "@/lib/catalogue/categories";
+import { DIETARY_OPTIONS } from "@/lib/catalogue/dining";
 import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 import { VERDICTS } from "@/lib/evaluation/method";
 import { requireAdmin } from "@/server/auth";
@@ -17,6 +18,7 @@ import {
   deleteExternalRating,
   deletePhoto,
   saveDescriptions,
+  saveDining,
   saveDetails,
   savePhoto,
   setSafetyStatus,
@@ -46,6 +48,7 @@ export default async function VesselEditor({ params, searchParams }: Props) {
   const canEdit = session.adminRole === "super" || session.adminRole === "catalogue";
   const canText = canEdit || session.adminRole === "content";
   const desc = (l: string) => v.vessel_translations.find((t) => t.locale === l)?.description ?? "";
+  const dining = (l: string) => v.vessel_translations.find((t) => t.locale === l)?.dining ?? "";
   const alt = (m: (typeof v.media)[number], l: string) => m.media_translations.find((t) => t.locale === l)?.alt ?? "";
   const today = new Date().toISOString().slice(0, 10);
   const priv = v.vessel_private;
@@ -209,6 +212,13 @@ export default async function VesselEditor({ params, searchParams }: Props) {
               hint="Usually set by the operator in a submission; check it against what you know."
             />
             <Checkboxes legend="Shared spaces" name="shared_spaces" options={SHARED_SPACES} checked={v.shared_spaces} />
+            <Checkboxes
+              legend="Diets the kitchen caters for"
+              name="dietary_options"
+              options={DIETARY_OPTIONS}
+              checked={v.dietary_options}
+              hint="Shown under Food and dining on the vessel page."
+            />
           </ActionForm>
         ) : (
           <dl className={ui.grid}>
@@ -257,6 +267,35 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           </ActionForm>
         ) : (
           <p>{desc("en") || <span className={ui.muted}>No description yet.</span>}</p>
+        )}
+      </Section>
+
+      <Section title="Food and dining" id="dining">
+        {canText ? (
+          <ActionForm action={saveDining.bind(null, id)} submit="Save food and dining">
+            <p className={ui.muted}>
+              Meals, restaurants and what the kitchen serves. Leave out transfers and other paid extras: they are sold separately.
+            </p>
+            <TextArea label="English" name="dining_en" lang="en" maxLength={2000} defaultValue={dining("en")} />
+            <TextArea
+              label="Spanish"
+              name="dining_es"
+              lang="es"
+              maxLength={2000}
+              defaultValue={dining("es")}
+              hint="Optional. Empty shows the English text."
+            />
+            <TextArea
+              label="Japanese"
+              name="dining_ja"
+              lang="ja"
+              maxLength={2000}
+              defaultValue={dining("ja")}
+              hint="Optional. Empty shows the English text."
+            />
+          </ActionForm>
+        ) : (
+          <p>{dining("en") || <span className={ui.muted}>Nothing about food yet.</span>}</p>
         )}
       </Section>
 
