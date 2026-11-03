@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { areaBox, deckSummary, decksOf, hullPath, toneOf } from "@/lib/marketplace/deck-layout";
+import { areaBox, cabinShare, deckSummary, decksOf, hullPath, toneOf } from "@/lib/marketplace/deck-layout";
 import { layoutProblems, parseLayout } from "@/lib/marketplace/deck-layout-schema";
 
 const lily = JSON.parse(
@@ -21,6 +21,12 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
     expect(decksOf(layout, "STD")).toEqual(["D", "C", "B"]);
     expect(decksOf(layout, "RS")).toEqual(["D", "B"]);
     expect(decksOf(layout, "XX")).toEqual([]);
+  });
+
+  it("measures how much of the plan each cabin type covers, so the biggest is drawn lightest", () => {
+    const layout = parseLayout(lily)!;
+    expect(cabinShare(layout, "STD")).toBeGreaterThan(cabinShare(layout, "RS"));
+    expect(cabinShare(layout, "XX")).toBe(0);
   });
 
   it("names what each deck holds, stern to bow, without repeats", () => {
