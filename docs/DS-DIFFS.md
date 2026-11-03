@@ -27,5 +27,6 @@ Every place where the build intentionally differs from `nilecrz-design-system` (
 | 20 | Hero | Same scrim at all widths | Stronger scrim behind copy on phones | BRAND-020 | ADR-047 |
 | 21 | ItineraryTimeline, VesselCompare | Key handling on the tab list | On each tab, with Home/End; no-JS list of days | A11Y-009 | — |
 | 22 | Gallery, Scene, count-ups | JS motion ignored reduced motion | Tilt, parallax, smooth scroll and count-up off under reduced motion | A11Y-004 | ADR-048 |
+| 23 | ItineraryTimeline | Stops only | Optional `nights`: a crescent between consecutive days marks each night on board (vessel pages) | EXP-003 | — |
 
 Measured parity per component: `docs/screenshots/batch-02/parity/report.json`; reasons for anything over 1%: `tests/e2e/parity-allowlist.json`.

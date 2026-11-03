@@ -1,5 +1,4 @@
 import { useTranslations } from "next-intl";
-import { Gallery } from "@/components/ds/Gallery/Gallery";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import { formatMoney } from "@/components/ds/lib/format";
 import { Link } from "@/i18n/navigation";
@@ -17,14 +16,16 @@ import {
   type VesselItinerary,
   type VesselPage,
 } from "@/lib/marketplace/vessel";
+import { WEEKDAYS } from "@/lib/product/departures";
 import { arriveDayBefore, dayBeforeTip, sailingTimeText } from "@/lib/product/sailing-time";
 import { isBuilt, keywordText, LINK_MAP } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { calendarSailings, patternLines } from "@/lib/marketplace/sailing-calendar";
+import { calendarSailings, headingOf, patternLines } from "@/lib/marketplace/sailing-calendar";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { MooringExplainer } from "@/components/mooring/MooringExplainer";
 import { dietaryText } from "@/lib/catalogue/dining";
 import { DeckPlan } from "./DeckPlan";
+import { VesselPhotos } from "./VesselPhotos";
 import { ItinerarySwitch } from "./ItinerarySwitch";
 import { AddToCompare, CompareTray } from "./CompareTray";
 import { PriceWhy } from "./PriceWhy";
@@ -38,6 +39,13 @@ const TYPE_FACET = {
 } as const;
 
 /** PAGE-072: one page per vessel with all its itineraries (DATA-031), cabins by deck, evaluation and external ratings. */
+/** "Mondays", "Mondays and Fridays", or "On published dates" for an itinerary without a weekly day. */
+const sailsOn = (days: number[]) => {
+  const names = WEEKDAYS.filter((w) => days.includes(w.value)).map((w) => `${w.label}s`);
+  if (!names.length) return "On published dates";
+  return names.length === 7 ? "Every day" : names.length < 3 ? names.join(" and ") : `${names.length} days a week`;
+};
+
 export function VesselView({
   locale,
   v,
@@ -173,9 +181,7 @@ export function VesselView({
         )}
       </section>
 
-      {v.photos.length ? (
-        <Gallery label={`${v.name}: photos`} items={v.photos.map((p) => ({ image: p, caption: p.alt }))} />
-      ) : null}
+      {v.photos.length ? <VesselPhotos photos={v.photos} name={v.name} /> : null}
 
       {v.description ? (
         <section className={styles.section}>
@@ -199,7 +205,10 @@ export function VesselView({
             defaultCode={it.code}
             panels={v.itineraries.map((i) => ({
               code: i.code,
-              label: `${i.origin} → ${i.destination}, ${i.nights} nights`,
+              nights: i.nights,
+              route: `${i.origin} → ${i.destination}`,
+              when: sailsOn(i.sailingDays),
+              heading: headingOf(i.origin, i.destination),
               node: <ItineraryDetails v={v} it={i} locale={locale} />,
             }))}
           />
@@ -319,6 +328,7 @@ export function VesselView({
 /** One itinerary: check-in to check-out (DATA-018), the sailing time (PROPOSED-019), the days and the next departures. */
 function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerary; locale: Locale }) {
   const sails = sailingTimeText(it.sailingPeriod, it.sailsAt, it.origin);
+  const heading = headingOf(it.origin, it.destination);
   const stops = stopsFor(it.origin, it.destination).filter((st) => isBuilt(st.href));
   return (
     <div className={styles.section}>
@@ -363,8 +373,22 @@ function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerar
       {sails ? <p>{sails}.</p> : null}
       {arriveDayBefore(it.sailingPeriod) ? <p className={styles.note}>{dayBeforeTip(it.origin)}</p> : null}
       {it.days.length ? (
+        <p className={styles.direction}>
+          {heading ? (
+            <span className={styles[heading]}>
+              <span aria-hidden="true">{heading === "south" ? "↓" : "↑"}</span>{" "}
+              {heading === "south" ? "Upstream, sailing south" : "Downstream, sailing north"}
+            </span>
+          ) : null}
+          <span>
+            <span aria-hidden="true">☾</span> {it.nights} {it.nights === 1 ? "night" : "nights"} on board
+          </span>
+        </p>
+      ) : null}
+      {it.days.length ? (
         <ItineraryTimeline
           scroll
+          nights
           vessel={v.type}
           stops={it.days.map((d) => ({
             day: d.day,

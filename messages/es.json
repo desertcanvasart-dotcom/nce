@@ -122,6 +122,7 @@
     },
     "itinerary": {
       "label": "Itinerario",
+      "night": "Noche {n}",
       "day": "Día",
       "prevDay": "Día anterior",
       "nextDay": "Día siguiente",

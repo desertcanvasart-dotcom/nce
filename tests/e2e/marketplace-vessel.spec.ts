@@ -114,8 +114,8 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   expect(ld).toContain('"priceCurrency":"USD"');
   expect(ld).not.toContain("AggregateRating");
 
-  // Another itinerary by parameter; the canonical stays the vessel URL.
-  await page.getByRole("link", { name: `${S.origin} → ${S.destination}, 7 nights` }).click();
+  // Another itinerary, chosen by its length; it swaps in place and the address carries it. The canonical stays the vessel URL.
+  await page.getByRole("link", { name: new RegExp(`^7 nights .*${S.origin} → ${S.destination}`) }).click();
   await expect(page.getByText(`to check-out on day 8 in ${S.destination}.`)).toBeVisible();
   expect(page.url()).toContain("?itinerary=CX7");
   await page.reload();
