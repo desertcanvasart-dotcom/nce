@@ -122,6 +122,7 @@
     },
     "itinerary": {
       "label": "旅程",
+      "night": "{n}泊目",
       "day": "日目",
       "prevDay": "前の日",
       "nextDay": "次の日",

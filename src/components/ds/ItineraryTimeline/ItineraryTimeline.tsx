@@ -21,13 +21,15 @@ export type ItineraryTimelineProps = {
    * Without JavaScript the days are simply an ordered list.
    */
   scroll?: boolean;
+  /** Mark each night on board with a crescent between two consecutive days. */
+  nights?: boolean;
 };
 
 /**
  * Day-by-day route drawn as a river (COMP-ItineraryTimeline): pick a stop or press play and the boat sails there.
  * Arrow keys move between days (A11Y-009). Without JavaScript the full list of days is shown.
  */
-export function ItineraryTimeline({ stops, vessel = "sail", scroll = false }: ItineraryTimelineProps) {
+export function ItineraryTimeline({ stops, vessel = "sail", scroll = false, nights = false }: ItineraryTimelineProps) {
   const t = useTranslations("ds.itinerary");
   const [cur, setCur] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -139,6 +141,24 @@ export function ItineraryTimeline({ stops, vessel = "sail", scroll = false }: It
             <span className={styles.name}>{st.place}</span>
           </button>
         ))}
+        {/* Each curve between two days peaks halfway at the mean of their heights: the night sits there. */}
+        {nights
+          ? pts.slice(1).map((p, i) =>
+              stops[i + 1]!.day === stops[i]!.day + 1 ? (
+                <span
+                  key={`night-${i}`}
+                  className={styles.night}
+                  style={{ left: `${(pts[i]![0] + p[0]) / 2}%`, top: `${(pts[i]![1] + p[1]) / 2}%` }}
+                  title={t("night", { n: i + 1 })}
+                  aria-hidden="true"
+                >
+                  <svg viewBox="0 0 16 16">
+                    <path d="M10.5 1.5a6.5 6.5 0 1 0 4 11.6A5.5 5.5 0 0 1 10.5 1.5Z" />
+                  </svg>
+                </span>
+              ) : null,
+            )
+          : null}
         <div className={styles.boat} style={{ left: `${pos[0]}%`, top: `${pos[1]}%` }} aria-hidden="true">
           <VesselArt type={vessel} waterline={false} decorative />
         </div>

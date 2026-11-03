@@ -40,6 +40,26 @@
   transition: stroke-dashoffset 900ms var(--ease-river);
 }
 
+/* A night on board, between two days: a small crescent on the river. */
+.night {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-muted);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.night svg {
+  width: 13px;
+  height: 13px;
+  fill: currentcolor;
+}
+
 .stop {
   position: absolute;
   display: grid;
