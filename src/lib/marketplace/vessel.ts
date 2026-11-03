@@ -18,7 +18,26 @@ export type VesselCabin = {
   view: string | null;
   balcony: boolean;
   amenities: string[];
+  /** How many cabins of this type the vessel has, when known. */
+  count?: number | null;
+  /** Facts that came from an import but nobody has confirmed: never shown. */
+  unverified?: CabinFact[];
+  /** Photos of this cabin type (the vessel photos that show it). */
+  photos?: { src: string; alt: string; width: number; height: number }[];
 };
+
+export type CabinFact = "size" | "bed" | "max_guests" | "view";
+/** A cabin type with only its confirmed facts: the ones not confirmed become null. */
+export function verifiedCabin(c: VesselCabin): VesselCabin & { maxGuests: number | null } {
+  const hide = new Set(c.unverified ?? []);
+  return {
+    ...c,
+    sizeM2: hide.has("size") ? null : c.sizeM2,
+    bed: hide.has("bed") ? null : c.bed,
+    view: hide.has("view") ? null : c.view,
+    maxGuests: hide.has("max_guests") ? null : c.maxOccupancy,
+  };
+}
 
 export type VesselItinerary = {
   id: string;
@@ -52,6 +71,55 @@ export function sightseeingText(s: Sightseeing): string {
   return `${parts.filter(Boolean).join(", ")}; visiting ${s.sites.join(", ")}.`.replace(/^./, (c) => c.toUpperCase());
 }
 
+export type VesselEvaluation = {
+  score: number;
+  verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
+  assessedOn: string;
+  evaluator: string;
+  /** Points per dimension, out of its weight. */
+  dimensions: Record<string, number>;
+  verified: boolean;
+  evaluatorRole: string | null;
+  method: "onboard_inspection" | "document_review" | "onboard_and_documents" | null;
+  verdictSummary: string | null;
+  strengths: string[];
+  watchPoints: string[];
+  /** One note per scored dimension. */
+  dimensionNotes: Record<string, string>;
+};
+
+/**
+ * An evaluation is published only when someone has confirmed it is real and nothing is missing: the evaluator's role,
+ * the method, the one-sentence conclusion, strengths, watch points and a note for every scored dimension. Anything
+ * less isn't shown anywhere, not even its score.
+ */
+export function evaluationPublishable(e: VesselEvaluation | undefined): e is VesselEvaluation {
+  if (!e?.verified) return false;
+  const filled = (s: string | null | undefined) => !!s?.trim();
+  return (
+    filled(e.evaluator) &&
+    filled(e.evaluatorRole) &&
+    !!e.method &&
+    !!e.assessedOn &&
+    filled(e.verdictSummary) &&
+    e.strengths.some(filled) &&
+    e.watchPoints.some(filled) &&
+    Object.keys(e.dimensions).length > 0 &&
+    Object.keys(e.dimensions).every((k) => filled(e.dimensionNotes[k]))
+  );
+}
+
+export type IndicativePrice = { perNight: Money; basis: "per_person_per_night"; status: "indicative" };
+
+/** The indicative price of a whole itinerary per person: the nightly guide times the nights (rounded only for display). */
+export const indicativeTotal = (p: IndicativePrice, nights: number): Money => ({
+  amount: p.perNight.amount * nights,
+  currency: p.perNight.currency,
+});
+
+/** The distinct lengths of a vessel's itineraries, shortest first. */
+export const nightsOf = (its: Pick<VesselItinerary, "nights">[]) => [...new Set(its.map((i) => i.nights))].sort((a, b) => a - b);
+
 export type VesselPage = {
   id: string;
   slug: string;
@@ -81,14 +149,15 @@ export type VesselPage = {
     original: { url: string; name: string; bytes: number | null; credit: string | null } | null;
   } | null;
   itineraries: VesselItinerary[];
-  evaluation?: {
-    score: number;
-    verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
-    assessedOn: string;
-    evaluator: string;
-    /** Points per dimension, out of its weight. */
-    dimensions: Record<string, number>;
-  };
+  /** Only an evaluation that may be published (evaluationPublishable); otherwise none. */
+  evaluation?: VesselEvaluation;
+  /** A guide price per person and night for a vessel that can't be booked: never a quote, never an offer. */
+  indicativePrice?: IndicativePrice;
+  /** "Is this the right boat for you?", in the page's language; null hides it. */
+  goodFor?: string | null;
+  lessSuitedTo?: string | null;
+  /** What a cruise includes, verified entries only. */
+  inclusions?: { included: string[]; optional: string[]; notIncluded: string[] };
   externalRatings: {
     source: string;
     rating: number;
@@ -153,26 +222,36 @@ export const VERDICT_TEXT = {
 } as const;
 
 /**
- * Structured data for the vessel page (PAGE-072, DATA-034, SEO-026): a TouristTrip with the itinerary's stops, and an
- * AggregateOffer from the public "from" price only. Never AggregateRating (no verified reviews yet).
+ * Structured data for the vessel page (PAGE-072, DATA-034, SEO-026): a TouristTrip for the vessel, one sub-trip per
+ * itinerary with its stops, its main photo, and an AggregateOffer from the public "from" price only when it can be
+ * booked. Never an offer from an indicative price, and never AggregateRating (no verified reviews yet).
  */
-export function touristTripJsonLd(v: VesselPage, it: VesselItinerary | undefined, url: string) {
+export function touristTripJsonLd(
+  v: VesselPage,
+  url: string,
+  words: { name: string; description?: string | null; image?: string; trip: (it: VesselItinerary) => string },
+) {
+  const stops = (it: VesselItinerary) => {
+    const known = stopsFor(it.origin, it.destination).map((s) => s.name);
+    return {
+      "@type": "ItemList",
+      itemListElement: (known.length ? known : [it.origin, it.destination]).map((place, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        item: { "@type": "Place", name: place },
+      })),
+    };
+  };
   return {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
-    name: vesselH1(v.name, it),
-    description: v.summary ?? undefined,
+    name: words.name,
+    description: words.description ?? undefined,
     url,
+    image: words.image,
     touristType: "Nile cruise",
-    itinerary: it
-      ? {
-          "@type": "ItemList",
-          itemListElement: [it.origin, it.destination].map((place, i) => ({
-            "@type": "ListItem",
-            position: i + 1,
-            item: { "@type": "Place", name: place },
-          })),
-        }
+    subTrip: v.itineraries.length
+      ? v.itineraries.map((it) => ({ "@type": "TouristTrip", name: words.trip(it), itinerary: stops(it) }))
       : undefined,
     offers:
       v.bookable && v.from
