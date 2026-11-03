@@ -23,6 +23,7 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 import { calendarSailings, headingOf, patternLines } from "@/lib/marketplace/sailing-calendar";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { MooringExplainer } from "@/components/mooring/MooringExplainer";
+import { dietaryText } from "@/lib/catalogue/dining";
 import { DeckPlan } from "./DeckPlan";
 import { VesselPhotos } from "./VesselPhotos";
 import { ItinerarySwitch } from "./ItinerarySwitch";
@@ -186,6 +187,14 @@ export function VesselView({
         <section className={styles.section}>
           <h2>About {v.name}</h2>
           <p className={styles.prose}>{v.description}</p>
+        </section>
+      ) : null}
+
+      {v.dining || v.dietaryOptions?.length ? (
+        <section className={styles.section} id="dining">
+          <h2>Food and dining</h2>
+          {v.dining ? <p className={styles.prose}>{v.dining}</p> : null}
+          {dietaryText(v.dietaryOptions ?? []) ? <p className={styles.note}>{dietaryText(v.dietaryOptions ?? [])}</p> : null}
         </section>
       ) : null}
 

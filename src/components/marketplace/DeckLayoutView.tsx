@@ -4,6 +4,7 @@ import { useId, useState } from "react";
 import {
   areaBox,
   areaLabel,
+  cabinShare,
   DECK_W,
   deckSummary,
   decksOf,
@@ -49,7 +50,10 @@ export function DeckLayoutView({
 }) {
   const uid = useId();
   const [picked, setPicked] = useState<string | null>(null);
-  const drawn = cabins.filter((c) => c.code && decksOf(layout, c.code).length);
+  // Biggest first: the type covering most of the plan gets the lightest shade, so the words drawn on it stay readable.
+  const drawn = cabins
+    .filter((c) => c.code && decksOf(layout, c.code).length)
+    .sort((a, b) => cabinShare(layout, b.code!) - cabinShare(layout, a.code!));
   const tone = (code: string) =>
     Math.min(
       drawn.findIndex((c) => c.code === code),
