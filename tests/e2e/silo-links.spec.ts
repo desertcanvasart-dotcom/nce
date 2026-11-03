@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { ABOUT } from "@/content/about";
 import { allowedLinks, BUILT, expectedLinks, LINK_MAP } from "@/lib/seo/links";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
@@ -10,6 +11,8 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
  */
 const EDUCATION = [...BUILT].filter((u) => !u.startsWith("/cruises/"));
 const isTourPage = (h: string) => /^\/tours-extras\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h];
+// Pages whose H1 was approved in place of the workbook's (PAGE-101: the About page's own title).
+const OWN_H1: Record<string, string> = { "/about/": ABOUT.title };
 // Home and the pillars link to many pages; each link is fetched to prove it exists.
 test.describe.configure({ timeout: 90_000 });
 
@@ -17,7 +20,7 @@ for (const url of EDUCATION) {
   test(`${url} links as the workbook says [SEO-008–014]`, async ({ page, request }) => {
     const row = LINK_MAP[url]!;
     await page.goto(url);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(row.h1);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(OWN_H1[url] ?? row.h1);
     if (url !== "/") await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toBeVisible();
 
     const links = await page
