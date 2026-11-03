@@ -80,10 +80,14 @@ test("education pages say they are drafts and carry their structured data [ADR-0
   expect(home).toContain("/cruises/?q={search_term_string}");
 });
 
-test("the vessel comparison shows real figures, never sample prices [DATA-009]", async ({ page }) => {
-  await page.goto("/vessels/compare/");
-  await expect(page.getByText("See current prices on each dahabiya").first()).toBeVisible();
-  await expect(page.getByText(/US\$2,000–9,000/)).toHaveCount(0); // the design system's sample price
+test("the vessel comparison shows the three types side by side, never sample prices [DATA-009, ADR-106]", async ({ request }) => {
+  // In the server-rendered HTML, so crawlers read every type's figures.
+  const html = await (await request.get("/vessels/compare/")).text();
+  for (const name of ["Sailing dahabiya", "Motor cruise ship", "Paddle steamer", "4–10", "Up to 72", "14–24, including suites"])
+    expect(html).toContain(name);
+  expect(html).toContain("Varies by vessel, cabin and season");
+  expect(html).not.toContain("See current prices on each");
+  expect(html).not.toMatch(/US\$2,000–9,000/); // the design system's sample price
 });
 
 test("unbuilt and felucca pages don't exist [ADR-008]", async ({ request }) => {

@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Spanish translator before launch (ADR-032, CONTENT-NEEDED #28). The vessels pillar (vesselsPillar) and the vessel-type text in src/content/vessel-types.ts were drafted by Claude on 3 Nov 2026 and need the same review (ADR-106).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
@@ -193,7 +193,7 @@
         "mooring": "Dónde amarra",
         "sound": "Lo que se oye",
         "days": "Sus días",
-        "price": "Precio habitual"
+        "price": "Precio"
       },
       "meters": {
         "intimacy": "Intimidad",
@@ -437,5 +437,142 @@
     },
     "monthHead": "{month} <y>{year}</y>",
     "routeLine": "{route}, {nights}"
+  },
+  "vesselsPillar": {
+    "meta": {
+      "title": "Tipos de barco en el Nilo: dahabiya, crucero o vapor",
+      "description": "¿Dahabiya, crucero a motor o vapor de ruedas? Compare camarotes, pasajeros, amarres y la vida a bordo, y encuentre el barco del Nilo que le conviene.",
+      "image": "Tres barcos del Nilo dibujados uno junto a otro: una dahabiya de vela, un crucero a motor y un vapor de ruedas"
+    },
+    "crumbs": {
+      "home": "Inicio",
+      "vessels": "Embarcaciones"
+    },
+    "hero": {
+      "title": "Tres maneras de navegar por el Nilo",
+      "intro": "Cada crucero por el Nilo depende de su barco. Compare los tres tipos que navegan por el río, vea cómo es de verdad la vida a bordo y encuentre el que mejor encaja con su viaje.",
+      "choose": "Ayúdeme a elegir",
+      "compare": "Comparar los tres"
+    },
+    "chooser": {
+      "heading": "¿Qué barco le conviene?",
+      "intro": "Responda tres preguntas y le sugeriremos un tipo de barco. No necesita una cuenta.",
+      "questions": {
+        "priority": {
+          "legend": "Pregunta 1: ¿Qué es lo más importante para usted?",
+          "quiet": "Tranquilidad y un grupo pequeño",
+          "facilities": "Piscina, más instalaciones y un programa fijo",
+          "character": "Carácter histórico"
+        },
+        "days": {
+          "legend": "Pregunta 2: ¿Cómo quiere pasar los días?",
+          "slow": "Sin prisas, con tiempo en paradas pequeñas y tranquilas",
+          "schedule": "Con un horario claro y los templos principales incluidos",
+          "gentle": "A un ritmo pausado, en un ambiente de época"
+        },
+        "party": {
+          "legend": "Pregunta 3: ¿Quién viaja?",
+          "small": "Una pareja o un grupo pequeño que busca un ambiente cercano",
+          "family": "Una familia o quien quiera más espacio e instalaciones a bordo",
+          "unsure": "Todavía no lo sé"
+        }
+      },
+      "waiting": "Responda las tres preguntas para ver una sugerencia.",
+      "resultLabel": "Nuestra sugerencia",
+      "results": {
+        "sail": "Una dahabiya de vela parece la opción adecuada para usted: un grupo pequeño, un ritmo más lento y amarres tranquilos.",
+        "motor": "Un crucero a motor parece la opción adecuada para usted: más instalaciones, un programa fijo y, por lo general, un precio de partida más bajo.",
+        "steam": "Un vapor de ruedas parece la opción adecuada para usted: carácter de época, un ritmo pausado y más ambiente que un barco moderno."
+      },
+      "startOver": "Empezar de nuevo"
+    },
+    "types": {
+      "heading": "Los tres tipos de embarcación",
+      "links": {
+        "sail": "Descubra las dahabiyas",
+        "motor": "Descubra los cruceros a motor",
+        "steam": "Descubra los vapores de ruedas"
+      }
+    },
+    "compare": {
+      "heading": "Compare los tres",
+      "note": "Las puntuaciones comparan los tipos de embarcación en general, no barcos concretos. <link>Vea cómo evaluamos las embarcaciones.</link>",
+      "prices": "Por qué varían los precios",
+      "sideBySide": "Las embarcaciones del Nilo, lado a lado"
+    },
+    "trust": {
+      "heading": "Escrito por personas que han trabajado en estos barcos",
+      "text": "Nuestros evaluadores han trabajado a bordo de embarcaciones del Nilo como cocineros, directores de barco, camareros de bar, personal de limpieza y recepcionistas, con más de 300 años de experiencia entre todos. Por eso nos fijamos en los detalles que marcan sus días, no solo en las estrellas.",
+      "link": "Cómo elegimos las embarcaciones"
+    },
+    "sections": {
+      "sail": {
+        "heading": "La dahabiya de vela",
+        "paragraphs": [
+          "Una dahabiya es una casa flotante de vela con dos mástiles, como las que los viajeros del siglo XIX alquilaban para todo el invierno. Las dahabiyas actuales tienen de 4 a 10 camarotes, una cubierta superior con sombra y una tripulación pequeña que llega a conocer a sus pasajeros. Navegan a vela cuando el viento lo permite. La mayoría viaja con una lancha a motor al lado, que puede remolcarlas cuando no hay viento, así que se mantienen las paradas previstas.",
+          "La ruta en dahabiya que recomendamos es de cinco noches y seis días, de Esna a Asuán. Esna está a unas 33 millas (unos 53 km) al sur de Luxor, y las dahabiyas no necesitan navegar el tramo desde Luxor, así que el tiempo se dedica a la parte más gratificante del río. Hay tiempo para amarrar en lugares estrechos y tranquilos donde los barcos grandes no paran, como Gebel Silsileh, además de visitar Edfu y Kom Ombo."
+        ]
+      },
+      "motor": {
+        "heading": "El crucero a motor",
+        "paragraphs": [
+          "La mayoría de los cruceros por el Nilo se hacen en barcos a motor, con tres a cinco cubiertas, hasta 72 camarotes, restaurante, salón y, por lo general, piscina en la cubierta solar. Siguen horarios fijos: normalmente cuatro noches río arriba de Luxor a Asuán, o tres noches río abajo. Amarran en los muelles de las ciudades, a menudo con varios barcos uno junto a otro."
+        ]
+      },
+      "steam": {
+        "heading": "El vapor de ruedas",
+        "paragraphs": [
+          "Unos pocos vapores de ruedas históricos siguen navegando por el río, restaurados con estilo de época. El SS Sudan y el Mövenpick SS Misr tienen 24 camarotes y suites cada uno, y el SS Karim tiene 14 y se ofrece en salidas chárter seleccionadas. Son más grandes que una dahabiya y mucho más pequeños que un crucero, y avanzan sin prisas, a un ritmo que va bien con el paisaje."
+        ]
+      }
+    },
+    "choose": {
+      "heading": "Cómo elegir",
+      "sail": {
+        "yes": "<b>Elija una dahabiya si</b> busca un grupo pequeño, un ritmo lento y amarres tranquilos.",
+        "no": "<b>Puede no convenirle si</b> quiere piscina, gimnasio o un precio de partida más bajo, aunque algunas dahabiyas de lujo sí ofrecen más instalaciones."
+      },
+      "motor": {
+        "yes": "<b>Elija un crucero a motor si</b> busca instalaciones, un programa fijo y, por lo general, un precio de partida más bajo.",
+        "no": "<b>Puede no convenirle si</b> no le gustan las multitudes o no quiere amarrar junto a otros barcos."
+      },
+      "steam": {
+        "yes": "<b>Elija un vapor de ruedas si</b> busca carácter histórico y un ritmo pausado.",
+        "no": "<b>Puede no convenirle si</b> quiere las instalaciones de un gran barco moderno. Consulte el calendario de cada vapor, porque algunos solo navegan en fechas o chárteres concretos."
+      }
+    },
+    "samples": {
+      "heading": "Embarcaciones para descubrir",
+      "intro": "Un ejemplo de cada tipo. Estamos preparando los precios, así que pregúntenos por las tarifas y la disponibilidad actuales.",
+      "cabins": "{count} camarotes",
+      "empty": "Estas embarcaciones aún no están publicadas.",
+      "more": "Ver todos los cruceros por el Nilo"
+    },
+    "faqs": {
+      "heading": "Preguntas",
+      "items": [
+        {
+          "q": "¿Cuál es la forma más cómoda de hacer un crucero por el Nilo?",
+          "a": "La comodidad depende más del barco que del tipo. Los barcos grandes ofrecen más instalaciones, mientras que las dahabiyas ofrecen más espacio por pasajero y tranquilidad. Nuestra <link>evaluación</link> de cada embarcación puntúa por separado los camarotes, el servicio y la higiene."
+        },
+        {
+          "q": "¿Cuántas noches debo elegir en una dahabiya?",
+          "a": "Cinco noches y seis días es lo que mejor encaja con la mayoría de los viajeros. Navegar de Esna a Asuán le da tiempo para amarres tranquilos y lugares más pequeños."
+        },
+        {
+          "q": "¿Navega siempre a vela una dahabiya?",
+          "a": "Solo cuando el viento lo permite. La mayoría de las dahabiyas viajan con una lancha a motor al lado, que puede remolcarlas cuando no hay viento, así que se mantienen las paradas previstas."
+        },
+        {
+          "q": "¿Puedo navegar en una faluca?",
+          "a": "Las falucas son pequeños veleros abiertos que se usan para paseos cortos, no para cruceros con noches a bordo. Un paseo en faluca en Asuán suele formar parte del programa de un crucero."
+        }
+      ]
+    },
+    "cta": {
+      "heading": "¿Aún no sabe qué barco le conviene?",
+      "text": "Díganos sus fechas y cómo le gusta viajar, y le ayudaremos a decidir.",
+      "button": "Planificar mi crucero"
+    }
   }
 }

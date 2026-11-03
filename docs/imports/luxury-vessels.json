@@ -247,7 +247,7 @@
     {
       "slug": "movenpick-ss-misr",
       "name": "Mövenpick SS Misr",
-      "type": "motor",
+      "type": "steam",
       "cabin_count": 24,
       "year_built": 1918,
       "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck", "pool"],

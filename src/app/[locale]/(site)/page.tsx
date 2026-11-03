@@ -7,7 +7,7 @@ import { VesselTypeCard } from "@/components/ds/VesselTypeCard/VesselTypeCard";
 import { vesselIcon } from "@/components/ds/lib/types";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
 import styles from "@/components/editorial/editorial.module.css";
-import { profileWithStats, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
+import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { siteUrl } from "@/lib/env";
@@ -15,7 +15,7 @@ import { jsonLdScript, searchRoutes, VESSEL_OPTIONS } from "@/lib/marketplace/li
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import { bridges, LINK_MAP, sentence } from "@/lib/seo/links";
 import { pageMetadata } from "@/lib/seo/metadata";
-import { editorialPage, vesselTypeStats } from "@/server/content/pages";
+import { editorialPage } from "@/server/content/pages";
 import { publicListing } from "@/server/marketplace/queries";
 
 type Props = { params: Promise<{ locale: Locale }> };
@@ -39,8 +39,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [page, stats, all] = await Promise.all([editorialPage("P001"), vesselTypeStats(), publicListing()]);
-  const profiles = (["sail", "motor", "steam"] as const).map((t) => profileWithStats(t, stats[t]));
+  const [page, all] = await Promise.all([editorialPage("P001"), publicListing()]);
+  const profiles = (["sail", "motor", "steam"] as const).map((t) => vesselProfile(t));
   const [types, prices, how] = page?.sections ?? [];
   const pillars = bridges("/").filter((b) => b.href !== "/cruises/");
   return (

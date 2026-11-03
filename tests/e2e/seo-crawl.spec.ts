@@ -79,6 +79,11 @@ test("the sitemaps: an index, one per language, only translated and indexable pa
   expect(en).not.toContain("/cruises/compare/");
   expect(en).not.toContain("/dashboard/");
   expect(en).toContain('hreflang="x-default"');
-  const es = await (await request.get("/sitemaps/sitemap/es.xml")).text();
-  expect(es).not.toContain("<url>");
+  // Only translated pages join a language's sitemap: so far the vessels pillar (ADR-106).
+  for (const l of ["es", "ja"]) {
+    const sm = await (await request.get(`/sitemaps/sitemap/${l}.xml`)).text();
+    expect([...sm.matchAll(/<loc>[^<]*?(\/[^<]*)<\/loc>/g)].map((m) => new URL(m[0].slice(5, -6)).pathname)).toEqual([
+      `/${l}/vessels/`,
+    ]);
+  }
 });

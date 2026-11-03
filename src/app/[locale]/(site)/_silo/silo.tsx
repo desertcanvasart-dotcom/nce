@@ -1,32 +1,31 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound, permanentRedirect } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import { PriceAnatomy } from "@/components/ds/PriceAnatomy/PriceAnatomy";
 import { Scene } from "@/components/ds/Scene/Scene";
 import { VesselArt } from "@/components/ds/VesselArt/VesselArt";
 import { VesselCompare } from "@/components/ds/VesselCompare/VesselCompare";
-import { VesselTypeCard } from "@/components/ds/VesselTypeCard/VesselTypeCard";
 import type { VesselType } from "@/components/ds/lib/types";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
 import { EditorialFrame } from "@/components/editorial/EditorialFrame";
-import { LinkCards } from "@/components/editorial/LinkCards";
 import { TourCards, TourDetails } from "@/components/editorial/TourDetails";
+import { VesselsPillar } from "@/components/editorial/VesselsPillar";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
 import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
 import { ROUTE_STOPS } from "@/content/routes";
-import { profileWithStats, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
+import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
 import { routing, type Locale } from "@/i18n/routing";
 import { tourUrl, WORKBOOK_TOURS } from "@/lib/content/tours";
 import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
 import { companyPageJsonLd, MAIN_SIGHT, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
-import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING, sentence } from "@/lib/seo/links";
+import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
-import { editorialPage, vesselTypeStats } from "@/server/content/pages";
+import { editorialPage } from "@/server/content/pages";
 import { publicTours } from "@/server/content/tours";
 import { ContactForm } from "../contact/ContactForm";
 import { PlanForm } from "@/components/plan/PlanForm";
@@ -52,6 +51,16 @@ export function siloStaticParams(prefix: string) {
 
 export async function siloMetadata(prefix: string, { locale, path }: SiloParams): Promise<Metadata> {
   const url = urlOf(prefix, path);
+  if (url === "/vessels/") {
+    const t = await getTranslations({ locale, namespace: "vesselsPillar.meta" });
+    return pageMetadata({
+      locale,
+      path: url,
+      title: t("title"),
+      description: t("description"),
+      image: { url: "/images/og/vessels.png", width: 1200, height: 630, alt: t("image") },
+    });
+  }
   const row = LINK_MAP[url];
   const page = row && BUILT.has(url) ? await editorialPage(row.id) : null;
   if (!row || !page) return {};
@@ -73,18 +82,20 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   const url = urlOf(prefix, path);
   const row = LINK_MAP[url];
   if (!row || !BUILT.has(url)) notFound();
-  const [page, stats, all, tours] = await Promise.all([
+  // PAGE-026: the vessels pillar is laid out by hand, in every language (ADR-106).
+  if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing()} />;
+  const [page, all, tours] = await Promise.all([
     editorialPage(row.id),
-    vesselTypeStats(),
     publicListing(),
     url.startsWith("/tours-extras/") ? publicTours() : Promise.resolve([]),
   ]);
   if (!page) notFound();
   const type = TYPE_OF[url] ?? ROUTE_STOPS[url]?.vessel;
-  const profiles = (["sail", "motor", "steam"] as const).map((t) => profileWithStats(t, stats[t]));
+  const profiles = (["sail", "motor", "steam"] as const).map((t) => vesselProfile(t));
+  // The three-way comparison page opens with every type side by side; elsewhere, on the page's own type.
   const compare = (
     <div className={styles.compare}>
-      <VesselCompare profiles={profiles} defaultType={type} />
+      <VesselCompare profiles={profiles} defaultType={type} defaultAll={url === "/vessels/compare/"} />
     </div>
   );
   // DATA-008: the price breakdown, flagged as sample data with an honest footnote.
@@ -102,39 +113,11 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   );
 
   let lead: ReactNode = null;
-  let hideChildren = false;
   let extra: ReactNode = null;
   const closing = !NO_CLOSING.has(url);
   const ld = (data: unknown) => <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(data) }} />;
   const description = page.seoDescription ?? page.standfirst.replace("[[up]]", "").trim();
-  if (url === "/vessels/") {
-    // The three vessel types as cards (their keyword is the link text, SEO-014), then the comparison.
-    hideChildren = true;
-    const typeHubs = new Set(profiles.map((p) => VESSEL_TYPE_TEXT[p.type].hub));
-    lead = (
-      <>
-        <div className={styles.types}>
-          {profiles.map((p) => {
-            const hub = VESSEL_TYPE_TEXT[p.type].hub;
-            return (
-              <VesselTypeCard
-                key={p.type}
-                type={p.type}
-                title={p.name}
-                eyebrow={p.short}
-                description={p.line}
-                facts={p.facts}
-                href={hub}
-                cta={sentence(LINK_MAP[hub]!.keyword)}
-              />
-            );
-          })}
-        </div>
-        {compare}
-        <LinkCards title="Compare them" links={children(url).filter((l) => !typeHubs.has(l.href))} id="children" />
-      </>
-    );
-  } else if (row.type === "Vessel type hub" && type) {
+  if (row.type === "Vessel type hub" && type) {
     lead = (
       <>
         <div className={styles.art}>
@@ -263,7 +246,6 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         url={url}
         page={page}
         lead={lead}
-        hideChildren={hideChildren}
         closing={closing ? <ClosingCruises all={all} listing={closingListing(url)} type={TYPE_OF[url]} /> : null}
       />
       {extra}

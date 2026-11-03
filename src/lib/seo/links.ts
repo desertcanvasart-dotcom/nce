@@ -169,8 +169,14 @@ export function expectedLinks(url: string): string[] {
   return [...out];
 }
 
-/** Trust links a page may carry beyond its workbook row (Islam, 3 Nov 2026: About → How we choose vessels). */
-export const TRUST_LINKS: Record<string, string[]> = { "/about/": ["/how-we-choose-vessels/"] };
+/**
+ * Trust links a page may carry beyond its workbook row (Islam, 3 Nov 2026: About → How we choose vessels; the vessels
+ * pillar → how we evaluate, and its closing "Plan my cruise").
+ */
+export const TRUST_LINKS: Record<string, string[]> = {
+  "/about/": ["/how-we-choose-vessels/"],
+  "/vessels/": ["/how-we-choose-vessels/", "/plan-my-cruise/"],
+};
 
 /** Every education-silo URL a page may link to: its own row's links, its trail, trust links and the closing listing. */
 export function allowedLinks(url: string): Set<string> {
