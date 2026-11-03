@@ -27,6 +27,8 @@ export const footerExplore = [
   { key: "guide", ns: "nav", href: "/nile-cruise-guide" },
   { key: "destinations", ns: "nav", href: "/destinations" },
   { key: "tours", ns: "nav", href: "/tours-extras" },
+  // ADR-105: the blog, in the footer only (the main navigation is the pillars, SEO-015); shown once it has posts.
+  { key: "blog", ns: "footer", href: "/blog" },
 ] as const;
 
 /** Draft legal pages exist in English only while under review (ENG-019, ADR-031). */

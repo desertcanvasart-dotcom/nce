@@ -7,4 +7,4 @@ export const LOCALES = [
 export const BASE_LOCALE = "en";
 
 /** Editorial pieces translated as whole documents, each language published on its own. */
-export const DOCUMENT_LOCALISED_TYPES = ["article", "faq", "destinationStory", "vesselTypeProfile"];
+export const DOCUMENT_LOCALISED_TYPES = ["article", "post", "faq", "destinationStory", "vesselTypeProfile"];

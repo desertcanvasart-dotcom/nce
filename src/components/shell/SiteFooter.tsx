@@ -4,12 +4,16 @@ import { isBuilt } from "@/lib/seo/links";
 import { EXTRA_PAGES } from "@/lib/seo/sitemap";
 import { footerCompany, footerExplore, footerLegal } from "./nav-items";
 
-/** Only pages that exist are linked (ADR-093): the egyptologists and reviews pages join when they are built. */
-const exists = (href: string) => isBuilt(`${href}/`) || EXTRA_PAGES.includes(`${href}/`);
+/**
+ * Only pages that exist are linked (ADR-093): the egyptologists and reviews pages join when they are built, and the
+ * blog once it has a post (ADR-105).
+ */
+const exists = (href: string, blog?: boolean) =>
+  isBuilt(`${href}/`) || EXTRA_PAGES.includes(`${href}/`) || (href === "/blog" && !!blog);
 import styles from "./SiteFooter.module.css";
 
 /** Footer: Trust & Company pages and silo roots (SEO-015), plus the draft legal pages (ENG-019). */
-export function SiteFooter({ locale }: { locale: string }) {
+export function SiteFooter({ locale, blog }: { locale: string; blog?: boolean }) {
   const t = useTranslations();
   const year = new Date().getFullYear();
   return (
@@ -23,7 +27,7 @@ export function SiteFooter({ locale }: { locale: string }) {
           <h2 className={styles.heading}>{t("footer.explore")}</h2>
           <ul className={styles.list}>
             {footerExplore
-              .filter((item) => exists(item.href))
+              .filter((item) => exists(item.href, blog))
               .map((item) => (
                 <li key={item.href}>
                   <Link href={item.href}>{t(`${item.ns}.${item.key}`)}</Link>
