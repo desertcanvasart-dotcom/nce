@@ -21,6 +21,14 @@ export function sailingDates(sailingDays: number[], periods: Period[], from: str
   return [...out].sort();
 }
 
+/** How a schedule sails: on its weekdays inside its periods, or only on dates added one by one (no weekdays). */
+export type SailsBy = "weekly" | "dates";
+export const sailsBy = (sailingDays: readonly number[]): SailsBy => (sailingDays.length ? "weekly" : "dates");
+export const SAILS_BY = [
+  { value: "weekly", label: "Every week, on the days below" },
+  { value: "dates", label: "Only on specific dates" },
+] as const;
+
 export function returnDate(departsOn: string, nights: number): string {
   const d = day(departsOn);
   d.setUTCDate(d.getUTCDate() + nights);
