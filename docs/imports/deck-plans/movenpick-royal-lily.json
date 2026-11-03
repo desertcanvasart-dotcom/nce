@@ -1,0 +1,79 @@
+{
+  "vessel": "movenpick-royal-lily",
+  "source": "Mövenpick MS Royal Lily deck plan (PDF, 2013), measured stern 0 to bow 100",
+  "credit": "Mövenpick",
+  "layout": {
+    "decks": [
+      {
+        "name": "E",
+        "length": 90,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 4.5, "space": "open" },
+          { "from": 4.5, "to": 51, "space": "shade" },
+          { "from": 51, "to": 64, "space": "sun_deck" },
+          { "from": 64, "to": 85, "space": "pool", "label": "Pool and jacuzzi" },
+          { "from": 85, "to": 90, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "D",
+        "length": 91,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 4.5, "space": "open" },
+          { "from": 4.5, "to": 51, "side": "port", "cabin": "STD" },
+          { "from": 4.5, "to": 51, "side": "starboard", "cabin": "STD" },
+          { "from": 51, "to": 65, "side": "port", "space": "shop", "label": "Bazaar" },
+          { "from": 51, "to": 58, "side": "starboard", "space": "spa", "label": "Sauna and massage" },
+          { "from": 58, "to": 65, "side": "starboard", "space": "gym" },
+          { "from": 65, "to": 69.6, "side": "port", "cabin": "STD" },
+          { "from": 65, "to": 69.6, "side": "starboard", "cabin": "STD" },
+          { "from": 69.6, "to": 78.8, "side": "port", "cabin": "RS" },
+          { "from": 69.6, "to": 78.8, "side": "starboard", "cabin": "RS" },
+          { "from": 78.8, "to": 91, "space": "open" }
+        ]
+      },
+      {
+        "name": "C",
+        "length": 97,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 4.5, "space": "open" },
+          { "from": 4.5, "to": 51, "side": "port", "cabin": "STD" },
+          { "from": 4.5, "to": 51, "side": "starboard", "cabin": "STD" },
+          { "from": 51, "to": 65, "space": "library", "label": "Reading and internet corner" },
+          { "from": 65, "to": 88, "side": "port", "cabin": "STD" },
+          { "from": 65, "to": 88, "side": "starboard", "cabin": "STD" },
+          { "from": 88, "to": 97, "space": "open" }
+        ]
+      },
+      {
+        "name": "B",
+        "length": 97,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 23.4, "space": "crew" },
+          { "from": 23.4, "to": 51, "space": "lounge" },
+          { "from": 51, "to": 69.4, "space": "reception" },
+          { "from": 69.4, "to": 78.8, "side": "port", "cabin": "STD" },
+          { "from": 69.4, "to": 78.8, "side": "starboard", "cabin": "STD" },
+          { "from": 78.8, "to": 88, "side": "port", "cabin": "RS" },
+          { "from": 78.8, "to": 88, "side": "starboard", "cabin": "RS" },
+          { "from": 88, "to": 97, "space": "open" }
+        ]
+      },
+      {
+        "name": "A",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 24.7, "space": "crew" },
+          { "from": 24.7, "to": 39.8, "space": "crew", "label": "Galley" },
+          { "from": 39.8, "to": 74, "space": "restaurant" },
+          { "from": 74, "to": 88.7, "space": "crew" }
+        ]
+      }
+    ]
+  }
+}

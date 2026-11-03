@@ -8,7 +8,7 @@ import styles from "./DeckView.module.css";
 
 const TONE = { instant: styles.instant, confirm: styles.confirm, sold_out: styles.soldOut };
 
-const facts = (c: VesselCabin) =>
+export const cabinFacts = (c: VesselCabin) =>
   [c.sizeM2 ? `${c.sizeM2} m²` : null, c.bed, `sleeps ${c.maxOccupancy}`, c.view, c.balcony ? "private balcony" : null]
     .filter(Boolean)
     .join(" · ");
@@ -76,7 +76,7 @@ export function DeckView({
               <ul>
                 {d.cabins.map((c) => (
                   <li key={c.id}>
-                    <strong>{c.name}</strong> <span>{facts(c)}</span>
+                    <strong>{c.name}</strong> <span>{cabinFacts(c)}</span>
                   </li>
                 ))}
               </ul>
@@ -151,7 +151,7 @@ export function DeckView({
               {cabin ? (
                 <>
                   <h3>{cabin.name}</h3>
-                  <p>{facts(cabin)}</p>
+                  <p>{cabinFacts(cabin)}</p>
                   {cabin.amenities.length ? <p className={styles.muted}>{cabin.amenities.join(", ")}</p> : null}
                   {state(cabin) ? <p>{DECK_STATE_TEXT[state(cabin)!]}.</p> : null}
                   {chooseInForm && state(cabin) !== "sold_out" ? (
