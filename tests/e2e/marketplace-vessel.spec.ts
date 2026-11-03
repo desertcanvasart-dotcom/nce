@@ -165,16 +165,9 @@ test("asking for an offer needs no account, and keeps the boat, cruise and date 
   await page.waitForURL(/\/cruises\/sample-motor-one\/ask\/$/);
   await expect(page.getByRole("heading", { level: 1, name: "Ask for an offer on this boat" })).toBeVisible();
   await expect(page.getByText("No account needed.", { exact: false })).toBeVisible();
-  // From a date on the calendar: its cruise and day come along.
-  const { data: its } = await adminDb()
-    .from("schedules")
-    .select("code, vessels!inner(slug)")
-    .eq("vessels.slug", "sample-motor-one")
-    .eq("active", true)
-    .limit(1);
-  const code = its![0]!.code;
-  await page.goto(`/cruises/sample-motor-one/ask/?itinerary=${code}&date=2027-02-01`);
-  await expect(page.getByLabel("Cruise")).toHaveValue(code);
+  // From a date on the calendar: its cruise and day come along (the sample ship's 4-night itinerary).
+  await page.goto(`/cruises/${slug}/ask/?itinerary=CX4&date=2027-02-01`);
+  await expect(page.getByLabel("Cruise")).toHaveValue("CX4");
   await expect(page.getByLabel("Preferred departure date")).toHaveValue("2027-02-01");
   const email = `guest-${RUN}@example.test`;
   await page.getByLabel("Your name").fill("Sample Guest");
@@ -186,7 +179,7 @@ test("asking for an offer needs no account, and keeps the boat, cruise and date 
     .select("topic, nights, departs_on, guests, vessel:vessels(slug)")
     .eq("email", email)
     .single();
-  expect(m).toMatchObject({ topic: "offer", departs_on: "2027-02-01", guests: 2, vessel: { slug: "sample-motor-one" } });
+  expect(m).toMatchObject({ topic: "offer", nights: 4, departs_on: "2027-02-01", guests: 2, vessel: { slug } });
 });
 
 test("listing → vessel → sign-in → reserve, at the published rate [DATA-033, DASH-PUB-008, 009, DASH-CUS-016]", async ({
