@@ -104,7 +104,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     db
       .from("vessels")
       .select(
-        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), cabin_types(id, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, active, sailing_period, sails_at, schedule_days(day_number, locale, title, description), departures(departs_on, status))",
+        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), cabin_types(id, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))",
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -198,6 +198,12 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
           .filter((d) => d.status === "scheduled" && d.departs_on > today)
           .map((d) => d.departs_on)
           .sort(),
+        sailingDays: s.sailing_days,
+        periods: s.schedule_periods.map((p) => ({ startsOn: p.starts_on, endsOn: p.ends_on })),
+        sailings: s.departures
+          .filter((d) => d.departs_on > today)
+          .map((d) => ({ id: d.id, departsOn: d.departs_on, returnsOn: d.returns_on, status: d.status }))
+          .sort((a, b) => a.departsOn.localeCompare(b.departsOn)),
         sightseeing: (() => {
           const x = (incl ?? []).find((i) => i.schedule_id === s.id);
           return x ? { guide: x.guide, ticketsIncluded: x.tickets_included, sites: x.sites, note: x.note } : undefined;
@@ -234,7 +240,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
 }
 
 /** One vessel's public page data, cached like the listing (the slug is part of the cache key). */
-export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v1"], {
+export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v2"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

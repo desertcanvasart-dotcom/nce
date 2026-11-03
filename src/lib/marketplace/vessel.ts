@@ -28,6 +28,10 @@ export type VesselItinerary = {
   days: { day: number; title: string; body: string }[];
   /** Future scheduled departure dates, ascending. */
   departures: string[];
+  /** The weekly pattern (ISO weekdays inside date periods) and every future departure row, for the sailing calendar. */
+  sailingDays: number[];
+  periods: { startsOn: string; endsOn: string }[];
+  sailings: { id: string; departsOn: string; returnsOn: string; status: "scheduled" | "cancelled" }[];
   /** ADR-102: what the vessel's own sightseeing includes on this itinerary (approved vessels only). */
   sightseeing?: Sightseeing;
   /** ADR-102: Nilecruz's sightseeing programme for this itinerary (every other vessel), its price per person for two. */

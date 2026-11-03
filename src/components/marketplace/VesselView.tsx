@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Gallery } from "@/components/ds/Gallery/Gallery";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import { formatMoney } from "@/components/ds/lib/format";
@@ -19,12 +20,14 @@ import {
 import { arriveDayBefore, dayBeforeTip, sailingTimeText } from "@/lib/product/sailing-time";
 import { isBuilt, keywordText, LINK_MAP } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
+import { calendarSailings, patternLines } from "@/lib/marketplace/sailing-calendar";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { MooringExplainer } from "@/components/mooring/MooringExplainer";
 import { DeckPlan } from "./DeckPlan";
 import { ItinerarySwitch } from "./ItinerarySwitch";
 import { AddToCompare, CompareTray } from "./CompareTray";
 import { PriceWhy } from "./PriceWhy";
+import { SailingCalendar } from "./SailingCalendar";
 import styles from "./marketplace.module.css";
 
 const TYPE = { sail: "Sailing dahabiya", motor: "Motor cruise ship", steam: "Paddle steamer" } as const;
@@ -34,7 +37,19 @@ const TYPE_FACET = {
 } as const;
 
 /** PAGE-072: one page per vessel with all its itineraries (DATA-031), cabins by deck, evaluation and external ratings. */
-export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; it: VesselItinerary | undefined }) {
+export function VesselView({
+  locale,
+  v,
+  it,
+  today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" }),
+}: {
+  locale: Locale;
+  v: VesselPage;
+  it: VesselItinerary | undefined;
+  /** Today in Cairo; injectable for tests. */
+  today?: string;
+}) {
+  const t = useTranslations("sailingCalendar");
   const path = `/cruises/${v.slug}/`;
   const facet = v.type === "steam" ? undefined : TYPE_FACET[v.type];
   const hubUrl = { sail: "/vessels/dahabiya/", motor: "/vessels/motor-cruise-ships/", steam: "/vessels/paddle-steamers/" }[
@@ -183,6 +198,21 @@ export function VesselView({ locale, v, it }: { locale: Locale; v: VesselPage; i
           <p className={styles.note}>No itinerary is published for this vessel yet.</p>
         )}
       </section>
+
+      {v.itineraries.length ? (
+        <section className={styles.section} id="dates">
+          {/* The sailing dates of every itinerary on one calendar: departure rows and the weekly pattern. */}
+          <h2>{t("title")}</h2>
+          <p className={styles.note}>{t("lead")}</p>
+          <SailingCalendar
+            sailings={calendarSailings(v.itineraries, today)}
+            patterns={patternLines(v.itineraries, today)}
+            today={today}
+            bookable={v.bookable}
+            reserve={`/cruises/${v.slug}/reserve/`}
+          />
+        </section>
+      ) : null}
 
       <section className={styles.section} id="cabins">
         <h2>Cabins and decks</h2>
@@ -338,16 +368,9 @@ function ItineraryDetails({ v, it, locale }: { v: VesselPage; it: VesselItinerar
         <p className={styles.note}>The operator hasn’t published the day-by-day programme yet.</p>
       )}
       {it.departures.length ? (
-        <>
-          <h3>Next departures</h3>
-          <ul className={styles.dates}>
-            {it.departures.slice(0, 8).map((d) => (
-              <li key={d}>
-                <time dateTime={d}>{formatDay(d, locale)}</time>
-              </li>
-            ))}
-          </ul>
-        </>
+        <p>
+          <a href="#dates">See this itinerary’s sailing dates on the calendar</a>.
+        </p>
       ) : null}
     </div>
   );
