@@ -2,15 +2,16 @@
 -- template. Every addition is optional, so vessels without it render as before and their sections simply hide.
 -- Idempotent ("if not exists"), so it can run again on a database that already has it.
 
--- An indicative price: a guide per person and night, never a quote and never offered for booking. All four together.
+-- An indicative price: a guide per person and night, never a quote and never offered for booking. In minor units
+-- (DATA-001), all four together.
 alter table public.vessels
-  add column if not exists indicative_price_per_night numeric(10, 2) check (indicative_price_per_night > 0),
-  add column if not exists indicative_price_currency text check (indicative_price_currency in ('USD', 'EUR', 'EGP')),
-  add column if not exists indicative_price_basis text check (indicative_price_basis in ('per_person_per_night')),
-  add column if not exists indicative_price_status text check (indicative_price_status in ('indicative'));
+  add column if not exists indicative_per_night_minor bigint check (indicative_per_night_minor > 0),
+  add column if not exists indicative_currency text check (indicative_currency in ('USD', 'EUR', 'EGP')),
+  add column if not exists indicative_basis text check (indicative_basis in ('per_person_per_night')),
+  add column if not exists indicative_status text check (indicative_status in ('indicative'));
 alter table public.vessels drop constraint if exists indicative_price_complete;
 alter table public.vessels add constraint indicative_price_complete check (
-  num_nulls(indicative_price_per_night, indicative_price_currency, indicative_price_basis, indicative_price_status) in (0, 4));
+  num_nulls(indicative_per_night_minor, indicative_currency, indicative_basis, indicative_status) in (0, 4));
 
 -- "Is this the right boat for you?", and what a cruise includes, in each language. `less_suited_to` may hold one
 -- site link written [words](/path/). The three lists hold verified entries only; an empty list isn't shown.
@@ -71,8 +72,8 @@ begin
   three := (select id from public.schedules where vessel_id = rl and code = 'ASW-LXR-3');
 
   -- Five decks (A to E) on Mövenpick's deck plan; the price is the guide Nilecruz gave, not a quote.
-  update public.vessels set deck_count = 5, indicative_price_per_night = 300, indicative_price_currency = 'USD',
-    indicative_price_basis = 'per_person_per_night', indicative_price_status = 'indicative'
+  update public.vessels set deck_count = 5, indicative_per_night_minor = 30000, indicative_currency = 'USD',
+    indicative_basis = 'per_person_per_night', indicative_status = 'indicative'
   where id = rl;
 
   -- Size, beds, guests and view came from the import and aren't confirmed yet.

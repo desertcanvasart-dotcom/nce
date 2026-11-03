@@ -76,12 +76,12 @@ function publishable(rows: EvaluationRow[], locale: Locale): VesselEvaluation | 
 }
 
 const indicative = (v: {
-  indicative_price_per_night: number | null;
-  indicative_price_currency: string | null;
+  indicative_per_night_minor: number | null;
+  indicative_currency: string | null;
 }): VesselPage["indicativePrice"] =>
-  v.indicative_price_per_night !== null && v.indicative_price_currency
+  v.indicative_per_night_minor !== null && v.indicative_currency
     ? {
-        perNight: { amount: Math.round(Number(v.indicative_price_per_night) * 100), currency: v.indicative_price_currency },
+        perNight: { amount: Number(v.indicative_per_night_minor), currency: v.indicative_currency },
         basis: "per_person_per_night",
         status: "indicative",
       }
@@ -96,7 +96,7 @@ async function loadListing(): Promise<ListingVessel[]> {
     db
       .from("vessels")
       .select(
-        `id, slug, name, type, category, max_guests, cabin_count, deck_count, is_sample, visibility, indicative_price_per_night, indicative_price_currency, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
+        `id, slug, name, type, category, max_guests, cabin_count, deck_count, is_sample, visibility, indicative_per_night_minor, indicative_currency, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
       )
       .in("visibility", ["published", "showcase"])
       .order("name"),
@@ -168,7 +168,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     db
       .from("vessels")
       .select(
-        `id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, indicative_price_per_night, indicative_price_currency, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))`,
+        `id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, indicative_per_night_minor, indicative_currency, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))`,
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
