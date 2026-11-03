@@ -189,7 +189,8 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
 }) => {
   const customer = await newUser("vessel-booker");
   await page.goto(`/cruises/${slug}/`);
-  await page.getByRole("link", { name: "See prices and dates" }).click();
+  // The hero's button (the section bar repeats it).
+  await page.getByRole("link", { name: "See prices and dates" }).first().click();
   // Prices need an account: the visitor is asked to sign in, and comes back.
   await page.waitForURL(/\/account\/sign-in\/\?next=/);
   await signIn(page, customer.email, customer.password, new URL(page.url()).pathname + new URL(page.url()).search);
