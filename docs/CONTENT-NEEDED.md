@@ -28,6 +28,11 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 2 | Confirm the wording of the 28 evaluation criteria (the 7 weights are adopted) | Must | Q12, ADR-070 |
 | 14, 36 | Vessel and destination photos with publishing rights and credits | Can follow | Illustrated scenes until then; no stock photos (ADR-096) |
 | 31 | Facts for the 14 name-only vessel drafts, or confirmation they're dropped | Can follow | ADR-060 |
+| 51 | Nour El Nil's permission for Nilecruz to feature Malouka and its photos | Can follow | ADR-106. Until then Malouka is a factual card with no operator photo, and no partnership is implied |
+| 52 | Verified price ranges per vessel type | Can follow | ADR-106. The comparison says "Varies by vessel, cabin and season" until then (`priceRange` in `src/content/vessel-types.ts`) |
+| 53 | Paddle steamers: typical nights and guest counts; SS Sudan's cabin count (24, older listings say 23); SS Karim's current sailings | Can follow | ADR-106. Guests show "Varies by vessel" |
+| 54 | Malouka's length (the operator gives 50 m × 7.7 m and 52 m × 7.5 m) | Can follow | ADR-106. No length is shown |
+| 55 | Approval of the vessels page's share image (the site's own three boat drawings) and one licensed photo per vessel type | Can follow | ADR-106. `public/images/og/vessels.png`; the type cards keep their drawings until photos are licensed |
 | 43 | Which vessels already sell with sightseeing included (admins approve each one) | Can follow | ADR-102. None approved yet |
 
 ## Pages and copy

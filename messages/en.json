@@ -192,7 +192,7 @@
         "mooring": "Where it moors",
         "sound": "What you hear",
         "days": "Your days",
-        "price": "Typical price"
+        "price": "Price"
       },
       "meters": {
         "intimacy": "Intimacy",
@@ -436,5 +436,142 @@
     },
     "monthHead": "{month} <y>{year}</y>",
     "routeLine": "{route}, {nights}"
+  },
+  "vesselsPillar": {
+    "meta": {
+      "title": "Nile cruise boat types: dahabiya, ship or steamer",
+      "description": "Dahabiya, motor ship or paddle steamer? Compare cabins, guests, moorings and life on board, then find the Nile boat that suits you.",
+      "image": "Three Nile boats drawn side by side: a sailing dahabiya, a motor cruise ship and a paddle steamer"
+    },
+    "crumbs": {
+      "home": "Home",
+      "vessels": "Vessels"
+    },
+    "hero": {
+      "title": "Three ways to sail the Nile",
+      "intro": "Every Nile cruise is shaped by its boat. Compare the three kinds on the river, see what life on board is really like, and find the one that suits your trip.",
+      "choose": "Help me choose",
+      "compare": "Compare all three"
+    },
+    "chooser": {
+      "heading": "Which boat suits you?",
+      "intro": "Answer three questions and we’ll suggest a type of boat. You don’t need an account.",
+      "questions": {
+        "priority": {
+          "legend": "Question 1: What matters most?",
+          "quiet": "Quiet and a small group",
+          "facilities": "A pool, more facilities and a set programme",
+          "character": "Historic character"
+        },
+        "days": {
+          "legend": "Question 2: How do you want to spend your days?",
+          "slow": "Slowly, with time at small, quiet stops",
+          "schedule": "On a clear schedule, with the main temples covered",
+          "gentle": "At a gentle pace in a period setting"
+        },
+        "party": {
+          "legend": "Question 3: Who is travelling?",
+          "small": "A couple or a small group who want a personal atmosphere",
+          "family": "A family or anyone who wants more space and onboard facilities",
+          "unsure": "Not sure yet"
+        }
+      },
+      "waiting": "Answer all three questions to see a suggestion.",
+      "resultLabel": "Our suggestion",
+      "results": {
+        "sail": "A sailing dahabiya looks like the right fit: a small group, a slower pace and quiet moorings.",
+        "motor": "A motor cruise ship looks like the right fit: more facilities, a set programme and usually a lower starting price.",
+        "steam": "A paddle steamer looks like the right fit: period character, a gentle pace and more atmosphere than a modern ship."
+      },
+      "startOver": "Start over"
+    },
+    "types": {
+      "heading": "The three vessel types",
+      "links": {
+        "sail": "Explore dahabiyas",
+        "motor": "Explore motor ships",
+        "steam": "Explore paddle steamers"
+      }
+    },
+    "compare": {
+      "heading": "Compare all three",
+      "note": "Scores compare vessel types in general, not individual boats. <link>See how we evaluate vessels.</link>",
+      "prices": "See why prices differ",
+      "sideBySide": "Comparing Nile vessels side by side"
+    },
+    "trust": {
+      "heading": "Written by people who have worked on these boats",
+      "text": "Our evaluators have worked on board Nile vessels as chefs, boat managers, bartenders, housekeeping staff and receptionists, with more than 300 years of combined experience. That’s why we look at the details that shape your days, not only the star rating.",
+      "link": "How we choose vessels"
+    },
+    "sections": {
+      "sail": {
+        "heading": "The sailing dahabiya",
+        "paragraphs": [
+          "A dahabiya is a two-masted sailing houseboat, the kind nineteenth-century travellers hired for the whole winter. Today’s dahabiyas have 4 to 10 cabins, a shaded upper deck and a small crew who get to know their guests. They sail when the wind allows. Most travel with a motor boat alongside, which can tow them when there’s no wind, so the planned stops are kept.",
+          "The dahabiya route we recommend is five nights and six days from Esna to Aswan. Esna is about 33 miles south of Luxor, and dahabiyas don’t need to sail the stretch from Luxor, so you spend your time on the most rewarding part of the river. There’s time to moor at narrow, quiet places where big ships don’t stop, such as Gebel Silsileh, as well as visiting Edfu and Kom Ombo."
+        ]
+      },
+      "motor": {
+        "heading": "The motor cruise ship",
+        "paragraphs": [
+          "Most Nile cruises are on motor ships, with three to five decks, up to 72 cabins, a restaurant, a lounge and usually a pool on the sun deck. They keep to set schedules, typically four nights upstream from Luxor to Aswan or three nights downstream. They moor at town quays, often with several ships side by side."
+        ]
+      },
+      "steam": {
+        "heading": "The paddle steamer",
+        "paragraphs": [
+          "A few historic paddle steamers still work the river, restored in period style. SS Sudan and Mövenpick SS Misr each have 24 cabins and suites, while SS Karim has 14 and is offered on selected charter sailings. That makes them larger than a dahabiya and far smaller than a cruise ship, and they move at an unhurried pace that suits the scenery."
+        ]
+      }
+    },
+    "choose": {
+      "heading": "How to choose",
+      "sail": {
+        "yes": "<b>Choose a dahabiya if</b> you want a small group, a slow pace and quiet moorings.",
+        "no": "<b>It may not suit you if</b> you want a pool, a gym or a lower starting price, although some luxury dahabiyas do offer more facilities."
+      },
+      "motor": {
+        "yes": "<b>Choose a motor ship if</b> you want facilities, a fixed programme and usually a lower starting price.",
+        "no": "<b>It may not suit you if</b> you dislike crowds or don’t want to moor beside other ships."
+      },
+      "steam": {
+        "yes": "<b>Choose a paddle steamer if</b> you want historic character and a gentle pace.",
+        "no": "<b>It may not suit you if</b> you want the facilities of a large modern ship. Check each steamer’s schedule, as some sail only on selected dates or charters."
+      }
+    },
+    "samples": {
+      "heading": "Vessels to explore",
+      "intro": "One example of each type. Prices are being prepared, so ask us about current rates and availability.",
+      "cabins": "{count} cabins",
+      "empty": "These vessels aren’t published yet.",
+      "more": "See all Nile cruises"
+    },
+    "faqs": {
+      "heading": "Questions",
+      "items": [
+        {
+          "q": "Which is the most comfortable way to cruise the Nile?",
+          "a": "Comfort depends on the vessel more than the type. Large ships offer more facilities, while dahabiyas offer more space per guest and quiet. Our <link>evaluation</link> of each vessel scores cabins, service and hygiene separately."
+        },
+        {
+          "q": "How many nights should I choose on a dahabiya?",
+          "a": "Five nights and six days suits most travellers. Sailing from Esna to Aswan gives you time for quiet moorings and smaller sites."
+        },
+        {
+          "q": "Does a dahabiya always sail?",
+          "a": "Only when the wind allows. Most dahabiyas travel with a motor boat alongside, which can tow them when there’s no wind, so the planned stops are kept."
+        },
+        {
+          "q": "Can I sail on a felucca?",
+          "a": "Feluccas are small open sailing boats used for short trips, not overnight cruises. A felucca sail in Aswan is often part of a cruise programme."
+        }
+      ]
+    },
+    "cta": {
+      "heading": "Still not sure which boat is right?",
+      "text": "Tell us your dates and how you like to travel, and we’ll help you narrow it down.",
+      "button": "Plan my cruise"
+    }
   }
 }
