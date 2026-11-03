@@ -240,8 +240,6 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         </tbody>
       </table>
     );
-  } else if (url === "/about/") {
-    extra = ld(companyPageJsonLd("AboutPage", row.h1, absoluteUrl(locale, url), siteUrl));
   } else if (url === "/contact/") {
     lead = <ContactForm />;
     extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
