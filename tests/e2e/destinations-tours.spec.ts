@@ -122,7 +122,7 @@ test("a vessel's itinerary links its stops and the transfers page [SEO-013, DATA
   const stops = page.getByText(/^Stops:/);
   await expect(stops.getByRole("link", { name: "Edfu" })).toHaveAttribute("href", "/destinations/edfu/");
   await expect(stops.getByRole("link", { name: "Kom Ombo" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Airport and hotel transfers" }).first()).toHaveAttribute(
+  await expect(page.locator("#price").getByRole("link", { name: "transfers", exact: true })).toHaveAttribute(
     "href",
     "/tours-extras/transfers/",
   );

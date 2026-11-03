@@ -130,8 +130,13 @@ test("an unverified evaluation is never shown: not its score, not in structured 
   await db.from("evaluations").update({ verified: false }).eq("id", evaluationId);
   await refreshCatalogue(request);
   try {
-    await page.goto(`/cruises/${slug}/`);
-    await expect(page.locator("#evaluation")).toContainText("We haven’t published our evaluation of this vessel yet.");
+    // A cached page regenerates after the refresh: read it until it has.
+    await expect(async () => {
+      await page.goto(`/cruises/${slug}/`);
+      await expect(page.locator("#evaluation")).toContainText("We haven’t published our evaluation of this vessel yet.", {
+        timeout: 2_000,
+      });
+    }).toPass({ timeout: 30_000 });
     await expect(page.getByText("80/100")).toHaveCount(0);
     await expect(page.locator("dt", { hasText: "Nilecruz score" })).toHaveCount(0);
     const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");

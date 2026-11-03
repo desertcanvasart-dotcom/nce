@@ -532,7 +532,7 @@
       "included": "Incluido",
       "optional": "Opcional o según tu paquete",
       "notIncluded": "No incluido",
-      "fallback": "Los vuelos y los traslados se reservan aparte.",
+      "fallback": "Los vuelos y los <link>traslados</link> se reservan aparte.",
       "fallbackProgramme": "El itinerario muestra el programa de visitas habitual, así que comprueba qué guías, entradas y excursiones incluye tu oferta.",
       "askIncluded": "Pregunta qué incluye en mis fechas"
     },

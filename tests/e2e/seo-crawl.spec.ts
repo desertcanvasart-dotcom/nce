@@ -47,7 +47,8 @@ for (const locale of ["es", "ja"] as const) {
     const pages = await site(request, `/${locale}/`);
     for (const p of PAGES) expect(pages.has(`/${locale}${p}`), `/${locale}${p} reached`).toBe(true);
     const out = [...pages.values()].flatMap((p) =>
-      p.links.filter((l) => !l.startsWith(`/${locale}/`)).map((l) => `${p.path} → ${l}`),
+      // Files (a vessel's deck plan) have no language; pages do.
+      p.links.filter((l) => !l.startsWith(`/${locale}/`) && !l.startsWith("/api/")).map((l) => `${p.path} → ${l}`),
     );
     expect(out).toEqual([]);
   });

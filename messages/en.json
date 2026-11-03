@@ -531,7 +531,7 @@
       "included": "Included",
       "optional": "Optional or depends on your package",
       "notIncluded": "Not included",
-      "fallback": "Flights and transfers are booked separately.",
+      "fallback": "Flights and <link>transfers</link> are booked separately.",
       "fallbackProgramme": "The itinerary shows the usual sightseeing programme, so check which guides, entry tickets and excursions your offer includes.",
       "askIncluded": "Ask what’s included in my dates"
     },

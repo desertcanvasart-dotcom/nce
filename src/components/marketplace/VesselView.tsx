@@ -447,7 +447,10 @@ export function VesselView({
           </div>
         ) : (
           <p className={styles.callout}>
-            {t("price.fallback")}
+            {/* DATA-018, SEO-013: transfers are sold separately, on their own page. */}
+            {t.rich("price.fallback", {
+              link: (c) => (isBuilt("/tours-extras/transfers/") ? <Link href="/tours-extras/transfers/">{c}</Link> : c),
+            })}
             {anyDays ? ` ${t("price.fallbackProgramme")}` : ""}
           </p>
         )}
