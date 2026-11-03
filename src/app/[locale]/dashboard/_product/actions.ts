@@ -13,7 +13,7 @@ import { dbProblem, failed, formObject, problemsFrom, saved } from "@/server/cat
 import { getDb } from "@/server/db";
 import type { Json } from "@/server/db/database.types";
 import { requireProductEditor } from "@/server/product/guard";
-import { layoutProblems } from "@/lib/marketplace/deck-layout";
+import { layoutProblems } from "@/lib/marketplace/deck-layout-schema";
 import { productPaths } from "./paths";
 import { periodOf, type SailingPeriod } from "@/lib/product/sailing-time";
 import { revalidateCatalogue } from "@/server/marketplace/revalidate";

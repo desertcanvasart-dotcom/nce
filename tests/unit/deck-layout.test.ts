@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { areaBox, deckSummary, decksOf, hullPath, layoutProblems, parseLayout, toneOf } from "@/lib/marketplace/deck-layout";
+import { areaBox, deckSummary, decksOf, hullPath, toneOf } from "@/lib/marketplace/deck-layout";
+import { layoutProblems, parseLayout } from "@/lib/marketplace/deck-layout-schema";
 
 const lily = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lily.json"), "utf8"),

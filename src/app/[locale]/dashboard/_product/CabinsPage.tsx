@@ -7,7 +7,7 @@ import { requireProductEditor } from "@/server/product/guard";
 import { cabinTypes } from "@/server/product/queries";
 import type { CancellationBand } from "@/lib/tours/tours";
 import { getDb } from "@/server/db";
-import { parseLayout } from "@/lib/marketplace/deck-layout";
+import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
 import { removeDeckPlanFile, saveCabin, saveDeckLayout, saveGratuity, savePolicy, uploadDeckPlan } from "./actions";
 import { productPaths } from "./paths";
 

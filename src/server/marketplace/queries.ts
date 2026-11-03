@@ -2,7 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import { env, indexingAllowed } from "@/lib/env";
-import { parseLayout } from "@/lib/marketplace/deck-layout";
+import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import type { VesselPage } from "@/lib/marketplace/vessel";
 import type { Database } from "@/server/db/database.types";
