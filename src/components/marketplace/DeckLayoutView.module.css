@@ -86,13 +86,11 @@
 }
 
 .detail {
+  min-height: 3em;
+  margin: 0;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-}
-
-.detail h3 {
-  margin: 0 0 var(--space-1);
 }
 
 /* The decks, top deck first, each a strip from stern to bow. */
@@ -256,4 +254,13 @@
   .deck rect {
     transition: none;
   }
+}
+
+/* Every block says what it is when pointed at or tapped; cabin blocks also choose their type. */
+.deck rect:hover {
+  stroke: var(--ink);
+}
+
+.pickable {
+  cursor: pointer;
 }
