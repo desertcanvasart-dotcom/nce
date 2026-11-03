@@ -794,6 +794,47 @@ export type Database = {
           },
         ];
       };
+      deck_plans: {
+        Row: {
+          created_at: string;
+          credit: string | null;
+          layout: Json | null;
+          source_bytes: number | null;
+          source_name: string | null;
+          source_path: string | null;
+          updated_at: string;
+          vessel_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          credit?: string | null;
+          layout?: Json | null;
+          source_bytes?: number | null;
+          source_name?: string | null;
+          source_path?: string | null;
+          updated_at?: string;
+          vessel_id: string;
+        };
+        Update: {
+          created_at?: string;
+          credit?: string | null;
+          layout?: Json | null;
+          source_bytes?: number | null;
+          source_name?: string | null;
+          source_path?: string | null;
+          updated_at?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "deck_plans_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: true;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       departures: {
         Row: {
           created_at: string;

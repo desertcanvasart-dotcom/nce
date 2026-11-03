@@ -225,7 +225,7 @@ export function VesselView({
 
       <section className={styles.section} id="cabins">
         <h2>Cabins and decks</h2>
-        <DeckPlan cabins={v.cabins} maxGuests={v.maxGuests} sharedSpaces={v.sharedSpaces} />
+        <DeckPlan cabins={v.cabins} maxGuests={v.maxGuests} sharedSpaces={v.sharedSpaces} plan={v.deckPlan} />
       </section>
 
       {v.mooring ? (

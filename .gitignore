@@ -33,3 +33,6 @@ studio/dist/
 studio/.sanity/
 .claude/launch.json
 .shots/
+
+# import backups: may hold production data
+.import-backups/

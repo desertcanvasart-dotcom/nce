@@ -1,3 +1,4 @@
+import type { DeckLayout } from "./deck-layout";
 import type { Mooring } from "@/lib/catalogue/mooring";
 /**
  * The vessel page (PAGE-072, Batch 5-2), kept free of I/O so it is unit-tested. English copy until Batch 10 (ADR-093).
@@ -7,6 +8,8 @@ import type { SailingPeriod } from "@/lib/product/sailing-time";
 
 export type VesselCabin = {
   id: string;
+  /** The operator's code for the type (STD, RS…): how a deck layout marks where it is. */
+  code?: string;
   name: string;
   deck: string;
   sizeM2: number | null;
@@ -72,6 +75,11 @@ export type VesselPage = {
   gratuityUsdMinor: number | null;
   photos: { src: string; alt: string; width: number; height: number }[];
   cabins: VesselCabin[];
+  /** EXP-002 (9-2b): Nilecruz's drawing of the decks, and the operator's original to download. */
+  deckPlan?: {
+    layout: DeckLayout | null;
+    original: { url: string; name: string; bytes: number | null; credit: string | null } | null;
+  } | null;
   itineraries: VesselItinerary[];
   evaluation?: {
     score: number;

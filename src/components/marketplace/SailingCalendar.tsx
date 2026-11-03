@@ -130,15 +130,13 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
             const count = sailings.filter((s) => s.departsOn.startsWith(m) && s.status !== "cancelled").length;
             return (
               <li key={m}>
-                <button
-                  type="button"
-                  className={styles.tab}
-                  aria-current={n === i ? "true" : undefined}
-                  aria-label={`${monthName.format(at(`${m}-01`))} ${m.slice(0, 4)}: ${t("monthCount", { count })}`}
-                  onClick={() => go(n)}
-                >
-                  <span>{monthShort.format(at(`${m}-01`))}</span>
-                  <span className={styles.count}>{count}</span>
+                <button type="button" className={styles.tab} aria-current={n === i ? "true" : undefined} onClick={() => go(n)}>
+                  {/* The name is the hidden words; the short month and count are what sighted visitors read (WCAG 2.5.3). */}
+                  <span className="visually-hidden">{`${monthName.format(at(`${m}-01`))} ${m.slice(0, 4)}: ${t("monthCount", { count })}`}</span>
+                  <span aria-hidden="true">{monthShort.format(at(`${m}-01`))}</span>
+                  <span className={styles.count} aria-hidden="true">
+                    {count}
+                  </span>
                 </button>
               </li>
             );
@@ -201,11 +199,13 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
                   type="button"
                   className={cx(styles.day, styles.sails)}
                   aria-pressed={picked === d}
-                  aria-label={`${longDay.format(at(d))}: ${here.map(sailingWords).join("; ")}`}
                   onClick={() => setPicked(d)}
                 >
-                  <span className={styles.num}>{n}</span>
-                  <span className={styles.flags}>
+                  <span className="visually-hidden">{`${longDay.format(at(d))}: ${here.map(sailingWords).join("; ")}`}</span>
+                  <span className={styles.num} aria-hidden="true">
+                    {n}
+                  </span>
+                  <span className={styles.flags} aria-hidden="true">
                     {here.map((s) => (
                       <span key={s.code} className={cx(styles.flag, styles[s.status], s.heading && styles[s.heading])}>
                         {s.heading ? <span aria-hidden="true">{ARROW[s.heading]}</span> : null}

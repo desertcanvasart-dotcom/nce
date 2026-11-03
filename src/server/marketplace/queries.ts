@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import { env, indexingAllowed } from "@/lib/env";
+import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import type { VesselPage } from "@/lib/marketplace/vessel";
 import type { Database } from "@/server/db/database.types";
@@ -104,7 +105,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     db
       .from("vessels")
       .select(
-        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description, dining), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), cabin_types(id, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))",
+        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description, dining), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))",
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -119,6 +120,16 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     const { data: s } = await db.storage.from("media").createSignedUrl(m.storage_path, PHOTO_SECONDS);
     if (s?.signedUrl && alt) photos.push({ src: s.signedUrl, alt, width: m.width, height: m.height });
   }
+  // EXP-002 (9-2b): the drawing, and a link that downloads the operator's original under its own file name.
+  const plan = v.deck_plans;
+  let original: NonNullable<VesselPage["deckPlan"]>["original"] = null;
+  if (plan?.source_path && plan.source_name) {
+    const { data: s } = await db.storage
+      .from("deck-plans")
+      .createSignedUrl(plan.source_path, PHOTO_SECONDS, { download: plan.source_name });
+    if (s?.signedUrl) original = { url: s.signedUrl, name: plan.source_name, bytes: plan.source_bytes, credit: plan.credit };
+  }
+  const layout = plan ? parseLayout(plan.layout) : null;
   const ev = [...v.evaluations].sort((a, b) => (b.published_at ?? "").localeCompare(a.published_at ?? ""))[0];
   const p = (prices ?? []).find((x) => x.vessel_id === v.id);
   const en = v.vessel_translations.find((t) => t.locale === "en");
@@ -173,6 +184,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
       .filter((c) => c.active)
       .map((c) => ({
         id: c.id,
+        code: c.code,
         name: c.name,
         deck: c.deck,
         sizeM2: c.size_m2 === null ? null : Number(c.size_m2),
@@ -182,6 +194,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
         balcony: c.balcony,
         amenities: c.amenities,
       })),
+    deckPlan: plan ? { layout, original } : null,
     itineraries: v.schedules
       .filter((s) => s.active)
       .map((s) => ({

@@ -11,7 +11,10 @@ import { bandsProblem, type CancellationBand } from "@/lib/tours/tours";
 import { requireAdmin } from "@/server/auth";
 import { dbProblem, failed, formObject, problemsFrom, saved } from "@/server/catalogue/form";
 import { getDb } from "@/server/db";
+import type { Json } from "@/server/db/database.types";
 import { requireProductEditor } from "@/server/product/guard";
+import { layoutProblems } from "@/lib/marketplace/deck-layout-schema";
+import { dateWindow, returnDate } from "@/lib/product/departures";
 import { productPaths } from "./paths";
 import { periodOf, type SailingPeriod } from "@/lib/product/sailing-time";
 import { revalidateCatalogue } from "@/server/marketplace/revalidate";
@@ -215,20 +218,131 @@ export async function uploadCabinPhoto(
   return saved("Photo added.");
 }
 
+// ── Deck plan (EXP-002, 9-2b): the operator's original to download, and Nilecruz's drawing ───────────────────
+const PLAN_TYPES: Record<string, string> = {
+  "application/pdf": "pdf",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+
+export async function uploadDeckPlan(
+  orgId: string | null,
+  vesselId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
+  const file = fd.get("plan");
+  if (!(file instanceof File) || file.size === 0) return failed("Choose the deck plan file.");
+  const ext = PLAN_TYPES[file.type];
+  if (!ext) return failed("Use a PDF, JPEG, PNG or WebP file.");
+  if (file.size > 15 * 1024 * 1024) return failed("The file is larger than 15 MB.");
+  const credit = String(fd.get("credit") ?? "").trim();
+  if (!credit || credit.length > 120 || fd.get("rights") !== "yes")
+    return failed("Add whose deck plan it is, and confirm the right to publish it.");
+  // The name travellers download it under: the file's own, without folders or odd characters.
+  const name =
+    (file.name.split(/[\\/]/).pop() ?? "")
+      .replace(/[^\w .()-]+/g, "")
+      .trim()
+      .slice(0, 120) || `deck-plan.${ext}`;
+  const db = await getDb();
+  const { data: before } = await db.from("deck_plans").select("source_path").eq("vessel_id", vesselId).maybeSingle();
+  const path = `vessels/${vesselId}/${randomUUID()}.${ext}`;
+  const up = await db.storage.from("deck-plans").upload(path, Buffer.from(await file.arrayBuffer()), { contentType: file.type });
+  if (up.error) return failed("The file could not be stored. Try again.");
+  const { error } = await db
+    .from("deck_plans")
+    .upsert({ vessel_id: vesselId, source_path: path, source_name: name, source_bytes: file.size, credit });
+  if (error) {
+    await db.storage.from("deck-plans").remove([path]);
+    return dbProblem(error);
+  }
+  if (before?.source_path) await db.storage.from("deck-plans").remove([before.source_path]);
+  revalidatePath(p.cabins);
+  revalidateCatalogue();
+  return saved("Deck plan uploaded. Travellers can download it from the vessel page.");
+}
+
+export async function removeDeckPlanFile(
+  orgId: string | null,
+  vesselId: string,
+  _prev: ActionState,
+  _fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
+  const db = await getDb();
+  const { data: plan } = await db.from("deck_plans").select("source_path").eq("vessel_id", vesselId).maybeSingle();
+  if (!plan?.source_path) return saved("There is no file to remove.");
+  const { error } = await db
+    .from("deck_plans")
+    .update({ source_path: null, source_name: null, source_bytes: null })
+    .eq("vessel_id", vesselId);
+  if (error) return dbProblem(error);
+  await db.storage.from("deck-plans").remove([plan.source_path]);
+  revalidatePath(p.cabins);
+  revalidateCatalogue();
+  return saved("Deck plan file removed. The drawing stays.");
+}
+
+/** Nilecruz's drawing of the decks: admins only, checked against the vessel's cabin codes. Empty removes it. */
+export async function saveDeckLayout(
+  orgId: string | null,
+  vesselId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  const { asAdmin } = await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
+  if (!asAdmin) return failed("Nilecruz draws deck plans; upload the operator's plan instead.");
+  const text = String(fd.get("layout") ?? "").trim();
+  let layout: unknown = null;
+  if (text) {
+    try {
+      layout = JSON.parse(text);
+    } catch {
+      return failed("The drawing isn't valid JSON.");
+    }
+    const db = await getDb();
+    const { data: codes } = await db.from("cabin_types").select("code").eq("vessel_id", vesselId);
+    const problems = layoutProblems(
+      layout,
+      (codes ?? []).map((c) => c.code),
+    );
+    if (problems.length) return failed(`Fix the drawing first: ${problems.slice(0, 5).join("; ")}.`);
+  }
+  const db = await getDb();
+  const { error } = await db.from("deck_plans").upsert({ vessel_id: vesselId, layout: layout as Json });
+  if (error) return dbProblem(error);
+  revalidatePath(p.cabins);
+  revalidateCatalogue();
+  return saved(layout ? "Drawing saved. It shows on the vessel page." : "Drawing removed.");
+}
+
 // ── Schedules, periods, itinerary, departures (DASH-ADM-051, 052) ───────────────────────────────────────
-const scheduleInput = z.object({
-  code,
-  origin: z.string().trim().min(1, "required").max(80),
-  destination: z.string().trim().min(1, "required").max(80),
-  nights: z.coerce.number().int().min(1, "1 to 21").max(21, "1 to 21"),
-  sailing_days: z.array(z.coerce.number().int().min(1).max(7)).min(1, "choose at least one day"),
-  active: z
-    .string()
-    .optional()
-    .transform((v) => v === "yes"),
-  sailing_period: z.enum(["", "morning", "noon", "evening"]).optional(),
-  sails_at: z.string().trim().max(5).optional(),
-});
+const scheduleInput = z
+  .object({
+    code,
+    origin: z.string().trim().min(1, "required").max(80),
+    destination: z.string().trim().min(1, "required").max(80),
+    nights: z.coerce.number().int().min(1, "1 to 21").max(21, "1 to 21"),
+    // "dates": it sails only on specific dates, added one by one; it keeps no weekdays.
+    sails_by: z.enum(["weekly", "dates"]).default("weekly"),
+    sailing_days: z.array(z.coerce.number().int().min(1).max(7)),
+    active: z
+      .string()
+      .optional()
+      .transform((v) => v === "yes"),
+    sailing_period: z.enum(["", "morning", "noon", "evening"]).optional(),
+    sails_at: z.string().trim().max(5).optional(),
+  })
+  .refine((d) => d.sails_by === "dates" || d.sailing_days.length > 0, {
+    path: ["sailing_days"],
+    message: "choose at least one day, or “Only on specific dates”",
+  });
 
 export async function saveSchedule(
   orgId: string | null,
@@ -269,7 +383,7 @@ export async function saveSchedule(
     origin: d.origin,
     destination: d.destination,
     nights: d.nights,
-    sailing_days: d.sailing_days,
+    sailing_days: d.sails_by === "dates" ? [] : d.sailing_days,
     active: scheduleId ? d.active : true,
   };
   const res = scheduleId
@@ -319,6 +433,33 @@ export async function removePeriod(
   revalidatePath(p.schedule(scheduleId));
   revalidateCatalogue();
   return saved("Period removed. Departures already created stay until you cancel them.");
+}
+
+/** A single sailing date: the sailings of a dates-only schedule, or an extra date outside a weekly pattern. */
+export async function addSailingDate(
+  orgId: string | null,
+  vesselId: string,
+  scheduleId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.schedule(scheduleId), { orgId: orgId ?? undefined });
+  const r = z.object({ departs_on: isoDate }).safeParse(formObject(fd));
+  if (!r.success) return problemsFrom(r.error, { departs_on: "Date" });
+  const date = r.data.departs_on;
+  if (date <= dateWindow(0).today) return failed("Choose a date after today.");
+  const db = await getDb();
+  const { data: s } = await db.from("schedules").select("nights").eq("id", scheduleId).eq("vessel_id", vesselId).maybeSingle();
+  if (!s) return failed("This schedule no longer exists.");
+  const { error } = await db
+    .from("departures")
+    .insert({ schedule_id: scheduleId, vessel_id: vesselId, departs_on: date, returns_on: returnDate(date, s.nights) });
+  if (error?.code === "23505") return failed(`${date} is already a sailing date of this schedule.`);
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
+  return saved(`Sailing on ${date} added.`);
 }
 
 export async function saveItineraryDay(
