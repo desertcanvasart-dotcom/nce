@@ -237,7 +237,6 @@
   white-space: pre-line;
 }
 
-.dates,
 .list {
   display: grid;
   gap: var(--space-2);

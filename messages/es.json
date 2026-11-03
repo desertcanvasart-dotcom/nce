@@ -396,5 +396,44 @@
       },
       "link": "¿Es una agencia? Solicite acceso profesional"
     }
+  },
+  "sailingCalendar": {
+    "title": "Fechas de salida",
+    "lead": "Todas las fechas en que zarpa este barco, mes a mes y en ambos sentidos. Elige un día para ver su ruta, su duración y si puedes reservarlo.",
+    "patternTitle": "Calendario semanal habitual",
+    "period": "del {from} al {to}",
+    "patternNote": "El calendario semanal es lo que el operador suele ofrecer, no la disponibilidad real. Solo se pueden reservar las salidas confirmadas.",
+    "months": "Meses con salidas",
+    "monthCount": "{count, plural, =0 {sin salidas} one {# salida} other {# salidas}}",
+    "prevMonth": "Mes anterior",
+    "nextMonth": "Mes siguiente",
+    "nightsShort": "{n}n",
+    "sailingLabel": "{route}, {nights}, {status}",
+    "status": {
+      "confirmed": "Salida confirmada",
+      "pattern": "Prevista, sin confirmar",
+      "cancelled": "Cancelada"
+    },
+    "length": "Duración",
+    "checkIn": "Embarque",
+    "checkOut": "Desembarque",
+    "why": {
+      "confirmed": "El operador ha confirmado esta salida. Inicia sesión para ver el precio de cada camarote.",
+      "confirmedInfo": "El operador ha confirmado esta salida, pero este barco todavía no se puede reservar en Nilecruz. Pide una oferta a los operadores.",
+      "pattern": "El operador suele zarpar este día de la semana, pero no ha confirmado esta fecha. Todavía no se puede reservar.",
+      "cancelled": "El operador ha cancelado esta salida."
+    },
+    "book": "Ver precios para esta fecha",
+    "ask": "Preguntar por esta fecha",
+    "none": "No hay salidas este mes. Elige otro mes arriba.",
+    "empty": "Este barco no tiene fechas de salida publicadas. Zarpa a petición o en las fechas que anuncia el operador: pide una oferta con tus fechas.",
+    "legend": {
+      "pattern": "Prevista según el calendario semanal",
+      "south": "Río arriba, rumbo al sur",
+      "north": "Río abajo, rumbo al norte",
+      "nights": "La línea bajo los días marca las noches a bordo. Horarios y precios pueden cambiar hasta que se confirme la salida."
+    },
+    "monthHead": "{month} <y>{year}</y>",
+    "routeLine": "{route}, {nights}"
   }
 }

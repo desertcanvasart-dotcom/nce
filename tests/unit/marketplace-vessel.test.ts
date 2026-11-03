@@ -27,6 +27,9 @@ const itin = (code: string, nights: number, origin = "Luxor", destination = "Asw
   sailsAt: null,
   days: [],
   departures: [],
+  sailingDays: [],
+  periods: [],
+  sailings: [],
 });
 
 const cabin = (id: string, deck: string, sizeM2: number | null): VesselCabin => ({

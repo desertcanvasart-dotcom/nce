@@ -395,5 +395,44 @@
       },
       "link": "A travel agency? Apply for trade access"
     }
+  },
+  "sailingCalendar": {
+    "title": "Sailing dates",
+    "lead": "Every date this vessel is due to sail, month by month, in both directions. Choose a day to see its route, its length and whether you can book it.",
+    "patternTitle": "Usual weekly pattern",
+    "period": "{from} to {to}",
+    "patternNote": "A weekly pattern is what the operator usually runs, not live availability. Only confirmed departures can be booked.",
+    "months": "Months with sailings",
+    "monthCount": "{count, plural, =0 {no sailings} one {# sailing} other {# sailings}}",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "nightsShort": "{n}n",
+    "sailingLabel": "{route}, {nights}, {status}",
+    "status": {
+      "confirmed": "Confirmed departure",
+      "pattern": "Expected, not confirmed",
+      "cancelled": "Cancelled"
+    },
+    "length": "Length",
+    "checkIn": "Check-in",
+    "checkOut": "Check-out",
+    "why": {
+      "confirmed": "The operator has confirmed this sailing. Sign in to see every cabin’s price for it.",
+      "confirmedInfo": "The operator has confirmed this sailing, but this vessel can’t be booked on Nilecruz yet. Ask operators for an offer instead.",
+      "pattern": "The operator usually sails on this day of the week, but hasn’t confirmed this date. It can’t be booked yet.",
+      "cancelled": "The operator has cancelled this sailing."
+    },
+    "book": "See prices for this date",
+    "ask": "Ask about this date",
+    "none": "No sailings this month. Choose another month above.",
+    "empty": "No sailing dates are published for this vessel. It sails on request or on dates the operator announces: ask for an offer with your dates.",
+    "legend": {
+      "pattern": "Expected from the weekly pattern",
+      "south": "Upstream, sailing south",
+      "north": "Downstream, sailing north",
+      "nights": "The line under the days marks the nights on board. Times and prices can change until a departure is confirmed."
+    },
+    "monthHead": "{month} <y>{year}</y>",
+    "routeLine": "{route}, {nights}"
   }
 }

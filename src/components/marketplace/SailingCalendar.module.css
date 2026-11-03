@@ -1,0 +1,564 @@
+/* The sailing-dates calendar: a printed timetable on ivory by day, the river at night. Square, hairlines, brass. */
+.calendar {
+  display: grid;
+  gap: var(--space-5);
+}
+
+/* Direction tones: decorative only; the arrow and the words carry the meaning. */
+.south {
+  --tone: var(--nile-600);
+}
+
+.north {
+  --tone: var(--brass-500);
+}
+
+.level {
+  --tone: var(--line-strong);
+}
+
+:global([data-theme="dark"]) .south {
+  --tone: var(--nile-300);
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.kicker:lang(ja) {
+  letter-spacing: 0.08em;
+}
+
+/* The weekly pattern, as a timetable. */
+.weekly {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+
+.timetable {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timetable li {
+  display: grid;
+  gap: var(--space-2) var(--space-4);
+  align-items: start;
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--tone, var(--line-strong));
+}
+
+@media (width >= 768px) {
+  .timetable li {
+    grid-template-columns: auto 1fr;
+  }
+}
+
+.stamps {
+  display: grid;
+  grid-template-columns: repeat(7, 20px);
+  gap: 2px;
+}
+
+.stamp {
+  display: grid;
+  place-items: center;
+  height: 20px;
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+  font-size: var(--type-micro-size);
+  line-height: 1;
+}
+
+.stamp.on {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: var(--type-label-weight);
+}
+
+.line {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.periods {
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.caution {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  max-width: var(--measure);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.cautionIcon {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+/* Months, with how many sailings each has. */
+.strip {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.strip ol {
+  display: flex;
+  gap: var(--space-1);
+  width: max-content;
+  margin: 0;
+  padding: 0 0 var(--space-1);
+  list-style: none;
+}
+
+.tab {
+  display: grid;
+  gap: 2px;
+  min-width: 52px;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: var(--type-caption-size);
+  text-align: center;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab[aria-current="true"] {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+  font-weight: var(--type-label-weight);
+}
+
+.count {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: 1;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.board {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (width >= 1024px) {
+  .board {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    align-items: start;
+  }
+}
+
+.sheet {
+  min-width: 0;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+}
+
+.head {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3);
+}
+
+.month {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: 1;
+  text-align: center;
+}
+
+.month span {
+  color: var(--accent);
+  font-size: 0.55em;
+  font-variant-numeric: lining-nums;
+}
+
+.arrow {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--ink);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.arrow:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.arrow:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.weekdays,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.weekdays {
+  padding: 0 0 var(--space-2);
+  color: var(--ink-muted);
+  font-size: var(--type-micro-size);
+  letter-spacing: var(--type-micro-tracking);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.grid {
+  border-top: 1px solid var(--line);
+}
+
+.grid > :first-child {
+  grid-column-start: calc(var(--offset) + 1);
+}
+
+.day {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: stretch;
+  min-width: 0;
+  min-height: 68px;
+  padding: var(--space-1) var(--space-1) var(--space-3);
+  border: 0;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+}
+
+.num {
+  font-size: var(--type-caption-size);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.past .num {
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+.sails {
+  cursor: pointer;
+}
+
+.sails .num {
+  font-weight: var(--type-label-weight);
+}
+
+.sails:hover {
+  background: var(--tint);
+}
+
+.sails[aria-pressed="true"] {
+  background: var(--tint);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+
+.sails:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -4px;
+}
+
+.flags {
+  display: grid;
+  gap: 2px;
+}
+
+/* A departure: filled when confirmed, dashed when only expected, struck through when cancelled. */
+.flag {
+  display: flex;
+  gap: 2px;
+  align-items: baseline;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1px 2px;
+  border: 1px solid transparent;
+  font-size: var(--type-micro-size);
+  font-weight: var(--type-label-weight);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.flag.confirmed {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.flag.pattern {
+  border: 1px dashed var(--line-strong);
+  color: var(--ink);
+}
+
+.flag.cancelled {
+  border-color: var(--line);
+  color: var(--ink-muted);
+  text-decoration: line-through;
+}
+
+.route {
+  display: none;
+  font-weight: var(--type-body-weight);
+  opacity: 0.85;
+}
+
+@media (width >= 768px) {
+  .month {
+    font-size: var(--type-display-l-size);
+  }
+
+  .day {
+    min-height: 92px;
+    padding: var(--space-2) var(--space-2) var(--space-4);
+  }
+
+  .flag {
+    justify-content: flex-start;
+    padding: 2px var(--space-1);
+  }
+
+  .route {
+    display: inline;
+  }
+}
+
+/* The nights on board: a line under the days, in the direction's tone; dashed while only expected. */
+.ribbon {
+  position: absolute;
+  right: -1px;
+  bottom: var(--space-1);
+  left: 0;
+  height: 4px;
+  background: var(--tone);
+}
+
+.ribbon.dashed {
+  background: repeating-linear-gradient(90deg, var(--tone) 0 6px, transparent 6px 10px);
+}
+
+/* The chosen day, in words. */
+.manifest {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border-top: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+@media (width >= 1024px) {
+  .manifest {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-4));
+  }
+}
+
+.entries {
+  display: grid;
+  gap: var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.entry + .entry {
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--line);
+}
+
+.badge {
+  display: inline-flex;
+  gap: var(--space-1);
+  align-items: center;
+  justify-self: start;
+  margin: 0;
+  padding: 2px var(--space-2);
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-label-weight);
+}
+
+.entry.confirmed .badge {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.entry.pattern .badge {
+  border: 1px dashed var(--line-strong);
+  background: var(--tint);
+  color: var(--ink);
+}
+
+.entry.cancelled .badge {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.entryRoute {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  font-weight: var(--type-heading-weight);
+  line-height: var(--type-heading-line);
+}
+
+.entry.cancelled .entryRoute {
+  color: var(--ink-muted);
+  text-decoration: line-through;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--ink-muted);
+  font-size: var(--type-micro-size);
+  letter-spacing: var(--type-micro-tracking);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.why,
+.hint {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+.book,
+.askLink {
+  justify-self: start;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  font-weight: var(--type-label-weight);
+  text-decoration: none;
+}
+
+.book {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.askLink {
+  color: var(--ink);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+.key {
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  margin-right: var(--space-1);
+  border: 1px solid transparent;
+  vertical-align: -1px;
+}
+
+.key.confirmed {
+  background: var(--primary);
+}
+
+.key.pattern {
+  border: 1px dashed var(--line-strong);
+}
+
+.key.cancelled {
+  border-color: var(--line-strong);
+  background: linear-gradient(to top right, transparent 45%, var(--ink-muted) 45% 55%, transparent 55%);
+}
+
+.lineKey {
+  display: inline-block;
+  width: 22px;
+  height: 4px;
+  margin-right: var(--space-1);
+  background: var(--tone);
+  vertical-align: 3px;
+}
+
+.footnote,
+.empty {
+  max-width: var(--measure);
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: var(--type-caption-line);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tab,
+  .arrow,
+  .sails {
+    transition:
+      background var(--dur-1) var(--ease-river),
+      border-color var(--dur-1) var(--ease-river),
+      color var(--dur-1) var(--ease-river);
+  }
+}
