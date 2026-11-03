@@ -5,7 +5,7 @@ import { formatMoney } from "@/components/ds/lib/format";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
-import { dateWindow, nowMs, sailingDates, WEEKDAYS } from "@/lib/product/departures";
+import { dateWindow, nowMs, sailingDates, sailsBy, WEEKDAYS } from "@/lib/product/departures";
 import { hoursText, isFresh, RATE_PLANS } from "@/lib/product/pricing";
 import { requireProductEditor } from "@/server/product/guard";
 import {
@@ -16,10 +16,12 @@ import {
   schedule as getSchedule,
   scheduleSightseeing,
   sightseeingRatesFor,
+  upcomingDepartures,
 } from "@/server/product/queries";
 import { getDb } from "@/server/db";
 import {
   addPeriod,
+  addSailingDate,
   bulkUpdate,
   confirmAvailability,
   deletePartnerRate,
@@ -55,12 +57,14 @@ export async function SchedulePage({
   const start = from && /^\d{4}-\d{2}-\d{2}$/.test(from) ? from : today;
   const end = dateWindow(62, start).until;
   const approved = !!vessel.sightseeing_approved_at;
-  const [cabins, grid, hours, partners, included] = await Promise.all([
+  const dated = sailsBy(s.sailing_days) === "dates";
+  const [cabins, grid, hours, partners, included, dates] = await Promise.all([
     cabinTypes(vesselId),
     departureGrid(scheduleId, start, end),
     freshnessHours(),
     approvedPartners(),
     approved ? scheduleSightseeing(scheduleId) : Promise.resolve(null),
+    dated ? upcomingDepartures(scheduleId, today) : Promise.resolve([]),
   ]);
   const active = cabins.filter((c) => c.active);
   const horizon = dateWindow(400).until;
@@ -83,45 +87,101 @@ export async function SchedulePage({
         </ActionForm>
       </Section>
 
-      <Section title="Operating periods" id="periods">
-        {s.schedule_periods.length ? (
-          <ul className={ui.list}>
-            {[...s.schedule_periods]
-              .sort((a, b) => a.starts_on.localeCompare(b.starts_on))
-              .map((x) => (
-                <li key={x.id} className={ui.actions}>
-                  <span>
-                    {x.starts_on} to {x.ends_on}
-                  </span>
-                  <ActionForm
-                    action={removePeriod.bind(null, orgId, vesselId, scheduleId, x.id)}
-                    submit="Remove"
-                    variant="ghost"
-                  />
-                </li>
-              ))}
-          </ul>
-        ) : (
-          <p className={ui.muted}>No periods yet: add the dates this schedule operates.</p>
-        )}
-        <ActionForm
-          action={addPeriod.bind(null, orgId, vesselId, scheduleId)}
-          submit="Add period"
-          variant="outline"
-          resetOnSuccess
-        >
-          <div className={ui.grid}>
-            <Input label="From" name="starts_on" type="date" required />
-            <Input label="To" name="ends_on" type="date" required />
-          </div>
-        </ActionForm>
-        <ActionForm action={generate.bind(null, orgId, vesselId, scheduleId)} submit="Create departures">
-          <p className={ui.hint}>
-            {planned} sailing date{planned === 1 ? "" : "s"} in the next 400 days. Dates that already have a departure are left as
-            they are.
-          </p>
-        </ActionForm>
-      </Section>
+      {dated ? (
+        <>
+          <Section title="Sailing dates" id="dates">
+            <p className={ui.muted}>
+              This schedule sails only on the dates below; travellers see just these on the calendar. Cancel a date rather than
+              leave it: bookings and prices stay attached to it.
+            </p>
+            {dates.length ? (
+              <ul className={ui.list}>
+                {dates.map((d) => (
+                  <li key={d.id} className={ui.actions}>
+                    <span>
+                      <Link href={p.departure(scheduleId, d.id)}>{d.departs_on}</Link> → {d.returns_on}{" "}
+                      {d.status === "cancelled" ? <Badge tone="danger">Cancelled</Badge> : null}
+                    </span>
+                    <ActionForm
+                      action={setDepartureStatus.bind(null, orgId, vesselId, scheduleId, d.id)}
+                      submit={d.status === "cancelled" ? "Restore" : "Cancel sailing"}
+                      variant="ghost"
+                    >
+                      <input type="hidden" name="status" value={d.status === "cancelled" ? "scheduled" : "cancelled"} />
+                    </ActionForm>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className={ui.muted}>No sailing dates yet: add each date the operator has published.</p>
+            )}
+            <ActionForm
+              action={addSailingDate.bind(null, orgId, vesselId, scheduleId)}
+              submit="Add sailing date"
+              variant="outline"
+              resetOnSuccess
+            >
+              <Input label="Departs on" name="departs_on" type="date" required hint={`Returns ${s.nights} nights later.`} />
+            </ActionForm>
+          </Section>
+        </>
+      ) : (
+        <>
+          <Section title="Operating periods" id="periods">
+            {s.schedule_periods.length ? (
+              <ul className={ui.list}>
+                {[...s.schedule_periods]
+                  .sort((a, b) => a.starts_on.localeCompare(b.starts_on))
+                  .map((x) => (
+                    <li key={x.id} className={ui.actions}>
+                      <span>
+                        {x.starts_on} to {x.ends_on}
+                      </span>
+                      <ActionForm
+                        action={removePeriod.bind(null, orgId, vesselId, scheduleId, x.id)}
+                        submit="Remove"
+                        variant="ghost"
+                      />
+                    </li>
+                  ))}
+              </ul>
+            ) : (
+              <p className={ui.muted}>No periods yet: add the dates this schedule operates.</p>
+            )}
+            <ActionForm
+              action={addPeriod.bind(null, orgId, vesselId, scheduleId)}
+              submit="Add period"
+              variant="outline"
+              resetOnSuccess
+            >
+              <div className={ui.grid}>
+                <Input label="From" name="starts_on" type="date" required />
+                <Input label="To" name="ends_on" type="date" required />
+              </div>
+            </ActionForm>
+            <ActionForm action={generate.bind(null, orgId, vesselId, scheduleId)} submit="Create departures">
+              <p className={ui.hint}>
+                {planned} sailing date{planned === 1 ? "" : "s"} in the next 400 days. Dates that already have a departure are
+                left as they are.
+              </p>
+            </ActionForm>
+            <ActionForm
+              action={addSailingDate.bind(null, orgId, vesselId, scheduleId)}
+              submit="Add date"
+              variant="ghost"
+              resetOnSuccess
+            >
+              <Input
+                label="Extra sailing date (optional)"
+                name="departs_on"
+                type="date"
+                required
+                hint="A one-off sailing outside the weekly days."
+              />
+            </ActionForm>
+          </Section>
+        </>
+      )}
 
       <Section title="Itinerary" id="itinerary">
         <ol className={ui.list}>
