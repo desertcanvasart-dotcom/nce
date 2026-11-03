@@ -109,10 +109,10 @@ describe("maintained data (DATA-009, ADR-106)", () => {
   it("gives each type its general cabin and guest range, and no price until there are verified ranges", () => {
     const sail = vesselProfile("sail");
     expect(sail.rows.cabins).toBe("4–10");
-    expect(sail.rows.guests).toBe("About 8–20");
+    expect(sail.rows.guests).toBe("About 8–24");
     expect(sail.facts.map(([, f]) => f)).toEqual([
       "4–10 cabins",
-      "About 8–20 guests",
+      "About 8–24 guests",
       "Ideally 5 nights, Esna to Aswan",
       "Mostly riverbanks and islands",
     ]);

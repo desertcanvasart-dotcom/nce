@@ -44,6 +44,7 @@ export default async function CruisesHub({ params, searchParams }: Props) {
       vessels={sortListing(found.vessels)}
       all={all}
       sightseeing={!!query.sightseeing}
+      propulsion={query.propulsion}
       vesselType={query.vessel}
       matchCount={found.departures}
       empty={searching ? "No sailings fit that search. Try other dates or any route." : "No cruises are published yet."}

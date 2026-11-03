@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
+import { Badge } from "@/components/ds/Badge/Badge";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import { Media } from "@/components/ds/Media/Media";
 import { formatMoney, formatNights } from "@/components/ds/lib/format";
-import type { Money } from "@/components/ds/lib/types";
+import { propulsionArt, propulsionIcon, type Money } from "@/components/ds/lib/types";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { EvaluationRadar } from "@/components/evaluation/EvaluationRadar";
@@ -71,8 +72,11 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
     .filter((i) => i.sailingDays.length)
     .map((i) => t("hero.sailingsFrom", { days: days(i.sailingDays), origin: place(i.origin) }))
     .join(t("listSep"));
+  // A nightly guide gives a total for each length; a per-trip guide is only ever said for its own cruise.
+  const nightly = v.indicativePrice?.basis === "per_person_per_night" ? v.indicativePrice : undefined;
   const total = (n: number, key: string) =>
-    t(key, { price: money(indicativeTotal(v.indicativePrice!, n)), nights: formatNights(n, locale) });
+    t(key, { price: money(indicativeTotal(nightly!, n)!), nights: formatNights(n, locale) });
+  const p = v.indicativePrice;
   return {
     tag,
     list,
@@ -85,25 +89,41 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
         ? t("hero.routeBetween", { nights: nightsList, a: place(ends[0]!), b: place(ends[1]!) })
         : t("hero.routeMixed", { nights: nightsList }),
     sailings: sailings ? sailings.replace(/^./, (c) => c.toUpperCase()) : null,
+    /** The guide price in a sentence: per night, or for the whole cruise sharing a double room. */
+    priceLine: !p
+      ? null
+      : p.basis === "per_person_per_night"
+        ? t("price.fromAbout", { price: money(p.perNight) })
+        : t("price.fromTrip", { price: money(p.perTrip), n: p.nights }),
+    priceFact: !p
+      ? null
+      : p.basis === "per_person_per_night"
+        ? t("hero.fromAbout", { price: money(p.perNight) })
+        : t("hero.fromTrip", { price: money(p.perTrip), n: p.nights }),
     // "about US$900 per person for 3 nights or US$1,200 for 4 nights": per person said once.
-    totals: v.indicativePrice
+    totals: nightly
       ? list(
           nights.map((n, i) => total(n, i ? "price.totalMore" : "price.totalFirst")),
           "disjunction",
         )
       : null,
-    faqTotals: v.indicativePrice
+    faqTotals: nightly
       ? list(
           nights.map((n) => total(n, "price.totalMore")),
           "disjunction",
         )
       : null,
-    title: nights.length ? t("meta.title", { name: v.name, nights: nightsList }) : t("meta.titleOne", { name: v.name }),
-    description: !nights.length
-      ? v.summary
-      : between
-        ? t("meta.description", { name: v.name, nights: nightsList, a: place(ends[0]!), b: place(ends[1]!) })
-        : t("meta.descriptionRoute", { name: v.name, nights: nightsList }),
+    // A vessel's own search title and description, when its data has them, else the usual pattern.
+    title:
+      v.seoTitle ??
+      (nights.length ? t("meta.title", { name: v.name, nights: nightsList }) : t("meta.titleOne", { name: v.name })),
+    description: v.seoDescription
+      ? v.seoDescription
+      : !nights.length
+        ? v.summary
+        : between
+          ? t("meta.description", { name: v.name, nights: nightsList, a: place(ends[0]!), b: place(ends[1]!) })
+          : t("meta.descriptionRoute", { name: v.name, nights: nightsList }),
     trip: (it: VesselItinerary) =>
       t("meta.trip", {
         name: v.name,
@@ -137,6 +157,7 @@ export function VesselView({
 }) {
   const t = useTranslations("vesselPage");
   const tc = useTranslations("sailingCalendar");
+  const td = useTranslations("ds");
   const w = vesselWords(
     v,
     locale,
@@ -144,6 +165,7 @@ export function VesselView({
     (k) => t.raw(k),
   );
   const path = `/cruises/${v.slug}/`;
+  const heading = v.displayName ?? v.name;
   const askHref = `/cruises/${v.slug}/ask/`;
   const reserveHref = `/cruises/${v.slug}/reserve/`;
   const facet = v.type === "steam" ? undefined : TYPE_FACET[v.type];
@@ -155,7 +177,20 @@ export function VesselView({
   const cabins = v.cabins;
   const showCabins = cabins.length > 0 || !!v.deckPlan?.layout;
   const diets = DIETARY_OPTIONS.filter((o) => v.dietaryOptions?.includes(o.value)).map((o) => t(`onBoard.diet.${o.value}`));
-  const showOnBoard = !!(v.description || v.dining || diets.length || v.mooring || hub);
+  const onBoard = v.onBoard ?? [];
+  const goodToKnow = v.goodToKnow ?? [];
+  const metres = (n: number) => new Intl.NumberFormat(w.tag, { maximumFractionDigits: 1 }).format(n);
+  const size = v.lengthM && v.beamM ? t("onBoard.sizeValue", { length: metres(v.lengthM), beam: metres(v.beamM) }) : null;
+  const showOnBoard = !!(
+    v.description ||
+    v.dining ||
+    diets.length ||
+    v.mooring ||
+    hub ||
+    v.propulsionNote ||
+    onBoard.length ||
+    size
+  );
   const inclusions = v.inclusions ?? { included: [], optional: [], notIncluded: [] };
   const lists = (
     [
@@ -202,11 +237,13 @@ export function VesselView({
 
   // The questions only this vessel's data can answer, and only the ones it can.
   const faqs: { q: string; a: string }[] = [];
-  if (price && w.faqTotals)
+  if (price?.basis === "per_person_per_night" && w.faqTotals)
     faqs.push({
       q: t("faq.costQ", { name: v.name }),
       a: t("faq.costA", { price: w.money(price.perNight), totals: w.faqTotals }),
     });
+  else if (price && w.priceLine)
+    faqs.push({ q: t("faq.costQ", { name: v.name }), a: `${w.priceLine}${locale === "ja" ? "" : " "}${t("price.guide")}` });
   else if (v.bookable && v.from)
     faqs.push({ q: t("faq.costQ", { name: v.name }), a: t("faq.costBookableA", { price: formatMoney(v.from, locale) }) });
   faqs.push({ q: t("faq.bookQ"), a: v.bookable ? t("faq.bookYes") : t("faq.bookNo") });
@@ -252,6 +289,7 @@ export function VesselView({
     ...(showCabins ? [{ id: "cabins", label: t("nav.cabins") }] : []),
     { id: "evaluation", label: t("nav.evaluation") },
     ...(showOnBoard ? [{ id: "on-board", label: t("nav.onBoard") }] : []),
+    ...(goodToKnow.length ? [{ id: "good-to-know", label: t("nav.goodToKnow") }] : []),
     ...(its.length ? [{ id: "dates", label: t("nav.dates") }] : []),
     { id: "faqs", label: t("nav.faqs") },
   ];
@@ -267,7 +305,7 @@ export function VesselView({
           ...(facet
             ? [{ name: t(facet === "dahabiyas" ? "crumbs.dahabiyas" : "crumbs.motorShips"), path: `/cruises/${facet}/` }]
             : []),
-          { name: v.name, path },
+          { name: heading, path },
         ]}
       />
 
@@ -276,13 +314,15 @@ export function VesselView({
           <p className={styles.eyebrow}>
             {t(`type.${v.type}`)}
             {v.sample ? ` · ${t("sampleData")}` : ""}
+            {/* What drives it, from its data: an icon and a word, shown however sparse the rest is. */}
+            {v.propulsion ? <Badge icon={propulsionIcon[v.propulsion]}>{td(`propulsion.${v.propulsion}`)}</Badge> : null}
           </p>
-          <h1 className={styles.title}>{v.name}</h1>
+          <h1 className={styles.title}>{heading}</h1>
           {w.routeLine ? <p className={styles.route}>{w.routeLine}</p> : null}
         </div>
         {v.photos.length ? (
           <div className={styles.heroPhoto}>
-            <VesselPhotos photos={v.photos} name={v.name} hero />
+            <VesselPhotos photos={v.photos} name={heading} hero />
           </div>
         ) : null}
         {/* The price on its own, so a phone shows it with the main action right under the photo. */}
@@ -307,10 +347,10 @@ export function VesselView({
                 />
               </dd>
             </div>
-          ) : price ? (
+          ) : price && w.priceFact ? (
             <div className={styles.priceFact}>
               <dt>{t("hero.indicativePrice")}</dt>
-              <dd>{t("hero.fromAbout", { price: w.money(price.perNight) })}</dd>
+              <dd>{w.priceFact}</dd>
             </div>
           ) : null}
         </dl>
@@ -417,10 +457,9 @@ export function VesselView({
           </>
         ) : (
           <>
-            {price ? (
+            {price && w.priceLine ? (
               <p className={styles.big}>
-                {t("price.fromAbout", { price: w.money(price.perNight) })}{" "}
-                {w.totals ? `${t("price.totals", { list: w.totals })} ` : ""}
+                {w.priceLine} {w.totals ? `${t("price.totals", { list: w.totals })} ` : ""}
                 {t("price.guide")}
               </p>
             ) : null}
@@ -487,7 +526,10 @@ export function VesselView({
                     it={i}
                     locale={locale}
                     place={w.place}
-                    total={price ? w.money(indicativeTotal(price, i.nights)) : null}
+                    total={(() => {
+                      const m = price ? indicativeTotal(price, i.nights) : null;
+                      return m ? w.money(m) : null;
+                    })()}
                   />
                 ),
               }))}
@@ -610,6 +652,23 @@ export function VesselView({
         <section className={styles.section} id="on-board" aria-labelledby="on-board-h">
           <h2 id="on-board-h">{t("onBoard.title")}</h2>
           {v.description ? <p className={styles.prose}>{v.description}</p> : null}
+          {v.propulsionNote ? (
+            <div className={styles.sub} id="sailing">
+              <h3>{t("onBoard.sails")}</h3>
+              <p>{v.propulsionNote}</p>
+            </div>
+          ) : null}
+          {onBoard.length || size ? (
+            <div className={styles.sub} id="facilities">
+              <h3>{t("onBoard.notes")}</h3>
+              <ul>
+                {size ? <li>{t("onBoard.size", { size })}</li> : null}
+                {onBoard.map((x) => (
+                  <li key={x}>{x}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {v.dining || diets.length ? (
             <div className={styles.sub} id="dining">
               <h3>{t("onBoard.food")}</h3>
@@ -636,6 +695,17 @@ export function VesselView({
               <Link href={hub}>{t(`onBoard.guide.${v.type}`)}</Link>
             </p>
           ) : null}
+        </section>
+      ) : null}
+
+      {goodToKnow.length ? (
+        <section className={styles.section} id="good-to-know" aria-labelledby="good-to-know-h">
+          <h2 id="good-to-know-h">{t("goodToKnow.title")}</h2>
+          <ul>
+            {goodToKnow.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
         </section>
       ) : null}
 
@@ -695,16 +765,23 @@ export function VesselView({
               <li key={s.slug}>
                 <Media image={s.image} vessel={s.type} sizes="(min-width: 900px) 30vw, 100vw" className={styles.similarPhoto} />
                 <h3>
-                  <Link href={`/cruises/${s.slug}/`}>{s.name}</Link>
+                  <Link href={`/cruises/${s.slug}/`}>{s.displayName ?? s.name}</Link>
                 </h3>
+                {s.propulsion ? (
+                  <p>
+                    <Badge icon={propulsionIcon[s.propulsion]}>{td(`propulsion.${s.propulsion}`)}</Badge>
+                  </p>
+                ) : null}
                 <p className={styles.muted}>
                   {[
                     s.cabinCount ? t("similar.cabins", { n: s.cabinCount }) : null,
                     s.bookable && s.from
                       ? t("similar.from", { price: formatMoney(s.from, locale) })
-                      : s.indicativePerNight
-                        ? t("similar.fromAbout", { price: w.money(s.indicativePerNight) })
-                        : null,
+                      : s.indicativePrice?.basis === "per_person_per_night"
+                        ? t("similar.fromAbout", { price: w.money(s.indicativePrice.perNight) })
+                        : s.indicativePrice
+                          ? t("similar.fromTrip", { price: w.money(s.indicativePrice.perTrip), n: s.indicativePrice.nights })
+                          : null,
                   ]
                     .filter(Boolean)
                     .join(" · ")}
@@ -778,6 +855,11 @@ function ItineraryDetails({
     <div className={styles.itinerary}>
       {total ? <p className={styles.total}>{t("itinerary.about", { price: total, nights })}</p> : null}
       <p>{t("itinerary.checkInOut", { origin, destination, last: it.nights + 1 })}</p>
+      {it.boardingNote ? (
+        <p>
+          <strong>{t("itinerary.boarding")}</strong> {it.boardingNote}
+        </p>
+      ) : null}
       {it.sightseeing ? (
         <p>
           <strong>{t("itinerary.vesselSightseeing")}</strong>{" "}
@@ -841,7 +923,8 @@ function ItineraryDetails({
         <ItineraryTimeline
           scroll
           nights
-          vessel={v.type}
+          // The route's drawing matches what drives the vessel: a ship, a sail or a paddle steamer.
+          vessel={v.propulsion ? propulsionArt[v.propulsion] : v.type}
           stops={it.days.map((d) => ({
             day: d.day,
             place: d.day === 1 ? origin : d.day === it.nights + 1 ? destination : "",

@@ -23,6 +23,7 @@ const vessel = (over: Partial<ListingVessel> = {}): ListingVessel => ({
   slug: "sample",
   name: "Sample",
   type: "motor",
+  propulsion: null,
   category: null,
   maxGuests: 80,
   cabinCount: 40,
@@ -122,6 +123,23 @@ describe("search (DATA-012)", () => {
     expect(applySearch(all, { vessel: "sail" }).vessels.map((v) => v.id)).toEqual(["a"]);
     expect(applySearch(all, { guests: 20 }).vessels.map((v) => v.id)).toEqual(["b", "c"]); // the dahabiya sleeps 12
     expect(applySearch(all, { date: "2027-01-01" })).toEqual({ vessels: [], departures: 0 });
+  });
+});
+
+describe("propulsion (motor, wind, steam)", () => {
+  const wind = vessel({ slug: "w", name: "W", displayName: "W, by Operator", type: "sail", propulsion: "wind", bookable: false });
+  const steam = vessel({ slug: "s", type: "steam", propulsion: "steam" });
+  const unknown = vessel({ slug: "u" });
+  it("filters by the vessel's own value, never its name", () => {
+    expect(parseSearch({ propulsion: "wind" }).propulsion).toBe("wind");
+    expect(parseSearch({ propulsion: "sail" }).propulsion).toBeUndefined();
+    expect(isSearching(parseSearch({ propulsion: "steam" }))).toBe(true);
+    expect(applySearch([wind, steam, unknown], { propulsion: "wind" }).vessels.map((v) => v.slug)).toEqual(["w"]);
+    expect(applySearch([wind, steam, unknown], { propulsion: "motor" }).vessels).toEqual([]);
+  });
+  it("puts the badge and the heading on the card; none when unconfirmed", () => {
+    expect(toCard(wind)).toMatchObject({ name: "W, by Operator", propulsion: "wind" });
+    expect(toCard(unknown).propulsion).toBeUndefined();
   });
 });
 

@@ -1,0 +1,671 @@
+{
+  "source": "Spanish and Japanese for nour-el-nil-fleet-data.json, and the photos taken from each boat's source_url (permission confirmed by the owner, 3 Nov 2026).",
+  "review": {
+    "status": "needs_human_review",
+    "note": "Drafted by Claude on 4 Nov 2026 from the English data. A Spanish and a Japanese reviewer should check every es and ja string before the boats are promoted beyond information-only.",
+    "locales": ["es", "ja"]
+  },
+  "fleet": {
+    "propulsion_support": {
+      "es": "Navega a vela cuando el viento lo permite y no lleva motor a bordo. Cuando hace falta, la remolca un barco.",
+      "ja": "風があれば帆で進みます。船にエンジンはなく、必要なときはタグボートが曳航します。"
+    },
+    "included": {
+      "es": [
+        "Traslado desde un hotel de Luxor hasta Esna",
+        "Entradas a los cinco lugares que se visitan",
+        "Guía oficial egipcio, en tu idioma si hay disponibilidad",
+        "Todas las comidas y tentempiés",
+        "Bebidas sin alcohol",
+        "Traslado a un hotel de Asuán en tierra firme"
+      ],
+      "ja": [
+        "ルクソールのホテルからエスナまでの送迎",
+        "訪問する5か所の入場料",
+        "エジプト公認ガイド(可能な場合はご希望の言語で)",
+        "すべての食事と軽食",
+        "ノンアルコール飲料",
+        "アスワン市街(島以外)のホテルへの送迎"
+      ]
+    },
+    "not_included": {
+      "es": ["Cerveza, vino y licores", "Traslados desde o hacia el aeropuerto"],
+      "ja": ["ビール、ワイン、蒸留酒", "空港との送迎"]
+    },
+    "boarding_note": {
+      "es": "El operador recoge a los pasajeros en los hoteles de la ciudad de Luxor, normalmente entre las 09:00 y las 09:30, para ir en coche hasta Esna. La recogida en el aeropuerto no forma parte del traslado estándar.",
+      "ja": "運航会社がルクソール市内のホテルへ通常9:00〜9:30にお迎えに上がり、車でエスナへ向かいます。空港での出迎えは標準の送迎に含まれません。"
+    },
+    "programme": {
+      "es": [
+        { "title": "Esna", "text": "Embarque en Esna y paseo hasta el templo de Jnum y por el pueblo." },
+        { "title": "El Kab y Edfu", "text": "Visita a la necrópolis de El Kab y, después, al templo de Horus en Edfu." },
+        {
+          "title": "Un día en el río",
+          "text": "Paseo opcional por la mañana y, después, navegación. Hay tiempo para parar en la orilla, darse un baño y caminar por el desierto."
+        },
+        {
+          "title": "Gebel Silsila",
+          "text": "Visita al templo de Horemheb y a las canteras de arenisca; después, se sigue navegando con una parada en la orilla. Los grandes cruceros no paran aquí."
+        },
+        { "title": "Kom Ombo", "text": "Visita al templo y al Museo del Cocodrilo." },
+        {
+          "title": "Desembarque en Asuán",
+          "text": "Por la mañana se deja el barco cerca del puente de Asuán, donde las autoridades exigen que las dahabiyas pasen la última noche."
+        }
+      ],
+      "ja": [
+        { "title": "エスナ", "text": "エスナで乗船し、クヌム神殿まで歩いて町を散策します。" },
+        { "title": "エル・カブとエドフ", "text": "エル・カブの墓所を訪れ、その後エドフのホルス神殿へ。" },
+        { "title": "川で過ごす一日", "text": "朝は希望者のみ散歩、その後は航行します。川岸に立ち寄り、泳いだり砂漠を歩いたりする時間もあります。" },
+        {
+          "title": "ゲベル・シルシラ",
+          "text": "ホルエムヘブの神殿と砂岩の石切り場を訪れ、川岸に立ち寄りながら航行を続けます。大型クルーズ船はここには停泊しません。"
+        },
+        { "title": "コム・オンボ", "text": "神殿とワニ博物館を見学します。" },
+        { "title": "アスワンで下船", "text": "朝、アスワン橋の近くで下船します。当局の規定により、ダハビヤは最終泊をこの場所で過ごします。" }
+      ]
+    },
+    "on_board": {
+      "air_conditioning": {
+        "es": "Aire acondicionado las 24 horas, alimentado sobre todo con paneles solares y baterías, con apoyo de reserva",
+        "ja": "24時間エアコン完備。主に太陽光パネルとバッテリーで稼働し、予備電源もあります"
+      },
+      "fans": { "es": "Un ventilador en cada habitación", "ja": "全室に扇風機" },
+      "wifi": {
+        "es": "El wifi usa la cobertura móvil de la ruta y funciona aproximadamente el 70 % del tiempo. Sirve para mensajes, correo y navegación ligera, no para streaming ni videollamadas.",
+        "ja": "Wi-Fiは航路沿いの携帯電話回線を利用し、つながるのは全体の約70%です。メッセージやメール、軽いウェブ閲覧向きで、動画配信やビデオ通話には向きません。"
+      },
+      "laundry": {
+        "es": "No hay servicio de lavandería como tal, pero la tripulación puede lavar gratis la ropa de diario y secarla al aire.",
+        "ja": "正式なランドリーサービスはありませんが、普段着なら乗務員が無料で洗濯し、自然乾燥してくれます。"
+      }
+    },
+    "dining": {
+      "es": "Cocina sobre todo egipcia, con ingredientes comprados a lo largo del río, servida a menudo en cubierta. Hay opciones vegetarianas. Las peticiones sin gluten, sin lactosa u otras pueden organizarse con antelación.",
+      "ja": "主にエジプト料理で、川沿いで仕入れた食材を使い、デッキで出されることもよくあります。ベジタリアン向けの料理もあります。グルテンフリー、乳製品不使用などのご要望は事前に手配できます。"
+    },
+    "less_suited_to": {
+      "es": "Viajeros que necesitan ascensor o una conexión a internet fiable.",
+      "ja": "エレベーターや安定したインターネット接続が必要な方。"
+    },
+    "good_to_know": {
+      "children": {
+        "es": "Los niños son bienvenidos. No se publica una edad mínima.",
+        "ja": "お子様も乗船できます。最低年齢は公表されていません。"
+      },
+      "mobility": {
+        "es": "Las cubiertas se comunican por escaleras y no hay ascensor. La tripulación puede ayudar a bordo, pero en las visitas en tierra el terreno puede ser irregular.",
+        "ja": "デッキ間は階段でつながっており、エレベーターはありません。船内では乗務員が手助けしますが、上陸観光では足元が不安定な場所もあります。"
+      },
+      "charter": {
+        "es": "Se puede alquilar el barco entero en privado; el precio depende del barco y de la temporada.",
+        "ja": "船を丸ごと貸し切ることもできます。料金は船と時期によって異なります。"
+      },
+      "route_note": {
+        "es": "El crucero no visita los lugares de Luxor ni de Asuán, porque el operador evita los puertos concurridos. Reserva esas visitas antes o después.",
+        "ja": "運航会社が混雑する港を避けているため、このクルーズではルクソールとアスワンの観光地は訪れません。それらのツアーはクルーズの前後にご予約ください。"
+      },
+      "season": {
+        "es": "No hay salidas de junio a agosto por el calor.",
+        "ja": "暑さのため、6月から8月は運航しません。"
+      }
+    },
+    "seo_title": {
+      "en": "{name} dahabiya: 5-night Esna to Aswan cruise",
+      "es": "Dahabiya {name}: crucero de 5 noches de Esna a Asuán",
+      "ja": "ダハビヤ{name}:エスナからアスワンへの5泊クルーズ"
+    },
+    "seo_description_suffix": {
+      "en": "See the cabins, itinerary and what’s included.",
+      "es": "Consulta los camarotes, el itinerario y lo que incluye.",
+      "ja": "客室、旅程、料金に含まれるものをご覧ください。"
+    }
+  },
+  "cabin_types": {
+    "panoramic_suite": {
+      "name": { "es": "Suite panorámica", "ja": "パノラミックスイート" },
+      "beds": { "en": "1 king bed", "es": "1 cama king", "ja": "キングベッド1台" },
+      "feature": { "es": "Ventanales del suelo al techo", "ja": "床から天井までの窓" }
+    },
+    "panoramic_room": {
+      "name": { "es": "Habitación panorámica", "ja": "パノラミックルーム" },
+      "beds": { "en": "1 king bed", "es": "1 cama king", "ja": "キングベッド1台" },
+      "feature": { "es": "Ventanales del suelo al techo", "ja": "床から天井までの窓" }
+    },
+    "deluxe_suite": {
+      "name": { "es": "Suite deluxe", "ja": "デラックススイート" },
+      "beds": {
+        "en": "2 king beds, 4 twin beds, or 1 king and 2 twin beds",
+        "es": "2 camas king, 4 camas individuales o 1 cama king y 2 individuales",
+        "ja": "キングベッド2台、シングルベッド4台、またはキングベッド1台とシングルベッド2台"
+      },
+      "bathrooms": { "en": "2 bathrooms.", "es": "2 baños.", "ja": "バスルーム2室。" },
+      "feature": {
+        "es": "Se vende como una sola unidad. Se prepara como dos dormitorios o como un dormitorio con salón privado. No hay camas supletorias.",
+        "ja": "1ユニットとして販売。寝室2室、または寝室1室と専用サロンとして使えます。エキストラベッドはありません。"
+      }
+    },
+    "luxury_room": {
+      "name": { "es": "Habitación de lujo", "ja": "ラグジュアリールーム" },
+      "beds": { "en": "2 twin beds or 1 king bed", "es": "2 camas individuales o 1 cama king", "ja": "シングルベッド2台またはキングベッド1台" }
+    },
+    "room": {
+      "name": { "es": "Habitación", "ja": "客室" },
+      "beds": { "en": "2 twin beds or 1 king bed", "es": "2 camas individuales o 1 cama king", "ja": "シングルベッド2台またはキングベッド1台" }
+    }
+  },
+  "extras": {
+    "180-degree Nile view": { "es": "Vista de 180 grados al Nilo", "ja": "ナイル川を180度見渡す眺め" }
+  },
+  "summaries": {
+    "dendera": {
+      "es": "La dahabiya más nueva de Nour El Nil, construida en 2026, con cubiertas amplias y suites panorámicas con vistas de 180 grados al río.",
+      "ja": "2026年建造の、Nour El Nil最新のダハビヤ。広々としたデッキと、川を180度見渡せるパノラミックスイートを備えています。"
+    },
+    "najafa": {
+      "es": "Una dahabiya de 2025 con camarotes espaciosos y cubiertas amplias. Sus suites panorámicas y deluxe son las más grandes de su tipo en la flota.",
+      "ja": "2025年建造のダハビヤ。客室はゆったりとしてデッキも広く、パノラミックスイートとデラックススイートは船団の同タイプで最大です。"
+    },
+    "poppee": {
+      "es": "Una dahabiya luminosa de 2024 con cubiertas amplias, suites deluxe para familias o amigos y suites panorámicas con amplias vistas al río.",
+      "ja": "2024年建造の開放的なダハビヤ。広いデッキ、家族や友人同士に向くデラックススイート、川を広く見渡せるパノラミックスイートがあります。"
+    },
+    "roman": {
+      "es": "Una dahabiya contemporánea de 2023 con interiores luminosos, una cubierta amplia y tres categorías de camarote, entre ellas suites deluxe de dos habitaciones.",
+      "ja": "2023年建造のモダンなダハビヤ。明るいインテリアと広いデッキ、2部屋からなるデラックススイートを含む3つの客室タイプがあります。"
+    },
+    "adelaide": {
+      "es": "Una dahabiya moderna de 2020 con espacios comunes abiertos, cubiertas amplias y un interior luminoso.",
+      "ja": "2020年建造のモダンなダハビヤ。ひと続きの共用スペース、広いデッキ、明るいインテリアが特徴です。"
+    },
+    "agatha": {
+      "es": "Una dahabiya de 2020 que combina un ambiente tradicional con interiores más nuevos, suites panorámicas luminosas y una cubierta amplia.",
+      "ja": "2020年建造のダハビヤ。伝統的な雰囲気に新しいインテリア、明るいパノラミックスイート、広いデッキスペースを組み合わせています。"
+    },
+    "meroe": {
+      "es": "Una dahabiya de 2017, a medio camino entre los barcos más antiguos y los más nuevos de la flota, con camarotes más grandes y un ambiente tradicional.",
+      "ja": "2017年建造のダハビヤ。船団の古い船と新しい船の中間にあたり、広めの客室と伝統的な雰囲気が特徴です。"
+    },
+    "malouka": {
+      "es": "Una dahabiya clásica de 2008 con camarotes compactos y un ambiente tradicional y cercano.",
+      "ja": "2008年建造のクラシックなダハビヤ。コンパクトな客室と、家庭的で伝統的な雰囲気が魅力です。"
+    },
+    "el-nil": {
+      "es": "El barco más tradicional de la flota, construido en 2006, con las habitaciones publicadas más pequeñas y un estilo sencillo e íntimo.",
+      "ja": "2006年建造の、船団で最も伝統的な船。公表されている客室は船団で最も小さく、簡素さとくつろぎを大切にしています。"
+    }
+  },
+  "photos_note": "In gallery order (the first is the main photo). `cabin` puts the photo on that cabin type's card instead of the gallery. Left out on purpose: photos on a boat's page whose file name names another boat (Meroe photos on Malouka's page, Napata photos on Dendera's and Poppee's), stock photos of the sites, and the fleet slider.",
+  "photos": {
+    "dendera": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Manage_Exterior_0034.jpg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails on the Nile, beside a sandstone outcrop on the bank",
+          "es": "Una dahabiya con velas a rayas rojas y blancas en el Nilo, junto a una roca de arenisca en la orilla",
+          "ja": "岸の砂岩の岩のそばを、赤と白のストライプの帆を張ってナイル川を進むダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Manage_Deck_831-e1773892407490.jpg",
+        "alt": {
+          "en": "A shaded deck with blue striped floor cushions, a hammock and two guests playing a board game",
+          "es": "Cubierta a la sombra con cojines de suelo a rayas azules, una hamaca y dos pasajeros jugando a un juego de mesa",
+          "ja": "青いストライプのクッションとハンモックが並ぶ日よけ付きデッキで、ボードゲームを楽しむ2人の乗客"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Manage_Salon_1376.jpg",
+        "alt": {
+          "en": "A salon with red-and-white striped sofas, bookshelves and windows onto the river",
+          "es": "Salón con sofás a rayas rojas y blancas, estanterías y ventanas al río",
+          "ja": "赤と白のストライプのソファと本棚があり、窓から川が見えるサロン"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Outtakes_201.jpg",
+        "alt": {
+          "en": "Red-and-white sails and rigging above the deck, with the Nile and two feluccas beyond",
+          "es": "Velas rojas y blancas y jarcias sobre la cubierta, con el Nilo y dos falucas al fondo",
+          "ja": "デッキの上の赤と白の帆と索具。その先にナイル川と2隻のファルーカ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Outtakes_521.jpg",
+        "alt": {
+          "en": "A man in a galabeya on the shaded deck, with floor cushions, a hammock and hanging lamps",
+          "es": "Un hombre con galabiya en la cubierta a la sombra, con cojines de suelo, una hamaca y lámparas colgantes",
+          "ja": "ガラベーヤ姿の男性が立つ日よけ付きデッキ。床置きクッション、ハンモック、吊りランプがある"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Outtakes_495.jpg",
+        "alt": {
+          "en": "Close-up of blue striped and floral cushions",
+          "es": "Primer plano de cojines a rayas azules y de flores",
+          "ja": "青いストライプと花柄のクッションのクローズアップ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2546_NEN_Manage_Panoramic_1599-1.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and windows on three sides, open onto the river and sandstone cliffs",
+          "es": "Dormitorio con cama doble y ventanas en tres lados, abiertas al río y a acantilados de arenisca",
+          "ja": "三方に窓がある寝室。ダブルベッドがあり、窓の外に川と砂岩の崖が見える"
+        }
+      }
+    ],
+    "najafa": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Exterior_1035-e1762630304442.jpg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails on the Nile at sunset",
+          "es": "Una dahabiya con velas a rayas rojas y blancas en el Nilo al atardecer",
+          "ja": "夕暮れのナイル川を、赤と白のストライプの帆で進むダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Deck_0610.jpg",
+        "alt": {
+          "en": "Two guests reading on a shaded deck with cushioned benches and cane chairs",
+          "es": "Dos pasajeros leyendo en una cubierta a la sombra con bancos acolchados y sillas de mimbre",
+          "ja": "クッション付きのベンチと籐椅子が並ぶ日よけ付きデッキで読書をする2人の乗客"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Salon_0481.jpg",
+        "alt": {
+          "en": "Three people playing a board game on floor cushions in a salon with red-and-white striped sofas",
+          "es": "Tres personas jugando a un juego de mesa sobre cojines en un salón con sofás a rayas rojas y blancas",
+          "ja": "赤と白のストライプのソファがあるサロンで、床のクッションに座ってボードゲームをする3人"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Panoramic_0221.jpg",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and an open window where two guests look out at the river",
+          "es": "Dormitorio con cama doble, mesa para dos y una ventana abierta desde la que dos pasajeros miran el río",
+          "ja": "ダブルベッドと2人用テーブルのある寝室。開いた窓から2人の乗客が川を眺めている"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Panoramic_0326.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and windows on three sides looking onto the river",
+          "es": "Dormitorio con cama doble, mesa para dos y ventanas en tres lados que dan al río",
+          "ja": "ダブルベッドと2人用テーブルがあり、三方の窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Najafa_Deluxe_Suite_932.jpg",
+        "cabin": "deluxe_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and a doorway through to a room with red-and-white striped seating",
+          "es": "Dormitorio con cama doble y una puerta que da a una sala con asientos a rayas rojas y blancas",
+          "ja": "ダブルベッドのある寝室。戸口の先に赤と白のストライプの座席がある部屋が見える"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2511_NEN_Najafa_Luxury_0165.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A white bedroom with a double bed, an armchair and windows onto the river",
+          "es": "Dormitorio blanco con cama doble, un sillón y ventanas al río",
+          "ja": "ダブルベッドと肘掛け椅子があり、窓から川が見える白い寝室"
+        }
+      }
+    ],
+    "poppee": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Exterior_0530-1.jpg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails on the Nile in evening light, with palm trees on the bank",
+          "es": "Una dahabiya con velas a rayas rojas y blancas en el Nilo con luz de atardecer y palmeras en la orilla",
+          "ja": "夕方の光の中、ヤシの木が並ぶ岸を背に赤と白のストライプの帆で進むダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Deck_0172-1.jpg",
+        "alt": {
+          "en": "A long shaded deck with cushioned benches and cane chairs, with a man in a galabeya walking along it",
+          "es": "Una larga cubierta a la sombra con bancos acolchados y sillas de mimbre, por la que camina un hombre con galabiya",
+          "ja": "クッション付きベンチと籐椅子が並ぶ長い日よけ付きデッキを、ガラベーヤ姿の男性が歩いている"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Salon_1265-1.jpg",
+        "alt": {
+          "en": "Two people at a low brass table on floor cushions in a salon with red-and-white striped sofas",
+          "es": "Dos personas ante una mesa baja de latón, sentadas en cojines, en un salón con sofás a rayas rojas y blancas",
+          "ja": "赤と白のストライプのソファがあるサロンで、床のクッションに座り真鍮の低いテーブルを囲む2人"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Room_Pan_1089.jpg",
+        "alt": {
+          "en": "A bedroom with a double bed and a table for two by the windows, where two guests stand looking at the river",
+          "es": "Dormitorio con cama doble y una mesa para dos junto a las ventanas, donde dos pasajeros miran el río",
+          "ja": "ダブルベッドと窓際の2人用テーブルがある寝室。窓辺で2人の乗客が川を眺めている"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Room_Pan_1008.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and windows on three sides, with sandy hills across the river",
+          "es": "Dormitorio con cama doble, mesa para dos y ventanas en tres lados, con colinas de arena al otro lado del río",
+          "ja": "ダブルベッドと2人用テーブルがあり、三方の窓から対岸の砂丘が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Poppee_Deluxe_Suite_972.jpg",
+        "cabin": "deluxe_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and a doorway through to a room with red-and-white striped seating",
+          "es": "Dormitorio con cama doble y una puerta que da a una sala con asientos a rayas rojas y blancas",
+          "ja": "ダブルベッドのある寝室。戸口の先に赤と白のストライプの座席がある部屋が見える"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2024/04/2439_NEN_Poppee_Room_Lux_0974.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A white bedroom with a double bed, an armchair and two windows onto palm trees by the river",
+          "es": "Dormitorio blanco con cama doble, un sillón y dos ventanas con vistas a palmeras junto al río",
+          "ja": "ダブルベッドと肘掛け椅子があり、2つの窓から川辺のヤシの木が見える白い寝室"
+        }
+      }
+    ],
+    "roman": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_1058.jpeg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails passing rocky banks on the Nile",
+          "es": "Una dahabiya con velas a rayas rojas y blancas pasando junto a orillas rocosas en el Nilo",
+          "ja": "岩の多い岸辺を、赤と白のストライプの帆で通り過ぎるダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_652-2.jpg",
+        "alt": {
+          "en": "A long shaded deck with blue striped benches, cane chairs and a table set for tea",
+          "es": "Una larga cubierta a la sombra con bancos a rayas azules, sillas de mimbre y una mesa con servicio de té",
+          "ja": "青いストライプのベンチと籐椅子、お茶のセットが置かれたテーブルが並ぶ長い日よけ付きデッキ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_476.jpeg",
+        "alt": {
+          "en": "A shaded deck with blue floor cushions, a hammock and guests relaxing",
+          "es": "Cubierta a la sombra con cojines azules de suelo, una hamaca y pasajeros descansando",
+          "ja": "青い床置きクッションとハンモックがある日よけ付きデッキでくつろぐ乗客"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_386.jpg",
+        "alt": {
+          "en": "Two guests on a red-and-white striped sofa in a salon with bookshelves and a chandelier",
+          "es": "Dos pasajeros en un sofá a rayas rojas y blancas en un salón con estanterías y una lámpara de araña",
+          "ja": "本棚とシャンデリアのあるサロンで、赤と白のストライプのソファに座る2人の乗客"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_200.jpeg",
+        "alt": {
+          "en": "A bedroom with a double bed, two armchairs and windows on three sides looking onto the river",
+          "es": "Dormitorio con cama doble, dos sillones y ventanas en tres lados que dan al río",
+          "ja": "ダブルベッドと肘掛け椅子2脚があり、三方の窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_210.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "Two armchairs and a table by windows onto the river, under a chandelier",
+          "es": "Dos sillones y una mesa junto a ventanas que dan al río, bajo una lámpara de araña",
+          "ja": "シャンデリアの下、川に面した窓辺に置かれた肘掛け椅子2脚とテーブル"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Roman_Deluxe_Suite_004.jpg",
+        "cabin": "deluxe_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and a doorway through to a second room",
+          "es": "Dormitorio con cama doble y una puerta que da a una segunda habitación",
+          "ja": "ダブルベッドのある寝室。戸口の先に別の部屋が見える"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2022/11/2248_NEN_Roman_141-3.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A guest sitting on one of two single beds in a white room with windows onto the river",
+          "es": "Una pasajera sentada en una de las dos camas individuales de una habitación blanca con ventanas al río",
+          "ja": "川に面した窓のある白い部屋で、シングルベッド2台の片方に座る乗客"
+        }
+      }
+    ],
+    "adelaide": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_BoatExterior_661-1.jpg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails on the Nile at sunset, with birds overhead",
+          "es": "Una dahabiya con velas a rayas rojas y blancas en el Nilo al atardecer, con pájaros en el cielo",
+          "ja": "鳥が舞う夕暮れのナイル川を、赤と白のストライプの帆で進むダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Adelaide_482.jpg",
+        "alt": {
+          "en": "A shaded deck with striped floor cushions, low tables and woven mats",
+          "es": "Cubierta a la sombra con cojines de suelo a rayas, mesas bajas y esteras tejidas",
+          "ja": "ストライプの床置きクッション、低いテーブル、編みマットが並ぶ日よけ付きデッキ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Adelaide_020-1.jpg",
+        "alt": {
+          "en": "A salon with red-and-white striped sofas, bookshelves and a window onto palm trees",
+          "es": "Salón con sofás a rayas rojas y blancas, estanterías y una ventana con vistas a palmeras",
+          "ja": "赤と白のストライプのソファと本棚があり、窓からヤシの木が見えるサロン"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Adelaide_389.jpg",
+        "alt": {
+          "en": "A table for two and armchairs by windows onto the river, with a bed in the foreground",
+          "es": "Una mesa para dos y sillones junto a ventanas que dan al río, con una cama en primer plano",
+          "ja": "手前にベッド、川に面した窓辺に2人用テーブルと肘掛け椅子"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Adelaide_114.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and windows on three sides looking onto the river and palm trees",
+          "es": "Dormitorio con cama doble, mesa para dos y ventanas en tres lados con vistas al río y a palmeras",
+          "ja": "ダブルベッドと2人用テーブルがあり、三方の窓から川とヤシの木が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2025/09/2546_NEN_Adelaide_Deluxe_Suite_060.jpg",
+        "cabin": "deluxe_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and a doorway through to a second room",
+          "es": "Dormitorio con cama doble y una puerta que da a una segunda habitación",
+          "ja": "ダブルベッドのある寝室。戸口の先に別の部屋が見える"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Adelaide_086.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A white room with two single beds and windows onto the river",
+          "es": "Habitación blanca con dos camas individuales y ventanas al río",
+          "ja": "シングルベッド2台があり、窓から川が見える白い部屋"
+        }
+      }
+    ],
+    "agatha": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_BoatExterior_396-1.jpg",
+        "alt": {
+          "en": "A dahabiya with red-and-white striped sails on the Nile, with sand dunes and palm trees behind",
+          "es": "Una dahabiya con velas a rayas rojas y blancas en el Nilo, con dunas y palmeras detrás",
+          "ja": "砂丘とヤシの木を背に、赤と白のストライプの帆でナイル川を進むダハビヤ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Hamis_113.jpg",
+        "alt": {
+          "en": "A shaded deck with striped floor cushions, low tables and a tea tray",
+          "es": "Cubierta a la sombra con cojines de suelo a rayas, mesas bajas y una bandeja de té",
+          "ja": "ストライプの床置きクッションと低いテーブル、お茶のトレイがある日よけ付きデッキ"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Hamis_480.jpg",
+        "alt": {
+          "en": "A salon with red-and-white striped sofas, bookshelves and windows onto desert and palm trees",
+          "es": "Salón con sofás a rayas rojas y blancas, estanterías y ventanas con vistas al desierto y a palmeras",
+          "ja": "赤と白のストライプのソファと本棚があり、窓から砂漠とヤシの木が見えるサロン"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Hamis_376.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed and windows on three sides looking onto the river",
+          "es": "Dormitorio con cama doble y ventanas en tres lados que dan al río",
+          "ja": "ダブルベッドがあり、三方の窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2020/01/2004_NEN_Hamis_132-1.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A white bedroom with a double bed and windows onto palm trees by the river",
+          "es": "Dormitorio blanco con cama doble y ventanas con vistas a palmeras junto al río",
+          "ja": "ダブルベッドがあり、窓から川辺のヤシの木が見える白い寝室"
+        }
+      }
+    ],
+    "meroe": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1727_NEN_Meroe-II_091-smallest.jpg",
+        "alt": {
+          "en": "A shaded deck with striped cushions, cane chairs and a table set for tea, with guests relaxing",
+          "es": "Cubierta a la sombra con cojines a rayas, sillas de mimbre y una mesa con servicio de té, con pasajeros descansando",
+          "ja": "ストライプのクッションと籐椅子、お茶のテーブルがある日よけ付きデッキでくつろぐ乗客"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1727_NEN_Meroe-II_smallest.jpg",
+        "alt": {
+          "en": "A salon with red-and-white striped sofas, a chess set and windows onto the river",
+          "es": "Salón con sofás a rayas rojas y blancas, un tablero de ajedrez y ventanas al río",
+          "ja": "赤と白のストライプのソファとチェス盤があり、窓から川が見えるサロン"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/02/unnamed123.jpg",
+        "alt": {
+          "en": "Someone painting a watercolour of sails in a sketchbook",
+          "es": "Una persona pintando unas velas a la acuarela en un cuaderno",
+          "ja": "スケッチブックに帆の水彩画を描く人"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1727_NEN_Meroe-II_210-low-res-2.jpg",
+        "cabin": "panoramic_suite",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and windows onto the river",
+          "es": "Dormitorio con cama doble, mesa para dos y ventanas al río",
+          "ja": "ダブルベッドと2人用テーブルがあり、窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1727_NEN_Meroe-II_017-smallest.jpg",
+        "cabin": "luxury_room",
+        "alt": {
+          "en": "A white room with two single beds and windows onto palm trees",
+          "es": "Habitación blanca con dos camas individuales y ventanas con vistas a palmeras",
+          "ja": "シングルベッド2台があり、窓からヤシの木が見える白い部屋"
+        }
+      }
+    ],
+    "malouka": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/Malouka_Panoramic_1372.jpg",
+        "alt": {
+          "en": "A bedroom with a double bed, a table for two and windows on three sides looking onto the river",
+          "es": "Dormitorio con cama doble, mesa para dos y ventanas en tres lados que dan al río",
+          "ja": "ダブルベッドと2人用テーブルがあり、三方の窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1505_NEN_00441.jpg",
+        "alt": {
+          "en": "Glasses of a red fruit drink on a brass tray",
+          "es": "Vasos de una bebida de fruta roja en una bandeja de latón",
+          "ja": "真鍮のトレイに並ぶ赤いフルーツドリンクのグラス"
+        }
+      }
+    ],
+    "el-nil": [
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1505_NEN_ELNIL_Deck_29.jpg",
+        "alt": {
+          "en": "A shaded deck by the riverbank with striped cushioned benches, cane chairs and a chess table",
+          "es": "Cubierta a la sombra junto a la orilla, con bancos acolchados a rayas, sillas de mimbre y una mesa de ajedrez",
+          "ja": "川岸に面した日よけ付きデッキ。ストライプのクッション付きベンチ、籐椅子、チェステーブルがある"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1505_NEN_ELNIL_Salon_01.jpg",
+        "alt": {
+          "en": "A salon with red-and-white striped sofas, a fruit bowl and windows onto the river",
+          "es": "Salón con sofás a rayas rojas y blancas, un frutero y ventanas al río",
+          "ja": "赤と白のストライプのソファとフルーツ皿があり、窓から川が見えるサロン"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/NEN_Elnil_Luxury_311A.jpg",
+        "alt": {
+          "en": "Two single beds under framed pictures in a white room",
+          "es": "Dos camas individuales bajo cuadros enmarcados en una habitación blanca",
+          "ja": "額入りの絵の下に並ぶシングルベッド2台がある白い部屋"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/NEN_Landscapes_0098.jpg",
+        "alt": {
+          "en": "A small rowing boat on the Nile under a low sun, with palm trees on the far bank",
+          "es": "Una pequeña barca de remos en el Nilo con el sol bajo y palmeras en la otra orilla",
+          "ja": "低い太陽の下、ナイル川に浮かぶ小さな手漕ぎボート。対岸にはヤシの木"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/1505_NEN_ELNIL_Panorama_01.jpg",
+        "cabin": "panoramic_room",
+        "alt": {
+          "en": "A bedroom with a double bed and windows on three sides looking onto the river",
+          "es": "Dormitorio con cama doble y ventanas en tres lados que dan al río",
+          "ja": "ダブルベッドがあり、三方の窓から川が見える寝室"
+        }
+      },
+      {
+        "url": "https://www.nourelnil.com/wp-content/uploads/2015/04/3A-Luxury-Room.jpg",
+        "cabin": "room",
+        "alt": {
+          "en": "A white room with two single beds and windows onto the river",
+          "es": "Habitación blanca con dos camas individuales y ventanas al río",
+          "ja": "シングルベッド2台があり、窓から川が見える白い部屋"
+        }
+      }
+    ]
+  }
+}

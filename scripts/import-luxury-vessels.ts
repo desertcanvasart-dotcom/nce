@@ -1,7 +1,7 @@
 /**
  * Import the 14 luxury ships' content (docs/imports/luxury-vessels.json, from the November 2026 research file):
  * facts, English summary and description, cabin types and day-by-day itineraries. Another file in the same shape can
- * be named first, e.g. docs/imports/sample-vessels.json (the vessels pillar's sample dahabiya, ADR-106).
+ * be named first. (The vessels pillar's sample dahabiya, Malouka, now comes from the Nour El Nil fleet import, ADR-107.)
  *
  *   pnpm import:luxury-vessels                              dry run: checks the file, changes nothing
  *   pnpm import:luxury-vessels --apply --target=local       into the local Docker database

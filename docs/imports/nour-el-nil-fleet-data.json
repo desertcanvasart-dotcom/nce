@@ -1,0 +1,747 @@
+{
+  "meta": {
+    "dataset": "nour-el-nil-fleet",
+    "researched_on": "2026-11-03",
+    "language": "en",
+    "field_rule": "A null value or a field with status needs_confirmation must not be shown to visitors.",
+    "status_values": {
+      "confirmed": "Published consistently by the operator; safe to display",
+      "needs_confirmation": "Conflicting or incomplete; store it, but do not display it"
+    },
+    "updated_on": "2026-11-03",
+    "sources_added": [
+      "Nour El Nil email to Nilecruz, undated (regular season rates, cabin counts, dimensions)",
+      "Owner confirmations, 2026-11-03"
+    ]
+  },
+  "operator": {
+    "id": "nour-el-nil",
+    "name": "Nour El Nil",
+    "website": "https://www.nourelnil.com/",
+    "partner_status": "permission_confirmed",
+    "display_rule": "Owner confirms permission to feature each boat and use its photos. Host photos on Nilecruz; never hotlink. Do not imply the boats can be booked on Nilecruz."
+  },
+  "fleet_defaults": {
+    "vessel_type": "dahabiya",
+    "vessel_type_label": "Sailing dahabiya",
+    "propulsion": "wind",
+    "propulsion_label": "Wind",
+    "propulsion_support": {
+      "text": "Sails when the wind allows, with no engine on board. A towboat is used when needed.",
+      "status": "confirmed"
+    },
+    "booking_status": "information_only",
+    "indicative_price": null,
+    "evaluation": null,
+    "deck_plan": null,
+    "gallery": [],
+    "category_path": "/cruises/dahabiyas/",
+    "operating_season": {
+      "closed_months": [
+        6,
+        7,
+        8
+      ],
+      "note": "No sailings from June to August because of the heat."
+    },
+    "itineraries": [
+      {
+        "id": "ESN-ASW-5",
+        "from": "Esna",
+        "to": "Aswan",
+        "direction": "upstream",
+        "direction_label": "Upstream, sailing south",
+        "nights": 5,
+        "days": 6,
+        "reverse_available": false,
+        "boarding_note": "The operator collects guests from Luxor city hotels, usually between 09:00 and 09:30, for the drive to Esna. Airport pickup is not part of the standard transfer.",
+        "stops": [
+          "Esna",
+          "El Kab",
+          "Edfu",
+          "Gebel Silsileh",
+          "Kom Ombo",
+          "Aswan"
+        ],
+        "programme": [
+          {
+            "day": 1,
+            "place": "Esna",
+            "title": "Esna",
+            "text": "Board in Esna, then walk to the Temple of Khnum and through the town."
+          },
+          {
+            "day": 2,
+            "place": "El Kab and Edfu",
+            "title": "El Kab and Edfu",
+            "text": "Visit the El Kab necropolis, then the Temple of Horus at Edfu."
+          },
+          {
+            "day": 3,
+            "place": "On the Nile",
+            "title": "A day on the river",
+            "text": "Take an optional morning walk, then sail. There's time for a riverbank stop, a swim and a desert walk."
+          },
+          {
+            "day": 4,
+            "place": "Gebel Silsileh",
+            "title": "Gebel Silsileh",
+            "text": "Visit the Temple of Horemheb and the sandstone quarries, then sail on with a riverbank stop. Large cruise ships don't stop here."
+          },
+          {
+            "day": 5,
+            "place": "Kom Ombo",
+            "title": "Kom Ombo",
+            "text": "Visit the temple and the Crocodile Museum."
+          },
+          {
+            "day": 6,
+            "place": "Aswan",
+            "title": "Disembarkation in Aswan",
+            "text": "Leave the boat in the morning near Aswan Bridge, where the authorities require dahabiyas to spend the final night."
+          }
+        ]
+      }
+    ],
+    "inclusions": {
+      "status": "confirmed",
+      "included": [
+        "Transfer from a Luxor hotel to Esna",
+        "Entry to the five sites visited",
+        "Official Egyptian guide, in your language if available",
+        "All meals and snacks",
+        "Non-alcoholic drinks",
+        "Transfer to a hotel on the Aswan mainland"
+      ],
+      "not_included": [
+        "Beer, wine and spirits",
+        "Transfers to or from the airport"
+      ],
+      "needs_confirmation": {
+        "crew_and_guide_gratuities": "The operator's email lists gratuities as not included, while its help pages say they are included. Do not show either way."
+      }
+    },
+    "on_board": {
+      "air_conditioning": "24-hour air conditioning, powered mainly by solar panels and batteries, with backup support",
+      "fans": "A fan in every room",
+      "wifi": "Wi-Fi uses mobile coverage along the route and works about 70% of the time. It suits messages, email and light browsing, not streaming or video calls.",
+      "laundry": "No formal laundry service, but the crew can wash everyday clothing at no charge and air-dry it.",
+      "food": "Mainly Egyptian cooking with ingredients bought along the river, often served on deck.",
+      "dietary": "Vegetarian options are available. Gluten-free, dairy-free and other requests can be arranged in advance.",
+      "facilities_reported": {
+        "pool": true,
+        "hot_tub": true,
+        "spa": true,
+        "gym": true,
+        "balcony": true,
+        "status": "needs_confirmation",
+        "display": false,
+        "note": "Stated by the owner for all boats, but the operator's pages for El Nil and Najafa mention none of these. Do not display until checked with the operator."
+      },
+      "shared_spaces": [
+        "Top deck",
+        "Salon"
+      ]
+    },
+    "suitability": {
+      "children": "Children are welcome. No minimum age is published.",
+      "mobility": "Decks are connected by stairs and there's no elevator. Crew can help on board, but shore visits may involve uneven ground.",
+      "less_suited_to": "Travellers who need an elevator or reliable internet."
+    },
+    "charter": {
+      "available": true,
+      "text": "The whole boat can be privately chartered, with price depending on vessel and season."
+    },
+    "operator_rate_model": {
+      "basis": "per_room_per_cruise",
+      "occupancy": "double, except Deluxe Suites (up to 4 guests)",
+      "currency": "EUR",
+      "nights": 5,
+      "season": "regular",
+      "display": false,
+      "note": "Rates are regular season. High Season rates are not in this dataset. Do not convert to per night."
+    },
+    "operator_terms": {
+      "display": false,
+      "deposit": "25% non-refundable",
+      "balance_due": "At least 60 days before departure",
+      "cancellation": "More than 60 days out generally gives a rebooking credit; within 60 days, payments are forfeited.",
+      "single_occupancy": "Generally 75% of the double-occupancy price in September and May, on eligible standard or Luxury Rooms, excluding High Season and panoramic or family categories.",
+      "early_departure": "Leaving early does not reduce the price.",
+      "payment": "Priced in euros and can be settled in USD. Visa, Mastercard and bank transfer are accepted. Individual payments above EUR 12,500 must be by bank transfer."
+    },
+    "shared_sources": {
+      "fleet_comparison": "https://nourelnil.zendesk.com/hc/en-us/articles/360030122212-What-is-the-difference-between-each-of-your-dahabiyas",
+      "availability": "https://www.nourelnil.com/search/",
+      "inclusions": "https://nourelnil.zendesk.com/hc/en-us/articles/360030638331-What-is-included-in-the-cruise",
+      "tipping": "https://nourelnil.zendesk.com/hc/en-us/articles/360030638011-How-much-gratuity-should-I-tip-the-crew-and-guide",
+      "direction": "https://nourelnil.zendesk.com/hc/en-us/articles/39473212438669-Does-Nour-El-Nil-Offer-Cruises-from-Aswan-to-Luxor",
+      "logistics": "https://nourelnil.zendesk.com/hc/en-us/articles/39508705061645-Can-you-provide-me-more-information-about-the-cruise",
+      "air_conditioning": "https://nourelnil.zendesk.com/hc/en-us/articles/360030306792-Is-air-conditioning-available-on-the-cruise",
+      "wifi": "https://nourelnil.zendesk.com/hc/en-us/articles/360030638211-Is-WiFi-available-on-the-cruise",
+      "food": "https://nourelnil.zendesk.com/hc/en-us/articles/39508904358029-Can-you-give-me-more-information-about-the-food-and-meals-offered-on-board",
+      "accessibility": "https://nourelnil.zendesk.com/hc/en-us/articles/34209571305997-Is-the-cruise-well-suited-for-those-with-mobility-concerns",
+      "children": "https://nourelnil.zendesk.com/hc/en-us/articles/360030306592-Are-children-allowed-on-board-the-cruise",
+      "laundry": "https://nourelnil.zendesk.com/hc/en-us/articles/9059953234189-Is-there-laundry-service-available",
+      "charter": "https://nourelnil.zendesk.com/hc/en-us/articles/360030638311-Can-I-privatize-charter-the-cruise",
+      "pricing": "https://nourelnil.zendesk.com/hc/en-us/articles/360032798352-How-much-does-the-cruise-cost",
+      "deluxe_suites": "https://nourelnil.zendesk.com/hc/en-us/articles/39620266600845-Can-you-provide-more-information-about-the-Deluxe-Suites",
+      "bed_configurations": "https://nourelnil.zendesk.com/hc/en-us/articles/39555250672141-What-bed-configurations-are-possible",
+      "operator_email": "Provided by owner; not a public URL"
+    },
+    "fleet_from_price_stated": {
+      "amount": 900,
+      "currency": "EUR",
+      "basis": "per person, per trip",
+      "status": "needs_confirmation",
+      "display": false,
+      "note": "Stated by the owner. The operator's lowest regular-season bookable rate is EUR 3,550 per double room, or EUR 1,775 per person, so do not display until reconciled."
+    },
+    "route_note": "The cruise does not visit Luxor or Aswan sights, because the operator avoids the busy ports. Book those tours before or after.",
+    "ends": "Saturday or Sunday morning, near Aswan Bridge, depending on the start day"
+  },
+  "cabin_type_defaults": {
+    "panoramic_suite": {
+      "name": "Panoramic Suite",
+      "max_guests": 2,
+      "beds": [
+        "1 king"
+      ],
+      "feature": "Floor-to-ceiling windows"
+    },
+    "panoramic_room": {
+      "name": "Panoramic Room",
+      "max_guests": 2,
+      "beds": [
+        "1 king"
+      ],
+      "feature": "Floor-to-ceiling windows"
+    },
+    "deluxe_suite": {
+      "name": "Deluxe Suite",
+      "max_guests": 4,
+      "rooms_per_unit": 2,
+      "bathrooms": 2,
+      "beds": [
+        "2 king",
+        "4 twin",
+        "1 king + 2 twin"
+      ],
+      "feature": "Sold as one unit. Set up as two bedrooms, or one bedroom with a private salon. No rollaway beds."
+    },
+    "luxury_room": {
+      "name": "Luxury Room",
+      "max_guests": 2,
+      "beds": [
+        "2 twin",
+        "1 king"
+      ]
+    },
+    "room": {
+      "name": "Room",
+      "max_guests": 2,
+      "beds": [
+        "2 twin",
+        "1 king"
+      ]
+    }
+  },
+  "vessels": [
+    {
+      "id": "dendera",
+      "slug": "nour-el-nil-dendera",
+      "name": "Dendera",
+      "display_name": "Dendera, by Nour El Nil",
+      "publish": true,
+      "built_year": 2026,
+      "guest_capacity": {
+        "value": 20,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "52 × 8.2",
+        "listing": "52 × 8.2",
+        "boat_page": "52 × 8.2",
+        "status": "confirmed"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed",
+        "note": "Owner-confirmed. November booking results showed Tuesdays, and the operator's email omits Dendera."
+      },
+      "summary": "Nour El Nil's newest dahabiya, built in 2026, with generous decks and panoramic suites that have 180-degree river views.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 24.5,
+          "count": null,
+          "extra": "180-degree Nile view"
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 15.85,
+          "count": null
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats/dendera/",
+      "rates_status": "missing",
+      "cabin_count_status": "missing",
+      "indicative_price": null
+    },
+    {
+      "id": "najafa",
+      "slug": "nour-el-nil-najafa",
+      "name": "Najafa",
+      "display_name": "Najafa, by Nour El Nil",
+      "publish": true,
+      "built_year": 2025,
+      "guest_capacity": {
+        "value": 24,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "60 × 8.5",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "60 × 8.5"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed"
+      },
+      "summary": "A 2025 dahabiya with spacious cabins and generous decks. Its Panoramic and Deluxe Suites are the largest of their kind in the fleet.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 28.0,
+          "count": 2,
+          "rate_eur_regular_season": 9500
+        },
+        {
+          "type": "deluxe_suite",
+          "area_m2": 34.7,
+          "count": 2,
+          "rate_eur_regular_season": 12500
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 17.35,
+          "count": 6,
+          "rate_eur_regular_season": 6750
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats/najafa/",
+      "indicative_price": {
+        "amount": 3375.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "poppee",
+      "slug": "nour-el-nil-poppee",
+      "name": "Poppee",
+      "display_name": "Poppee, by Nour El Nil",
+      "publish": true,
+      "built_year": 2024,
+      "guest_capacity": {
+        "value": 24,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "60 × 8",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "60 × 8"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed"
+      },
+      "summary": "An airy 2024 dahabiya with wide decks, Deluxe Suites for families or friends, and Panoramic Suites with broad river views.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 25.9,
+          "count": 2,
+          "rate_eur_regular_season": 9000
+        },
+        {
+          "type": "deluxe_suite",
+          "area_m2": 34.35,
+          "count": 2,
+          "rate_eur_regular_season": 12000
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 17.15,
+          "count": 6,
+          "rate_eur_regular_season": 6500
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats/poppee/",
+      "indicative_price": {
+        "amount": 3250.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "roman",
+      "slug": "nour-el-nil-roman",
+      "name": "Roman",
+      "display_name": "Roman, by Nour El Nil",
+      "publish": true,
+      "built_year": 2023,
+      "guest_capacity": {
+        "value": 24,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "60 × 8",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "59 × 9"
+      },
+      "departure_day": {
+        "value": "Tuesday",
+        "status": "confirmed"
+      },
+      "summary": "A contemporary 2023 dahabiya with bright interiors, a broad deck and three cabin categories, including two-room Deluxe Suites.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 22.75,
+          "count": 2,
+          "rate_eur_regular_season": 8500
+        },
+        {
+          "type": "deluxe_suite",
+          "area_m2": 31.85,
+          "count": 2,
+          "rate_eur_regular_season": 11000
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 15.9,
+          "count": 6,
+          "rate_eur_regular_season": 6000
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-roman/",
+      "indicative_price": {
+        "amount": 3000.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "adelaide",
+      "slug": "nour-el-nil-adelaide",
+      "name": "Adelaïde",
+      "display_name": "Adelaïde, by Nour El Nil",
+      "publish": true,
+      "built_year": 2020,
+      "guest_capacity": {
+        "value": 24,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "55 × 8",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "55 × 8.5"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed"
+      },
+      "summary": "A modern 2020 dahabiya with flowing shared spaces, wide decks and a light interior.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 27.0,
+          "count": 2,
+          "rate_eur_regular_season": 7500
+        },
+        {
+          "type": "deluxe_suite",
+          "area_m2": 29.5,
+          "count": 2,
+          "rate_eur_regular_season": 9000
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 14.75,
+          "count": 6,
+          "rate_eur_regular_season": 5000
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-adelaide/",
+      "indicative_price": {
+        "amount": 2500.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "agatha",
+      "slug": "nour-el-nil-agatha",
+      "name": "Agatha",
+      "display_name": "Agatha, by Nour El Nil",
+      "publish": true,
+      "built_year": 2020,
+      "guest_capacity": {
+        "value": 20,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "52 × 8",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "51 × 8.25"
+      },
+      "departure_day": {
+        "value": "Tuesday",
+        "status": "confirmed"
+      },
+      "summary": "A 2020 dahabiya that pairs a traditional atmosphere with newer interiors, bright Panoramic Suites and generous deck space.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 24.0,
+          "count": 2,
+          "rate_eur_regular_season": 7500
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 15.85,
+          "count": 8,
+          "rate_eur_regular_season": 5000
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-agatha/",
+      "indicative_price": {
+        "amount": 2500.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "meroe",
+      "slug": "nour-el-nil-meroe",
+      "name": "Meroe",
+      "display_name": "Meroe, by Nour El Nil",
+      "publish": true,
+      "built_year": 2017,
+      "guest_capacity": {
+        "value": 20,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "52 × 8",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "55 × 8.5"
+      },
+      "departure_day": {
+        "value": "Tuesday",
+        "status": "confirmed"
+      },
+      "summary": "A 2017 dahabiya that sits between the fleet's older and newer boats, with larger cabins and a traditional atmosphere.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 25.25,
+          "count": 2,
+          "rate_eur_regular_season": 7000
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 15.5,
+          "count": 8,
+          "rate_eur_regular_season": 4500
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-meroe/",
+      "indicative_price": {
+        "amount": 2250.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "malouka",
+      "slug": "nour-el-nil-malouka",
+      "name": "Malouka",
+      "display_name": "Malouka, by Nour El Nil",
+      "publish": true,
+      "featured_on_vessels_page": true,
+      "built_year": 2008,
+      "guest_capacity": {
+        "value": 20,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "50 × 7.7",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "52 × 7.5"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed"
+      },
+      "summary": "A classic 2008 dahabiya with compact cabins and a personal, traditional atmosphere.",
+      "cabin_types": [
+        {
+          "type": "panoramic_suite",
+          "area_m2": 21.0,
+          "count": 2,
+          "rate_eur_regular_season": 6200
+        },
+        {
+          "type": "luxury_room",
+          "area_m2": 13.4,
+          "count": 8,
+          "rate_eur_regular_season": 4200
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-malouka/",
+      "indicative_price": {
+        "amount": 2100.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "el-nil",
+      "slug": "nour-el-nil-el-nil",
+      "name": "El Nil",
+      "display_name": "El Nil, by Nour El Nil",
+      "publish": true,
+      "built_year": 2006,
+      "guest_capacity": {
+        "value": 20,
+        "status": "confirmed"
+      },
+      "accommodation_units": {
+        "value": 10,
+        "status": "confirmed"
+      },
+      "dimensions_m": {
+        "display": "43 × 6.7",
+        "source": "operator_email",
+        "status": "confirmed",
+        "other_published": "45 × 7.5"
+      },
+      "departure_day": {
+        "value": "Monday",
+        "status": "confirmed"
+      },
+      "summary": "The most traditional boat in the fleet, built in 2006, with the smallest published rooms and an emphasis on simplicity and intimacy.",
+      "cabin_types": [
+        {
+          "type": "panoramic_room",
+          "area_m2": 14.0,
+          "count": 2,
+          "rate_eur_regular_season": 4500
+        },
+        {
+          "type": "room",
+          "area_m2": 11.4,
+          "count": 7,
+          "rate_eur_regular_season": 3550
+        },
+        {
+          "type": "privatization_cabin",
+          "name": "Cabin",
+          "count": 1,
+          "rate_eur_regular_season": 2500,
+          "area_m2": null,
+          "max_guests": 2,
+          "sale_rule": "Only when the whole boat is privately chartered",
+          "display": false
+        }
+      ],
+      "source_url": "https://www.nourelnil.com/boats-el-nil/",
+      "indicative_price": {
+        "amount": 1775.0,
+        "currency": "EUR",
+        "basis": "per person, per trip, sharing a double room",
+        "season": "regular",
+        "status": "indicative",
+        "source": "operator_email"
+      }
+    },
+    {
+      "id": "assouan",
+      "slug": "nour-el-nil-assouan",
+      "name": "Assouan",
+      "display_name": "Assouan, by Nour El Nil",
+      "publish": false,
+      "publish_block_reason": "Owner confirms it is not operating at present. Specifications are historical only.",
+      "built_year": 2005,
+      "historical_only": {
+        "accommodation_units": 8,
+        "guest_capacity": 16,
+        "crew": 12,
+        "source_url": "https://nourelnil.com/wp-content/uploads/magazines/Conde_Nast_Traveller_Nov_2006_sm.pdf"
+      },
+      "operating_status": "not_operating"
+    }
+  ]
+}

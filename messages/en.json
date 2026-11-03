@@ -223,6 +223,11 @@
       "deniedTitle": "This is for signed-in accounts",
       "deniedBody": "Sign in with an account that has access to see this.",
       "signIn": "Sign in"
+    },
+    "propulsion": {
+      "motor": "Motor",
+      "wind": "Wind",
+      "steam": "Steam"
     }
   },
   "account": {
@@ -460,15 +465,7 @@
       "Kom Ombo": "Kom Ombo",
       "Cairo": "Cairo"
     },
-    "weekdaysPlural": [
-      "Mondays",
-      "Tuesdays",
-      "Wednesdays",
-      "Thursdays",
-      "Fridays",
-      "Saturdays",
-      "Sundays"
-    ],
+    "weekdaysPlural": ["Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays", "Saturdays", "Sundays"],
     "listSep": ", ",
     "meta": {
       "title": "{name}: {nights}-night Nile cruises",
@@ -506,7 +503,8 @@
       "photoOf": "{name}: photo {n} of {total}",
       "prevPhoto": "Previous photo",
       "nextPhoto": "Next photo",
-      "closePhotos": "Close photos"
+      "closePhotos": "Close photos",
+      "fromTrip": "From {price} per person for the {n}-night cruise"
     },
     "verdict": {
       "title": "Is this the right boat for you?",
@@ -522,7 +520,8 @@
       "evaluation": "Evaluation",
       "onBoard": "On board",
       "dates": "Dates",
-      "faqs": "FAQs"
+      "faqs": "FAQs",
+      "goodToKnow": "Good to know"
     },
     "price": {
       "title": "Price and what’s included",
@@ -541,7 +540,8 @@
       "notIncluded": "Not included",
       "fallback": "Flights and <link>transfers</link> are booked separately.",
       "fallbackProgramme": "The itinerary shows the usual sightseeing programme, so check which guides, entry tickets and excursions your offer includes.",
-      "askIncluded": "Ask what’s included in my dates"
+      "askIncluded": "Ask what’s included in my dates",
+      "fromTrip": "From {price} per person for the {n}-night cruise, sharing a double room."
     },
     "itinerary": {
       "title": "The usual programme",
@@ -570,7 +570,8 @@
       "fees": "entrance fees included",
       "noFees": "entrance fees not included",
       "visiting": "visiting {sites}",
-      "programme": "With sightseeing: add Nilecruz’s <link>{name}</link> when you book, from {price} per person for two. It’s a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise."
+      "programme": "With sightseeing: add Nilecruz’s <link>{name}</link> when you book, from {price} per person for two. It’s a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise.",
+      "boarding": "Getting on board:"
     },
     "cabins": {
       "title": "Cabins and decks",
@@ -581,7 +582,8 @@
       "balcony": "Private balcony",
       "decks": "{n, plural, one {Deck {list}} other {Decks {list}}}",
       "show": "Show on the deck plan",
-      "shown": "Shown on the deck plan"
+      "shown": "Shown on the deck plan",
+      "sizeWithBath": "Area, including bathroom: {n, number} m²"
     },
     "deck": {
       "drawn": "Drawn by Nilecruz from {credit}’s deck plan. It shows where each cabin type and shared space is; your cabin number is assigned by the operator.",
@@ -683,7 +685,11 @@
         "sail": "What’s it like on a sailing dahabiya?",
         "steam": "What’s it like on a paddle steamer?"
       },
-      "mooring": "Where it moors"
+      "mooring": "Where it moors",
+      "sails": "How it sails",
+      "notes": "On board",
+      "size": "Length and beam: {size}",
+      "sizeValue": "{length} × {beam} m"
     },
     "dates": {
       "intro": "These are expected dates based on the operator’s usual weekly sailings. Choose a date to see the route and length, or ask us to check it.",
@@ -720,7 +726,8 @@
       "fromAbout": "From about {price} a night",
       "from": "From {price} per person",
       "bookable": "Bookable on Nilecruz",
-      "compareTypes": "Compare vessel types"
+      "compareTypes": "Compare vessel types",
+      "fromTrip": "From {price} per person for {n} nights"
     },
     "final": {
       "title": "Want a price for your dates?",
@@ -748,6 +755,9 @@
       "tooMany": "Too many requests from here. Please try again in a few minutes.",
       "invalid": "Please check: {fields}.",
       "back": "Back to {name}"
+    },
+    "goodToKnow": {
+      "title": "Good to know"
     }
   },
   "vesselsPillar": {
@@ -858,7 +868,8 @@
       "intro": "One example of each type. Prices are being prepared, so ask us about current rates and availability.",
       "cabins": "{count} cabins",
       "empty": "These vessels aren’t published yet.",
-      "more": "See all Nile cruises"
+      "more": "See all Nile cruises",
+      "size": "Length and beam: {length} × {beam} m"
     },
     "faqs": {
       "heading": "Questions",

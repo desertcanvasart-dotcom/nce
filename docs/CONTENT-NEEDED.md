@@ -28,12 +28,14 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 2 | Confirm the wording of the 28 evaluation criteria (the 7 weights are adopted) | Must | Q12, ADR-070 |
 | 14, 36 | Vessel and destination photos with publishing rights and credits | Can follow | Illustrated scenes until then; no stock photos (ADR-096) |
 | 31 | Facts for the 14 name-only vessel drafts, or confirmation they're dropped | Can follow | ADR-060 |
-| 51 | Nour El Nil's permission for Nilecruz to feature Malouka and its photos | Can follow | ADR-106. Until then Malouka is a factual card with no operator photo, and no partnership is implied |
+| 51 | ~~Nour El Nil's permission for Nilecruz to feature Malouka and its photos~~ | Done | Confirmed by the owner, 3 Nov 2026 (ADR-107): the whole fleet is imported with its photos |
 | 52 | Verified price ranges per vessel type | Can follow | ADR-106. The comparison says "Varies by vessel, cabin and season" until then (`priceRange` in `src/content/vessel-types.ts`) |
 | 53 | Paddle steamers: typical nights and guest counts; SS Sudan's cabin count (24, older listings say 23); SS Karim's current sailings | Can follow | ADR-106. Guests show "Varies by vessel" |
-| 54 | Malouka's length (the operator gives 50 m × 7.7 m and 52 m × 7.5 m) | Can follow | ADR-106. No length is shown |
+| 54 | ~~Malouka's length (the operator gives 50 m × 7.7 m and 52 m × 7.5 m)~~ | Done | ADR-107: 50 × 7.7 m, from the operator's email, which matches its fleet listing |
 | 55 | Approval of the vessels page's share image (the site's own three boat drawings) and one licensed photo per vessel type | Can follow | ADR-106. `public/images/og/vessels.png`; the type cards keep their drawings until photos are licensed |
 | 43 | Which vessels already sell with sightseeing included (admins approve each one) | Can follow | ADR-102. None approved yet |
+| 56 | What drives each vessel already in the catalogue (motor, wind or steam), from the operator | Must, for each vessel shown | ADR-107. Only Royal Lily (motor) and SS Misr, SS Sudan and SS Karim (steam) are set; the rest show no badge. List: `docs/imports/propulsion-unconfirmed.md` |
+| 57 | Nour El Nil, held back until you confirm: the facilities (pool, hot tub, spa, gym, balcony), gratuities, the €900 fleet price, Dendera's cabin counts and rates, numbered deck plans | Can follow | ADR-107. Stored in `docs/imports/nour-el-nil-fleet-data.json`, not shown. Malouka's page also uses Meroe photos and Dendera's and Poppee's use "Napata" photos: those were left out |
 
 ## Pages and copy
 
@@ -62,6 +64,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 |---|---|---|---|
 | 17, 28 | A native-speaker review of the Spanish and Japanese interface text (`messages/es.json`, `messages/ja.json`), then page translations | Must, for ES/JA pages to be indexed | I18N-005, ADR-032. Only the cancellation wording is approved |
 | 44 | A review of the Spanish and Japanese keyword drafts (`docs/drafts/keywords-es-ja.xlsx`) | With 17 | I18N-012. Not checked against search volumes |
+| 58 | A review of the Spanish and Japanese text for the Nour El Nil fleet: summaries, inclusions, programme, cabins, life on board, good to know and photo alt text | With 17 | ADR-107. `docs/imports/nour-el-nil-fleet-i18n.json`, drafted by Claude and marked `needs_human_review`; re-run `pnpm import:fleet` after edits |
 
 ## Accounts and settings (yours to create)
 

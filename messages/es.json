@@ -224,6 +224,11 @@
       "deniedTitle": "Esto es para cuentas con sesión iniciada",
       "deniedBody": "Inicie sesión con una cuenta que tenga acceso para verlo.",
       "signIn": "Iniciar sesión"
+    },
+    "propulsion": {
+      "motor": "Motor",
+      "wind": "Viento",
+      "steam": "Vapor"
     }
   },
   "account": {
@@ -461,15 +466,7 @@
       "Kom Ombo": "Kom Ombo",
       "Cairo": "El Cairo"
     },
-    "weekdaysPlural": [
-      "los lunes",
-      "los martes",
-      "los miércoles",
-      "los jueves",
-      "los viernes",
-      "los sábados",
-      "los domingos"
-    ],
+    "weekdaysPlural": ["los lunes", "los martes", "los miércoles", "los jueves", "los viernes", "los sábados", "los domingos"],
     "listSep": ", ",
     "meta": {
       "title": "{name}: cruceros por el Nilo de {nights} noches",
@@ -507,7 +504,8 @@
       "photoOf": "{name}: foto {n} de {total}",
       "prevPhoto": "Foto anterior",
       "nextPhoto": "Foto siguiente",
-      "closePhotos": "Cerrar las fotos"
+      "closePhotos": "Cerrar las fotos",
+      "fromTrip": "Desde {price} por persona por el crucero de {n} noches"
     },
     "verdict": {
       "title": "¿Es el barco adecuado para ti?",
@@ -523,7 +521,8 @@
       "evaluation": "Evaluación",
       "onBoard": "A bordo",
       "dates": "Fechas",
-      "faqs": "Preguntas"
+      "faqs": "Preguntas",
+      "goodToKnow": "Conviene saber"
     },
     "price": {
       "title": "Precio y qué incluye",
@@ -542,7 +541,8 @@
       "notIncluded": "No incluido",
       "fallback": "Los vuelos y los <link>traslados</link> se reservan aparte.",
       "fallbackProgramme": "El itinerario muestra el programa de visitas habitual, así que comprueba qué guías, entradas y excursiones incluye tu oferta.",
-      "askIncluded": "Pregunta qué incluye en mis fechas"
+      "askIncluded": "Pregunta qué incluye en mis fechas",
+      "fromTrip": "Desde {price} por persona por el crucero de {n} noches, en habitación doble compartida."
     },
     "itinerary": {
       "title": "El programa habitual",
@@ -571,7 +571,8 @@
       "fees": "entradas incluidas",
       "noFees": "entradas no incluidas",
       "visiting": "con visitas a {sites}",
-      "programme": "Con visitas: añade el <link>{name}</link> de Nilecruz al reservar, desde {price} por persona para dos. Es una reserva aparte con Nilecruz, con guía egiptólogo y entradas, que se paga junto con el crucero."
+      "programme": "Con visitas: añade el <link>{name}</link> de Nilecruz al reservar, desde {price} por persona para dos. Es una reserva aparte con Nilecruz, con guía egiptólogo y entradas, que se paga junto con el crucero.",
+      "boarding": "Cómo embarcar:"
     },
     "cabins": {
       "title": "Camarotes y cubiertas",
@@ -582,7 +583,8 @@
       "balcony": "Balcón privado",
       "decks": "{n, plural, one {Cubierta {list}} other {Cubiertas {list}}}",
       "show": "Ver en el plano",
-      "shown": "Marcado en el plano"
+      "shown": "Marcado en el plano",
+      "sizeWithBath": "Superficie, baño incluido: {n, number} m²"
     },
     "deck": {
       "drawn": "Dibujado por Nilecruz a partir del plano de cubiertas de {credit}. Muestra dónde está cada tipo de camarote y cada espacio común; la naviera asigna el número de tu camarote.",
@@ -684,7 +686,11 @@
         "sail": "¿Cómo es una dahabiya de vela?",
         "steam": "¿Cómo es un barco de vapor de ruedas?"
       },
-      "mooring": "Dónde amarra"
+      "mooring": "Dónde amarra",
+      "sails": "Cómo navega",
+      "notes": "A bordo",
+      "size": "Eslora y manga: {size}",
+      "sizeValue": "{length} × {beam} m"
     },
     "dates": {
       "intro": "Son fechas previstas según las salidas semanales habituales de la naviera. Elige una fecha para ver la ruta y la duración, o pídenos que la comprobemos.",
@@ -721,7 +727,8 @@
       "fromAbout": "Desde unos {price} por noche",
       "from": "Desde {price} por persona",
       "bookable": "Se puede reservar en Nilecruz",
-      "compareTypes": "Compara los tipos de barco"
+      "compareTypes": "Compara los tipos de barco",
+      "fromTrip": "Desde {price} por persona por {n} noches"
     },
     "final": {
       "title": "¿Quieres un precio para tus fechas?",
@@ -749,6 +756,9 @@
       "tooMany": "Demasiadas solicitudes desde aquí. Inténtalo de nuevo en unos minutos.",
       "invalid": "Revisa: {fields}.",
       "back": "Volver al {name}"
+    },
+    "goodToKnow": {
+      "title": "Conviene saber"
     }
   },
   "vesselsPillar": {
@@ -859,7 +869,8 @@
       "intro": "Un ejemplo de cada tipo. Estamos preparando los precios, así que pregúntenos por las tarifas y la disponibilidad actuales.",
       "cabins": "{count} camarotes",
       "empty": "Estas embarcaciones aún no están publicadas.",
-      "more": "Ver todos los cruceros por el Nilo"
+      "more": "Ver todos los cruceros por el Nilo",
+      "size": "Eslora y manga: {length} × {beam} m"
     },
     "faqs": {
       "heading": "Preguntas",

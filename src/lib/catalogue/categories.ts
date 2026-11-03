@@ -34,3 +34,6 @@ export const BEST_FOR = [
 export type BestFor = (typeof BEST_FOR)[number]["value"];
 
 export const VESSEL_TYPE_LABEL = { sail: "Sailing dahabiya", motor: "Motor cruise ship", steam: "Paddle steamer" } as const;
+
+/** What drives a vessel; required, set from what the operator confirms, never guessed from the name or "MS"/"SS". */
+export const PROPULSION_LABEL = { motor: "Motor", wind: "Wind (sails only)", steam: "Steam" } as const;

@@ -5,7 +5,7 @@ import { Badge } from "@/components/ds/Badge/Badge";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Notice, Section, Select, TextArea, ui } from "@/components/dashboard/ui";
 import { CairoTime } from "@/components/shell/CairoTime";
-import { BEST_FOR, CATEGORIES, VESSEL_TYPE_LABEL } from "@/lib/catalogue/categories";
+import { BEST_FOR, CATEGORIES, PROPULSION_LABEL, VESSEL_TYPE_LABEL } from "@/lib/catalogue/categories";
 import { DIETARY_OPTIONS } from "@/lib/catalogue/dining";
 import { MOORING, SHARED_SPACES } from "@/lib/catalogue/mooring";
 import { VERDICTS } from "@/lib/evaluation/method";
@@ -175,6 +175,15 @@ export default async function VesselEditor({ params, searchParams }: Props) {
                 options={Object.entries(VESSEL_TYPE_LABEL).map(([value, label]) => ({ value, label }))}
               />
               <Select
+                label="Propulsion"
+                name="propulsion"
+                required
+                placeholder="Not confirmed"
+                defaultValue={v.propulsion}
+                options={Object.entries(PROPULSION_LABEL).map(([value, label]) => ({ value, label }))}
+                hint="As the operator confirms it. Never guess from the name or an MS or SS prefix."
+              />
+              <Select
                 label="Category"
                 name="category"
                 placeholder="Not set"
@@ -222,6 +231,10 @@ export default async function VesselEditor({ params, searchParams }: Props) {
           </ActionForm>
         ) : (
           <dl className={ui.grid}>
+            <div>
+              <dt className={ui.label}>Propulsion</dt>
+              <dd>{v.propulsion ? PROPULSION_LABEL[v.propulsion] : "Not confirmed"}</dd>
+            </div>
             <div>
               <dt className={ui.label}>Category</dt>
               <dd>{CATEGORIES.find((c) => c.value === v.category)?.label ?? "Not set"}</dd>

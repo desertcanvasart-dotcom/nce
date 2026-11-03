@@ -54,6 +54,7 @@ const page = (over: Partial<VesselPage> = {}): VesselPage => ({
   slug: "s",
   name: "Sample Ship",
   type: "motor",
+  propulsion: null,
   category: null,
   maxGuests: 60,
   cabinCount: 30,
@@ -146,6 +147,16 @@ describe("the indicative price (a guide, never a quote)", () => {
   it("totals an itinerary from the nightly guide and its nights", () => {
     expect(indicativeTotal(price, 3)).toEqual({ amount: 90000, currency: "USD" });
     expect(indicativeTotal(price, 4)).toEqual({ amount: 120000, currency: "USD" });
+  });
+  it("never turns a per-trip guide into a nightly figure, and gives it only for its own length", () => {
+    const trip = {
+      perTrip: { amount: 337500, currency: "EUR" },
+      nights: 5,
+      basis: "per_person_per_trip",
+      status: "indicative",
+    } as const;
+    expect(indicativeTotal(trip, 5)).toEqual({ amount: 337500, currency: "EUR" });
+    expect(indicativeTotal(trip, 4)).toBeNull();
   });
   it("lists each length once, shortest first", () => {
     expect(nightsOf([itin("L4", 4), itin("A3", 3), itin("X4", 4)])).toEqual([3, 4]);

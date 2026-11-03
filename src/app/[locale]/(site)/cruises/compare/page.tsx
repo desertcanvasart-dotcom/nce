@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
+import { Badge } from "@/components/ds/Badge/Badge";
 import { formatMoney } from "@/components/ds/lib/format";
+import { propulsionIcon } from "@/components/ds/lib/types";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/marketplace/marketplace.module.css";
 import { Link } from "@/i18n/navigation";
@@ -15,6 +17,7 @@ type Props = {
 };
 
 const TYPE = { sail: "Dahabiya", motor: "Motor ship", steam: "Paddle steamer" } as const;
+const PROPULSION = { motor: "Motor", wind: "Wind", steam: "Steam" } as const;
 
 // A comparison is a visitor's own selection: never indexed (SEO-016).
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -73,7 +76,7 @@ export default async function Compare({ params, searchParams }: Props) {
                 <td />
                 {picked.map((v) => (
                   <th key={v.slug} scope="col">
-                    <Link href={`/cruises/${v.slug}/`}>{v.name}</Link>
+                    <Link href={`/cruises/${v.slug}/`}>{v.displayName ?? v.name}</Link>
                     {v.sample ? <small> · Sample data</small> : null}
                   </th>
                 ))}
@@ -81,6 +84,9 @@ export default async function Compare({ params, searchParams }: Props) {
             </thead>
             <tbody>
               {row("Type", (v) => TYPE[v.type])}
+              {row("Propulsion", (v) =>
+                v.propulsion ? <Badge icon={propulsionIcon[v.propulsion]}>{PROPULSION[v.propulsion]}</Badge> : "Not confirmed",
+              )}
               {row("Guests on board, at most", (v) => v.maxGuests ?? "Not given")}
               {row("Cabins", (v) => v.cabinCount ?? "Not given")}
               {row("Decks", (v) => v.deckCount ?? "Not given")}

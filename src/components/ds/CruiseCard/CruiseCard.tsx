@@ -4,7 +4,7 @@ import { Link } from "@/i18n/navigation";
 import { Badge, type BadgeProps } from "../Badge/Badge";
 import { Icon, type IconName } from "../Icon/Icon";
 import { formatMoney, formatNights } from "../lib/format";
-import { vesselIcon, type Money, type SceneTime, type VesselType } from "../lib/types";
+import { propulsionIcon, vesselIcon, type Money, type Propulsion, type SceneTime, type VesselType } from "../lib/types";
 import { Media, type MediaProps } from "../Media/Media";
 import { Rating } from "../Rating/Rating";
 import { CompareToggle, SaveButton } from "./CardToggles";
@@ -15,6 +15,8 @@ export type CruiseCardProps = {
   /** Vessel page for this sailing. */
   href: string;
   vessel: VesselType;
+  /** What drives it (motor, wind or steam), when its data says: a badge with an icon and a word. */
+  propulsion?: Propulsion;
   /** Stops in order. */
   route?: string[];
   nights?: number;
@@ -67,6 +69,7 @@ export function CruiseCard(p: CruiseCardProps) {
         <p className={styles.eyebrow}>
           <Icon name={vesselIcon[p.vessel]} />
           {t(`vesselTypes.${p.vessel}`)}
+          {p.propulsion ? <Badge icon={propulsionIcon[p.propulsion]}>{t(`propulsion.${p.propulsion}`)}</Badge> : null}
         </p>
         <h3 className={styles.title} id={id}>
           <Link href={p.href} className={styles.titleLink}>

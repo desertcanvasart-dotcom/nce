@@ -6,7 +6,7 @@ _Carried over verbatim from `vendor/design-system/components/CruiseCard/README.m
 
 A listing card for one sailing: scene or photo, vessel type, name, route, nights, guests, rating, amenity icons, price per person, save and compare.
 
-Provide `name`, `vessel` (`sail`/`motor`/`steam`), `route` (array of stops), `nights`, `guests` (max on board, which is the honest size signal), `rating`, `reviews`, `price`, `amenities` (icon names), `badges`, `image` or `time`, and the callbacks `onSave` and `onCompare`.
+Provide `name`, `vessel` (`sail`/`motor`/`steam`), `propulsion` (`motor`/`wind`/`steam`, from the vessel's data: a badge with an icon and a word), `route` (array of stops), `nights`, `guests` (max on board, which is the honest size signal), `rating`, `reviews`, `price`, `amenities` (icon names), `badges`, `image` or `time`, and the callbacks `onSave` and `onCompare`.
 
 - Always show the guest count: it explains most of the price.
 - Show five amenity icons or fewer, the ones that differ.
