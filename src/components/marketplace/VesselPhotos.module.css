@@ -166,6 +166,15 @@
   }
 }
 
+/* In the vessel page's hero: a 3:2 lead photo beside the name and price, the strip of four always under it. */
+.hero .lead {
+  aspect-ratio: 3 / 2;
+}
+
+.hero .strip {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 @media (prefers-reduced-motion: reduce) {
   .frame:hover .media img {
     transform: none;
