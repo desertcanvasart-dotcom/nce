@@ -1,6 +1,7 @@
 /**
  * Import the 14 luxury ships' content (docs/imports/luxury-vessels.json, from the November 2026 research file):
- * facts, English summary and description, cabin types and day-by-day itineraries.
+ * facts, English summary and description, cabin types and day-by-day itineraries. Another file in the same shape can
+ * be named first, e.g. docs/imports/sample-vessels.json (the vessels pillar's sample dahabiya, ADR-106).
  *
  *   pnpm import:luxury-vessels                              dry run: checks the file, changes nothing
  *   pnpm import:luxury-vessels --apply --target=local       into the local Docker database
@@ -54,8 +55,11 @@ type Vessel = {
   rename_from?: string;
   create?: boolean;
   name: string;
-  type: "motor" | "sail";
+  type: "motor" | "sail" | "steam";
+  /** Defaults to luxury (the research file's ships); null leaves a ship unrated. */
+  category?: "luxury" | null;
   cabin_count: number;
+  max_guests?: number;
   year_built?: number;
   shared_spaces: string[];
   summary: string;
@@ -159,8 +163,9 @@ function reportOf(v: Vessel, e: Row | undefined): string {
   const facts: [string, unknown, unknown][] = [
     ["name", e.name, v.name],
     ["type", e.type, v.type],
-    ["category", e.category, "luxury"],
+    ["category", e.category, v.category === undefined ? "luxury" : v.category],
     ["cabins", e.cabin_count, v.cabin_count],
+    ["guests", e.max_guests, v.max_guests ?? e.max_guests],
     ["year built", e.year_built, v.year_built ?? e.year_built],
   ];
   for (const [k, now, next] of facts) if (now !== next) lines.push(`${k}: ${String(now ?? "–")} → ${String(next)}`);
@@ -228,8 +233,9 @@ async function run() {
         .update({
           name: v.name,
           type: v.type,
-          category: "luxury",
+          category: v.category === undefined ? "luxury" : v.category,
           cabin_count: v.cabin_count,
+          ...(v.max_guests ? { max_guests: v.max_guests } : {}),
           shared_spaces: [...new Set([...row.shared_spaces, ...(v.shared_spaces as typeof row.shared_spaces)])],
           ...(v.year_built ? { year_built: v.year_built } : {}),
         })

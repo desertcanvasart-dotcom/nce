@@ -22,6 +22,8 @@ type PageMeta = {
   title: string;
   description?: string;
   noindex?: boolean;
+  /** The picture shown when the page is shared (path under the site, or absolute), with its size and alt text. */
+  image?: { url: string; width: number; height: number; alt: string };
 };
 
 /** SEO-007: each language the page is complete in, both ways, and x-default (English). */
@@ -37,7 +39,7 @@ export function hreflangAlternates(path: string, list?: Parameters<typeof transl
  * hreflang (SEO-007). Indexing is off unless ALLOW_INDEXING=true. A Spanish or Japanese page that isn't translated yet
  * (Batch 10) shows English, so it isn't indexed and its canonical is the English page.
  */
-export function pageMetadata({ locale, path, title, description, noindex }: PageMeta): Metadata {
+export function pageMetadata({ locale, path, title, description, noindex, image }: PageMeta): Metadata {
   const translated = isTranslated(path, locale);
   const index = indexingAllowed && !noindex && translated;
   const self = absoluteUrl(locale, path);
@@ -48,6 +50,7 @@ export function pageMetadata({ locale, path, title, description, noindex }: Page
       ? { canonical: self, languages: noindex ? undefined : hreflangAlternates(path) }
       : { canonical: absoluteUrl(routing.defaultLocale, path) },
     robots: index ? { index: true, follow: true } : { index: false, follow: !noindex },
-    openGraph: { title, description, url: self, siteName: "Nilecruz", locale },
+    openGraph: { title, description, url: self, siteName: "Nilecruz", locale, ...(image ? { images: [image] } : {}) },
+    ...(image ? { twitter: { card: "summary_large_image", title, description, images: [image] } } : {}),
   };
 }

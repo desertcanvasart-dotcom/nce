@@ -256,3 +256,59 @@
     position: static;
   }
 }
+
+.meterCell {
+  display: grid;
+  grid-template-columns: minmax(0, 120px) 32px;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.meterCell > b {
+  color: var(--ink-muted);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+}
+
+.note {
+  margin: var(--space-3) 0 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+/* Phones: each row becomes its label and the three types under it, so nothing scrolls sideways. */
+@media (max-width: 640px) {
+  .tr {
+    grid-template-columns: 1fr;
+    padding: var(--space-2) 0;
+  }
+
+  .head {
+    display: none;
+  }
+
+  .tr > span {
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .tr > span[role="rowheader"] {
+    color: var(--ink);
+    font-weight: var(--type-label-weight);
+  }
+
+  .tr > span[data-label] {
+    display: grid;
+    grid-template-columns: 9.5em 1fr;
+    gap: var(--space-3);
+  }
+
+  .tr > span[data-label]::before {
+    content: attr(data-label);
+    color: var(--ink-muted);
+    font-size: var(--type-caption-size);
+  }
+
+  .tr > span.meterCell {
+    grid-template-columns: 9.5em minmax(0, 120px) 32px;
+  }
+}

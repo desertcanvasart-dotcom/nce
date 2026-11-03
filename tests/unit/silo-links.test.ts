@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DRAFT_PAGES } from "@/content/pages";
 import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
 import { ROUTE_STOPS } from "@/content/routes";
-import { profileWithStats } from "@/content/vessel-types";
+import { vesselProfile } from "@/content/vessel-types";
 import { houseStyleProblems, splitUp, toSections } from "@/lib/content/editorial";
 import { applySearch, parseSearch, type ListingVessel } from "@/lib/marketplace/listing";
 import { faqJsonLd, webApplicationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
@@ -105,14 +105,37 @@ describe("the drafted pages (ADR-096)", () => {
   });
 });
 
-describe("maintained data (DATA-009)", () => {
-  it("shows the catalogue's guest and cabin ranges, or says they vary", () => {
-    const p = profileWithStats("sail", { vessels: 251, guests: [12, 20], cabins: [6, 10] });
-    expect(p.rows.guests).toBe("12–20");
-    expect(p.rows.cabins).toBe("6–10");
-    expect(p.facts[0]).toEqual(["users", "12–20 guests"]);
-    expect(profileWithStats("steam", undefined).rows.guests).toBe("Varies by vessel");
-    expect(p.sample).toBe(false);
+describe("maintained data (DATA-009, ADR-106)", () => {
+  it("gives each type its general cabin and guest range, and no price until there are verified ranges", () => {
+    const sail = vesselProfile("sail");
+    expect(sail.rows.cabins).toBe("4–10");
+    expect(sail.rows.guests).toBe("About 8–20");
+    expect(sail.facts.map(([, f]) => f)).toEqual([
+      "4–10 cabins",
+      "About 8–20 guests",
+      "Ideally 5 nights, Esna to Aswan",
+      "Mostly riverbanks and islands",
+    ]);
+    expect(vesselProfile("motor").rows.cabins).toBe("Up to 72");
+    expect(vesselProfile("steam").rows.guests).toBe("Varies by vessel");
+    for (const t of ["sail", "motor", "steam"] as const) {
+      const p = vesselProfile(t);
+      expect(p.rows.price).toBe("Varies by vessel, cabin and season");
+      expect(JSON.stringify(p)).not.toMatch(/Guests vary by vessel|6–8|six to ten|away from other boats|current prices/);
+      expect(p.sample).toBe(false);
+    }
+  });
+
+  it("has the same facts and scores in Spanish and Japanese", () => {
+    for (const t of ["sail", "motor", "steam"] as const) {
+      for (const l of ["es", "ja"] as const) {
+        const p = vesselProfile(t, l);
+        expect(p.meters).toEqual(vesselProfile(t).meters);
+        expect(p.name).not.toBe(vesselProfile(t).name);
+        expect(p.facts).toHaveLength(4);
+      }
+    }
+    expect(vesselProfile("sail", "es").rows.cabins).toBe("4–10");
   });
 });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type KeyboardEvent } from "react";
+import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "../Button/Button";
 import { Icon, type IconName } from "../Icon/Icon";
@@ -14,6 +14,10 @@ export type VesselCompareProps = {
   /** In display order; usually sail, motor, steam. */
   profiles: VesselProfile[];
   defaultType?: VesselType;
+  /** Open with all types side by side (the server-rendered HTML then carries every type's figures). */
+  defaultAll?: boolean;
+  /** A line under the scores, e.g. what they compare and a link to the method. */
+  note?: ReactNode;
 };
 
 const ROWS: [IconName, keyof VesselProfile["rows"]][] = [
@@ -28,15 +32,29 @@ const ROWS: [IconName, keyof VesselProfile["rows"]][] = [
 ];
 const METERS: (keyof VesselProfile["meters"])[] = ["intimacy", "quiet", "freeItinerary", "facilities", "heritage"];
 
+/** One 1–5 meter, announced by name. */
+function Meter({ label, value }: { label: string; value: number }) {
+  return (
+    <>
+      <span className={styles.cells} role="meter" aria-valuemin={0} aria-valuemax={5} aria-valuenow={value} aria-label={label}>
+        {[1, 2, 3, 4, 5].map((i) => (
+          <i key={i} className={i <= value ? styles.cellOn : undefined} style={{ transitionDelay: `${i * 40}ms` }} />
+        ))}
+      </span>
+      <b>{value}/5</b>
+    </>
+  );
+}
+
 /**
  * Comparison of the vessel types (COMP-VesselCompare): tabs with an illustration, five meters and a fact list,
- * or all side by side. Arrow keys move between tabs (A11Y-009). Meters show character, not quality.
+ * or all side by side, meters included. Arrow keys move between tabs (A11Y-009). Meters show character, not quality.
  */
-export function VesselCompare({ profiles, defaultType }: VesselCompareProps) {
+export function VesselCompare({ profiles, defaultType, defaultAll, note }: VesselCompareProps) {
   const t = useTranslations("ds.vesselCompare");
   const id = useId();
   const [cur, setCur] = useState<VesselType>(defaultType ?? profiles[0]?.type ?? "sail");
-  const [all, setAll] = useState(false);
+  const [all, setAll] = useState(defaultAll ?? false);
   const tabs = useRef<Record<string, HTMLButtonElement | null>>({});
   const v = profiles.find((p) => p.type === cur) ?? profiles[0];
   if (!v) return null;
@@ -93,30 +111,43 @@ export function VesselCompare({ profiles, defaultType }: VesselCompareProps) {
         </div>
       </div>
       {all ? (
-        <div className={styles.table} role="table" aria-label={t("tableLabel")}>
-          <div role="row" className={`${styles.tr} ${styles.head}`}>
-            <span role="columnheader" />
-            {profiles.map((p) => (
-              <span key={p.type} role="columnheader">
-                <VesselArt type={p.type} decorative className={styles.mini} />
-                {p.name}
-              </span>
-            ))}
-          </div>
-          {ROWS.map(([icon, key]) => (
-            <div role="row" key={key} className={styles.tr}>
-              <span role="rowheader">
-                <Icon name={icon} />
-                {t(`rows.${key}`)}
-              </span>
+        <>
+          <div className={styles.table} role="table" aria-label={t("tableLabel")}>
+            <div role="row" className={`${styles.tr} ${styles.head}`}>
+              <span role="columnheader" />
               {profiles.map((p) => (
-                <span key={p.type} role="cell">
-                  {p.rows[key]}
+                <span key={p.type} role="columnheader">
+                  <VesselArt type={p.type} decorative className={styles.mini} />
+                  {p.name}
                 </span>
               ))}
             </div>
-          ))}
-        </div>
+            {ROWS.map(([icon, key]) => (
+              <div role="row" key={key} className={styles.tr}>
+                <span role="rowheader">
+                  <Icon name={icon} />
+                  {t(`rows.${key}`)}
+                </span>
+                {profiles.map((p) => (
+                  <span key={p.type} role="cell" data-label={p.name}>
+                    {p.rows[key]}
+                  </span>
+                ))}
+              </div>
+            ))}
+            {METERS.map((m) => (
+              <div role="row" key={m} className={styles.tr}>
+                <span role="rowheader">{t(`meters.${m}`)}</span>
+                {profiles.map((p) => (
+                  <span key={p.type} role="cell" data-label={p.name} className={styles.meterCell}>
+                    <Meter label={`${p.name}: ${t(`meters.${m}`)}`} value={p.meters[m]} />
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+          {note ? <p className={styles.note}>{note}</p> : null}
+        </>
       ) : (
         <div className={styles.one} role="tabpanel" id={`${id}-panel`} aria-labelledby={`${id}-tab-${v.type}`} key={v.type}>
           <div className={styles.stage}>
@@ -130,26 +161,11 @@ export function VesselCompare({ profiles, defaultType }: VesselCompareProps) {
               {METERS.map((m) => (
                 <div className={styles.meter} key={m}>
                   <span>{t(`meters.${m}`)}</span>
-                  <span
-                    className={styles.cells}
-                    role="meter"
-                    aria-valuemin={0}
-                    aria-valuemax={5}
-                    aria-valuenow={v.meters[m]}
-                    aria-label={t(`meters.${m}`)}
-                  >
-                    {[1, 2, 3, 4, 5].map((i) => (
-                      <i
-                        key={i}
-                        className={i <= v.meters[m] ? styles.cellOn : undefined}
-                        style={{ transitionDelay: `${i * 40}ms` }}
-                      />
-                    ))}
-                  </span>
-                  <b>{v.meters[m]}/5</b>
+                  <Meter label={t(`meters.${m}`)} value={v.meters[m]} />
                 </div>
               ))}
             </div>
+            {note ? <p className={styles.note}>{note}</p> : null}
             <dl className={styles.dl}>
               {ROWS.map(([icon, key]) => (
                 <div key={key} className={styles.dlRow}>
