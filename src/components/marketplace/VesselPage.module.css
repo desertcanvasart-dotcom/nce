@@ -243,6 +243,7 @@
   display: flex;
   gap: var(--space-3);
   align-items: center;
+
   /* Never wider than the page: its links scroll inside it instead. */
   min-width: 0;
   height: var(--bar);
