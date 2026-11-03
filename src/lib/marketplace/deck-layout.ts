@@ -71,6 +71,13 @@ export function decksOf(layout: DeckLayout, code: string): string[] {
   return layout.decks.filter((d) => d.areas.some((a) => a.cabin === code)).map((d) => d.name);
 }
 
+/** How much of the plan a cabin type covers (a side of the corridor counts half): the biggest gets the lightest shade. */
+export function cabinShare(layout: DeckLayout, code: string): number {
+  let total = 0;
+  for (const d of layout.decks) for (const a of d.areas) if (a.cabin === code) total += (a.to - a.from) * (a.side ? 0.5 : 1);
+  return total;
+}
+
 /** What a deck holds, in words, stern to bow and without repeats: the drawing's text alternative. */
 export function deckSummary(deck: DeckLayout["decks"][number], cabinName: (code: string) => string | undefined): string[] {
   const seen = new Set<string>();
