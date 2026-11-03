@@ -66,7 +66,8 @@ test("the deck view with the keyboard only: deck, cabin type, its details [EXP-0
   await page.keyboard.press("Tab");
   await expect(cabins.getByRole("button", { name: "Double" })).toBeFocused();
   await page.keyboard.press("Enter");
-  await expect(cabins.getByRole("heading", { name: "Double" })).toBeVisible();
+  // In the deck view's panel (the cabin card above the decks has the same name).
+  await expect(cabins.getByRole("tabpanel").getByRole("heading", { name: "Double" })).toBeVisible();
   await expect(cabins.getByText("sleeps 2", { exact: true })).toBeVisible();
   await page.keyboard.press("Shift+Tab");
   await page.keyboard.press("Home");
