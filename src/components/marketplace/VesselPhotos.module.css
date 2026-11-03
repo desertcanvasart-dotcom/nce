@@ -112,11 +112,19 @@
   object-fit: contain;
 }
 
+/* The caption centred under the photo, the count below it. */
 .big figcaption {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-3);
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  max-width: var(--measure);
+  margin: 0 auto;
   font-size: var(--type-caption-size);
+  text-align: center;
+}
+
+.big figcaption span {
+  color: color-mix(in srgb, var(--ivory) 70%, transparent);
 }
 
 .controls {
