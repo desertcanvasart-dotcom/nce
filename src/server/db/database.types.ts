@@ -4347,6 +4347,7 @@ export type Database = {
       vessel_translations: {
         Row: {
           description: string | null;
+          dining: string | null;
           locale: string;
           summary: string | null;
           updated_at: string;
@@ -4354,6 +4355,7 @@ export type Database = {
         };
         Insert: {
           description?: string | null;
+          dining?: string | null;
           locale: string;
           summary?: string | null;
           updated_at?: string;
@@ -4361,6 +4363,7 @@ export type Database = {
         };
         Update: {
           description?: string | null;
+          dining?: string | null;
           locale?: string;
           summary?: string | null;
           updated_at?: string;
@@ -4383,6 +4386,7 @@ export type Database = {
           category: Database["public"]["Enums"]["vessel_category"] | null;
           created_at: string;
           deck_count: number | null;
+          dietary_options: string[];
           gratuity_usd_minor: number | null;
           id: string;
           is_sample: boolean;
@@ -4410,6 +4414,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
+          dietary_options?: string[];
           gratuity_usd_minor?: number | null;
           id?: string;
           is_sample?: boolean;
@@ -4437,6 +4442,7 @@ export type Database = {
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
+          dietary_options?: string[];
           gratuity_usd_minor?: number | null;
           id?: string;
           is_sample?: boolean;

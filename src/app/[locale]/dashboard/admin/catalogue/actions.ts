@@ -12,6 +12,7 @@ import { vesselForEditor } from "@/server/catalogue/queries";
 import { getDb } from "@/server/db";
 import {
   descriptionsInput,
+  diningInput,
   externalRatingInput,
   newVesselInput,
   photoEditInput,
@@ -60,7 +61,7 @@ export async function createVessel(_prev: ActionState, fd: FormData): Promise<Ac
 
 export async function saveDetails(id: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
   await requireAdmin([...CATALOGUE], editor(id));
-  const input = vesselDetailsInput.safeParse(formObject(fd, ["best_for", "shared_spaces"]));
+  const input = vesselDetailsInput.safeParse(formObject(fd, ["best_for", "shared_spaces", "dietary_options"]));
   if (!input.success) {
     return problemsFrom(input.error, {
       name: "Name",
@@ -74,6 +75,7 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
       best_for: "Best for",
       mooring: "Mooring",
       shared_spaces: "Shared spaces",
+      dietary_options: "Diets catered for",
       operator_org_id: "Operator",
     });
   }
@@ -98,6 +100,7 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
       best_for: d.best_for as ("families" | "value")[],
       mooring: d.mooring,
       shared_spaces: d.shared_spaces,
+      dietary_options: d.dietary_options,
       operator_org_id: d.operator_org_id,
     })
     .eq("id", id);
@@ -123,6 +126,24 @@ export async function saveDescriptions(id: string, _prev: ActionState, fd: FormD
   revalidatePath(editor(id));
   revalidateCatalogue();
   return saved("Descriptions saved. Spanish or Japanese left empty fall back to English on the site.");
+}
+
+/** Food on board, in each language; transfers and other paid extras belong elsewhere. */
+export async function saveDining(id: string, _prev: ActionState, fd: FormData): Promise<ActionState> {
+  await requireAdmin([...TEXTS], editor(id));
+  const input = diningInput.safeParse(formObject(fd));
+  if (!input.success) return problemsFrom(input.error, { dining_en: "English", dining_es: "Spanish", dining_ja: "Japanese" });
+  const db = await getDb();
+  const rows = (["en", "es", "ja"] as const).map((locale) => ({
+    vessel_id: id,
+    locale,
+    dining: input.data[`dining_${locale}`],
+  }));
+  const { error } = await db.from("vessel_translations").upsert(rows, { onConflict: "vessel_id,locale" });
+  if (error) return dbProblem(error);
+  revalidatePath(editor(id));
+  revalidateCatalogue();
+  return saved("Food and dining saved. Spanish or Japanese left empty fall back to English on the site.");
 }
 
 const IMAGE_TYPES: Record<string, string> = {

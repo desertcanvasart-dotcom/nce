@@ -105,7 +105,7 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     db
       .from("vessels")
       .select(
-        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))",
+        "id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description, dining), media(storage_path, width, height, sort_order, cabin_type_id, media_translations(locale, alt)), evaluations(overall_score, verdict, assessed_on, evaluator, dimension_results, published_at), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))",
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -176,6 +176,8 @@ async function loadVessel(slug: string): Promise<VesselPage | null> {
     showcase: v.visibility === "showcase",
     summary: en?.summary ?? null,
     description: en?.description ?? null,
+    dining: en?.dining ?? null,
+    dietaryOptions: v.dietary_options,
     gratuityUsdMinor: v.gratuity_usd_minor === null ? null : Number(v.gratuity_usd_minor),
     photos,
     cabins: v.cabin_types
