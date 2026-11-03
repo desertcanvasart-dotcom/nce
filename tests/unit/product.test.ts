@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isoWeekday, returnDate, sailingDates } from "@/lib/product/departures";
+import { isoWeekday, returnDate, sailingDates, sailsBy } from "@/lib/product/departures";
 import {
   hoursText,
   ageOn,
@@ -47,6 +47,16 @@ describe("departures (DASH-ADM-051)", () => {
   it("returns after the number of nights, across month ends", () => {
     expect(returnDate("2026-10-29", 4)).toBe("2026-11-02");
     expect(returnDate("2028-02-27", 3)).toBe("2028-03-01");
+  });
+});
+
+describe("schedules that sail only on specific dates", () => {
+  it("are the ones without weekdays", () => {
+    expect(sailsBy([])).toBe("dates");
+    expect(sailsBy([1, 5])).toBe("weekly");
+  });
+  it("plan no dates from their periods, so creating departures adds none", () => {
+    expect(sailingDates([], [{ starts_on: "2026-11-01", ends_on: "2027-03-31" }], "2026-11-03", "2027-12-31")).toEqual([]);
   });
 });
 

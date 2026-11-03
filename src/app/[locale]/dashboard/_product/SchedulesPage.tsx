@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input, Section, Select, ui } from "@/components/dashboard/ui";
-import { WEEKDAYS } from "@/lib/product/departures";
+import { SAILS_BY, sailsBy, WEEKDAYS } from "@/lib/product/departures";
 import { SAILING_PERIODS, whenText, type SailingPeriod } from "@/lib/product/sailing-time";
 import { requireProductEditor } from "@/server/product/guard";
 import { schedulesOf } from "@/server/product/queries";
@@ -9,7 +9,8 @@ import { saveSchedule } from "./actions";
 import { productPaths } from "./paths";
 import { SalesControls } from "./SalesControls";
 
-const days = (xs: number[]) => xs.map((d) => WEEKDAYS.find((w) => w.value === d)?.label.slice(0, 3)).join(", ");
+const days = (xs: number[]) =>
+  xs.length ? `sails ${xs.map((d) => WEEKDAYS.find((w) => w.value === d)?.label.slice(0, 3)).join(", ")}` : "specific dates only";
 
 /** DASH-ADM-051, 052: a vessel can have several directional schedules. */
 export async function SchedulesPage({ orgId, vesselId }: { orgId: string | null; vesselId: string }) {
@@ -31,7 +32,7 @@ export async function SchedulesPage({ orgId, vesselId }: { orgId: string | null;
                   {s.origin} → {s.destination}, {s.nights} nights
                 </Link>{" "}
                 <span className={ui.muted}>
-                  ({s.code} · sails {days(s.sailing_days)}
+                  ({s.code} · {days(s.sailing_days)}
                   {s.sailing_period ? ` ${whenText(s.sailing_period, s.sails_at)}` : ""} ·{" "}
                   {(s.departures as unknown as { count: number }[])[0]?.count ?? 0} departures
                   {s.active ? "" : " · inactive"})
@@ -101,8 +102,16 @@ export function ScheduleFields({
           hint="Cairo time, HH:MM, for example 08:00."
         />
       </div>
+      <Select
+        label="How it sails"
+        name="sails_by"
+        options={SAILS_BY}
+        defaultValue={value ? sailsBy(value.sailing_days) : "weekly"}
+        hint="Specific dates: for ships with a published list of sailings. You add each date on the schedule's page."
+      />
       <Checkboxes
         legend="Sailing days"
+        hint="Every week, inside the operating periods. Ignored for specific dates only."
         name="sailing_days"
         options={WEEKDAYS.map((w) => ({ value: String(w.value), label: w.label }))}
         checked={(value?.sailing_days ?? []).map(String)}

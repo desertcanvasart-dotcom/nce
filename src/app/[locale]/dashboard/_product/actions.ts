@@ -14,6 +14,7 @@ import { getDb } from "@/server/db";
 import type { Json } from "@/server/db/database.types";
 import { requireProductEditor } from "@/server/product/guard";
 import { layoutProblems } from "@/lib/marketplace/deck-layout-schema";
+import { dateWindow, returnDate } from "@/lib/product/departures";
 import { productPaths } from "./paths";
 import { periodOf, type SailingPeriod } from "@/lib/product/sailing-time";
 import { revalidateCatalogue } from "@/server/marketplace/revalidate";
@@ -322,19 +323,26 @@ export async function saveDeckLayout(
 }
 
 // ── Schedules, periods, itinerary, departures (DASH-ADM-051, 052) ───────────────────────────────────────
-const scheduleInput = z.object({
-  code,
-  origin: z.string().trim().min(1, "required").max(80),
-  destination: z.string().trim().min(1, "required").max(80),
-  nights: z.coerce.number().int().min(1, "1 to 21").max(21, "1 to 21"),
-  sailing_days: z.array(z.coerce.number().int().min(1).max(7)).min(1, "choose at least one day"),
-  active: z
-    .string()
-    .optional()
-    .transform((v) => v === "yes"),
-  sailing_period: z.enum(["", "morning", "noon", "evening"]).optional(),
-  sails_at: z.string().trim().max(5).optional(),
-});
+const scheduleInput = z
+  .object({
+    code,
+    origin: z.string().trim().min(1, "required").max(80),
+    destination: z.string().trim().min(1, "required").max(80),
+    nights: z.coerce.number().int().min(1, "1 to 21").max(21, "1 to 21"),
+    // "dates": it sails only on specific dates, added one by one; it keeps no weekdays.
+    sails_by: z.enum(["weekly", "dates"]).default("weekly"),
+    sailing_days: z.array(z.coerce.number().int().min(1).max(7)),
+    active: z
+      .string()
+      .optional()
+      .transform((v) => v === "yes"),
+    sailing_period: z.enum(["", "morning", "noon", "evening"]).optional(),
+    sails_at: z.string().trim().max(5).optional(),
+  })
+  .refine((d) => d.sails_by === "dates" || d.sailing_days.length > 0, {
+    path: ["sailing_days"],
+    message: "choose at least one day, or “Only on specific dates”",
+  });
 
 export async function saveSchedule(
   orgId: string | null,
@@ -375,7 +383,7 @@ export async function saveSchedule(
     origin: d.origin,
     destination: d.destination,
     nights: d.nights,
-    sailing_days: d.sailing_days,
+    sailing_days: d.sails_by === "dates" ? [] : d.sailing_days,
     active: scheduleId ? d.active : true,
   };
   const res = scheduleId
@@ -425,6 +433,33 @@ export async function removePeriod(
   revalidatePath(p.schedule(scheduleId));
   revalidateCatalogue();
   return saved("Period removed. Departures already created stay until you cancel them.");
+}
+
+/** A single sailing date: the sailings of a dates-only schedule, or an extra date outside a weekly pattern. */
+export async function addSailingDate(
+  orgId: string | null,
+  vesselId: string,
+  scheduleId: string,
+  _prev: ActionState,
+  fd: FormData,
+): Promise<ActionState> {
+  const p = productPaths(orgId, vesselId);
+  await requireProductEditor(vesselId, p.schedule(scheduleId), { orgId: orgId ?? undefined });
+  const r = z.object({ departs_on: isoDate }).safeParse(formObject(fd));
+  if (!r.success) return problemsFrom(r.error, { departs_on: "Date" });
+  const date = r.data.departs_on;
+  if (date <= dateWindow(0).today) return failed("Choose a date after today.");
+  const db = await getDb();
+  const { data: s } = await db.from("schedules").select("nights").eq("id", scheduleId).eq("vessel_id", vesselId).maybeSingle();
+  if (!s) return failed("This schedule no longer exists.");
+  const { error } = await db
+    .from("departures")
+    .insert({ schedule_id: scheduleId, vessel_id: vesselId, departs_on: date, returns_on: returnDate(date, s.nights) });
+  if (error?.code === "23505") return failed(`${date} is already a sailing date of this schedule.`);
+  if (error) return dbProblem(error);
+  revalidatePath(p.schedule(scheduleId));
+  revalidateCatalogue();
+  return saved(`Sailing on ${date} added.`);
 }
 
 export async function saveItineraryDay(
