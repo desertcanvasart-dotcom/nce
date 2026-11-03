@@ -188,7 +188,8 @@
   font-size: var(--type-label-size);
 }
 
-@media (max-width: 720px) {
+/* Until the hero has two columns (1024px), the price and the main action follow a shorter photo. */
+@media (max-width: 1023px) {
   .hero .lead {
     aspect-ratio: 16 / 9;
   }
