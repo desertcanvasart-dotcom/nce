@@ -7,7 +7,8 @@ import { requireProductEditor } from "@/server/product/guard";
 import { cabinTypes } from "@/server/product/queries";
 import type { CancellationBand } from "@/lib/tours/tours";
 import { getDb } from "@/server/db";
-import { saveCabin, saveGratuity, savePolicy } from "./actions";
+import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
+import { removeDeckPlanFile, saveCabin, saveDeckLayout, saveGratuity, savePolicy, uploadDeckPlan } from "./actions";
 import { productPaths } from "./paths";
 
 export const DECKS = ["Lower", "Middle", "Upper"];
@@ -24,7 +25,7 @@ export async function CabinsPage({
   preset?: string;
 }) {
   const p = productPaths(orgId, vesselId);
-  const { vessel } = await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
+  const { vessel, asAdmin } = await requireProductEditor(vesselId, p.cabins, { orgId: orgId ?? undefined });
   const cabins = await cabinTypes(vesselId);
   const db = await getDb();
   const { data: policy } = await db
@@ -37,6 +38,16 @@ export async function CabinsPage({
   const bands = chosen?.bands ?? (policy?.bands as CancellationBand[] | undefined) ?? [];
   const policyText = (l: "en" | "es" | "ja") =>
     chosen ? chosen[l] : (policy?.cancellation_policy_translations.find((t) => t.locale === l)?.terms ?? "");
+  const { data: plan } = await db
+    .from("deck_plans")
+    .select("layout, source_path, source_name, source_bytes, credit")
+    .eq("vessel_id", vesselId)
+    .maybeSingle();
+  const drawing = plan ? parseLayout(plan.layout) : null;
+  const file = plan?.source_path
+    ? (await db.storage.from("deck-plans").createSignedUrl(plan.source_path, 600, { download: plan.source_name ?? true })).data
+        ?.signedUrl
+    : null;
   const suggested = suggestedPolicy(vessel.name);
   const decks = [...new Set(cabins.map((c) => c.deck))];
   return (
@@ -45,6 +56,66 @@ export async function CabinsPage({
         <Link href={p.back}>← Back</Link>
       </p>
       <h1 className={ui.pageTitle}>Cabins and decks · {vessel.name}</h1>
+
+      <Section title="Deck plan" id="deck-plan">
+        <p className={ui.muted}>
+          Upload the operator’s deck plan. Nilecruz redraws it in the site’s style on the vessel page, showing where each cabin
+          type and shared space is, and travellers can download the original.
+        </p>
+        <p>
+          {drawing
+            ? `Drawn by Nilecruz: ${drawing.decks.length} decks (${drawing.decks.map((d) => d.name).join(", ")}).`
+            : "Not drawn yet: until it is, the vessel page lists the cabin types by deck."}
+        </p>
+        {plan?.source_path ? (
+          <div className={ui.actions}>
+            <span>
+              {file ? <a href={file}>{plan.source_name}</a> : plan.source_name}
+              {plan.credit ? ` · ${plan.credit}` : ""}
+            </span>
+            <ActionForm action={removeDeckPlanFile.bind(null, orgId, vesselId)} submit="Remove file" variant="ghost" />
+          </div>
+        ) : null}
+        <ActionForm
+          action={uploadDeckPlan.bind(null, orgId, vesselId)}
+          submit={plan?.source_path ? "Replace file" : "Upload deck plan"}
+          variant="outline"
+          encType="multipart/form-data"
+          resetOnSuccess
+        >
+          <div className={ui.field}>
+            <label className={ui.label} htmlFor="plan">
+              Deck plan (PDF, JPEG, PNG or WebP, up to 15 MB)
+            </label>
+            <input id="plan" name="plan" type="file" accept="application/pdf,image/jpeg,image/png,image/webp" required />
+          </div>
+          <Input
+            label="Whose plan it is"
+            name="credit"
+            required
+            maxLength={120}
+            defaultValue={plan?.credit ?? ""}
+            hint="Shown beside the download, for example “Mövenpick”."
+          />
+          <Checkboxes
+            legend="Rights"
+            name="rights"
+            options={[{ value: "yes", label: "We have the right to publish this deck plan" }]}
+            checked={[]}
+          />
+        </ActionForm>
+        {asAdmin ? (
+          <ActionForm action={saveDeckLayout.bind(null, orgId, vesselId)} submit="Save drawing" variant="ghost">
+            <TextArea
+              label="Drawing (Nilecruz only)"
+              name="layout"
+              rows={8}
+              defaultValue={drawing ? JSON.stringify(drawing, null, 2) : ""}
+              hint="Decks top first; each area from stern 0 to bow 100, a cabin code or a space. Empty removes the drawing."
+            />
+          </ActionForm>
+        ) : null}
+      </Section>
 
       <Section title="Crew gratuity" id="gratuity">
         <p className={ui.muted}>

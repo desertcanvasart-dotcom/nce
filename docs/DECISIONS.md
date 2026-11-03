@@ -829,3 +829,12 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - **The 09:00 digest** also lists holds Nilecruz placed that end that day.
   - **The public operators page keeps six ways:** freesale sits with allotments.
 - **Not built:** the standalone vessel system and Vessel Desk; an append-only inventory history; webhooks for travel partners; converting an admin hold into a booking.
+
+### ADR-104 Deck plans redrawn by Nilecruz, with the operator's original to download (Accepted; Islam 3 Nov 2026)
+- **Context:** EXP-002 left "real deck plan images" for 9-2b. Operators' deck plans differ in style, are often low resolution, and number every cabin, which DASH-BND-003 rules out.
+- **Decision:**
+  - Nilecruz **redraws** each vessel's decks in the site's own style (`deck_plans.layout`): decks from top to bottom, each a set of areas from stern to bow, marked by **cabin type** or **shared space**. Choosing a cabin type highlights it on every deck. Day and night colours come from the palette.
+  - **Cabin numbers are never drawn.** The drawing says it is Nilecruz's, from the operator's plan, and that the operator assigns the cabin. DASH-BND-003 still holds: no screen implies a numbered cabin is chosen.
+  - The operator's **original** (PDF or image) can be downloaded under the drawing, credited. Operators and catalogue admins upload or remove it; only Nilecruz admins edit the drawing.
+  - Vessels without a drawing keep the deck-by-deck cabin list.
+- **Decided while building:** a malformed drawing is ignored rather than breaking the page; the reserve page keeps the cabin list, because there the cabin choice sits beside the booking form.

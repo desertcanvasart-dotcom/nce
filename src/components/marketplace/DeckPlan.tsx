@@ -1,10 +1,11 @@
-import type { BookingMode, VesselCabin } from "@/lib/marketplace/vessel";
+import type { BookingMode, VesselCabin, VesselPage } from "@/lib/marketplace/vessel";
+import { DeckLayoutView } from "./DeckLayoutView";
 import { DeckView } from "./DeckView";
 import styles from "./marketplace.module.css";
 
 /**
  * DASH-CUS-016, 017, DASH-BND-002, 003: the vessel's decks and the cabin types on each (EXP-002), or a plain note when
- * the vessel has no structured cabin types yet.
+ * the vessel has no structured cabin types yet. With a drawn deck plan (9-2b), Nilecruz's drawing and the original.
  */
 export function DeckPlan(props: {
   cabins: VesselCabin[];
@@ -12,6 +13,7 @@ export function DeckPlan(props: {
   sharedSpaces: string[];
   modes?: Record<string, BookingMode>;
   chooseInForm?: boolean;
+  plan?: VesselPage["deckPlan"];
 }) {
   if (!props.cabins.length)
     return (
@@ -20,5 +22,28 @@ export function DeckPlan(props: {
         cabin is like.
       </p>
     );
-  return <DeckView {...props} />;
+  const { plan, ...rest } = props;
+  if (plan?.layout && !props.modes)
+    return (
+      <DeckLayoutView
+        layout={plan.layout}
+        original={plan.original}
+        cabins={props.cabins}
+        maxGuests={props.maxGuests}
+        sharedSpaces={props.sharedSpaces}
+      />
+    );
+  return (
+    <>
+      <DeckView {...rest} />
+      {plan?.original ? (
+        <p>
+          <a href={plan.original.url} download={plan.original.name}>
+            Download the official deck plan
+          </a>
+          {plan.original.credit ? ` (${plan.original.credit})` : null}
+        </p>
+      ) : null}
+    </>
+  );
 }
