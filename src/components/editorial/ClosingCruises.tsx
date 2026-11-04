@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/navigation";
 import { ListingGrid } from "@/components/marketplace/ListingGrid";
 import type { VesselType } from "@/components/ds/lib/types";
+import { featuredFirst } from "@/content/vessel-types";
 import { facetBySlug, sortListing, toCard, type ListingVessel } from "@/lib/marketplace/listing";
 import type { Link as SiloLink } from "@/lib/seo/links";
 import styles from "./editorial.module.css";
@@ -22,7 +23,8 @@ export function ClosingCruises({
   title?: string;
 }) {
   const facet = facetBySlug(listing.href.replace(/^\/cruises\/|\/$/g, ""));
-  const fits = sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type)));
+  // Each type's featured vessel leads (Steam Ship Sudan for paddle steamers), then the listing's own order.
+  const fits = featuredFirst(sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type))));
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
       <h2 id="closing-cruises">{title ?? "Cruises you can book"}</h2>

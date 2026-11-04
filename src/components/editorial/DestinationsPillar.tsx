@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import { featuredFirst } from "@/content/vessel-types";
 import { Button } from "@/components/ds/Button/Button";
 import { Icon, type IconName } from "@/components/ds/Icon/Icon";
 import { Media } from "@/components/ds/Media/Media";
@@ -84,7 +85,7 @@ export async function DestinationsPillar({
   // One published cruise of each kind that calls at stops on this page, never a Lake Nasser route; bookable first.
   const calls = (v: ListingVessel) =>
     itinerariesOf(v, places).some((it) => !onLakeNasser(it) && river.some((s) => callsAt(it, s)));
-  const examples = TYPES.map((type) => sortListing(all.filter((v) => v.type === type && calls(v)))[0]).filter(
+  const examples = TYPES.map((type) => featuredFirst(sortListing(all.filter((v) => v.type === type && calls(v))))[0]).filter(
     (v): v is ListingVessel => !!v,
   );
 

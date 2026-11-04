@@ -111,8 +111,13 @@ function reportOf(v: VesselPlan, e: Row | undefined): string {
       ? `guide price ${v.indicative.currency} ${v.indicative.amountMinor / 100} per person for ${v.indicative.nights} nights`
       : "no price shown",
     `${v.cabins.filter((c) => c.active).length} cabin types shown${v.cabins.some((c) => !c.active) ? `, ${v.cabins.filter((c) => !c.active).length} hidden` : ""}`,
-    v.itinerary
-      ? `${v.itinerary.code}: ${v.itinerary.sailingDays.length ? `weekly, ${v.itinerary.periods.map((p) => `${p.starts_on}–${p.ends_on}`).join(", ")}` : "no dates (departure day not confirmed)"}`
+    v.itineraries.length
+      ? v.itineraries
+          .map(
+            (it) =>
+              `${it.code}: ${it.sailingDays.length ? `weekly, ${it.periods.map((p) => `${p.starts_on}–${p.ends_on}`).join(", ")}` : "no dates (departure day not confirmed)"}`,
+          )
+          .join("; ")
       : "no itinerary",
     `${v.photos.length} photos (${v.photos.filter((p) => p.cabin).length} on cabin cards)`,
   ];
@@ -220,9 +225,9 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
       `${v.slug}: cabin texts`,
     );
 
-  // The itinerary: its weekly day inside the open months, its days and boarding note in each language.
-  if (v.itinerary) {
-    const it = v.itinerary;
+  // Each itinerary: its weekly day inside the open months, its days and boarding note in each language. Any other
+  // itinerary on the record stops being shown.
+  for (const it of v.itineraries) {
     const schedule = one(
       await db
         .from("schedules")
@@ -240,11 +245,7 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
         )
         .select("id")
         .single(),
-      `${v.slug}: itinerary`,
-    );
-    must(
-      await db.from("schedules").update({ active: false }).eq("vessel_id", id).neq("code", it.code),
-      `${v.slug}: other itineraries`,
+      `${v.slug}: itinerary ${it.code}`,
     );
     must(await db.from("schedule_periods").delete().eq("schedule_id", schedule.id), `${v.slug}: old periods`);
     if (it.periods.length)
@@ -268,13 +269,22 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
         `${v.slug}: boarding note`,
       );
   }
+  if (v.itineraries.length)
+    must(
+      await db
+        .from("schedules")
+        .update({ active: false })
+        .eq("vessel_id", id)
+        .not("code", "in", `(${v.itineraries.map((it) => it.code).join(",")})`),
+      `${v.slug}: other itineraries`,
+    );
 
   // Photos, copied into Nilecruz storage once. A photo of a cabin type shows on its card instead of the gallery.
   const stored = new Map((existing?.media ?? []).map((m) => [m.storage_path, m.id]));
   for (const p of v.photos) {
     const path = `vessels/${id}/${p.file}`;
     let mediaId = stored.get(path);
-    const row = { sort_order: p.sort_order, credit: "Nour El Nil", shows_cabin_type_id: p.cabin ? cabinIds.get(p.cabin)! : null };
+    const row = { sort_order: p.sort_order, credit: v.credit, shows_cabin_type_id: p.cabin ? cabinIds.get(p.cabin)! : null };
     if (!mediaId) {
       const res = await fetch(p.url, { headers: { "User-Agent": "Nilecruz fleet import (photos used with permission)" } });
       if (!res.ok) throw new Error(`${v.slug}: photo ${p.file}: ${res.status}`);

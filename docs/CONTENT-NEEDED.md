@@ -41,6 +41,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 61 | "From our team" notes per stop: best time of day, crowds, what to skip | Can follow | ADR-108. From the evaluation team; `insiderNote`, hidden until written |
 | 62 | Whether classic Luxor–Aswan cruises stop at Esna and El Kab | Can follow | ADR-108. The table says "Check the itinerary" until confirmed |
 | 63 | Pages for Esna, El Kab and Gebel Silsila | Can follow | ADR-108. Shown on the hub without a link until each page is written (no thin pages) |
+| 65 | Steam Ship Sudan: permission to use its photos; the current numbered deck plan; certified guest capacity (48 reported); build or launch year (operator says 1921, others 1885); length; cabin areas (17 m² and 25 m² are category averages); Wi-Fi and cabin amenities after the refit; departure calendar; what a cruise includes; commercial terms | Can follow | Featured paddle steamer (it replaced SS Misr on /vessels/). `docs/imports/steam-ship-sudan-data.json`; each field stays hidden until confirmed |
 
 ## Pages and copy
 
@@ -71,6 +72,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 44 | A review of the Spanish and Japanese keyword drafts (`docs/drafts/keywords-es-ja.xlsx`) | With 17 | I18N-012. Not checked against search volumes |
 | 58 | A review of the Spanish and Japanese text for the Nour El Nil fleet: summaries, inclusions, programme, cabins, life on board, good to know and photo alt text | With 17 | ADR-107. `docs/imports/nour-el-nil-fleet-i18n.json`, drafted by Claude and marked `needs_human_review`; re-run `pnpm import:fleet` after edits |
 | 64 | A review of the Spanish and Japanese text for the destinations hub and the stop data (`messages/*.json` → `destinationsPillar`, `src/content/river-stops.ts`) | With 17 | ADR-108. Drafted by Claude; the hub is listed in `TRANSLATED` so it renders in each language |
+| 66 | A review of the Spanish and Japanese text for Steam Ship Sudan | With 17 | `docs/imports/steam-ship-sudan-i18n.json`, drafted by Claude; re-run `pnpm import:fleet docs/imports/steam-ship-sudan-data.json docs/imports/steam-ship-sudan-i18n.json` after edits |
 
 ## Accounts and settings (yours to create)
 
