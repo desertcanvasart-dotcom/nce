@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { BrandLogo } from "@/components/ds/NavBar/BrandLogo";
 import { Link } from "@/i18n/navigation";
 import { isBuilt } from "@/lib/seo/links";
 import { EXTRA_PAGES } from "@/lib/seo/sitemap";
@@ -20,7 +21,7 @@ export function SiteFooter({ locale, blog }: { locale: string; blog?: boolean })
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.brand}>
-          <span className={styles.name}>Nilecruz</span>
+          <BrandLogo variant="wordmark" alt="Nilecruz" className={styles.logo} />
           <span className={styles.tagline}>{t("shell.tagline")}</span>
         </div>
         <nav aria-label={t("footer.explore")}>

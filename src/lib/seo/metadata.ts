@@ -39,7 +39,15 @@ export function hreflangAlternates(path: string, list?: Parameters<typeof transl
  * hreflang (SEO-007). Indexing is off unless ALLOW_INDEXING=true. A Spanish or Japanese page that isn't translated yet
  * (Batch 10) shows English, so it isn't indexed and its canonical is the English page.
  */
-export function pageMetadata({ locale, path, title, description, noindex, image }: PageMeta): Metadata {
+/** The site's share picture (the final logo on night blue, Islam 4 Nov 2026), for every page without one of its own. */
+export const SHARE_IMAGE = {
+  url: "/nilecruz-social-share.png",
+  width: 1200,
+  height: 630,
+  alt: "Nilecruz: Nile cruises, explained",
+};
+
+export function pageMetadata({ locale, path, title, description, noindex, image = SHARE_IMAGE }: PageMeta): Metadata {
   const translated = isTranslated(path, locale);
   const index = indexingAllowed && !noindex && translated;
   const self = absoluteUrl(locale, path);
@@ -50,7 +58,7 @@ export function pageMetadata({ locale, path, title, description, noindex, image 
       ? { canonical: self, languages: noindex ? undefined : hreflangAlternates(path) }
       : { canonical: absoluteUrl(routing.defaultLocale, path) },
     robots: index ? { index: true, follow: true } : { index: false, follow: !noindex },
-    openGraph: { title, description, url: self, siteName: "Nilecruz", locale, ...(image ? { images: [image] } : {}) },
-    ...(image ? { twitter: { card: "summary_large_image", title, description, images: [image] } } : {}),
+    openGraph: { title, description, url: self, siteName: "Nilecruz", locale, images: [image] },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
