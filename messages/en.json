@@ -878,5 +878,157 @@
       "text": "Tell us your dates and how you like to travel, and we’ll help you narrow it down.",
       "button": "Plan my cruise"
     }
+  },
+  "guideHub": {
+    "meta": {
+      "title": "Nile cruise guide: routes, seasons and planning",
+      "description": "Plan your Nile cruise: choose a route, when to go and how many nights you need, then see what to book separately.",
+      "image": "The Nile at dawn, with a temple on the riverbank"
+    },
+    "crumbs": {
+      "home": "Home",
+      "guide": "Nile cruise guide"
+    },
+    "hero": {
+      "title": "Plan your Nile cruise",
+      "intro": "Most of the decisions come down to four things: your route, the time of year, how many nights you have, and how you’ll get to the boat. Start here, then go deeper where you need to.",
+      "plan": "Plan my route",
+      "compare": "Compare boat types"
+    },
+    "planner": {
+      "heading": "Find your route",
+      "questions": {
+        "nights": {
+          "legend": "Step 1: How many nights do you have?",
+          "upTo3": "Up to 3",
+          "four": "4",
+          "fiveOrMore": "5 or more"
+        },
+        "style": {
+          "legend": "Step 2: How do you want to travel?",
+          "schedule": "See the main temples on a set schedule",
+          "slow": "Go slowly, with time at small, quiet stops"
+        },
+        "season": {
+          "legend": "Step 3: When do you want to go?",
+          "winter": "November to February",
+          "shoulder": "October, March or April",
+          "summer": "May to September",
+          "unsure": "Not sure yet"
+        }
+      },
+      "waiting": "Answer all three questions to see your route.",
+      "resultLabel": "Your route",
+      "results": {
+        "upTo3Schedule": "<b>Aswan to Luxor, 3 nights.</b> The shorter route, covering the main temples on a motor ship or steamer.",
+        "upTo3Slow": "<b>Aswan to Luxor, 3 nights.</b> It’s the closest fit for your time. The slowest route, Esna to Aswan by dahabiya, takes 5 nights.",
+        "fourSchedule": "<b>Luxor to Aswan, 4 nights.</b> It adds a night and a slower pace than sailing the other way.",
+        "fourSlow": "<b>Luxor to Aswan, 4 nights.</b> It’s the slower of the classic routes. With one more night, you could sail Esna to Aswan by dahabiya.",
+        "fiveOrMoreSchedule": "<b>Luxor to Aswan, 4 nights.</b> Use the extra time for a night in Luxor or Aswan.",
+        "fiveOrMoreSlow": "<b>Esna to Aswan by dahabiya, 5 nights.</b> Our top choice for time on the river, with quiet moorings and smaller sites."
+      },
+      "seasons": {
+        "winter": "These months have the mildest weather, but they’re busy, especially at Christmas and New Year. Book early.",
+        "shoulder": "These months usually have fewer crowds and lower prices than the peak months.",
+        "summer": "It’s hot, so sightseeing starts early. Ships are quieter and prices are lower. Some dahabiyas don’t sail from June to August, so check before you plan around one."
+      },
+      "whenToGo": "See when to go",
+      "routeLinks": {
+        "aswanToLuxor": "Read about the Aswan to Luxor route",
+        "luxorToAswan": "Read about the Luxor to Aswan route",
+        "esnaToAswan": "Read about the Esna to Aswan route"
+      },
+      "listLinks": {
+        "aswanToLuxor": "See Aswan to Luxor cruises",
+        "luxorToAswan": "See Luxor to Aswan cruises",
+        "esnaToAswan": "See dahabiya cruises"
+      },
+      "flights": "Check the cruise’s check-in and check-out times before you book flights.",
+      "startOver": "Start over"
+    },
+    "short": {
+      "heading": "The short version",
+      "items": [
+        {
+          "label": "Route",
+          "text": "Most cruises sail between Luxor and Aswan. Dahabiyas usually sail from Esna to Aswan."
+        },
+        {
+          "label": "Nights",
+          "text": "Plan on 3 nights from Aswan, 4 from Luxor or 5 on a dahabiya."
+        },
+        {
+          "label": "Season",
+          "text": "October to April is cooler and busier. May to September is hotter and quieter."
+        },
+        {
+          "label": "Flights",
+          "text": "Choose your cruise first, then book flights around its check-in and check-out times."
+        }
+      ]
+    },
+    "decisions": {
+      "heading": "The four decisions",
+      "route": {
+        "heading": "1. Choose your route",
+        "text": "Most Nile cruises cover the 200 km of river between Luxor and Aswan, stopping at Esna, Edfu and Kom Ombo. Luxor to Aswan usually takes four nights and Aswan to Luxor three. Dahabiyas usually sail from Esna to Aswan, which gives them time for smaller sites that larger ships pass."
+      },
+      "season": {
+        "heading": "2. Pick the time of year",
+        "text": "October to April is the cooler season, and the busiest. Christmas, New Year and Easter cost the most. May to September is very hot but quieter and cheaper, and sightseeing starts early to avoid the heat. Some dahabiyas don’t sail from June to August."
+      },
+      "nights": {
+        "heading": "3. Decide how many nights",
+        "text": "Three or four nights covers the main temples. If you want time on the river as well, five nights from Esna to Aswan on a dahabiya is our top choice, because it leaves room for quiet moorings and smaller sites."
+      },
+      "around": {
+        "heading": "4. Plan around the cruise",
+        "text": "Flights, airport transfers, extra tours and hotel nights are usually booked separately. Decide on your cruise first, then fit everything else around its check-in and check-out times. Check what your cruise includes, especially guides and entry tickets."
+      },
+      "links": {
+        "routes": "Compare the routes",
+        "whenToGo": "See when to go",
+        "nights": "How many nights do you need?",
+        "planning": "Plan your trip",
+        "included": "What’s included on a Nile cruise",
+        "extras": "Transfers and tours"
+      }
+    },
+    "boat": "The boat shapes the trip as much as the route does. <link>Compare the three types of Nile boat</link>.",
+    "day": {
+      "heading": "How a cruise day works",
+      "text": "Sightseeing usually starts early, before the heat. Afternoons are for sailing, and evenings are spent on board. Your cruise runs from check-in on the first day to check-out on the last, so count those days when you plan flights and transfers."
+    },
+    "faqs": {
+      "heading": "Questions",
+      "items": [
+        {
+          "q": "How long is a Nile cruise?",
+          "a": "Usually three nights from Aswan to Luxor, or four from Luxor to Aswan. Dahabiyas usually sail for four or five nights, and we recommend five. A few boats offer longer trips."
+        },
+        {
+          "q": "Which month is best for a Nile cruise?",
+          "a": "November to February has the mildest weather. October, March and April usually have fewer crowds and lower prices. May to September is hotter, but quieter and cheaper."
+        },
+        {
+          "q": "Should I book flights first?",
+          "a": "No. Choose your cruise first, then book flights that fit its check-in and check-out times."
+        },
+        {
+          "q": "How far ahead should I book?",
+          "a": "For the cooler months, and especially Christmas and New Year, book several months ahead. Summer cruises can usually be booked closer to the date."
+        },
+        {
+          "q": "Do I need a guide?",
+          "a": "Many cruises include guided visits, but this varies, so check your offer, including whether entry tickets are covered. A private Egyptologist is often available at extra cost."
+        }
+      ]
+    },
+    "cta": {
+      "heading": "Ready to plan your cruise?",
+      "text": "Tell us your dates and how you like to travel, and we’ll help you narrow it down.",
+      "button": "Plan my cruise",
+      "all": "See all Nile cruises"
+    }
   }
 }

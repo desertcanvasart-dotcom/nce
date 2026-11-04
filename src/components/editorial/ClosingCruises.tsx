@@ -7,22 +7,25 @@ import styles from "./editorial.module.css";
 
 /**
  * SEO-012, 024: every informational page ends with a row of up to three real cruises from the matching listing, and a
- * link to that listing. `type` narrows the cards where the listing's own facet page doesn't exist yet.
+ * link to that listing. `type` narrows the cards where the listing's own facet page doesn't exist yet. `picked` shows
+ * vessels the page chose itself (the guide's "Vessels to explore", one of each type) instead.
  */
 export function ClosingCruises({
   all,
   listing,
   type,
   title,
+  picked,
 }: {
   /** Every public vessel (the page loads them: components don't read the server). */
   all: ListingVessel[];
   listing: SiloLink;
   type?: VesselType;
   title?: string;
+  picked?: ListingVessel[];
 }) {
   const facet = facetBySlug(listing.href.replace(/^\/cruises\/|\/$/g, ""));
-  const fits = sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type)));
+  const fits = picked ?? sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type)));
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
       <h2 id="closing-cruises">{title ?? "Cruises you can book"}</h2>

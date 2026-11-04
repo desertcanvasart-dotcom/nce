@@ -11,8 +11,9 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
  */
 const EDUCATION = [...BUILT].filter((u) => !u.startsWith("/cruises/"));
 const isTourPage = (h: string) => /^\/tours-extras\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h];
-// Pages whose H1 was approved in place of the workbook's (PAGE-101: the About page's own title).
-const OWN_H1: Record<string, string> = { "/about/": ABOUT.title };
+// Pages whose H1 was approved in place of the workbook's (PAGE-101: the About page's own title; PAGE-002: the guide
+// hub's, from Islam's guide brief).
+const OWN_H1: Record<string, string> = { "/about/": ABOUT.title, "/nile-cruise-guide/": "Plan your Nile cruise" };
 // Home and the pillars link to many pages; each link is fetched to prove it exists.
 test.describe.configure({ timeout: 90_000 });
 

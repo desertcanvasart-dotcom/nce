@@ -10,15 +10,18 @@ import { VesselCompare } from "@/components/ds/VesselCompare/VesselCompare";
 import type { VesselType } from "@/components/ds/lib/types";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
 import { EditorialFrame } from "@/components/editorial/EditorialFrame";
+import { GuideHub } from "@/components/editorial/GuideHub";
 import { TourCards, TourDetails } from "@/components/editorial/TourDetails";
 import { VesselsPillar } from "@/components/editorial/VesselsPillar";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
+import { Link } from "@/i18n/navigation";
 import styles from "@/components/editorial/editorial.module.css";
 import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
 import { ROUTE_STOPS } from "@/content/routes";
 import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
 import { routing, type Locale } from "@/i18n/routing";
 import { tourUrl, WORKBOOK_TOURS } from "@/lib/content/tours";
+import { exploreVessels } from "@/lib/guide/explore";
 import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
@@ -61,6 +64,16 @@ export async function siloMetadata(prefix: string, { locale, path }: SiloParams)
       image: { url: "/images/og/vessels.png", width: 1200, height: 630, alt: t("image") },
     });
   }
+  if (url === "/nile-cruise-guide/") {
+    const t = await getTranslations({ locale, namespace: "guideHub.meta" });
+    return pageMetadata({
+      locale,
+      path: url,
+      title: t("title"),
+      description: t("description"),
+      image: { url: "/images/og/nile-cruise-guide.png", width: 1200, height: 630, alt: t("image") },
+    });
+  }
   const row = LINK_MAP[url];
   const page = row && BUILT.has(url) ? await editorialPage(row.id) : null;
   if (!row || !page) return {};
@@ -84,6 +97,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   if (!row || !BUILT.has(url)) notFound();
   // PAGE-026: the vessels pillar is laid out by hand, in every language (ADR-106).
   if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing()} />;
+  // PAGE-002: the guide hub plans the trip, laid out by hand in every language (Islam's guide brief, 4 Nov 2026).
+  if (url === "/nile-cruise-guide/") return <GuideHub locale={locale} />;
   const [page, all, tours] = await Promise.all([
     editorialPage(row.id),
     publicListing(),
@@ -175,7 +190,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         </ul>
       </>
     );
-  } else if (url === "/nile-cruise-guide/" || url === "/nile-cruise-guide/planning/how-many-nights/") {
+  } else if (url === "/nile-cruise-guide/planning/how-many-nights/") {
     lead = compare;
   } else if (url.startsWith("/destinations/")) {
     // PAGE-074–090: a scene until photos (ADR-096), and the destination's data.
@@ -239,6 +254,15 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
   }
 
+  // The guide's pages end with vessels to explore, one of each type that sails the page's route; none are bookable yet,
+  // so the row doesn't say "you can book" (Islam's guide brief, 4 Nov 2026).
+  const stops = ROUTE_STOPS[url]?.stops;
+  const explore = url.startsWith("/nile-cruise-guide/")
+    ? exploreVessels(all, {
+        route: type === "sail" || !stops ? undefined : { origin: stops[0]!.place, destination: stops.at(-1)!.place },
+        type: type === "sail" ? "sail" : undefined,
+      })
+    : null;
   return (
     <>
       <EditorialFrame
@@ -246,7 +270,23 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         url={url}
         page={page}
         lead={lead}
-        closing={closing ? <ClosingCruises all={all} listing={closingListing(url)} type={TYPE_OF[url]} /> : null}
+        closing={
+          !closing ? null : explore?.length === 0 ? (
+            // No two types sail this route yet: no vessel row, but still the way to its cruises (SEO-012).
+            <p>
+              <Link href={closingListing(url).href} className={styles.more}>
+                See all: {closingListing(url).anchor}
+              </Link>
+            </p>
+          ) : (
+            <ClosingCruises
+              all={all}
+              listing={closingListing(url)}
+              type={TYPE_OF[url]}
+              {...(explore ? { picked: explore, title: "Vessels to explore" } : {})}
+            />
+          )
+        }
       />
       {extra}
       {/* SEO-005: a hub lists its pages (CollectionPage with an ItemList), as its workbook row asks. */}

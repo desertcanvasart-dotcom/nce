@@ -879,5 +879,157 @@
       "text": "Díganos sus fechas y cómo le gusta viajar, y le ayudaremos a decidir.",
       "button": "Planificar mi crucero"
     }
+  },
+  "guideHub": {
+    "meta": {
+      "title": "Guía de cruceros por el Nilo: rutas, temporadas y planificación",
+      "description": "Planifica tu crucero por el Nilo: elige la ruta, cuándo ir y cuántas noches necesitas, y mira qué se reserva aparte.",
+      "image": "El Nilo al amanecer, con un templo en la orilla"
+    },
+    "crumbs": {
+      "home": "Inicio",
+      "guide": "Guía de cruceros por el Nilo"
+    },
+    "hero": {
+      "title": "Planifica tu crucero por el Nilo",
+      "intro": "Casi todo se reduce a cuatro decisiones: la ruta, la época del año, cuántas noches tienes y cómo llegarás al barco. Empieza aquí y profundiza donde lo necesites.",
+      "plan": "Planificar mi ruta",
+      "compare": "Comparar tipos de barco"
+    },
+    "planner": {
+      "heading": "Encuentra tu ruta",
+      "questions": {
+        "nights": {
+          "legend": "Paso 1: ¿Cuántas noches tienes?",
+          "upTo3": "Hasta 3",
+          "four": "4",
+          "fiveOrMore": "5 o más"
+        },
+        "style": {
+          "legend": "Paso 2: ¿Cómo quieres viajar?",
+          "schedule": "Ver los templos principales con un programa fijo",
+          "slow": "Ir despacio, con tiempo en paradas pequeñas y tranquilas"
+        },
+        "season": {
+          "legend": "Paso 3: ¿Cuándo quieres ir?",
+          "winter": "De noviembre a febrero",
+          "shoulder": "Octubre, marzo o abril",
+          "summer": "De mayo a septiembre",
+          "unsure": "Aún no lo sé"
+        }
+      },
+      "waiting": "Responde a las tres preguntas para ver tu ruta.",
+      "resultLabel": "Tu ruta",
+      "results": {
+        "upTo3Schedule": "<b>De Asuán a Luxor, 3 noches.</b> La ruta más corta, con los templos principales, en un crucero a motor o un barco de vapor.",
+        "upTo3Slow": "<b>De Asuán a Luxor, 3 noches.</b> Es la que mejor se ajusta a tu tiempo. La ruta más pausada, de Esna a Asuán en dahabiya, dura 5 noches.",
+        "fourSchedule": "<b>De Luxor a Asuán, 4 noches.</b> Suma una noche y un ritmo más pausado que el viaje en sentido contrario.",
+        "fourSlow": "<b>De Luxor a Asuán, 4 noches.</b> Es la más pausada de las rutas clásicas. Con una noche más, podrías navegar de Esna a Asuán en dahabiya.",
+        "fiveOrMoreSchedule": "<b>De Luxor a Asuán, 4 noches.</b> Aprovecha el tiempo que te sobra para pasar una noche en Luxor o en Asuán.",
+        "fiveOrMoreSlow": "<b>De Esna a Asuán en dahabiya, 5 noches.</b> Nuestra opción preferida para disfrutar del río, con amarres tranquilos y yacimientos más pequeños."
+      },
+      "seasons": {
+        "winter": "Son los meses de clima más suave, pero hay mucha gente, sobre todo en Navidad y Año Nuevo. Reserva con antelación.",
+        "shoulder": "En estos meses suele haber menos gente y precios más bajos que en temporada alta.",
+        "summer": "Hace calor, así que las visitas empiezan temprano. Los barcos van más tranquilos y los precios son más bajos. Algunas dahabiyas no navegan de junio a agosto, así que compruébalo antes de organizar el viaje en torno a una."
+      },
+      "whenToGo": "Ver cuándo ir",
+      "routeLinks": {
+        "aswanToLuxor": "Leer sobre la ruta de Asuán a Luxor",
+        "luxorToAswan": "Leer sobre la ruta de Luxor a Asuán",
+        "esnaToAswan": "Leer sobre la ruta de Esna a Asuán"
+      },
+      "listLinks": {
+        "aswanToLuxor": "Ver cruceros de Asuán a Luxor",
+        "luxorToAswan": "Ver cruceros de Luxor a Asuán",
+        "esnaToAswan": "Ver cruceros en dahabiya"
+      },
+      "flights": "Consulta los horarios de embarque y desembarque del crucero antes de reservar los vuelos.",
+      "startOver": "Empezar de nuevo"
+    },
+    "short": {
+      "heading": "En resumen",
+      "items": [
+        {
+          "label": "Ruta",
+          "text": "La mayoría de los cruceros navegan entre Luxor y Asuán. Las dahabiyas suelen ir de Esna a Asuán."
+        },
+        {
+          "label": "Noches",
+          "text": "Cuenta con 3 noches desde Asuán, 4 desde Luxor o 5 en dahabiya."
+        },
+        {
+          "label": "Temporada",
+          "text": "De octubre a abril hace más fresco y hay más gente. De mayo a septiembre hace más calor y hay más tranquilidad."
+        },
+        {
+          "label": "Vuelos",
+          "text": "Elige primero el crucero y luego reserva los vuelos según sus horarios de embarque y desembarque."
+        }
+      ]
+    },
+    "decisions": {
+      "heading": "Las cuatro decisiones",
+      "route": {
+        "heading": "1. Elige la ruta",
+        "text": "La mayoría de los cruceros por el Nilo recorren los 200 km de río entre Luxor y Asuán, con paradas en Esna, Edfu y Kom Ombo. De Luxor a Asuán suelen ser cuatro noches, y de Asuán a Luxor, tres. Las dahabiyas suelen navegar de Esna a Asuán, lo que les deja tiempo para yacimientos más pequeños que los barcos grandes pasan de largo."
+      },
+      "season": {
+        "heading": "2. Elige la época del año",
+        "text": "De octubre a abril es la temporada más fresca y también la de más gente. Navidad, Año Nuevo y Semana Santa son las fechas más caras. De mayo a septiembre hace mucho calor, pero hay menos gente y es más barato, y las visitas empiezan temprano para evitar el calor. Algunas dahabiyas no navegan de junio a agosto."
+      },
+      "nights": {
+        "heading": "3. Decide cuántas noches",
+        "text": "Con tres o cuatro noches ves los templos principales. Si además quieres tiempo en el río, nuestra opción preferida son cinco noches de Esna a Asuán en dahabiya, porque dejan margen para amarres tranquilos y yacimientos más pequeños."
+      },
+      "around": {
+        "heading": "4. Organiza el resto en torno al crucero",
+        "text": "Los vuelos, los traslados al aeropuerto, las excursiones adicionales y las noches de hotel suelen reservarse aparte. Decide primero el crucero y luego encaja todo lo demás según sus horarios de embarque y desembarque. Comprueba qué incluye tu crucero, sobre todo los guías y las entradas."
+      },
+      "links": {
+        "routes": "Comparar las rutas",
+        "whenToGo": "Ver cuándo ir",
+        "nights": "¿Cuántas noches necesitas?",
+        "planning": "Planificar tu viaje",
+        "included": "Qué incluye un crucero por el Nilo",
+        "extras": "Traslados y excursiones"
+      }
+    },
+    "boat": "El barco marca el viaje tanto como la ruta. <link>Compara los tres tipos de barco del Nilo</link>.",
+    "day": {
+      "heading": "Cómo es un día de crucero",
+      "text": "Las visitas suelen empezar temprano, antes del calor. Las tardes son para navegar y las noches se pasan a bordo. El crucero va desde el embarque del primer día hasta el desembarque del último, así que cuenta esos días al planificar vuelos y traslados."
+    },
+    "faqs": {
+      "heading": "Preguntas",
+      "items": [
+        {
+          "q": "¿Cuánto dura un crucero por el Nilo?",
+          "a": "Normalmente tres noches de Asuán a Luxor, o cuatro de Luxor a Asuán. Las dahabiyas suelen navegar cuatro o cinco noches, y recomendamos cinco. Algunos barcos ofrecen viajes más largos."
+        },
+        {
+          "q": "¿Qué mes es mejor para un crucero por el Nilo?",
+          "a": "De noviembre a febrero el clima es más suave. Octubre, marzo y abril suelen tener menos gente y precios más bajos. De mayo a septiembre hace más calor, pero hay más tranquilidad y es más barato."
+        },
+        {
+          "q": "¿Debo reservar primero los vuelos?",
+          "a": "No. Elige primero el crucero y luego reserva vuelos que encajen con sus horarios de embarque y desembarque."
+        },
+        {
+          "q": "¿Con cuánta antelación debo reservar?",
+          "a": "Para los meses más frescos, y sobre todo Navidad y Año Nuevo, reserva con varios meses de antelación. Los cruceros de verano suelen poder reservarse con menos tiempo."
+        },
+        {
+          "q": "¿Necesito un guía?",
+          "a": "Muchos cruceros incluyen visitas guiadas, pero varía, así que revisa tu oferta, también si incluye las entradas. A menudo se puede contratar un egiptólogo privado con coste adicional."
+        }
+      ]
+    },
+    "cta": {
+      "heading": "¿Listo para planificar tu crucero?",
+      "text": "Cuéntanos tus fechas y cómo te gusta viajar, y te ayudaremos a acotar las opciones.",
+      "button": "Planificar mi crucero",
+      "all": "Ver todos los cruceros por el Nilo"
+    }
   }
 }

@@ -24,14 +24,16 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
+const PAGE_ONLY = new Set(["vesselPage", "guideHub"]);
+
 export default async function LocaleLayout({ children, params }: { children: ReactNode; params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "shell" });
-  // Every page's client components get the site's words, except the vessel page's (two fifths of them): only the
-  // pages that draw vessels pass those on (VesselMessages), so no other page downloads them.
-  const messages = Object.fromEntries(Object.entries(await getMessages()).filter(([ns]) => ns !== "vesselPage"));
+  // Every page's client components get the site's words, except the vessel page's (two fifths of them) and the guide
+  // hub's: only the pages that use them pass those on (VesselMessages, GuideHub), so no other page downloads them.
+  const messages = Object.fromEntries(Object.entries(await getMessages()).filter(([ns]) => !PAGE_ONLY.has(ns)));
 
   return (
     // data-theme is owned by the bootstrap script, never by React: if React rendered it, a client re-mount

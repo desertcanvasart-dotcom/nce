@@ -9,9 +9,10 @@ type Other = Exclude<Locale, "en">;
  * shown in English with a note, `noindex`, with its canonical pointing at the English page.
  */
 export const TRANSLATED: Record<Other, readonly string[]> = {
-  // The vessels pillar (ADR-106): drafted in Spanish and Japanese on 3 Nov 2026, to be reviewed by native speakers.
-  es: ["/vessels/"],
-  ja: ["/vessels/"],
+  // The vessels pillar (ADR-106) and the guide hub (PAGE-002): drafted in Spanish and Japanese on 3 and 4 Nov 2026, to
+  // be reviewed by native speakers.
+  es: ["/vessels/", "/nile-cruise-guide/"],
+  ja: ["/vessels/", "/nile-cruise-guide/"],
 };
 
 const norm = (path: string) => {
