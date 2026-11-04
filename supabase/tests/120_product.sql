@@ -16,7 +16,7 @@ select lives_ok($$insert into public.cabin_types (id, vessel_id, code, name, dec
   ('00000000-0000-4000-c200-000000000001', '00000000-0000-4000-8000-000000000003', 'STD-M', 'Standard', 'Middle', 2),
   ('00000000-0000-4000-c200-000000000002', '00000000-0000-4000-8000-000000000003', 'STE-U', 'Suite', 'Upper', 3)$$, 'owner adds cabin types on decks');
 select throws_ok($$insert into public.cabin_types (vessel_id, code, name, deck, max_occupancy) values
-  ('00000000-0000-4000-8000-000000000003', 'BIG', 'Too big', 'Lower', 4)$$, '23514', null, 'occupancy above 3 is refused');
+  ('00000000-0000-4000-8000-000000000003', 'BIG', 'Too big', 'Lower', 5)$$, '23514', null, 'occupancy above 4 is refused (a two-room family suite sleeps 4, ADR-107)');
 select throws_ok($$insert into public.cabin_types (vessel_id, code, name, deck) values
   ('00000000-0000-4000-8000-000000000004', 'X', 'Other operator', 'Lower')$$, '42501', null, 'operator A cannot build operator B''s vessel');
 select lives_ok($$insert into public.schedules (id, vessel_id, code, origin, destination, nights, sailing_days) values
