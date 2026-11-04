@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import { refreshSignature } from "@/lib/connections/signature";
 import { FEED_PULL_TEST_SECRET } from "../support/feed-tls";
 import { adminDb, LOCAL, newUser, signIn } from "../support/local-auth";
+import { insertEvaluation } from "../support/evaluation";
 import { sampleReservations } from "../support/sailing";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
@@ -17,6 +18,14 @@ const RUN = Date.now();
 const NAME = `Sample Cancel Ship ${RUN}vp`;
 let S: Awaited<ReturnType<typeof sampleReservations>>;
 let slug = "";
+let evaluationId = "";
+
+async function refreshCatalogue(request: import("@playwright/test").APIRequestContext) {
+  const ts = String(Math.floor(Date.now() / 1000));
+  await request.post("/api/internal/catalogue/refresh/", {
+    headers: { "nilecruz-timestamp": ts, "nilecruz-signature": refreshSignature(FEED_PULL_TEST_SECRET, ts) },
+  });
+}
 
 test.beforeAll(async ({ request }) => {
   const someone = await newUser("vessel-sailing");
@@ -50,18 +59,7 @@ test.beforeAll(async ({ request }) => {
     })
     .select("id")
     .single();
-  const fours = [4, 4, 4, 4];
-  await db.from("evaluations").insert({
-    vessel_id: S.vesselId,
-    assessed_on: "2026-10-01",
-    evaluator: "Sample evaluator",
-    verdict: "recommended",
-    scores: Object.fromEntries(
-      ["hygiene", "service", "food", "amenities", "management", "cabin_vessel", "cruise_experience"].map((d) => [d, fours]),
-    ),
-    published: true,
-    published_at: new Date().toISOString(),
-  });
+  evaluationId = await insertEvaluation(db, S.vesselId);
   const { error } = await db.from("external_ratings").insert({
     vessel_id: S.vesselId,
     source_name: "Sample Review Site",
@@ -83,10 +81,11 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await page.goto("/cruises/");
   await page.getByRole("article", { name: NAME }).getByRole("link", { name: NAME }).click();
   await page.waitForURL(new RegExp(`/cruises/${slug}/$`));
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${NAME} — ${S.origin} to ${S.destination}, 4 nights`);
+  // One H1 for the vessel, whichever itinerary is shown (DATA-031).
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(NAME);
   await expect(page.getByRole("navigation", { name: "Breadcrumb" })).toContainText("Nile cruise ships");
   // SEO-013 (Batch 6): the page links to its vessel-type hub by the hub's keyword.
-  await expect(page.getByRole("link", { name: "Nile cruise ship", exact: true })).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "What’s it like on a Nile cruise ship?" })).toHaveAttribute(
     "href",
     "/vessels/motor-cruise-ships/",
   );
@@ -96,7 +95,11 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.getByText("Board and sail")).toBeVisible();
   await expect(page.getByText(/Schematic: not a floor plan/)).toBeVisible();
   await expect(page.getByRole("tab", { name: "Main deck" })).toBeVisible();
+  // A verified, complete evaluation is published: its score, conclusion, evaluator and notes.
   await expect(page.getByText("80/100").first()).toBeVisible();
+  await expect(page.locator("#evaluation")).toContainText("Assessed on");
+  await expect(page.locator("#evaluation")).toContainText("Former boat manager");
+  await expect(page.locator("#evaluation")).toContainText("A sample note on hygiene.");
   // EXP-009: the score unfolds into its seven dimensions.
   await expect(page.getByRole("img", { name: /^Evaluation 80 out of 100: / })).toBeVisible();
   await expect(page.getByText("Recommended", { exact: false }).first()).toBeVisible();
@@ -122,12 +125,61 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/cruises/${slug}/$`));
 });
 
+test("an unverified evaluation is never shown: not its score, not in structured data", async ({ page, request }) => {
+  const db = adminDb();
+  await db.from("evaluations").update({ verified: false }).eq("id", evaluationId);
+  await refreshCatalogue(request);
+  try {
+    // A cached page regenerates after the refresh: read it until it has.
+    await expect(async () => {
+      await page.goto(`/cruises/${slug}/`);
+      await expect(page.locator("#evaluation")).toContainText("We haven’t published our evaluation of this vessel yet.", {
+        timeout: 2_000,
+      });
+    }).toPass({ timeout: 30_000 });
+    await expect(page.getByText("80/100")).toHaveCount(0);
+    await expect(page.locator("dt", { hasText: "Nilecruz score" })).toHaveCount(0);
+    const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
+    expect(ld).not.toContain("80");
+  } finally {
+    await db.from("evaluations").update({ verified: true }).eq("id", evaluationId);
+    await refreshCatalogue(request);
+  }
+});
+
 test("an information-only vessel offers a request instead [DASH-PUB-010, DASH-BND-002]", async ({ page }) => {
   await page.goto("/cruises/sample-motor-one/");
-  await expect(page.getByText("Information only.")).toBeVisible();
+  await expect(page.getByText("This boat can’t be booked on Nilecruz yet.", { exact: false }).first()).toBeVisible();
+  await expect(page.getByText("Information only")).toHaveCount(0);
+  await expect(page.getByText("Not given")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "See prices and dates" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Ask for an offer" })).toBeVisible();
-  await expect(page.getByText(/hasn’t listed this vessel’s cabin types yet/)).toBeVisible();
+  await expect(page.getByRole("link", { name: "Ask for an offer", exact: true }).first()).toBeVisible();
+  // No cabin types yet: no cabins section, and no link to one.
+  await expect(page.locator("#cabins")).toHaveCount(0);
+  await expect(page.locator('a[href="#cabins"]')).toHaveCount(0);
+});
+
+test("asking for an offer needs no account, and keeps the boat, cruise and date [DASH-PUB-010]", async ({ page }) => {
+  await page.goto("/cruises/sample-motor-one/");
+  await page.getByRole("link", { name: "Ask for an offer", exact: true }).first().click();
+  await page.waitForURL(/\/cruises\/sample-motor-one\/ask\/$/);
+  await expect(page.getByRole("heading", { level: 1, name: "Ask for an offer on this boat" })).toBeVisible();
+  await expect(page.getByText("No account needed.", { exact: false })).toBeVisible();
+  // From a date on the calendar: its cruise and day come along (the sample ship's 4-night itinerary).
+  await page.goto(`/cruises/${slug}/ask/?itinerary=CX4&date=2027-02-01`);
+  await expect(page.getByLabel("Cruise")).toHaveValue("CX4");
+  await expect(page.getByLabel("Preferred departure date")).toHaveValue("2027-02-01");
+  const email = `guest-${RUN}@example.test`;
+  await page.getByLabel("Your name").fill("Sample Guest");
+  await page.getByLabel("Email").fill(email);
+  await page.getByRole("button", { name: "Send my request" }).click();
+  await expect(page.getByRole("status")).toContainText("Thank you.");
+  const { data: m } = await adminDb()
+    .from("contact_messages")
+    .select("topic, nights, departs_on, guests, vessel:vessels(slug)")
+    .eq("email", email)
+    .single();
+  expect(m).toMatchObject({ topic: "offer", nights: 4, departs_on: "2027-02-01", guests: 2, vessel: { slug } });
 });
 
 test("listing → vessel → sign-in → reserve, at the published rate [DATA-033, DASH-PUB-008, 009, DASH-CUS-016]", async ({
@@ -135,7 +187,8 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
 }) => {
   const customer = await newUser("vessel-booker");
   await page.goto(`/cruises/${slug}/`);
-  await page.getByRole("link", { name: "See prices and dates" }).click();
+  // The hero's button (the section bar repeats it).
+  await page.getByRole("link", { name: "See prices and dates" }).first().click();
   // Prices need an account: the visitor is asked to sign in, and comes back.
   await page.waitForURL(/\/account\/sign-in\/\?next=/);
   await signIn(page, customer.email, customer.password, new URL(page.url()).pathname + new URL(page.url()).search);

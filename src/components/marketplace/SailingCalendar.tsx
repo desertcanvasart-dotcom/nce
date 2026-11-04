@@ -24,7 +24,12 @@ export type SailingCalendarProps = {
   bookable: boolean;
   /** The vessel's reserve page, without a query. */
   reserve: string;
+  /** The vessel's "Ask for an offer" page, without a query: a date is asked about with its itinerary and day. */
+  ask: string;
 };
+
+// Months shown before "See more dates": the next three, this one first.
+const FIRST_MONTHS = 3;
 
 const STATUS_ICON = { confirmed: "check", pattern: "clock", cancelled: "close" } as const;
 const ARROW = { south: "↓", north: "↑" } as const;
@@ -35,7 +40,7 @@ const ARROW = { south: "↓", north: "↑" } as const;
  * dates expected from the weekly pattern are outlined in dashes, cancelled ones are struck through. Choosing a day
  * shows its sailings in words beside the month, with the way to book (confirmed) or to ask (everything else).
  */
-export function SailingCalendar({ sailings, patterns, today, bookable, reserve }: SailingCalendarProps) {
+export function SailingCalendar({ sailings, patterns, today, bookable, reserve, ask: askPage }: SailingCalendarProps) {
   const t = useTranslations("sailingCalendar");
   const locale = useLocale();
   const tag = locale === "en" ? "en-GB" : locale;
@@ -45,9 +50,11 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
     const own = sailings.filter((s) => s.departsOn.startsWith(m));
     return (own.find((s) => s.status === "confirmed") ?? own.find((s) => s.status !== "cancelled") ?? own[0])?.departsOn ?? null;
   };
-  const start = (sailings.find((s) => s.status !== "cancelled") ?? sailings[0])?.departsOn.slice(0, 7);
+  // The calendar opens on this month (the months run from today's), on its first sailing.
+  const start = months[0];
   const [month, setMonth] = useState(() => start ?? today.slice(0, 7));
   const [picked, setPicked] = useState(() => (start ? pickIn(start) : null));
+  const [more, setMore] = useState(false);
 
   const byDay = new Map<string, CalendarSailing[]>();
   for (const s of sailings) byDay.set(s.departsOn, [...(byDay.get(s.departsOn) ?? []), s]);
@@ -87,8 +94,9 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
     setPicked(pickIn(m));
   };
   const chosen = picked ? (byDay.get(picked) ?? []) : [];
-  const ask = (s: CalendarSailing) =>
-    `/dashboard/journey/requests/?${new URLSearchParams({ route: route(s), nights: String(s.nights), from: s.departsOn }).toString()}#new`;
+  const ask = (s: CalendarSailing) => `${askPage}?${new URLSearchParams({ itinerary: s.code, date: s.departsOn }).toString()}`;
+  const shown = more || i >= FIRST_MONTHS ? months : months.slice(0, FIRST_MONTHS);
+  const monthSailings = sailings.filter((s) => s.departsOn.startsWith(months[i]!));
 
   return (
     <div className={styles.calendar}>
@@ -126,7 +134,7 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
 
       <nav className={styles.strip} aria-label={t("months")}>
         <ol>
-          {months.map((m, n) => {
+          {shown.map((m, n) => {
             const count = sailings.filter((s) => s.departsOn.startsWith(m) && s.status !== "cancelled").length;
             return (
               <li key={m}>
@@ -142,6 +150,11 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
             );
           })}
         </ol>
+        {months.length > FIRST_MONTHS && i < FIRST_MONTHS ? (
+          <button type="button" className={styles.more} aria-expanded={more} onClick={() => setMore(!more)}>
+            {more ? t("seeFewer") : t("seeMore")}
+          </button>
+        ) : null}
       </nav>
 
       <div className={styles.board}>
@@ -178,6 +191,29 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve }
               <span key={n}>{weekday.format(isoDay(n))}</span>
             ))}
           </div>
+          {/* On a phone: the month's sailings as a list of days to choose from, instead of a squeezed grid. */}
+          <ul className={styles.dayList}>
+            {monthSailings.length ? (
+              [...new Set(monthSailings.map((s) => s.departsOn))].map((d) => {
+                const here = byDay.get(d) ?? [];
+                return (
+                  <li key={d}>
+                    <button type="button" aria-pressed={picked === d} onClick={() => setPicked(d)}>
+                      <strong>{shortDay.format(at(d))}</strong>
+                      {here.map((s) => (
+                        <span key={s.code} className={cx(styles.flag, styles[s.status], s.heading && styles[s.heading])}>
+                          {s.heading ? <span aria-hidden="true">{ARROW[s.heading]} </span> : null}
+                          {route(s)}, {formatNights(s.nights, locale)} · {status(s.status)}
+                        </span>
+                      ))}
+                    </button>
+                  </li>
+                );
+              })
+            ) : (
+              <li className={styles.hint}>{t("none")}</li>
+            )}
+          </ul>
           <div className={styles.grid} style={{ ["--offset" as string]: offset }}>
             {days.map((d) => {
               const here = byDay.get(d) ?? [];

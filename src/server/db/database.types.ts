@@ -410,6 +410,7 @@ export type Database = {
           name: string;
           size_m2: number | null;
           sort_order: number;
+          unverified_fields: string[];
           updated_at: string;
           vessel_id: string;
           view: string | null;
@@ -428,6 +429,7 @@ export type Database = {
           name: string;
           size_m2?: number | null;
           sort_order?: number;
+          unverified_fields?: string[];
           updated_at?: string;
           vessel_id: string;
           view?: string | null;
@@ -446,6 +448,7 @@ export type Database = {
           name?: string;
           size_m2?: number | null;
           sort_order?: number;
+          unverified_fields?: string[];
           updated_at?: string;
           vessel_id?: string;
           view?: string | null;
@@ -681,38 +684,61 @@ export type Database = {
       contact_messages: {
         Row: {
           created_at: string;
+          departs_on: string | null;
           email: string;
+          guests: number | null;
           handled_at: string | null;
           handled_by: string | null;
           id: string;
           message: string;
           name: string;
+          nights: number | null;
+          route: string | null;
           topic: Database["public"]["Enums"]["contact_topic"];
           user_id: string | null;
+          vessel_id: string | null;
         };
         Insert: {
           created_at?: string;
+          departs_on?: string | null;
           email: string;
+          guests?: number | null;
           handled_at?: string | null;
           handled_by?: string | null;
           id?: string;
           message: string;
           name: string;
+          nights?: number | null;
+          route?: string | null;
           topic?: Database["public"]["Enums"]["contact_topic"];
           user_id?: string | null;
+          vessel_id?: string | null;
         };
         Update: {
           created_at?: string;
+          departs_on?: string | null;
           email?: string;
+          guests?: number | null;
           handled_at?: string | null;
           handled_by?: string | null;
           id?: string;
           message?: string;
           name?: string;
+          nights?: number | null;
+          route?: string | null;
           topic?: Database["public"]["Enums"]["contact_topic"];
           user_id?: string | null;
+          vessel_id?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "contact_messages_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       cruise_requests: {
         Row: {
@@ -991,19 +1017,31 @@ export type Database = {
       };
       evaluation_translations: {
         Row: {
+          dimension_notes: Json;
           evaluation_id: string;
           locale: string;
           notes: string | null;
+          strengths: string[];
+          verdict_summary: string | null;
+          watch_points: string[];
         };
         Insert: {
+          dimension_notes?: Json;
           evaluation_id: string;
           locale: string;
           notes?: string | null;
+          strengths?: string[];
+          verdict_summary?: string | null;
+          watch_points?: string[];
         };
         Update: {
+          dimension_notes?: Json;
           evaluation_id?: string;
           locale?: string;
           notes?: string | null;
+          strengths?: string[];
+          verdict_summary?: string | null;
+          watch_points?: string[];
         };
         Relationships: [
           {
@@ -1018,10 +1056,12 @@ export type Database = {
       evaluations: {
         Row: {
           assessed_on: string;
+          assessment_method: string | null;
           created_at: string;
           created_by: string | null;
           dimension_results: Json;
           evaluator: string;
+          evaluator_role: string | null;
           id: string;
           method_version: number;
           overall_score: number;
@@ -1030,14 +1070,17 @@ export type Database = {
           scores: Json;
           updated_at: string;
           verdict: Database["public"]["Enums"]["evaluation_verdict"];
+          verified: boolean;
           vessel_id: string;
         };
         Insert: {
           assessed_on: string;
+          assessment_method?: string | null;
           created_at?: string;
           created_by?: string | null;
           dimension_results?: Json;
           evaluator: string;
+          evaluator_role?: string | null;
           id?: string;
           method_version?: number;
           overall_score?: number;
@@ -1046,14 +1089,17 @@ export type Database = {
           scores: Json;
           updated_at?: string;
           verdict: Database["public"]["Enums"]["evaluation_verdict"];
+          verified?: boolean;
           vessel_id: string;
         };
         Update: {
           assessed_on?: string;
+          assessment_method?: string | null;
           created_at?: string;
           created_by?: string | null;
           dimension_results?: Json;
           evaluator?: string;
+          evaluator_role?: string | null;
           id?: string;
           method_version?: number;
           overall_score?: number;
@@ -1062,6 +1108,7 @@ export type Database = {
           scores?: Json;
           updated_at?: string;
           verdict?: Database["public"]["Enums"]["evaluation_verdict"];
+          verified?: boolean;
           vessel_id?: string;
         };
         Relationships: [
@@ -1486,6 +1533,7 @@ export type Database = {
           height: number;
           id: string;
           is_sample: boolean;
+          shows_cabin_type_id: string | null;
           sort_order: number;
           storage_path: string;
           tour_id: string | null;
@@ -1501,6 +1549,7 @@ export type Database = {
           height: number;
           id?: string;
           is_sample?: boolean;
+          shows_cabin_type_id?: string | null;
           sort_order?: number;
           storage_path: string;
           tour_id?: string | null;
@@ -1516,6 +1565,7 @@ export type Database = {
           height?: number;
           id?: string;
           is_sample?: boolean;
+          shows_cabin_type_id?: string | null;
           sort_order?: number;
           storage_path?: string;
           tour_id?: string | null;
@@ -1536,6 +1586,13 @@ export type Database = {
             columns: ["destination_id"];
             isOneToOne: false;
             referencedRelation: "destinations";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "media_shows_cabin_type_id_fkey";
+            columns: ["shows_cabin_type_id"];
+            isOneToOne: false;
+            referencedRelation: "cabin_types";
             referencedColumns: ["id"];
           },
           {
@@ -4348,7 +4405,12 @@ export type Database = {
         Row: {
           description: string | null;
           dining: string | null;
+          good_for: string | null;
+          included: string[];
+          less_suited_to: string | null;
           locale: string;
+          not_included: string[];
+          optional_extras: string[];
           summary: string | null;
           updated_at: string;
           vessel_id: string;
@@ -4356,7 +4418,12 @@ export type Database = {
         Insert: {
           description?: string | null;
           dining?: string | null;
+          good_for?: string | null;
+          included?: string[];
+          less_suited_to?: string | null;
           locale: string;
+          not_included?: string[];
+          optional_extras?: string[];
           summary?: string | null;
           updated_at?: string;
           vessel_id: string;
@@ -4364,7 +4431,12 @@ export type Database = {
         Update: {
           description?: string | null;
           dining?: string | null;
+          good_for?: string | null;
+          included?: string[];
+          less_suited_to?: string | null;
           locale?: string;
+          not_included?: string[];
+          optional_extras?: string[];
           summary?: string | null;
           updated_at?: string;
           vessel_id?: string;
@@ -4389,6 +4461,10 @@ export type Database = {
           dietary_options: string[];
           gratuity_usd_minor: number | null;
           id: string;
+          indicative_basis: string | null;
+          indicative_currency: string | null;
+          indicative_per_night_minor: number | null;
+          indicative_status: string | null;
           is_sample: boolean;
           max_guests: number | null;
           mooring: Database["public"]["Enums"]["mooring_practice"] | null;
@@ -4417,6 +4493,10 @@ export type Database = {
           dietary_options?: string[];
           gratuity_usd_minor?: number | null;
           id?: string;
+          indicative_basis?: string | null;
+          indicative_currency?: string | null;
+          indicative_per_night_minor?: number | null;
+          indicative_status?: string | null;
           is_sample?: boolean;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
@@ -4445,6 +4525,10 @@ export type Database = {
           dietary_options?: string[];
           gratuity_usd_minor?: number | null;
           id?: string;
+          indicative_basis?: string | null;
+          indicative_currency?: string | null;
+          indicative_per_night_minor?: number | null;
+          indicative_status?: string | null;
           is_sample?: boolean;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
@@ -5233,7 +5317,7 @@ export type Database = {
       booking_request_status: "waiting" | "held" | "confirmed" | "declined" | "alternative_offered" | "expired" | "withdrawn";
       cancellation_status: "requested" | "withdrawn" | "rejected" | "refund_due" | "closed";
       commission_kind: "payment" | "reversal";
-      contact_topic: "cruise" | "booking" | "vessel" | "partner" | "other";
+      contact_topic: "cruise" | "booking" | "vessel" | "partner" | "other" | "offer";
       departure_status: "scheduled" | "cancelled";
       evaluation_verdict: "recommended" | "recommended_with_reservations" | "not_recommended";
       feed_status: "pending" | "active" | "paused" | "rejected";
@@ -5402,7 +5486,7 @@ export const Constants = {
       booking_request_status: ["waiting", "held", "confirmed", "declined", "alternative_offered", "expired", "withdrawn"],
       cancellation_status: ["requested", "withdrawn", "rejected", "refund_due", "closed"],
       commission_kind: ["payment", "reversal"],
-      contact_topic: ["cruise", "booking", "vessel", "partner", "other"],
+      contact_topic: ["cruise", "booking", "vessel", "partner", "other", "offer"],
       departure_status: ["scheduled", "cancelled"],
       evaluation_verdict: ["recommended", "recommended_with_reservations", "not_recommended"],
       feed_status: ["pending", "active", "paused", "rejected"],

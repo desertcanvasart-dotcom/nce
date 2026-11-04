@@ -121,6 +121,10 @@
 
 /* Months, with how many sailings each has. */
 .strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
   overflow-x: auto;
   scrollbar-width: thin;
 }
@@ -560,5 +564,74 @@
       background var(--dur-1) var(--ease-river),
       border-color var(--dur-1) var(--ease-river),
       color var(--dur-1) var(--ease-river);
+  }
+}
+
+/* Later months wait behind "See more dates". */
+.more {
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--type-label-size);
+  cursor: pointer;
+}
+
+.more:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: var(--offset);
+}
+
+/* A phone gets the month's sailing days as a list; the grid is for wider screens. */
+.dayList {
+  display: none;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dayList button {
+  display: grid;
+  gap: var(--space-1);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.dayList button[aria-pressed="true"] {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.dayList button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: var(--offset);
+}
+
+.dayList .flag {
+  justify-content: flex-start;
+  font-size: var(--type-caption-size);
+  white-space: normal;
+}
+
+@media (width < 560px) {
+  .dayList {
+    display: grid;
+  }
+
+  .weekdays,
+  .grid {
+    display: none;
   }
 }

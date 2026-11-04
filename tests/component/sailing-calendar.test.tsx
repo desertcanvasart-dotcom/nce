@@ -41,6 +41,7 @@ function show(bookable = true, list = its) {
       today={TODAY}
       bookable={bookable}
       reserve="/cruises/sample/reserve/"
+      ask="/cruises/sample/ask/"
     />,
   );
 }
@@ -67,7 +68,9 @@ describe("SailingCalendar", () => {
       screen.getByRole("button", { name: /13 November 2026: Aswan → Luxor, 3 nights, Expected, not confirmed/ }),
     );
     expect(screen.queryByRole("link", { name: "See prices for this date" })).toBeNull();
-    expect(screen.getByRole("link", { name: "Ask about this date" }).getAttribute("href")).toContain("from=2026-11-13");
+    expect(screen.getByRole("link", { name: "Ask about this date" }).getAttribute("href")).toMatch(
+      /^\/cruises\/sample\/ask\/\?itinerary=[^&]+&date=2026-11-13$/,
+    );
     expect(screen.getByText(/hasn’t confirmed this date/)).toBeTruthy();
   });
 

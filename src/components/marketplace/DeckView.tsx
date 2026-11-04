@@ -8,8 +8,15 @@ import styles from "./DeckView.module.css";
 
 const TONE = { instant: styles.instant, confirm: styles.confirm, sold_out: styles.soldOut };
 
+/** A cabin type's facts in words; facts nobody has confirmed (`unverified`) are left out. */
 export const cabinFacts = (c: VesselCabin) =>
-  [c.sizeM2 ? `${c.sizeM2} m²` : null, c.bed, `sleeps ${c.maxOccupancy}`, c.view, c.balcony ? "private balcony" : null]
+  [
+    c.sizeM2 && !c.unverified?.includes("size") ? `${c.sizeM2} m²` : null,
+    c.unverified?.includes("bed") ? null : c.bed,
+    c.unverified?.includes("max_guests") ? null : `sleeps ${c.maxOccupancy}`,
+    c.unverified?.includes("view") ? null : c.view,
+    c.balcony ? "private balcony" : null,
+  ]
     .filter(Boolean)
     .join(" · ");
 

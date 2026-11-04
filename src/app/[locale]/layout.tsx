@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { fontVariables } from "@/app/fonts";
 import { siteUrl } from "@/lib/env";
@@ -29,6 +29,9 @@ export default async function LocaleLayout({ children, params }: { children: Rea
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "shell" });
+  // Every page's client components get the site's words, except the vessel page's (two fifths of them): only the
+  // pages that draw vessels pass those on (VesselMessages), so no other page downloads them.
+  const messages = Object.fromEntries(Object.entries(await getMessages()).filter(([ns]) => ns !== "vesselPage"));
 
   return (
     // data-theme is owned by the bootstrap script, never by React: if React rendered it, a client re-mount
@@ -43,7 +46,7 @@ export default async function LocaleLayout({ children, params }: { children: Rea
         </noscript>
       </head>
       <body>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
           <ThemeSync />
           <a href="#main" className={shell.skip}>
             {t("skipToContent")}

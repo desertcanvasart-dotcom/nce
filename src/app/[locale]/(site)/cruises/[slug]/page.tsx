@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Listing } from "@/components/marketplace/Listing";
-import { VesselView } from "@/components/marketplace/VesselView";
+import { VesselMessages } from "@/components/marketplace/VesselMessages";
+import { VesselView, vesselWords } from "@/components/marketplace/VesselView";
 import { routing, type Locale } from "@/i18n/routing";
 import { facetBySlug, FACETS, sortListing } from "@/lib/marketplace/listing";
-import { pickItinerary, vesselH1 } from "@/lib/marketplace/vessel";
+import type { ListingVessel } from "@/lib/marketplace/listing";
+import { siteUrl } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { publicListing, publicVessel } from "@/server/marketplace/queries";
 
@@ -25,19 +27,41 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const f = facetBySlug(slug);
   if (f) return pageMetadata({ locale, path: `/cruises/${f.slug}`, title: f.title, description: f.description });
-  const v = await publicVessel(slug);
+  const v = await publicVessel(slug, locale);
   if (!v) return {};
-  // DATA-031: an itinerary is a parameter read in the browser; the canonical is always the vessel URL.
-  const it = pickItinerary(v.itineraries, undefined);
-  return pageMetadata({
+  // The title and description cover every itinerary (DATA-031): no single sailing sets the page's identity.
+  const t = await getTranslations({ locale, namespace: "vesselPage" });
+  const w = vesselWords(
+    v,
+    locale,
+    (k, x) => t(k as never, x as never),
+    (k) => t.raw(k as never),
+  );
+  const meta = pageMetadata({
     locale,
     path: `/cruises/${v.slug}`,
-    title: `${vesselH1(v.name, it)} | Nile cruise`,
-    description:
-      v.summary ?? `${v.name}: itineraries, cabins by deck, the Nilecruz evaluation and the starting price for a Nile cruise.`,
+    title: w.title,
+    description: w.description ?? undefined,
     // Sample vessels are test data: never indexed.
     noindex: v.sample,
   });
+  const images = v.photos[0] ? [{ url: photoUrl(v.slug), alt: v.photos[0].alt }] : undefined;
+  return {
+    ...meta,
+    openGraph: { ...meta.openGraph, type: "website", images },
+    twitter: { card: "summary_large_image", title: w.title, description: w.description ?? undefined, images },
+  };
+}
+
+/** The main photo at a stable address on the site (signed storage links expire). */
+const photoUrl = (slug: string) => `${siteUrl}/api/vessel-files/${slug}/photo/`;
+
+/** Up to three other public vessels of the same type to compare: those with a photo first, then by name. */
+function similarTo(slug: string, type: string, all: ListingVessel[]): ListingVessel[] {
+  return all
+    .filter((x) => x.slug !== slug && x.type === type)
+    .sort((a, b) => Number(!a.image) - Number(!b.image) || a.name.localeCompare(b.name))
+    .slice(0, 3);
 }
 
 /**
@@ -49,9 +73,18 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
   setRequestLocale(locale);
   const f = facetBySlug(slug);
   if (!f) {
-    const v = await publicVessel(slug);
+    const [v, all] = await Promise.all([publicVessel(slug, locale), publicListing()]);
     if (!v) notFound();
-    return <VesselView locale={locale} v={v} it={pickItinerary(v.itineraries, undefined)} />;
+    return (
+      <VesselMessages>
+        <VesselView
+          locale={locale}
+          v={v}
+          similar={similarTo(v.slug, v.type, all)}
+          ogImage={v.photos[0] ? photoUrl(v.slug) : undefined}
+        />
+      </VesselMessages>
+    );
   }
   const all = await publicListing();
   return (

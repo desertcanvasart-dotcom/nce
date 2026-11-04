@@ -291,7 +291,9 @@
 .scrolling .map {
   position: sticky;
   z-index: 2;
-  top: 0;
+
+  /* Below a page's own sticky bar, when it has one (the vessel page's sections). */
+  top: var(--bar, 0);
   background: var(--surface);
 }
 

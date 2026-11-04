@@ -16,7 +16,7 @@ export async function cabinTypes(vesselId: string) {
   const db = await getDb();
   const { data } = await db
     .from("cabin_types")
-    .select("*, cabin_type_translations(locale, name, description), media(id)")
+    .select("*, cabin_type_translations(locale, name, description), media!media_cabin_type_id_fkey(id)")
     .eq("vessel_id", vesselId)
     .order("deck")
     .order("sort_order")
@@ -29,7 +29,7 @@ export async function cabinType(id: string, vesselId: string) {
   const { data } = await db
     .from("cabin_types")
     .select(
-      "*, cabin_type_translations(locale, name, description), media(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt))",
+      "*, cabin_type_translations(locale, name, description), media!media_cabin_type_id_fkey(id, storage_path, width, height, credit, sort_order, media_translations(locale, alt))",
     )
     .eq("id", id)
     .eq("vessel_id", vesselId)

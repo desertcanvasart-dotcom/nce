@@ -12,6 +12,7 @@ const TOPIC = {
   vessel: "A vessel or our evaluation",
   partner: "Operators and travel partners",
   other: "Something else",
+  offer: "An offer for a vessel",
 } as const;
 
 /**
@@ -23,7 +24,9 @@ export default async function MessagesPage() {
   const db = await getDb();
   const { data } = await db
     .from("contact_messages")
-    .select("id, name, email, topic, message, created_at, handled_at")
+    .select(
+      "id, name, email, topic, message, created_at, handled_at, route, nights, departs_on, guests, vessel:vessels(name, slug)",
+    )
     .order("created_at", { ascending: false })
     .limit(200);
   const since = new Date(nowMs() - 86_400_000).toISOString();
@@ -46,6 +49,21 @@ export default async function MessagesPage() {
               <strong>{m.name}</strong> · <a href={`mailto:${m.email}`}>{m.email}</a> · {TOPIC[m.topic]} ·{" "}
               <CairoTime value={m.created_at} />
             </p>
+            {m.vessel ? (
+              <p>
+                {/* Asked from a vessel page: the boat, route, nights, date and party it was asked for. */}
+                <a href={`/cruises/${m.vessel.slug}/`}>{m.vessel.name}</a>
+                {[
+                  m.route,
+                  m.nights ? `${m.nights} nights` : null,
+                  m.departs_on ? `from ${m.departs_on}` : null,
+                  m.guests ? `${m.guests} ${m.guests === 1 ? "person" : "people"}` : null,
+                ]
+                  .filter(Boolean)
+                  .map((x) => ` · ${x}`)
+                  .join("")}
+              </p>
+            ) : null}
             <p className={ui.prewrap}>{m.message}</p>
             <ActionForm
               action={fileMessage.bind(null, m.id, !handled)}
@@ -62,7 +80,8 @@ export default async function MessagesPage() {
     <>
       <h1 className={ui.pageTitle}>Messages</h1>
       <p className={ui.muted}>
-        Sent from the Contact page. Reply by email from your own mailbox, then mark the message as handled.
+        Sent from the Contact page and from “Ask for an offer” on vessel pages. Reply by email from your own mailbox, then mark
+        the message as handled.
       </p>
       <Section title={`Open (${open.length})`} id="open">
         {list(open, false)}

@@ -7,7 +7,8 @@ import styles from "./marketplace.module.css";
 
 export type ItineraryPanel = {
   code: string;
-  nights: number;
+  /** "4 nights", in the page's language. */
+  nights: string;
   /** "Luxor → Aswan". */
   route: string;
   /** "Mondays", or how it sails when it has no weekly day. */
@@ -23,21 +24,30 @@ const ARROW = { south: "↓", north: "↑" } as const;
  * The parameter is canonical to the vessel URL. Choosing another itinerary swaps it in place and updates the address,
  * so the choice can be shared. Without JavaScript the default (shortest) itinerary shows, and the links still work.
  */
-export function ItinerarySwitch({ panels, defaultCode }: { panels: ItineraryPanel[]; defaultCode: string }) {
+export function ItinerarySwitch({
+  panels,
+  defaultCode,
+  label,
+}: {
+  panels: ItineraryPanel[];
+  defaultCode: string;
+  /** "Choose your cruise", in the page's language. */
+  label: string;
+}) {
   return (
-    <Suspense fallback={<Panels panels={panels} initial={defaultCode} />}>
-      <FromUrl panels={panels} defaultCode={defaultCode} />
+    <Suspense fallback={<Panels panels={panels} initial={defaultCode} label={label} />}>
+      <FromUrl panels={panels} defaultCode={defaultCode} label={label} />
     </Suspense>
   );
 }
 
-function FromUrl({ panels, defaultCode }: { panels: ItineraryPanel[]; defaultCode: string }) {
+function FromUrl({ panels, defaultCode, label }: { panels: ItineraryPanel[]; defaultCode: string; label: string }) {
   const asked = useSearchParams().get("itinerary")?.toLowerCase();
   const initial = panels.find((p) => p.code.toLowerCase() === asked)?.code ?? defaultCode;
-  return <Panels key={initial} panels={panels} initial={initial} />;
+  return <Panels key={initial} panels={panels} initial={initial} label={label} />;
 }
 
-function Panels({ panels, initial }: { panels: ItineraryPanel[]; initial: string }) {
+function Panels({ panels, initial, label }: { panels: ItineraryPanel[]; initial: string; label: string }) {
   const [current, setCurrent] = useState(initial);
   const pick = (e: MouseEvent<HTMLAnchorElement>, code: string) => {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
@@ -51,8 +61,8 @@ function Panels({ panels, initial }: { panels: ItineraryPanel[]; initial: string
   return (
     <>
       {panels.length > 1 ? (
-        <nav aria-label="Choose your cruise" className={styles.lengths}>
-          <p className={styles.lengthsTitle}>Choose your cruise</p>
+        <nav aria-label={label} className={styles.lengths}>
+          <p className={styles.lengthsTitle}>{label}</p>
           <ul>
             {panels.map((p) => (
               <li key={p.code}>
@@ -61,9 +71,7 @@ function Panels({ panels, initial }: { panels: ItineraryPanel[]; initial: string
                   aria-current={p.code === current ? "true" : undefined}
                   onClick={(e) => pick(e, p.code)}
                 >
-                  <strong>
-                    {p.nights} {p.nights === 1 ? "night" : "nights"}
-                  </strong>
+                  <strong>{p.nights}</strong>
                   <span>
                     {p.heading ? (
                       <span className={styles[p.heading]} aria-hidden="true">

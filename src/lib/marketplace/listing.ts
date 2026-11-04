@@ -28,8 +28,10 @@ export type ListingVessel = {
   showcase: boolean;
   summary: string | null;
   image?: { src: string; alt: string; width: number; height: number };
-  /** Published Nilecruz evaluation, 0–100 (ADR-009). */
+  /** Published Nilecruz evaluation, 0–100 (ADR-009): only one that may be published (evaluationPublishable). */
   evaluation?: number;
+  /** A guide price per person and night for a vessel that can't be booked; never a "from" price. */
+  indicativePerNight?: Money;
   itineraries: Itinerary[];
   /** The one public price (ADR-025, ADR-093); absent when nothing is bookable or no rate fits. */
   from?: Money;

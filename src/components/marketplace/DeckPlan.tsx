@@ -1,6 +1,7 @@
 import type { BookingMode, VesselCabin, VesselPage } from "@/lib/marketplace/vessel";
 import { DeckLayoutView } from "./DeckLayoutView";
 import { DeckView } from "./DeckView";
+import { VesselMessages } from "./VesselMessages";
 import styles from "./marketplace.module.css";
 
 /**
@@ -25,13 +26,15 @@ export function DeckPlan(props: {
   const { plan, ...rest } = props;
   if (plan?.layout && !props.modes)
     return (
-      <DeckLayoutView
-        layout={plan.layout}
-        original={plan.original}
-        cabins={props.cabins}
-        maxGuests={props.maxGuests}
-        sharedSpaces={props.sharedSpaces}
-      />
+      <VesselMessages>
+        <DeckLayoutView
+          layout={plan.layout}
+          original={plan.original}
+          cabins={props.cabins}
+          maxGuests={props.maxGuests}
+          sharedSpaces={props.sharedSpaces}
+        />
+      </VesselMessages>
     );
   return (
     <>
