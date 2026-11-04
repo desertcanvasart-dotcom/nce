@@ -4,7 +4,8 @@
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
 import { formatMoney } from "@/components/ds/lib/format";
-import type { Money, VesselType } from "@/components/ds/lib/types";
+import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
+import type { IndicativePrice } from "./vessel";
 
 export type Itinerary = {
   origin: string;
@@ -18,11 +19,18 @@ export type ListingVessel = {
   id: string;
   slug: string;
   name: string;
+  /** The heading when it differs from the name ("Dendera, by Nour El Nil"). */
+  displayName?: string | null;
   type: VesselType;
+  /** What drives it; null until confirmed in its data. */
+  propulsion: Propulsion | null;
   category: string | null;
   maxGuests: number | null;
   cabinCount: number | null;
   deckCount: number | null;
+  /** Length and beam in metres, when both are confirmed. */
+  lengthM?: number | null;
+  beamM?: number | null;
   sample: boolean;
   /** Showcase vessels are listed although incomplete (DASH-PUB-010). */
   showcase: boolean;
@@ -30,8 +38,8 @@ export type ListingVessel = {
   image?: { src: string; alt: string; width: number; height: number };
   /** Published Nilecruz evaluation, 0–100 (ADR-009): only one that may be published (evaluationPublishable). */
   evaluation?: number;
-  /** A guide price per person and night for a vessel that can't be booked; never a "from" price. */
-  indicativePerNight?: Money;
+  /** A guide price per person (per night or per trip) for a vessel that can't be booked; never a "from" price. */
+  indicativePrice?: IndicativePrice;
   itineraries: Itinerary[];
   /** The one public price (ADR-025, ADR-093); absent when nothing is bookable or no rate fits. */
   from?: Money;
@@ -131,9 +139,10 @@ export function toCard(v: ListingVessel): GridCard {
   if (v.sample) badges.push({ label: "Sample data", tone: "accent", icon: "info" });
   return {
     slug: v.slug,
-    name: v.name,
+    name: v.displayName ?? v.name,
     href: `/cruises/${v.slug}/`,
     vessel: v.type,
+    propulsion: v.propulsion ?? undefined,
     route: it ? [it.origin, it.destination] : undefined,
     nights: it?.nights,
     guests: v.maxGuests ?? undefined,
@@ -205,6 +214,8 @@ export type SearchQuery = {
   q?: string;
   /** ADR-102: only vessels with a "with sightseeing" price (their own or Nilecruz's programme). */
   sightseeing?: boolean;
+  /** Only vessels driven this way (motor, wind or steam), from their own data. */
+  propulsion?: Propulsion;
 };
 
 /** Reads the CruiseSearch GET form (route, vessel, date, adults, ages); anything unknown is ignored. */
@@ -225,10 +236,12 @@ export function parseSearch(sp: Record<string, string | string[] | undefined>): 
     date: date && /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined,
     guests: guests || undefined,
     sightseeing: one("sightseeing") === "1" || undefined,
+    propulsion: PROPULSIONS.find((p) => p === one("propulsion")),
   };
 }
 
-export const isSearching = (q: SearchQuery) => !!(q.route || q.vessel || q.date || q.guests || q.q || q.sightseeing);
+export const isSearching = (q: SearchQuery) =>
+  !!(q.route || q.vessel || q.date || q.guests || q.q || q.sightseeing || q.propulsion);
 
 /** The vessels that fit, and how many departures fit (never invented, ADR-007). */
 export function applySearch(list: ListingVessel[], q: SearchQuery): { vessels: ListingVessel[]; departures: number } {
@@ -237,6 +250,7 @@ export function applySearch(list: ListingVessel[], q: SearchQuery): { vessels: L
   const vessels = list.filter((v) => {
     if (words.length && !words.every((w) => v.name.toLowerCase().includes(w))) return false;
     if (q.vessel && v.type !== q.vessel) return false;
+    if (q.propulsion && v.propulsion !== q.propulsion) return false;
     if (q.sightseeing && !(v.bookable && v.fromWithSightseeing)) return false;
     if (q.guests && v.maxGuests && q.guests > v.maxGuests) return false;
     const its = v.itineraries.filter((i) => !q.route || routeId(i.origin, i.destination) === q.route);

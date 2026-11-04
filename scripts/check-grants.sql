@@ -7,7 +7,7 @@ with intended(table_name, grantee, privileges) as (
     ('evaluations', 'anon', 'SELECT'), ('evaluation_translations', 'anon', 'SELECT'), ('external_ratings', 'anon', 'SELECT'),
     ('vessel_submission_events', 'authenticated', 'SELECT'), ('vessel_submission_events', 'service_role', 'SELECT'),
     ('cabin_types', 'anon', 'SELECT'), ('cabin_type_translations', 'anon', 'SELECT'), ('schedules', 'anon', 'SELECT'),
-    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT'),
+    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('schedule_translations', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT'),
     -- Batch 4c-2: connections are read by people and changed only through functions or the service role.
     ('inventory_feeds', 'authenticated', 'SELECT'), ('api_keys', 'authenticated', 'SELECT'),
     ('inventory_runs', 'authenticated', 'SELECT'),
@@ -57,7 +57,7 @@ with intended(table_name, grantee, privileges) as (
                     'destinations', 'destination_translations', 'media', 'media_translations',
                     'evaluations', 'evaluation_translations', 'external_ratings', 'safety_observations',
                     'org_invitations', 'vessel_submissions', 'vessel_import_batches',
-                    'cabin_types', 'cabin_type_translations', 'schedules', 'schedule_periods', 'schedule_days', 'departures',
+                    'cabin_types', 'cabin_type_translations', 'schedules', 'schedule_periods', 'schedule_days', 'schedule_translations', 'departures',
                     'inventory', 'rates', 'platform_settings', 'promotions', 'promotion_translations', 'promotion_rates',
                     'tour_suppliers', 'tours', 'tour_translations', 'tour_schedules', 'tour_sessions', 'programs',
                     'program_translations', 'program_items', 'program_schedules',

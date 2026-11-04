@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Media } from "@/components/ds/Media/Media";
 import { decksOf, type DeckLayout } from "@/lib/marketplace/deck-layout";
-import { verifiedCabin, type VesselCabin, type VesselPage } from "@/lib/marketplace/vessel";
+import { UNKNOWN_DECK, verifiedCabin, type VesselCabin, type VesselPage } from "@/lib/marketplace/vessel";
 import { DeckLayoutView, drawnCabins, toneClass } from "./DeckLayoutView";
 import { DeckView } from "./DeckView";
 import layoutStyles from "./DeckLayoutView.module.css";
@@ -35,6 +35,8 @@ export function CabinsAndDecks({
   const list = (xs: string[]) => new Intl.ListFormat(tag, { type: "conjunction" }).format(xs);
   const drawn = layout ? drawnCabins(layout, cabins) : [];
   const onPlan = (c: VesselCabin) => !!c.code && drawn.some((d) => d.code === c.code);
+  // No deck schematic when the operator hasn't said which deck any cabin is on: nothing is drawn from guesses.
+  const decksKnown = cabins.some((c) => c.deck !== UNKNOWN_DECK);
 
   return (
     <>
@@ -45,7 +47,7 @@ export function CabinsAndDecks({
             const decks = layout && c.code && decksOf(layout, c.code).length ? decksOf(layout, c.code) : null;
             const facts = [
               c.count ? t("cabins.count", { n: c.count }) : null,
-              c.sizeM2 ? t("cabins.size", { n: c.sizeM2 }) : null,
+              c.sizeM2 ? t(c.sizeIncludesBathroom ? "cabins.sizeWithBath" : "cabins.size", { n: c.sizeM2 }) : null,
               c.bed,
               c.maxGuests ? t("cabins.sleeps", { n: c.maxGuests }) : null,
               c.view,
@@ -75,6 +77,7 @@ export function CabinsAndDecks({
                     ))}
                   </ul>
                 ) : null}
+                {c.description ? <p className={styles.cabinNote}>{c.description}</p> : null}
                 {onPlan(c) ? (
                   <button
                     type="button"
@@ -103,7 +106,7 @@ export function CabinsAndDecks({
       ) : (
         <>
           {/* No drawn plan yet: the decks as a schematic, the operator's own plan to download when there is one. */}
-          {cabins.length ? (
+          {cabins.length && decksKnown ? (
             <DeckView cabins={cabins.map(verifiedCabin)} maxGuests={maxGuests} sharedSpaces={sharedSpaces} />
           ) : null}
           {original ? (

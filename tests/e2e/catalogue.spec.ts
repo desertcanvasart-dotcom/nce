@@ -40,6 +40,7 @@ test.describe("admin catalogue (DASH-ADM-010–034)", () => {
     await signInAdmin(page, EDITOR);
     await page.goto(`/dashboard/admin/catalogue/${VESSEL}/`);
     const details = page.locator("form", { has: page.getByRole("button", { name: "Save details" }) });
+    await details.getByLabel("Propulsion").selectOption("steam");
     await details.getByLabel("Category").selectOption("deluxe");
     await details.getByLabel("Route").fill("Luxor–Aswan");
     await details.getByLabel("Families").check();

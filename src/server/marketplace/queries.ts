@@ -77,15 +77,27 @@ function publishable(rows: EvaluationRow[], locale: Locale): VesselEvaluation | 
 
 const indicative = (v: {
   indicative_per_night_minor: number | null;
+  indicative_per_trip_minor: number | null;
+  indicative_trip_nights: number | null;
   indicative_currency: string | null;
-}): VesselPage["indicativePrice"] =>
-  v.indicative_per_night_minor !== null && v.indicative_currency
-    ? {
-        perNight: { amount: Number(v.indicative_per_night_minor), currency: v.indicative_currency },
-        basis: "per_person_per_night",
-        status: "indicative",
-      }
-    : undefined;
+}): VesselPage["indicativePrice"] => {
+  if (!v.indicative_currency) return undefined;
+  if (v.indicative_per_night_minor !== null)
+    return {
+      perNight: { amount: Number(v.indicative_per_night_minor), currency: v.indicative_currency },
+      basis: "per_person_per_night",
+      status: "indicative",
+    };
+  if (v.indicative_per_trip_minor !== null && v.indicative_trip_nights)
+    return {
+      perTrip: { amount: Number(v.indicative_per_trip_minor), currency: v.indicative_currency },
+      nights: v.indicative_trip_nights,
+      basis: "per_person_per_trip",
+      status: "indicative",
+    };
+  return undefined;
+};
+const PRICE_COLUMNS = "indicative_per_night_minor, indicative_per_trip_minor, indicative_trip_nights, indicative_currency";
 
 async function loadListing(): Promise<ListingVessel[]> {
   const db = visitorDb();
@@ -96,7 +108,7 @@ async function loadListing(): Promise<ListingVessel[]> {
     db
       .from("vessels")
       .select(
-        `id, slug, name, type, category, max_guests, cabin_count, deck_count, is_sample, visibility, indicative_per_night_minor, indicative_currency, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
+        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, is_sample, visibility, ${PRICE_COLUMNS}, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
       )
       .in("visibility", ["published", "showcase"])
       .order("name"),
@@ -120,17 +132,21 @@ async function loadListing(): Promise<ListingVessel[]> {
       id: v.id,
       slug: v.slug,
       name: v.name,
+      displayName: v.display_name,
       type: v.type,
+      propulsion: v.propulsion,
       category: v.category,
       maxGuests: v.max_guests,
       cabinCount: v.cabin_count,
       deckCount: v.deck_count,
+      lengthM: v.length_m === null ? null : Number(v.length_m),
+      beamM: v.beam_m === null ? null : Number(v.beam_m),
       sample: v.is_sample,
       showcase: v.visibility === "showcase",
       summary: v.vessel_translations.find((t) => t.locale === "en")?.summary ?? null,
       image,
       evaluation: evaluation?.score,
-      indicativePerNight: indicative(v)?.perNight,
+      indicativePrice: indicative(v),
       itineraries: v.schedules
         .filter((s) => s.active)
         .map((s) => ({
@@ -154,7 +170,7 @@ async function loadListing(): Promise<ListingVessel[]> {
   return out;
 }
 
-export const publicListing = unstable_cache(loadListing, ["public-listing-v3"], {
+export const publicListing = unstable_cache(loadListing, ["public-listing-v4"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });
@@ -168,7 +184,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     db
       .from("vessels")
       .select(
-        `id, slug, name, type, category, max_guests, cabin_count, deck_count, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, indicative_per_night_minor, indicative_currency, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), departures(id, departs_on, returns_on, status))`,
+        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, ${PRICE_COLUMNS}, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included, propulsion_note, on_board, good_to_know, seo_title, seo_description), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, size_includes_bathroom, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name, description, bed_configuration, view)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), schedule_translations(locale, boarding_note), departures(id, departs_on, returns_on, status))`,
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -201,9 +217,14 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
   const en = v.vessel_translations.find((t) => t.locale === "en");
   const own = v.vessel_translations.find((t) => t.locale === locale);
   // Each text in the page's language when it has been written, else in English.
-  const say = <K extends "summary" | "description" | "dining" | "good_for" | "less_suited_to">(k: K) =>
-    own?.[k] ?? en?.[k] ?? null;
-  const listed = (k: "included" | "optional_extras" | "not_included") => (own?.[k]?.length ? own[k] : (en?.[k] ?? []));
+  const say = <
+    K extends
+      "summary" | "description" | "dining" | "good_for" | "less_suited_to" | "propulsion_note" | "seo_title" | "seo_description",
+  >(
+    k: K,
+  ) => own?.[k] ?? en?.[k] ?? null;
+  const listed = (k: "included" | "optional_extras" | "not_included" | "on_board" | "good_to_know") =>
+    own?.[k]?.length ? own[k] : (en?.[k] ?? []);
   // ADR-102: Nilecruz's sightseeing programme for each itinerary (published, with an office and an active programme
   // rate); none for a vessel that sells its own. Priced per person for a party of two (the database prices the party).
   const { data: progs } = await db
@@ -235,11 +256,15 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     id: v.id,
     slug: v.slug,
     name: v.name,
+    displayName: v.display_name,
     type: v.type,
+    propulsion: v.propulsion,
     category: v.category,
     maxGuests: v.max_guests,
     cabinCount: v.cabin_count,
     deckCount: v.deck_count,
+    lengthM: v.length_m === null ? null : Number(v.length_m),
+    beamM: v.beam_m === null ? null : Number(v.beam_m),
     mooring: v.mooring,
     sharedSpaces: v.shared_spaces,
     yearBuilt: v.year_built,
@@ -251,6 +276,11 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     goodFor: say("good_for"),
     lessSuitedTo: say("less_suited_to"),
     inclusions: { included: listed("included"), optional: listed("optional_extras"), notIncluded: listed("not_included") },
+    propulsionNote: say("propulsion_note"),
+    onBoard: listed("on_board"),
+    goodToKnow: listed("good_to_know"),
+    seoTitle: say("seo_title"),
+    seoDescription: say("seo_description"),
     indicativePrice: indicative(v),
     dietaryOptions: v.dietary_options,
     gratuityUsdMinor: v.gratuity_usd_minor === null ? null : Number(v.gratuity_usd_minor),
@@ -258,21 +288,27 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     cabins: v.cabin_types
       .filter((c) => c.active)
       .sort((a, b) => a.sort_order - b.sort_order)
-      .map((c) => ({
-        id: c.id,
-        code: c.code,
-        name: c.cabin_type_translations.find((t) => t.locale === locale)?.name ?? c.name,
-        deck: c.deck,
-        sizeM2: c.size_m2 === null ? null : Number(c.size_m2),
-        bed: c.bed_configuration,
-        maxOccupancy: c.max_occupancy,
-        view: c.view,
-        balcony: c.balcony,
-        amenities: c.amenities,
-        count: c.cabin_count,
-        unverified: c.unverified_fields as CabinFact[],
-        photos: cabinPhotos.get(c.id) ?? [],
-      })),
+      .map((c) => {
+        const own = c.cabin_type_translations.find((t) => t.locale === locale);
+        const en = c.cabin_type_translations.find((t) => t.locale === "en");
+        return {
+          id: c.id,
+          code: c.code,
+          name: own?.name ?? c.name,
+          deck: c.deck,
+          sizeM2: c.size_m2 === null ? null : Number(c.size_m2),
+          sizeIncludesBathroom: c.size_includes_bathroom,
+          bed: own?.bed_configuration ?? c.bed_configuration,
+          maxOccupancy: c.max_occupancy,
+          view: own?.view ?? c.view,
+          description: own?.description ?? en?.description ?? null,
+          balcony: c.balcony,
+          amenities: c.amenities,
+          count: c.cabin_count,
+          unverified: c.unverified_fields as CabinFact[],
+          photos: cabinPhotos.get(c.id) ?? [],
+        };
+      }),
     deckPlan: plan ? { layout, original } : null,
     itineraries: v.schedules
       .filter((s) => s.active)
@@ -284,6 +320,10 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
         nights: s.nights,
         sailingPeriod: s.sailing_period,
         sailsAt: s.sails_at,
+        boardingNote:
+          s.schedule_translations.find((t) => t.locale === locale)?.boarding_note ??
+          s.schedule_translations.find((t) => t.locale === "en")?.boarding_note ??
+          null,
         // The programme in the page's language when every day is written in it, else in English.
         days: s.schedule_days
           .filter(
@@ -332,7 +372,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
 }
 
 /** One vessel's public page data, cached like the listing (the slug and language are part of the cache key). */
-export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v3"], {
+export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v4"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

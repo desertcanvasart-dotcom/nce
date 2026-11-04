@@ -3,7 +3,7 @@ import type { Mooring } from "@/lib/catalogue/mooring";
 /**
  * The vessel page (PAGE-072, Batch 5-2), kept free of I/O so it is unit-tested. English copy until Batch 10 (ADR-093).
  */
-import type { Money, VesselType } from "@/components/ds/lib/types";
+import type { Money, Propulsion, VesselType } from "@/components/ds/lib/types";
 import type { SailingPeriod } from "@/lib/product/sailing-time";
 
 export type VesselCabin = {
@@ -20,6 +20,10 @@ export type VesselCabin = {
   amenities: string[];
   /** How many cabins of this type the vessel has, when known. */
   count?: number | null;
+  /** The area includes the bathroom ("Area, including bathroom"). */
+  sizeIncludesBathroom?: boolean;
+  /** A short note on the type in the page's language, e.g. how a two-room suite is sold. */
+  description?: string | null;
   /** Facts that came from an import but nobody has confirmed: never shown. */
   unverified?: CabinFact[];
   /** Photos of this cabin type (the vessel photos that show it). */
@@ -27,6 +31,8 @@ export type VesselCabin = {
 };
 
 export type CabinFact = "size" | "bed" | "max_guests" | "view";
+/** The deck an imported cabin type gets when the operator hasn't said: no deck drawing is made from it. */
+export const UNKNOWN_DECK = "To be confirmed";
 /** A cabin type with only its confirmed facts: the ones not confirmed become null. */
 export function verifiedCabin(c: VesselCabin): VesselCabin & { maxGuests: number | null } {
   const hide = new Set(c.unverified ?? []);
@@ -47,6 +53,8 @@ export type VesselItinerary = {
   nights: number;
   sailingPeriod: SailingPeriod | null;
   sailsAt: string | null;
+  /** How guests get on board (transfers, pick-up times), in the page's language. */
+  boardingNote?: string | null;
   days: { day: number; title: string; body: string }[];
   /** Future scheduled departure dates, ascending. */
   departures: string[];
@@ -109,13 +117,24 @@ export function evaluationPublishable(e: VesselEvaluation | undefined): e is Ves
   );
 }
 
-export type IndicativePrice = { perNight: Money; basis: "per_person_per_night"; status: "indicative" };
+/**
+ * A guide price per person, never a quote: per night, or for a whole cruise of a given length (sharing a double room)
+ * when the operator prices per trip. A per-trip price is never turned into a nightly figure.
+ */
+export type IndicativePrice =
+  | { perNight: Money; basis: "per_person_per_night"; status: "indicative" }
+  | { perTrip: Money; nights: number; basis: "per_person_per_trip"; status: "indicative" };
 
-/** The indicative price of a whole itinerary per person: the nightly guide times the nights (rounded only for display). */
-export const indicativeTotal = (p: IndicativePrice, nights: number): Money => ({
-  amount: p.perNight.amount * nights,
-  currency: p.perNight.currency,
-});
+/**
+ * The indicative price of a whole itinerary per person: the nightly guide times the nights (rounded only for display),
+ * or the per-trip guide for a cruise of exactly its length; none for any other length.
+ */
+export const indicativeTotal = (p: IndicativePrice, nights: number): Money | null =>
+  p.basis === "per_person_per_night"
+    ? { amount: p.perNight.amount * nights, currency: p.perNight.currency }
+    : p.nights === nights
+      ? p.perTrip
+      : null;
 
 /** The distinct lengths of a vessel's itineraries, shortest first. */
 export const nightsOf = (its: Pick<VesselItinerary, "nights">[]) => [...new Set(its.map((i) => i.nights))].sort((a, b) => a - b);
@@ -125,10 +144,17 @@ export type VesselPage = {
   slug: string;
   name: string;
   type: VesselType;
+  /** What drives it; null until confirmed in its data (no badge then). */
+  propulsion: Propulsion | null;
+  /** The heading when it differs from the name ("Dendera, by Nour El Nil"). */
+  displayName?: string | null;
   category: string | null;
   maxGuests: number | null;
   cabinCount: number | null;
   deckCount: number | null;
+  /** Length and beam in metres, when both are confirmed. */
+  lengthM?: number | null;
+  beamM?: number | null;
   /** EXP-005, EXP-002: how it moors, and the spaces all its guests share. */
   mooring: Mooring | null;
   sharedSpaces: string[];
@@ -158,6 +184,14 @@ export type VesselPage = {
   lessSuitedTo?: string | null;
   /** What a cruise includes, verified entries only. */
   inclusions?: { included: string[]; optional: string[]; notIncluded: string[] };
+  /** How a wind-driven vessel sails, in the page's language. */
+  propulsionNote?: string | null;
+  /** Notes on life on board (air conditioning, Wi-Fi, laundry…) and "good to know" points; empty lists hide. */
+  onBoard?: string[];
+  goodToKnow?: string[];
+  /** A search title and description of the vessel's own, when its data has them. */
+  seoTitle?: string | null;
+  seoDescription?: string | null;
   externalRatings: {
     source: string;
     rating: number;

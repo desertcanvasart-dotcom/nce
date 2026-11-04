@@ -159,6 +159,14 @@ export async function VesselsPillar({ locale, all }: { locale: Locale; all: List
                 v.slug,
                 <>
                   {v.cabinCount ? <p>{t("samples.cabins", { count: v.cabinCount })}</p> : null}
+                  {v.lengthM && v.beamM ? (
+                    <p>
+                      {t("samples.size", {
+                        length: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v.lengthM),
+                        beam: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(v.beamM),
+                      })}
+                    </p>
+                  ) : null}
                   {/* The record's summary is English; the other languages show the facts only. */}
                   {locale === "en" && v.summary ? <p>{v.summary}</p> : null}
                 </>,

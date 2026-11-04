@@ -21,6 +21,7 @@ const optText = (max: number) =>
 export const vesselDetailsInput = z.object({
   name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),
   type: z.enum(["sail", "motor", "steam"], { message: "choose a type" }),
+  propulsion: z.enum(["motor", "wind", "steam"], { message: "choose what drives it" }),
   route_text: optText(200),
   category: z
     .union([z.literal(""), z.enum(CATEGORIES.map((c) => c.value) as [string, ...string[]])])

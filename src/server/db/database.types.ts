@@ -368,22 +368,28 @@ export type Database = {
       };
       cabin_type_translations: {
         Row: {
+          bed_configuration: string | null;
           cabin_type_id: string;
           description: string | null;
           locale: string;
           name: string | null;
+          view: string | null;
         };
         Insert: {
+          bed_configuration?: string | null;
           cabin_type_id: string;
           description?: string | null;
           locale: string;
           name?: string | null;
+          view?: string | null;
         };
         Update: {
+          bed_configuration?: string | null;
           cabin_type_id?: string;
           description?: string | null;
           locale?: string;
           name?: string | null;
+          view?: string | null;
         };
         Relationships: [
           {
@@ -408,6 +414,7 @@ export type Database = {
           id: string;
           max_occupancy: number;
           name: string;
+          size_includes_bathroom: boolean;
           size_m2: number | null;
           sort_order: number;
           unverified_fields: string[];
@@ -427,6 +434,7 @@ export type Database = {
           id?: string;
           max_occupancy?: number;
           name: string;
+          size_includes_bathroom?: boolean;
           size_m2?: number | null;
           sort_order?: number;
           unverified_fields?: string[];
@@ -446,6 +454,7 @@ export type Database = {
           id?: string;
           max_occupancy?: number;
           name?: string;
+          size_includes_bathroom?: boolean;
           size_m2?: number | null;
           sort_order?: number;
           unverified_fields?: string[];
@@ -3247,6 +3256,32 @@ export type Database = {
           },
         ];
       };
+      schedule_translations: {
+        Row: {
+          boarding_note: string | null;
+          locale: string;
+          schedule_id: string;
+        };
+        Insert: {
+          boarding_note?: string | null;
+          locale: string;
+          schedule_id: string;
+        };
+        Update: {
+          boarding_note?: string | null;
+          locale?: string;
+          schedule_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "schedule_translations_schedule_id_fkey";
+            columns: ["schedule_id"];
+            isOneToOne: false;
+            referencedRelation: "schedules";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       schedules: {
         Row: {
           active: boolean;
@@ -4406,11 +4441,16 @@ export type Database = {
           description: string | null;
           dining: string | null;
           good_for: string | null;
+          good_to_know: string[];
           included: string[];
           less_suited_to: string | null;
           locale: string;
           not_included: string[];
+          on_board: string[];
           optional_extras: string[];
+          propulsion_note: string | null;
+          seo_description: string | null;
+          seo_title: string | null;
           summary: string | null;
           updated_at: string;
           vessel_id: string;
@@ -4419,11 +4459,16 @@ export type Database = {
           description?: string | null;
           dining?: string | null;
           good_for?: string | null;
+          good_to_know?: string[];
           included?: string[];
           less_suited_to?: string | null;
           locale: string;
           not_included?: string[];
+          on_board?: string[];
           optional_extras?: string[];
+          propulsion_note?: string | null;
+          seo_description?: string | null;
+          seo_title?: string | null;
           summary?: string | null;
           updated_at?: string;
           vessel_id: string;
@@ -4432,11 +4477,16 @@ export type Database = {
           description?: string | null;
           dining?: string | null;
           good_for?: string | null;
+          good_to_know?: string[];
           included?: string[];
           less_suited_to?: string | null;
           locale?: string;
           not_included?: string[];
+          on_board?: string[];
           optional_extras?: string[];
+          propulsion_note?: string | null;
+          seo_description?: string | null;
+          seo_title?: string | null;
           summary?: string | null;
           updated_at?: string;
           vessel_id?: string;
@@ -4453,23 +4503,29 @@ export type Database = {
       };
       vessels: {
         Row: {
+          beam_m: number | null;
           best_for: Database["public"]["Enums"]["best_for_label"][];
           cabin_count: number | null;
           category: Database["public"]["Enums"]["vessel_category"] | null;
           created_at: string;
           deck_count: number | null;
           dietary_options: string[];
+          display_name: string | null;
           gratuity_usd_minor: number | null;
           id: string;
           indicative_basis: string | null;
           indicative_currency: string | null;
           indicative_per_night_minor: number | null;
+          indicative_per_trip_minor: number | null;
           indicative_status: string | null;
+          indicative_trip_nights: number | null;
           is_sample: boolean;
+          length_m: number | null;
           max_guests: number | null;
           mooring: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id: string | null;
+          propulsion: Database["public"]["Enums"]["propulsion"] | null;
           published_at: string | null;
           route_text: string | null;
           shared_spaces: string[];
@@ -4485,23 +4541,29 @@ export type Database = {
           year_built: number | null;
         };
         Insert: {
+          beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
+          display_name?: string | null;
           gratuity_usd_minor?: number | null;
           id?: string;
           indicative_basis?: string | null;
           indicative_currency?: string | null;
           indicative_per_night_minor?: number | null;
+          indicative_per_trip_minor?: number | null;
           indicative_status?: string | null;
+          indicative_trip_nights?: number | null;
           is_sample?: boolean;
+          length_m?: number | null;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id?: string | null;
+          propulsion?: Database["public"]["Enums"]["propulsion"] | null;
           published_at?: string | null;
           route_text?: string | null;
           shared_spaces?: string[];
@@ -4517,23 +4579,29 @@ export type Database = {
           year_built?: number | null;
         };
         Update: {
+          beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
+          display_name?: string | null;
           gratuity_usd_minor?: number | null;
           id?: string;
           indicative_basis?: string | null;
           indicative_currency?: string | null;
           indicative_per_night_minor?: number | null;
+          indicative_per_trip_minor?: number | null;
           indicative_status?: string | null;
+          indicative_trip_nights?: number | null;
           is_sample?: boolean;
+          length_m?: number | null;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name?: string;
           operator_org_id?: string | null;
+          propulsion?: Database["public"]["Enums"]["propulsion"] | null;
           published_at?: string | null;
           route_text?: string | null;
           shared_spaces?: string[];
@@ -5335,6 +5403,7 @@ export type Database = {
       price_basis: "per_guest" | "per_group";
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
       proof_status: "submitted" | "verified" | "rejected";
+      propulsion: "motor" | "wind" | "steam";
       rate_plan: "international" | "egyptian_citizen" | "foreign_resident" | "trade";
       refund_method: "stripe" | "manual";
       request_status: "open" | "accepted" | "closed";
@@ -5504,6 +5573,7 @@ export const Constants = {
       price_basis: ["per_guest", "per_group"],
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],
       proof_status: ["submitted", "verified", "rejected"],
+      propulsion: ["motor", "wind", "steam"],
       rate_plan: ["international", "egyptian_citizen", "foreign_resident", "trade"],
       refund_method: ["stripe", "manual"],
       request_status: ["open", "accepted", "closed"],

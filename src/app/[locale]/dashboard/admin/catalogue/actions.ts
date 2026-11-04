@@ -66,6 +66,7 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
     return problemsFrom(input.error, {
       name: "Name",
       type: "Type",
+      propulsion: "Propulsion",
       route_text: "Route",
       category: "Category",
       cabin_count: "Cabins",
@@ -91,6 +92,7 @@ export async function saveDetails(id: string, _prev: ActionState, fd: FormData):
     .update({
       name: d.name,
       type: d.type,
+      propulsion: d.propulsion,
       route_text: d.route_text,
       category: d.category as "luxury" | null,
       cabin_count: d.cabin_count,

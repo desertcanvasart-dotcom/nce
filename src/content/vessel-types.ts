@@ -20,10 +20,10 @@ const EN: Record<VesselType, TypeText> = {
     name: "Sailing dahabiya",
     short: "The private sailing house",
     line: "A two-masted sailing houseboat with just 4 to 10 cabins. It moors mostly at riverbanks and islands, away from the town quays.",
-    facts: ["4–10 cabins", "About 8–20 guests", "Ideally 5 nights, Esna to Aswan", "Mostly riverbanks and islands"],
+    facts: ["4–10 cabins", "About 8–24 guests", "Ideally 5 nights, Esna to Aswan", "Mostly riverbanks and islands"],
     rows: {
       cabins: "4–10",
-      guests: "About 8–20",
+      guests: "About 8–24",
       power: "Two sails, with a motor boat travelling alongside that can tow it when there’s no wind",
       pace: "Sails by day, with time to stop at quiet moorings between Esna and Aswan",
       mooring: "Mostly riverbanks and islands",
@@ -78,10 +78,10 @@ const ES: Record<VesselType, TypeText> = {
     name: "Dahabiya de vela",
     short: "La casa flotante a vela",
     line: "Una casa flotante de dos mástiles con solo 4 a 10 camarotes. Amarra sobre todo en orillas e islas, lejos de los muelles de las ciudades.",
-    facts: ["4–10 camarotes", "Unos 8–20 pasajeros", "Lo ideal: 5 noches, de Esna a Asuán", "Sobre todo orillas e islas"],
+    facts: ["4–10 camarotes", "Unos 8–24 pasajeros", "Lo ideal: 5 noches, de Esna a Asuán", "Sobre todo orillas e islas"],
     rows: {
       cabins: "4–10",
-      guests: "Unos 8–20",
+      guests: "Unos 8–24",
       power: "Dos velas, con una lancha a motor al lado que puede remolcarla cuando no hay viento",
       pace: "Navega de día, con tiempo para parar en amarres tranquilos entre Esna y Asuán",
       mooring: "Sobre todo orillas e islas",
@@ -137,10 +137,10 @@ const JA: Record<VesselType, TypeText> = {
     name: "帆走ダハビヤ",
     short: "帆で進む水上の家",
     line: "2本マストの帆走ハウスボートで、客室はわずか4〜10室。町の船着き場を離れ、主に川岸や島に停泊します。",
-    facts: ["客室4〜10室", "乗客約8〜20名", "おすすめは5泊、エスナからアスワン", "主に川岸や島"],
+    facts: ["客室4〜10室", "乗客約8〜24名", "おすすめは5泊、エスナからアスワン", "主に川岸や島"],
     rows: {
       cabins: "4〜10室",
-      guests: "約8〜20名",
+      guests: "約8〜24名",
       power: "2枚の帆。風がないときは並走するモーターボートが曳航します",
       pace: "日中に帆走し、エスナとアスワンの間の静かな停泊地に立ち寄る時間があります",
       mooring: "主に川岸や島",
@@ -225,4 +225,4 @@ export function vesselProfile(type: VesselType, locale: Locale = "en"): VesselPr
  * catalogue records (showcase, not bookable), so their facts come from the catalogue; one that isn't published isn't
  * shown.
  */
-export const SAMPLE_VESSELS = ["malouka", "movenpick-hamees", "movenpick-ss-misr"];
+export const SAMPLE_VESSELS = ["nour-el-nil-malouka", "movenpick-hamees", "movenpick-ss-misr"];

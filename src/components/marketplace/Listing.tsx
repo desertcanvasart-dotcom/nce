@@ -12,7 +12,8 @@ import {
   headlineItinerary,
 } from "@/lib/marketplace/listing";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { vesselIcon } from "@/components/ds/lib/types";
+import { Icon } from "@/components/ds/Icon/Icon";
+import { PROPULSIONS, propulsionIcon, vesselIcon, type Propulsion } from "@/components/ds/lib/types";
 import { Breadcrumbs, type Trail } from "./Breadcrumbs";
 import { ListingGrid } from "./ListingGrid";
 import { PriceWhy } from "./PriceWhy";
@@ -36,7 +37,11 @@ type Props = {
   empty: string;
   /** ADR-102: the "With sightseeing" filter is on (the Cruises hub only). */
   sightseeing?: boolean;
+  /** The Motor, Wind or Steam filter that is on (the Cruises hub only). */
+  propulsion?: Propulsion;
 };
+
+const PROPULSION_TEXT: Record<Propulsion, string> = { motor: "Motor", wind: "Wind", steam: "Steam" };
 
 /** A /cruises/ listing (PAGE-060–067): breadcrumb, H1, search, the facet links and the cards. */
 export function Listing(p: Props) {
@@ -79,6 +84,26 @@ export function Listing(p: Props) {
               <Link href="/cruises/?sightseeing=1">With sightseeing</Link>
             )}
           </li>
+        </ul>
+      </nav>
+      {/* What drives the vessel, from its own data: an icon and a word for each, never colour alone. */}
+      <nav aria-label="Propulsion" className={styles.facets}>
+        <ul>
+          {PROPULSIONS.map((k) => (
+            <li key={k}>
+              {p.propulsion === k ? (
+                <span aria-current="page">
+                  <Icon name={propulsionIcon[k]} />
+                  {PROPULSION_TEXT[k]}
+                </span>
+              ) : (
+                <Link href={`/cruises/?propulsion=${k}`}>
+                  <Icon name={propulsionIcon[k]} />
+                  {PROPULSION_TEXT[k]}
+                </Link>
+              )}
+            </li>
+          ))}
         </ul>
       </nav>
       <p className={styles.count}>

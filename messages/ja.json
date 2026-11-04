@@ -224,6 +224,11 @@
       "deniedTitle": "ログインしたアカウント向けの内容です",
       "deniedBody": "アクセス権のあるアカウントでログインしてください。",
       "signIn": "ログイン"
+    },
+    "propulsion": {
+      "motor": "モーター",
+      "wind": "風力",
+      "steam": "蒸気"
     }
   },
   "account": {
@@ -499,7 +504,8 @@
       "photoOf": "{name}:写真{n}/{total}",
       "prevPhoto": "前の写真",
       "nextPhoto": "次の写真",
-      "closePhotos": "写真を閉じる"
+      "closePhotos": "写真を閉じる",
+      "fromTrip": "{n}泊のクルーズで1名あたり{price}から"
     },
     "verdict": {
       "title": "あなたに合う船ですか?",
@@ -515,7 +521,8 @@
       "evaluation": "評価",
       "onBoard": "船内",
       "dates": "日程",
-      "faqs": "よくある質問"
+      "faqs": "よくある質問",
+      "goodToKnow": "知っておきたいこと"
     },
     "price": {
       "title": "料金と含まれるもの",
@@ -534,7 +541,8 @@
       "notIncluded": "含まれないもの",
       "fallback": "航空券と<link>送迎</link>は別途手配となります。",
       "fallbackProgramme": "行程には通常の観光プログラムを掲載しています。ガイド、入場料、エクスカーションが見積もりに含まれるかをご確認ください。",
-      "askIncluded": "希望日程で含まれる内容を問い合わせる"
+      "askIncluded": "希望日程で含まれる内容を問い合わせる",
+      "fromTrip": "{n}泊のクルーズで、2名1室利用時の1名あたり{price}から。"
     },
     "itinerary": {
       "title": "通常の行程",
@@ -563,7 +571,8 @@
       "fees": "入場料込み",
       "noFees": "入場料は含まれません",
       "visiting": "訪問先:{sites}",
-      "programme": "観光付き:予約時にNilecruzの<link>{name}</link>を追加できます(2名利用時1名あたり{price}から)。エジプト学者のガイドと入場料が含まれ、Nilecruzとの別予約として、クルーズと一緒にお支払いいただきます。"
+      "programme": "観光付き:予約時にNilecruzの<link>{name}</link>を追加できます(2名利用時1名あたり{price}から)。エジプト学者のガイドと入場料が含まれ、Nilecruzとの別予約として、クルーズと一緒にお支払いいただきます。",
+      "boarding": "乗船について:"
     },
     "cabins": {
       "title": "客室とデッキ",
@@ -574,7 +583,8 @@
       "balcony": "専用バルコニー",
       "decks": "{list}デッキ",
       "show": "デッキプランで表示",
-      "shown": "デッキプランに表示中"
+      "shown": "デッキプランに表示中",
+      "sizeWithBath": "面積(バスルーム含む):{n, number}m²"
     },
     "deck": {
       "drawn": "{credit}のデッキプランをもとにNilecruzが作成した図です。各客室タイプと共用スペースの位置を示しています。客室番号は運航会社が割り当てます。",
@@ -676,7 +686,11 @@
         "sail": "帆船ダハビヤでの過ごし方は?",
         "steam": "外輪蒸気船での過ごし方は?"
       },
-      "mooring": "停泊のしかた"
+      "mooring": "停泊のしかた",
+      "sails": "航行のしかた",
+      "notes": "船内設備",
+      "size": "全長と全幅:{size}",
+      "sizeValue": "{length}×{beam}m"
     },
     "dates": {
       "intro": "これは運航会社の通常の週ごとの出航日にもとづく予定日です。日付を選ぶとルートと日数が表示されます。確認のご依頼もお気軽にどうぞ。",
@@ -713,7 +727,8 @@
       "fromAbout": "1泊約{price}から",
       "from": "1名あたり{price}から",
       "bookable": "Nilecruzで予約可能",
-      "compareTypes": "船のタイプを比較する"
+      "compareTypes": "船のタイプを比較する",
+      "fromTrip": "{n}泊で1名あたり{price}から"
     },
     "final": {
       "title": "ご希望の日程の料金を知りたいですか?",
@@ -741,6 +756,9 @@
       "tooMany": "このネットワークからの依頼が多すぎます。数分後にもう一度お試しください。",
       "invalid": "次の項目をご確認ください:{fields}。",
       "back": "{name}に戻る"
+    },
+    "goodToKnow": {
+      "title": "知っておきたいこと"
     }
   },
   "vesselsPillar": {
@@ -851,7 +869,8 @@
       "intro": "各種類から1隻ずつご紹介します。料金は準備中ですので、現在の料金と空き状況はお問い合わせください。",
       "cabins": "客室{count}室",
       "empty": "これらの船はまだ公開されていません。",
-      "more": "ナイル川クルーズをすべて見る"
+      "more": "ナイル川クルーズをすべて見る",
+      "size": "全長と全幅:{length}×{beam}m"
     },
     "faqs": {
       "heading": "よくある質問",

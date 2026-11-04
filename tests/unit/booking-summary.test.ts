@@ -30,6 +30,7 @@ describe("an approved vessel's price with sightseeing (ADR-102)", () => {
       slug: "sample-dahab",
       name: "Sample Dahabiya",
       type: "sail",
+      propulsion: null,
       category: null,
       maxGuests: 12,
       cabinCount: 6,
@@ -110,6 +111,7 @@ describe("the cruise with Nilecruz's programme (ADR-102, 8-3b-2)", () => {
       itineraries: [],
       bookable: true,
       type: "motor" as const,
+      propulsion: null,
     };
     const q = parseSearch({ sightseeing: "1" });
     expect(q.sightseeing).toBe(true);
