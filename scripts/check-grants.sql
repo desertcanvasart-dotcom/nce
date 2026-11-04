@@ -7,7 +7,7 @@ with intended(table_name, grantee, privileges) as (
     ('evaluations', 'anon', 'SELECT'), ('evaluation_translations', 'anon', 'SELECT'), ('external_ratings', 'anon', 'SELECT'),
     ('vessel_submission_events', 'authenticated', 'SELECT'), ('vessel_submission_events', 'service_role', 'SELECT'),
     ('cabin_types', 'anon', 'SELECT'), ('cabin_type_translations', 'anon', 'SELECT'), ('schedules', 'anon', 'SELECT'),
-    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('schedule_translations', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT'),
+    ('schedule_periods', 'anon', 'SELECT'), ('schedule_days', 'anon', 'SELECT'), ('schedule_translations', 'anon', 'SELECT'), ('deck_plans', 'anon', 'SELECT'), ('departures', 'anon', 'SELECT'),
     -- Batch 4c-2: connections are read by people and changed only through functions or the service role.
     ('inventory_feeds', 'authenticated', 'SELECT'), ('api_keys', 'authenticated', 'SELECT'),
     ('inventory_runs', 'authenticated', 'SELECT'),
@@ -63,7 +63,7 @@ with intended(table_name, grantee, privileges) as (
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
                     'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments',
-                    'sightseeing_rates', 'schedule_sightseeing', 'freesales', 'supplements', 'webhook_endpoints']) t,
+                    'sightseeing_rates', 'schedule_sightseeing', 'freesales', 'supplements', 'webhook_endpoints', 'deck_plans']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
