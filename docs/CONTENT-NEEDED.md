@@ -36,6 +36,11 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 43 | Which vessels already sell with sightseeing included (admins approve each one) | Can follow | ADR-102. None approved yet |
 | 56 | What drives each vessel already in the catalogue (motor, wind or steam), from the operator | Must, for each vessel shown | ADR-107. Only Royal Lily (motor) and SS Misr, SS Sudan and SS Karim (steam) are set; the rest show no badge. List: `docs/imports/propulsion-unconfirmed.md` |
 | 57 | Nour El Nil, held back until you confirm: the facilities (pool, hot tub, spa, gym, balcony), gratuities, the €900 fleet price, Dendera's cabin counts and rates, numbered deck plans | Can follow | ADR-107. Stored in `docs/imports/nour-el-nil-fleet-data.json`, not shown. Malouka's page also uses Meroe photos and Dendera's and Poppee's use "Napata" photos: those were left out |
+| 59 | Licensed photos of the eight stops (Luxor, Esna, El Kab, Edfu, Gebel Silsila, Kom Ombo, Aswan, Abu Simbel), each clearly showing the place | Can follow | ADR-108. `image` in `src/content/river-stops.ts`; an illustrated temple scene (no boat) until then. Also needed for the hub's share image |
+| 60 | Typical visit length for each stop | Can follow | ADR-108. Only Edfu's (about two hours) is confirmed; `visitLength` stays hidden until set |
+| 61 | "From our team" notes per stop: best time of day, crowds, what to skip | Can follow | ADR-108. From the evaluation team; `insiderNote`, hidden until written |
+| 62 | Whether classic Luxor–Aswan cruises stop at Esna and El Kab | Can follow | ADR-108. The table says "Check the itinerary" until confirmed |
+| 63 | Pages for Esna, El Kab and Gebel Silsila | Can follow | ADR-108. Shown on the hub without a link until each page is written (no thin pages) |
 
 ## Pages and copy
 
@@ -65,6 +70,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 17, 28 | A native-speaker review of the Spanish and Japanese interface text (`messages/es.json`, `messages/ja.json`), then page translations | Must, for ES/JA pages to be indexed | I18N-005, ADR-032. Only the cancellation wording is approved |
 | 44 | A review of the Spanish and Japanese keyword drafts (`docs/drafts/keywords-es-ja.xlsx`) | With 17 | I18N-012. Not checked against search volumes |
 | 58 | A review of the Spanish and Japanese text for the Nour El Nil fleet: summaries, inclusions, programme, cabins, life on board, good to know and photo alt text | With 17 | ADR-107. `docs/imports/nour-el-nil-fleet-i18n.json`, drafted by Claude and marked `needs_human_review`; re-run `pnpm import:fleet` after edits |
+| 64 | A review of the Spanish and Japanese text for the destinations hub and the stop data (`messages/*.json` → `destinationsPillar`, `src/content/river-stops.ts`) | With 17 | ADR-108. Drafted by Claude; the hub is listed in `TRANSLATED` so it renders in each language |
 
 ## Accounts and settings (yours to create)
 

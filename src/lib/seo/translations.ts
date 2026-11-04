@@ -10,8 +10,9 @@ type Other = Exclude<Locale, "en">;
  */
 export const TRANSLATED: Record<Other, readonly string[]> = {
   // The vessels pillar (ADR-106): drafted in Spanish and Japanese on 3 Nov 2026, to be reviewed by native speakers.
-  es: ["/vessels/"],
-  ja: ["/vessels/"],
+  // The destinations hub (Islam's brief, 4 Nov 2026): drafted the same way, awaiting the same review.
+  es: ["/vessels/", "/destinations/"],
+  ja: ["/vessels/", "/destinations/"],
 };
 
 const norm = (path: string) => {

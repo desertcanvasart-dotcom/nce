@@ -833,7 +833,7 @@
         "heading": "La dahabiya de vela",
         "paragraphs": [
           "Una dahabiya es una casa flotante de vela con dos mástiles, como las que los viajeros del siglo XIX alquilaban para todo el invierno. Las dahabiyas actuales tienen de 4 a 10 camarotes, una cubierta superior con sombra y una tripulación pequeña que llega a conocer a sus pasajeros. Navegan a vela cuando el viento lo permite. La mayoría viaja con una lancha a motor al lado, que puede remolcarlas cuando no hay viento, así que se mantienen las paradas previstas.",
-          "La ruta en dahabiya que recomendamos es de cinco noches y seis días, de Esna a Asuán. Esna está a unas 33 millas (unos 53 km) al sur de Luxor, y las dahabiyas no necesitan navegar el tramo desde Luxor, así que el tiempo se dedica a la parte más gratificante del río. Hay tiempo para amarrar en lugares estrechos y tranquilos donde los barcos grandes no paran, como Gebel Silsileh, además de visitar Edfu y Kom Ombo."
+          "La ruta en dahabiya que recomendamos es de cinco noches y seis días, de Esna a Asuán. Esna está a unas 33 millas (unos 53 km) al sur de Luxor, y las dahabiyas no necesitan navegar el tramo desde Luxor, así que el tiempo se dedica a la parte más gratificante del río. Hay tiempo para amarrar en lugares estrechos y tranquilos donde los barcos grandes no paran, como Gebel Silsila, además de visitar Edfu y Kom Ombo."
         ]
       },
       "motor": {
@@ -897,6 +897,105 @@
       "heading": "¿Aún no sabe qué barco le conviene?",
       "text": "Díganos sus fechas y cómo le gusta viajar, y le ayudaremos a decidir.",
       "button": "Planificar mi crucero"
+    }
+  },
+  "destinationsPillar": {
+    "meta": {
+      "title": "Paradas de un crucero por el Nilo: templos y pueblos",
+      "description": "Sigue el Nilo de Luxor a Asuán: los templos y pueblos de cada parada, lo que añaden los barcos pequeños y qué cruceros paran en cada uno."
+    },
+    "crumbs": {
+      "home": "Inicio",
+      "destinations": "Destinos"
+    },
+    "hero": {
+      "title": "Templos y pueblos a orillas del Nilo",
+      "intro": "Sigue el río de Luxor a Asuán y descubre qué te espera en cada parada, desde los grandes templos de todas las rutas clásicas hasta los rincones tranquilos a los que solo llegan los barcos pequeños.",
+      "follow": "Sigue el río",
+      "table": "Quién para dónde"
+    },
+    "map": {
+      "label": "Mapa del río de Luxor a Asuán, con Abu Simbel",
+      "notToScale": "Sin escala",
+      "direction": "Río arriba, navegando hacia el sur →",
+      "routeLabel": "Muestra una ruta",
+      "classic": "Crucero clásico Luxor–Asuán",
+      "dahabiya": "Dahabiya Esna–Asuán",
+      "optional": "Excursión opcional desde Asuán",
+      "lake": "Lago Nasser",
+      "end": "Final de la ruta",
+      "onRoute": "En esta ruta",
+      "stop": "Parada {n}",
+      "read": "Más sobre {name}",
+      "list": "Las paradas en el orden del río"
+    },
+    "journey": {
+      "heading": "El viaje, parada a parada",
+      "stop": "Parada {n}",
+      "beyond": "Más allá del río",
+      "sights": "Lugares principales",
+      "visit": "Visita habitual",
+      "team": "De nuestro equipo"
+    },
+    "table": {
+      "heading": "Quién para dónde",
+      "intro": "Los barcos grandes y los pequeños comparten el río, pero no todas las paradas. Consulta el itinerario de tu crucero, porque los programas varían.",
+      "caption": "Qué paradas incluye normalmente cada ruta",
+      "stop": "Parada",
+      "status": {
+        "yes": "Sí",
+        "check": "Consulta el itinerario",
+        "noLargeShips": "Los barcos grandes no paran",
+        "notOnItinerary": "No está en el itinerario",
+        "optionalFromAswan": "Excursión opcional desde Asuán",
+        "optionalSeparate": "Opcional, se organiza aparte"
+      },
+      "note": "La columna de dahabiya se basa en el programa Esna–Asuán que ofrecemos ahora. Es fácil añadir Luxor y Asuán antes o después del crucero.",
+      "link": "Compara las rutas"
+    },
+    "visit": {
+      "heading": "Cómo es una visita",
+      "text": "Los barcos paran en los lugares principales con visitas guiadas, normalmente a primera hora para evitar el calor. Las dahabiyas pasan más tiempo en el río y añaden lugares más pequeños por el camino. Consulta en tu oferta qué guías, entradas y excursiones incluye."
+    },
+    "cruises": {
+      "heading": "Cruceros que paran aquí",
+      "intro": "Un ejemplo de cada tipo de barco. Abre un crucero para ver su itinerario completo.",
+      "link": "Ver todos los cruceros por el Nilo",
+      "empty": "Todavía no hay publicados cruceros que paren aquí."
+    },
+    "faqs": {
+      "heading": "Preguntas",
+      "items": [
+        {
+          "q": "¿Qué lugares visitan todos los cruceros?",
+          "a": "Ninguna parada está en todos los cruceros. Edfu y Kom Ombo están en la mayoría de los itinerarios Luxor–Asuán, y algunos programas en dahabiya se saltan los lugares de Luxor y Asuán. Consulta el itinerario de tu crucero."
+        },
+        {
+          "q": "¿En qué se diferencian las paradas de una dahabiya?",
+          "a": "Las dahabiyas pueden añadir lugares más pequeños, como El Kab y Gebel Silsila, donde los barcos grandes no suelen parar."
+        },
+        {
+          "q": "¿Abu Simbel forma parte de un crucero por el Nilo?",
+          "a": "No en la ruta Luxor–Asuán. La mayoría lo visita en una excursión de un día desde Asuán, y algunos barcos navegan por el lago Nasser."
+        },
+        {
+          "q": "¿Puedo ver Luxor si mi dahabiya sale de Esna?",
+          "a": "Sí. Reserva tiempo en Luxor antes de embarcar o contrátalo como una excursión aparte."
+        }
+      ]
+    },
+    "next": {
+      "heading": "¿Sabes qué quieres ver?",
+      "text": "Cuéntanos qué lugares te importan más y te ayudaremos a encontrar un crucero que pare allí.",
+      "button": "Planificar mi crucero",
+      "secondary": "Planifica tu ruta"
+    },
+    "child": {
+      "river": "En el río",
+      "here": "Estás aquí",
+      "previous": "Parada anterior: {name}",
+      "next": "Siguiente parada: {name}",
+      "all": "Ver todos los cruceros por el Nilo"
     }
   }
 }
