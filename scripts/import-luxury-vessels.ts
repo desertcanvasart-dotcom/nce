@@ -22,6 +22,7 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { Database } from "../src/server/db/database.types";
+import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
 const SPACES = ["sun_deck", "pool", "jacuzzi", "dining_room", "lounge", "bar", "spa", "gym", "library"];
@@ -356,6 +357,7 @@ async function run() {
     console.log(`✓ ${v.name}: ${v.cabins.length} cabin types, ${v.itineraries.length} itineraries`);
   }
   console.log(`Done: ${vessels.length} ships in ${target}. Visibility unchanged; no departures created.`);
+  await refreshSite(target!);
 }
 
 if (apply && !target) {
