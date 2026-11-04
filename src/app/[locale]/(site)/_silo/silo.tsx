@@ -9,12 +9,15 @@ import { VesselArt } from "@/components/ds/VesselArt/VesselArt";
 import { VesselCompare } from "@/components/ds/VesselCompare/VesselCompare";
 import type { VesselType } from "@/components/ds/lib/types";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
+import { DestinationLead, StopCruises } from "@/components/editorial/DestinationExtras";
+import { DestinationsPillar } from "@/components/editorial/DestinationsPillar";
 import { EditorialFrame } from "@/components/editorial/EditorialFrame";
 import { TourCards, TourDetails } from "@/components/editorial/TourDetails";
 import { VesselsPillar } from "@/components/editorial/VesselsPillar";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
 import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
+import { stopByPath } from "@/content/river-stops";
 import { ROUTE_STOPS } from "@/content/routes";
 import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
 import { routing, type Locale } from "@/i18n/routing";
@@ -32,7 +35,7 @@ import { PlanForm } from "@/components/plan/PlanForm";
 import { SeasonCalendar } from "@/components/calendar/SeasonCalendar";
 import { RULE_WORDS } from "@/lib/payments/deadlines";
 import { publicPremiumPeriods } from "@/server/content/premium";
-import { publicListing } from "@/server/marketplace/queries";
+import { publicItineraryPlaces, publicListing } from "@/server/marketplace/queries";
 
 /**
  * One renderer for the three education silos (Batch 6): Vessels, Prices Explained and the Guide. Each silo's route
@@ -61,6 +64,10 @@ export async function siloMetadata(prefix: string, { locale, path }: SiloParams)
       image: { url: "/images/og/vessels.png", width: 1200, height: 630, alt: t("image") },
     });
   }
+  if (url === "/destinations/") {
+    const t = await getTranslations({ locale, namespace: "destinationsPillar.meta" });
+    return pageMetadata({ locale, path: url, title: t("title"), description: t("description") });
+  }
   const row = LINK_MAP[url];
   const page = row && BUILT.has(url) ? await editorialPage(row.id) : null;
   if (!row || !page) return {};
@@ -84,6 +91,11 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   if (!row || !BUILT.has(url)) notFound();
   // PAGE-026: the vessels pillar is laid out by hand, in every language (ADR-106).
   if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing()} />;
+  // PAGE-074: the destinations hub, an illustrated river chart (Islam's destinations brief, 4 Nov 2026).
+  if (url === "/destinations/") {
+    const [all, places] = await Promise.all([publicListing(), publicItineraryPlaces()]);
+    return <DestinationsPillar locale={locale} all={all} places={places} />;
+  }
   const [page, all, tours] = await Promise.all([
     editorialPage(row.id),
     publicListing(),
@@ -114,6 +126,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
 
   let lead: ReactNode = null;
   let extra: ReactNode = null;
+  let closingRow: ReactNode = null;
   const closing = !NO_CLOSING.has(url);
   const ld = (data: unknown) => <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(data) }} />;
   const description = page.seoDescription ?? page.standfirst.replace("[[up]]", "").trim();
@@ -178,14 +191,17 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   } else if (url === "/nile-cruise-guide/" || url === "/nile-cruise-guide/planning/how-many-nights/") {
     lead = compare;
   } else if (url.startsWith("/destinations/")) {
-    // PAGE-074–090: a scene until photos (ADR-096), and the destination's data.
-    lead = (
+    // PAGE-075–090: the stop's own data from the shared stop records, and only the cruises that call there.
+    const stop = stopByPath(url);
+    lead = stop ? (
+      <DestinationLead locale={locale} stop={stop} />
+    ) : (
       <div className={styles.scene}>
-        <Scene time="dawn" temple vessel="sail" label={`${row.h1} from the river`} />
+        <Scene time="dawn" temple vessel={null} label={`${row.h1} from the river`} />
       </div>
     );
-    if (url !== "/destinations/")
-      extra = ld(touristDestinationJsonLd(row.h1, description, absoluteUrl(locale, url), MAIN_SIGHT[url]));
+    if (stop) closingRow = <StopCruises locale={locale} stop={stop} all={all} places={await publicItineraryPlaces()} />;
+    extra = ld(touristDestinationJsonLd(row.h1, description, absoluteUrl(locale, url), MAIN_SIGHT[url]));
   } else if (url === "/tours-extras/") {
     lead = <TourCards tours={tours} />;
   } else if (WORKBOOK_TOURS[url]) {
@@ -246,7 +262,13 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         url={url}
         page={page}
         lead={lead}
-        closing={closing ? <ClosingCruises all={all} listing={closingListing(url)} type={TYPE_OF[url]} /> : null}
+        closing={
+          url.startsWith("/destinations/") && stopByPath(url) ? (
+            closingRow
+          ) : closing ? (
+            <ClosingCruises all={all} listing={closingListing(url)} type={TYPE_OF[url]} />
+          ) : null
+        }
       />
       {extra}
       {/* SEO-005: a hub lists its pages (CollectionPage with an ItemList), as its workbook row asks. */}

@@ -832,7 +832,7 @@
         "heading": "The sailing dahabiya",
         "paragraphs": [
           "A dahabiya is a two-masted sailing houseboat, the kind nineteenth-century travellers hired for the whole winter. Today’s dahabiyas have 4 to 10 cabins, a shaded upper deck and a small crew who get to know their guests. They sail when the wind allows. Most travel with a motor boat alongside, which can tow them when there’s no wind, so the planned stops are kept.",
-          "The dahabiya route we recommend is five nights and six days from Esna to Aswan. Esna is about 33 miles south of Luxor, and dahabiyas don’t need to sail the stretch from Luxor, so you spend your time on the most rewarding part of the river. There’s time to moor at narrow, quiet places where big ships don’t stop, such as Gebel Silsileh, as well as visiting Edfu and Kom Ombo."
+          "The dahabiya route we recommend is five nights and six days from Esna to Aswan. Esna is about 33 miles south of Luxor, and dahabiyas don’t need to sail the stretch from Luxor, so you spend your time on the most rewarding part of the river. There’s time to moor at narrow, quiet places where big ships don’t stop, such as Gebel Silsila, as well as visiting Edfu and Kom Ombo."
         ]
       },
       "motor": {
@@ -896,6 +896,105 @@
       "heading": "Still not sure which boat is right?",
       "text": "Tell us your dates and how you like to travel, and we’ll help you narrow it down.",
       "button": "Plan my cruise"
+    }
+  },
+  "destinationsPillar": {
+    "meta": {
+      "title": "Nile cruise stops: temples and towns",
+      "description": "Follow the Nile from Luxor to Aswan: see the temples and towns at each stop, what small boats add, and which cruises stop there."
+    },
+    "crumbs": {
+      "home": "Home",
+      "destinations": "Destinations"
+    },
+    "hero": {
+      "title": "Temples and towns along the Nile",
+      "intro": "Follow the river from Luxor to Aswan and see what waits at each stop, from the great temples on every classic route to the quiet places only small boats reach.",
+      "follow": "Follow the river",
+      "table": "See who stops where"
+    },
+    "map": {
+      "label": "River map from Luxor to Aswan, with Abu Simbel",
+      "notToScale": "Not to scale",
+      "direction": "Upstream, sailing south →",
+      "routeLabel": "Show a route",
+      "classic": "Classic Luxor–Aswan cruise",
+      "dahabiya": "Esna–Aswan dahabiya",
+      "optional": "Optional trip from Aswan",
+      "lake": "Lake Nasser",
+      "end": "End of the route",
+      "onRoute": "On this route",
+      "stop": "Stop {n}",
+      "read": "Read about {name}",
+      "list": "The stops in river order"
+    },
+    "journey": {
+      "heading": "The journey, stop by stop",
+      "stop": "Stop {n}",
+      "beyond": "Beyond the river",
+      "sights": "Main sights",
+      "visit": "Typical visit",
+      "team": "From our team"
+    },
+    "table": {
+      "heading": "Who stops where",
+      "intro": "Big ships and small boats share a river, but not all the same stops. Check your own cruise’s itinerary, as programmes vary.",
+      "caption": "Which stops each route usually includes",
+      "stop": "Stop",
+      "status": {
+        "yes": "Yes",
+        "check": "Check the itinerary",
+        "noLargeShips": "Large ships don’t stop",
+        "notOnItinerary": "Not on the itinerary",
+        "optionalFromAswan": "Optional trip from Aswan",
+        "optionalSeparate": "Optional, arranged separately"
+      },
+      "note": "The dahabiya column is based on the Esna–Aswan programme we currently list. Luxor and Aswan are easy to add before or after your cruise.",
+      "link": "Compare the routes"
+    },
+    "visit": {
+      "heading": "How a visit works",
+      "text": "Ships stop at the main sites with guided visits, usually early in the day to avoid the heat. Dahabiyas take more time on the river and add smaller places along the way. Check your offer to see which guides, entry tickets and excursions it includes."
+    },
+    "cruises": {
+      "heading": "Cruises that stop here",
+      "intro": "One example of each kind of boat. Open a cruise to see its full itinerary.",
+      "link": "See all Nile cruises",
+      "empty": "No cruises that stop here are published yet."
+    },
+    "faqs": {
+      "heading": "Questions",
+      "items": [
+        {
+          "q": "Which places does every cruise visit?",
+          "a": "No stop is on every cruise. Edfu and Kom Ombo are on most Luxor–Aswan itineraries, while some dahabiya programmes skip the sights in Luxor and Aswan. Check your cruise’s itinerary."
+        },
+        {
+          "q": "What’s different about a dahabiya’s stops?",
+          "a": "Dahabiyas can add smaller places, such as El Kab and Gebel Silsila, where large ships don’t usually stop."
+        },
+        {
+          "q": "Is Abu Simbel part of a Nile cruise?",
+          "a": "Not on the Luxor–Aswan route. Most people visit on a day trip from Aswan, and some ships cruise Lake Nasser instead."
+        },
+        {
+          "q": "Can I see Luxor if my dahabiya starts in Esna?",
+          "a": "Yes. Plan time in Luxor before you board, or book it as a separate tour."
+        }
+      ]
+    },
+    "next": {
+      "heading": "Know what you want to see?",
+      "text": "Tell us which places matter most, and we’ll help you find a cruise that stops there.",
+      "button": "Plan my cruise",
+      "secondary": "Plan your route"
+    },
+    "child": {
+      "river": "On the river",
+      "here": "You are here",
+      "previous": "Previous stop: {name}",
+      "next": "Next stop: {name}",
+      "all": "See all Nile cruises"
     }
   }
 }

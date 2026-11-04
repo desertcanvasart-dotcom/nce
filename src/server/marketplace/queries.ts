@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import { env, indexingAllowed } from "@/lib/env";
 import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
+import type { ItineraryPlaces } from "@/content/river-stops";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import { evaluationPublishable, type CabinFact, type VesselEvaluation, type VesselPage } from "@/lib/marketplace/vessel";
 import type { Locale } from "@/i18n/routing";
@@ -171,6 +172,34 @@ async function loadListing(): Promise<ListingVessel[]> {
 }
 
 export const publicListing = unstable_cache(loadListing, ["public-listing-v4"], {
+  tags: [CATALOGUE_TAG],
+  revalidate: CATALOGUE_SECONDS,
+});
+
+/**
+ * Each public vessel's active itineraries with their English day titles, which name the places they call at: for the
+ * destination pages ("Cruises that stop here"). Kept out of the listing so every other page's query stays light.
+ */
+async function loadItineraryPlaces(): Promise<ItineraryPlaces> {
+  const db = visitorDb();
+  if (!db) return {};
+  const { data, error } = await db
+    .from("schedules")
+    .select("vessel_id, origin, destination, schedule_days(day_number, title)")
+    .eq("active", true)
+    .eq("schedule_days.locale", "en");
+  if (error) throw error;
+  const out: ItineraryPlaces = {};
+  for (const s of data ?? [])
+    (out[s.vessel_id] ??= []).push({
+      origin: s.origin,
+      destination: s.destination,
+      places: [...s.schedule_days].sort((a, b) => a.day_number - b.day_number).map((d) => d.title),
+    });
+  return out;
+}
+
+export const publicItineraryPlaces = unstable_cache(loadItineraryPlaces, ["public-itinerary-places-v1"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

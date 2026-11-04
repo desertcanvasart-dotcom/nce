@@ -3,6 +3,7 @@
  * (src/lib/seo/link-map.json, made by scripts/link-map.py) and points only at a page that exists (ADR-093).
  * Anchors are the target's primary keyword (SEO-014). The CI link check (tests/e2e/silo-links.spec.ts) reads the same.
  */
+import { RIVER_NEIGHBOUR_LINKS } from "@/content/river-stops";
 import map from "./link-map.json";
 
 export type SiloPage = {
@@ -176,6 +177,8 @@ export function expectedLinks(url: string): string[] {
 export const TRUST_LINKS: Record<string, string[]> = {
   "/about/": ["/how-we-choose-vessels/"],
   "/vessels/": ["/how-we-choose-vessels/", "/plan-my-cruise/"],
+  // The destinations hub ends with "Plan my cruise" and "Plan your route" (Islam's destinations brief, 4 Nov 2026).
+  "/destinations/": ["/plan-my-cruise/", "/nile-cruise-guide/"],
 };
 
 /** Every education-silo URL a page may link to: its own row's links, its trail, trust links and the closing listing. */
@@ -186,6 +189,8 @@ export function allowedLinks(url: string): Set<string> {
     ...p.across,
     ...p.bridges,
     ...(TRUST_LINKS[url] ?? []),
+    // A destination page links the stops before and after it on the river (src/content/river-stops.ts).
+    ...(RIVER_NEIGHBOUR_LINKS[url] ?? []),
     ...trail(url).map((c) => c.path),
     closingListing(url).href,
     url,

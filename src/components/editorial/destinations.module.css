@@ -1,0 +1,624 @@
+/* The destinations hub and the destination pages (Islam's brief, 4 Nov 2026): an illustrated river chart in the same
+   visual language as the cruise page's route (river line, moored points, crescents, a small boat). Motion collapses
+   under reduced motion (global rule); every stop is in the HTML without it. */
+
+.hero {
+  display: grid;
+  gap: var(--space-5);
+}
+
+/* ── River map ── */
+.riverMap {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.mapBar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.routes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.routes button {
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--type-label-size);
+  cursor: pointer;
+}
+
+.routes button[aria-pressed="true"] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--surface);
+}
+
+.routes button:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.mapNotes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  letter-spacing: 0.06em;
+}
+
+:lang(ja) .mapNotes {
+  letter-spacing: 0;
+}
+
+.mapCanvas {
+  position: relative;
+  height: 250px;
+  margin: 0 var(--space-4);
+}
+
+.mapCanvas svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  width: 100%;
+  height: 100%;
+}
+
+.vertical {
+  display: none;
+}
+
+.water {
+  fill: none;
+  stroke: var(--nile-600);
+  stroke-linecap: round;
+  stroke-width: 14;
+  opacity: 0.28;
+}
+
+.track {
+  fill: none;
+  stroke: var(--accent);
+  stroke-dasharray: 4 6;
+  stroke-width: 1.5;
+}
+
+/* Past Aswan the river becomes Lake Nasser: a broken line, because Abu Simbel isn't on the cruise. */
+.lakeTrack {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-dasharray: 2 10;
+  stroke-linecap: round;
+  stroke-width: 2;
+}
+
+.mapStops {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mapStop,
+.moon,
+.mapBoat,
+.lakeLabel {
+  position: absolute;
+  left: var(--hx);
+  top: var(--hy);
+}
+
+.mapStop {
+  transform: translate(-50%, -50%);
+}
+
+.mapStop a {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.mapDot {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--ink-muted);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  transition:
+    transform var(--dur-2) var(--ease-river),
+    background var(--dur-2),
+    border-color var(--dur-2);
+}
+
+.lit .mapDot {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+/* The end of a route that doesn't visit the town's sights: a ring, not a filled stop. */
+.endStop .mapDot {
+  border-width: 3px;
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.apart .mapDot {
+  border-style: dashed;
+}
+
+.mapStop a[aria-current="true"] .mapDot {
+  box-shadow: 0 0 0 6px var(--accent-soft);
+  transform: scale(1.4);
+}
+
+.mapStop a:focus-visible {
+  outline: none;
+}
+
+.mapStop a:focus-visible .mapDot {
+  outline: 2px solid var(--focus);
+  outline-offset: 4px;
+}
+
+.mapName {
+  position: absolute;
+  top: 40px;
+  font-size: var(--type-caption-size);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  transition: color var(--dur-1);
+}
+
+:lang(ja) .mapName {
+  letter-spacing: 0;
+}
+
+.labelUp .mapName {
+  top: auto;
+  bottom: 40px;
+}
+
+.lit .mapName,
+.mapStop a[aria-current="true"] .mapName,
+.mapStop a:hover .mapName {
+  color: var(--ink);
+  font-weight: var(--type-label-weight);
+}
+
+.moon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--ink-muted);
+  transform: translate(-50%, -50%);
+}
+
+/* The crescents ride in their own lane above the river, so none ever sits on a stop between two the route calls at. */
+.mapCanvas .moon {
+  top: 4%;
+}
+
+.moon svg {
+  position: static;
+  width: 13px;
+  height: 13px;
+  fill: currentcolor;
+}
+
+.mapBoat {
+  width: 44px;
+  height: 26px;
+  color: var(--ink);
+  pointer-events: none;
+  transform: translate(-50%, -150%);
+  transition:
+    left 900ms var(--ease-river),
+    top 900ms var(--ease-river);
+}
+
+.lakeLabel {
+  top: var(--hy);
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  font-style: italic;
+  white-space: nowrap;
+  transform: translate(-50%, -48px);
+}
+
+/* The chosen stop: its photo (once licensed), its line and the way to its section. */
+.mapPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.mapPanel p {
+  margin: 0;
+}
+
+.mapPanel > div {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.panelPhoto {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-sm);
+}
+
+.panelName {
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  line-height: var(--type-heading-line);
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  line-height: var(--type-eyebrow-line);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+.more {
+  font-weight: var(--type-label-weight);
+}
+
+/* ── The journey, stop by stop ── */
+.journey {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line);
+}
+
+.stops {
+  display: grid;
+  gap: var(--space-9);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stop {
+  display: grid;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.stopArt {
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-lg);
+}
+
+.stopText {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--measure);
+}
+
+.stopText p,
+.stopText h3,
+.stopText h4 {
+  margin: 0;
+}
+
+.stopText h3 {
+  font-family: var(--font-display);
+  font-size: var(--type-display-l-size);
+  font-weight: var(--type-display-l-weight);
+  line-height: var(--type-display-l-line);
+}
+
+.stopNumber {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--type-heading-size);
+  letter-spacing: var(--type-eyebrow-tracking);
+}
+
+.summary {
+  font-size: var(--type-body-l-size);
+  line-height: var(--type-body-l-line);
+}
+
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.facts h4 {
+  color: var(--ink-muted);
+  font-size: var(--type-eyebrow-size);
+  font-weight: var(--type-eyebrow-weight);
+  letter-spacing: var(--type-eyebrow-tracking);
+  text-transform: uppercase;
+}
+
+:lang(ja) .facts h4,
+:lang(ja) .eyebrow {
+  letter-spacing: 0;
+}
+
+.sights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sights li:not(:last-child)::after {
+  margin-left: var(--space-3);
+  color: var(--ink-muted);
+  content: "·";
+}
+
+.fact {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+}
+
+.note {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunk);
+}
+
+/* Beyond Aswan: a break in the river before Abu Simbel. */
+.beyondStop {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.riverBreak {
+  height: 14px;
+  margin: 0;
+  background: radial-gradient(circle, var(--ink-muted) 1.5px, transparent 2px) 0 50% / 14px 14px repeat-x;
+  opacity: 0.6;
+}
+
+/* ── Who stops where ── */
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-label-weight);
+}
+
+.table td svg,
+.routeLists svg {
+  margin-right: var(--space-2);
+  vertical-align: -2px;
+}
+
+.table td[data-status="yes"] svg,
+.routeLists li[data-status="yes"] svg {
+  color: var(--accent);
+}
+
+.table td:not([data-status="yes"]),
+.routeLists li:not([data-status="yes"]) span {
+  color: var(--ink-muted);
+}
+
+.routeLists {
+  display: none;
+}
+
+.routeLists h3 {
+  margin: 0 0 var(--space-2);
+}
+
+.routeLists ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.routeLists li {
+  display: flex;
+  gap: var(--space-1);
+  align-items: baseline;
+}
+
+/* ── A destination page: its river position and facts ── */
+.position {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+}
+
+.position h2 {
+  margin: 0;
+  font-size: var(--type-heading-size);
+}
+
+.miniRiver {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) 0;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.miniRiver li {
+  display: flex;
+  align-items: center;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+}
+
+.miniRiver li:not(:last-child)::after {
+  width: 28px;
+  height: 2px;
+  margin: 0 var(--space-2);
+  background: var(--nile-600);
+  opacity: 0.35;
+  content: "";
+}
+
+.miniRiver li[aria-current="location"] {
+  color: var(--ink);
+  font-weight: var(--type-label-weight);
+}
+
+.miniRiver li[aria-current="location"]::before {
+  width: 10px;
+  height: 10px;
+  margin-right: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  content: "";
+}
+
+.neighbours {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (width >= 900px) {
+  .hero {
+    gap: var(--space-6);
+  }
+
+  .mapPanel {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+  }
+
+  .mapPanel:not(:has(.panelPhoto)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .stop {
+    grid-template-columns: minmax(0, 11fr) minmax(0, 9fr);
+    gap: var(--space-7);
+  }
+
+  /* Alternate image and text down the river. */
+  .stops > li:nth-child(even) .stop {
+    grid-template-columns: minmax(0, 9fr) minmax(0, 11fr);
+  }
+
+  .stops > li:nth-child(even) .stopArt {
+    order: 2;
+  }
+}
+
+@media (width < 700px) {
+  /* A phone draws the river downwards: no sideways scroll, no squeezed desktop map. */
+  .mapCanvas {
+    height: 640px;
+    margin: 0;
+  }
+
+  .horizontal {
+    display: none;
+  }
+
+  .vertical {
+    display: block;
+  }
+
+  .mapStop,
+  .moon,
+  .mapBoat {
+    left: var(--vx);
+    top: var(--vy);
+  }
+
+  .mapName,
+  .labelUp .mapName {
+    top: 50%;
+    bottom: auto;
+    left: 40px;
+    transform: translateY(-50%);
+  }
+
+  .mapBoat {
+    transform: translate(-150%, -50%);
+  }
+
+  .mapCanvas .moon {
+    top: var(--vy);
+    left: 4%;
+  }
+
+  .lakeLabel {
+    top: var(--vy);
+    left: var(--vx);
+    transform: translate(40px, -150%);
+  }
+
+  .tableWrap {
+    display: none;
+  }
+
+  .routeLists {
+    display: grid;
+    gap: var(--space-5);
+  }
+}
