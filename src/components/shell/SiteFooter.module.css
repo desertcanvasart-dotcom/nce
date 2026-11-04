@@ -19,11 +19,8 @@
   gap: var(--space-2);
 }
 
-.name {
-  font-family: var(--font-display);
-  font-size: var(--type-heading-size);
-  font-weight: 500;
-  line-height: 1;
+.logo {
+  height: 34px;
 }
 
 .tagline,

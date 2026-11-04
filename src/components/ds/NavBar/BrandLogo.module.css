@@ -1,0 +1,24 @@
+/* Only one colour version shows: the one for the current theme (display: none also hides the other from screen readers). */
+.logo {
+  display: inline-block;
+  line-height: 0;
+}
+
+.logo img {
+  width: auto;
+  height: 100%;
+}
+
+.forDark {
+  display: none;
+}
+
+:global([data-theme="dark"]) .forLight,
+.onMedia .forLight {
+  display: none;
+}
+
+:global([data-theme="dark"]) .forDark,
+.onMedia .forDark {
+  display: block;
+}

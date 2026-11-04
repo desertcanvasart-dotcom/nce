@@ -12,7 +12,7 @@ Provide `links`, `active`, `brand`, `tagline`, `cta`, `overMedia` (transparent w
 
 - Takes real links (`{label, href}`) and a CTA; the current section comes from the URL.
 - Day/Night control beside the language switch; phone menu is a `<details>` element (works without JS) and includes the language switch (ADR-037).
-- Wordmark reads Nilecruz (ADR-022).
+- The logo is the final Nilecruz artwork in `public/` (`BrandLogo`): with its strapline in English, the wordmark plus the translated strapline in other languages, in a light or dark version by theme (ADR-022).
 
 - Optional `account` link (Batch 4a): a quiet "Sign in" text link before the call to action, in the header and the phone menu.
 
