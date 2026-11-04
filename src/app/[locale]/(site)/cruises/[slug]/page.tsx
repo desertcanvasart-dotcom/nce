@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Listing } from "@/components/marketplace/Listing";
+import { VesselMessages } from "@/components/marketplace/VesselMessages";
 import { VesselView, vesselWords } from "@/components/marketplace/VesselView";
 import { routing, type Locale } from "@/i18n/routing";
 import { facetBySlug, FACETS, sortListing } from "@/lib/marketplace/listing";
@@ -75,12 +76,14 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
     const [v, all] = await Promise.all([publicVessel(slug, locale), publicListing()]);
     if (!v) notFound();
     return (
-      <VesselView
-        locale={locale}
-        v={v}
-        similar={similarTo(v.slug, v.type, all)}
-        ogImage={v.photos[0] ? photoUrl(v.slug) : undefined}
-      />
+      <VesselMessages>
+        <VesselView
+          locale={locale}
+          v={v}
+          similar={similarTo(v.slug, v.type, all)}
+          ogImage={v.photos[0] ? photoUrl(v.slug) : undefined}
+        />
+      </VesselMessages>
     );
   }
   const all = await publicListing();
