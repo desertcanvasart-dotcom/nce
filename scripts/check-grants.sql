@@ -50,7 +50,9 @@ with intended(table_name, grantee, privileges) as (
     -- Batch 11-2 (ADR-103): stop-sales are lifted, never deleted; holds and webhook deliveries are written through functions.
     ('stop_sales', 'authenticated', 'INSERT,SELECT,UPDATE'), ('stop_sales', 'service_role', 'INSERT,SELECT,UPDATE'),
     ('holds', 'authenticated', 'SELECT'), ('holds', 'service_role', 'SELECT'),
-    ('webhook_deliveries', 'authenticated', 'SELECT'), ('webhook_deliveries', 'service_role', 'SELECT')
+    ('webhook_deliveries', 'authenticated', 'SELECT'), ('webhook_deliveries', 'service_role', 'SELECT'),
+    -- 9-2b (ADR-104): a deck plan is readable with its vessel; editors write it under RLS.
+    ('deck_plans', 'anon', 'SELECT')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['profiles', 'organisations', 'vessels', 'vessel_private', 'vessel_translations',
@@ -63,7 +65,8 @@ with intended(table_name, grantee, privileges) as (
                     'program_translations', 'program_items', 'program_schedules',
                     'cancellation_policies', 'cancellation_policy_translations', 'premium_periods',
                     'partner_rates', 'tour_rates', 'tour_seasons', 'operator_contacts', 'operator_settings', 'operator_aliases', 'allotments',
-                    'sightseeing_rates', 'schedule_sightseeing', 'freesales', 'supplements', 'webhook_endpoints']) t,
+                    'sightseeing_rates', 'schedule_sightseeing', 'freesales', 'supplements', 'webhook_endpoints',
+                    'deck_plans']) t,
        unnest(array['authenticated', 'service_role']) g
   union all
   select t, 'service_role', 'DELETE,INSERT,SELECT,UPDATE'
