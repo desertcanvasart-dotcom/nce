@@ -21,6 +21,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import type { Database } from "../src/server/db/database.types";
 import { NO_DECK, planFleetImport, type FleetFile, type FleetI18n, type VesselPlan } from "./lib/fleet-import";
+import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
 const SHOWCASE_DAYS = 365;
@@ -347,6 +348,7 @@ async function run() {
     console.log(`✓ ${v.displayName ?? v.name}`);
   }
   console.log(`Done: ${plan.vessels.length} boats in ${target}, information only.`);
+  await refreshSite(target!);
 }
 
 if (apply && !target) {
