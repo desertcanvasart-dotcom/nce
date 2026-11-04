@@ -23,8 +23,8 @@ const visible = (id: string) => {
     v.displayName,
     v.translations,
     v.cabins.filter((c) => c.active).map((c) => [c.name, c.bed_configuration, c.view, c.translations]),
-    v.itinerary?.days,
-    v.itinerary?.boarding,
+    v.itineraries[0]?.days,
+    v.itineraries[0]?.boarding,
     v.photos.map((p) => p.alt),
   ]);
 };
@@ -50,13 +50,13 @@ describe("Nour El Nil fleet import", () => {
     for (const v of plan.vessels) {
       expect(v.type).toBe("sail");
       expect(v.propulsion).toBe("wind");
-      expect(v.itinerary?.code).toBe("ESN-ASW-5");
+      expect(v.itineraries[0]?.code).toBe("ESN-ASW-5");
       expect(v.translations[0]!.propulsion_note).toBe(
         "Sails when the wind allows, with no engine on board. A towboat is used when needed.",
       );
     }
-    expect(boat("roman").itinerary?.sailingDays).toEqual([2]);
-    expect(boat("najafa").itinerary?.sailingDays).toEqual([1]);
+    expect(boat("roman").itineraries[0]?.sailingDays).toEqual([2]);
+    expect(boat("najafa").itineraries[0]?.sailingDays).toEqual([1]);
     expect(boat("najafa")).toMatchObject({ cabinCount: 10, maxGuests: 24, yearBuilt: 2025, lengthM: 60, beamM: 8.5 });
     expect(boat("malouka")).toMatchObject({ lengthM: 50, beamM: 7.7 });
   });
@@ -118,7 +118,7 @@ describe("Nour El Nil fleet import", () => {
   });
 
   it("generates weekly dates only inside the open months", () => {
-    expect(boat("najafa").itinerary?.periods).toEqual([
+    expect(boat("najafa").itineraries[0]?.periods).toEqual([
       { starts_on: "2026-11-04", ends_on: "2027-05-26" },
       { starts_on: "2027-09-01", ends_on: "2028-05-26" },
     ]);
@@ -127,7 +127,7 @@ describe("Nour El Nil fleet import", () => {
   it("generates no dates when the departure day needs confirmation", () => {
     const own = { ...file.vessels[1]!, departure_day: { value: "Monday", status: "needs_confirmation" } };
     const p = planFleetImport({ ...file, vessels: [own] }, i18n, "2026-11-04");
-    expect(p.vessels[0]!.itinerary).toMatchObject({ sailingDays: [], periods: [] });
+    expect(p.vessels[0]!.itineraries[0]).toMatchObject({ sailingDays: [], periods: [] });
   });
 
   it("takes propulsion from the data and refuses a boat without it", () => {
@@ -168,5 +168,36 @@ describe("fleet import rules", () => {
       { starts_on: "2027-09-01", ends_on: "2027-09-30" },
     ]);
     expect(openPeriods("2027-07-10", [6, 7, 8], 5, 2)).toEqual([{ starts_on: "2027-09-01", ends_on: "2027-09-30" }]);
+  });
+});
+
+describe("Steam Ship Sudan (the featured paddle steamer)", () => {
+  const sudan = planFleetImport(
+    read<FleetFile>("steam-ship-sudan-data.json"),
+    read<FleetI18n>("steam-ship-sudan-i18n.json"),
+    "2026-11-04",
+  );
+  const v = sudan.vessels[0]!;
+
+  it("is valid, a steam-driven paddle steamer, information only, with both itineraries", () => {
+    expect(sudan.problems).toEqual([]);
+    expect(v).toMatchObject({ slug: "steam-ship-sudan", type: "steam", propulsion: "steam", cabinCount: 24, indicative: null });
+    expect(v.itineraries.map((it) => [it.code, it.origin, it.destination, it.nights])).toEqual([
+      ["ASW-LXR-5", "Aswan", "Luxor", 5],
+      ["LXR-ASW-5", "Luxor", "Aswan", 5],
+    ]);
+    for (const it of v.itineraries) expect(it).toMatchObject({ sailingDays: [], periods: [] });
+    expect(v.itineraries[1]!.days.filter((d) => d.locale === "ja")).toHaveLength(6);
+  });
+
+  it("shows nothing unconfirmed: no guest count, build year, length, areas, Wi-Fi or photos", () => {
+    expect(v).toMatchObject({ maxGuests: null, yearBuilt: null, lengthM: null, beamM: null });
+    expect(v.cabins.map((c) => [c.code, c.cabin_count, c.size_m2])).toEqual([
+      ["cabin", 18, null],
+      ["suite", 6, null],
+    ]);
+    expect(v.photos).toEqual([]);
+    expect(JSON.stringify(v.translations)).not.toMatch(/wi-?fi|48|pool|1885/i);
+    expect(v.translations[0]!.summary).toContain("according to its operator");
   });
 });

@@ -1,0 +1,132 @@
+{
+  "source": "Spanish and Japanese for steam-ship-sudan-data.json. No photos: permission to use the operator's images hasn't been given.",
+  "review": {
+    "status": "needs_human_review",
+    "note": "Drafted by Claude on 4 Nov 2026 from the English data. A Spanish and a Japanese reviewer should check every es and ja string.",
+    "locales": ["es", "ja"]
+  },
+  "fleet": {
+    "propulsion_support": {
+      "es": "Su máquina de vapor de triple expansión sigue moviendo las ruedas de paletas, ahora con diésel en lugar de carbón y con la ayuda de un propulsor auxiliar.",
+      "ja": "三段膨張式の蒸気機関が今も外輪を回しています。燃料は石炭からディーゼルに替わり、補助スラスターが航行を助けます。"
+    },
+    "included": {},
+    "not_included": {},
+    "boarding_note": {},
+    "programme": {},
+    "programmes": {
+      "ASW-LXR-5": {
+        "es": [
+          { "title": "Asuán y Filae", "text": "Embarque en Asuán y visita al templo de Filae. La primera noche se pasa en Asuán." },
+          { "title": "Kom Ombo y Edfu", "text": "Visita a los templos de Kom Ombo y Edfu, y noche en Esna." },
+          { "title": "Esclusa de Esna y Luxor", "text": "Paso por la esclusa de Esna y visita a Karnak y al templo de Luxor." },
+          { "title": "Qena y Dendera", "text": "Navegación hasta Qena y visita al templo de Hathor en Dendera." },
+          { "title": "Abydos", "text": "Visita a Abydos por carretera y regreso a Luxor." },
+          {
+            "title": "La orilla oeste de Luxor",
+            "text": "Visita a las tumbas y templos de la orilla oeste y desembarque en Luxor. La entrada a la tumba de Nefertari depende de la disponibilidad."
+          }
+        ],
+        "ja": [
+          { "title": "アスワンとフィラエ", "text": "アスワンで乗船し、フィラエ神殿を見学します。最初の夜はアスワンで過ごします。" },
+          { "title": "コム・オンボとエドフ", "text": "コム・オンボとエドフの神殿を見学し、夜はエスナで過ごします。" },
+          { "title": "エスナの閘門とルクソール", "text": "エスナの閘門を通過し、カルナック神殿とルクソール神殿を見学します。" },
+          { "title": "ケナとデンデラ", "text": "ケナまで航行し、デンデラのハトホル神殿を見学します。" },
+          { "title": "アビドス", "text": "陸路でアビドスを訪れ、ルクソールに戻ります。" },
+          {
+            "title": "ルクソール西岸",
+            "text": "西岸の墓と神殿を見学し、ルクソールで下船します。ネフェルタリの墓への入場は空き状況によります。"
+          }
+        ]
+      },
+      "LXR-ASW-5": {
+        "es": [
+          { "title": "Luxor", "text": "Embarque en Luxor y visita a Karnak y al templo de Luxor; después, navegación hacia Qena." },
+          {
+            "title": "Abydos y Dendera",
+            "text": "Visita a Abydos por carretera y al templo de Hathor en Dendera; después, navegación de vuelta hacia Luxor."
+          },
+          {
+            "title": "La orilla oeste de Luxor",
+            "text": "Visita a las tumbas y templos de la orilla oeste; después, navegación hacia Esna y Edfu. La entrada a la tumba de Nefertari depende de la disponibilidad."
+          },
+          { "title": "Edfu y Kom Ombo", "text": "Visita a los templos de Edfu y Kom Ombo." },
+          { "title": "Asuán y Filae", "text": "Llegada a Asuán y visita al templo de Filae." },
+          { "title": "Desembarque en Asuán", "text": "Desembarque en Asuán." }
+        ],
+        "ja": [
+          { "title": "ルクソール", "text": "ルクソールで乗船し、カルナック神殿とルクソール神殿を見学した後、ケナに向けて航行します。" },
+          { "title": "アビドスとデンデラ", "text": "陸路でアビドスを訪れ、デンデラのハトホル神殿を見学した後、ルクソール方面へ戻ります。" },
+          {
+            "title": "ルクソール西岸",
+            "text": "西岸の墓と神殿を見学し、エスナとエドフに向けて航行します。ネフェルタリの墓への入場は空き状況によります。"
+          },
+          { "title": "エドフとコム・オンボ", "text": "エドフとコム・オンボの神殿を見学します。" },
+          { "title": "アスワンとフィラエ", "text": "アスワンに到着し、フィラエ神殿を見学します。" },
+          { "title": "アスワンで下船", "text": "アスワンで下船します。" }
+        ]
+      }
+    },
+    "on_board": {},
+    "dining": {
+      "es": "El operador describe un menú creado con el chef Jean Imbert en torno a ingredientes egipcios como el pescado del Nilo, las lentejas, las especias, los cítricos y el hibisco.",
+      "ja": "運航会社によると、シェフのジャン・アンベールとともに、ナイルの魚、レンズ豆、スパイス、柑橘類、ハイビスカスなどエジプトの食材を使ったメニューを作り上げています。"
+    },
+    "less_suited_to": {
+      "es": "Familias que viajan con niños menores de seis años.",
+      "ja": "6歳未満のお子様連れのご家族。"
+    },
+    "good_to_know": {
+      "children": { "es": "No se admiten niños menores de seis años.", "ja": "6歳未満のお子様は乗船できません。" },
+      "mobility": {},
+      "charter": {},
+      "route_note": {
+        "es": "De finales de noviembre a mediados de febrero, el nivel bajo del agua impide navegar entre Luxor y Qena, y se aplica un programa alternativo. Abydos se visita por carretera.",
+        "ja": "11月下旬から2月中旬までは水位が低いため、ルクソールとケナの間は航行できず、代わりのプログラムになります。アビドスへは陸路で訪れます。"
+      },
+      "season": {}
+    },
+    "seo_title": {
+      "en": "{name}: 5-night Nile cruises on a historic paddle steamer",
+      "es": "{name}: cruceros de 5 noches por el Nilo en un vapor de ruedas histórico",
+      "ja": "{name}:歴史的な外輪蒸気船で巡るナイル川5泊クルーズ"
+    },
+    "seo_description_suffix": {
+      "en": "See the cabins, itineraries and what’s known about it.",
+      "es": "Consulta los camarotes, los itinerarios y lo que se sabe del barco.",
+      "ja": "客室、旅程、この船について分かっていることをご覧ください。"
+    }
+  },
+  "cabin_types": {
+    "cabin": {
+      "name": { "es": "Camarote", "ja": "キャビン" },
+      "beds": { "en": "Double or twin beds", "es": "Cama doble o dos camas individuales", "ja": "ダブルベッドまたはシングルベッド2台" },
+      "feature": {
+        "es": "Cada uno con su nombre y decoración propios, y dos ventanas a la cubierta de paseo compartida.",
+        "ja": "それぞれ固有の名前と装飾があり、共用のプロムナードデッキに面した窓が2つあります。"
+      }
+    },
+    "suite": {
+      "name": { "es": "Suite", "ja": "スイート" },
+      "beds": { "en": "Twin or double beds", "es": "Dos camas individuales o cama doble", "ja": "シングルベッド2台またはダブルベッド" },
+      "feature": {
+        "es": "Cada una con su nombre y decoración propios, y ventanales panorámicos más grandes. La suite Odilo tiene una cubierta privada.",
+        "ja": "それぞれ固有の名前と装飾があり、より大きなパノラマ窓を備えています。オディロ・スイートには専用デッキがあります。"
+      }
+    }
+  },
+  "extras": {},
+  "summaries": {
+    "steam-ship-sudan": {
+      "es": "Un vapor histórico de ruedas laterales, botado en 1921 según su operador, con 18 camarotes y seis suites en tres cubiertas.",
+      "ja": "運航会社によれば1921年進水の歴史的な外輪蒸気船。3層のデッキに18のキャビンと6つのスイートがあります。"
+    }
+  },
+  "descriptions": {
+    "steam-ship-sudan": {
+      "es": "Cada camarote y cada suite tienen su propio nombre y decoración, de Agatha Christie a Naguib Mahfuz. Agatha Christie recorrió el Nilo en 1933, cuatro años antes de Muerte en el Nilo, y el operador del barco señala al Sudan como el vapor que inspiró la novela.",
+      "ja": "キャビンとスイートにはそれぞれアガサ・クリスティーからナギーブ・マフフーズまで固有の名前と装飾があります。アガサ・クリスティーは『ナイルに死す』の4年前の1933年にナイル川を旅しており、運航会社はスーダン号をこの小説の着想となった蒸気船としています。"
+    }
+  },
+  "photos": {}
+}

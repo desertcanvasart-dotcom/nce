@@ -20,7 +20,15 @@ const VESSEL_TYPES: Record<string, "sail" | "motor" | "steam"> = {
   paddle_steamer: "steam",
 };
 /** The file's shared spaces in the catalogue's words. */
-const SPACES: Record<string, string> = { "Top deck": "sun_deck", "Sun deck": "sun_deck", Salon: "lounge", Lounge: "lounge" };
+const SPACES: Record<string, string> = {
+  "Top deck": "sun_deck",
+  "Sun deck": "sun_deck",
+  Salon: "lounge",
+  Lounge: "lounge",
+  Bar: "bar",
+  "Dining salon": "dining_room",
+  "Dining room": "dining_room",
+};
 const ISO_DAY: Record<string, number> = {
   Monday: 1,
   Tuesday: 2,
@@ -51,6 +59,8 @@ export type FleetI18n = {
     not_included: Partial<Record<Locale, string[]>>;
     boarding_note: Words;
     programme: Partial<Record<Locale, { title: string; text: string }[]>>;
+    /** Each itinerary's days by its id, for a boat with more than one; `programme` serves the first otherwise. */
+    programmes?: Record<string, Partial<Record<Locale, { title: string; text: string }[]>>>;
     on_board: Record<string, Words>;
     dining: Words;
     less_suited_to: Words;
@@ -61,6 +71,7 @@ export type FleetI18n = {
   cabin_types: Record<string, { name?: Words; beds?: Words; bathrooms?: Words; feature?: Words }>;
   extras: Record<string, Words>;
   summaries: Record<string, Words>;
+  descriptions?: Record<string, Words>;
   photos: Record<string, { url: string; cabin?: string; alt: Words }[]>;
 };
 
@@ -103,7 +114,7 @@ export type VesselPlan = {
   translations: {
     locale: Locale;
     summary: string | null;
-    description: null;
+    description: string | null;
     dining: string | null;
     good_for: null;
     less_suited_to: string | null;
@@ -117,7 +128,7 @@ export type VesselPlan = {
     seo_description: string | null;
   }[];
   cabins: CabinPlan[];
-  itinerary: {
+  itineraries: {
     code: string;
     origin: string;
     destination: string;
@@ -127,9 +138,11 @@ export type VesselPlan = {
     periods: { starts_on: string; ends_on: string }[];
     days: { locale: Locale; day_number: number; title: string; description: string }[];
     boarding: { locale: Locale; boarding_note: string }[];
-  } | null;
+  }[];
   photos: { url: string; file: string; cabin: string | null; sort_order: number; alt: Record<Locale, string> }[];
   sourceUrls: string[];
+  /** Who the photos come from, credited under each. */
+  credit: string;
   verificationNote: string;
   /** Fields stored or held back but not shown to visitors, for the report. */
   hidden: string[];
@@ -240,8 +253,8 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     const summaryEn = typeof v.summary === "string" ? v.summary.replace(/(\w)'(\w)/g, "$1’$2") : null;
     for (const l of ["es", "ja"] as const) if (summaryEn && !i18n.summaries[id]?.[l]) bad(`no ${l} summary`);
 
-    const itinerary = (Array.isArray(v.itineraries) ? v.itineraries : [])[0] as Json | undefined;
-    const nights = Number(itinerary?.nights ?? 0);
+    const itinerariesIn = (Array.isArray(v.itineraries) ? v.itineraries : []) as Json[];
+    const nights = Number(itinerariesIn[0]?.nights ?? 0);
     const price = v.indicative_price as Json | null;
     let indicative: VesselPlan["indicative"] = null;
     if (shown(price) && price) {
@@ -263,6 +276,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     // The site's typography: a curly apostrophe (there’s, Nour El Nil’s), as in every other text.
     const text = (x: unknown) => (typeof x === "string" && x.trim() ? x.replace(/(\w)'(\w)/g, "$1’$2") : null);
     const diningEn = [text(onBoard.food), text(onBoard.dietary)].filter(Boolean).join(" ") || null;
+    const descriptionEn = text(v.description);
     const goodEn: [keyof FleetI18n["fleet"]["good_to_know"], string | null][] = [
       ["children", text(suitability.children)],
       ["mobility", text(suitability.mobility)],
@@ -273,15 +287,15 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     const translations = LOCALES.map((l) => {
       const list = (en: string[], w: Partial<Record<Locale, string[]>>) => (l === "en" ? en : (w[l] ?? []));
       const confirmed = shown(inclusions) ? inclusions : {};
-      const included = list((confirmed.included as string[] | undefined) ?? [], f.included);
-      const notIncluded = list((confirmed.not_included as string[] | undefined) ?? [], f.not_included);
+      const included = list((confirmed.included as string[] | undefined) ?? [], f.included ?? {});
+      const notIncluded = list((confirmed.not_included as string[] | undefined) ?? [], f.not_included ?? {});
       const summary = l === "en" ? summaryEn : (i18n.summaries[id]?.[l] ?? null);
       const title = f.seo_title[l]?.replace("{name}", String(v.name)) ?? null;
       const suffix = f.seo_description_suffix[l];
       return {
         locale: l,
         summary,
-        description: null,
+        description: descriptionEn ? (l === "en" ? descriptionEn : (i18n.descriptions?.[id]?.[l] ?? null)) : null,
         dining: diningEn ? pick(f.dining, l, diningEn) : null,
         good_for: null,
         less_suited_to: text(suitability.less_suited_to) ? pick(f.less_suited_to, l, text(suitability.less_suited_to)) : null,
@@ -291,11 +305,11 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
         propulsion_note: supportEn ? pick(f.propulsion_support, l, supportEn) : null,
         on_board: ON_BOARD.flatMap((k) => {
           const en = text(onBoard[k]);
-          const w = en ? pick(f.on_board[k], l, en) : null;
+          const w = en ? pick(f.on_board?.[k], l, en) : null;
           return w ? [w] : [];
         }),
         good_to_know: goodEn.flatMap(([k, en]) => {
-          const w = en ? pick(f.good_to_know[k], l, en) : null;
+          const w = en ? pick(f.good_to_know?.[k], l, en) : null;
           return w ? [w] : [];
         }),
         seo_title: title,
@@ -355,29 +369,32 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     const counted = cabins.reduce((n, c) => n + (c.cabin_count ?? 0), 0);
     if (units !== null && counted > units) bad(`cabin types add up to ${counted}, more than ${units} units`);
 
-    let plannedItinerary: VesselPlan["itinerary"] = null;
-    if (itinerary) {
+    const plannedItineraries: VesselPlan["itineraries"] = itinerariesIn.map((itinerary, n) => {
+      const code = String(itinerary.id);
+      const itNights = Number(itinerary.nights ?? 0);
       const programme = (itinerary.programme as Json[] | undefined) ?? [];
-      if (programme.length !== nights + 1) bad(`${programme.length} programme days for ${nights} nights`);
-      const day = valueOf<string>(v.departure_day);
+      if (programme.length !== itNights + 1) bad(`${code}: ${programme.length} programme days for ${itNights} nights`);
+      // The itinerary's own departure day when it gives one, else the boat's; only a confirmed one gives dates.
+      const day = valueOf<string>("departure_day" in itinerary ? itinerary.departure_day : v.departure_day);
       const sailingDays = day && ISO_DAY[day] ? [ISO_DAY[day]!] : [];
-      const closed = ((season.closed_months as number[] | undefined) ?? []).filter((n) => n >= 1 && n <= 12);
+      const closed = ((season.closed_months as number[] | undefined) ?? []).filter((m) => m >= 1 && m <= 12);
+      const words = (l: Locale) => f.programmes?.[code]?.[l] ?? (n === 0 ? f.programme?.[l] : undefined);
       const days = LOCALES.flatMap((l) =>
         programme.map((p, i) => {
-          const w = l === "en" ? { title: text(p.title) ?? "", text: text(p.text) ?? "" } : f.programme[l]?.[i];
-          if (!w) bad(`no ${l} programme for day ${i + 1}`);
+          const w = l === "en" ? { title: text(p.title) ?? "", text: text(p.text) ?? "" } : words(l)?.[i];
+          if (!w) bad(`${code}: no ${l} programme for day ${i + 1}`);
           return { locale: l, day_number: i + 1, title: w?.title ?? "", description: w?.text ?? "" };
         }),
       );
       const boardingEn = text(itinerary.boarding_note);
-      plannedItinerary = {
-        code: String(itinerary.id),
+      return {
+        code,
         origin: String(itinerary.from),
         destination: String(itinerary.to),
-        nights,
+        nights: itNights,
         sailingDays,
         // A confirmed weekly day gives expected dates in the open months; an unconfirmed one gives none.
-        periods: sailingDays.length ? openPeriods(today, closed, nights) : [],
+        periods: sailingDays.length ? openPeriods(today, closed, itNights) : [],
         days,
         boarding: boardingEn
           ? LOCALES.flatMap((l) => {
@@ -386,7 +403,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
             })
           : [],
       };
-    }
+    });
 
     const photos = (i18n.photos[id] ?? []).map((p, i) => {
       const file = decodeURIComponent(new URL(p.url).pathname.split("/").pop() ?? "").replace(/[^A-Za-z0-9._-]/g, "-");
@@ -421,7 +438,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       propulsion: propulsion ?? "wind",
       cabinCount: units,
       maxGuests: valueOf<number>(v.guest_capacity),
-      yearBuilt: typeof v.built_year === "number" ? v.built_year : null,
+      yearBuilt: typeof v.built_year === "number" ? v.built_year : valueOf<number>(v.built_year),
       lengthM: dims?.[0] ?? null,
       beamM: dims?.[1] ?? null,
       sharedSpaces,
@@ -429,9 +446,10 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       showcaseReason: `Information only: ${operator.name} fleet (${(operator.partner_status ?? "permission unknown").replace(/_/g, " ")}, ${String(file.meta.updated_on ?? file.meta.researched_on ?? "")}). Not bookable on Nilecruz.`,
       translations,
       cabins,
-      itinerary: plannedItinerary,
+      itineraries: plannedItineraries,
       photos,
       sourceUrls: [String(v.source_url ?? ""), operator.website ?? ""].filter(Boolean),
+      credit: operator.name.replace(/\s*\(.*\)$/, ""),
       verificationNote: [
         `${operator.name} fleet import (${String(file.meta.dataset ?? "")}, ${String(file.meta.updated_on ?? "")}).`,
         `Spanish and Japanese: ${i18n.review.status.replace(/_/g, " ")}.`,

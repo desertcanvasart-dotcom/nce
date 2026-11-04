@@ -221,8 +221,13 @@ export function vesselProfile(type: VesselType, locale: Locale = "en"): VesselPr
 }
 
 /**
- * The sample vessels on /vessels/, one of each type in this order (Islam's brief): Malouka, MS Hamees, SS Misr. They are
+ * The sample vessels on /vessels/, one of each type in this order (Islam's brief): Malouka, MS Hamees and Steam Ship
+ * Sudan, the paddle steamer to feature (Islam, 4 Nov 2026; it replaced SS Misr). They are
  * catalogue records (showcase, not bookable), so their facts come from the catalogue; one that isn't published isn't
  * shown.
  */
-export const SAMPLE_VESSELS = ["nour-el-nil-malouka", "movenpick-hamees", "movenpick-ss-misr"];
+export const SAMPLE_VESSELS = ["nour-el-nil-malouka", "movenpick-hamees", "steam-ship-sudan"];
+
+/** The featured vessels first (each type's representative), in a list already sorted otherwise. */
+export const featuredFirst = <T extends { slug: string }>(list: T[]): T[] =>
+  [...list].sort((a, b) => Number(!SAMPLE_VESSELS.includes(a.slug)) - Number(!SAMPLE_VESSELS.includes(b.slug)));

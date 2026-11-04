@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "dataset": "steam-ship-sudan",
+    "researched_on": "2026-11-04",
+    "updated_on": "2026-11-04",
+    "language": "en",
+    "field_rule": "A null value or a field with status needs_confirmation must not be shown to visitors.",
+    "sources": "Research dossier, ~/Documents/ChatGPT/nilecrz/output/steam-ship-sudan-research (operator pages steam-ship-sudan.com, Voyageurs du Monde 2025 report, first-hand and trade accounts)"
+  },
+  "operator": {
+    "id": "steam-ship-sudan",
+    "name": "Steam Ship Sudan (Voyageurs du Monde)",
+    "website": "https://www.steam-ship-sudan.com/en/",
+    "partner_status": "no agreement yet",
+    "display_rule": "Information only. No photos until permission is given. Attribute the operator's own claims (launch year, the Agatha Christie connection, engineering)."
+  },
+  "fleet_defaults": {
+    "vessel_type": "paddle_steamer",
+    "vessel_type_label": "Paddle steamer",
+    "propulsion": "steam",
+    "propulsion_label": "Steam",
+    "propulsion_support": {
+      "text": "Its triple-expansion steam engine still turns the paddle wheels, now fired by diesel rather than coal, with an auxiliary thruster to help.",
+      "status": "confirmed",
+      "source": "https://www.steam-ship-sudan.com/journal/sudan-ex-machina/"
+    },
+    "booking_status": "information_only",
+    "indicative_price": null,
+    "evaluation": null,
+    "deck_plan": {
+      "status": "needs_confirmation",
+      "note": "Only a 2007 plan exists, with different cabin names and 21 units. Historical reference, not shown."
+    },
+    "inclusions": null,
+    "on_board": {
+      "food": "The operator describes a menu created with chef Jean Imbert around Egyptian ingredients such as Nile fish, lentils, spices, citrus and hibiscus.",
+      "dietary": null,
+      "wifi": {
+        "value": "Reported aboard, patchy on a January 2023 voyage",
+        "status": "needs_confirmation"
+      },
+      "cabin_amenities": {
+        "value": "Air conditioning, internal telephone, safe, hairdryer, 220 V sockets (2024 report)",
+        "status": "needs_confirmation"
+      },
+      "shared_spaces": ["Dining salon", "Lounge", "Bar", "Sun deck"]
+    },
+    "suitability": {
+      "children": "Children under six are not accepted.",
+      "mobility": null,
+      "less_suited_to": "Families travelling with children under six."
+    },
+    "charter": null,
+    "route_note": "From late November to mid-February, low water stops the ship sailing between Luxor and Qena, and an alternative programme applies. Abydos is visited by road.",
+    "operating_season": null
+  },
+  "cabin_type_defaults": {
+    "cabin": {
+      "name": "Cabin",
+      "max_guests": 2,
+      "beds": ["double", "twin"],
+      "feature": "Named and decorated individually, with two windows onto the shared promenade deck."
+    },
+    "suite": {
+      "name": "Suite",
+      "max_guests": 2,
+      "beds": ["twin", "double"],
+      "feature": "Named and decorated individually, with larger panoramic windows. The Odilo suite has a private deck."
+    }
+  },
+  "vessels": [
+    {
+      "id": "steam-ship-sudan",
+      "slug": "steam-ship-sudan",
+      "name": "Steam Ship Sudan",
+      "display_name": "Steam Ship Sudan",
+      "publish": true,
+      "built_year": { "value": 1921, "status": "needs_confirmation", "note": "Operator says launched 1921; 1885 appears elsewhere." },
+      "guest_capacity": { "value": 48, "status": "needs_confirmation", "note": "First-hand report; certified capacity unverified." },
+      "accommodation_units": { "value": 24, "status": "confirmed" },
+      "dimensions_m": { "display": null, "status": "needs_confirmation", "note": "Secondary reports give 69, 72 and 74 m." },
+      "summary": "A historic side-wheel paddle steamer, launched in 1921 according to its operator, with 18 cabins and six suites across three decks.",
+      "description": "Every cabin and suite has its own name and decoration, from Agatha Christie to Naguib Mahfouz. Agatha Christie cruised the Nile in 1933, four years before Death on the Nile, and the ship’s operator identifies the Sudan as the steamer that inspired the novel.",
+      "cabin_types": [
+        { "type": "cabin", "count": 18, "area_m2": null, "area_average_m2": { "value": 17, "status": "needs_confirmation" } },
+        { "type": "suite", "count": 6, "area_m2": null, "area_average_m2": { "value": 25, "status": "needs_confirmation" } }
+      ],
+      "itineraries": [
+        {
+          "id": "ASW-LXR-5",
+          "from": "Aswan",
+          "to": "Luxor",
+          "nights": 5,
+          "departure_day": null,
+          "boarding_note": null,
+          "programme": [
+            { "title": "Aswan and Philae", "text": "Board in Aswan and visit Philae Temple. The first night is spent in Aswan." },
+            { "title": "Kom Ombo and Edfu", "text": "Visit the temples of Kom Ombo and Edfu, then spend the night at Esna." },
+            { "title": "Esna lock and Luxor", "text": "Pass through the lock at Esna, then visit Karnak and Luxor Temple." },
+            { "title": "Qena and Dendera", "text": "Sail to Qena and visit the Temple of Hathor at Dendera." },
+            { "title": "Abydos", "text": "Visit Abydos by road, then return to Luxor." },
+            {
+              "title": "Luxor’s west bank",
+              "text": "Visit the tombs and temples of the west bank, then leave the ship in Luxor. Entry to Nefertari’s tomb depends on availability."
+            }
+          ]
+        },
+        {
+          "id": "LXR-ASW-5",
+          "from": "Luxor",
+          "to": "Aswan",
+          "nights": 5,
+          "departure_day": null,
+          "boarding_note": null,
+          "programme": [
+            { "title": "Luxor", "text": "Board in Luxor and visit Karnak and Luxor Temple, then sail towards Qena." },
+            {
+              "title": "Abydos and Dendera",
+              "text": "Visit Abydos by road and the Temple of Hathor at Dendera, then sail back towards Luxor."
+            },
+            {
+              "title": "Luxor’s west bank",
+              "text": "Visit the tombs and temples of the west bank, then sail on towards Esna and Edfu. Entry to Nefertari’s tomb depends on availability."
+            },
+            { "title": "Edfu and Kom Ombo", "text": "Visit the temples of Edfu and Kom Ombo." },
+            { "title": "Aswan and Philae", "text": "Arrive in Aswan and visit Philae Temple." },
+            { "title": "Disembarkation in Aswan", "text": "Leave the ship in Aswan." }
+          ]
+        }
+      ],
+      "source_url": "https://www.steam-ship-sudan.com/en/cabins-and-suites/",
+      "photos_status": "not permitted yet: 54 official image references in the dossier, not used",
+      "indicative_price": null
+    }
+  ]
+}
