@@ -18,7 +18,7 @@ export const sampleProfiles: VesselProfile[] = [
     type: "sail",
     name: "Sailing dahabiya",
     short: "The private sailing house",
-    line: "A low two-masted boat moved by the wind, carrying 8 to 24 guests. It moors at islands and villages the big ships cannot reach.",
+    line: "A low two-masted boat moved by the wind, carrying 8 to 24 guests. It moors at islands and villages where the big ships don’t stop.",
     facts: [
       ["users", "8–24 guests"],
       ["clock", "5–7 nights"],

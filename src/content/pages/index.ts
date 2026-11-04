@@ -10,7 +10,6 @@ import P016 from "./P016.json";
 import P017 from "./P017.json";
 import P018 from "./P018.json";
 import P019 from "./P019.json";
-import P026 from "./P026.json";
 import P027 from "./P027.json";
 import P030 from "./P030.json";
 import P032 from "./P032.json";
@@ -50,7 +49,6 @@ export const DRAFT_PAGES: Record<string, EditorialPage> = {
   P017: P017 as EditorialPage,
   P018: P018 as EditorialPage,
   P019: P019 as EditorialPage,
-  P026: P026 as EditorialPage,
   P027: P027 as EditorialPage,
   P030: P030 as EditorialPage,
   P032: P032 as EditorialPage,

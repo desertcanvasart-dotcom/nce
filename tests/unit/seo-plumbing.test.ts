@@ -15,8 +15,8 @@ describe("Batch 10: which pages are translated", () => {
     expect(isTranslated("/about/", "ja", list)).toBe(false);
     expect(translatedLocales("/contact/", list)).toEqual(["en"]);
   });
-  it("no page is marked translated yet: translations arrive page by page", () => {
-    expect(TRANSLATED).toEqual({ es: [], ja: [] });
+  it("translations arrive page by page: so far, the vessels pillar (ADR-106)", () => {
+    expect(TRANSLATED).toEqual({ es: ["/vessels/"], ja: ["/vessels/"] });
   });
 });
 
