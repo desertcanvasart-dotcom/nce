@@ -206,7 +206,7 @@ export const VESSEL_OPTIONS: { id: string; label: string; type?: VesselType }[] 
   { id: "any", label: "Any vessel" },
   { id: "sail", label: "Dahabiya", type: "sail" },
   { id: "motor", label: "Motor ship", type: "motor" },
-  { id: "steam", label: "Paddle steamer", type: "steam" },
+  { id: "steam", label: "Steamer", type: "steam" },
 ];
 
 export type SearchQuery = {
