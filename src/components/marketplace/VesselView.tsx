@@ -23,7 +23,7 @@ import {
 import { arriveDayBefore } from "@/lib/product/sailing-time";
 import { isBuilt } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { calendarSailings, headingOf, patternLines } from "@/lib/marketplace/sailing-calendar";
+import { calendarSailings, headingOf, patternLines, usualLines, withUsualYear } from "@/lib/marketplace/sailing-calendar";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { MooringExplainer } from "@/components/mooring/MooringExplainer";
 import { CabinsAndDecks } from "./CabinsAndDecks";
@@ -201,6 +201,8 @@ export function VesselView({
   ).filter(([, xs]) => xs.length);
   const anyDays = its.some((i) => i.days.length);
   const confirmed = its.some((i) => i.sailings.some((s) => s.status === "scheduled"));
+  // The calendar draws usual weekdays without a period for the coming year, as expected dates.
+  const calendarIts = withUsualYear(its, today);
   const linked = (text: string) => {
     const out: ReactNode[] = [];
     let last = 0;
@@ -713,16 +715,27 @@ export function VesselView({
         <section className={styles.section} id="dates" aria-labelledby="dates-h">
           {/* The sailing dates of every itinerary on one calendar: departure rows and the weekly pattern. */}
           <h2 id="dates-h">{tc("title")}</h2>
-          <p>{confirmed ? t("dates.introConfirmed") : t("dates.intro")}</p>
+          <p>
+            {confirmed
+              ? t("dates.introConfirmed")
+              : calendarSailings(calendarIts, today).length
+                ? t("dates.intro")
+                : t("dates.introUsual")}
+          </p>
           {!confirmed ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
           <SailingCalendar
             // Direction is worked out on the English names; the visitor reads the places in their language.
-            sailings={calendarSailings(its, today).map((s) => ({
+            sailings={calendarSailings(calendarIts, today).map((s) => ({
               ...s,
               origin: w.place(s.origin),
               destination: w.place(s.destination),
             }))}
-            patterns={patternLines(its, today).map((p) => ({
+            patterns={patternLines(calendarIts, today).map((p) => ({
+              ...p,
+              origin: w.place(p.origin),
+              destination: w.place(p.destination),
+            }))}
+            usual={usualLines(calendarIts, today).map((p) => ({
               ...p,
               origin: w.place(p.origin),
               destination: w.place(p.destination),

@@ -4,7 +4,13 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it } from "vitest";
 import { renderEn } from "./setup";
 import { SailingCalendar } from "@/components/marketplace/SailingCalendar";
-import { calendarSailings, patternLines, type CalendarItinerary } from "@/lib/marketplace/sailing-calendar";
+import {
+  calendarSailings,
+  patternLines,
+  usualLines,
+  withUsualYear,
+  type CalendarItinerary,
+} from "@/lib/marketplace/sailing-calendar";
 
 afterEach(cleanup);
 
@@ -38,6 +44,7 @@ function show(bookable = true, list = its) {
     <SailingCalendar
       sailings={calendarSailings(list, TODAY)}
       patterns={patternLines(list, TODAY)}
+      usual={usualLines(list, TODAY)}
       today={TODAY}
       bookable={bookable}
       reserve="/cruises/sample/reserve/"
@@ -97,8 +104,23 @@ describe("SailingCalendar", () => {
     expect(screen.getByRole("button", { name: "Next month" }).hasAttribute("disabled")).toBe(true);
   });
 
-  it("says so when a vessel has no published dates", () => {
-    show(true, [{ ...its[0]!, periods: [], sailings: [] }]);
+  it("says so when a vessel has no published dates and no usual days", () => {
+    show(true, [{ ...its[0]!, sailingDays: [], periods: [], sailings: [] }]);
     expect(screen.getByText(/No sailing dates are published for this vessel/)).toBeTruthy();
+  });
+
+  it("draws a ship with usual weekdays but no dates as expected dates for the coming year", () => {
+    show(false, withUsualYear([{ ...its[0]!, periods: [], sailings: [] }], TODAY));
+    expect(screen.getByRole("heading", { name: "Usual weekly pattern" })).toBeTruthy();
+    expect(screen.getByRole("navigation", { name: "Months with sailings" })).toBeTruthy();
+    expect(screen.queryByText(/No sailing dates are published/)).toBeNull();
+  });
+
+  it("lists the usual days instead when there are no dates to draw, never claiming none are published", () => {
+    show(false, [{ ...its[0]!, periods: [], sailings: [] }]);
+    expect(screen.getByRole("heading", { name: "Usual weekly pattern" })).toBeTruthy();
+    expect(screen.getByText("Monday")).toBeTruthy();
+    expect(screen.getByText(/The operator usually sails on these days/)).toBeTruthy();
+    expect(screen.queryByText(/No sailing dates are published/)).toBeNull();
   });
 });

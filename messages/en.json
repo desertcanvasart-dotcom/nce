@@ -434,6 +434,7 @@
     "ask": "Ask about this date",
     "none": "No sailings this month. Choose another month above.",
     "empty": "No sailing dates are published for this vessel. It sails on request or on dates the operator announces: ask for an offer with your dates.",
+    "emptyUsual": "The operator usually sails on these days. Ask for an offer with your dates and we’ll check them.",
     "legend": {
       "pattern": "Expected from the weekly pattern",
       "south": "Upstream, sailing south",
@@ -705,6 +706,7 @@
     "dates": {
       "intro": "These are expected dates based on the operator’s usual weekly sailings. Choose a date to see the route and length, or ask us to check it.",
       "introConfirmed": "Confirmed departures, and the operator’s usual weekly sailings where it has them. Choose a date to see the route and length.",
+      "introUsual": "The operator’s usual weekly sailings. No dates are published yet, so ask us about the ones you want.",
       "noneConfirmed": "No dates are confirmed for booking yet."
     },
     "faq": {
