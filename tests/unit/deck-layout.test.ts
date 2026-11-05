@@ -19,9 +19,22 @@ const abbas = JSON.parse(
 const lotus = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lotus.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const sunRay = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-sun-ray.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Sun Ray's drawing with its existing codes: Classic on deck 1, both suites on deck 4, not 'To be confirmed'", () => {
+    const layout = parseLayout(sunRay.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["Sun", "4", "3", "2", "1"]);
+    expect(layoutProblems(sunRay.layout, sunRay.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "CLASSIC")).toEqual(["1"]);
+    expect(decksOf(layout, "UPPER")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "JS")).toEqual(["4"]);
+    expect(decksOf(layout, "SS")).toEqual(["4"]);
+  });
+
   it("reads Royal Lotus's drawing with the cabin types it already has: Deluxe on D, C and B, Royal Suites forward on B", () => {
     const layout = parseLayout(lotus.layout)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);

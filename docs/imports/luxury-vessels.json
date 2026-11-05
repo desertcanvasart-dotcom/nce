@@ -138,38 +138,40 @@
       "rename_from": "movenpick-ms-sun-ray",
       "name": "Mövenpick MS Sun Ray",
       "type": "motor",
-      "cabin_count": 62,
+      "cabin_count": 66,
       "shared_spaces": ["pool", "sun_deck", "dining_room", "lounge", "bar", "library"],
-      "summary": "A five-star Mövenpick cruiser with a grand lobby, 54 cabins and four suite categories, leaving Luxor on Thursdays and Aswan on Mondays.",
+      "summary": "A five-star Mövenpick cruiser with a grand lobby and 66 cabins and suites, among them two Junior and two Senior Suites, leaving Luxor on Thursdays and Aswan on Mondays.",
       "description": "The Mövenpick MS Sun Ray (also written Sunray) is a five-star deluxe Nile cruise ship with an impressive high-ceilinged entrance lobby, spacious public areas and contemporary furnishings. Its cruises link Luxor, Edfu, Kom Ombo and Aswan, combining temple visits with a relaxed atmosphere on board.\n\nLower-deck Classic Cabins look out through two fixed portholes; upper-deck cabins have larger windows, some of which partly open. There are two suites in each of four categories: Junior, Superior, Deluxe and Executive.\n\nOn board: an outdoor pool and sun deck, a main restaurant and lounge bar, a reading room and a playroom.\n\nFour-night cruises usually leave Luxor on Thursdays and three-night cruises leave Aswan on Mondays, a different week from most other Mövenpick ships. This is the usual pattern, not live availability.",
       "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html", "https://movenpick.accor.com/en/africa/egypt/nilecruisers.html"],
-      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Confirm the 62-cabin breakdown, upper-deck category names, sizes and counts, suite sizes and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'.",
+      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Cabins and suites from Mövenpick's fact sheet (2020): 60 outside cabins of 20 m², 2 singles of 15 m², 2 Junior Suites of 37 m² and 2 Senior Suites of 39 m², 66 in all; the website's other suite names are sales products. Confirm which rooms are the singles, and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'.",
       "cabins": [
         {
           "code": "CLASSIC",
           "name": "Classic Cabin",
-          "deck": "Lower deck",
+          "deck": "Deck 1",
           "size_m2": 20,
           "max_occupancy": 2,
           "view": "Two fixed portholes (not opening)",
           "balcony": false,
+          "cabin_count": 8,
           "amenities": ["Bathtub", "Hairdryer", "Air conditioning", "LED TV with satellite channels", "Espresso machine", "Tea and coffee", "Minibar", "Safe", "Telephone"],
           "description": "Cabins of about 20 m² on the lower deck, facing the Nile through two fixed portholes, with a bathtub, espresso machine and satellite TV."
         },
         {
           "code": "UPPER",
           "name": "Upper-deck Cabin",
-          "deck": "Upper deck",
+          "deck": "Decks 2, 3 and 4",
+          "size_m2": 20,
           "max_occupancy": 2,
           "view": "Large Nile-facing window, some partly opening",
           "balcony": false,
+          "cabin_count": 52,
           "amenities": ["Air conditioning", "Television", "Minibar", "Safe"],
           "description": "Cabins on the upper decks with larger Nile-facing windows, some partly opening, for a better view than the lower-deck portholes."
         },
-        { "code": "JS", "name": "Junior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
-        { "code": "SS", "name": "Superior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Superior Suites, with upgraded space and furnishings." },
-        { "code": "DS", "name": "Deluxe Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Deluxe Suites, with upgraded space and furnishings." },
-        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Executive Suites, the ship's top category." }
+        { "code": "JS", "name": "Junior Suite", "deck": "Deck 4", "size_m2": 37, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
+        { "code": "SS", "name": "Senior Suite", "deck": "Deck 4", "size_m2": 39, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Senior Suites, the ship’s largest, with a seating area." },
+        { "code": "SGL", "name": "Single Cabin", "size_m2": 15, "max_occupancy": 1, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two single cabins of about 15 m²." }
       ],
       "itineraries": [
         {
