@@ -12,7 +12,7 @@
     "name": "Steam Ship Sudan (Voyageurs du Monde)",
     "website": "https://www.steam-ship-sudan.com/en/",
     "partner_status": "no agreement yet",
-    "display_rule": "Information only. No photos until permission is given. Attribute the operator's own claims (launch year, the Agatha Christie connection, engineering)."
+    "display_rule": "Information only. Photos used with the operator's permission (Islam, 5 November 2026); six of the seven have digitally extended sides, which their captions say. Attribute the operator's own claims (launch year, the Agatha Christie connection, engineering)."
   },
   "fleet_defaults": {
     "vessel_type": "paddle_steamer",
@@ -130,7 +130,7 @@
         }
       ],
       "source_url": "https://www.steam-ship-sudan.com/en/cabins-and-suites/",
-      "photos_status": "not permitted yet: 54 official image references in the dossier, not used",
+      "photos_status": "permitted (Islam, 5 November 2026): seven photos in docs/imports/photos/steam-ship-sudan/, six with sides digitally extended to 3:2, labelled in their captions",
       "indicative_price": null
     }
   ]
