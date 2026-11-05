@@ -455,6 +455,11 @@
         "status": "confirmed"
       },
       "summary": "A contemporary 2023 dahabiya with bright interiors, a broad deck and three cabin categories, including two-room Deluxe Suites.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam, the 2023 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
