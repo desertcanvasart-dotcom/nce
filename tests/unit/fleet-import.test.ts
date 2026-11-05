@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
@@ -208,11 +208,9 @@ describe("fleet import rules", () => {
 });
 
 describe("Steam Ship Sudan (the featured paddle steamer)", () => {
-  const sudan = planFleetImport(
-    read<FleetFile>("steam-ship-sudan-data.json"),
-    read<FleetI18n>("steam-ship-sudan-i18n.json"),
-    "2026-11-04",
-  );
+  const sudanData = read<FleetFile>("steam-ship-sudan-data.json");
+  const sudanI18n = read<FleetI18n>("steam-ship-sudan-i18n.json");
+  const sudan = planFleetImport(sudanData, sudanI18n, "2026-11-04");
   const v = sudan.vessels[0]!;
 
   it("is valid, a steam-driven paddle steamer, information only, with both itineraries", () => {
@@ -233,14 +231,37 @@ describe("Steam Ship Sudan (the featured paddle steamer)", () => {
     expect(v.itineraries[1]!.days.filter((d) => d.locale === "ja")).toHaveLength(6);
   });
 
-  it("shows nothing unconfirmed: no guest count, build year, length, areas, Wi-Fi or photos", () => {
+  it("shows nothing unconfirmed: no guest count, build year, length, areas or Wi-Fi", () => {
     expect(v).toMatchObject({ maxGuests: null, yearBuilt: null, lengthM: null, beamM: null });
     expect(v.cabins.map((c) => [c.code, c.cabin_count, c.size_m2])).toEqual([
       ["cabin", 18, null],
       ["suite", 6, null],
     ]);
-    expect(v.photos).toEqual([]);
     expect(JSON.stringify(v.translations)).not.toMatch(/wi-?fi|48|pool|1885/i);
     expect(v.translations[0]!.summary).toContain("according to its operator");
+  });
+
+  it("shows the seven photos, kept in the repository, and says which have digitally extended sides", () => {
+    expect(v.photos).toHaveLength(7);
+    for (const p of v.photos) {
+      expect(p).toMatchObject({ url: null, cabin: null });
+      expect(existsSync(resolve(import.meta.dirname, "../..", p.path!))).toBe(true);
+    }
+    // Six were widened to 3:2 with generated sides; the one original says nothing of the kind.
+    const extended = v.photos.filter((p) => p.alt.en.endsWith("Sides digitally extended."));
+    expect(extended).toHaveLength(6);
+    for (const p of extended) {
+      expect(p.alt.es).toContain("ampliados digitalmente");
+      expect(p.alt.ja).toContain("デジタル処理で拡張");
+    }
+    expect(v.photos.find((p) => p.file.includes("L1730053BD"))!.alt.en).not.toContain("extended");
+    expect(v.credit).toBe("Steam Ship Sudan");
+  });
+
+  it("refuses a photo that is neither an https address nor a file under docs/imports/photos/", () => {
+    const own = { ...sudanI18n, photos: { "steam-ship-sudan": [{ path: "../secret.jpg", alt: { en: "x", es: "x", ja: "x" } }] } };
+    expect(planFleetImport(sudanData, own, "2026-11-04").problems).toEqual(
+      expect.arrayContaining([expect.stringMatching(/under docs\/imports\/photos/)]),
+    );
   });
 });

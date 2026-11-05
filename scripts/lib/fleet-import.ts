@@ -73,7 +73,8 @@ export type FleetI18n = {
   extras: Record<string, Words>;
   summaries: Record<string, Words>;
   descriptions?: Record<string, Words>;
-  photos: Record<string, { url: string; cabin?: string; alt: Words }[]>;
+  /** A photo on the operator's site (url), or one kept in this repository (path, under docs/imports/photos/). */
+  photos: Record<string, { url?: string; path?: string; cabin?: string; alt: Words }[]>;
 };
 
 export type CabinPlan = {
@@ -140,7 +141,14 @@ export type VesselPlan = {
     days: { locale: Locale; day_number: number; title: string; description: string }[];
     boarding: { locale: Locale; boarding_note: string }[];
   }[];
-  photos: { url: string; file: string; cabin: string | null; sort_order: number; alt: Record<Locale, string> }[];
+  photos: {
+    url: string | null;
+    path: string | null;
+    file: string;
+    cabin: string | null;
+    sort_order: number;
+    alt: Record<Locale, string>;
+  }[];
   sourceUrls: string[];
   /** Who the photos come from, credited under each. */
   credit: string;
@@ -417,12 +425,18 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     });
 
     const photos = (i18n.photos[id] ?? []).map((p, i) => {
-      const file = decodeURIComponent(new URL(p.url).pathname.split("/").pop() ?? "").replace(/[^A-Za-z0-9._-]/g, "-");
-      for (const l of LOCALES) if (!p.alt[l]?.trim()) bad(`photo ${file}: no ${l} alt text`);
+      const from = p.path ?? p.url ?? "";
+      const name = p.path ? (p.path.split("/").pop() ?? "") : p.url ? (new URL(p.url).pathname.split("/").pop() ?? "") : "";
+      const file = decodeURIComponent(name).replace(/[^A-Za-z0-9._-]/g, "-");
+      for (const l of LOCALES) if (!p.alt[l]?.trim()) bad(`photo ${file || from}: no ${l} alt text`);
       if (p.cabin && !cabins.some((c) => c.code === p.cabin && c.active)) bad(`photo ${file}: no cabin ${p.cabin}`);
-      if (!/^https:\/\//.test(p.url)) bad(`photo ${file}: not an https address`);
+      if (!!p.url === !!p.path) bad(`photo ${file || i}: give a url or a path, not both`);
+      if (p.url && !/^https:\/\//.test(p.url)) bad(`photo ${file}: not an https address`);
+      if (p.path && !/^docs\/imports\/photos\/[A-Za-z0-9._/-]+\.(jpe?g|png|webp)$/.test(p.path))
+        bad(`photo ${file}: a path must be a JPEG, PNG or WebP under docs/imports/photos/`);
       return {
-        url: p.url,
+        url: p.url ?? null,
+        path: p.path ?? null,
         file,
         cabin: p.cabin ?? null,
         sort_order: i,

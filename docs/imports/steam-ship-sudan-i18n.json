@@ -128,5 +128,64 @@
       "ja": "キャビンとスイートにはそれぞれアガサ・クリスティーからナギーブ・マフフーズまで固有の名前と装飾があります。アガサ・クリスティーは『ナイルに死す』の4年前の1933年にナイル川を旅しており、運航会社はスーダン号をこの小説の着想となった蒸気船としています。"
     }
   },
-  "photos": {}
+  "photos": {
+    "steam-ship-sudan": [
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1680307BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "A waiter in a fez carries a tray of drinks along the deck at sunset over the Nile. Sides digitally extended.",
+          "es": "Un camarero con fez lleva una bandeja de bebidas por la cubierta al atardecer sobre el Nilo. Laterales ampliados digitalmente.",
+          "ja": "夕暮れのナイル川を背に、フェズ帽の給仕が飲み物をのせたトレーを運ぶデッキ。（左右はデジタル処理で拡張）"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1650200-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "The ship’s wheel on the promenade deck, beside the shuttered cabin wall, at dusk. Sides digitally extended.",
+          "es": "El timón en la cubierta de paseo, junto a la pared de camarotes con contraventanas, al anochecer. Laterales ampliados digitalmente.",
+          "ja": "夕暮れの遊歩デッキ。よろい戸の並ぶ客室の壁のそばに立つ舵輪。（左右はデジタル処理で拡張）"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1730053BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "The dining room laid for dinner, its tall windows looking onto the Nile.",
+          "es": "El comedor preparado para la cena, con sus altos ventanales al Nilo.",
+          "ja": "夕食の用意が整ったダイニングルーム。背の高い窓からナイル川が見える。"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1650282BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "Guests at dinner in the wood-panelled dining salon. Sides digitally extended.",
+          "es": "Pasajeros cenando en el comedor revestido de madera. Laterales ampliados digitalmente.",
+          "ja": "木の羽目板に囲まれたダイニングサロンで夕食をとる乗客。（左右はデジタル処理で拡張）"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1680090BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "A wood-panelled cabin in evening light, with fruit on the bed and a window open onto the river. Sides digitally extended.",
+          "es": "Un camarote revestido de madera con la luz de la tarde, fruta sobre la cama y una ventana abierta al río. Laterales ampliados digitalmente.",
+          "ja": "夕方の光が差し込む木張りの客室。ベッドの上の果物と、川に向かって開いた窓。（左右はデジタル処理で拡張）"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1650851BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "A crew member in blue overalls walks down the carved wooden staircase. Sides digitally extended.",
+          "es": "Un tripulante con mono azul baja por la escalera de madera tallada. Laterales ampliados digitalmente.",
+          "ja": "彫刻の施された木の階段を下りる青いつなぎ姿の乗組員。（左右はデジタル処理で拡張）"
+        }
+      },
+      {
+        "path": "docs/imports/photos/steam-ship-sudan/BOBY-BOBY-L1720166BD-1-landscape-3x2.jpg",
+        "alt": {
+          "en": "A crew member handles the ropes beside a riveted steel lock wall. Sides digitally extended.",
+          "es": "Un tripulante maneja los cabos junto a la pared de acero remachado de una esclusa. Laterales ampliados digitalmente.",
+          "ja": "リベット打ちの鋼鉄の閘門の壁のそばで、ロープを扱う乗組員。（左右はデジタル処理で拡張）"
+        }
+      }
+    ]
+  }
 }

@@ -287,9 +287,14 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
     let mediaId = stored.get(path);
     const row = { sort_order: p.sort_order, credit: v.credit, shows_cabin_type_id: p.cabin ? cabinIds.get(p.cabin)! : null };
     if (!mediaId) {
-      const res = await fetch(p.url, { headers: { "User-Agent": "Nilecruz fleet import (photos used with permission)" } });
-      if (!res.ok) throw new Error(`${v.slug}: photo ${p.file}: ${res.status}`);
-      const bytes = Buffer.from(await res.arrayBuffer());
+      // A photo kept in this repository is read from disk; one on the operator's site is downloaded.
+      let bytes: Buffer;
+      if (p.path) bytes = readFileSync(resolve(import.meta.dirname, "..", p.path));
+      else {
+        const res = await fetch(p.url!, { headers: { "User-Agent": "Nilecruz fleet import (photos used with permission)" } });
+        if (!res.ok) throw new Error(`${v.slug}: photo ${p.file}: ${res.status}`);
+        bytes = Buffer.from(await res.arrayBuffer());
+      }
       const size = imageSize(bytes);
       if (!size.width || !size.height) throw new Error(`${v.slug}: photo ${p.file}: not an image`);
       const type = size.type === "png" ? "image/png" : size.type === "webp" ? "image/webp" : "image/jpeg";
