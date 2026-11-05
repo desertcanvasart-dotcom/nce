@@ -106,6 +106,21 @@ describe("cards (BRAND-026, 028, ADR-025, DASH-PUB-010)", () => {
       toCard(vessel({ bookable: false, indicativePrice: { ...perTrip, nights: 4 }, itineraries: fiveNights })).indicativePrice,
     ).toBeUndefined();
   });
+
+  it("show a per-night guide price as the headline cruise's total, as Royal Lily's page lists it by itinerary", () => {
+    const perNight = {
+      perNight: { amount: 30000, currency: "USD" },
+      basis: "per_person_per_night" as const,
+      status: "indicative" as const,
+    };
+    // The headline itinerary is the shortest: 4 nights × US$300.
+    expect(toCard(vessel({ bookable: false, indicativePrice: perNight })).indicativePrice).toEqual({
+      amount: 120000,
+      currency: "USD",
+    });
+    // A bookable vessel shows its one public price, never the guide.
+    expect(toCard(vessel({ indicativePrice: perNight })).indicativePrice).toBeUndefined();
+  });
 });
 
 describe("search (DATA-012)", () => {
