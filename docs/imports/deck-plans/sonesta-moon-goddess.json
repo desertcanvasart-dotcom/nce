@@ -1,0 +1,61 @@
+{
+  "vessel": "sonesta-moon-goddess",
+  "source": "Sonesta Moon Goddess deck plan (via LiveAboard; cabin numbers, no categories other than the suites), redrawn by Nilecruz: all four decks on one drawing, measured stern 0 to the bow 100. The plan cuts deck 1 off, so its restaurant's extent is approximate.",
+  "credit": "Sonesta",
+  "checked_on": "2026-11-05",
+  "source_urls": ["https://www.liveaboard.com/river-cruise/nile/moon-goddess"],
+  "uses_existing_cabin_types": ["DLX", "PRES"],
+  "to_confirm": {
+    "note": "The plan supports 53: 49 Deluxe Cabins (12 on deck 4, 21 on deck 3, 16 on deck 2) and 4 Presidential Suites (209, 210, 309, 310), counting the two 'connected' pairs on deck 4 (405–403, 406–404) as one unit each, and 304 (marked B.M.) as not a guest room. Ask Sonesta to confirm the connected pairs, cabin sizes, and 72 × 12 m, built 2000, 106 guests (CruiseMapper). The plan labels no spa or gym."
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "4",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 43.8, "side": "port", "cabin": "DLX" },
+          { "from": 0, "to": 43.8, "side": "starboard", "cabin": "DLX" },
+          { "from": 43.8, "to": 51.6, "space": "shop", "label": "Bazaar" },
+          { "from": 52.3, "to": 76.5, "space": "bar", "label": "Bar lounge" },
+          { "from": 76.5, "to": 90.2, "space": "crew" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 41.2, "side": "port", "cabin": "DLX" },
+          { "from": 0, "to": 41.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 41.2, "to": 44.4, "space": "shop", "label": "Bazaar" },
+          { "from": 51, "to": 73.2, "side": "port", "cabin": "DLX" },
+          { "from": 51, "to": 73.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 73.2, "to": 79.7, "side": "port", "cabin": "PRES" },
+          { "from": 73.2, "to": 79.7, "side": "starboard", "cabin": "PRES" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 27.5, "side": "port", "cabin": "DLX" },
+          { "from": 0, "to": 27.5, "side": "starboard", "cabin": "DLX" },
+          { "from": 27.5, "to": 44.4, "space": "reception" },
+          { "from": 44.4, "to": 71.2, "side": "port", "cabin": "DLX" },
+          { "from": 44.4, "to": 71.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 71.2, "to": 77.8, "side": "port", "cabin": "PRES" },
+          { "from": 71.2, "to": 77.8, "side": "starboard", "cabin": "PRES" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [{ "from": 20, "to": 80, "space": "restaurant" }]
+      }
+    ]
+  }
+}

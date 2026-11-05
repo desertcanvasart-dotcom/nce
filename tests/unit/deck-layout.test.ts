@@ -25,9 +25,20 @@ const sunRay = JSON.parse(
 const misr = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-ss-misr.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const moon = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-moon-goddess.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Moon Goddess's drawing with its existing codes: Presidential Suites forward on decks 3 and 2", () => {
+    const layout = parseLayout(moon.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["4", "3", "2", "1"]);
+    expect(layoutProblems(moon.layout, moon.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "DLX")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "PRES")).toEqual(["3", "2"]);
+  });
+
   it("reads SS Misr's drawing with its existing codes, where Mövenpick's numbered plan puts each category", () => {
     const layout = parseLayout(misr.layout)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2"]);
