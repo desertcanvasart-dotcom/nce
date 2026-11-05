@@ -1,0 +1,66 @@
+{
+  "vessel": "sonesta-star-goddess",
+  "source": "Sonesta Star Goddess deck plan (via LiveAboard; suite numbers and names, blurry), redrawn by Nilecruz: all four decks on one drawing, measured stern 0 to the bow 100. The plan doesn't draw the sun deck or pool, so they are not drawn.",
+  "credit": "Sonesta",
+  "checked_on": "2026-11-05",
+  "source_urls": ["https://www.liveaboard.com/river-cruise/nile/star-goddess"],
+  "uses_existing_cabin_types": ["BEETHOVEN", "MOZART", "CHOPIN"],
+  "to_confirm": {
+    "note": "The plan matches the page: 27 Beethoven Suites (6 on deck 2, 11 on deck 3, 10 on deck 4), 4 Mozart Suites aft on decks 3 and 4, and 2 Chopin Suites forward on deck 4. Rooms 340, 350, 360 and 370 on deck 3 look like guide and crew cabins and are drawn as crew areas. Ask Sonesta for a clearer plan with the sun deck, and to confirm 72 × 14 m, built 2006, 66 guests (CruiseMapper)."
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "4",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 6.9, "side": "port", "cabin": "MOZART" },
+          { "from": 0, "to": 6.9, "side": "starboard", "cabin": "MOZART" },
+          { "from": 6.9, "to": 30.1, "side": "port", "cabin": "BEETHOVEN" },
+          { "from": 6.9, "to": 30.1, "side": "starboard", "cabin": "BEETHOVEN" },
+          { "from": 30.7, "to": 34.6, "space": "shop", "label": "Bazaar" },
+          { "from": 51.6, "to": 72.5, "side": "port", "cabin": "BEETHOVEN" },
+          { "from": 51.6, "to": 72.5, "side": "starboard", "cabin": "BEETHOVEN" },
+          { "from": 72.5, "to": 80.4, "side": "port", "cabin": "CHOPIN" },
+          { "from": 72.5, "to": 80.4, "side": "starboard", "cabin": "CHOPIN" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 6.9, "side": "port", "cabin": "MOZART" },
+          { "from": 0, "to": 6.9, "side": "starboard", "cabin": "MOZART" },
+          { "from": 6.9, "to": 30.7, "side": "port", "cabin": "BEETHOVEN" },
+          { "from": 6.9, "to": 30.7, "side": "starboard", "cabin": "BEETHOVEN" },
+          { "from": 30.7, "to": 39.9, "space": "crew" },
+          { "from": 40.5, "to": 42.5, "space": "shop", "label": "Bazaar" },
+          { "from": 51, "to": 66.7, "side": "port", "cabin": "BEETHOVEN" },
+          { "from": 51, "to": 66.7, "side": "starboard", "cabin": "BEETHOVEN" },
+          { "from": 66.7, "to": 79.1, "side": "port", "space": "crew" },
+          { "from": 66.7, "to": 77.8, "side": "starboard", "cabin": "BEETHOVEN" },
+          { "from": 80.4, "to": 92.2, "space": "crew" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.7, "to": 29.4, "space": "bar", "label": "Bar lounge" },
+          { "from": 35.9, "to": 52.9, "space": "reception" },
+          { "from": 54.9, "to": 80.4, "side": "port", "cabin": "BEETHOVEN" },
+          { "from": 54.9, "to": 80.4, "side": "starboard", "cabin": "BEETHOVEN" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [{ "from": 41.2, "to": 67.3, "space": "restaurant" }]
+      }
+    ]
+  }
+}

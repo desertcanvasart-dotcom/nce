@@ -31,9 +31,21 @@ const moon = JSON.parse(
 const george = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-st-george-i.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const star = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-star-goddess.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Star Goddess's drawing with its existing codes: Mozart aft on 4 and 3, Chopin forward on 4", () => {
+    const layout = parseLayout(star.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["4", "3", "2", "1"]);
+    expect(layoutProblems(star.layout, star.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "BEETHOVEN")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "MOZART")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "CHOPIN")).toEqual(["4"]);
+  });
+
   it("reads St. George I's drawing with its existing codes: Presidential Suites on 3, Elite and Royal on 4", () => {
     const layout = parseLayout(george.layout)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
