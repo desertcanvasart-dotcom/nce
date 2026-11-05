@@ -22,9 +22,22 @@ const lotus = JSON.parse(
 const sunRay = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-sun-ray.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const misr = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-ss-misr.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads SS Misr's drawing with its existing codes, where Mövenpick's numbered plan puts each category", () => {
+    const layout = parseLayout(misr.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2"]);
+    expect(layoutProblems(misr.layout, misr.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "OUT")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "STE")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "PAN")).toEqual(["3"]);
+    expect(decksOf(layout, "SGL")).toEqual(["2"]);
+  });
+
   it("reads Sun Ray's drawing with its existing codes: Classic on deck 1, both suites on deck 4, not 'To be confirmed'", () => {
     const layout = parseLayout(sunRay.layout)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["Sun", "4", "3", "2", "1"]);
