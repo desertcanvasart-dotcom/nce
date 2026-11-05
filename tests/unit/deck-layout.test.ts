@@ -16,9 +16,20 @@ const hamees = JSON.parse(
 const abbas = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-prince-abbas.json"), "utf8"),
 ) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number | null }[] } };
+const lotus = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lotus.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Royal Lotus's drawing with the cabin types it already has: Deluxe on D, C and B, Royal Suites forward on B", () => {
+    const layout = parseLayout(lotus.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);
+    expect(layoutProblems(lotus.layout, lotus.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "STD")).toEqual(["D", "C", "B"]);
+    expect(decksOf(layout, "RS")).toEqual(["B"]);
+  });
+
   it("reads Prince Abbas's drawing: six decks, suites forward, and no Standard Cabin count until Mövenpick gives one", () => {
     const layout = parseLayout(abbas.layout)!;
     const types = abbas.cabin_types_needed.types;
