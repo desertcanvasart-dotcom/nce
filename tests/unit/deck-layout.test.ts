@@ -7,9 +7,28 @@ import { layoutProblems, parseLayout } from "@/lib/marketplace/deck-layout-schem
 const lily = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lily.json"), "utf8"),
 ).layout as unknown;
+const darakum = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-darakum.json"), "utf8"),
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number }[] } };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Darakum's drawing: five decks, its three cabin types where the plan puts them, 52 cabins in all", () => {
+    const layout = parseLayout(darakum.layout)!;
+    const types = darakum.cabin_types_needed.types;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
+    expect(
+      layoutProblems(
+        darakum.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
+    expect(decksOf(layout, "STD")).toEqual(["3", "2", "1"]);
+    expect(decksOf(layout, "SS")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "PS")).toEqual(["3"]);
+    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(52);
+  });
+
   it("reads Royal Lily's drawing: five decks, top first, every cabin code known", () => {
     const layout = parseLayout(lily)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);

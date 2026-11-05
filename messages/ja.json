@@ -625,6 +625,11 @@
       "crew": "乗組員専用"
     },
     "deckLabels": {
+      "Lobby": "ロビー",
+      "Reception hall": "レセプションホール",
+      "Rear sun deck": "後方サンデッキ",
+      "Lower sun deck": "下層サンデッキ",
+      "Patio": "パティオ",
       "Bazaar": "バザール",
       "Sauna and massage": "サウナとマッサージ",
       "Reading and internet corner": "読書・インターネットコーナー",

@@ -1,0 +1,105 @@
+{
+  "vessel": "movenpick-darakum",
+  "source": "CruiseMapper's Mövenpick MS Darakum deck plan (5 decks, no cabin numbers), redrawn by Nilecruz: each deck measured stern 0 to the hull's bow tip 100 on the same drawing. CruiseMapper's image is not published: it says its plans belong to the operator.",
+  "credit": "Mövenpick, via CruiseMapper",
+  "checked_on": "2026-11-05",
+  "cabin_types_needed": {
+    "note": "Darakum has no cabin types yet. Add these in the admin before the drawing, with the same codes. Counts are from the plan (46 + 4 + 2 = 52, the ship's total); Accor and Cosmos say 44 Standard or Superior cabins and 8 suites, so confirm the split and sizes with Mövenpick.",
+    "types": [
+      {
+        "code": "STD",
+        "name": "Standard Cabin",
+        "cabin_count": 46,
+        "decks": "3, 2 and 1",
+        "size_m2": 20,
+        "size_source": "About 20 m² in most listings (Riviera Travel, Cosmos); not on Mövenpick's own pages"
+      },
+      {
+        "code": "SS",
+        "name": "Senior Suite",
+        "cabin_count": 4,
+        "decks": "4 and 3",
+        "size_m2": null,
+        "size_source": "40 m² (Riviera Travel) or 34 m² (another listing): left empty until Mövenpick confirms"
+      },
+      {
+        "code": "PS",
+        "name": "Panorama Suite",
+        "cabin_count": 2,
+        "decks": "3, forward-facing",
+        "size_m2": 34,
+        "size_source": "34 m² (Riviera Travel, Accor listing)"
+      }
+    ]
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "5",
+        "length": 80,
+        "bow": "round",
+        "areas": [
+          { "from": 31.5, "to": 66.8, "space": "sun_deck" },
+          { "from": 66.8, "to": 76.3, "space": "pool" },
+          { "from": 76.3, "to": 79, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "4",
+        "length": 80,
+        "bow": "round",
+        "areas": [
+          { "from": 13.4, "to": 32.3, "space": "sun_deck", "label": "Lower sun deck" },
+          { "from": 32.3, "to": 41.4, "space": "open", "label": "Patio" },
+          { "from": 41.4, "to": 62.9, "space": "lounge" },
+          { "from": 62.9, "to": 71.6, "side": "port", "cabin": "SS" },
+          { "from": 62.9, "to": 71.6, "side": "starboard", "cabin": "SS" },
+          { "from": 71.6, "to": 78, "space": "crew" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 90,
+        "bow": "round",
+        "areas": [
+          { "from": 4.3, "to": 14.7, "space": "sun_deck", "label": "Rear sun deck" },
+          { "from": 14.7, "to": 56, "side": "port", "cabin": "STD" },
+          { "from": 14.7, "to": 56, "side": "starboard", "cabin": "STD" },
+          { "from": 56, "to": 60.3, "side": "port", "space": "shop" },
+          { "from": 56, "to": 60.3, "side": "starboard", "space": "gym" },
+          { "from": 60.3, "to": 64.7, "space": "reception", "label": "Lobby" },
+          { "from": 64.7, "to": 73.7, "side": "port", "cabin": "SS" },
+          { "from": 64.7, "to": 73.7, "side": "starboard", "cabin": "SS" },
+          { "from": 73.7, "to": 82.8, "side": "port", "cabin": "PS" },
+          { "from": 73.7, "to": 82.8, "side": "starboard", "cabin": "PS" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 19.4, "space": "crew" },
+          { "from": 19.4, "to": 46.6, "side": "port", "cabin": "STD" },
+          { "from": 19.4, "to": 46.6, "side": "starboard", "cabin": "STD" },
+          { "from": 46.6, "to": 64.7, "space": "reception", "label": "Reception hall" },
+          { "from": 64.7, "to": 82.8, "side": "port", "cabin": "STD" },
+          { "from": 64.7, "to": 82.8, "side": "starboard", "cabin": "STD" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 19.4, "space": "crew" },
+          { "from": 19.4, "to": 33.2, "space": "crew", "label": "Galley" },
+          { "from": 33.2, "to": 51.3, "space": "restaurant" },
+          { "from": 51.3, "to": 64.7, "space": "reception", "label": "Lobby" },
+          { "from": 64.7, "to": 81, "side": "port", "cabin": "STD" },
+          { "from": 64.7, "to": 81, "side": "starboard", "cabin": "STD" }
+        ]
+      }
+    ]
+  }
+}

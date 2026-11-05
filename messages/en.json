@@ -624,6 +624,11 @@
       "crew": "Crew only"
     },
     "deckLabels": {
+      "Lobby": "Lobby",
+      "Reception hall": "Reception hall",
+      "Rear sun deck": "Rear sun deck",
+      "Lower sun deck": "Lower sun deck",
+      "Patio": "Patio",
       "Bazaar": "Bazaar",
       "Sauna and massage": "Sauna and massage",
       "Reading and internet corner": "Reading and internet corner",

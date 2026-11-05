@@ -625,6 +625,11 @@
       "crew": "Solo tripulación"
     },
     "deckLabels": {
+      "Lobby": "Vestíbulo",
+      "Reception hall": "Recepción",
+      "Rear sun deck": "Solárium de popa",
+      "Lower sun deck": "Solárium inferior",
+      "Patio": "Patio",
       "Bazaar": "Bazar",
       "Sauna and massage": "Sauna y masajes",
       "Reading and internet corner": "Rincón de lectura e internet",
