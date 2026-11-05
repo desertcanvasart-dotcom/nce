@@ -218,6 +218,13 @@ describe("Steam Ship Sudan (the featured paddle steamer)", () => {
   it("is valid, a steam-driven paddle steamer, information only, with both itineraries", () => {
     expect(sudan.problems).toEqual([]);
     expect(v).toMatchObject({ slug: "steam-ship-sudan", type: "steam", propulsion: "steam", cabinCount: 24, indicative: null });
+    // Where the cabins and suites are, from the ship's own cabin pages: there is no deck plan to draw.
+    const suite = v.cabins.find((c) => c.code === "suite")!;
+    expect(suite.translations.map((t) => t.description)).toEqual([
+      expect.stringContaining("prow and stern of the upper deck"),
+      expect.stringContaining("cubierta superior"),
+      expect.stringContaining("アッパーデッキ"),
+    ]);
     expect(v.itineraries.map((it) => [it.code, it.origin, it.destination, it.nights])).toEqual([
       ["ASW-LXR-5", "Aswan", "Luxor", 5],
       ["LXR-ASW-5", "Luxor", "Aswan", 5],

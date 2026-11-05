@@ -59,13 +59,13 @@
       "name": "Cabin",
       "max_guests": 2,
       "beds": ["double", "twin"],
-      "feature": "Named and decorated individually, with two windows onto the shared promenade deck."
+      "feature": "Named and decorated individually, with two windows onto the shared promenade deck. Most are on the upper deck, the others on the main deck."
     },
     "suite": {
       "name": "Suite",
       "max_guests": 2,
       "beds": ["twin", "double"],
-      "feature": "Named and decorated individually, with larger panoramic windows. The Odilo suite has a private deck."
+      "feature": "Named and decorated individually, with larger panoramic windows. Three are at the prow and stern of the upper deck; the others are at the bow of the main deck, on the poop deck and on the sun deck, where the Odilo suite has a private deck."
     }
   },
   "vessels": [
@@ -80,6 +80,7 @@
       "accommodation_units": { "value": 24, "status": "confirmed" },
       "dimensions_m": { "display": null, "status": "needs_confirmation", "note": "Secondary reports give 69, 72 and 74 m." },
       "summary": "A historic side-wheel paddle steamer, launched in 1921 according to its operator, with 18 cabins and six suites across three decks.",
+      "deck_plan": { "value": null, "status": "needs_confirmation", "note": "Checked 5 November 2026: no deck plan found. The ship's cabin pages place 12 cabins on the upper deck and 4 on the main deck (2 not stated); suites: Agatha Christie and Lady Duff Gordon at the upper deck's prow, Queen Victoria at its stern, Oum Kalsoum across the main deck's bow, Aïda on the poop deck and Odilo on the sun deck. Ask the operator for a plan, the guest capacity and the length." },
       "description": "Every cabin and suite has its own name and decoration, from Agatha Christie to Naguib Mahfouz. Agatha Christie cruised the Nile in 1933, four years before Death on the Nile, and the ship’s operator identifies the Sudan as the steamer that inspired the novel.",
       "cabin_types": [
         { "type": "cabin", "count": 18, "area_m2": null, "area_average_m2": { "value": 17, "status": "needs_confirmation" } },

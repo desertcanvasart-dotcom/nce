@@ -102,16 +102,16 @@
       "name": { "es": "Camarote", "ja": "キャビン" },
       "beds": { "en": "Double or twin beds", "es": "Cama doble o dos camas individuales", "ja": "ダブルベッドまたはシングルベッド2台" },
       "feature": {
-        "es": "Cada uno con su nombre y decoración propios, y dos ventanas a la cubierta de paseo compartida.",
-        "ja": "それぞれ固有の名前と装飾があり、共用のプロムナードデッキに面した窓が2つあります。"
+        "es": "Cada uno con su nombre y decoración propios, y dos ventanas a la cubierta de paseo compartida. La mayoría están en la cubierta superior y los demás, en la cubierta principal.",
+        "ja": "それぞれ固有の名前と装飾があり、共用のプロムナードデッキに面した窓が2つあります。大半はアッパーデッキにあり、残りはメインデッキにあります。"
       }
     },
     "suite": {
       "name": { "es": "Suite", "ja": "スイート" },
       "beds": { "en": "Twin or double beds", "es": "Dos camas individuales o cama doble", "ja": "シングルベッド2台またはダブルベッド" },
       "feature": {
-        "es": "Cada una con su nombre y decoración propios, y ventanales panorámicos más grandes. La suite Odilo tiene una cubierta privada.",
-        "ja": "それぞれ固有の名前と装飾があり、より大きなパノラマ窓を備えています。オディロ・スイートには専用デッキがあります。"
+        "es": "Cada una con su nombre y decoración propios, y ventanales panorámicos más grandes. Tres están en la proa y la popa de la cubierta superior; las demás, en la proa de la cubierta principal, en la cubierta de popa y en la cubierta solar, donde la suite Odilo tiene una cubierta privada.",
+        "ja": "それぞれ固有の名前と装飾があり、より大きなパノラマ窓を備えています。3室はアッパーデッキの船首と船尾にあり、残りはメインデッキの船首、プープデッキ、サンデッキにあります。サンデッキのオディロ・スイートには専用デッキがあります。"
       }
     }
   },
