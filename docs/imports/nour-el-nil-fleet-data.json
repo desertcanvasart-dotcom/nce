@@ -328,6 +328,11 @@
         "status": "confirmed"
       },
       "summary": "A 2025 dahabiya with spacious cabins and generous decks. Its Panoramic and Deluxe Suites are the largest of their kind in the fleet.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2025 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",

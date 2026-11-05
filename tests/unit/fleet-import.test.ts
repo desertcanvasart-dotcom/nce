@@ -60,6 +60,11 @@ describe("Nour El Nil fleet import", () => {
     expect(boat("najafa")).toMatchObject({ cabinCount: 10, maxGuests: 24, yearBuilt: 2025, lengthM: 60, beamM: 8.5 });
     expect(boat("malouka")).toMatchObject({ cabinCount: 10, maxGuests: 20, yearBuilt: 2008, lengthM: 50, beamM: 7.7 });
     expect(boat("meroe")).toMatchObject({ cabinCount: 10, maxGuests: 20, yearBuilt: 2017, lengthM: 52, beamM: 8 });
+    expect(boat("najafa").cabins.map((c) => [c.code, c.cabin_count, c.size_m2])).toEqual([
+      ["panoramic_suite", 2, 28],
+      ["deluxe_suite", 2, 34.7],
+      ["luxury_room", 6, 17.35],
+    ]);
   });
 
   it("merges a boat's own on-board values into the fleet's: Adelaïde adds its library, and keeps the shared notes", () => {
