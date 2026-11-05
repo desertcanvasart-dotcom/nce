@@ -620,6 +620,11 @@
         "status": "confirmed"
       },
       "summary": "A 2017 dahabiya that sits between the fleet's older and newer boats, with larger cabins and a traditional atmosphere.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the 2017 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
