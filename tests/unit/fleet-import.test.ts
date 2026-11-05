@@ -74,7 +74,12 @@ describe("Nour El Nil fleet import", () => {
     expect(deluxe).toMatchObject({ name: "Deluxe Suite", max_occupancy: 4, size_m2: 34.7, cabin_count: 2 });
     expect(deluxe.translations.find((t) => t.locale === "en")?.description).toContain("Sold as one unit");
     const panoramic = boat("dendera").cabins.find((c) => c.code === "panoramic_suite")!;
-    expect(panoramic).toMatchObject({ size_m2: 24.5, cabin_count: null, view: "180-degree Nile view" });
+    expect(panoramic).toMatchObject({ size_m2: 24.5, cabin_count: 2, view: "180-degree Nile view" });
+    // Dendera's split is on the operator's boat page: 2 Panoramic Suites and 8 Luxury Rooms.
+    expect(boat("dendera").cabins.map((c) => [c.code, c.cabin_count])).toEqual([
+      ["panoramic_suite", 2],
+      ["luxury_room", 8],
+    ]);
   });
 
   it("keeps El Nil's charter-only cabin out of the cards, though it counts as one of the 10 units", () => {

@@ -274,22 +274,32 @@
         "note": "Owner-confirmed. November booking results showed Tuesdays, and the operator's email omits Dendera."
       },
       "summary": "Nour El Nil's newest dahabiya, built in 2026, with generous decks and panoramic suites that have 180-degree river views.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found on the operator's pages or elsewhere, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2026 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
           "area_m2": 24.5,
-          "count": null,
+          "count": 2,
           "extra": "180-degree Nile view"
         },
         {
           "type": "luxury_room",
           "area_m2": 15.85,
-          "count": null
+          "count": 8
         }
       ],
       "source_url": "https://www.nourelnil.com/boats/dendera/",
       "rates_status": "missing",
-      "cabin_count_status": "missing",
+      "cabin_count_source": {
+        "value": "2 Panoramic Suites and 8 Luxury Rooms",
+        "source": "https://www.nourelnil.com/boats/dendera/",
+        "checked_on": "2026-11-05",
+        "status": "confirmed"
+      },
       "indicative_price": null
     },
     {
