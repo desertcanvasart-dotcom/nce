@@ -113,6 +113,7 @@
       "evaluation": "{score}/100 · Nilecruz評価",
       "onBoard": "船内設備",
       "fromPerPerson": "1名あたり",
+      "indicativePerPerson": "目安料金（1名あたり）",
       "pricesInPreparation": "料金準備中",
       "compare": "比較する",
       "save": "{name}を保存",

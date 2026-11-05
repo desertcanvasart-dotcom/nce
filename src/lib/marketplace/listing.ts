@@ -5,7 +5,7 @@
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
 import { formatMoney } from "@/components/ds/lib/format";
 import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
-import type { IndicativePrice } from "./vessel";
+import { indicativeTotal, type IndicativePrice } from "./vessel";
 
 export type Itinerary = {
   origin: string;
@@ -149,6 +149,9 @@ export function toCard(v: ListingVessel): GridCard {
     evaluation: v.evaluation,
     // ADR-025: the one public price, only for a vessel that can be booked; information-only listings show none.
     price: v.bookable ? v.from : undefined,
+    // The same guide price the vessel page shows, so the card never says "Prices in preparation" beside it.
+    indicativePrice:
+      !v.bookable && v.indicativePrice && it ? (indicativeTotal(v.indicativePrice, it.nights) ?? undefined) : undefined,
     image: v.image,
     badges:
       v.bookable && v.fromWithSightseeing

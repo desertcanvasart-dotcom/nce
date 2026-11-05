@@ -113,6 +113,7 @@
       "evaluation": "{score}/100 · evaluación de Nilecruz",
       "onBoard": "A bordo",
       "fromPerPerson": "Desde, por persona",
+      "indicativePerPerson": "Orientativo, por persona",
       "pricesInPreparation": "Precios en preparación",
       "compare": "Comparar",
       "save": "Guardar {name}",

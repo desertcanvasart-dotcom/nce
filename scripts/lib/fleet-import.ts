@@ -28,6 +28,7 @@ const SPACES: Record<string, string> = {
   Bar: "bar",
   "Dining salon": "dining_room",
   "Dining room": "dining_room",
+  Library: "library",
 };
 const ISO_DAY: Record<string, number> = {
   Monday: 1,
@@ -164,7 +165,14 @@ export function shown(x: unknown): boolean {
 const valueOf = <T>(x: unknown): T | null => (shown(x) && isObj(x) && "value" in x ? (x.value as T) : null);
 
 /** Defaults first, then the vessel's own values (a whole field replaces the default's). */
-export const withDefaults = (defaults: Json, own: Json): Json => ({ ...defaults, ...own });
+/** A vessel's own values over the defaults; an object in both (on_board, inclusions) is merged one level down. */
+export const withDefaults = (defaults: Json, own: Json): Json =>
+  Object.fromEntries(
+    Object.entries({ ...defaults, ...own }).map(([k, v]) => [
+      k,
+      isObj(v) && isObj(defaults[k]) && k in own ? { ...(defaults[k] as Json), ...v } : v,
+    ]),
+  );
 
 /** Every path under a vessel that the display rule hides, with why. */
 export function hiddenPaths(x: unknown, path = ""): string[] {

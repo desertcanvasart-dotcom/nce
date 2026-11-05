@@ -486,6 +486,19 @@
         "status": "confirmed"
       },
       "summary": "A modern 2020 dahabiya with flowing shared spaces, wide decks and a light interior.",
+      "on_board": {
+        "shared_spaces": [
+          "Top deck",
+          "Salon",
+          "Library"
+        ],
+        "shared_spaces_source": "QuirkyCruise review, December 2022: a covered lounge on the top deck, and a salon and library on the cabin deck. No deck plan has been published; ask Nour El Nil for one."
+      },
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found on the operator's pages or elsewhere. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",

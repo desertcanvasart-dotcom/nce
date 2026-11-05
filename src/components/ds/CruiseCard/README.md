@@ -13,7 +13,7 @@ Provide `name`, `vessel` (`sail`/`motor`/`steam`), `propulsion` (`motor`/`wind`/
 
 ## Changes in the build
 
-- `price` is `{amount (minor units), currency}` and optional: without it the card says 'Prices in preparation' (ADR-019, ADR-025).
+- `price` is `{amount (minor units), currency}` and optional. An information-only vessel passes `indicativePrice` instead, shown as an indicative price per person; with neither, the card says 'Prices in preparation' (ADR-019, ADR-025).
 - Shows the Nilecruz evaluation 'NN/100'; stars only for verified reviews (ADR-009).
 - The title links to the vessel page and the whole card is clickable; save and compare keep local state until saved cruises and the compare tray exist.
 

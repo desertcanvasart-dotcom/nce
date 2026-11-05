@@ -112,6 +112,7 @@
       "evaluation": "{score}/100 · Nilecruz evaluation",
       "onBoard": "On board",
       "fromPerPerson": "From, per person",
+      "indicativePerPerson": "Indicative, per person",
       "pricesInPreparation": "Prices in preparation",
       "compare": "Compare",
       "save": "Save {name}",
