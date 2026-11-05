@@ -210,20 +210,32 @@
       "name": "Mövenpick SB Feddya",
       "type": "sail",
       "cabin_count": 4,
-      "shared_spaces": ["dining_room"],
+      "max_guests": 8,
+      "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck"],
       "summary": "A boutique Mövenpick dahabiya with only four suites, sailing tailor-made six-night voyages from Luxor to Aswan with stops at El Kab, Ramadi Village and Gebel El Silsila.",
       "description": "The Mövenpick SB Feddya is a boutique luxury dahabiya for an intimate sail between Luxor and Aswan. Inspired by Egypt's historic sailing boats, it combines personal hospitality, the feel of a private yacht and an unhurried cultural programme.\n\nWith only four suites, Feddya suits a private charter, couples, families or small groups. Its six-night voyage adds lesser-visited sites, El Kab, Ramadi Village and Gebel El Silsila, to the famous temples, with quiet island moorings along the way. The vessel docks at its own landing in Al Bughdadi, near Luxor.\n\nDepartures are tailor-made, subject to availability; there is no weekly sailing day.",
-      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-feddya.html", "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/movenpick-sb-feddya/pdf-2024/msa_d_0000255.pdf"],
-      "verification_note": "Reservations: Cruise.Feddya@movenpick.com. Tailor-made: the itinerary was imported inactive with no sailing weekday; never generate weekly departures. Get suite names, sizes, windows, bedding, occupancy and terraces from Mövenpick; don't copy them from other ships. Confirm charter terms, special tomb tickets (Seti I, Tutankhamun), guiding and transfers.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-feddya.html", "https://www.scribd.com/doc/170543397/Fact-Sheet-SB-Feddya", "https://www.memphistours.co.uk/egypt/feddya-dahabiya-nile-cruise"],
+      "verification_note": "Reservations: Cruise.Feddya@movenpick.com. Tailor-made: the itinerary was imported inactive with no sailing weekday; never generate weekly departures. Suites (checked 5 November 2026): 2 Panorama Suites of 24 m² with an 8 m² balcony and 2 Senior Suites of 22.5 m² with an 8 m² patio (Memphis Tours; Mövenpick's fact sheet gives 4 suites of 22.5–24 m² with private outdoor space, 8 guests, 47.5 × 7.5 m). Confirm bedding and where each suite sits: the fact sheet's plan is unlabelled, so no deck drawing yet. The Mövenpick PDF once listed here (msa_d_0000255.pdf) is about a resort in Bintan, not Feddya: remove it from the vessel's sources. Confirm charter terms, special tomb tickets (Seti I, Tutankhamun), guiding and transfers.",
       "cabins": [
         {
           "code": "SUITE",
-          "name": "Suite",
+          "name": "Senior Suite",
+          "size_m2": 22.5,
           "max_occupancy": 2,
           "balcony": false,
-          "cabin_count": 4,
-          "amenities": [],
-          "description": "One of four private suites on this intimate dahabiya."
+          "cabin_count": 2,
+          "amenities": ["Private patio (8 m²)"],
+          "description": "One of two Senior Suites of 22.5 m², each with its own 8 m² patio."
+        },
+        {
+          "code": "PANO",
+          "name": "Panorama Suite",
+          "size_m2": 24,
+          "max_occupancy": 2,
+          "balcony": true,
+          "cabin_count": 2,
+          "amenities": ["Private balcony (8 m²)"],
+          "description": "One of two Panorama Suites of 24 m², each with its own 8 m² balcony."
         }
       ],
       "itineraries": [
