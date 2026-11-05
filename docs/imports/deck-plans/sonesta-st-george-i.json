@@ -1,0 +1,91 @@
+{
+  "vessel": "sonesta-st-george-i",
+  "source": "CruiseMapper's Sonesta St. George I deck plans (five decks, cabin numbers, low resolution), redrawn by Nilecruz: each deck measured stern 0 to its own bow 100. Unlabelled rooms (perhaps the spa and gym on deck 4) are left undrawn.",
+  "credit": "Sonesta, via CruiseMapper",
+  "checked_on": "2026-11-05",
+  "source_urls": [
+    "https://www.cruisemapper.com/deckplans/MS-Sonesta-St-George-1363",
+    "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/guest-cabins-and-suites"
+  ],
+  "uses_existing_cabin_types": ["DLX", "PRES", "ELITE", "ROYAL"],
+  "to_confirm": {
+    "note": "Sonesta lists 47 Deluxe Cabins, 6 Presidential, 3 Elite and 1 Royal Suite (57). The plan shows 49 standard rooms and labels 9 suites 'Presidential' and 1 'Royal' (400): the 10 suites agree. Deck 3 has exactly 6 Presidential suites (301, 302, 307, 308, 309, 310), so the three on deck 4 (401, 403, 404) are drawn as the Elite Suites: an inference, for Sonesta to confirm, with the 57 or 59 count, sizes (Deluxe 22, Presidential 44, Royal 46 m² per CruiseMapper) and where the spa and gym are."
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "5",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 4.3, "to": 37.2, "space": "shade" },
+          { "from": 37.2, "to": 52.8, "side": "port", "space": "sun_deck" },
+          { "from": 37.2, "to": 45.9, "side": "starboard", "space": "sun_deck" },
+          { "from": 45.9, "to": 52.8, "side": "starboard", "space": "bar" },
+          { "from": 52.8, "to": 68.4, "space": "sun_deck" },
+          { "from": 68.4, "to": 87.9, "space": "pool" }
+        ]
+      },
+      {
+        "name": "4",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.4, "to": 5.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 5.2, "to": 47.6, "side": "port", "cabin": "DLX" },
+          { "from": 5.2, "to": 47.6, "side": "starboard", "cabin": "DLX" },
+          { "from": 61.9, "to": 71.4, "side": "port", "cabin": "ELITE" },
+          { "from": 61.9, "to": 71.4, "side": "starboard", "cabin": "ELITE" },
+          { "from": 71.4, "to": 78.8, "side": "port", "cabin": "ELITE" },
+          { "from": 71.4, "to": 76.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 76.2, "to": 86.1, "side": "starboard", "cabin": "ROYAL" },
+          { "from": 78.8, "to": 86.1, "side": "port", "space": "lounge" },
+          { "from": 86.1, "to": 98.7, "space": "lounge" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.4, "to": 5.2, "side": "starboard", "cabin": "DLX" },
+          { "from": 5.2, "to": 38.5, "side": "port", "cabin": "DLX" },
+          { "from": 5.2, "to": 43.3, "side": "starboard", "cabin": "DLX" },
+          { "from": 38.5, "to": 48.1, "side": "port", "cabin": "PRES" },
+          { "from": 43.3, "to": 52.8, "side": "starboard", "cabin": "PRES" },
+          { "from": 48.1, "to": 67.5, "side": "port", "space": "reception", "label": "Lobby" },
+          { "from": 52.8, "to": 62.8, "side": "starboard", "space": "reception", "label": "Lobby" },
+          { "from": 62.8, "to": 72.3, "side": "starboard", "cabin": "PRES" },
+          { "from": 67.5, "to": 77.1, "side": "port", "cabin": "PRES" },
+          { "from": 72.3, "to": 81.8, "side": "starboard", "cabin": "DLX" },
+          { "from": 77.1, "to": 81.8, "side": "port", "cabin": "DLX" },
+          { "from": 81.8, "to": 91.8, "side": "port", "cabin": "PRES" },
+          { "from": 81.8, "to": 91.8, "side": "starboard", "cabin": "PRES" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.4, "to": 18.6, "space": "crew" },
+          { "from": 18.6, "to": 45.9, "space": "lounge" },
+          { "from": 45.9, "to": 63.2, "space": "reception", "label": "Lobby" },
+          { "from": 63.2, "to": 85.3, "side": "port", "cabin": "DLX" },
+          { "from": 63.2, "to": 85.3, "side": "starboard", "cabin": "DLX" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 33.3, "space": "crew" },
+          { "from": 33.3, "to": 58, "space": "crew", "label": "Galley" },
+          { "from": 58, "to": 86.6, "space": "restaurant" },
+          { "from": 86.6, "to": 95, "space": "crew" }
+        ]
+      }
+    ]
+  }
+}

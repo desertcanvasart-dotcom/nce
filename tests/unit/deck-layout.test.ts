@@ -28,9 +28,24 @@ const misr = JSON.parse(
 const moon = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-moon-goddess.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const george = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-st-george-i.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads St. George I's drawing with its existing codes: Presidential Suites on 3, Elite and Royal on 4", () => {
+    const layout = parseLayout(george.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
+    expect(layoutProblems(george.layout, george.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "DLX")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "PRES")).toEqual(["3"]);
+    expect(decksOf(layout, "ELITE")).toEqual(["4"]);
+    expect(decksOf(layout, "ROYAL")).toEqual(["4"]);
+    // Six Presidential Suites on deck 3, as Sonesta counts them.
+    expect(layout.decks[2]!.areas.filter((a) => a.cabin === "PRES")).toHaveLength(6);
+  });
+
   it("reads Moon Goddess's drawing with its existing codes: Presidential Suites forward on decks 3 and 2", () => {
     const layout = parseLayout(moon.layout)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["4", "3", "2", "1"]);

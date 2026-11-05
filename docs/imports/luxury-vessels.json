@@ -494,7 +494,7 @@
       "name": "Sonesta St. George I",
       "type": "motor",
       "cabin_count": 57,
-      "shared_spaces": ["dining_room", "lounge", "bar", "spa", "gym", "pool", "sun_deck"],
+      "shared_spaces": ["dining_room", "lounge", "bar", "spa", "gym", "pool", "sun_deck", "jacuzzi"],
       "summary": "A Sonesta cruiser with spa-style bathrooms, opening French windows and a full-service spa: 47 Deluxe Cabins and ten suites in three categories, leaving Luxor on Mondays and Aswan on Fridays.",
       "description": "Sonesta St. George I is an upscale Nile cruiser with elegant interiors, spacious suites, wellness facilities and cultural sightseeing. Its Deluxe Cabins stand out for their spa-style bathrooms, with steam bath, Jacuzzi and water massage, and panoramic French windows that open.\n\nThere are 47 Deluxe Cabins, six Presidential Suites, three Elite Suites and one Royal Suite, the most exclusive on board.\n\nOn board: a main restaurant and lounge bars, a full-service spa and fitness centre, a pool and sun deck, panoramic lounges, reception and cultural entertainment.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/itinerary"],
