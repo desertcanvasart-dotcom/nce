@@ -353,15 +353,15 @@
       "name": "Sonesta Dahabeya Amirat II",
       "type": "sail",
       "cabin_count": 9,
-      "shared_spaces": ["lounge", "dining_room", "sun_deck", "spa", "gym"],
-      "summary": "A nine-cabin Sonesta dahabiya with an elevator, spa and gym, and two Royal Suites with private terraces, sailing four nights in either direction between Luxor and Aswan.",
+      "shared_spaces": ["lounge", "dining_room", "sun_deck", "spa", "gym", "bar", "jacuzzi"],
+      "summary": "A nine-cabin Sonesta dahabiya with an elevator, spa and gym, and four suites with private terraces, sailing four nights in either direction between Luxor and Aswan.",
       "description": "Sonesta Dahabeya Amirat II combines the romance of a traditional Nile sail with refined modern design. The intimate nine-cabin vessel suits travellers who want privacy and personal service. Unusually for a dahabiya, it has an elevator, a spa and fitness facilities.\n\nThere are five Executive Cabins of about 25 m², two Royal Suites with private Nile-facing terraces and two Executive Suites with a separate seating area. Butler service is available on request.\n\nOn board: a lounge and dining room, a sun deck with river views, a spa and fitness area, in-cabin dining and cultural entertainment. Four-night voyages run in both directions, with quiet island moorings.",
       "source_urls": ["https://www.sonesta.com/sonesta-dahabeya-amirat-ii", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/itinerary"],
-      "verification_note": "Not on staging before this import (created). Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Verify 5 Executive Cabins, 2 Royal Suites, 2 Executive Suites (Sonesta's suite text is inconsistent), suite sizes and inclusions. Don't substitute Amirat's seven-night itinerary.",
+      "verification_note": "Not on staging before this import (created). Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Checked 5 November 2026: Sonesta's cabins page gives 5 Executive Cabins of 25 m² and 4 Elegant Suites, all with a private terrace, as Royal Suites and Executive Suites with a seating area; it doesn't say how many of each, so their counts are left empty (the 2 + 2 was a guess: clear it in the admin). Its overview says 4 Royal Suites; its FAQ (5 + 2, 35 m² suites) describes the first Amirat. Ask Sonesta for the split, suite sizes and a deck plan; mention the elevator to all levels for guests with limited mobility. Don't substitute Amirat's seven-night itinerary.",
       "cabins": [
         { "code": "EXC", "name": "Executive Cabin", "size_m2": 25, "max_occupancy": 2, "balcony": false, "cabin_count": 5, "amenities": ["Television", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer", "Tea and coffee", "Butler on request"], "description": "Five cabins of about 25 m² with individual climate control, a tea and coffee station, and butler service on request." },
-        { "code": "RS", "name": "Royal Suite", "max_occupancy": 2, "view": "Private Nile-facing terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two upgraded suites, each with a private terrace facing the Nile." },
-        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": ["Separate seating area"], "description": "Two spacious suites with a separate seating area." }
+        { "code": "RS", "name": "Royal Suite", "max_occupancy": 2, "view": "Private Nile-facing terrace", "balcony": false, "amenities": ["Private terrace"], "description": "Upgraded suites, each with a private terrace facing the Nile." },
+        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": false, "amenities": ["Separate seating area", "Private terrace"], "description": "Spacious suites with a separate seating area and a private terrace." }
       ],
       "itineraries": [
         {
