@@ -85,7 +85,7 @@ function problemsOf(v: Vessel): string[] {
   if (counted > v.cabin_count) p.push(`${v.slug}: cabin types add up to ${counted}, more than ${v.cabin_count}`);
   for (const c of v.cabins) {
     if (!CODE.test(c.code)) p.push(`${v.slug}/${c.code}: bad cabin code`);
-    if (c.max_occupancy < 1 || c.max_occupancy > 3) p.push(`${v.slug}/${c.code}: occupancy must be 1–3`);
+    if (c.max_occupancy < 1 || c.max_occupancy > 4) p.push(`${v.slug}/${c.code}: occupancy must be 1–4`);
     if (c.description.length > 4000) p.push(`${v.slug}/${c.code}: description too long`);
   }
   for (const it of v.itineraries) {
