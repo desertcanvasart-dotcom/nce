@@ -3,13 +3,8 @@
   "source": "Mövenpick MS Royal Lotus deck plan with technical data (ROL Cruise PDF, after the 2021 refurbishment), redrawn by Nilecruz: all five decks on one drawing, measured stern 0 to the lowest deck's bow 100. The plan names no decks, so they are lettered A (lowest) to E (top), as on Royal Lily. Unmarked areas are left undrawn.",
   "credit": "Mövenpick",
   "checked_on": "2026-11-05",
-  "source_urls": [
-    "https://www.rolcruise.co.uk/upload/pdf/MS-Royal-Lotus-Deck-Plan-640f5a2937733.pdf"
-  ],
-  "uses_existing_cabin_types": [
-    "STD",
-    "RS"
-  ],
+  "source_urls": ["https://www.rolcruise.co.uk/upload/pdf/MS-Royal-Lotus-Deck-Plan-640f5a2937733.pdf"],
+  "uses_existing_cabin_types": ["STD", "RS"],
   "to_confirm": {
     "note": "On the plan's technical data, not yet on the page; add once Mövenpick confirms: length 75 m, beam 14 m, 124 guests, crew 75, refurbished 2021. The fact sheet gives the Royal Suite as about 42 m². Mövenpick sells the standard cabins as Superior and Deluxe; the page calls them 'Standard / Deluxe Cabin'."
   },
@@ -20,21 +15,9 @@
         "length": 91.2,
         "bow": "round",
         "areas": [
-          {
-            "from": 0,
-            "to": 58,
-            "space": "sun_deck"
-          },
-          {
-            "from": 58,
-            "to": 83.6,
-            "space": "pool"
-          },
-          {
-            "from": 83.6,
-            "to": 91.2,
-            "space": "sun_deck"
-          }
+          { "from": 0, "to": 58, "space": "sun_deck" },
+          { "from": 58, "to": 83.6, "space": "pool" },
+          { "from": 83.6, "to": 91.2, "space": "sun_deck" }
         ]
       },
       {
@@ -42,48 +25,13 @@
         "length": 91.2,
         "bow": "square",
         "areas": [
-          {
-            "from": 3.7,
-            "to": 50.8,
-            "side": "port",
-            "cabin": "STD"
-          },
-          {
-            "from": 3.7,
-            "to": 50.8,
-            "side": "starboard",
-            "cabin": "STD"
-          },
-          {
-            "from": 50.8,
-            "to": 64.1,
-            "side": "port",
-            "space": "shop",
-            "label": "Bazaar"
-          },
-          {
-            "from": 50.8,
-            "to": 64.1,
-            "side": "starboard",
-            "space": "gym"
-          },
-          {
-            "from": 64.1,
-            "to": 78.9,
-            "side": "port",
-            "cabin": "STD"
-          },
-          {
-            "from": 64.1,
-            "to": 78.9,
-            "side": "starboard",
-            "cabin": "STD"
-          },
-          {
-            "from": 78.9,
-            "to": 91.2,
-            "space": "open"
-          }
+          { "from": 3.7, "to": 50.8, "side": "port", "cabin": "STD" },
+          { "from": 3.7, "to": 50.8, "side": "starboard", "cabin": "STD" },
+          { "from": 50.8, "to": 64.1, "side": "port", "space": "shop", "label": "Bazaar" },
+          { "from": 50.8, "to": 64.1, "side": "starboard", "space": "gym" },
+          { "from": 64.1, "to": 78.9, "side": "port", "cabin": "STD" },
+          { "from": 64.1, "to": 78.9, "side": "starboard", "cabin": "STD" },
+          { "from": 78.9, "to": 91.2, "space": "open" }
         ]
       },
       {
@@ -91,36 +39,11 @@
         "length": 99,
         "bow": "round",
         "areas": [
-          {
-            "from": 3.7,
-            "to": 50.8,
-            "side": "port",
-            "cabin": "STD"
-          },
-          {
-            "from": 3.7,
-            "to": 50.8,
-            "side": "starboard",
-            "cabin": "STD"
-          },
-          {
-            "from": 50.8,
-            "to": 63.1,
-            "space": "reception",
-            "label": "Lobby"
-          },
-          {
-            "from": 63.1,
-            "to": 88.3,
-            "side": "port",
-            "cabin": "STD"
-          },
-          {
-            "from": 63.1,
-            "to": 88.3,
-            "side": "starboard",
-            "cabin": "STD"
-          }
+          { "from": 3.7, "to": 50.8, "side": "port", "cabin": "STD" },
+          { "from": 3.7, "to": 50.8, "side": "starboard", "cabin": "STD" },
+          { "from": 50.8, "to": 63.1, "space": "reception", "label": "Lobby" },
+          { "from": 63.1, "to": 88.3, "side": "port", "cabin": "STD" },
+          { "from": 63.1, "to": 88.3, "side": "starboard", "cabin": "STD" }
         ]
       },
       {
@@ -128,40 +51,12 @@
         "length": 97.3,
         "bow": "round",
         "areas": [
-          {
-            "from": 24.2,
-            "to": 55.9,
-            "space": "lounge"
-          },
-          {
-            "from": 55.9,
-            "to": 69.3,
-            "space": "reception"
-          },
-          {
-            "from": 69.3,
-            "to": 78.9,
-            "side": "port",
-            "cabin": "STD"
-          },
-          {
-            "from": 69.3,
-            "to": 78.9,
-            "side": "starboard",
-            "cabin": "STD"
-          },
-          {
-            "from": 78.9,
-            "to": 87.7,
-            "side": "port",
-            "cabin": "RS"
-          },
-          {
-            "from": 78.9,
-            "to": 87.7,
-            "side": "starboard",
-            "cabin": "RS"
-          }
+          { "from": 24.2, "to": 55.9, "space": "lounge" },
+          { "from": 55.9, "to": 69.3, "space": "reception" },
+          { "from": 69.3, "to": 78.9, "side": "port", "cabin": "STD" },
+          { "from": 69.3, "to": 78.9, "side": "starboard", "cabin": "STD" },
+          { "from": 78.9, "to": 87.7, "side": "port", "cabin": "RS" },
+          { "from": 78.9, "to": 87.7, "side": "starboard", "cabin": "RS" }
         ]
       },
       {
@@ -169,11 +64,7 @@
         "length": 100,
         "bow": "round",
         "areas": [
-          {
-            "from": 50.8,
-            "to": 96.9,
-            "space": "restaurant"
-          }
+          { "from": 50.8, "to": 96.9, "space": "restaurant" }
         ]
       }
     ]
