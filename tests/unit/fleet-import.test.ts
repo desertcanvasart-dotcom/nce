@@ -65,6 +65,11 @@ describe("Nour El Nil fleet import", () => {
       ["deluxe_suite", 2, 34.7],
       ["luxury_room", 6, 17.35],
     ]);
+    // Poppee's Luxury Rooms have a king bed only (the operator's Poppee page); the fleet's other Luxury Rooms keep twin or king.
+    const poppee = boat("poppee").cabins.find((c) => c.code === "luxury_room")!;
+    expect(poppee.bed_configuration).toBe("1 king bed");
+    expect(poppee.translations.map((t) => t.bed_configuration)).toEqual([null, "1 cama king", "キングベッド1台"]);
+    expect(boat("najafa").cabins.find((c) => c.code === "luxury_room")!.bed_configuration).toBe("2 twin beds or 1 king bed");
   });
 
   it("merges a boat's own on-board values into the fleet's: Adelaïde adds its library, and keeps the shared notes", () => {

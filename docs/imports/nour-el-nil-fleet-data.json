@@ -389,6 +389,11 @@
         "status": "confirmed"
       },
       "summary": "An airy 2024 dahabiya with wide decks, Deluxe Suites for families or friends, and Panoramic Suites with broad river views.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2024 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -406,7 +411,12 @@
           "type": "luxury_room",
           "area_m2": 17.15,
           "count": 6,
-          "rate_eur_regular_season": 6500
+          "rate_eur_regular_season": 6500,
+          "beds": [
+            "1 king"
+          ],
+          "beds_as": "panoramic_suite",
+          "beds_source": "Operator's Poppee page lists the Luxury Rooms with 1 King Bed only (checked 5 November 2026)"
         }
       ],
       "source_url": "https://www.nourelnil.com/boats/poppee/",
