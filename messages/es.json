@@ -435,6 +435,7 @@
     "ask": "Preguntar por esta fecha",
     "none": "No hay salidas este mes. Elige otro mes arriba.",
     "empty": "Este barco no tiene fechas de salida publicadas. Zarpa a petición o en las fechas que anuncia el operador: pide una oferta con tus fechas.",
+    "emptyUsual": "El operador suele zarpar estos días. Pide una oferta con tus fechas y las comprobamos.",
     "legend": {
       "pattern": "Prevista según el calendario semanal",
       "south": "Río arriba, rumbo al sur",
@@ -706,6 +707,7 @@
     "dates": {
       "intro": "Son fechas previstas según las salidas semanales habituales de la naviera. Elige una fecha para ver la ruta y la duración, o pídenos que la comprobemos.",
       "introConfirmed": "Salidas confirmadas y, cuando las hay, las salidas semanales habituales de la naviera. Elige una fecha para ver la ruta y la duración.",
+      "introUsual": "Las salidas semanales habituales de la naviera. Aún no hay fechas publicadas: pregúntanos por las que quieras.",
       "noneConfirmed": "Aún no hay fechas confirmadas para reservar."
     },
     "faq": {

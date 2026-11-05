@@ -19,6 +19,8 @@ import styles from "./SailingCalendar.module.css";
 export type SailingCalendarProps = {
   sailings: CalendarSailing[];
   patterns: PatternLine[];
+  /** Usual sailing days with no dates to draw: listed when the calendar has nothing else to show. */
+  usual?: PatternLine[];
   /** Today in Cairo (yyyy-mm-dd), from the server, so the page and the browser agree. */
   today: string;
   bookable: boolean;
@@ -40,7 +42,15 @@ const ARROW = { south: "↓", north: "↑" } as const;
  * dates expected from the weekly pattern are outlined in dashes, cancelled ones are struck through. Choosing a day
  * shows its sailings in words beside the month, with the way to book (confirmed) or to ask (everything else).
  */
-export function SailingCalendar({ sailings, patterns, today, bookable, reserve, ask: askPage }: SailingCalendarProps) {
+export function SailingCalendar({
+  sailings,
+  patterns,
+  usual = [],
+  today,
+  bookable,
+  reserve,
+  ask: askPage,
+}: SailingCalendarProps) {
   const t = useTranslations("sailingCalendar");
   const locale = useLocale();
   const tag = locale === "en" ? "en-GB" : locale;
@@ -78,10 +88,46 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve, 
   const sailingWords = (s: CalendarSailing) =>
     t("sailingLabel", { route: route(s), nights: formatNights(s.nights, locale), status: status(s.status) });
 
+  // The weekly timetable: each itinerary's weekdays, its route and length, and the periods it runs in when known.
+  const timetable = (lines: PatternLine[]) => (
+    <ul className={styles.timetable}>
+      {lines.map((p) => (
+        <li key={p.code} className={cx(p.heading && styles[p.heading])}>
+          <span className={styles.stamps} aria-hidden="true">
+            {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+              <span key={n} className={cx(styles.stamp, p.days.includes(n) && styles.on)}>
+                {weekdayNarrow.format(isoDay(n))}
+              </span>
+            ))}
+          </span>
+          <span className={styles.line}>
+            <strong>{dayList.format(p.days.map((n) => weekdayLong.format(isoDay(n))))}</strong>
+            <span>{t("routeLine", { route: route(p), nights: formatNights(p.nights, locale) })}</span>
+            {p.periods.length ? (
+              <span className={styles.periods}>
+                {p.periods
+                  .map((r) => t("period", { from: dated.format(at(r.startsOn)), to: dated.format(at(r.endsOn)) }))
+                  .join(" · ")}
+              </span>
+            ) : null}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+
   if (!months.length) {
     return (
       <div className={styles.calendar}>
-        <p className={styles.empty}>{t("empty")}</p>
+        {usual.length ? (
+          <div className={styles.weekly}>
+            <h3 className={styles.kicker}>{t("patternTitle")}</h3>
+            {timetable(usual)}
+            <p className={styles.empty}>{t("emptyUsual")}</p>
+          </div>
+        ) : (
+          <p className={styles.empty}>{t("empty")}</p>
+        )}
       </div>
     );
   }
@@ -103,28 +149,7 @@ export function SailingCalendar({ sailings, patterns, today, bookable, reserve, 
       {patterns.length ? (
         <div className={styles.weekly}>
           <h3 className={styles.kicker}>{t("patternTitle")}</h3>
-          <ul className={styles.timetable}>
-            {patterns.map((p) => (
-              <li key={p.code} className={cx(p.heading && styles[p.heading])}>
-                <span className={styles.stamps} aria-hidden="true">
-                  {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                    <span key={n} className={cx(styles.stamp, p.days.includes(n) && styles.on)}>
-                      {weekdayNarrow.format(isoDay(n))}
-                    </span>
-                  ))}
-                </span>
-                <span className={styles.line}>
-                  <strong>{dayList.format(p.days.map((n) => weekdayLong.format(isoDay(n))))}</strong>
-                  <span>{t("routeLine", { route: route(p), nights: formatNights(p.nights, locale) })}</span>
-                  <span className={styles.periods}>
-                    {p.periods
-                      .map((r) => t("period", { from: dated.format(at(r.startsOn)), to: dated.format(at(r.endsOn)) }))
-                      .join(" · ")}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ul>
+          {timetable(patterns)}
           <p className={styles.caution}>
             <Icon name="info" className={styles.cautionIcon} />
             {t("patternNote")}

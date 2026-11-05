@@ -23,7 +23,7 @@ import {
 import { arriveDayBefore } from "@/lib/product/sailing-time";
 import { isBuilt } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { calendarSailings, headingOf, patternLines } from "@/lib/marketplace/sailing-calendar";
+import { calendarSailings, headingOf, patternLines, usualLines } from "@/lib/marketplace/sailing-calendar";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { MooringExplainer } from "@/components/mooring/MooringExplainer";
 import { CabinsAndDecks } from "./CabinsAndDecks";
@@ -713,7 +713,13 @@ export function VesselView({
         <section className={styles.section} id="dates" aria-labelledby="dates-h">
           {/* The sailing dates of every itinerary on one calendar: departure rows and the weekly pattern. */}
           <h2 id="dates-h">{tc("title")}</h2>
-          <p>{confirmed ? t("dates.introConfirmed") : t("dates.intro")}</p>
+          <p>
+            {confirmed
+              ? t("dates.introConfirmed")
+              : calendarSailings(its, today).length
+                ? t("dates.intro")
+                : t("dates.introUsual")}
+          </p>
           {!confirmed ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
           <SailingCalendar
             // Direction is worked out on the English names; the visitor reads the places in their language.
@@ -723,6 +729,11 @@ export function VesselView({
               destination: w.place(s.destination),
             }))}
             patterns={patternLines(its, today).map((p) => ({
+              ...p,
+              origin: w.place(p.origin),
+              destination: w.place(p.destination),
+            }))}
+            usual={usualLines(its, today).map((p) => ({
               ...p,
               origin: w.place(p.origin),
               destination: w.place(p.destination),

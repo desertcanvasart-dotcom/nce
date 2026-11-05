@@ -10,6 +10,7 @@ import {
   monthDays,
   nightsOnBoard,
   patternLines,
+  usualLines,
   type CalendarItinerary,
 } from "@/lib/marketplace/sailing-calendar";
 
@@ -102,6 +103,17 @@ describe("sailing calendar: the two ways a ship's dates come", () => {
     expect(patternLines([lxr({ sailingDays: [5, 1, 1] })], TODAY)[0]).toMatchObject({ days: [1, 5], heading: "south" });
     expect(patternLines([lxr({ periods: [{ startsOn: "2026-01-01", endsOn: "2026-04-30" }] })], TODAY)).toEqual([]);
     expect(patternLines([lxr({ periods: [] })], TODAY)).toEqual([]);
+  });
+
+  it("lists the usual weekdays of an itinerary with no period to draw, so the page never says there are none", () => {
+    // A luxury ship: weekdays only, no periods and no departures.
+    const asw = lxr({ code: "ASW3", origin: "Aswan", destination: "Luxor", nights: 3, sailingDays: [5], periods: [] });
+    expect(usualLines([lxr({ periods: [] }), asw], TODAY)).toEqual([
+      expect.objectContaining({ code: "LXR4", days: [1], periods: [], heading: "south" }),
+      expect.objectContaining({ code: "ASW3", days: [5], periods: [], heading: "north" }),
+    ]);
+    // A pattern already drawn from its periods isn't repeated; an itinerary without weekdays has nothing to list.
+    expect(usualLines([lxr(), lxr({ code: "X", sailingDays: [], periods: [] })], TODAY)).toEqual([]);
   });
 });
 

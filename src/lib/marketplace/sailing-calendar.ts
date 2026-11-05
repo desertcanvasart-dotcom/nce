@@ -117,6 +117,25 @@ export function patternLines(its: CalendarItinerary[], today: string): PatternLi
     .filter((l) => l.days.length && l.periods.length);
 }
 
+/**
+ * The usual sailing days of itineraries that have them but no period still running, so no dates can be drawn: what
+ * the operator usually runs, to show instead of "no sailing dates" (the luxury ships carry weekdays only).
+ */
+export function usualLines(its: CalendarItinerary[], today: string): PatternLine[] {
+  const drawn = new Set(patternLines(its, today).map((l) => l.code));
+  return its
+    .filter((it) => !drawn.has(it.code) && it.sailingDays.length)
+    .map((it) => ({
+      code: it.code,
+      origin: it.origin,
+      destination: it.destination,
+      nights: it.nights,
+      days: [...new Set(it.sailingDays)].sort((a, b) => a - b),
+      periods: [],
+      heading: headingOf(it.origin, it.destination),
+    }));
+}
+
 /** "yyyy-mm" from today's month to the last month with a sailing; none without sailings. */
 export function calendarMonths(sailings: CalendarSailing[], today: string): string[] {
   const last = sailings.at(-1)?.departsOn.slice(0, 7);
