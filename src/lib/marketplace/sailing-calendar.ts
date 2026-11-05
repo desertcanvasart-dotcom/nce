@@ -20,6 +20,8 @@ export type CalendarItinerary = {
   periods: { startsOn: string; endsOn: string }[];
   /** Future departure rows, cancelled ones included. */
   sailings: { id: string; departsOn: string; returnsOn: string; status: "scheduled" | "cancelled" }[];
+  /** Its period is the coming twelve months, assumed from its usual weekdays (withUsualYear), not one it was given. */
+  rolling?: boolean;
 };
 
 export type SailingStatus = "confirmed" | "pattern" | "cancelled";
@@ -105,16 +107,31 @@ export function calendarSailings(its: CalendarItinerary[], today: string): Calen
 /** The weekly patterns still running after today, in words on the page. */
 export function patternLines(its: CalendarItinerary[], today: string): PatternLine[] {
   return its
+    .filter((it) => it.sailingDays.length && (it.rolling || it.periods.some((p) => p.endsOn > today)))
     .map((it) => ({
       code: it.code,
       origin: it.origin,
       destination: it.destination,
       nights: it.nights,
       days: [...new Set(it.sailingDays)].sort((a, b) => a - b),
-      periods: it.periods.filter((p) => p.endsOn > today).sort((a, b) => a.startsOn.localeCompare(b.startsOn)),
+      // An assumed year has no dates to state: the line gives the weekdays only.
+      periods: it.rolling ? [] : it.periods.filter((p) => p.endsOn > today).sort((a, b) => a.startsOn.localeCompare(b.startsOn)),
       heading: headingOf(it.origin, it.destination),
-    }))
-    .filter((l) => l.days.length && l.periods.length);
+    }));
+}
+
+/**
+ * An itinerary with usual weekdays but no period still running and no departure rows (the luxury ships: their
+ * import sets weekdays only) is drawn for the coming twelve months, as expected dates, until real dates arrive
+ * (Islam, 5 Nov 2026). Its line on the page gives the weekdays, not an invented period.
+ */
+export function withUsualYear(its: CalendarItinerary[], today: string): CalendarItinerary[] {
+  const end = horizonOf(today);
+  return its.map((it) =>
+    it.sailingDays.length && !it.sailings.length && !it.periods.some((p) => p.endsOn > today)
+      ? { ...it, periods: [{ startsOn: today, endsOn: end }], rolling: true }
+      : it,
+  );
 }
 
 /**

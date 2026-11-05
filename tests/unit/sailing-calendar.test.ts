@@ -11,6 +11,7 @@ import {
   nightsOnBoard,
   patternLines,
   usualLines,
+  withUsualYear,
   type CalendarItinerary,
 } from "@/lib/marketplace/sailing-calendar";
 
@@ -103,6 +104,25 @@ describe("sailing calendar: the two ways a ship's dates come", () => {
     expect(patternLines([lxr({ sailingDays: [5, 1, 1] })], TODAY)[0]).toMatchObject({ days: [1, 5], heading: "south" });
     expect(patternLines([lxr({ periods: [{ startsOn: "2026-01-01", endsOn: "2026-04-30" }] })], TODAY)).toEqual([]);
     expect(patternLines([lxr({ periods: [] })], TODAY)).toEqual([]);
+  });
+
+  it("draws usual weekdays without a period for the coming twelve months, and states no invented period", () => {
+    // A luxury ship: weekdays only, no periods and no departures.
+    const [it] = withUsualYear([lxr({ periods: [] })], TODAY);
+    expect(it).toMatchObject({ rolling: true, periods: [{ startsOn: TODAY, endsOn: "2027-10-31" }] });
+    const dates = calendarSailings([it!], TODAY);
+    expect(dates[0]).toMatchObject({ departsOn: "2026-11-09", status: "pattern" });
+    expect(dates.every((d) => d.status === "pattern" && new Date(`${d.departsOn}T12:00:00Z`).getUTCDay() === 1)).toBe(true);
+    expect(dates.at(-1)!.departsOn <= "2027-10-31").toBe(true);
+    expect(patternLines([it!], TODAY)).toEqual([expect.objectContaining({ days: [1], periods: [] })]);
+    // Given periods, or departure rows, are left alone; so is an itinerary without weekdays.
+    const given = lxr();
+    const dated = lxr({
+      periods: [],
+      sailings: [{ id: "d", departsOn: "2026-12-07", returnsOn: "2026-12-11", status: "scheduled" }],
+    });
+    const none = lxr({ sailingDays: [], periods: [] });
+    expect(withUsualYear([given, dated, none], TODAY)).toEqual([given, dated, none]);
   });
 
   it("lists the usual weekdays of an itinerary with no period to draw, so the page never says there are none", () => {
