@@ -1,0 +1,68 @@
+{
+  "vessel": "movenpick-ss-misr",
+  "source": "Mövenpick's SS Misr fact sheet deck plan (cabin numbers and categories), redrawn by Nilecruz: all four guest decks on one drawing, measured stern 0 to the main deck's bow 100. Deck 1 (staff cabins and the steam engine room) is not on the plan and is not drawn.",
+  "credit": "Mövenpick",
+  "checked_on": "2026-11-05",
+  "source_urls": ["https://www.scribd.com/document/170543378/Fact-Sheet-SS-Misr"],
+  "uses_existing_cabin_types": ["OUT", "SGL", "STE", "PAN"],
+  "to_confirm": {
+    "note": "The plan matches the page: 14 Outside Cabins (the plan's categories 3 and 4: 401–405, 301, 201–208), 2 Single Cabins (209, 210), 6 Suites (302–305, 406, 407) and 2 Panorama Suites (306, 307). Ask Mövenpick: the fact sheet calls SS Misr a propeller steamer, while Nilecruz shows every steam vessel as a paddle steamer; guests (the cabins sleep 46, Cruising Journal says 45); and the route length (the old fact sheet says seven nights, the page four)."
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "5",
+        "length": 91,
+        "bow": "square",
+        "areas": [
+          { "from": 22.3, "to": 65.2, "space": "sun_deck" },
+          { "from": 65.2, "to": 89.2, "space": "pool" }
+        ]
+      },
+      {
+        "name": "4",
+        "length": 97,
+        "bow": "round",
+        "areas": [
+          { "from": 2.5, "to": 20.8, "space": "sun_deck", "label": "Lower sun deck" },
+          { "from": 20.8, "to": 46, "space": "lounge" },
+          { "from": 46, "to": 60.1, "space": "bar" },
+          { "from": 65.2, "to": 79, "side": "port", "cabin": "OUT" },
+          { "from": 60.1, "to": 79, "side": "starboard", "cabin": "OUT" },
+          { "from": 79, "to": 91.6, "side": "port", "cabin": "STE" },
+          { "from": 79, "to": 91.6, "side": "starboard", "cabin": "STE" },
+          { "from": 91.6, "to": 95.2, "space": "crew" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 98,
+        "bow": "round",
+        "areas": [
+          { "from": 5.8, "to": 22.6, "space": "crew", "label": "Galley" },
+          { "from": 22.6, "to": 46, "space": "restaurant" },
+          { "from": 46, "to": 60.1, "space": "reception", "label": "Lobby" },
+          { "from": 60.1, "to": 65.8, "side": "port", "space": "shop" },
+          { "from": 60.1, "to": 65.8, "side": "starboard", "cabin": "OUT" },
+          { "from": 65.8, "to": 79, "side": "port", "cabin": "STE" },
+          { "from": 65.8, "to": 79, "side": "starboard", "cabin": "STE" },
+          { "from": 79, "to": 92.2, "side": "port", "cabin": "PAN" },
+          { "from": 79, "to": 92.2, "side": "starboard", "cabin": "PAN" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 43, "space": "crew" },
+          { "from": 43, "to": 60.1, "space": "reception" },
+          { "from": 60.1, "to": 82.6, "side": "port", "cabin": "OUT" },
+          { "from": 60.1, "to": 82.6, "side": "starboard", "cabin": "OUT" },
+          { "from": 82.6, "to": 86.8, "side": "port", "cabin": "SGL" },
+          { "from": 82.6, "to": 86.8, "side": "starboard", "cabin": "SGL" }
+        ]
+      }
+    ]
+  }
+}

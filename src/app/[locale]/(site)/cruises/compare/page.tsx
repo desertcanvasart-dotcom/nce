@@ -16,7 +16,7 @@ type Props = {
   searchParams: Promise<{ v?: string | string[] }>;
 };
 
-const TYPE = { sail: "Dahabiya", motor: "Motor ship", steam: "Paddle steamer" } as const;
+const TYPE = { sail: "Dahabiya", motor: "Motor ship", steam: "Steamer" } as const;
 const PROPULSION = { motor: "Motor", wind: "Wind", steam: "Steam" } as const;
 
 // A comparison is a visitor's own selection: never indexed (SEO-016).

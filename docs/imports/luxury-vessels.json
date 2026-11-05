@@ -138,38 +138,40 @@
       "rename_from": "movenpick-ms-sun-ray",
       "name": "Mövenpick MS Sun Ray",
       "type": "motor",
-      "cabin_count": 62,
+      "cabin_count": 66,
       "shared_spaces": ["pool", "sun_deck", "dining_room", "lounge", "bar", "library"],
-      "summary": "A five-star Mövenpick cruiser with a grand lobby, 54 cabins and four suite categories, leaving Luxor on Thursdays and Aswan on Mondays.",
+      "summary": "A five-star Mövenpick cruiser with a grand lobby and 66 cabins and suites, among them two Junior and two Senior Suites, leaving Luxor on Thursdays and Aswan on Mondays.",
       "description": "The Mövenpick MS Sun Ray (also written Sunray) is a five-star deluxe Nile cruise ship with an impressive high-ceilinged entrance lobby, spacious public areas and contemporary furnishings. Its cruises link Luxor, Edfu, Kom Ombo and Aswan, combining temple visits with a relaxed atmosphere on board.\n\nLower-deck Classic Cabins look out through two fixed portholes; upper-deck cabins have larger windows, some of which partly open. There are two suites in each of four categories: Junior, Superior, Deluxe and Executive.\n\nOn board: an outdoor pool and sun deck, a main restaurant and lounge bar, a reading room and a playroom.\n\nFour-night cruises usually leave Luxor on Thursdays and three-night cruises leave Aswan on Mondays, a different week from most other Mövenpick ships. This is the usual pattern, not live availability.",
       "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html", "https://movenpick.accor.com/en/africa/egypt/nilecruisers.html"],
-      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Confirm the 62-cabin breakdown, upper-deck category names, sizes and counts, suite sizes and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'.",
+      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Cabins and suites from Mövenpick's fact sheet (2020): 60 outside cabins of 20 m², 2 singles of 15 m², 2 Junior Suites of 37 m² and 2 Senior Suites of 39 m², 66 in all; the website's other suite names are sales products. Confirm which rooms are the singles, and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'.",
       "cabins": [
         {
           "code": "CLASSIC",
           "name": "Classic Cabin",
-          "deck": "Lower deck",
+          "deck": "Deck 1",
           "size_m2": 20,
           "max_occupancy": 2,
           "view": "Two fixed portholes (not opening)",
           "balcony": false,
+          "cabin_count": 8,
           "amenities": ["Bathtub", "Hairdryer", "Air conditioning", "LED TV with satellite channels", "Espresso machine", "Tea and coffee", "Minibar", "Safe", "Telephone"],
           "description": "Cabins of about 20 m² on the lower deck, facing the Nile through two fixed portholes, with a bathtub, espresso machine and satellite TV."
         },
         {
           "code": "UPPER",
           "name": "Upper-deck Cabin",
-          "deck": "Upper deck",
+          "deck": "Decks 2, 3 and 4",
+          "size_m2": 20,
           "max_occupancy": 2,
           "view": "Large Nile-facing window, some partly opening",
           "balcony": false,
+          "cabin_count": 52,
           "amenities": ["Air conditioning", "Television", "Minibar", "Safe"],
           "description": "Cabins on the upper decks with larger Nile-facing windows, some partly opening, for a better view than the lower-deck portholes."
         },
-        { "code": "JS", "name": "Junior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
-        { "code": "SS", "name": "Superior Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Superior Suites, with upgraded space and furnishings." },
-        { "code": "DS", "name": "Deluxe Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Deluxe Suites, with upgraded space and furnishings." },
-        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Executive Suites, the ship's top category." }
+        { "code": "JS", "name": "Junior Suite", "deck": "Deck 4", "size_m2": 37, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
+        { "code": "SS", "name": "Senior Suite", "deck": "Deck 4", "size_m2": 39, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Senior Suites, the ship’s largest, with a seating area." },
+        { "code": "SGL", "name": "Single Cabin", "size_m2": 15, "max_occupancy": 1, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two single cabins of about 15 m²." }
       ],
       "itineraries": [
         {
@@ -208,20 +210,32 @@
       "name": "Mövenpick SB Feddya",
       "type": "sail",
       "cabin_count": 4,
-      "shared_spaces": ["dining_room"],
+      "max_guests": 8,
+      "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck"],
       "summary": "A boutique Mövenpick dahabiya with only four suites, sailing tailor-made six-night voyages from Luxor to Aswan with stops at El Kab, Ramadi Village and Gebel El Silsila.",
       "description": "The Mövenpick SB Feddya is a boutique luxury dahabiya for an intimate sail between Luxor and Aswan. Inspired by Egypt's historic sailing boats, it combines personal hospitality, the feel of a private yacht and an unhurried cultural programme.\n\nWith only four suites, Feddya suits a private charter, couples, families or small groups. Its six-night voyage adds lesser-visited sites, El Kab, Ramadi Village and Gebel El Silsila, to the famous temples, with quiet island moorings along the way. The vessel docks at its own landing in Al Bughdadi, near Luxor.\n\nDepartures are tailor-made, subject to availability; there is no weekly sailing day.",
-      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-feddya.html", "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/movenpick-sb-feddya/pdf-2024/msa_d_0000255.pdf"],
-      "verification_note": "Reservations: Cruise.Feddya@movenpick.com. Tailor-made: the itinerary was imported inactive with no sailing weekday; never generate weekly departures. Get suite names, sizes, windows, bedding, occupancy and terraces from Mövenpick; don't copy them from other ships. Confirm charter terms, special tomb tickets (Seti I, Tutankhamun), guiding and transfers.",
+      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-feddya.html", "https://www.scribd.com/doc/170543397/Fact-Sheet-SB-Feddya", "https://www.memphistours.co.uk/egypt/feddya-dahabiya-nile-cruise"],
+      "verification_note": "Reservations: Cruise.Feddya@movenpick.com. Tailor-made: the itinerary was imported inactive with no sailing weekday; never generate weekly departures. Suites (checked 5 November 2026): 2 Panorama Suites of 24 m² with an 8 m² balcony and 2 Senior Suites of 22.5 m² with an 8 m² patio (Memphis Tours; Mövenpick's fact sheet gives 4 suites of 22.5–24 m² with private outdoor space, 8 guests, 47.5 × 7.5 m). Confirm bedding and where each suite sits: the fact sheet's plan is unlabelled, so no deck drawing yet. The Mövenpick PDF once listed here (msa_d_0000255.pdf) is about a resort in Bintan, not Feddya: remove it from the vessel's sources. Confirm charter terms, special tomb tickets (Seti I, Tutankhamun), guiding and transfers.",
       "cabins": [
         {
           "code": "SUITE",
-          "name": "Suite",
+          "name": "Senior Suite",
+          "size_m2": 22.5,
           "max_occupancy": 2,
           "balcony": false,
-          "cabin_count": 4,
-          "amenities": [],
-          "description": "One of four private suites on this intimate dahabiya."
+          "cabin_count": 2,
+          "amenities": ["Private patio (8 m²)"],
+          "description": "One of two Senior Suites of 22.5 m², each with its own 8 m² patio."
+        },
+        {
+          "code": "PANO",
+          "name": "Panorama Suite",
+          "size_m2": 24,
+          "max_occupancy": 2,
+          "balcony": true,
+          "cabin_count": 2,
+          "amenities": ["Private balcony (8 m²)"],
+          "description": "One of two Panorama Suites of 24 m², each with its own 8 m² balcony."
         }
       ],
       "itineraries": [
@@ -289,10 +303,10 @@
       "summary": "A Sonesta dahabiya with five Deluxe Cabins and two terrace suites, sailing seven nights between Luxor and Aswan with island moorings, usually on Saturdays.",
       "description": "Sonesta Dahabeya Amirat offers a graceful, traditional luxury sail between Luxor and Aswan. With only five Deluxe Cabins and two Elegant Suites, it feels more like a private yacht than a motor cruise. Its unhurried seven-night voyage adds island moorings and river landscapes to the classic monuments of Upper Egypt, and suits couples, small families and private groups.\n\nOn board: a dining room, a shaded sun deck with a bar, an indoor lounge and an open-air oriental-style Jacuzzi. Breakfast and lunch are usually buffets and dinner is à la carte; in-cabin dining runs until midnight.\n\nVoyages usually start on Saturdays, subject to the season. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-dahabeya-amirat", "https://www.sonesta.com/sonesta-dahabeya-amirat/itinerary"],
-      "verification_note": "Confirm seasonal dates, cabin and suite sizes, occupancy, charter terms and whether Gebel El Silsila is included or optional. Staging had 9 cabins on this record (Amirat II's number); corrected to 7.",
+      "verification_note": "Confirm seasonal dates, cabin and suite sizes, occupancy, charter terms and whether Gebel El Silsila is included or optional. Staging had 9 cabins on this record (Amirat II's number); corrected to 7. The Elegant Suites have a private terrace, not a balcony (Sonesta): the balcony flag showed both, so set balcony off on the existing ELS row in the admin (checked 5 November 2026). No deck plan found; ask Sonesta for one, with the cabin sizes and guests.",
       "cabins": [
         { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "balcony": false, "cabin_count": 5, "amenities": ["Air conditioning", "Television with films", "Wi-Fi", "Telephone", "Electronic lock", "Minibar", "Safe", "Hairdryer", "Daily housekeeping"], "description": "Five cabins with individually controlled air conditioning, a television with films, Wi-Fi, a minibar and a safe." },
-        { "code": "ELS", "name": "Elegant Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two more spacious suites, each with a private terrace." }
+        { "code": "ELS", "name": "Elegant Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two more spacious suites, each with a private terrace." }
       ],
       "itineraries": [
         {
@@ -339,15 +353,15 @@
       "name": "Sonesta Dahabeya Amirat II",
       "type": "sail",
       "cabin_count": 9,
-      "shared_spaces": ["lounge", "dining_room", "sun_deck", "spa", "gym"],
-      "summary": "A nine-cabin Sonesta dahabiya with an elevator, spa and gym, and two Royal Suites with private terraces, sailing four nights in either direction between Luxor and Aswan.",
+      "shared_spaces": ["lounge", "dining_room", "sun_deck", "spa", "gym", "bar", "jacuzzi"],
+      "summary": "A nine-cabin Sonesta dahabiya with an elevator, spa and gym, and four suites with private terraces, sailing four nights in either direction between Luxor and Aswan.",
       "description": "Sonesta Dahabeya Amirat II combines the romance of a traditional Nile sail with refined modern design. The intimate nine-cabin vessel suits travellers who want privacy and personal service. Unusually for a dahabiya, it has an elevator, a spa and fitness facilities.\n\nThere are five Executive Cabins of about 25 m², two Royal Suites with private Nile-facing terraces and two Executive Suites with a separate seating area. Butler service is available on request.\n\nOn board: a lounge and dining room, a sun deck with river views, a spa and fitness area, in-cabin dining and cultural entertainment. Four-night voyages run in both directions, with quiet island moorings.",
       "source_urls": ["https://www.sonesta.com/sonesta-dahabeya-amirat-ii", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-dahabeya-amirat-ii/itinerary"],
-      "verification_note": "Not on staging before this import (created). Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Verify 5 Executive Cabins, 2 Royal Suites, 2 Executive Suites (Sonesta's suite text is inconsistent), suite sizes and inclusions. Don't substitute Amirat's seven-night itinerary.",
+      "verification_note": "Not on staging before this import (created). Sailing weekdays are not published, so both itineraries were imported inactive: set the real sailing days, then activate. Checked 5 November 2026: Sonesta's cabins page gives 5 Executive Cabins of 25 m² and 4 Elegant Suites, all with a private terrace, as Royal Suites and Executive Suites with a seating area; it doesn't say how many of each, so their counts are left empty (the 2 + 2 was a guess: clear it in the admin). Its overview says 4 Royal Suites; its FAQ (5 + 2, 35 m² suites) describes the first Amirat. Ask Sonesta for the split, suite sizes and a deck plan; mention the elevator to all levels for guests with limited mobility. Don't substitute Amirat's seven-night itinerary.",
       "cabins": [
         { "code": "EXC", "name": "Executive Cabin", "size_m2": 25, "max_occupancy": 2, "balcony": false, "cabin_count": 5, "amenities": ["Television", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer", "Tea and coffee", "Butler on request"], "description": "Five cabins of about 25 m² with individual climate control, a tea and coffee station, and butler service on request." },
-        { "code": "RS", "name": "Royal Suite", "max_occupancy": 2, "view": "Private Nile-facing terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace"], "description": "Two upgraded suites, each with a private terrace facing the Nile." },
-        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": ["Separate seating area"], "description": "Two spacious suites with a separate seating area." }
+        { "code": "RS", "name": "Royal Suite", "max_occupancy": 2, "view": "Private Nile-facing terrace", "balcony": false, "amenities": ["Private terrace"], "description": "Upgraded suites, each with a private terrace facing the Nile." },
+        { "code": "ES", "name": "Executive Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": false, "amenities": ["Separate seating area", "Private terrace"], "description": "Spacious suites with a separate seating area and a private terrace." }
       ],
       "itineraries": [
         {
@@ -434,14 +448,14 @@
       "type": "motor",
       "cabin_count": 53,
       "shared_spaces": ["dining_room", "lounge", "bar", "pool", "sun_deck"],
-      "summary": "A Sonesta cruiser with 47 Deluxe Cabins, some connecting, two Senator Suites with balconies and four Presidential Suites with terraces, leaving Luxor on Mondays and Aswan on Fridays.",
+      "summary": "A Sonesta cruiser with 47 Deluxe Cabins, some connecting, two Senator Suites and four Presidential Suites with terraces, leaving Luxor on Mondays and Aswan on Fridays.",
       "description": "Sonesta Nile Goddess combines classic luxury Nile cruising with comfortable cabins and premium suites. The ship sails between Luxor and Aswan with temple excursions, dining on board, river views and entertainment. With connecting cabins and an elevator, it suits families as well as couples.\n\nIts 47 Deluxe Cabins have Nile views and a full-size bathtub. Two Senator Suites have private balconies and four Presidential Suites have private terraces. All cabins and suites are non-smoking.\n\nOn board: a main restaurant, a lounge bar, a pool and sun deck, an elevator, reception and cultural entertainment, with full-board dining.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-nile-goddess-cruise-ship", "https://www.sonesta.com/sonesta-nile-goddess-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-nile-goddess-cruise-ship/itinerary"],
-      "verification_note": "Verify terrace allocations, sizes and the sightseeing on disembarkation day. Staging had 57 cabins on this record; corrected to 53. Seven-night round trips not imported.",
+      "verification_note": "Verify terrace allocations, sizes and the sightseeing on disembarkation day. Staging had 57 cabins on this record; corrected to 53. Seven-night round trips not imported. Checked 5 November 2026: Sonesta's pages give terraces to the Presidential Suites only and mention no balcony, so the Senator Suites' balcony is removed; in the admin, clear it (view, amenity, flag) and turn off the Presidential Suites' balcony flag. No deck plan found (RiverCruise's is 'coming soon'); ask Sonesta for one, with sizes. CruiseMapper's 57 cabins conflict with Sonesta's 53.",
       "cabins": [
         { "code": "DLX", "name": "Deluxe Cabin", "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 47, "amenities": ["Full-size bathtub", "Air conditioning", "Television", "Music system", "Telephone", "Wi-Fi", "Minibar", "Safe", "Hairdryer", "Connecting cabins available"], "description": "Elegant Nile-view cabins with individual climate control and a full-size bathtub. Some connect, subject to allocation. Non-smoking." },
-        { "code": "SEN", "name": "Senator Suite", "max_occupancy": 2, "view": "Private balcony", "balcony": true, "cabin_count": 2, "amenities": ["Private balcony"], "description": "Two upgraded suites with a private balcony. Non-smoking." },
-        { "code": "PRES", "name": "Presidential Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 4, "amenities": ["Private terrace"], "description": "Four spacious suites with a private terrace. Non-smoking." }
+        { "code": "SEN", "name": "Senator Suite", "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "Two upgraded suites. Non-smoking." },
+        { "code": "PRES", "name": "Presidential Suite", "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 4, "amenities": ["Private terrace"], "description": "Four spacious suites with a private terrace. Non-smoking." }
       ],
       "itineraries": [
         {
@@ -480,7 +494,7 @@
       "name": "Sonesta St. George I",
       "type": "motor",
       "cabin_count": 57,
-      "shared_spaces": ["dining_room", "lounge", "bar", "spa", "gym", "pool", "sun_deck"],
+      "shared_spaces": ["dining_room", "lounge", "bar", "spa", "gym", "pool", "sun_deck", "jacuzzi"],
       "summary": "A Sonesta cruiser with spa-style bathrooms, opening French windows and a full-service spa: 47 Deluxe Cabins and ten suites in three categories, leaving Luxor on Mondays and Aswan on Fridays.",
       "description": "Sonesta St. George I is an upscale Nile cruiser with elegant interiors, spacious suites, wellness facilities and cultural sightseeing. Its Deluxe Cabins stand out for their spa-style bathrooms, with steam bath, Jacuzzi and water massage, and panoramic French windows that open.\n\nThere are 47 Deluxe Cabins, six Presidential Suites, three Elite Suites and one Royal Suite, the most exclusive on board.\n\nOn board: a main restaurant and lounge bars, a full-service spa and fitness centre, a pool and sun deck, panoramic lounges, reception and cultural entertainment.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-st-george-1-nile-cruise-ship/itinerary"],
@@ -532,11 +546,11 @@
       "summary": "An all-suite Sonesta cruiser with 33 terrace suites named after composers (Beethoven, Mozart and Chopin), leaving Luxor on Saturdays and Aswan on Wednesdays.",
       "description": "Sonesta Star Goddess is an exclusive all-suite Nile cruiser with only 33 suites, each with a private terrace. Named after classical composers, its Beethoven, Mozart and Chopin Suites give far more room than standard cabins. The ship pairs refined interiors and panoramic river views with fine dining and temple visits between Luxor and Aswan.\n\nThere are 27 Beethoven Suites of about 40 m², four Mozart Suites of about 35 m² and two Chopin Suites of about 52 m², the largest, with a spa-style bathroom. Every suite has double-glazed panoramic French windows.\n\nOn board: a main restaurant, a lounge bar, a sun deck with an outdoor pool and bar, barbecue facilities, reception and cultural entertainment.\n\nFour-night cruises usually leave Luxor on Saturdays and three-night cruises leave Aswan on Wednesdays. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship", "https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-star-goddess-nile-cruise-ship/itinerary"],
-      "verification_note": "All-suite: never add a standard cabin category. Confirm suite availability per date and the sightseeing after disembarkation in Luxor. Seven-night round trips not imported.",
+      "verification_note": "All-suite: never add a standard cabin category. Confirm suite availability per date and the sightseeing after disembarkation in Luxor. Seven-night round trips not imported. Checked 5 November 2026: the plan matches (27 Beethoven, 4 Mozart, 2 Chopin). The suites have terraces, which showed as both terrace and balcony: turn the balcony flag off on the three existing suite rows in the admin.",
       "cabins": [
-        { "code": "BEETHOVEN", "name": "Beethoven Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 27, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Live sailing channel", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer"], "description": "Spacious, well-appointed suites of about 40 m² with a private terrace and Nile views." },
-        { "code": "MOZART", "name": "Mozart Suite", "size_m2": 35, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 4, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "Intimate luxury suites of about 35 m² with a private terrace." },
-        { "code": "CHOPIN", "name": "Chopin Suite", "size_m2": 52, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace", "Steam bath", "Jacuzzi", "Water massage", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "The two largest suites, about 52 m², with a private terrace and a spa-style bathroom with steam bath, Jacuzzi and water massage." }
+        { "code": "BEETHOVEN", "name": "Beethoven Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 27, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Live sailing channel", "Wi-Fi", "Telephone", "Air conditioning", "Electronic lock", "Minibar", "Safe", "Hairdryer"], "description": "Spacious, well-appointed suites of about 40 m² with a private terrace and Nile views." },
+        { "code": "MOZART", "name": "Mozart Suite", "size_m2": 35, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 4, "amenities": ["Private terrace", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "Intimate luxury suites of about 35 m² with a private terrace." },
+        { "code": "CHOPIN", "name": "Chopin Suite", "size_m2": 52, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 2, "amenities": ["Private terrace", "Steam bath", "Jacuzzi", "Water massage", "Panoramic French windows", "43-inch LED TV", "Wi-Fi", "Minibar", "Safe"], "description": "The two largest suites, about 52 m², with a private terrace and a spa-style bathroom with steam bath, Jacuzzi and water massage." }
       ],
       "itineraries": [
         {
@@ -580,12 +594,12 @@
       "summary": "An all-suite Sonesta cruiser launched in 2020: 30 suites, every one with a private terrace, including Family, Executive and Royal Suites of about 60 m², leaving Luxor on Mondays and Aswan on Fridays.",
       "description": "Sonesta Sun Goddess is an all-suite luxury Nile cruiser launched in 2020. Its 30 suites, each with a private terrace, make an intimate, contemporary base for exploring Luxor, Edfu, Kom Ombo and Aswan.\n\nThere are 26 Presidential Suites of about 40 m², and one Executive and one Royal Suite of about 60 m²; the Royal Suite has its own Jacuzzi. Two Family Suites of about 60 m² have connecting arrangements suited to families. All suites are non-smoking, and in-suite dining runs until midnight.\n\nOn board: a main restaurant, an outdoor pool and hot tub, a sun deck, a bar and lounge, entertainment and cultural excursions.\n\nFour-night cruises usually leave Luxor on Mondays and three-night cruises leave Aswan on Fridays. This is the usual pattern, not live availability.",
       "source_urls": ["https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship", "https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship/guest-cabins-and-suites", "https://www.sonesta.com/sonesta-sun-goddess-nile-cruise-ship/itinerary"],
-      "verification_note": "All-suite: no standard cabins. Confirm Family Suite layout and occupancy (imported as 3 guests), dates and excursions. Sonesta's seven-night page has inconsistent text; not imported. Staging also has a duplicate private record 'sun-goddess'.",
+      "verification_note": "All-suite: no standard cabins. Confirm Family Suite layout and occupancy (imported as 3 guests), dates and excursions. Sonesta's seven-night page has inconsistent text; not imported. Staging also has a duplicate private record 'sun-goddess'. Checked 5 November 2026: the plan's 32 room numbers make Sonesta's 30 suites if each Family Suite is two rooms (403 with 405, 402 with 404); ask Sonesta. Fact sheet: 77 × 13.4 m, built 2020. The suites' terraces showed as both terrace and balcony: turn the balcony flag off on the four existing suite rows in the admin.",
       "cabins": [
-        { "code": "PRES", "name": "Presidential Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 26, "amenities": ["Private terrace", "Full-size bathtub", "Air conditioning", "LED TV", "Music system", "Minibar", "Safe", "Telephone", "Wi-Fi", "Hairdryer", "In-suite dining until midnight"], "description": "Spacious suites of about 40 m² with a private terrace and seating. Non-smoking." },
-        { "code": "FAMILY", "name": "Family Suite", "size_m2": 60, "max_occupancy": 3, "view": "Private terrace", "balcony": true, "cabin_count": 2, "amenities": ["Private terrace", "Connecting arrangement", "Full-size bathtub"], "description": "Two suites of about 60 m² with an extra room and connecting arrangements suited to families. Non-smoking." },
-        { "code": "EXEC", "name": "Executive Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 1, "amenities": ["Private terrace", "Living area", "Full-size bathtub"], "description": "A premium suite of about 60 m² with generous living space and a private terrace. Non-smoking." },
-        { "code": "ROYAL", "name": "Royal Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": true, "cabin_count": 1, "amenities": ["Private terrace", "Jacuzzi", "Living area"], "description": "The ship's Royal Suite, about 60 m², with its own Jacuzzi and a terrace. Non-smoking." }
+        { "code": "PRES", "name": "Presidential Suite", "size_m2": 40, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 26, "amenities": ["Private terrace", "Full-size bathtub", "Air conditioning", "LED TV", "Music system", "Minibar", "Safe", "Telephone", "Wi-Fi", "Hairdryer", "In-suite dining until midnight"], "description": "Spacious suites of about 40 m² with a private terrace and seating. Non-smoking." },
+        { "code": "FAMILY", "name": "Family Suite", "size_m2": 60, "max_occupancy": 3, "view": "Private terrace", "balcony": false, "cabin_count": 2, "amenities": ["Private terrace", "Connecting arrangement", "Full-size bathtub"], "description": "Two suites of about 60 m² with an extra room and connecting arrangements suited to families. Non-smoking." },
+        { "code": "EXEC", "name": "Executive Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 1, "amenities": ["Private terrace", "Living area", "Full-size bathtub"], "description": "A premium suite of about 60 m² with generous living space and a private terrace. Non-smoking." },
+        { "code": "ROYAL", "name": "Royal Suite", "size_m2": 60, "max_occupancy": 2, "view": "Private terrace", "balcony": false, "cabin_count": 1, "amenities": ["Private terrace", "Jacuzzi", "Living area"], "description": "The ship's Royal Suite, about 60 m², with its own Jacuzzi and a terrace. Non-smoking." }
       ],
       "itineraries": [
         {
@@ -689,15 +703,15 @@
       "name": "The Oberoi Zahra",
       "type": "motor",
       "cabin_count": 28,
-      "shared_spaces": ["dining_room", "lounge", "sun_deck"],
+      "shared_spaces": ["dining_room", "lounge", "sun_deck", "bar", "pool", "gym", "spa", "library"],
       "summary": "An ultra-luxury Oberoi cruiser with 28 cabins and suites, private heated whirlpools and a two-bedroom suite, Egyptologist-led sightseeing and three-, four- and seven-night cruises.",
       "description": "The Oberoi Zahra is an ultra-luxury Nile cruiser with spacious rooms, private terraces, premium hospitality and unhurried visits to the sites. With only 28 cabins and suites, it is a peaceful, personal way to see the temples and tombs of Upper Egypt, with professional Egyptologists, private docking and premium vehicles for sightseeing.\n\nLuxury Cabins measure about 26.4 m², with king or twin beds, a picture-frame Nile window and a rain shower with a view. Luxury Suites have 50 m² inside and a terrace with a heated whirlpool, about 115 m² in all, plus a lounge and private dining area. The two-bedroom Luxury Suite, about 92 m², sleeps four.\n\nOn board: a fine restaurant and lounge, a sun deck, relaxation areas, cultural presentations and Wi-Fi.",
       "source_urls": ["https://www.oberoihotels.com/nile-cruise-zahra/", "https://www.oberoihotels.com/nile-cruise-zahra/accommodation/", "https://www.oberoihotels.com/nile-cruise-zahra/itineraries/", "https://www.oberoihotels.com/nile-cruise-zahra/sailing-dates/"],
-      "verification_note": "The day-by-day itineraries were added to staging's existing test schedules ZLA4 and ZAL3, whose sailing days (Mon/Fri) and 100 departures were not set from Oberoi's dates. The two-bedroom suite sleeps 4 but cabins allow at most 3, so it was imported as 3. Seven-night and low-water itineraries not imported. Verify suite counts, departures, inclusions and cancellation terms. Staging also has a duplicate private record 'the-oberoi-zahra-luxury-nile-cruiser'.",
+      "verification_note": "The day-by-day itineraries were added to staging's existing test schedules ZLA4 and ZAL3, whose sailing days (Mon/Fri) and 100 departures were not set from Oberoi's dates. The two-bedroom suite sleeps 4 (Oberoi): cabins now allow 4, so set it to 4 in the admin, as the import only adds missing cabin types. Oberoi's deck plan (checked 5 November 2026) shows 25 Luxury Cabins and 2 Luxury Suites, 27, before the two-bedroom suite; Oberoi now says 28, so ask for its current plan and where that suite is. The plan also gives 72 × 14.4 m and shows a lift: add both, and mention the lift for guests with limited mobility. Seven-night and low-water itineraries not imported. Verify suite counts, departures, inclusions and cancellation terms. Staging also has a duplicate private record 'the-oberoi-zahra-luxury-nile-cruiser'.",
       "cabins": [
         { "code": "LC", "name": "Luxury Cabin", "size_m2": 26.4, "bed_configuration": "King or twin", "max_occupancy": 2, "view": "Picture-frame Nile window", "balcony": false, "amenities": ["Rain shower with a view", "Seating area", "Air conditioning", "Wi-Fi"], "description": "Cabins of about 26.4 m² with king or twin beds, a picture-frame Nile window and a rain shower with a view." },
         { "code": "LS", "name": "Luxury Suite", "size_m2": 50, "bed_configuration": "King", "max_occupancy": 2, "view": "Private terrace", "balcony": true, "amenities": ["Private terrace", "Heated whirlpool", "Separate lounge", "Private dining area", "Standalone bathtub", "Rain shower"], "description": "Suites with 50 m² inside and about 115 m² in all: a king bedroom, separate lounge, private dining area and an outdoor terrace with a heated whirlpool." },
-        { "code": "LS2", "name": "Luxury Suite with Two Bedrooms", "size_m2": 92, "max_occupancy": 3, "view": "Panoramic Nile views", "balcony": false, "amenities": ["Two bedrooms", "Living and dining areas"], "description": "About 92 m² with two bedrooms, living and dining areas and premium bathrooms. Sleeps four." }
+        { "code": "LS2", "name": "Luxury Suite with Two Bedrooms", "size_m2": 92, "max_occupancy": 4, "view": "Panoramic Nile views", "balcony": false, "amenities": ["Two bedrooms", "Living and dining areas"], "description": "About 92 m² with two bedrooms, living and dining areas and premium bathrooms. Sleeps four." }
       ],
       "itineraries": [
         {

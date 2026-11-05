@@ -1,0 +1,102 @@
+{
+  "vessel": "movenpick-sun-ray",
+  "source": "Mövenpick's MS Sunray fact sheet (2020, its general arrangement labels the suites on deck 4), with RiverCruise.com's matching 5-deck plan for the positions; redrawn by Nilecruz, each deck measured stern 0 to its own bow, deck lengths from the fact sheet's side-by-side plan. Neither image is published.",
+  "credit": "Mövenpick",
+  "checked_on": "2026-11-05",
+  "source_urls": [
+    "https://www.luxorandaswan.com/fact-sheet/movenpick-ms-sun-ray-nile-cruise.pdf",
+    "https://www.rivercruise.com/cruise_ship/MS_Sun_Ray.cfm",
+    "https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html"
+  ],
+  "uses_existing_cabin_types": ["CLASSIC", "UPPER", "JS", "SS"],
+  "corrections": {
+    "note": "Mövenpick's fact sheet: '66 spacious and elegantly designed cabins and suites': 60 outside cabins (20 m²), 2 single cabins (15 m²), 2 Junior Suites (37 m²), 2 Senior Suites (39 m²); 72 × 15 m. Its plan puts 8 rooms on deck 1, 22 on deck 2, 28 on deck 3 and 8 on deck 4 (Junior Suites 401–402 and Senior Suites 405–406 among them). Mövenpick's website lists nine bookable room products, including Superior, Deluxe and Executive Suites; those are sales names, not more suites. Correct these in the admin.",
+    "cabin_count": { "now": 62, "should_be": 66 },
+    "length_m": { "now": null, "should_be": 72 },
+    "beam_m": { "now": null, "should_be": 15 },
+    "cabin_types": [
+      "CLASSIC Classic Cabin: count 8, deck 1 (the plan's 101–108).",
+      "UPPER Upper-deck Cabin: count 52 (60 outside cabins less the 8 Classic), decks 2, 3 and 4; 20 m².",
+      "JS Junior Suite: count 2 stays; deck 4, forward (401, 402); 37 m².",
+      "SS: rename 'Superior Suite' to 'Senior Suite' (the fact sheet's name for 405 and 406); count 2; deck 4; 39 m².",
+      "DS Deluxe Suite and ES Executive Suite: not on the fact sheet, which counts only 4 suites; set inactive unless Mövenpick says otherwise.",
+      "Add SGL Single Cabin: count 2, 15 m², 1 guest. The plan doesn't mark which rooms, so it isn't drawn.",
+      "Replace 'To be confirmed' as the suites' deck with deck 4.",
+      "docs/imports/luxury-vessels.json now says 66 and lists these types, so re-running pnpm import:luxury-vessels sets 66 and adds SGL; it only adds missing cabin types, so the counts, the SS rename and DS/ES must still be edited in the admin."
+    ],
+    "texts": ["The summary says '54 cabins and four suite categories': say 66 cabins and suites, with Junior and Senior Suites."]
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "Sun",
+        "length": 96,
+        "bow": "square",
+        "areas": [
+          { "from": 9.5, "to": 75, "space": "sun_deck" },
+          { "from": 75, "to": 88.6, "space": "pool" },
+          { "from": 88.6, "to": 96, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "4",
+        "length": 91,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 10.9, "space": "open" },
+          { "from": 10.9, "to": 37.5, "space": "lounge" },
+          { "from": 37.5, "to": 42.2, "side": "port", "space": "library", "label": "Reading area" },
+          { "from": 37.5, "to": 42.2, "side": "starboard", "space": "lounge", "label": "TV room" },
+          { "from": 42.2, "to": 46.9, "side": "port", "cabin": "UPPER" },
+          { "from": 42.2, "to": 46.9, "side": "starboard", "cabin": "UPPER" },
+          { "from": 46.9, "to": 59.8, "space": "reception", "label": "Lobby" },
+          { "from": 59.8, "to": 66.4, "side": "port", "cabin": "SS" },
+          { "from": 59.8, "to": 66.4, "side": "starboard", "cabin": "SS" },
+          { "from": 66.4, "to": 73.4, "side": "port", "cabin": "UPPER" },
+          { "from": 66.4, "to": 73.4, "side": "starboard", "cabin": "UPPER" },
+          { "from": 73.4, "to": 82, "side": "port", "cabin": "JS" },
+          { "from": 73.4, "to": 82, "side": "starboard", "cabin": "JS" },
+          { "from": 82, "to": 91, "space": "crew" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 6, "to": 47.2, "side": "port", "cabin": "UPPER" },
+          { "from": 6, "to": 47.2, "side": "starboard", "cabin": "UPPER" },
+          { "from": 47.2, "to": 64.8, "space": "reception", "label": "Lobby" },
+          { "from": 64.8, "to": 87.6, "side": "port", "cabin": "UPPER" },
+          { "from": 64.8, "to": 87.6, "side": "starboard", "cabin": "UPPER" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.4, "to": 19.7, "space": "crew" },
+          { "from": 19.7, "to": 46.8, "side": "port", "cabin": "UPPER" },
+          { "from": 19.7, "to": 46.8, "side": "starboard", "cabin": "UPPER" },
+          { "from": 46.8, "to": 64.8, "space": "reception", "label": "Lobby" },
+          { "from": 64.8, "to": 87.6, "side": "port", "cabin": "UPPER" },
+          { "from": 64.8, "to": 87.6, "side": "starboard", "cabin": "UPPER" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 3, "to": 15.5, "space": "crew" },
+          { "from": 15.5, "to": 34.3, "space": "crew", "label": "Galley" },
+          { "from": 34.3, "to": 55.4, "space": "restaurant" },
+          { "from": 55.4, "to": 66.1, "space": "reception", "label": "Lobby" },
+          { "from": 66.1, "to": 83.3, "side": "port", "cabin": "CLASSIC" },
+          { "from": 66.1, "to": 83.3, "side": "starboard", "cabin": "CLASSIC" }
+        ]
+      }
+    ]
+  }
+}

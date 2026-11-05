@@ -55,7 +55,7 @@ const EN: Record<VesselType, TypeText> = {
   steam: {
     name: "Paddle steamer",
     short: "The period piece",
-    line: "One of a few historic steamers on the river, with 14 to 24 cabins and period interiors of wood and brass. Names to know: SS Sudan, SS Misr and SS Karim.",
+    line: "One of a few historic steamers on the river, with 14 to 24 cabins and period interiors of wood and brass. Names to know: the paddle steamers SS Sudan and SS Karim, and SS Misr, which is driven by propellers.",
     facts: ["14–24 cabins and suites", "Guest numbers vary by vessel", "Luxor–Aswan route", "Town quays and some quieter stops"],
     rows: {
       cabins: "14–24, including suites",
@@ -111,7 +111,7 @@ const ES: Record<VesselType, TypeText> = {
     ...EN.steam,
     name: "Vapor de ruedas",
     short: "La pieza de época",
-    line: "Uno de los pocos vapores históricos del río, con 14 a 24 camarotes e interiores de época en madera y latón. Nombres que conviene conocer: SS Sudan, SS Misr y SS Karim.",
+    line: "Uno de los pocos vapores históricos del río, con 14 a 24 camarotes e interiores de época en madera y latón. Nombres que conviene conocer: los vapores de ruedas SS Sudan y SS Karim, y el SS Misr, que se mueve con hélices.",
     facts: [
       "14–24 camarotes y suites",
       "El número de pasajeros varía según el barco",
@@ -170,7 +170,7 @@ const JA: Record<VesselType, TypeText> = {
     ...EN.steam,
     name: "外輪蒸気船",
     short: "時代を映す船",
-    line: "川に残る数少ない歴史的な蒸気船のひとつで、客室は14〜24室、木と真鍮を使った時代の内装です。代表的な船はSS Sudan、SS Misr、SS Karimです。",
+    line: "川に残る数少ない歴史的な蒸気船のひとつで、客室は14〜24室、木と真鍮を使った時代の内装です。代表的な船は外輪蒸気船のSS SudanとSS Karim、そしてスクリューで進むSS Misrです。",
     facts: [
       "客室・スイート14〜24室",
       "乗客数は船により異なります",

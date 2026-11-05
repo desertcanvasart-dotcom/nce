@@ -7,9 +7,157 @@ import { layoutProblems, parseLayout } from "@/lib/marketplace/deck-layout-schem
 const lily = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lily.json"), "utf8"),
 ).layout as unknown;
+const darakum = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-darakum.json"), "utf8"),
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number }[] } };
+const hamees = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-hamees.json"), "utf8"),
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number; max_occupancy: number }[] } };
+const abbas = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-prince-abbas.json"), "utf8"),
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number | null }[] } };
+const lotus = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-royal-lotus.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const sunRay = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-sun-ray.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const misr = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-ss-misr.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const moon = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-moon-goddess.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const george = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-st-george-i.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const star = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-star-goddess.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
+const sun = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-sun-goddess.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Sun Goddess's drawing with its existing codes: Family, Executive and Royal Suites forward on deck D", () => {
+    const layout = parseLayout(sun.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "D", "C", "B", "A"]);
+    expect(layoutProblems(sun.layout, sun.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "PRES")).toEqual(["D", "C"]);
+    for (const code of ["FAMILY", "EXEC", "ROYAL"]) expect(decksOf(layout, code)).toEqual(["D"]);
+  });
+
+  it("reads Star Goddess's drawing with its existing codes: Mozart aft on 4 and 3, Chopin forward on 4", () => {
+    const layout = parseLayout(star.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["4", "3", "2", "1"]);
+    expect(layoutProblems(star.layout, star.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "BEETHOVEN")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "MOZART")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "CHOPIN")).toEqual(["4"]);
+  });
+
+  it("reads St. George I's drawing with its existing codes: Presidential Suites on 3, Elite and Royal on 4", () => {
+    const layout = parseLayout(george.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
+    expect(layoutProblems(george.layout, george.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "DLX")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "PRES")).toEqual(["3"]);
+    expect(decksOf(layout, "ELITE")).toEqual(["4"]);
+    expect(decksOf(layout, "ROYAL")).toEqual(["4"]);
+    // Six Presidential Suites on deck 3, as Sonesta counts them.
+    expect(layout.decks[2]!.areas.filter((a) => a.cabin === "PRES")).toHaveLength(6);
+  });
+
+  it("reads Moon Goddess's drawing with its existing codes: Presidential Suites forward on decks 3 and 2", () => {
+    const layout = parseLayout(moon.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["4", "3", "2", "1"]);
+    expect(layoutProblems(moon.layout, moon.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "DLX")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "PRES")).toEqual(["3", "2"]);
+  });
+
+  it("reads SS Misr's drawing with its existing codes, where Mövenpick's numbered plan puts each category", () => {
+    const layout = parseLayout(misr.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2"]);
+    expect(layoutProblems(misr.layout, misr.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "OUT")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "STE")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "PAN")).toEqual(["3"]);
+    expect(decksOf(layout, "SGL")).toEqual(["2"]);
+  });
+
+  it("reads Sun Ray's drawing with its existing codes: Classic on deck 1, both suites on deck 4, not 'To be confirmed'", () => {
+    const layout = parseLayout(sunRay.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["Sun", "4", "3", "2", "1"]);
+    expect(layoutProblems(sunRay.layout, sunRay.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "CLASSIC")).toEqual(["1"]);
+    expect(decksOf(layout, "UPPER")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "JS")).toEqual(["4"]);
+    expect(decksOf(layout, "SS")).toEqual(["4"]);
+  });
+
+  it("reads Royal Lotus's drawing with the cabin types it already has: Deluxe on D, C and B, Royal Suites forward on B", () => {
+    const layout = parseLayout(lotus.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);
+    expect(layoutProblems(lotus.layout, lotus.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "STD")).toEqual(["D", "C", "B"]);
+    expect(decksOf(layout, "RS")).toEqual(["B"]);
+  });
+
+  it("reads Prince Abbas's drawing: six decks, suites forward, and no Standard Cabin count until Mövenpick gives one", () => {
+    const layout = parseLayout(abbas.layout)!;
+    const types = abbas.cabin_types_needed.types;
+    expect(layout.decks.map((d) => d.name)).toEqual(["6", "5", "4", "3", "2", "1"]);
+    expect(
+      layoutProblems(
+        abbas.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
+    expect(decksOf(layout, "RS")).toEqual(["3", "2"]);
+    expect(decksOf(layout, "JS")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "STD")).toEqual(["4", "3", "2"]);
+    expect(types.map((t) => [t.code, t.cabin_count])).toEqual([
+      ["RS", 4],
+      ["JS", 18],
+      ["STD", null],
+    ]);
+  });
+
+  it("reads Hamees's drawing: decks A to E, 72 cabins and 142 guests as Mövenpick's fact sheet gives, no suites", () => {
+    const layout = parseLayout(hamees.layout)!;
+    const types = hamees.cabin_types_needed.types;
+    expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);
+    expect(
+      layoutProblems(
+        hamees.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
+    expect(decksOf(layout, "SUP")).toEqual(["D", "C"]);
+    expect(decksOf(layout, "STD")).toEqual(["B", "A"]);
+    expect(decksOf(layout, "SGL")).toEqual(["B"]);
+    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(72);
+    expect(types.reduce((n, t) => n + t.cabin_count * t.max_occupancy, 0)).toBe(142);
+  });
+
+  it("reads Darakum's drawing: five decks, its three cabin types where the plan puts them, 52 cabins in all", () => {
+    const layout = parseLayout(darakum.layout)!;
+    const types = darakum.cabin_types_needed.types;
+    expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
+    expect(
+      layoutProblems(
+        darakum.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
+    expect(decksOf(layout, "STD")).toEqual(["3", "2", "1"]);
+    expect(decksOf(layout, "SS")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "PS")).toEqual(["3"]);
+    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(52);
+  });
+
   it("reads Royal Lily's drawing: five decks, top first, every cabin code known", () => {
     const layout = parseLayout(lily)!;
     expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);

@@ -74,7 +74,7 @@
     "vesselTypes": {
       "sail": "帆走ダハビヤ",
       "motor": "モータークルーズ船",
-      "steam": "外輪蒸気船"
+      "steam": "蒸気船"
     },
     "amenities": {
       "pool": "プール",
@@ -450,7 +450,7 @@
     "type": {
       "sail": "帆船ダハビヤ",
       "motor": "モータークルーズ船",
-      "steam": "外輪蒸気船"
+      "steam": "蒸気船"
     },
     "sampleData": "サンプルデータ",
     "crumbs": {
@@ -626,6 +626,16 @@
       "crew": "乗組員専用"
     },
     "deckLabels": {
+      "Lobby": "ロビー",
+      "Reception hall": "レセプションホール",
+      "Rear sun deck": "後方サンデッキ",
+      "Lower sun deck": "下層サンデッキ",
+      "Patio": "パティオ",
+      "TV room": "テレビルーム",
+      "Oriental sun deck": "オリエンタル・サンデッキ",
+      "Bar lounge": "バーラウンジ",
+      "Reading area": "読書コーナー",
+      "Playing area": "プレイエリア",
       "Bazaar": "バザール",
       "Sauna and massage": "サウナとマッサージ",
       "Reading and internet corner": "読書・インターネットコーナー",
@@ -846,7 +856,7 @@
       "steam": {
         "heading": "外輪蒸気船",
         "paragraphs": [
-          "数隻の歴史的な外輪蒸気船が、時代の様式に修復されて今も川を行き来しています。SS SudanとMövenpick SS Misrは、それぞれ客室とスイートが24室あり、SS Karimは14室で、一部のチャーター便で運航されています。ダハビヤより大きく、クルーズ船よりずっと小さな船で、景色によく合うゆったりしたペースで進みます。"
+          "数隻の歴史的な蒸気船が、時代の様式に修復されて今も川を行き来しています。SS SudanとSS Karimは外輪で、Mövenpick SS Misrはスクリューで進みます。SS SudanとSS Misrは、それぞれ客室とスイートが24室あり、SS Karimは14室で、一部のチャーター便で運航されています。ダハビヤより大きく、クルーズ船よりずっと小さな船で、景色によく合うゆったりしたペースで進みます。"
         ]
       }
     },

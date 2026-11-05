@@ -1,0 +1,129 @@
+{
+  "vessel": "movenpick-prince-abbas",
+  "source": "RiverCruise.com's Mövenpick MS Prince Abbas deck plan (6 decks, about 2011), redrawn by Nilecruz. Each deck is measured stern 0 to its own bow on its own drawing; the decks above the main deck are drawn shorter by estimate, as the plan draws every deck to the same height. The plan's image is not published: it belongs to the operator.",
+  "credit": "Mövenpick, via RiverCruise.com",
+  "checked_on": "2026-11-05",
+  "source_urls": [
+    "https://www.rivercruise.com/cruise_ship/Prince_Abbas.cfm",
+    "https://marketplace.trekksoft.com/en/activity/334741/m-s-prince-abbas",
+    "https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-prince-abbas.html"
+  ],
+  "corrections": {
+    "note": "Mövenpick's own pages give no cabin breakdown or deck count. The plan and Cruising Journal show 6 decks; the live page says 5. Mövenpick's page says the ship was inaugurated in 2001 (RiverCruise says built 1998).",
+    "deck_count": { "now": 5, "should_be": 6 },
+    "cabin_count": {
+      "now": 65,
+      "plan_shows": 74,
+      "note": "Keep 65 until Mövenpick confirms: the plan is about 2011 and shows 52 standard rooms, a booking listing gives 43. Both agree on 18 Junior Suites and 4 Royal Suites."
+    }
+  },
+  "cabin_types_needed": {
+    "note": "Prince Abbas has no cabin types yet. Add these in the admin before the drawing, with the same codes. Suite counts agree across the plan and the listing; the Standard Cabin count is left empty (43 or 52). Sizes are the booking listing's (about 225, 325 and 430 ft²), not Mövenpick's.",
+    "types": [
+      {
+        "code": "RS",
+        "name": "Royal Suite",
+        "cabin_count": 4,
+        "decks": "3 and 2, forward (Abu Simbel, Nefertari, Philae, Kalabsha)",
+        "size_m2": 40,
+        "max_occupancy": 2
+      },
+      {
+        "code": "JS",
+        "name": "Junior Suite",
+        "cabin_count": 18,
+        "decks": "4, 3 and 2",
+        "size_m2": 30,
+        "max_occupancy": 2
+      },
+      {
+        "code": "STD",
+        "name": "Standard Cabin",
+        "cabin_count": null,
+        "decks": "4, 3 and 2",
+        "size_m2": 21,
+        "max_occupancy": 2
+      }
+    ]
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "6",
+        "length": 80,
+        "bow": "square",
+        "areas": [
+          { "from": 1.4, "to": 22, "space": "pool", "label": "Pool and jacuzzi" },
+          { "from": 23, "to": 30.6, "space": "bar" },
+          { "from": 30.6, "to": 79.3, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "5",
+        "length": 85,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 16.4, "space": "sun_deck", "label": "Oriental sun deck" },
+          { "from": 16.4, "to": 39.4, "space": "restaurant" },
+          { "from": 39.4, "to": 81.3, "space": "lounge" }
+        ]
+      },
+      {
+        "name": "4",
+        "length": 90,
+        "bow": "square",
+        "areas": [
+          { "from": 3.9, "to": 15.8, "space": "lounge" },
+          { "from": 19.7, "to": 39.8, "side": "port", "cabin": "STD" },
+          { "from": 19.7, "to": 39.8, "side": "starboard", "cabin": "STD" },
+          { "from": 42.9, "to": 59.9, "side": "port", "cabin": "STD" },
+          { "from": 42.9, "to": 59.9, "side": "starboard", "cabin": "STD" },
+          { "from": 59.9, "to": 74.9, "side": "port", "cabin": "JS" },
+          { "from": 59.9, "to": 74.9, "side": "starboard", "cabin": "JS" },
+          { "from": 74.9, "to": 83.8, "space": "library" }
+        ]
+      },
+      {
+        "name": "3",
+        "length": 95,
+        "bow": "square",
+        "areas": [
+          { "from": 4.1, "to": 8.2, "side": "port", "cabin": "STD" },
+          { "from": 8.2, "to": 12.7, "side": "port", "space": "gym" },
+          { "from": 12.7, "to": 42.4, "side": "port", "cabin": "STD" },
+          { "from": 4.1, "to": 42.4, "side": "starboard", "cabin": "STD" },
+          { "from": 45.7, "to": 62.8, "side": "port", "cabin": "STD" },
+          { "from": 45.7, "to": 62.8, "side": "starboard", "cabin": "STD" },
+          { "from": 62.8, "to": 84.8, "side": "port", "cabin": "JS" },
+          { "from": 62.8, "to": 84.8, "side": "starboard", "cabin": "JS" },
+          { "from": 84.8, "to": 90.5, "side": "port", "cabin": "RS" },
+          { "from": 84.8, "to": 90.5, "side": "starboard", "cabin": "RS" }
+        ]
+      },
+      {
+        "name": "2",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 25.4, "to": 37.5, "side": "port", "cabin": "STD" },
+          { "from": 20.7, "to": 37.5, "side": "starboard", "cabin": "STD" },
+          { "from": 41, "to": 56.9, "space": "reception" },
+          { "from": 56.9, "to": 77.2, "side": "port", "cabin": "JS" },
+          { "from": 56.9, "to": 77.2, "side": "starboard", "cabin": "JS" },
+          { "from": 77.2, "to": 84.9, "side": "port", "cabin": "RS" },
+          { "from": 77.2, "to": 84.9, "side": "starboard", "cabin": "RS" }
+        ]
+      },
+      {
+        "name": "1",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 41.6, "space": "crew" },
+          { "from": 41.6, "to": 71.4, "space": "restaurant" },
+          { "from": 71.4, "to": 95, "space": "crew" }
+        ]
+      }
+    ]
+  }
+}

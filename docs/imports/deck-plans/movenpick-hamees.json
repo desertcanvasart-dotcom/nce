@@ -1,0 +1,120 @@
+{
+  "vessel": "movenpick-hamees",
+  "source": "Mövenpick's MS Hamees fact sheet (after the refit: decks A to E, 72 cabins, 72 × 14.80 m), with CruiseMapper's matching 5-deck plan for the positions; redrawn by Nilecruz, each deck measured stern 0 to the bow tip 100. Neither image is published.",
+  "credit": "Mövenpick",
+  "checked_on": "2026-11-05",
+  "source_urls": [
+    "https://www.luxorandaswan.com/fact-sheet/movenpick-ms-hamees-nile-cruise.pdf",
+    "https://www.cruisemapper.com/deckplans/Movenpick-MS-Hamees-963"
+  ],
+  "corrections": {
+    "note": "The live page says 66 cabins in six categories from Classic Cabins to Executive Suites with two bathrooms. Mövenpick's fact sheet says 72 cabins and no suites. Correct these in the admin.",
+    "cabin_count": { "now": 66, "should_be": 72 },
+    "max_guests": { "now": null, "should_be": 142, "why": "70 double cabins × 2 + 2 single cabins" },
+    "length_m": { "now": null, "should_be": 72 },
+    "beam_m": { "now": null, "should_be": 14.8 },
+    "deck_count": { "now": null, "should_be": 5 },
+    "texts": [
+      "Remove 'six accommodation categories, from Classic Cabins to Executive Suites' and 'with separate seating areas and two bathrooms': the ship has Standard, Superior and Single Cabins, and no suites.",
+      "'Lower-deck Classic Cabins use fixed portholes': Mövenpick says Standard Cabins have a panoramic window or two sealed windows, so say that instead."
+    ]
+  },
+  "cabin_types_needed": {
+    "note": "Hamees has no cabin types yet. Add these in the admin before the drawing, with the same codes. From the fact sheet: 70 cabins of 21.70 m², 2 singles of 15 m²; Standard on the lower and main decks, Superior on the upper and top decks.",
+    "types": [
+      {
+        "code": "SUP",
+        "name": "Superior Cabin",
+        "cabin_count": 54,
+        "decks": "D and C",
+        "size_m2": 21.7,
+        "bed_configuration": "Queen or twin",
+        "max_occupancy": 2
+      },
+      {
+        "code": "STD",
+        "name": "Standard Cabin",
+        "cabin_count": 16,
+        "decks": "B and A",
+        "size_m2": 21.7,
+        "bed_configuration": "Queen or twin",
+        "max_occupancy": 2
+      },
+      {
+        "code": "SGL",
+        "name": "Single Cabin",
+        "cabin_count": 2,
+        "decks": "B, forward",
+        "size_m2": 15,
+        "bed_configuration": "Single",
+        "max_occupancy": 1
+      }
+    ]
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "E",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.9, "to": 83.4, "space": "sun_deck" },
+          { "from": 83.4, "to": 88.3, "space": "pool" },
+          { "from": 88.3, "to": 95, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "D",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 5.6, "to": 49.1, "side": "port", "cabin": "SUP" },
+          { "from": 5.6, "to": 49.1, "side": "starboard", "cabin": "SUP" },
+          { "from": 49.1, "to": 63.4, "space": "shop", "label": "Bazaar" },
+          { "from": 63.4, "to": 83.2, "side": "port", "cabin": "SUP" },
+          { "from": 63.4, "to": 83.2, "side": "starboard", "cabin": "SUP" },
+          { "from": 87.9, "to": 100, "space": "crew" }
+        ]
+      },
+      {
+        "name": "C",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 2.6, "to": 48.7, "side": "port", "cabin": "SUP" },
+          { "from": 2.6, "to": 48.7, "side": "starboard", "cabin": "SUP" },
+          { "from": 48.7, "to": 63.4, "side": "port", "space": "lounge", "label": "Playing area" },
+          { "from": 48.7, "to": 63.4, "side": "starboard", "space": "library", "label": "Reading area" },
+          { "from": 63.4, "to": 87.3, "side": "port", "cabin": "SUP" },
+          { "from": 63.4, "to": 87.3, "side": "starboard", "cabin": "SUP" }
+        ]
+      },
+      {
+        "name": "B",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 19.8, "space": "crew" },
+          { "from": 19.8, "to": 49.1, "space": "bar", "label": "Bar lounge" },
+          { "from": 49.1, "to": 63.8, "space": "reception" },
+          { "from": 63.8, "to": 83.2, "side": "port", "cabin": "STD" },
+          { "from": 63.8, "to": 83.2, "side": "starboard", "cabin": "STD" },
+          { "from": 83.2, "to": 88.2, "side": "port", "cabin": "SGL" },
+          { "from": 83.2, "to": 88.2, "side": "starboard", "cabin": "SGL" }
+        ]
+      },
+      {
+        "name": "A",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 35.1, "space": "crew" },
+          { "from": 35.1, "to": 60.3, "space": "restaurant" },
+          { "from": 60.3, "to": 65.3, "space": "reception", "label": "Lobby" },
+          { "from": 65.3, "to": 85.8, "side": "port", "cabin": "STD" },
+          { "from": 65.3, "to": 85.8, "side": "starboard", "cabin": "STD" }
+        ]
+      }
+    ]
+  }
+}

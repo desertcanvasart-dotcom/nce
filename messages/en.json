@@ -73,7 +73,7 @@
     "vesselTypes": {
       "sail": "Sailing dahabiya",
       "motor": "Motor cruise ship",
-      "steam": "Paddle steamer"
+      "steam": "Steamer"
     },
     "amenities": {
       "pool": "Pool",
@@ -449,7 +449,7 @@
     "type": {
       "sail": "Sailing dahabiya",
       "motor": "Motor cruise ship",
-      "steam": "Paddle steamer"
+      "steam": "Steamer"
     },
     "sampleData": "Sample data",
     "crumbs": {
@@ -625,6 +625,16 @@
       "crew": "Crew only"
     },
     "deckLabels": {
+      "Lobby": "Lobby",
+      "Reception hall": "Reception hall",
+      "Rear sun deck": "Rear sun deck",
+      "Lower sun deck": "Lower sun deck",
+      "Patio": "Patio",
+      "TV room": "TV room",
+      "Oriental sun deck": "Oriental sun deck",
+      "Bar lounge": "Bar lounge",
+      "Reading area": "Reading area",
+      "Playing area": "Playing area",
       "Bazaar": "Bazaar",
       "Sauna and massage": "Sauna and massage",
       "Reading and internet corner": "Reading and internet corner",
@@ -845,7 +855,7 @@
       "steam": {
         "heading": "The paddle steamer",
         "paragraphs": [
-          "A few historic paddle steamers still work the river, restored in period style. SS Sudan and Mövenpick SS Misr each have 24 cabins and suites, while SS Karim has 14 and is offered on selected charter sailings. That makes them larger than a dahabiya and far smaller than a cruise ship, and they move at an unhurried pace that suits the scenery."
+          "A few historic steamers still work the river, restored in period style. SS Sudan and SS Karim turn paddle wheels; Mövenpick SS Misr is driven by propellers. SS Sudan and SS Misr each have 24 cabins and suites, while SS Karim has 14 and is offered on selected charter sailings. That makes them larger than a dahabiya and far smaller than a cruise ship, and they move at an unhurried pace that suits the scenery."
         ]
       }
     },
