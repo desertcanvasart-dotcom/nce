@@ -555,6 +555,11 @@
         "status": "confirmed"
       },
       "summary": "A 2020 dahabiya that pairs a traditional atmosphere with newer interiors, bright Panoramic Suites and generous deck space.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan or deck-by-deck description found on the operator's pages or elsewhere. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the Panoramic Suite windows (larger, or floor-to-ceiling)."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",

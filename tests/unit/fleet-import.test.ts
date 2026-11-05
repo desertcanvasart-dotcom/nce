@@ -66,6 +66,7 @@ describe("Nour El Nil fleet import", () => {
     expect(boat("adelaide").translations[0]!.on_board).toEqual(boat("agatha").translations[0]!.on_board);
     expect(boat("agatha").sharedSpaces).toEqual(["sun_deck", "lounge"]);
     expect(boat("adelaide")).toMatchObject({ cabinCount: 10, maxGuests: 24, lengthM: 55, beamM: 8 });
+    expect(boat("agatha")).toMatchObject({ cabinCount: 10, maxGuests: 20, yearBuilt: 2020, lengthM: 52, beamM: 8 });
   });
 
   it("merges the cabin defaults under each cabin type's own values", () => {
