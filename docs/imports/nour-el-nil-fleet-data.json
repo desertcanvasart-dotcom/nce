@@ -671,6 +671,11 @@
         "status": "confirmed"
       },
       "summary": "A classic 2008 dahabiya with compact cabins and a personal, traditional atmosphere.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the 2008 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
