@@ -721,6 +721,11 @@
         "status": "confirmed"
       },
       "summary": "The most traditional boat in the fleet, built in 2006, with the smallest published rooms and an emphasis on simplicity and intimacy.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found; the operator mentions only a top deck and a salon. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the Cabin's size and beds."
+      },
       "cabin_types": [
         {
           "type": "panoramic_room",
@@ -742,7 +747,8 @@
           "area_m2": null,
           "max_guests": 2,
           "sale_rule": "Only when the whole boat is privately chartered",
-          "display": false
+          "feature": "Available only when the whole boat is privately chartered.",
+          "source": "Operator's El Nil page lists 2 Panoramic Rooms, 7 Rooms and 1 Cabin (checked 5 November 2026). Size and beds not published."
         }
       ],
       "source_url": "https://www.nourelnil.com/boats-el-nil/",

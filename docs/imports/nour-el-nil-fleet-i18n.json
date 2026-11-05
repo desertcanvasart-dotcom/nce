@@ -153,6 +153,10 @@
     "room": {
       "name": { "es": "Habitación", "ja": "客室" },
       "beds": { "en": "2 twin beds or 1 king bed", "es": "2 camas individuales o 1 cama king", "ja": "シングルベッド2台またはキングベッド1台" }
+    },
+    "privatization_cabin": {
+      "name": { "es": "Camarote", "ja": "キャビン" },
+      "feature": { "es": "Solo disponible cuando se alquila el barco entero en privado.", "ja": "船全体を貸し切る場合のみ利用できます。" }
     }
   },
   "extras": {

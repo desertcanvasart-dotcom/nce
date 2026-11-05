@@ -82,11 +82,22 @@ describe("Nour El Nil fleet import", () => {
     ]);
   });
 
-  it("keeps El Nil's charter-only cabin out of the cards, though it counts as one of the 10 units", () => {
+  it("lists El Nil's tenth cabin with its charter-only rule, so the cards add up to the 10 units", () => {
     const elNil = boat("el-nil");
     expect(elNil.cabinCount).toBe(10);
-    expect(elNil.cabins.filter((c) => c.active).map((c) => c.code)).toEqual(["panoramic_room", "room"]);
-    expect(elNil.cabins.find((c) => c.code === "privatization_cabin")).toMatchObject({ active: false, translations: [] });
+    expect(elNil.cabins.map((c) => [c.code, c.active, c.cabin_count])).toEqual([
+      ["panoramic_room", true, 2],
+      ["room", true, 7],
+      ["privatization_cabin", true, 1],
+    ]);
+    const cabin = elNil.cabins.find((c) => c.code === "privatization_cabin")!;
+    // The operator publishes no size or beds for it, so none is shown.
+    expect(cabin).toMatchObject({ name: "Cabin", size_m2: null, bed_configuration: null });
+    expect(cabin.translations.map((t) => t.description)).toEqual([
+      "Available only when the whole boat is privately chartered.",
+      "Solo disponible cuando se alquila el barco entero en privado.",
+      "船全体を貸し切る場合のみ利用できます。",
+    ]);
   });
 
   it("shows a per-trip guide price where the data has one, and none for Dendera", () => {
