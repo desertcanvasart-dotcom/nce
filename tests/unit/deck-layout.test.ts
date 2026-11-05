@@ -13,9 +13,32 @@ const darakum = JSON.parse(
 const hamees = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-hamees.json"), "utf8"),
 ) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number; max_occupancy: number }[] } };
+const abbas = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-prince-abbas.json"), "utf8"),
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number | null }[] } };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
+  it("reads Prince Abbas's drawing: six decks, suites forward, and no Standard Cabin count until Mövenpick gives one", () => {
+    const layout = parseLayout(abbas.layout)!;
+    const types = abbas.cabin_types_needed.types;
+    expect(layout.decks.map((d) => d.name)).toEqual(["6", "5", "4", "3", "2", "1"]);
+    expect(
+      layoutProblems(
+        abbas.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
+    expect(decksOf(layout, "RS")).toEqual(["3", "2"]);
+    expect(decksOf(layout, "JS")).toEqual(["4", "3", "2"]);
+    expect(decksOf(layout, "STD")).toEqual(["4", "3", "2"]);
+    expect(types.map((t) => [t.code, t.cabin_count])).toEqual([
+      ["RS", 4],
+      ["JS", 18],
+      ["STD", null],
+    ]);
+  });
+
   it("reads Hamees's drawing: decks A to E, 72 cabins and 142 guests as Mövenpick's fact sheet gives, no suites", () => {
     const layout = parseLayout(hamees.layout)!;
     const types = hamees.cabin_types_needed.types;
