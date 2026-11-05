@@ -11,8 +11,8 @@
  *
  * With a target and no --apply, it reads that database and reports ship by ship; nothing is written.
  * Every --apply first saves the affected rows to .import-backups/ (git-ignored), then writes.
- * Visibility is never changed and no departures are created: weekly days are the usual pattern only, and
- * tailor-made or dated ships are imported with their itineraries inactive.
+ * Visibility is never changed. Weekly days are the usual pattern only, so no departures are made from them; an
+ * itinerary given its published dates (departures) is date-only, and those dates after today are added as departures.
  * The ship's name, type, category, cabins and year are set on every run; shared spaces and source links are
  * merged with what is there, and the note is appended. Texts, cabin types, itineraries and days are only added
  * when missing, so existing and admin-edited content survives.
@@ -50,6 +50,11 @@ type Itinerary = {
   sailing_days: number[];
   active: boolean;
   days: { title: string; description: string }[];
+  /**
+   * The operator's published departure dates (yyyy-mm-dd), for a ship that sails on dates rather than weekdays: the
+   * itinerary becomes date-only (no weekdays) and active, and its dates after today are added as departures.
+   */
+  departures?: string[];
 };
 type Vessel = {
   slug: string;
@@ -91,7 +96,12 @@ function problemsOf(v: Vessel): string[] {
   for (const it of v.itineraries) {
     if (!CODE.test(it.code)) p.push(`${v.slug}/${it.code}: bad itinerary code`);
     if (it.days.length !== it.nights + 1) p.push(`${v.slug}/${it.code}: ${it.days.length} days for ${it.nights} nights`);
-    if (!it.sailing_days.length || it.sailing_days.some((d) => d < 1 || d > 7)) p.push(`${v.slug}/${it.code}: bad sailing days`);
+    if (it.departures) {
+      if (it.sailing_days.length) p.push(`${v.slug}/${it.code}: dated itineraries have no weekdays`);
+      if (it.departures.some((d) => !/^\d{4}-\d{2}-\d{2}$/.test(d) || Number.isNaN(Date.parse(d))))
+        p.push(`${v.slug}/${it.code}: bad departure date`);
+    } else if (!it.sailing_days.length || it.sailing_days.some((d) => d < 1 || d > 7))
+      p.push(`${v.slug}/${it.code}: bad sailing days`);
     for (const d of it.days)
       if (d.title.length > 160 || d.description.length > 4000) p.push(`${v.slug}/${it.code}: day text too long`);
   }
@@ -354,9 +364,35 @@ async function run() {
       ),
       `${v.slug}: days`,
     );
-    console.log(`✓ ${v.name}: ${v.cabins.length} cabin types, ${v.itineraries.length} itineraries`);
+    // Published dates: the itinerary sails on them only, so it loses any weekdays and is shown; dates are added once.
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+    let added = 0;
+    for (const it of v.itineraries.filter((x) => x.departures)) {
+      const scheduleId = scheduleIds.find((s) => s.code === it.code)!.id;
+      must(
+        await db.from("schedules").update({ sailing_days: [], active: true }).eq("id", scheduleId),
+        `${v.slug}/${it.code}: dated`,
+      );
+      const rows = it
+        .departures!.filter((d) => d > today)
+        .map((d) => ({
+          schedule_id: scheduleId,
+          vessel_id: id,
+          departs_on: d,
+          returns_on: new Date(Date.parse(`${d}T00:00:00Z`) + it.nights * 86_400_000).toISOString().slice(0, 10),
+        }));
+      if (rows.length)
+        must(
+          await db.from("departures").upsert(rows, { onConflict: "schedule_id,departs_on", ignoreDuplicates: true }),
+          `${v.slug}/${it.code}: departures`,
+        );
+      added += rows.length;
+    }
+    console.log(
+      `✓ ${v.name}: ${v.cabins.length} cabin types, ${v.itineraries.length} itineraries${added ? `, ${added} published dates` : ""}`,
+    );
   }
-  console.log(`Done: ${vessels.length} ships in ${target}. Visibility unchanged; no departures created.`);
+  console.log(`Done: ${vessels.length} ships in ${target}. Visibility unchanged.`);
   await refreshSite(target!);
 }
 
