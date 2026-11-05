@@ -74,7 +74,7 @@
     "vesselTypes": {
       "sail": "帆走ダハビヤ",
       "motor": "モータークルーズ船",
-      "steam": "外輪蒸気船"
+      "steam": "蒸気船"
     },
     "amenities": {
       "pool": "プール",
@@ -449,7 +449,7 @@
     "type": {
       "sail": "帆船ダハビヤ",
       "motor": "モータークルーズ船",
-      "steam": "外輪蒸気船"
+      "steam": "蒸気船"
     },
     "sampleData": "サンプルデータ",
     "crumbs": {

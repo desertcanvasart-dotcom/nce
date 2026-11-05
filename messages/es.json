@@ -74,7 +74,7 @@
     "vesselTypes": {
       "sail": "Dahabiya de vela",
       "motor": "Crucero a motor",
-      "steam": "Vapor de ruedas"
+      "steam": "Vapor"
     },
     "amenities": {
       "pool": "Piscina",
@@ -449,7 +449,7 @@
     "type": {
       "sail": "Dahabiya de vela",
       "motor": "Crucero a motor",
-      "steam": "Barco de vapor de ruedas"
+      "steam": "Barco de vapor"
     },
     "sampleData": "Datos de ejemplo",
     "crumbs": {

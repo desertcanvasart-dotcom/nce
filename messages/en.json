@@ -73,7 +73,7 @@
     "vesselTypes": {
       "sail": "Sailing dahabiya",
       "motor": "Motor cruise ship",
-      "steam": "Paddle steamer"
+      "steam": "Steamer"
     },
     "amenities": {
       "pool": "Pool",
@@ -448,7 +448,7 @@
     "type": {
       "sail": "Sailing dahabiya",
       "motor": "Motor cruise ship",
-      "steam": "Paddle steamer"
+      "steam": "Steamer"
     },
     "sampleData": "Sample data",
     "crumbs": {
