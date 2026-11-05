@@ -28,6 +28,8 @@ export type CruiseCardProps = {
   rating?: { value: number; count: number };
   /** Public "from" price per person (ADR-025). Leave out for information-only listings. */
   price?: Money;
+  /** An information-only vessel's indicative price per person for the headline cruise: a guide, never a "from" price. */
+  indicativePrice?: Money;
   /** Five or fewer, the ones that differ. Each is labelled for screen readers. */
   amenities?: IconName[];
   badges?: { label: string; tone?: BadgeProps["tone"]; icon?: IconName }[];
@@ -115,6 +117,11 @@ export function CruiseCard(p: CruiseCardProps) {
             <div className={styles.price}>
               <small>{t("cruiseCard.fromPerPerson")}</small>
               <b>{formatMoney(p.price, locale)}</b>
+            </div>
+          ) : p.indicativePrice ? (
+            <div className={styles.price}>
+              <small>{t("cruiseCard.indicativePerPerson")}</small>
+              <b>{formatMoney(p.indicativePrice, locale)}</b>
             </div>
           ) : (
             <div className={styles.price}>

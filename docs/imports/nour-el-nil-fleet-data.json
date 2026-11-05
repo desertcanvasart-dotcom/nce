@@ -274,22 +274,32 @@
         "note": "Owner-confirmed. November booking results showed Tuesdays, and the operator's email omits Dendera."
       },
       "summary": "Nour El Nil's newest dahabiya, built in 2026, with generous decks and panoramic suites that have 180-degree river views.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found on the operator's pages or elsewhere, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2026 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
           "area_m2": 24.5,
-          "count": null,
+          "count": 2,
           "extra": "180-degree Nile view"
         },
         {
           "type": "luxury_room",
           "area_m2": 15.85,
-          "count": null
+          "count": 8
         }
       ],
       "source_url": "https://www.nourelnil.com/boats/dendera/",
       "rates_status": "missing",
-      "cabin_count_status": "missing",
+      "cabin_count_source": {
+        "value": "2 Panoramic Suites and 8 Luxury Rooms",
+        "source": "https://www.nourelnil.com/boats/dendera/",
+        "checked_on": "2026-11-05",
+        "status": "confirmed"
+      },
       "indicative_price": null
     },
     {
@@ -318,6 +328,11 @@
         "status": "confirmed"
       },
       "summary": "A 2025 dahabiya with spacious cabins and generous decks. Its Panoramic and Deluxe Suites are the largest of their kind in the fleet.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2025 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -374,6 +389,11 @@
         "status": "confirmed"
       },
       "summary": "An airy 2024 dahabiya with wide decks, Deluxe Suites for families or friends, and Panoramic Suites with broad river views.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the 2024 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -391,7 +411,12 @@
           "type": "luxury_room",
           "area_m2": 17.15,
           "count": 6,
-          "rate_eur_regular_season": 6500
+          "rate_eur_regular_season": 6500,
+          "beds": [
+            "1 king"
+          ],
+          "beds_as": "panoramic_suite",
+          "beds_source": "Operator's Poppee page lists the Luxury Rooms with 1 King Bed only (checked 5 November 2026)"
         }
       ],
       "source_url": "https://www.nourelnil.com/boats/poppee/",
@@ -430,6 +455,11 @@
         "status": "confirmed"
       },
       "summary": "A contemporary 2023 dahabiya with bright interiors, a broad deck and three cabin categories, including two-room Deluxe Suites.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam, the 2023 build year and the Deluxe Suite bed options."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -486,6 +516,19 @@
         "status": "confirmed"
       },
       "summary": "A modern 2020 dahabiya with flowing shared spaces, wide decks and a light interior.",
+      "on_board": {
+        "shared_spaces": [
+          "Top deck",
+          "Salon",
+          "Library"
+        ],
+        "shared_spaces_source": "QuirkyCruise review, December 2022: a covered lounge on the top deck, and a salon and library on the cabin deck. No deck plan has been published; ask Nour El Nil for one."
+      },
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found on the operator's pages or elsewhere. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -542,6 +585,11 @@
         "status": "confirmed"
       },
       "summary": "A 2020 dahabiya that pairs a traditional atmosphere with newer interiors, bright Panoramic Suites and generous deck space.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan or deck-by-deck description found on the operator's pages or elsewhere. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the Panoramic Suite windows (larger, or floor-to-ceiling)."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -592,6 +640,11 @@
         "status": "confirmed"
       },
       "summary": "A 2017 dahabiya that sits between the fleet's older and newer boats, with larger cabins and a traditional atmosphere.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the 2017 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -643,6 +696,11 @@
         "status": "confirmed"
       },
       "summary": "A classic 2008 dahabiya with compact cabins and a personal, traditional atmosphere.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found, and the operator lists no public areas. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the 2008 build year."
+      },
       "cabin_types": [
         {
           "type": "panoramic_suite",
@@ -693,6 +751,11 @@
         "status": "confirmed"
       },
       "summary": "The most traditional boat in the fleet, built in 2006, with the smallest published rooms and an emphasis on simplicity and intimacy.",
+      "deck_plan": {
+        "value": null,
+        "status": "needs_confirmation",
+        "note": "Checked 5 November 2026: no deck plan found; the operator mentions only a top deck and a salon. Ask Nour El Nil for the current plan, with the decks, each cabin's location and the public areas, and confirm the length and beam and the Cabin's size and beds."
+      },
       "cabin_types": [
         {
           "type": "panoramic_room",
@@ -714,7 +777,8 @@
           "area_m2": null,
           "max_guests": 2,
           "sale_rule": "Only when the whole boat is privately chartered",
-          "display": false
+          "feature": "Available only when the whole boat is privately chartered.",
+          "source": "Operator's El Nil page lists 2 Panoramic Rooms, 7 Rooms and 1 Cabin (checked 5 November 2026). Size and beds not published."
         }
       ],
       "source_url": "https://www.nourelnil.com/boats-el-nil/",

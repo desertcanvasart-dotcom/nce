@@ -28,6 +28,7 @@ const SPACES: Record<string, string> = {
   Bar: "bar",
   "Dining salon": "dining_room",
   "Dining room": "dining_room",
+  Library: "library",
 };
 const ISO_DAY: Record<string, number> = {
   Monday: 1,
@@ -164,7 +165,14 @@ export function shown(x: unknown): boolean {
 const valueOf = <T>(x: unknown): T | null => (shown(x) && isObj(x) && "value" in x ? (x.value as T) : null);
 
 /** Defaults first, then the vessel's own values (a whole field replaces the default's). */
-export const withDefaults = (defaults: Json, own: Json): Json => ({ ...defaults, ...own });
+/** A vessel's own values over the defaults; an object in both (on_board, inclusions) is merged one level down. */
+export const withDefaults = (defaults: Json, own: Json): Json =>
+  Object.fromEntries(
+    Object.entries({ ...defaults, ...own }).map(([k, v]) => [
+      k,
+      isObj(v) && isObj(defaults[k]) && k in own ? { ...(defaults[k] as Json), ...v } : v,
+    ]),
+  );
 
 /** Every path under a vessel that the display rule hides, with why. */
 export function hiddenPaths(x: unknown, path = ""): string[] {
@@ -328,6 +336,9 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
     const cabins: CabinPlan[] = cabinsIn.map((raw, i) => {
       const c = withDefaults(file.cabin_type_defaults[String(raw.type)] ?? {}, raw);
       const words = i18n.cabin_types[String(c.type)] ?? {};
+      // A boat whose rooms differ from the type's usual beds names the type whose bed wording it shares (beds_as).
+      const beds = i18n.cabin_types[String(c.beds_as ?? c.type)]?.beds;
+      if (c.beds_as !== undefined && !beds) bad(`cabin ${String(c.type)}: no bed words for beds_as ${String(c.beds_as)}`);
       const active = c.display !== false;
       const extra = text(c.extra);
       const feature = text(c.feature);
@@ -349,7 +360,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
         name: String(c.name),
         active,
         size_m2: typeof c.area_m2 === "number" ? c.area_m2 : null,
-        bed_configuration: active ? (words.beds?.en ?? null) : null,
+        bed_configuration: active ? (beds?.en ?? null) : null,
         max_occupancy: maxGuests,
         view: extra,
         cabin_count: typeof c.count === "number" ? c.count : null,
@@ -359,7 +370,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
               locale: l,
               name: l === "en" ? null : (words.name?.[l] ?? null),
               description: note(l),
-              bed_configuration: l === "en" ? null : (words.beds?.[l] ?? null),
+              bed_configuration: l === "en" ? null : (beds?.[l] ?? null),
               view: l === "en" || !extra ? null : (i18n.extras[extra]?.[l] ?? null),
             }))
           : [],
