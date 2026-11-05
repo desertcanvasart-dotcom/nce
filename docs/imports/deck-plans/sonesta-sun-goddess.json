@@ -1,0 +1,78 @@
+{
+  "vessel": "sonesta-sun-goddess",
+  "source": "Sonesta Sun Goddess general arrangement (via LiveAboard; decks A to D and the sun deck, with room numbers), redrawn by Nilecruz: all five decks on one drawing, measured stern 0 to the bow 100.",
+  "credit": "Sonesta",
+  "checked_on": "2026-11-05",
+  "source_urls": [
+    "https://www.liveaboard.com/river-cruise/nile/sun-goddess",
+    "https://www.luxorandaswan.com/fact-sheet/sun-goddess-nile-cruise.pdf"
+  ],
+  "uses_existing_cabin_types": ["PRES", "FAMILY", "EXEC", "ROYAL"],
+  "to_confirm": {
+    "note": "The plan numbers 32 rooms; Sonesta says 30 suites. On deck D, 405 and 404 are narrow rooms marked 'Family' beside 403 and 402: each Family Suite (60 m²) is drawn as one of those pairs, which makes 26 Presidential (16 on C, 10 on D), 2 Family, 1 Executive (400) and 1 Royal (401): 30. Ask Sonesta to confirm the pairs and the Family Suite's guests (3 on the page). The fact sheet gives 77 × 13.4 m, height 11 m, draft 1.5 m, built 2020: add the dimensions."
+  },
+  "layout": {
+    "decks": [
+      {
+        "name": "5",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.7, "to": 14.7, "space": "sun_deck" },
+          { "from": 14.7, "to": 34.3, "space": "pool" },
+          { "from": 34.3, "to": 85, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "D",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.7, "to": 36.4, "side": "port", "cabin": "PRES" },
+          { "from": 0.7, "to": 36.4, "side": "starboard", "cabin": "PRES" },
+          { "from": 36.4, "to": 49, "space": "reception", "label": "Lobby" },
+          { "from": 49, "to": 57.3, "side": "port", "cabin": "PRES" },
+          { "from": 49, "to": 57.3, "side": "starboard", "cabin": "PRES" },
+          { "from": 57.3, "to": 70.6, "side": "port", "cabin": "FAMILY" },
+          { "from": 57.3, "to": 70.6, "side": "starboard", "cabin": "FAMILY" },
+          { "from": 70.6, "to": 81.8, "side": "port", "cabin": "ROYAL" },
+          { "from": 70.6, "to": 81.8, "side": "starboard", "cabin": "EXEC" }
+        ]
+      },
+      {
+        "name": "C",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.7, "to": 36.4, "side": "port", "cabin": "PRES" },
+          { "from": 0.7, "to": 36.4, "side": "starboard", "cabin": "PRES" },
+          { "from": 36.4, "to": 48.3, "space": "reception", "label": "Lobby" },
+          { "from": 48.3, "to": 82.5, "side": "port", "cabin": "PRES" },
+          { "from": 48.3, "to": 82.5, "side": "starboard", "cabin": "PRES" }
+        ]
+      },
+      {
+        "name": "B",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0.7, "to": 32.9, "space": "crew" },
+          { "from": 32.9, "to": 49.7, "space": "reception" },
+          { "from": 49.7, "to": 74.8, "space": "lounge" },
+          { "from": 74.8, "to": 81.8, "space": "crew" }
+        ]
+      },
+      {
+        "name": "A",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 28.7, "space": "crew" },
+          { "from": 28.7, "to": 39.9, "space": "crew", "label": "Galley" },
+          { "from": 39.9, "to": 48.9, "space": "reception", "label": "Lobby" },
+          { "from": 48.9, "to": 74.8, "space": "restaurant" }
+        ]
+      }
+    ]
+  }
+}
