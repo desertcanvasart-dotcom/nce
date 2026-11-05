@@ -21,20 +21,26 @@ const intOrEmpty = (min: number, max: number) =>
     .trim()
     .refine((v) => v === "" || (/^\d+$/.test(v) && Number(v) >= min && Number(v) <= max), `a whole number from ${min} to ${max}`);
 
-const proposalInput = z.object({
-  name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),
-  type: z.enum(["sail", "motor", "steam"], { message: "choose a type" }),
-  route_text: z.string().trim().max(200, "at most 200 characters"),
-  cabin_count: intOrEmpty(1, 400),
-  max_guests: intOrEmpty(1, 800),
-  deck_count: intOrEmpty(1, 10),
-  year_built: intOrEmpty(1850, 2100),
-  mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))], { message: "choose how the vessel moors" }),
-  shared_spaces: z
-    .string()
-    .refine((v) => v === "" || v.split(",").every((x) => SHARED_SPACES.some((s) => s.value === x)), "choose from the list"),
-  description_en: z.string().trim().max(4000, "at most 4,000 characters"),
-});
+const proposalInput = z
+  .object({
+    name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),
+    type: z.enum(["sail", "motor", "steam"], { message: "choose a type" }),
+    route_text: z.string().trim().max(200, "at most 200 characters"),
+    cabin_count: intOrEmpty(1, 400),
+    max_guests: intOrEmpty(1, 800),
+    deck_count: intOrEmpty(1, 10),
+    year_built: intOrEmpty(1850, 2100),
+    year_renovated: intOrEmpty(1850, 2100),
+    mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))], { message: "choose how the vessel moors" }),
+    shared_spaces: z
+      .string()
+      .refine((v) => v === "" || v.split(",").every((x) => SHARED_SPACES.some((s) => s.value === x)), "choose from the list"),
+    description_en: z.string().trim().max(4000, "at most 4,000 characters"),
+  })
+  .refine((v) => v.year_renovated === "" || v.year_built === "" || Number(v.year_renovated) >= Number(v.year_built), {
+    message: "can't be before the year built",
+    path: ["year_renovated"],
+  });
 const LABELS = Object.fromEntries(PROPOSAL_FIELDS.map((f) => [f.key, f.label]));
 
 export async function startSubmission(
@@ -50,7 +56,7 @@ export async function startSubmission(
     const { data: v } = await db
       .from("vessels")
       .select(
-        "name, type, route_text, cabin_count, max_guests, deck_count, year_built, mooring, shared_spaces, operator_org_id, vessel_translations(locale, description)",
+        "name, type, route_text, cabin_count, max_guests, deck_count, year_built, year_renovated, mooring, shared_spaces, operator_org_id, vessel_translations(locale, description)",
       )
       .eq("id", vesselId)
       .maybeSingle();
@@ -63,6 +69,7 @@ export async function startSubmission(
       max_guests: v.max_guests?.toString() ?? "",
       deck_count: v.deck_count?.toString() ?? "",
       year_built: v.year_built?.toString() ?? "",
+      year_renovated: v.year_renovated?.toString() ?? "",
       mooring: v.mooring ?? "",
       shared_spaces: v.shared_spaces.join(","),
       description_en: v.vessel_translations.find((t) => t.locale === "en")?.description ?? "",

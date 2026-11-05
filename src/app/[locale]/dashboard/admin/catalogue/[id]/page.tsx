@@ -196,6 +196,13 @@ export default async function VesselEditor({ params, searchParams }: Props) {
               <Input label="Guests" name="max_guests" inputMode="numeric" defaultValue={v.max_guests} />
               <Input label="Decks" name="deck_count" inputMode="numeric" defaultValue={v.deck_count} />
               <Input label="Year built" name="year_built" inputMode="numeric" defaultValue={v.year_built} />
+              <Input
+                label="Year last renovated"
+                name="year_renovated"
+                inputMode="numeric"
+                defaultValue={v.year_renovated}
+                hint="Renovated, refurbished or rebuilt. Leave empty if never, or not known."
+              />
               <Select
                 label="Operator"
                 name="operator_org_id"

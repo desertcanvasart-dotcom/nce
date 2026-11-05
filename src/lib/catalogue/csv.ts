@@ -16,15 +16,17 @@ export const CSV_COLUMNS = [
   "max_guests",
   "deck_count",
   "year_built",
+  "year_renovated",
   "description_en",
 ] as const;
 type Column = (typeof CSV_COLUMNS)[number];
+const OPTIONAL_COLUMNS: readonly Column[] = ["year_renovated"];
 
 export const CSV_TEMPLATE =
   CSV_COLUMNS.join(",") +
   "\n" +
   // One example row, marked as an example so it can't be imported by mistake.
-  '"EXAMPLE-1","EXAMPLE – delete this row","sail","Esna–Aswan","luxury","6","12","2","2019","Two or three sentences about the vessel."\n';
+  '"EXAMPLE-1","EXAMPLE – delete this row","sail","Esna–Aswan","luxury","6","12","2","2019","2023","Two or three sentences about the vessel."\n';
 
 export type ImportRow = {
   line: number;
@@ -41,6 +43,7 @@ export type ImportRow = {
     max_guests: number | null;
     deck_count: number | null;
     year_built: number | null;
+    year_renovated: number | null;
     description_en: string | null;
   };
 };
@@ -72,7 +75,8 @@ export function parseVesselCsv(
     transformHeader: (h) => h.trim(),
   });
   const headers = parsed.meta.fields ?? [];
-  const missing = CSV_COLUMNS.filter((c) => !headers.includes(c));
+  // year_renovated came later: files made from the older template, without it, still import.
+  const missing = CSV_COLUMNS.filter((c) => !headers.includes(c) && !OPTIONAL_COLUMNS.includes(c));
   if (missing.length) fileErrors.push(`Missing columns: ${missing.join(", ")}. Use the template.`);
   const extra = headers.filter((h) => !(CSV_COLUMNS as readonly string[]).includes(h));
   if (extra.length) fileErrors.push(`Unknown columns: ${extra.join(", ")}. This import covers vessel profiles only.`);
@@ -102,6 +106,9 @@ export function parseVesselCsv(
     const max_guests = int(get("max_guests"), "Guest capacity", 1, 800, msgs);
     const deck_count = int(get("deck_count"), "Deck count", 1, 10, msgs);
     const year_built = int(get("year_built"), "Year built", 1850, 2100, msgs);
+    const year_renovated = int(get("year_renovated"), "Year last renovated", 1850, 2100, msgs);
+    if (year_built !== null && year_renovated !== null && year_renovated < year_built)
+      msgs.push("The year last renovated is before the year built.");
     const description = get("description_en");
     if (description.length > 4000) msgs.push("The description is longer than 4,000 characters.");
     if (msgs.length) return { line, status: "error", messages: msgs };
@@ -142,6 +149,7 @@ export function parseVesselCsv(
         max_guests,
         deck_count,
         year_built,
+        year_renovated,
         description_en: description || null,
       },
     };

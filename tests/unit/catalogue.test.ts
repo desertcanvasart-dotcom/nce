@@ -133,6 +133,19 @@ describe("vessel CSV import (DASH-ADM-020–025)", () => {
       /Type must be.*Category must be.*Cabin count.*Guest capacity.*Deck count.*Year built/s,
     );
   });
+  it("takes the year last renovated, never before the year built; files from the older template still import", () => {
+    const withRenovated =
+      "source_ref,name,type,route,category,cabin_count,max_guests,deck_count,year_built,year_renovated,description_en\n";
+    const ok = parseVesselCsv(withRenovated + "R1,A,motor,,,,,,2001,2018,\n", none).rows[0]!;
+    expect(ok).toMatchObject({ status: "ok", vessel: { year_built: 2001, year_renovated: 2018 } });
+    const early = parseVesselCsv(withRenovated + "R1,A,motor,,,,,,2001,1999,\n", none).rows[0]!;
+    expect(early.messages.join(" ")).toMatch(/renovated is before the year built/);
+    // The older template has no year_renovated column at all.
+    expect(parseVesselCsv(head + "R1,A,motor,,,,,,2001,\n", none)).toMatchObject({
+      fileErrors: [],
+      rows: [{ status: "ok", vessel: { year_built: 2001, year_renovated: null } }],
+    });
+  });
   it("skips duplicates of the catalogue and within the file, without touching existing records", () => {
     const existing = { sourceRefs: new Set(["r1"]), names: new Set(["kept vessel"]), slugs: new Set<string>() };
     const { rows } = parseVesselCsv(

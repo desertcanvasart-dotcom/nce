@@ -494,6 +494,7 @@
       "scoreValue": "{score}/100",
       "guests": "最大乗船人数",
       "built": "建造年",
+      "renovated": "改装年",
       "ask": "見積もりを依頼",
       "seeIncluded": "料金に含まれるもの",
       "seePrices": "料金と日程を見る",

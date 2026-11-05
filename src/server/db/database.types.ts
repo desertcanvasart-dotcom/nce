@@ -4539,6 +4539,7 @@ export type Database = {
           updated_at: string;
           visibility: Database["public"]["Enums"]["visibility"];
           year_built: number | null;
+          year_renovated: number | null;
         };
         Insert: {
           beam_m?: number | null;
@@ -4577,6 +4578,7 @@ export type Database = {
           updated_at?: string;
           visibility?: Database["public"]["Enums"]["visibility"];
           year_built?: number | null;
+          year_renovated?: number | null;
         };
         Update: {
           beam_m?: number | null;
@@ -4615,6 +4617,7 @@ export type Database = {
           updated_at?: string;
           visibility?: Database["public"]["Enums"]["visibility"];
           year_built?: number | null;
+          year_renovated?: number | null;
         };
         Relationships: [
           {

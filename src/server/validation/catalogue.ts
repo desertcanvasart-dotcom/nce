@@ -17,6 +17,7 @@ export const vesselFacts = z.object({
   max_guests: count(800),
   deck_count: count(10),
   year_built: z.number().int().min(1850).max(2100).nullable().optional(),
+  year_renovated: z.number().int().min(1850).max(2100).nullable().optional(),
   route_text: optionalText(200),
 });
 

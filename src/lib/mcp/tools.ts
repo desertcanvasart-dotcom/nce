@@ -106,6 +106,7 @@ function facts(v: VesselPage, site: string) {
     cabins: v.cabinCount,
     decks: v.deckCount,
     year_built: v.yearBuilt,
+    year_renovated: v.yearRenovated,
     summary: v.summary,
     evaluation: v.evaluation
       ? {
