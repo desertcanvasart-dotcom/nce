@@ -642,7 +642,12 @@
       "Sauna and massage": "サウナとマッサージ",
       "Reading and internet corner": "読書・インターネットコーナー",
       "Pool and jacuzzi": "プールとジャグジー",
-      "Galley": "厨房"
+      "Galley": "厨房",
+      "Foyer": "ロビー",
+      "Library and cigar lounge": "図書室とシガーラウンジ",
+      "Theatre": "シアター",
+      "Massage suites": "マッサージルーム",
+      "Wheelhouse": "操舵室"
     },
     "evaluation": {
       "title": "Nilecruzの評価",
