@@ -152,6 +152,7 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
         cabin_count: v.cabinCount,
         max_guests: v.maxGuests,
         year_built: v.yearBuilt,
+        year_renovated: v.yearRenovated,
         length_m: v.lengthM,
         beam_m: v.beamM,
         deck_count: null,

@@ -159,6 +159,8 @@ export type VesselPage = {
   mooring: Mooring | null;
   sharedSpaces: string[];
   yearBuilt: number | null;
+  /** The latest renovation, refurbishment or rebuild. */
+  yearRenovated: number | null;
   sample: boolean;
   showcase: boolean;
   summary: string | null;

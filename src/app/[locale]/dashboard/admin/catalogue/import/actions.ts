@@ -80,6 +80,7 @@ export async function confirmImport(batchId: string, _prev: ActionState, _fd: Fo
         max_guests: v.max_guests,
         deck_count: v.deck_count,
         year_built: v.year_built,
+        year_renovated: v.year_renovated,
       })
       .select("id")
       .single();

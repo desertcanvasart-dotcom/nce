@@ -31,6 +31,7 @@ const dahabiya = (over: Partial<VesselPage> = {}): VesselPage => ({
   mooring: null,
   sharedSpaces: [],
   yearBuilt: 2025,
+  yearRenovated: null,
   sample: false,
   showcase: true,
   summary: "A 2025 dahabiya with spacious cabins.",
@@ -94,6 +95,15 @@ describe("the vessel page for a wind-driven dahabiya", () => {
     expect(screen.getByRole("heading", { level: 1 }).textContent).toBe("Najafa, by Nour El Nil");
   });
 
+  it("shows the year built and, when there is one, the year last renovated", () => {
+    renderEn(<VesselView locale="en" v={dahabiya({ yearBuilt: 2001, yearRenovated: 2018 })} today="2026-11-04" />);
+    expect(screen.getByText("Built").nextElementSibling?.textContent).toBe("2001");
+    expect(screen.getByText("Renovated").nextElementSibling?.textContent).toBe("2018");
+    cleanup();
+    renderEn(<VesselView locale="en" v={dahabiya()} today="2026-11-04" />);
+    expect(screen.queryByText("Renovated")).toBeNull();
+  });
+
   it("says the guide price per person for the whole cruise, never per night", () => {
     renderEn(<VesselView locale="en" v={dahabiya()} today="2026-11-04" />);
     expect(screen.getByText("From €3,375 per person for the 5-night cruise")).toBeTruthy();
@@ -126,6 +136,7 @@ describe("the vessel page for a wind-driven dahabiya", () => {
           cabinCount: null,
           maxGuests: null,
           yearBuilt: null,
+          yearRenovated: null,
           lengthM: null,
           summary: null,
           cabins: [],

@@ -36,6 +36,7 @@ const page: VesselPage = {
   mooring: null,
   sharedSpaces: [],
   yearBuilt: 2019,
+  yearRenovated: null,
   sample: true,
   showcase: false,
   summary: "A sample ship.",

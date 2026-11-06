@@ -213,7 +213,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     db
       .from("vessels")
       .select(
-        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, year_built, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, ${PRICE_COLUMNS}, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included, propulsion_note, on_board, good_to_know, seo_title, seo_description), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, size_includes_bathroom, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name, description, bed_configuration, view)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), schedule_translations(locale, boarding_note), departures(id, departs_on, returns_on, status))`,
+        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, year_built, year_renovated, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, ${PRICE_COLUMNS}, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included, propulsion_note, on_board, good_to_know, seo_title, seo_description), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, size_includes_bathroom, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name, description, bed_configuration, view)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), schedule_translations(locale, boarding_note), departures(id, departs_on, returns_on, status))`,
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -297,6 +297,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     mooring: v.mooring,
     sharedSpaces: v.shared_spaces,
     yearBuilt: v.year_built,
+    yearRenovated: v.year_renovated,
     sample: v.is_sample,
     showcase: v.visibility === "showcase",
     summary: say("summary"),

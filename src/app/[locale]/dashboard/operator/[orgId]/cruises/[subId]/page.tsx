@@ -69,6 +69,13 @@ export default async function SubmissionPage({ params }: { params: Promise<{ org
               <Input label="Guests" name="max_guests" inputMode="numeric" defaultValue={p.max_guests} />
               <Input label="Decks" name="deck_count" inputMode="numeric" defaultValue={p.deck_count} />
               <Input label="Year built" name="year_built" inputMode="numeric" defaultValue={p.year_built} />
+              <Input
+                label="Year last renovated"
+                name="year_renovated"
+                inputMode="numeric"
+                defaultValue={p.year_renovated}
+                hint="Renovated, refurbished or rebuilt. Leave empty if never."
+              />
               <Select
                 label="Mooring"
                 name="mooring"

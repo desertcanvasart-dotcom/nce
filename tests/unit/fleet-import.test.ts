@@ -231,8 +231,10 @@ describe("Steam Ship Sudan (the featured paddle steamer)", () => {
     expect(v.itineraries[1]!.days.filter((d) => d.locale === "ja")).toHaveLength(6);
   });
 
-  it("shows nothing unconfirmed: no guest count, build year, length, areas or Wi-Fi", () => {
-    expect(v).toMatchObject({ maxGuests: null, yearBuilt: null, lengthM: null, beamM: null });
+  it("shows nothing unconfirmed: no guest count, length, areas or Wi-Fi; the operator's launch and renovation years", () => {
+    expect(v).toMatchObject({ maxGuests: null, lengthM: null, beamM: null });
+    // Launched 1921 and first renovated in 2007, both from the operator's own history of the ship.
+    expect(v).toMatchObject({ yearBuilt: 1921, yearRenovated: 2007 });
     expect(v.cabins.map((c) => [c.code, c.cabin_count, c.size_m2])).toEqual([
       ["cabin", 18, null],
       ["suite", 6, null],

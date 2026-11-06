@@ -18,28 +18,34 @@ const optText = (max: number) =>
     .max(max, `at most ${max} characters`)
     .transform((v) => (v === "" ? null : v));
 
-export const vesselDetailsInput = z.object({
-  name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),
-  type: z.enum(["sail", "motor", "steam"], { message: "choose a type" }),
-  propulsion: z.enum(["motor", "wind", "steam"], { message: "choose what drives it" }),
-  route_text: optText(200),
-  category: z
-    .union([z.literal(""), z.enum(CATEGORIES.map((c) => c.value) as [string, ...string[]])])
-    .transform((v) => (v === "" ? null : v)),
-  cabin_count: optInt(1, 400),
-  max_guests: optInt(1, 800),
-  deck_count: optInt(1, 10),
-  year_built: optInt(1850, 2100),
-  best_for: z.array(z.enum(BEST_FOR.map((b) => b.value) as [string, ...string[]])).max(10),
-  mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))]).transform((v) => (v === "" ? null : v)),
-  shared_spaces: z.array(z.enum(SHARED_SPACES.map((s) => s.value))).max(SHARED_SPACES.length),
-  dietary_options: z.array(z.enum(DIETARY_OPTIONS.map((o) => o.value))).max(DIETARY_OPTIONS.length),
-  operator_org_id: z
-    .string()
-    .trim()
-    .transform((v) => (v === "" ? null : v))
-    .refine((v) => v === null || /^[0-9a-f-]{36}$/.test(v), "choose an operator from the list"),
-});
+export const vesselDetailsInput = z
+  .object({
+    name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),
+    type: z.enum(["sail", "motor", "steam"], { message: "choose a type" }),
+    propulsion: z.enum(["motor", "wind", "steam"], { message: "choose what drives it" }),
+    route_text: optText(200),
+    category: z
+      .union([z.literal(""), z.enum(CATEGORIES.map((c) => c.value) as [string, ...string[]])])
+      .transform((v) => (v === "" ? null : v)),
+    cabin_count: optInt(1, 400),
+    max_guests: optInt(1, 800),
+    deck_count: optInt(1, 10),
+    year_built: optInt(1850, 2100),
+    year_renovated: optInt(1850, 2100),
+    best_for: z.array(z.enum(BEST_FOR.map((b) => b.value) as [string, ...string[]])).max(10),
+    mooring: z.union([z.literal(""), z.enum(MOORING.map((m) => m.value))]).transform((v) => (v === "" ? null : v)),
+    shared_spaces: z.array(z.enum(SHARED_SPACES.map((s) => s.value))).max(SHARED_SPACES.length),
+    dietary_options: z.array(z.enum(DIETARY_OPTIONS.map((o) => o.value))).max(DIETARY_OPTIONS.length),
+    operator_org_id: z
+      .string()
+      .trim()
+      .transform((v) => (v === "" ? null : v))
+      .refine((v) => v === null || /^[0-9a-f-]{36}$/.test(v), "choose an operator from the list"),
+  })
+  .refine((v) => v.year_renovated === null || v.year_built === null || v.year_renovated >= v.year_built, {
+    message: "can't be before the year built",
+    path: ["year_renovated"],
+  });
 
 export const newVesselInput = z.object({
   name: z.string().trim().min(1, "required").max(120, "at most 120 characters"),

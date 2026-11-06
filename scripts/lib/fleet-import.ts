@@ -107,6 +107,7 @@ export type VesselPlan = {
   cabinCount: number | null;
   maxGuests: number | null;
   yearBuilt: number | null;
+  yearRenovated: number | null;
   lengthM: number | null;
   beamM: number | null;
   sharedSpaces: string[];
@@ -278,6 +279,9 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       indicative = { amountMinor: Math.round(Number(price.amount) * 100), currency: String(price.currency), nights };
     }
     const dims = dimensions(v.dimensions_m);
+    const built = typeof v.built_year === "number" ? v.built_year : valueOf<number>(v.built_year);
+    const renovated = typeof v.renovated_year === "number" ? v.renovated_year : valueOf<number>(v.renovated_year);
+    if (built && renovated && renovated < built) bad(`renovated (${renovated}) before it was built (${built})`);
     const spacesIn = ((v.on_board as Json | undefined)?.shared_spaces as string[] | undefined) ?? [];
     const sharedSpaces = [...new Set(spacesIn.map((s) => SPACES[s]).filter((s): s is string => !!s))];
     for (const s of spacesIn) if (!SPACES[s]) bad(`unknown shared space ${s}`);
@@ -464,6 +468,7 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       cabinCount: units,
       maxGuests: valueOf<number>(v.guest_capacity),
       yearBuilt: typeof v.built_year === "number" ? v.built_year : valueOf<number>(v.built_year),
+      yearRenovated: typeof v.renovated_year === "number" ? v.renovated_year : valueOf<number>(v.renovated_year),
       lengthM: dims?.[0] ?? null,
       beamM: dims?.[1] ?? null,
       sharedSpaces,

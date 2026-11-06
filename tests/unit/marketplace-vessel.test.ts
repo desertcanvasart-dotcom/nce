@@ -62,6 +62,7 @@ const page = (over: Partial<VesselPage> = {}): VesselPage => ({
   mooring: null,
   sharedSpaces: [],
   yearBuilt: null,
+  yearRenovated: null,
   sample: false,
   showcase: false,
   summary: "A ship.",

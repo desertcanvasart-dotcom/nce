@@ -387,6 +387,12 @@ export function VesselView({
               <dd>{v.yearBuilt}</dd>
             </div>
           ) : null}
+          {v.yearRenovated ? (
+            <div>
+              <dt>{t("hero.renovated")}</dt>
+              <dd>{v.yearRenovated}</dd>
+            </div>
+          ) : null}
           {ev ? (
             <div>
               <dt>{t("hero.score")}</dt>

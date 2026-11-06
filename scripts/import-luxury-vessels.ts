@@ -67,6 +67,8 @@ type Vessel = {
   cabin_count: number;
   max_guests?: number;
   year_built?: number;
+  /** The latest renovation, refurbishment or rebuild, from the operator. */
+  year_renovated?: number;
   shared_spaces: string[];
   summary: string;
   description: string;
@@ -88,6 +90,8 @@ function problemsOf(v: Vessel): string[] {
   if (bad.length) p.push(`${v.slug}: unknown shared spaces ${bad.join(", ")}`);
   const counted = v.cabins.reduce((n, c) => n + (c.cabin_count ?? 0), 0);
   if (counted > v.cabin_count) p.push(`${v.slug}: cabin types add up to ${counted}, more than ${v.cabin_count}`);
+  if (v.year_renovated && v.year_built && v.year_renovated < v.year_built)
+    p.push(`${v.slug}: renovated (${v.year_renovated}) before it was built (${v.year_built})`);
   for (const c of v.cabins) {
     if (!CODE.test(c.code)) p.push(`${v.slug}/${c.code}: bad cabin code`);
     if (c.max_occupancy < 1 || c.max_occupancy > 4) p.push(`${v.slug}/${c.code}: occupancy must be 1–4`);
@@ -178,6 +182,7 @@ function reportOf(v: Vessel, e: Row | undefined): string {
     ["cabins", e.cabin_count, v.cabin_count],
     ["guests", e.max_guests, v.max_guests ?? e.max_guests],
     ["year built", e.year_built, v.year_built ?? e.year_built],
+    ["year renovated", e.year_renovated, v.year_renovated ?? e.year_renovated],
   ];
   for (const [k, now, next] of facts) if (now !== next) lines.push(`${k}: ${String(now ?? "–")} → ${String(next)}`);
   const spaces = v.shared_spaces.filter((s) => !e.shared_spaces.includes(s as never));
@@ -249,6 +254,7 @@ async function run() {
           ...(v.max_guests ? { max_guests: v.max_guests } : {}),
           shared_spaces: [...new Set([...row.shared_spaces, ...(v.shared_spaces as typeof row.shared_spaces)])],
           ...(v.year_built ? { year_built: v.year_built } : {}),
+          ...(v.year_renovated ? { year_renovated: v.year_renovated } : {}),
         })
         .eq("id", id),
       `${v.slug}: facts`,
