@@ -447,7 +447,9 @@
     "monthHead": "{month} <y>{year}</y>",
     "routeLine": "{route}, {nights}",
     "seeMore": "See more dates",
-    "seeFewer": "See fewer dates"
+    "seeFewer": "See fewer dates",
+    "emptyInfo": "No sailing dates are published for this vessel.",
+    "emptyUsualInfo": "The operator usually sails on these days."
   },
   "vesselPage": {
     "type": {
@@ -762,7 +764,9 @@
       "costA": "We don’t sell this cruise, so we don’t publish a price for it.",
       "bookA": "Not through Nilecruz. You can enquire with {name} instead.",
       "bookNone": "Not through Nilecruz.",
-      "finalTitle": "Interested in this cruise?"
+      "finalTitle": "Interested in this cruise?",
+      "label": "Booking",
+      "datesIntro": "The operator’s published dates and usual sailings, for reference. They can’t be booked through Nilecruz."
     }
   },
   "vesselsPillar": {

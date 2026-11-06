@@ -946,3 +946,15 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - **Pictures:** the hub shows the site's own river drawing (Scene, no vessel), also used as the share image, until a licensed photo is chosen (ADR-096).
   - **Japanese titles** break between phrases (`word-break: auto-phrase`, strict line breaks), so no line starts with a long-vowel mark; this applies to every editorial title.
 - **Consequence:** the brief's "dahabiyas 8–24 guests" differs from the site's "about 8–20" (ADR-106); the site keeps 8–20 until Islam confirms. Sanity's articles for P003 and P010 aren't there yet; when they are seeded, the repository drafts carry the new text.
+
+### ADR-112 The live-site review: no booking claims for vessels we can't sell, and guide prices without our margin (Accepted; Islam 6 Nov 2026)
+- **Context:** Islam's review of the live site found Steam Ship Sudan under "Cruises you can book", dollar guide prices, a strapline too small to read in the header, and wording he had already changed ("ten times", "obligatory", "Gebel Silsileh").
+- **Decision:**
+  - **Booking availability** is vessel data (`booking_availability`, `commercial_relationship`, `enquiry_partner_name`, `enquiry_partner_email`; migration `20261106000400`). A vessel `not_available_through_nilecruz` shows "Booking unavailable through us" instead of a price, no reserve, offer or rates action, and no "ask us" wording. It may name a travel company that takes enquiries, shown as "Enquire with {name}" (a `mailto:` link), never as its operator. Steam Ship Sudan: no relationship; Original Travel, `jamie.armstrong@originaltravel.co.uk`, approved by Original Travel.
+  - **Closing rows** are headed "Cruises to explore" unless every cruise in them can be booked through Nilecruz (`closingHeading`), on every page that uses `ClosingCruises`.
+  - **Prices:** `price_includes_margin` (default true). False shows "From €X per person. A guide, not a quote." and drops the margin policy line on that page. The Nour El Nil boats keep their euro prices this way, copied from the stored guide prices, never converted. Royal Lily's €1,120 is the lowest across its sailings, so it names no cruise length (`pricing_trip_nights` null).
+  - **Header:** the name-only wordmark in every language; the strapline logo stays for the sharing image and larger uses.
+  - **Homepage:** "Find the right Nile cruise", the new intro, no eyebrow (the logo says it), draft label cleared. The silo workbook's H1 for "/" needs the same change; `link-map.json` was edited to match.
+  - **Copy:** "more than 15 times", gratuities "expected", "Gebel Silsila" in stored itineraries (migration `20261106000500`; search keeps the old spelling through the stop's aliases).
+- **Consequence:** production needs migrations 200, 400 and 500 pasted in order, and the Sanity articles updated (CONTENT-NEEDED #71). Staging has all three (applied 6 Nov 2026).
+

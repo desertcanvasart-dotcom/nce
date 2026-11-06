@@ -350,7 +350,7 @@ export function VesselView({
         {/* The price on its own, so a phone shows it with the main action right under the photo. */}
         <dl className={styles.price}>
           <div className={styles.priceFact}>
-            <dt>{t("hero.startingPrice")}</dt>
+            <dt>{sold ? t("hero.startingPrice") : t("booking.label")}</dt>
             <dd>{priceRich(price)}</dd>
           </div>
         </dl>
@@ -482,7 +482,7 @@ export function VesselView({
             {policy ? <p>{tp("policy")}</p> : null}
           </>
         )}
-        <p>{tp("gratuities")}</p>
+        {sold ? <p>{tp("gratuities")}</p> : null}
         {isBuilt("/nile-cruise-prices/") ? (
           <p>
             <Link href="/nile-cruise-prices/">{tp("why")}</Link>
@@ -507,7 +507,7 @@ export function VesselView({
             {t.rich("price.fallback", {
               link: (c) => (isBuilt("/tours-extras/transfers/") ? <Link href="/tours-extras/transfers/">{c}</Link> : c),
             })}
-            {anyDays ? ` ${t("price.fallbackProgramme")}` : ""}
+            {anyDays && sold ? ` ${t("price.fallbackProgramme")}` : ""}
           </p>
         )}
         {rates && sold ? (
@@ -739,13 +739,15 @@ export function VesselView({
           {/* The sailing dates of every itinerary on one calendar: departure rows and the weekly pattern. */}
           <h2 id="dates-h">{tc("title")}</h2>
           <p>
-            {confirmed
-              ? t("dates.introConfirmed")
-              : calendarSailings(calendarIts, today).length
-                ? t("dates.intro")
-                : t("dates.introUsual")}
+            {!sold
+              ? t("booking.datesIntro")
+              : confirmed
+                ? t("dates.introConfirmed")
+                : calendarSailings(calendarIts, today).length
+                  ? t("dates.intro")
+                  : t("dates.introUsual")}
           </p>
-          {!confirmed ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
+          {!confirmed && sold ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
           <SailingCalendar
             // Direction is worked out on the English names; the visitor reads the places in their language.
             sailings={calendarSailings(calendarIts, today).map((s) => ({

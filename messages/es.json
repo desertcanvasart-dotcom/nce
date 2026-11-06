@@ -448,7 +448,9 @@
     "monthHead": "{month} <y>{year}</y>",
     "routeLine": "{route}, {nights}",
     "seeMore": "Ver más fechas",
-    "seeFewer": "Ver menos fechas"
+    "seeFewer": "Ver menos fechas",
+    "emptyInfo": "No hay fechas de salida publicadas para este barco.",
+    "emptyUsualInfo": "El operador suele zarpar estos días."
   },
   "vesselPage": {
     "type": {
@@ -763,7 +765,9 @@
       "costA": "No vendemos este crucero, así que no publicamos su precio.",
       "bookA": "No con Nilecruz. Puedes consultar con {name}.",
       "bookNone": "No con Nilecruz.",
-      "finalTitle": "¿Te interesa este crucero?"
+      "finalTitle": "¿Te interesa este crucero?",
+      "label": "Reserva",
+      "datesIntro": "Las fechas publicadas por el operador y sus salidas habituales, como referencia. No se pueden reservar con Nilecruz."
     }
   },
   "vesselsPillar": {

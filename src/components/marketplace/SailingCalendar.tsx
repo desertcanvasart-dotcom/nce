@@ -126,10 +126,10 @@ export function SailingCalendar({
           <div className={styles.weekly}>
             <h3 className={styles.kicker}>{t("patternTitle")}</h3>
             {timetable(usual)}
-            <p className={styles.empty}>{t("emptyUsual")}</p>
+            <p className={styles.empty}>{askPage ? t("emptyUsual") : t("emptyUsualInfo")}</p>
           </div>
         ) : (
-          <p className={styles.empty}>{t("empty")}</p>
+          <p className={styles.empty}>{askPage ? t("empty") : t("emptyInfo")}</p>
         )}
       </div>
     );

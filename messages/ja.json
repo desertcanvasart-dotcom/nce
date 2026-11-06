@@ -448,7 +448,9 @@
     "monthHead": "<y>{year}年</y>{month}",
     "routeLine": "{route}、{nights}",
     "seeMore": "ほかの日程を見る",
-    "seeFewer": "表示する日程を減らす"
+    "seeFewer": "表示する日程を減らす",
+    "emptyInfo": "この船の出航日は公開されていません。",
+    "emptyUsualInfo": "運航会社は通常、これらの曜日に出航します。"
   },
   "vesselPage": {
     "type": {
@@ -763,7 +765,9 @@
       "costA": "当社ではこのクルーズを販売していないため、料金は掲載していません。",
       "bookA": "Nilecruzでは予約できません。{name}にお問い合わせいただけます。",
       "bookNone": "Nilecruzでは予約できません。",
-      "finalTitle": "このクルーズに興味がありますか？"
+      "finalTitle": "このクルーズに興味がありますか？",
+      "label": "予約",
+      "datesIntro": "運航会社が公開している出航日と通常の運航パターンです（参考情報）。Nilecruzでは予約できません。"
     }
   },
   "vesselsPillar": {
