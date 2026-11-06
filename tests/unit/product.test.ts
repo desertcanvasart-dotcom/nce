@@ -130,9 +130,10 @@ describe("crew gratuity (DATA-015)", () => {
 });
 
 describe("currencies by plan (ADR-082)", () => {
-  it("E£ only for Egyptian citizens and residents", () => {
-    expect(currenciesFor("international")).toEqual(["USD", "EUR"]);
-    expect(currenciesFor("trade")).toEqual(["USD", "EUR"]);
+  it("€ for every plan, E£ only for Egyptian citizens and residents; never US$ (ADR-110)", () => {
+    expect(currenciesFor("international")).toEqual(["EUR"]);
+    expect(currenciesFor("trade")).toEqual(["EUR"]);
+    expect(currenciesFor("egyptian_citizen")).not.toContain("USD");
     expect(currenciesFor("egyptian_citizen")).toContain("EGP");
     expect(currenciesFor("foreign_resident")).toContain("EGP");
   });

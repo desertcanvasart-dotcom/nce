@@ -46,7 +46,7 @@ async function requestViaApi() {
   const c = await apiAs(customer.email, customer.password);
   const { data, error } = await c.rpc("customer_request_booking", {
     dep: S.departureId,
-    cur: "USD",
+    cur: "EUR",
     cabins: [{ cabin_type_id: S.cabinTypeId, ages: [40, 38] }],
     guests: [
       { full_name: "Sample Guest One", date_of_birth: "1980-02-02" },
@@ -152,7 +152,7 @@ test("the customer sees the confirmation and pays as for any booking", async ({ 
   await expect(page.getByText("Confirmed", { exact: true })).toBeVisible();
   await page.getByRole("link", { name: "Open your reservation and pay" }).click();
   await page.waitForURL(/\/dashboard\/journey\/reservations\/[0-9a-f-]{36}\/$/);
-  await expect(page.getByText("US$2,000").first()).toBeVisible();
+  await expect(page.getByText("€2,000").first()).toBeVisible();
 });
 
 test("Decline sets that cabin type to none free; a broken or expired link shows a plain page", async ({ page }) => {

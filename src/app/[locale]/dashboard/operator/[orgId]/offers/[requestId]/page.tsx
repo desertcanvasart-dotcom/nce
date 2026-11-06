@@ -43,7 +43,7 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
   const partner = r.buyer_org_id !== null;
   const plans = partner ? RATE_PLANS : RATE_PLANS.filter((p) => p.value !== "trade");
   const defaultPlan = revising?.rate_plan ?? (partner ? "trade" : "international");
-  const cabins = chosen ? await cabinsForDeparture(chosen.id, defaultPlan, revising?.currency ?? "USD") : [];
+  const cabins = chosen ? await cabinsForDeparture(chosen.id, defaultPlan, revising?.currency === "EGP" ? "EGP" : "EUR") : [];
   const base = `/dashboard/operator/${orgId}/offers/${requestId}/`;
   const keep = revising ? `&revise=${revising.id}` : "";
   const lineDefault = (i: number) =>
@@ -153,9 +153,8 @@ export default async function AnswerRequest({ params, searchParams }: Props) {
                     label="Currency"
                     name="currency"
                     required
-                    defaultValue={revising?.currency ?? "USD"}
+                    defaultValue={revising?.currency === "EGP" ? "EGP" : "EUR"}
                     options={[
-                      { value: "USD", label: "US$" },
                       { value: "EUR", label: "€" },
                       { value: "EGP", label: "E£ (local plans only)" },
                     ]}

@@ -40,7 +40,7 @@ const JSON_DOC = {
               available: 4,
               confirmed_at: "2027-03-01T09:30:00+02:00",
               rates: [
-                { occupancy: 2, plan: "international", currency: "USD", price: "1250.50" },
+                { occupancy: 2, plan: "international", currency: "EUR", price: "1250.50" },
                 { occupancy: 1, plan: "egyptian_citizen", currency: "EGP", price: 45000 },
               ],
             },
@@ -61,7 +61,7 @@ const XML_DOC = `<?xml version="1.0" encoding="UTF-8"?>
       <availability>
         <date date="2027-03-15" schedule="LXR-ASW">
           <cabin type="STD" available="4" confirmed_at="2027-03-01T07:30:00Z">
-            <rate occupancy="2" plan="international" currency="USD" price="1250.50"/>
+            <rate occupancy="2" plan="international" currency="EUR" price="1250.50"/>
           </cabin>
         </date>
       </availability>
@@ -81,7 +81,7 @@ describe("inventory format v1 (ADR-080)", () => {
       available: 4,
       confirmed_at: "2027-03-01T07:30:00.000Z",
       rates: [
-        { occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050, package: "cruise" },
+        { occupancy: 2, plan: "international", currency: "EUR", amount_minor: 125050, package: "cruise" },
         { occupancy: 1, plan: "egyptian_citizen", currency: "EGP", amount_minor: 4500000, package: "cruise" },
       ],
       errors: [],
@@ -98,7 +98,7 @@ describe("inventory format v1 (ADR-080)", () => {
       confirmed_at: "2027-03-01T07:30:00.000Z",
     });
     expect(row!.rates).toEqual([
-      { occupancy: 2, plan: "international", currency: "USD", amount_minor: 125050, package: "cruise" },
+      { occupancy: 2, plan: "international", currency: "EUR", amount_minor: 125050, package: "cruise" },
     ]);
   });
 
@@ -116,8 +116,8 @@ describe("inventory format v1 (ADR-080)", () => {
                     type: "DBL",
                     available: 2,
                     rates: [
-                      { occupancy: 2, plan: "international", currency: "USD", price: 900 },
-                      { occupancy: 2, plan: "international", currency: "USD", price: 1200, package: pkg },
+                      { occupancy: 2, plan: "international", currency: "EUR", price: 900 },
+                      { occupancy: 2, plan: "international", currency: "EUR", price: 1200, package: pkg },
                     ],
                   },
                 ],

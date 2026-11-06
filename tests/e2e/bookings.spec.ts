@@ -73,7 +73,7 @@ async function sailing(orgId: string, name: string, upperCabins: number) {
       vessel_id: v.id,
       occupancy: 3,
       rate_plan: "international",
-      currency: "USD",
+      currency: "EUR",
       amount_minor: c.code === "TRI-U" ? 100000 : 90000,
     });
   }

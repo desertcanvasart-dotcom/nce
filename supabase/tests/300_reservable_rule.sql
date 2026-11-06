@@ -26,7 +26,7 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
   ('00000000-0000-4000-e200-000000000003', '00000000-0000-4000-e200-000000000015', '00000000-0000-4000-e200-000000000001', 2, now() - interval '1 hour', 'tap'),
   ('00000000-0000-4000-e200-000000000003', '00000000-0000-4000-e200-000000000016', '00000000-0000-4000-e200-000000000001', 3, now() - interval '3 hours', 'feed');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor)
-select '00000000-0000-4000-e200-000000000003', ('00000000-0000-4000-e200-00000000001' || n)::uuid, '00000000-0000-4000-e200-000000000001', 2, 'international', 'USD', 100000
+select '00000000-0000-4000-e200-000000000003', ('00000000-0000-4000-e200-00000000001' || n)::uuid, '00000000-0000-4000-e200-000000000001', 2, 'international', 'EUR', 100000
 from generate_series(1, 6) n;
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-e200-000000000001', '[{"from_days": 0, "percent": 100}]');
 
@@ -44,30 +44,30 @@ select results_eq($$ select right(cabin_type_id::text, 1), booking_mode, places_
   'each cabin''s booking mode, with places left only from instant data');
 
 -- Instant: feed or API, or an operator's answer, within 2 hours.
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(1), pg_temp.guests(), true) $$,
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(1), pg_temp.guests(), true) $$,
   'feed data within 2 hours books instantly');
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(5), pg_temp.guests(), true) $$,
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(5), pg_temp.guests(), true) $$,
   'an operator''s answer within 2 hours books instantly');
 
 -- Manual within 7 days: a booking request, never an instant booking.
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(2), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(2), pg_temp.guests(), true) $$,
   '22023', 'The operator confirms these cabins before you pay: send a booking request instead. Nothing was booked.',
   'manual data can''t be paid for instantly');
-select lives_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(2), pg_temp.guests(), true) $$,
+select lives_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(2), pg_temp.guests(), true) $$,
   'manual data within 7 days becomes a booking request');
 select is((select count(*)::int from public.reservations r where r.departure_id = '00000000-0000-4000-e200-000000000003'), 2,
   'the request made no reservation (only the two instant bookings exist)');
 
 -- Too old, or none free: neither.
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(3), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(3), pg_temp.guests(), true) $$,
   '22023', null, 'manual data older than 7 days can''t be booked');
-select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(3), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(3), pg_temp.guests(), true) $$,
   '22023', null, '… or requested');
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(6), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(6), pg_temp.guests(), true) $$,
   '22023', null, 'feed data older than 2 hours can''t be booked instantly');
-select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(6), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(6), pg_temp.guests(), true) $$,
   '22023', null, '… and, older than its 2 hours, is not requestable either');
-select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'USD', pg_temp.cabins(4), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e200-000000000003', 'EUR', pg_temp.cabins(4), pg_temp.guests(), true) $$,
   '22023', null, 'sold out can''t be requested');
 
 -- "Confirmed within X hours": 24 until the operator has answered five requests.

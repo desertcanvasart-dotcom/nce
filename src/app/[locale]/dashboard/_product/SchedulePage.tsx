@@ -305,9 +305,8 @@ export async function SchedulePage({
             <Select
               label="Currency"
               name="currency"
-              defaultValue="USD"
+              defaultValue="EUR"
               options={[
-                { value: "USD", label: "US$" },
                 { value: "EUR", label: "€" },
                 { value: "EGP", label: "E£ (Egyptian citizen or resident plans)" },
               ]}

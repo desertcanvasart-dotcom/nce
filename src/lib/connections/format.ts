@@ -13,7 +13,8 @@ import type { RatePlan } from "@/lib/product/pricing";
 
 export const FORMAT_ID = "nilecruz-inventory/1";
 export const LIMITS = { pasteBytes: 2_000_000, apiBytes: 2_000_000, feedBytes: 5_000_000, rows: 5000 } as const;
-const CURRENCIES = ["USD", "EUR", "EGP"] as const;
+// ADR-110: rates are in € (E£ for the local plans); US dollars are refused, never converted.
+const CURRENCIES = ["EUR", "EGP"] as const;
 const PLANS: RatePlan[] = ["international", "egyptian_citizen", "foreign_resident", "trade"];
 const CODE = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$/;
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -240,7 +241,8 @@ function toRow(vessel: string, date: string, schedule: string | null, k: RawCabi
     const bad: string[] = [];
     if (occupancy === null) bad.push("“occupancy” must be 1, 2 or 3 guests");
     if (!plan || !PLANS.includes(plan)) bad.push(`“plan” must be one of ${PLANS.join(", ")}`);
-    if (!currency || !(CURRENCIES as readonly string[]).includes(currency)) bad.push("“currency” must be USD, EUR or EGP");
+    if (!currency || !(CURRENCIES as readonly string[]).includes(currency))
+      bad.push("“currency” must be EUR (or EGP for the local plans); prices aren’t taken in USD");
     if (amount === null) bad.push("“price” must be a positive amount per person with at most two decimals, such as 1250.00");
     if (!(PACKAGES as readonly string[]).includes(pkg)) bad.push("“package” must be cruise or with_sightseeing");
     if (bad.length) errors.push(`A rate can’t be read: ${bad.join("; ")}.`);

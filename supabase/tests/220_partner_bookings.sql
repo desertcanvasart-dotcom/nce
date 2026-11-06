@@ -13,7 +13,7 @@ begin
   perform set_config('role', 'postgres', true);
 end $$;
 
--- A bookable sailing with a company rate for Sample Partner (…c1): US$700 pp for two; 3 double cabins.
+-- A bookable sailing with a company rate for Sample Partner (…c1): €700 pp for two; 3 double cabins.
 update public.vessels set visibility = 'published', published_at = now() where id = '00000000-0000-4000-8000-000000000003';
 insert into public.cabin_types (id, vessel_id, code, name, deck, max_occupancy) values
   ('00000000-0000-4000-f100-000000000001', '00000000-0000-4000-8000-000000000003', 'DBL', 'Double', 'Main', 2);
@@ -26,10 +26,10 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
   ('00000000-0000-4000-f300-000000000001', '00000000-0000-4000-f100-000000000001', '00000000-0000-4000-8000-000000000003', 3, 'feed');
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-8000-000000000003', '[{"from_days": 0, "percent": 100}]');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor) values
-  ('00000000-0000-4000-f300-000000000001', '00000000-0000-4000-f100-000000000001', '00000000-0000-4000-8000-000000000003', 2, 'international', 'USD', 100000);
+  ('00000000-0000-4000-f300-000000000001', '00000000-0000-4000-f100-000000000001', '00000000-0000-4000-8000-000000000003', 2, 'international', 'EUR', 100000);
 insert into public.partner_rates (partner_org_id, departure_id, cabin_type_id, vessel_id, occupancy, currency, amount_minor) values
   ('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', '00000000-0000-4000-f100-000000000001',
-   '00000000-0000-4000-8000-000000000003', 2, 'USD', 70000);
+   '00000000-0000-4000-8000-000000000003', 2, 'EUR', 70000);
 insert into public.organisations (id, kind, status, display_name) values ('00000000-0000-4000-b000-0000000000c2', 'partner', 'approved', 'Second Agency');
 insert into public.memberships (org_id, user_id, team_role) values ('00000000-0000-4000-b000-0000000000c2', '00000000-0000-4000-a000-000000000020', 'owner');
 create temp table t (k text primary key, v text) on commit drop;
@@ -37,26 +37,26 @@ grant select, insert on t to authenticated;
 
 -- Reserving (DASH-B2B-003, 006): reservations users, at the agency's rate.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000032');
-select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'USD',
+select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000001", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Two", "date_of_birth": "1987-01-01"}]', 'C-1', 0, true)$$,
   '42501', null, 'a finance user doesn''t reserve');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'USD',
+select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000001", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Child", "date_of_birth": "2020-01-01"}]', 'C-1', 0, true)$$,
   '22023', null, 'guests'' ages must match the cabins');
-select lives_ok($$insert into t values ('r1', public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'USD',
+select lives_ok($$insert into t values ('r1', public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000001", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01", "nationality": "es"}, {"full_name": "Sample Two", "date_of_birth": "1987-01-01"}]',
   'CLIENT-17', 180000, true))$$, 'a reservations user reserves for a client');
 select pg_temp.as_postgres();
 insert into t select 'id1', id::text from public.reservations where reference = (select v from t where k = 'r1');
 select is((select array[total_minor::text, rate_plan::text, buyer_name, currency::text] from public.reservations where id = (select v::uuid from t where k = 'id1')),
-  array['140000', 'trade', 'Sample Partner', 'USD'], 'at the company rate, as a trade booking for the agency');
+  array['140000', 'trade', 'Sample Partner', 'EUR'], 'at the company rate, as a trade booking for the agency');
 select is((select available from public.inventory where departure_id = '00000000-0000-4000-f300-000000000001'), 2, 'the cabin is taken');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-insert into t values ('r2', public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'USD',
+insert into t values ('r2', public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000001", "ages": [40, 7]}]',
   ('[{"full_name": "Sample Parent", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Child", "date_of_birth": "' || (current_date + 40 - interval '7 years 1 day')::date || '"}]')::jsonb,
   null, 0, true));
@@ -87,10 +87,10 @@ select is((select selling_total_minor from public.partner_booking_details where 
 
 -- Paying and cancelling by role (DASH-B2B-005, ADR-092).
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-select throws_ok($$select public.report_payment((select v::uuid from t where k = 'id1'), 140000, 'USD', current_date, 'TRF')$$, 'P0002', null,
+select throws_ok($$select public.report_payment((select v::uuid from t where k = 'id1'), 140000, 'EUR', current_date, 'TRF')$$, 'P0002', null,
   'a reservations user doesn''t pay');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000032');
-select lives_ok($$select public.report_payment((select v::uuid from t where k = 'id1'), 140000, 'USD', current_date, 'TRF')$$,
+select lives_ok($$select public.report_payment((select v::uuid from t where k = 'id1'), 140000, 'EUR', current_date, 'TRF')$$,
   'a finance user reports the transfer');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
 select lives_ok($$select public.request_cancellation((select id from public.reservations where reference = (select v from t where k = 'r2')),
@@ -104,7 +104,7 @@ select throws_ok($$select public.request_cancellation((select v::uuid from t whe
 select pg_temp.as_postgres();
 update public.organisations set status = 'paused' where id = '00000000-0000-4000-b000-0000000000c1';
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'USD',
+select throws_ok($$select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-f300-000000000001', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000001", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Two", "date_of_birth": "1987-01-01"}]', null, 0, true)$$,
   '42501', null, 'a paused agency can''t reserve');

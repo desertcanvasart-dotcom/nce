@@ -32,7 +32,7 @@ select ('00000000-0000-4000-e600-00000000002' || n)::uuid, '00000000-0000-4000-e
 from generate_series(1, 4) n;
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor)
 select ('00000000-0000-4000-e600-00000000002' || n)::uuid, ('00000000-0000-4000-e600-00000000001' || c)::uuid, '00000000-0000-4000-e600-000000000001',
-  2, 'international', 'USD', 100000
+  2, 'international', 'EUR', 100000
 from generate_series(1, 4) n, generate_series(1, 2) c;
 insert into public.inventory (departure_id, cabin_type_id, vessel_id, available, confirmed_at, source) values
   ('00000000-0000-4000-e600-000000000021', '00000000-0000-4000-e600-000000000011', '00000000-0000-4000-e600-000000000001', 4, now() - interval '30 minutes', 'feed'),
@@ -60,7 +60,7 @@ update public.vessels set visibility = 'published' where id = '00000000-0000-400
 
 -- A booking's total is its cabins' fares from the rates: no gratuity, tours, transfers or flights.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e600-000000000021', 'USD',
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e600-000000000021', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e600-000000000011", "ages": [40, 38]}]'::jsonb,
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]'::jsonb, true) $$,
   'a sample couple reserves');

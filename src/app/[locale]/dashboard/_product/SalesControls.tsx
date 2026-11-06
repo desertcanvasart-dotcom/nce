@@ -120,8 +120,8 @@ export async function SalesControls({ orgId, vesselId }: { orgId: string | null;
               label="Currency"
               name="currency"
               required
+              defaultValue="EUR"
               options={[
-                { value: "USD", label: "US$" },
                 { value: "EUR", label: "€" },
                 { value: "EGP", label: "E£" },
               ]}

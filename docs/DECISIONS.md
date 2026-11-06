@@ -677,7 +677,7 @@ Faris's message was cut off after "with draft"; it is read as approving all six 
   - **Open:** tours and extras are still described as sold by Nilecruz (they have no operator and no commission). Confirm with the accountant whether they also follow the agent model.
 - **Cancelling an unpaid booking costs nothing:** the policy's charge only ever comes out of what was paid. Payments beyond the charge are refunded. A part payment below the charge is kept, and nothing more is owed. The database no longer records an unpaid charge (constraint `no_unpaid_charge`).
 - **Spanish and Japanese cancellation wording:** reviewed by native speakers and approved. Both standard presets now fill English, Spanish and Japanese.
-- **Also settled:** the bank account's currency is USD (the IBAN comes later). The 9 tours from nilecruz.com were imported into staging as private drafts (`pnpm import:tours --apply --target=staging`).
+- **Also settled:** the bank account's currency is USD (the IBAN comes later). *Superseded by ADR-110 (6 Nov 2026): money settles in euros.* The 9 tours from nilecruz.com were imported into staging as private drafts (`pnpm import:tours --apply --target=staging`).
 
 ### ADR-095 Manual availability stays confirmed for 7 days (Accepted; Faris 20 Oct 2026)
 - Availability entered by hand or pasted counts as confirmed for **7 days** (168 hours, the most the admin setting allows), instead of 24 hours. Feeds and the API stay at 2 hours.
@@ -934,3 +934,19 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 - **Structured data:** an AggregateOffer only for a bookable vessel with an approved euro starting price. Today no vessel qualifies, so no vessel page has Offer markup.
 - **Launch data:** every vessel is `on_request`, except Mövenpick MS Royal Lily: from €1,120 per person for the 4-night cruise, Luxor to Aswan, approved, last checked 6 Nov 2026, with no expiry (Islam). It replaces its US$300-per-night guide, and with it the US$900 and US$1,200 totals.
 - **Consequence:** net rates and the margin stay in the role-restricted rate tables; the public columns hold only approved selling prices. Spanish and Japanese texts were drafted by Claude and need native review. The Sanity copies of the edited pages (P001, P019, P049, P051, P059) need re-seeding after merge. Signed-in flows (reserve, tour calendar, partner tools) still show the operator's currency; that is a separate decision.
+
+### ADR-110 Money settles in euros (Accepted; Islam 6 Nov 2026; replaces ADR-094's "the bank account's currency is USD")
+- **Context:** ADR-109 made the euro the only public selling currency. Islam chose to settle in euros too. Prices are never converted (ADR-093, ADR-109), so settlement in euros means bookings are made in euros.
+- **Decision:**
+  - **New bookings, in euros only:** bookings at the published rate (`app.check_direct_booking`) and trade bookings (`app.check_partner_booking`) are refused in any other currency. The reserve pages and the partner search offer euro rates only.
+  - **New rates, offers, promotions and supplements:** in € (E£ stays for the Egyptian-citizen and foreign-resident plans: question below). Feeds and the API refuse USD rates.
+  - **US$ rates already entered:** stay stored and are never converted, but can't be booked; operators enter euro rates instead. No vessel is bookable on production today, so nothing live stops selling.
+  - **Reservations already made in US$:** keep their currency. They can still be paid by card (the Stripe account is in Spain and pays out in euros) or by transfer, and payouts for them can be recorded in US$.
+  - **Finance:** payouts default to €. The bank account's currency field says euros. The details themselves (holder, bank, IBAN, SWIFT) are entered by a finance admin and wait on the account.
+  - **Tours:** `tour_rates` may now be in € as well as US$, so Nilecruz's programme can go with a cruise booked in euros. Existing tour rates, the tour admin form and the tour calendar are still US$ only (follow-up below).
+- **Not changed:** crew gratuities (paid on board to the vessel, never settled by Nilecruz: ADR-017, ADR-082) and travellers' budgets in requests.
+- **Still needs Islam:**
+  - the euro bank account (holder, bank, IBAN, SWIFT), entered in Admin → Finance;
+  - whether the E£ local plans stay, or also move to €;
+  - the tour office's euro rates, and moving tours fully to €;
+  - telling operators with US$ rates or feeds to switch to €.

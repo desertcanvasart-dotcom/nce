@@ -33,15 +33,15 @@ insert into public.departures (id, schedule_id, vessel_id, departs_on, returns_o
 insert into public.inventory (departure_id, cabin_type_id, vessel_id, available, confirmed_at, source) values
   ('00000000-0000-4000-e900-000000000003', '00000000-0000-4000-e900-000000000011', '00000000-0000-4000-e900-000000000001', 4, now(), 'feed');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor) values
-  ('00000000-0000-4000-e900-000000000003', '00000000-0000-4000-e900-000000000011', '00000000-0000-4000-e900-000000000001', 2, 'international', 'USD', 100000),
   ('00000000-0000-4000-e900-000000000003', '00000000-0000-4000-e900-000000000011', '00000000-0000-4000-e900-000000000001', 2, 'international', 'EUR', 92000);
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-e900-000000000001', '[{"from_days": 0, "percent": 100}]');
 insert into public.tours (id, slug, kind, name, location, duration_minutes, visibility, is_sample, office_id) values
   ('00000000-0000-4000-e900-000000000020', 'sample-4-night-sightseeing', 'other', 'Sample 4-Night Sightseeing', 'Luxor–Aswan', 5760,
    'published', true, '00000000-0000-4000-b000-0000000000d1');
 insert into public.tour_schedules (tour_id, schedule_id) values ('00000000-0000-4000-e900-000000000020', '00000000-0000-4000-e900-000000000002');
-insert into public.tour_rates (id, tour_id, mode, prices) values
-  ('00000000-0000-4000-e900-000000000021', '00000000-0000-4000-e900-000000000020', 'program',
+-- ADR-110: everything settles in euros, so the programme is priced in € here too.
+insert into public.tour_rates (id, tour_id, mode, currency, prices) values
+  ('00000000-0000-4000-e900-000000000021', '00000000-0000-4000-e900-000000000020', 'program', 'EUR',
    '{"tiers": [{"min": 1, "max": 1, "pp": 45400}, {"min": 2, "max": 2, "pp": 28900}, {"min": 3, "max": 14, "pp": 23500}],
      "child_pct": 50, "child35_pct": 25}');
 
@@ -55,22 +55,22 @@ grant execute on function pg_temp.cabins(text), pg_temp.guests() to authenticate
 
 -- The "with sightseeing" price: the cruise plus the programme's price per person for two.
 select results_eq($$ select sightseeing_amount_minor, sightseeing_by from public.public_vessel_prices() where vessel_id = '00000000-0000-4000-e900-000000000001' $$,
-  $$ values ((100000 + 28900)::bigint, 'nilecruz'::text) $$, 'cruise plus Nilecruz''s programme, per person for two');
+  $$ values ((92000 + 28900)::bigint, 'nilecruz'::text) $$, 'cruise plus Nilecruz''s programme, per person for two');
 
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is((select total_minor from public.programme_quote('00000000-0000-4000-e900-000000000003', '{40,38}')), 57800::bigint,
   'the programme''s price for a couple');
 
 -- Booked together: the cruise at its own price, the programme its own order, held until the cruise's deadline.
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'EUR', pg_temp.cabins('with_programme'), pg_temp.guests(), true) $$,
-  '22023', 'The sightseeing programme is priced in USD; book the cruise in USD to add it', 'the programme goes with a cruise in its currency');
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'USD', pg_temp.cabins('with_programme'), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'USD', pg_temp.cabins('with_programme'), pg_temp.guests(), true) $$,
+  '22023', 'Bookings at the published rate are in €', 'bookings settle in euros (ADR-110)');
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'EUR', pg_temp.cabins('with_programme'), pg_temp.guests(), true) $$,
   'a customer books the cruise with the programme');
 select pg_temp.as_postgres();
 select results_eq($$ select r.package, r.total_minor, o.total_minor, o.status::text, o.hold_until <= r.payment_due_at
   from public.reservations r join public.tour_orders o on o.reservation_id = r.id
   where r.departure_id = '00000000-0000-4000-e900-000000000003' $$,
-  $$ values ('cruise'::text, 200000::bigint, 57800::bigint, 'awaiting_payment'::text, true) $$,
+  $$ values ('cruise'::text, 184000::bigint, 57800::bigint, 'awaiting_payment'::text, true) $$,
   'two orders: the cruise (operator) and the programme (Nilecruz), the programme held until the cruise''s deadline');
 
 -- One programme per cruise.
@@ -81,9 +81,9 @@ select throws_ok($$ select public.customer_add_programme((select id from public.
 -- One card payment, recorded as two payments.
 select pg_temp.as_service();
 select is(public.service_card_payment((select id from public.reservations where departure_id = '00000000-0000-4000-e900-000000000003'),
-  'cs_prog', 'pi_prog', 200000, 'USD'), 'recorded', 'the cruise part is the reservation''s payment');
+  'cs_prog', 'pi_prog', 184000, 'EUR'), 'recorded', 'the cruise part is the reservation''s payment');
 select is(public.service_tour_payment((select o.id from public.tour_orders o join public.reservations r on r.id = o.reservation_id
-  where r.departure_id = '00000000-0000-4000-e900-000000000003'), 'cs_prog', 'pi_prog', 57800, 'USD'), 'recorded',
+  where r.departure_id = '00000000-0000-4000-e900-000000000003'), 'cs_prog', 'pi_prog', 57800, 'EUR'), 'recorded',
   '… and the programme part the tour order''s, from the same payment');
 select pg_temp.as_postgres();
 select is((select o.status::text from public.tour_orders o join public.reservations r on r.id = o.reservation_id
@@ -97,7 +97,7 @@ select results_eq($$ select o.status::text, o.cancel_state::text, o.cancel_refun
 
 -- Added later to a cruise booked on its own.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'USD', pg_temp.cabins('cruise'), pg_temp.guests(), true);
+select public.customer_reserve('00000000-0000-4000-e900-000000000003', 'EUR', pg_temp.cabins('cruise'), pg_temp.guests(), true);
 select lives_ok($$ select public.customer_add_programme((select id from public.reservations
   where departure_id = '00000000-0000-4000-e900-000000000003' and status = 'awaiting_payment')) $$,
   'a programme can be added to a cruise booked on its own');

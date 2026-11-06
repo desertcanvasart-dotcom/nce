@@ -60,7 +60,7 @@ test.beforeAll(async ({ request }) => {
   }));
   // The first two paid in full by card, through signed webhooks as Stripe would send them; the third stays unpaid.
   for (const [i, id] of res.slice(0, 2).entries()) {
-    const ev = paidCheckoutEvent(id, 200000, "usd", `${RUN}-c${i}`);
+    const ev = paidCheckoutEvent(id, 200000, "eur", `${RUN}-c${i}`);
     const r = await request.post("/api/stripe/webhook/", {
       data: ev.payload,
       headers: { "stripe-signature": ev.signature, "content-type": "application/json" },
@@ -78,8 +78,8 @@ test("a customer asks to cancel; the operator confirms; a finance admin approves
   const cancel = page.locator("section", { has: page.getByRole("heading", { name: "Cancel this reservation" }) });
   await expect(cancel).toContainText("75 days before departure");
   await expect(cancel).toContainText("35 %");
-  await expect(cancel).toContainText("US$700");
-  await expect(cancel).toContainText("US$1,300 would be refunded");
+  await expect(cancel).toContainText("€700");
+  await expect(cancel).toContainText("€1,300 would be refunded");
   await cancel.getByRole("button", { name: "Ask to cancel" }).click();
   await expect(page.getByText("Tick that you have read the cancellation policy and the charge.")).toBeVisible();
   await cancel.getByLabel("Reason (optional)").fill("Change of plans");
@@ -110,7 +110,7 @@ test("a customer asks to cancel; the operator confirms; a finance admin approves
   await expect(admin.getByText("The operator confirmed the figures.")).toBeVisible();
   await admin.getByLabel("Decision").selectOption("approve");
   await admin.getByRole("button", { name: "Save decision" }).click();
-  await expect(admin.getByText("Still to refund: US$1,300")).toBeVisible();
+  await expect(admin.getByText("Still to refund: €1,300")).toBeVisible();
   await expect(admin.getByText("Cancelled, refund being issued")).toBeVisible();
   expect(await available()).toBe(before + 1);
 
@@ -119,7 +119,7 @@ test("a customer asks to cancel; the operator confirms; a finance admin approves
   await expect(admin.getByText(/Card refunds aren't switched on/)).toBeVisible();
 
   const manual = admin.locator("form", { has: admin.getByRole("button", { name: "Record a manual refund" }) });
-  await manual.getByLabel("Amount (USD)").fill("1300.00");
+  await manual.getByLabel("Amount (EUR)").fill("1300.00");
   await manual.getByLabel("How").fill("Bank transfer");
   await manual.getByLabel("Reference").fill(`RF-${RUN}`);
   await manual.getByRole("button", { name: "Record a manual refund" }).click();

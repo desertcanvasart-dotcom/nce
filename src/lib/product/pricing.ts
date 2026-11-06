@@ -88,8 +88,12 @@ export function gratuityText(perPersonPerNightMinor: number, party?: { nights: n
 }
 
 /** ADR-082: E£ only for the Egyptian-citizen and foreign-resident plans. */
+/**
+ * ADR-110: money settles in euros, so new rates and offers are in € (E£ stays for the Egyptian-citizen and
+ * foreign-resident plans). US-dollar rates already entered stay stored but can't be booked; nothing is converted.
+ */
 export function currenciesFor(plan: RatePlan): ("USD" | "EUR" | "EGP")[] {
-  return plan === "egyptian_citizen" || plan === "foreign_resident" ? ["USD", "EUR", "EGP"] : ["USD", "EUR"];
+  return plan === "egyptian_citizen" || plan === "foreign_resident" ? ["EUR", "EGP"] : ["EUR"];
 }
 
 export const RATE_PLANS: { value: RatePlan; label: string }[] = [

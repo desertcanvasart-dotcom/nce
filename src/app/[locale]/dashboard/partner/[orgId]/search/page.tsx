@@ -120,11 +120,16 @@ export default async function PartnerSearch({
                           {c.price.supplementMinor ? `, with ${money(c.price.supplementMinor, c.currency)} in supplements` : ""})
                         </span>{" "}
                         · {c.confirmedAt ? <span className={ui.muted}>{availabilityUpdated(c.confirmedAt)} · </span> : null}
-                        <Link
-                          href={`/dashboard/partner/${orgId}/reserve/?dep=${d.departureId}&cabin=${c.cabinTypeId}&cur=${c.currency}&adults=${adults}&children=${encodeURIComponent(q.children ?? "")}`}
-                        >
-                          {c.mode === "instant" ? "Reserve" : "Request"}
-                        </Link>
+                        {/* ADR-110: bookings settle in €; a rate in another currency is shown but not booked. */}
+                        {c.currency === "EUR" ? (
+                          <Link
+                            href={`/dashboard/partner/${orgId}/reserve/?dep=${d.departureId}&cabin=${c.cabinTypeId}&cur=${c.currency}&adults=${adults}&children=${encodeURIComponent(q.children ?? "")}`}
+                          >
+                            {c.mode === "instant" ? "Reserve" : "Request"}
+                          </Link>
+                        ) : (
+                          <span className={ui.muted}>Bookable in € only; ask the operator for a € rate</span>
+                        )}
                       </>
                     ) : (
                       <span className={ui.muted}>{c.price.reason}</span>

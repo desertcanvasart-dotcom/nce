@@ -213,9 +213,14 @@ describe("prices after sign-in (DATA-033, BRAND-003)", () => {
     ...over,
   });
 
-  it("keeps one currency per departure and cabin, US$ before €", () => {
-    const kept = preferredPrices([row({ currency: "EUR", double: 1 }), row({}), row({ cabinTypeId: "x", currency: "EUR" })]);
-    expect(kept.map((r) => `${r.cabinTypeId}:${r.currency}`).sort()).toEqual(["c:USD", "x:EUR"]);
+  it("offers euro rates only, one per departure and cabin; a US$ rate is never booked or converted (ADR-110)", () => {
+    const kept = preferredPrices([
+      row({ currency: "EUR", double: 1 }),
+      row({}),
+      row({ cabinTypeId: "x", currency: "EUR" }),
+      row({ cabinTypeId: "y" }),
+    ]);
+    expect(kept.map((r) => `${r.cabinTypeId}:${r.currency}`).sort()).toEqual(["c:EUR", "x:EUR"]);
   });
 
   it("prices by guests taking a bed; infants under 3 don't", () => {

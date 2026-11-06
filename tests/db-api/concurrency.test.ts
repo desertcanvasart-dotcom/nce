@@ -89,7 +89,7 @@ beforeAll(async () => {
     vessel_id: vesselId,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 100000,
   });
   const { data: p } = await service
@@ -132,7 +132,7 @@ beforeAll(async () => {
       req: r.id,
       dep: departureId,
       plan: "international",
-      cur: "USD",
+      cur: "EUR",
       cabins: [{ cabin_type_id: cabinTypeId, adults: 2, child_ages: [], price_minor: 200000 }],
       total: 200000,
       list_total: 200000,

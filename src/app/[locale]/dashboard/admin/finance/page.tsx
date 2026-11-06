@@ -14,9 +14,10 @@ import { PAYMENT_BADGE } from "../../_bookings/PaymentPanel";
 import { decidePayment, deletePeriod, recordManualPayment, recordPayout, saveBankDetails, savePeriod } from "./actions";
 
 const money = (m: number, c: string) => formatMoney({ amount: Number(m), currency: c }, "en");
+// ADR-110: money settles in euros. US$ stays for payouts of reservations made in US$ before 6 Nov 2026.
 const CURRENCIES = [
-  { value: "USD", label: "US$" },
   { value: "EUR", label: "€" },
+  { value: "USD", label: "US$" },
   { value: "EGP", label: "E£" },
 ];
 
@@ -224,7 +225,7 @@ export default async function FinancePage() {
               options={operators.map((o) => ({ value: o.id, label: o.display_name }))}
             />
             <Input label="Amount" name="amount" inputMode="decimal" required />
-            <Select label="Currency" name="currency" required defaultValue="USD" options={CURRENCIES} />
+            <Select label="Currency" name="currency" required defaultValue="EUR" options={CURRENCIES} />
             <Input label="Method" name="method" required maxLength={80} defaultValue="Bank transfer" />
             <Input label="Reference" name="ref" maxLength={200} />
             <Input label="Paid on" name="paid_on" type="date" required />
@@ -272,7 +273,7 @@ export default async function FinancePage() {
               name="currency"
               maxLength={300}
               defaultValue={bank?.currency}
-              hint="For example “US$ and €”."
+              hint="Euros: money settles in € (ADR-110)."
             />
           </div>
           <Input label="Note to customers" name="note" maxLength={300} defaultValue={bank?.note} />

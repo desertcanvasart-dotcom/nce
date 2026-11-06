@@ -29,8 +29,8 @@ const JSON_EXAMPLE = `{
               "available": 4,
               "confirmed_at": "2027-03-01T09:30:00+02:00",
               "rates": [
-                { "occupancy": 2, "plan": "international", "currency": "USD", "price": "1250.00" },
-                { "occupancy": 1, "plan": "international", "currency": "USD", "price": "1875.00" },
+                { "occupancy": 2, "plan": "international", "currency": "EUR", "price": "1250.00" },
+                { "occupancy": 1, "plan": "international", "currency": "EUR", "price": "1875.00" },
                 { "occupancy": 2, "plan": "egyptian_citizen", "currency": "EGP", "price": "45000.00" }
               ]
             },
@@ -50,7 +50,7 @@ const XML_EXAMPLE = `<?xml version="1.0" encoding="UTF-8"?>
       <availability>
         <date date="2027-03-15" schedule="LXR-ASW-4N">
           <cabin type="STD" available="4" confirmed_at="2027-03-01T07:30:00Z">
-            <rate occupancy="2" plan="international" currency="USD" price="1250.00"/>
+            <rate occupancy="2" plan="international" currency="EUR" price="1250.00"/>
           </cabin>
           <cabin type="STE" available="0"/>
         </date>

@@ -37,7 +37,7 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
   ('00000000-0000-4000-e100-000000000005', '00000000-0000-4000-e100-000000000003', '00000000-0000-4000-e100-000000000001', 2, now() - interval '3 days', 'manual'),
   ('00000000-0000-4000-e100-000000000006', '00000000-0000-4000-e100-000000000002', '00000000-0000-4000-e100-000000000001', 3, now() - interval '3 days', 'manual');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor)
-select d, c, '00000000-0000-4000-e100-000000000001', 2, 'international', 'USD', 100000
+select d, c, '00000000-0000-4000-e100-000000000001', 2, 'international', 'EUR', 100000
 from unnest(array['00000000-0000-4000-e100-000000000005', '00000000-0000-4000-e100-000000000006']::uuid[]) d,
      unnest(array['00000000-0000-4000-e100-000000000002', '00000000-0000-4000-e100-000000000003']::uuid[]) c;
 insert into public.cancellation_policies (id, vessel_id, bands) values
@@ -56,7 +56,7 @@ grant execute on function pg_temp.avail(text) to authenticated, service_role;
 
 -- The customer asks; the request keeps what our data showed.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('a', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'USD',
+insert into t values ('a', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e100-000000000002", "ages": [40, 38]}]',
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01", "nationality": "gb"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]',
   true));
@@ -106,7 +106,7 @@ select ok((select responded_at is not null from public.booking_requests where id
 
 -- Decline: none free on that cabin type, as the operator's word.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('b', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'USD',
+insert into t values ('b', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e100-000000000003", "ages": [40, 38]}]',
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]', true));
 select pg_temp.as_user('00000000-0000-4000-a000-000000000011');
@@ -115,7 +115,7 @@ select is(pg_temp.avail('00000000-0000-4000-e100-000000000003'), '0 tap', 'a dec
 
 -- Offer other: another date; the customer takes it and is booked.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('c', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'USD',
+insert into t values ('c', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e100-000000000002", "ages": [40, 38]}]',
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]', true));
 select pg_temp.as_service();
@@ -133,7 +133,7 @@ select results_eq($$ select r.departure_id, i.available, i.source::text from pub
 
 -- A hold that runs out gives its cabin back.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('d', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'USD',
+insert into t values ('d', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e100-000000000002", "ages": [40, 38]}]',
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]', true));
 select pg_temp.as_service();
@@ -145,7 +145,7 @@ select is(pg_temp.avail('00000000-0000-4000-e100-000000000002'), '3 tap', 'the h
 
 -- Reply times: a reminder at the reply time (6 hours by default), an escalation at twice it.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('e', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'USD',
+insert into t values ('e', public.customer_request_booking('00000000-0000-4000-e100-000000000005', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-e100-000000000002", "ages": [40, 38]}]',
   '[{"full_name": "Sample Guest One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Guest Two", "date_of_birth": "1987-01-01"}]', true));
 select pg_temp.as_postgres();

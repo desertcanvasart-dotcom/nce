@@ -29,7 +29,7 @@ export default async function PartnerReserve({
     returnTo: `/dashboard/partner/${orgId}/search/`,
   });
   const q = await searchParams;
-  if (!q.dep || !isUuid(q.dep) || !q.cabin || !isUuid(q.cabin) || (q.cur !== "USD" && q.cur !== "EUR")) notFound();
+  if (!q.dep || !isUuid(q.dep) || !q.cabin || !isUuid(q.cabin) || q.cur !== "EUR") notFound();
   const adults = Math.min(3, Math.max(1, Number(q.adults) || 2));
   const childAges = parseChildAges(q.children ?? "") ?? [];
   const cabins = Math.min(5, Math.max(1, Number(q.cabins) || 1));
