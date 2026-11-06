@@ -2,7 +2,7 @@ import { Link } from "@/i18n/navigation";
 import { ListingGrid } from "@/components/marketplace/ListingGrid";
 import type { VesselType } from "@/components/ds/lib/types";
 import { featuredFirst } from "@/content/vessel-types";
-import { facetBySlug, sortListing, toCard, type ListingVessel } from "@/lib/marketplace/listing";
+import { closingHeading, facetBySlug, sortListing, toCard, type ListingVessel } from "@/lib/marketplace/listing";
 import type { Link as SiloLink } from "@/lib/seo/links";
 import styles from "./editorial.module.css";
 
@@ -29,11 +29,13 @@ export function ClosingCruises({
   // Each type's featured vessel leads (Steam Ship Sudan for paddle steamers), then the listing's own order.
   const fits =
     picked ?? featuredFirst(sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type))));
+  const shown = fits.slice(0, 3);
+  const heading = title ?? closingHeading(shown);
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
-      <h2 id="closing-cruises">{title ?? "Cruises you can book"}</h2>
-      {fits.length ? (
-        <ListingGrid cards={fits.slice(0, 3).map(toCard)} />
+      <h2 id="closing-cruises">{heading}</h2>
+      {shown.length ? (
+        <ListingGrid cards={shown.map(toCard)} />
       ) : (
         <p className={styles.muted}>No cruises of this kind are published yet.</p>
       )}

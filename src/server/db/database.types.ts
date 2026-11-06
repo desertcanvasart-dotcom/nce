@@ -4558,12 +4558,16 @@ export type Database = {
         Row: {
           beam_m: number | null;
           best_for: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability: string;
+          commercial_relationship: string | null;
           cabin_count: number | null;
           category: Database["public"]["Enums"]["vessel_category"] | null;
           created_at: string;
           deck_count: number | null;
           dietary_options: string[];
           display_name: string | null;
+          enquiry_partner_email: string | null;
+          enquiry_partner_name: string | null;
           from_price_minor: number | null;
           gratuity_usd_minor: number | null;
           id: string;
@@ -4580,6 +4584,7 @@ export type Database = {
           name: string;
           operator_org_id: string | null;
           operator_pricing_approved: boolean;
+          price_includes_margin: boolean;
           price_band_max_minor: number | null;
           price_band_min_minor: number | null;
           pricing_basis: string | null;
@@ -4609,12 +4614,16 @@ export type Database = {
         Insert: {
           beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability?: string;
+          commercial_relationship?: string | null;
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          enquiry_partner_email?: string | null;
+          enquiry_partner_name?: string | null;
           from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
@@ -4631,6 +4640,7 @@ export type Database = {
           name: string;
           operator_org_id?: string | null;
           operator_pricing_approved?: boolean;
+          price_includes_margin?: boolean;
           price_band_max_minor?: number | null;
           price_band_min_minor?: number | null;
           pricing_basis?: string | null;
@@ -4660,12 +4670,16 @@ export type Database = {
         Update: {
           beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability?: string;
+          commercial_relationship?: string | null;
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          enquiry_partner_email?: string | null;
+          enquiry_partner_name?: string | null;
           from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
@@ -4682,6 +4696,7 @@ export type Database = {
           name?: string;
           operator_org_id?: string | null;
           operator_pricing_approved?: boolean;
+          price_includes_margin?: boolean;
           price_band_max_minor?: number | null;
           price_band_min_minor?: number | null;
           pricing_basis?: string | null;

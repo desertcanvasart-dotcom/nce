@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Nile cruises, explained before you sail",
-    "homeDescription": "How a sailing dahabiya, a paddle steamer and a motor cruise ship differ on board, and why one five-star cabin costs more than 15 times another."
+    "homeDescription": "How a sailing dahabiya, a paddle steamer and a motor cruise ship differ on board, and why one five-star cruise can cost more than 15 times another."
   },
   "shell": {
     "skipToContent": "Skip to content",
@@ -116,7 +116,10 @@
       "remove": "Remove {name} from saved",
       "from": "From <b>{price}</b> per person. Includes our margin. A guide, not a quote.",
       "band": "Typically <b>{min}–{max}</b> per person. Includes our margin. A guide, not a quote.",
-      "onRequest": "Price on request"
+      "onRequest": "Price on request",
+      "unavailable": "Booking unavailable through us",
+      "fromGuide": "From <b>{price}</b> per person. A guide, not a quote.",
+      "bandGuide": "Typically <b>{min}–{max}</b> per person. A guide, not a quote."
     },
     "experienceCard": {
       "seeDetails": "See details"
@@ -752,6 +755,14 @@
     },
     "goodToKnow": {
       "title": "Good to know"
+    },
+    "booking": {
+      "enquire": "Enquire with {name}",
+      "note": "This cruise can’t be booked through Nilecruz. We describe it so you can compare it with the others.",
+      "costA": "We don’t sell this cruise, so we don’t publish a price for it.",
+      "bookA": "Not through Nilecruz. You can enquire with {name} instead.",
+      "bookNone": "Not through Nilecruz.",
+      "finalTitle": "Interested in this cruise?"
     }
   },
   "vesselsPillar": {
@@ -1036,7 +1047,10 @@
       "pageTitle": "Save this quote",
       "summary": "{name}: {details}",
       "any": "dates to be agreed"
-    }
+    },
+    "unavailable": "Booking unavailable through us",
+    "fromGuide": "From <b>{price}</b> per person. A guide, not a quote.",
+    "bandGuide": "Typically <b>{min}–{max}</b> per person. A guide, not a quote."
   },
   "guideHub": {
     "meta": {

@@ -45,9 +45,9 @@ export default async function HomePage({ params }: Props) {
   const pillars = bridges("/").filter((b) => b.href !== "/cruises/");
   return (
     <>
+      {/* No eyebrow: the logo already says "Nile cruises, explained" (Islam's review, 6 Nov 2026). */}
       <Hero
-        title={page?.title ?? "Nile cruises, explained before you sail"}
-        eyebrow="Nile cruises, explained"
+        title={page?.title ?? "Find the right Nile cruise"}
         subtitle={page ? firstSentence(page.standfirst) : undefined}
         vessel="sail"
         height={560}
@@ -65,7 +65,8 @@ export default async function HomePage({ params }: Props) {
             <span>Draft for review</span>
           </p>
         ) : null}
-        {page ? <p className={styles.lead}>{page.standfirst}</p> : null}
+        {/* The rest of the intro, when it runs past the hero's one sentence. */}
+        {page && page.standfirst !== firstSentence(page.standfirst) ? <p className={styles.lead}>{page.standfirst}</p> : null}
         {types ? (
           <section className={styles.section} aria-labelledby="types">
             <h2 id="types">{types.heading}</h2>

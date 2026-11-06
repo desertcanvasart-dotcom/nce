@@ -27,12 +27,23 @@ export type PublicPriceData = {
   priceLastChecked: string | null;
   operatorPriceApproved: boolean;
   rateDisplayAfterRequest: RateDisplay;
+  /** False until Islam confirms the figure includes our margin: shown without "Includes our margin" (6 Nov 2026). */
+  priceIncludesMargin?: boolean;
 };
 
 /** What the public may see. */
 export type PublicPrice =
-  | { mode: "from_price"; from: Money; basis: PriceBasis; nights: number | null; lastChecked: string }
-  | { mode: "price_band"; min: Money; max: Money; basis: PriceBasis; nights: number | null; lastChecked: string }
+  | { mode: "from_price"; from: Money; basis: PriceBasis; nights: number | null; lastChecked: string; margin?: boolean }
+  | {
+      mode: "price_band";
+      min: Money;
+      max: Money;
+      basis: PriceBasis;
+      nights: number | null;
+      lastChecked: string;
+      /** False: shown without "Includes our margin" until Islam confirms it does. Missing means it does. */
+      margin?: boolean;
+    }
   | { mode: "on_request" };
 
 export const ON_REQUEST: PublicPrice = { mode: "on_request" };
@@ -65,7 +76,7 @@ export function publicPrice(d: PublicPriceData | null | undefined, today: string
   if (d.priceValidTo && d.priceValidTo < today) return ON_REQUEST;
   const eur = (amount: number): Money => ({ amount, currency: "EUR" });
   const nights = d.priceBasis === "per_person_per_trip" ? d.priceTripNights : null;
-  const common = { basis: d.priceBasis, nights, lastChecked: d.priceLastChecked };
+  const common = { basis: d.priceBasis, nights, lastChecked: d.priceLastChecked, margin: d.priceIncludesMargin ?? true };
   if (d.publicPriceMode === "from_price") {
     if (!d.fromPriceAmount || d.fromPriceAmount <= 0) return ON_REQUEST;
     return { mode: "from_price", from: eur(d.fromPriceAmount), ...common };
@@ -85,12 +96,27 @@ export const sortAmount = (p: PublicPrice | undefined): number | null =>
 export function priceMessage(
   p: PublicPrice,
   money: (m: Money) => string,
-): { key: "level1.from" | "level1.band" | "level1.onRequest"; values: Record<string, string> } {
-  if (p.mode === "from_price") return { key: "level1.from", values: { price: money(p.from) } };
-  if (p.mode === "price_band") return { key: "level1.band", values: { min: money(p.min), max: money(p.max) } };
+): {
+  key: "level1.from" | "level1.fromGuide" | "level1.band" | "level1.bandGuide" | "level1.onRequest";
+  values: Record<string, string>;
+} {
+  if (p.mode === "from_price")
+    return { key: p.margin !== false ? "level1.from" : "level1.fromGuide", values: { price: money(p.from) } };
+  if (p.mode === "price_band")
+    return { key: p.margin !== false ? "level1.band" : "level1.bandGuide", values: { min: money(p.min), max: money(p.max) } };
   return { key: "level1.onRequest", values: {} };
 }
 
 /** A signed-in traveller may see a rate for chosen dates only where the vessel has that set and can be booked. */
 export const showsSignedInPrice = (rateDisplay: RateDisplay | undefined, bookable: boolean) =>
   bookable && rateDisplay === "signed_in_price";
+
+/**
+ * Who can book a vessel (Islam's review, 6 Nov 2026). "not_available_through_nilecruz": no price, no Nilecruz booking or
+ * offer request; its page may name a travel company that takes enquiries instead (never called the operator).
+ */
+export type BookingAvailability = "available_through_nilecruz" | "not_available_through_nilecruz";
+export type EnquiryPartner = { name: string; email: string };
+
+export const sellsThroughUs = (availability: BookingAvailability | undefined) =>
+  availability !== "not_available_through_nilecruz";

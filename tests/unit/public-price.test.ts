@@ -3,6 +3,7 @@ import {
   DEFAULT_PRICE_DATA,
   priceMessage,
   publicPrice,
+  sellsThroughUs,
   showsSignedInPrice,
   sortAmount,
   type PublicPriceData,
@@ -38,7 +39,21 @@ describe("public starting prices (ADR-109)", () => {
       basis: "per_person_per_trip",
       nights: null,
       lastChecked: "2026-11-06",
+      margin: true,
     });
+  });
+
+  it("says when a figure isn't yet confirmed to include our margin (the Nour El Nil boats, 6 Nov 2026)", () => {
+    const p = publicPrice({ ...royalLily, priceIncludesMargin: false }, today);
+    expect(p.mode === "from_price" && p.margin).toBe(false);
+    expect(priceMessage(p, () => "€2,500").key).toBe("level1.fromGuide");
+    expect(priceMessage(publicPrice(royalLily, today), () => "€1,120").key).toBe("level1.from");
+  });
+
+  it("only a vessel Nilecruz can sell is sold through us (Steam Ship Sudan isn't)", () => {
+    expect(sellsThroughUs("not_available_through_nilecruz")).toBe(false);
+    expect(sellsThroughUs("available_through_nilecruz")).toBe(true);
+    expect(sellsThroughUs(undefined)).toBe(true);
   });
 
   it("without the operator's approval, says 'Price on request'", () => {

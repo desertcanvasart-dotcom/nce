@@ -3,7 +3,7 @@
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
-    "homeDescription": "En qué se diferencian a bordo una dahabiya de vela, un vapor de ruedas y un crucero a motor, y por qué un camarote de cinco estrellas cuesta más de 15 veces lo que otro."
+    "homeDescription": "En qué se diferencian a bordo una dahabiya de vela, un vapor de ruedas y un crucero a motor, y por qué un crucero de cinco estrellas puede costar más de 15 veces lo que otro."
   },
   "shell": {
     "skipToContent": "Ir al contenido",
@@ -117,7 +117,10 @@
       "remove": "Quitar {name} de guardados",
       "from": "Desde <b>{price}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
       "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
-      "onRequest": "Precio a consultar"
+      "onRequest": "Precio a consultar",
+      "unavailable": "No se puede reservar con nosotros",
+      "fromGuide": "Desde <b>{price}</b> por persona. Una referencia, no un presupuesto.",
+      "bandGuide": "Normalmente <b>{min}–{max}</b> por persona. Una referencia, no un presupuesto."
     },
     "experienceCard": {
       "seeDetails": "Ver detalles"
@@ -753,6 +756,14 @@
     },
     "goodToKnow": {
       "title": "Conviene saber"
+    },
+    "booking": {
+      "enquire": "Consultar con {name}",
+      "note": "Este crucero no se puede reservar con Nilecruz. Lo describimos para que puedas compararlo con los demás.",
+      "costA": "No vendemos este crucero, así que no publicamos su precio.",
+      "bookA": "No con Nilecruz. Puedes consultar con {name}.",
+      "bookNone": "No con Nilecruz.",
+      "finalTitle": "¿Te interesa este crucero?"
     }
   },
   "vesselsPillar": {
@@ -1037,7 +1048,10 @@
       "pageTitle": "Guardar este presupuesto",
       "summary": "{name}: {details}",
       "any": "fechas por acordar"
-    }
+    },
+    "unavailable": "No se puede reservar con nosotros",
+    "fromGuide": "Desde <b>{price}</b> por persona. Una referencia, no un presupuesto.",
+    "bandGuide": "Normalmente <b>{min}–{max}</b> por persona. Una referencia, no un presupuesto."
   },
   "guideHub": {
     "meta": {

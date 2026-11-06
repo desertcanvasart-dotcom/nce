@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cx } from "../lib/cx";
 import { BrandLogo } from "./BrandLogo";
@@ -30,8 +30,6 @@ export type NavBarProps = {
  */
 export function NavBar({ links, cta, account, overMedia }: NavBarProps) {
   const t = useTranslations("shell");
-  // The logo's strapline is English; other languages show the wordmark with the strapline in their own words.
-  const english = useLocale() === "en";
   return (
     <header className={cx(styles.nav, overMedia ? styles.onMedia : styles.solid)}>
       <div className={styles.top}>
@@ -53,20 +51,10 @@ export function NavBar({ links, cta, account, overMedia }: NavBarProps) {
             </div>
           </nav>
         </details>
+        {/* The name-only wordmark at header size, in every language: the strapline is too small to read here (Islam,
+            6 Nov 2026). The strapline version is for the sharing image and larger brand uses. */}
         <Link href="/" className={styles.wordmark}>
-          {english ? (
-            <BrandLogo
-              variant="strapline"
-              alt={`Nilecruz: ${t("tagline")}`}
-              onMedia={overMedia}
-              className={styles.logoStrapline}
-            />
-          ) : (
-            <>
-              <BrandLogo variant="wordmark" alt="Nilecruz" onMedia={overMedia} className={styles.logoWordmark} />
-              <span className={styles.tagline}>{t("tagline")}</span>
-            </>
-          )}
+          <BrandLogo variant="wordmark" alt="Nilecruz" onMedia={overMedia} className={styles.logoWordmark} />
         </Link>
         <div className={styles.end}>
           {renderAccount(account, cx(styles.account, styles.desktopOnly))}

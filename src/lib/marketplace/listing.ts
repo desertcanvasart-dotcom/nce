@@ -4,7 +4,14 @@
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
 import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
-import { hasFigure, sortAmount, type PublicPrice, type RateDisplay } from "./public-price";
+import {
+  hasFigure,
+  sellsThroughUs,
+  sortAmount,
+  type BookingAvailability,
+  type PublicPrice,
+  type RateDisplay,
+} from "./public-price";
 
 export type Itinerary = {
   origin: string;
@@ -40,6 +47,8 @@ export type ListingVessel = {
   /** ADR-109: the one public starting price (euros, operator-approved), or "Price on request". */
   price: PublicPrice;
   rateDisplay?: RateDisplay;
+  /** Who can book it; "not_available_through_nilecruz" shows no price and no Nilecruz booking action (6 Nov 2026). */
+  booking?: BookingAvailability;
   itineraries: Itinerary[];
   /** The lowest bookable rate (any currency). Never shown publicly: ADR-109 shows `price` instead. */
   from?: Money;
@@ -139,6 +148,10 @@ export function headlineItinerary(v: ListingVessel): Itinerary | undefined {
 /** A listing card's props (BRAND-026, 028, ADR-025): guests always, the score when published, no stars, one price. */
 export type GridCard = Omit<CruiseCardProps, "onCompare" | "onSave" | "compared" | "saved"> & { slug: string };
 
+/** "Cruises you can book" only when every cruise in the row can be booked through Nilecruz (Islam, 6 Nov 2026). */
+export const closingHeading = (shown: ListingVessel[]) =>
+  shown.length && shown.every((v) => v.bookable) ? "Cruises you can book" : "Cruises to explore";
+
 export function toCard(v: ListingVessel): GridCard {
   const it = headlineItinerary(v);
   const badges: GridCard["badges"] = [];
@@ -158,10 +171,12 @@ export function toCard(v: ListingVessel): GridCard {
     // ADR-109: the approved starting price in euros, or "Price on request"; never a rate computed from cabins.
     price:
       v.price.mode === "from_price"
-        ? { from: v.price.from }
+        ? { from: v.price.from, margin: v.price.margin }
         : v.price.mode === "price_band"
-          ? { min: v.price.min, max: v.price.max }
+          ? { min: v.price.min, max: v.price.max, margin: v.price.margin }
           : undefined,
+    // A vessel Nilecruz can't sell says so instead of a price (Steam Ship Sudan, 6 Nov 2026).
+    unavailable: !sellsThroughUs(v.booking),
     image: v.image,
     badges,
   };

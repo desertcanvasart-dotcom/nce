@@ -113,6 +113,17 @@ export type VesselPlan = {
   sharedSpaces: string[];
   /** Per person for the whole cruise, sharing a double room; never turned into a nightly figure. */
   indicative: { amountMinor: number; currency: string; nights: number } | null;
+  /** The fleet data's date: when a public price from it was last checked. */
+  checkedOn: string;
+  /**
+   * Who can book it (Islam, 6 Nov 2026): a boat Nilecruz can't sell shows no price or booking, and may name a travel
+   * company that takes enquiries for it (never the operator).
+   */
+  booking: {
+    availability: "available_through_nilecruz" | "not_available_through_nilecruz";
+    relationship: "agreement" | "none" | null;
+    enquiry: { name: string; email: string } | null;
+  };
   showcaseReason: string;
   translations: {
     locale: Locale;
@@ -278,6 +289,25 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       if (!/per trip/.test(String(price.basis))) bad("indicative_price must be per person, per trip");
       indicative = { amountMinor: Math.round(Number(price.amount) * 100), currency: String(price.currency), nights };
     }
+    const availability =
+      v.booking_availability === undefined || v.booking_availability === "available_through_nilecruz"
+        ? "available_through_nilecruz"
+        : v.booking_availability === "not_available_through_nilecruz"
+          ? "not_available_through_nilecruz"
+          : null;
+    if (!availability) bad(`unknown booking_availability ${String(v.booking_availability)}`);
+    const relationship = v.commercial_relationship ?? null;
+    if (relationship !== null && relationship !== "agreement" && relationship !== "none")
+      bad(`unknown commercial_relationship ${String(relationship)}`);
+    const partner = (v.enquiry_partner ?? null) as Json | null;
+    const enquiry =
+      partner && typeof partner.name === "string" && typeof partner.email === "string"
+        ? { name: partner.name, email: partner.email }
+        : null;
+    if (partner && !enquiry) bad("enquiry_partner needs a name and an email");
+    if (enquiry && availability !== "not_available_through_nilecruz")
+      bad("an enquiry partner is only for a boat that can't be booked through Nilecruz");
+    if (availability === "not_available_through_nilecruz" && indicative) bad("a boat we can't sell shows no price");
     const dims = dimensions(v.dimensions_m);
     const built = typeof v.built_year === "number" ? v.built_year : valueOf<number>(v.built_year);
     const renovated = typeof v.renovated_year === "number" ? v.renovated_year : valueOf<number>(v.renovated_year);
@@ -473,6 +503,12 @@ export function planFleetImport(file: FleetFile, i18n: FleetI18n, today: string)
       beamM: dims?.[1] ?? null,
       sharedSpaces,
       indicative,
+      checkedOn: String(file.meta.updated_on ?? file.meta.researched_on ?? ""),
+      booking: {
+        availability: availability ?? "available_through_nilecruz",
+        relationship: (relationship as "agreement" | "none" | null) ?? null,
+        enquiry,
+      },
       showcaseReason: `Information only: ${operator.name} fleet (${(operator.partner_status ?? "permission unknown").replace(/_/g, " ")}, ${String(file.meta.updated_on ?? file.meta.researched_on ?? "")}). Not bookable on Nilecruz.`,
       translations,
       cabins,

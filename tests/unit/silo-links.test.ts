@@ -77,6 +77,8 @@ describe("the link map from the workbook (SEO-008–011)", () => {
   });
 });
 
+const CLEARED = new Set(["P001", "P027", "P041"]);
+
 describe("the drafted pages (ADR-096)", () => {
   const urlOf = Object.fromEntries(Object.entries(LINK_MAP).map(([u, p]) => [p.id, u]));
   for (const page of Object.values(DRAFT_PAGES)) {
@@ -85,7 +87,8 @@ describe("the drafted pages (ADR-096)", () => {
       expect(BUILT.has(url), url).toBe(true);
       expect(page.title).toBe(LINK_MAP[url]!.h1);
       expect(houseStyleProblems(page)).toEqual([]);
-      expect(page.review).toBe("draft");
+      // Islam cleared the draft label on the homepage, /vessels/compare/ and /vessels/dahabiya/ (6 Nov 2026).
+      expect(page.review).toBe(CLEARED.has(page.id) ? "approved" : "draft");
       if (up(url)) expect(page.standfirst).toContain("[[up]]");
       expect(page.faqs.length).toBeGreaterThan(0);
     });
