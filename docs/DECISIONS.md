@@ -925,7 +925,7 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - The rate-derived "from" price and the "with sightseeing from" badge are no longer shown publicly; the "Why this price" pop-up (EXP-001), built on them, is removed.
   - The plan-my-cruise budget is in euros, with no currency switcher.
 - **Other pages:**
-  - Vessel type hubs and vessel pages link to "Why Nile cruise prices differ".
+  - Vessel pages link to "Why Nile cruise prices differ"; vessel type hubs reach it through the site header ("Why prices differ"), because their silo-workbook rows don't list the price page as an in-article link.
   - "All prices we publish and quote already include our margin." appears on vessel pages, listings, the compare page and the price pages.
   - The listing sorts by starting price and says that vessels with "Price on request" come after the others.
   - The price page's heading is "Nile cruise prices: why five-star costs €400 or €6,500". "ten times" and "tenfold" become "more than 15 times".

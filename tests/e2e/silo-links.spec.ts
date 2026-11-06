@@ -126,7 +126,9 @@ test("the price page: euros, the brief's heading and example, the total from its
   await expect(example).toContainText("+€800");
   await expect(example).toContainText("+€300");
   await expect(example).toContainText("€1,500");
-  await expect(page.getByText("Sample data")).toHaveCount(0);
+  // The page and its example aren't sample data (cruise cards below may be, for sample vessels).
+  await expect(page.locator("header").getByText("Sample data")).toHaveCount(0);
+  await expect(example).not.toContainText("Sample data");
   await expect(page.locator("main")).not.toContainText(/US\$|tenfold|ten times/);
   await expect(page.getByText("All prices we publish and quote already include our margin.").first()).toBeVisible();
 });
