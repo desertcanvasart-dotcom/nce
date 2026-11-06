@@ -30,7 +30,7 @@ export const emptyPlan = (today: string): Plan => {
     childAges: "",
     cabins: 1,
     budget: "",
-    currency: "USD",
+    currency: "EUR",
     notes: "",
   };
 };

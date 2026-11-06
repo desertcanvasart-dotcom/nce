@@ -12,7 +12,6 @@ import {
   touristTripJsonLd,
   vesselH1,
   evaluationPublishable,
-  indicativeTotal,
   nightsOf,
   verifiedCabin,
   type VesselEvaluation,
@@ -74,6 +73,14 @@ const page = (over: Partial<VesselPage> = {}): VesselPage => ({
   externalRatings: [],
   from: { amount: 100000, currency: "USD" },
   bookable: true,
+  price: {
+    mode: "from_price",
+    from: { amount: 100000, currency: "EUR" },
+    basis: "per_person_per_trip",
+    nights: null,
+    lastChecked: "2026-11-06",
+  },
+  rateDisplay: "offer_by_adviser",
   ...over,
 });
 
@@ -117,15 +124,17 @@ describe("dates in the visitor's language (DATA-004)", () => {
 describe("structured data (DATA-034, SEO-026)", () => {
   const words = { name: "Sample Ship", trip: (it: VesselItinerary) => `${it.nights} nights`, image: "https://x/p.jpg" };
 
-  it("offers only the public 'from' price, and never a rating", () => {
+  it("offers only the approved euro starting price of a bookable vessel, and never a rating (ADR-109)", () => {
     const json = touristTripJsonLd(page(), "https://x/cruises/s/", words);
     expect(json).toMatchObject({
       "@type": "TouristTrip",
       name: "Sample Ship",
       image: "https://x/p.jpg",
-      offers: { "@type": "AggregateOffer", lowPrice: "1000.00", priceCurrency: "USD" },
+      offers: { "@type": "AggregateOffer", lowPrice: "1000.00", priceCurrency: "EUR" },
     });
     expect(JSON.stringify(json)).not.toContain("AggregateRating");
+    // A bookable rate the operator hasn't approved for publication never becomes an Offer.
+    expect(touristTripJsonLd(page({ price: { mode: "on_request" } }), "u", words).offers).toBeUndefined();
   });
 
   it("describes every itinerary, with its stops", () => {
@@ -134,31 +143,13 @@ describe("structured data (DATA-034, SEO-026)", () => {
     expect(JSON.stringify(json.subTrip?.[1])).toContain('"Kom Ombo"');
   });
 
-  it("has no offer for an information-only vessel, even with an indicative price", () => {
-    const v = page({
-      bookable: false,
-      indicativePrice: { perNight: { amount: 30000, currency: "USD" }, basis: "per_person_per_night", status: "indicative" },
-    });
+  it("has no offer for an information-only vessel, even with an approved starting price", () => {
+    const v = page({ bookable: false });
     expect(touristTripJsonLd(v, "u", words).offers).toBeUndefined();
   });
 });
 
-describe("the indicative price (a guide, never a quote)", () => {
-  const price = { perNight: { amount: 30000, currency: "USD" }, basis: "per_person_per_night", status: "indicative" } as const;
-  it("totals an itinerary from the nightly guide and its nights", () => {
-    expect(indicativeTotal(price, 3)).toEqual({ amount: 90000, currency: "USD" });
-    expect(indicativeTotal(price, 4)).toEqual({ amount: 120000, currency: "USD" });
-  });
-  it("never turns a per-trip guide into a nightly figure, and gives it only for its own length", () => {
-    const trip = {
-      perTrip: { amount: 337500, currency: "EUR" },
-      nights: 5,
-      basis: "per_person_per_trip",
-      status: "indicative",
-    } as const;
-    expect(indicativeTotal(trip, 5)).toEqual({ amount: 337500, currency: "EUR" });
-    expect(indicativeTotal(trip, 4)).toBeNull();
-  });
+describe("itinerary lengths", () => {
   it("lists each length once, shortest first", () => {
     expect(nightsOf([itin("L4", 4), itin("A3", 3), itin("X4", 4)])).toEqual([3, 4]);
   });

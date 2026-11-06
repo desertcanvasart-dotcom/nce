@@ -30,7 +30,7 @@ test("the vessel page: guests, cabins and decks as facts, and its evaluation sta
 test("the comparison: the same facts side by side [BRAND-010]", async ({ page }) => {
   await page.goto("/cruises/compare/?v=sample-sail-one,sample-motor-one");
   const table = page.getByRole("table", { name: "Vessels compared" });
-  for (const row of ["Guests on board", "Cabins", "From, per person"])
+  for (const row of ["Guests on board", "Cabins", "Starting price"])
     await expect(table.getByRole("rowheader", { name: row })).toBeVisible();
 });
 

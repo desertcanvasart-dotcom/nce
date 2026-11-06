@@ -1,4 +1,4 @@
-The "why US$800 vs US$8,000" explainer: two five-star presets and six factors that build the price live in a stacked bar, each with what you notice on board.
+The "why €400 vs €6,500" explainer: two five-star presets and six factors that build the price live in a stacked bar, each with what you notice on board.
 
 Provide `factors` (`{id, label, icon, options:[{label, v, why}]}`, default `Nilecrz.data.priceFactors`), `defaultPreset` (`low`/`high`), `currency`, `eyebrow`, `note` and `footnote`.
 

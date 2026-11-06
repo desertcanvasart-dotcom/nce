@@ -204,7 +204,22 @@
 .price {
   display: grid;
   gap: var(--space-1);
+  max-width: 24ch;
   line-height: 1;
+}
+
+/* ADR-109: the whole Level 1 sentence, the figure in the price style. */
+.price p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: var(--type-caption-size);
+  line-height: 1.4;
+}
+
+.price .onRequest {
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: 600;
 }
 
 .price small {

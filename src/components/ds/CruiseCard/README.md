@@ -13,7 +13,7 @@ Provide `name`, `vessel` (`sail`/`motor`/`steam`), `propulsion` (`motor`/`wind`/
 
 ## Changes in the build
 
-- `price` is `{amount (minor units), currency}` and optional. An information-only vessel passes `indicativePrice` instead, shown as an indicative price per person; with neither, the card says 'Prices in preparation' (ADR-019, ADR-025).
+- `price` is the approved public starting price in euros, already including Nilecruz's margin: `{ from }` or a typical band `{ min, max }` (Money in minor units). The card shows the brief's sentence, "From €X per person. Includes our margin. A guide, not a quote." Without one it says "Price on request"; booking status stays a separate badge (ADR-109).
 - Shows the Nilecruz evaluation 'NN/100'; stars only for verified reviews (ADR-009).
 - The title links to the vessel page and the whole card is clickable; save and compare keep local state until saved cruises and the compare tray exist.
 

@@ -113,16 +113,32 @@ test.describe("education pages are accessible", () => {
   }
 });
 
-test("the price calculator changes with each choice and says it isn't a quote [PAGE-059, DATA-008]", async ({ page }) => {
+test("the price page: euros, the brief's heading and example, the total from its steps, no sample label [ADR-109]", async ({
+  page,
+}) => {
+  await page.goto("/nile-cruise-prices/");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Nile cruise prices: why five-star costs €400 or €6,500" }),
+  ).toBeVisible();
+  const example = page.getByRole("region", { name: "Example: how a price builds up. A guide, not a quote." });
+  await expect(example).toContainText("Starting price");
+  await expect(example).toContainText("Better boat with fewer guests");
+  await expect(example).toContainText("+€800");
+  await expect(example).toContainText("+€300");
+  await expect(example).toContainText("€1,500");
+  await expect(page.getByText("Sample data")).toHaveCount(0);
+  await expect(page.locator("main")).not.toContainText(/US\$|tenfold|ten times/);
+  await expect(page.getByText("All prices we publish and quote already include our margin.").first()).toBeVisible();
+});
+
+test("the price calculator shows the same example and is a free web application [PAGE-059]", async ({ page }) => {
   await page.goto("/nile-cruise-prices/price-calculator/");
-  await expect(page.getByText("Sample data").first()).toBeVisible();
-  await expect(page.getByText(/They are not quotes/)).toBeVisible();
-  const total = page.locator("[aria-live='polite']").first();
-  const before = await total.textContent();
-  await page.getByRole("radiogroup", { name: "Cabin" }).getByRole("radio", { name: /Suite/ }).first().click();
-  await expect(total).not.toHaveText(before ?? "");
+  await expect(page.getByRole("region", { name: "Example: how a price builds up. A guide, not a quote." })).toContainText(
+    "€1,500",
+  );
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
   expect(ld).toContain('"WebApplication"');
+  expect(ld).not.toContain("USD");
 });
 
 test("route guides show the days and the vessels, never a price grid [SEO-023]", async ({ page }) => {
@@ -132,6 +148,6 @@ test("route guides show the days and the vessels, never a price grid [SEO-023]",
     // The only prices allowed are on the closing cruise cards (a "from" price per vessel).
     const article = page.locator("article").first();
     await expect(article.locator("table")).toHaveCount(0);
-    await expect(article.getByText(/How a price is built/)).toHaveCount(0);
+    await expect(article.getByText(/how a price builds up/)).toHaveCount(0);
   }
 });

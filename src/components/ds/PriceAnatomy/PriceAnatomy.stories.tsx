@@ -4,13 +4,13 @@ import { PriceAnatomy } from "./PriceAnatomy";
 
 export const stories: Story[] = [
   {
-    name: "The US$800 and US$8,000 five-star",
+    name: "The €400 and €6,500 five-star",
     sample: true,
     parity: true,
     render: () => (
       <PriceAnatomy
         factors={sampleFactors}
-        currency="USD"
+        currency="EUR"
         presets={samplePresets}
         eyebrow="Both are licensed five-star"
         totalLabel="per person, 4–5 nights"

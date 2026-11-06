@@ -26,10 +26,11 @@ export type CruiseCardProps = {
   evaluation?: number;
   /** Verified guest reviews only; never external ratings (ADR-009). */
   rating?: { value: number; count: number };
-  /** Public "from" price per person (ADR-025). Leave out for information-only listings. */
-  price?: Money;
-  /** An information-only vessel's indicative price per person for the headline cruise: a guide, never a "from" price. */
-  indicativePrice?: Money;
+  /**
+   * ADR-109: the approved public starting price per person in euros, already including Nilecruz's margin: "from" one
+   * figure, or a typical band. Leave it out and the card says "Price on request".
+   */
+  price?: { from: Money } | { min: Money; max: Money };
   /** Five or fewer, the ones that differ. Each is labelled for screen readers. */
   amenities?: IconName[];
   badges?: { label: string; tone?: BadgeProps["tone"]; icon?: IconName }[];
@@ -113,21 +114,23 @@ export function CruiseCard(p: CruiseCardProps) {
           </ul>
         ) : null}
         <div className={styles.foot}>
-          {p.price ? (
-            <div className={styles.price}>
-              <small>{t("cruiseCard.fromPerPerson")}</small>
-              <b>{formatMoney(p.price, locale)}</b>
-            </div>
-          ) : p.indicativePrice ? (
-            <div className={styles.price}>
-              <small>{t("cruiseCard.indicativePerPerson")}</small>
-              <b>{formatMoney(p.indicativePrice, locale)}</b>
-            </div>
-          ) : (
-            <div className={styles.price}>
-              <small>{t("cruiseCard.pricesInPreparation")}</small>
-            </div>
-          )}
+          <div className={styles.price}>
+            {p.price ? (
+              <p>
+                {"from" in p.price
+                  ? t.rich("cruiseCard.from", { price: formatMoney(p.price.from, locale), b: (c) => <b>{c}</b> })
+                  : t.rich("cruiseCard.band", {
+                      min: formatMoney(p.price.min, locale),
+                      max: formatMoney(p.price.max, locale),
+                      b: (c) => <b>{c}</b>,
+                    })}
+              </p>
+            ) : (
+              <p>
+                <b className={styles.onRequest}>{t("cruiseCard.onRequest")}</b>
+              </p>
+            )}
+          </div>
           <CompareToggle compared={p.compared} onCompare={p.onCompare} />
         </div>
       </div>

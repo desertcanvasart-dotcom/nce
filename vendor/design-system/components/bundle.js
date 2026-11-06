@@ -4,7 +4,7 @@
   var e = R.createElement, useState = R.useState, useEffect = R.useEffect, useRef = R.useRef, useMemo = R.useMemo, useCallback = R.useCallback, Fragment = R.Fragment;
   function cx() { return Array.prototype.filter.call(arguments, Boolean).join(' '); }
   function uid() { var id = R.useId ? R.useId() : ''; return 'nc' + String(id).replace(/[^a-zA-Z0-9]/g, ''); }
-  function money(n, cur) { return (cur || 'US$') + Math.round(n).toLocaleString('en-US'); }
+  function money(n, cur) { return (cur || '€') + Math.round(n).toLocaleString('en-US'); }
 
   /* ------------------------------------------------------------------ Icon */
   var P = function (d) { return ['path', { d: d }]; };
@@ -392,13 +392,13 @@
   /* -------------------------------------------------------- VesselTypeCard */
   var VESSELS = {
     motor: { name: 'Motor cruise ship', short: 'The floating hotel', line: 'Four or five decks, a pool on the roof and a full programme. Engines cover the classic route fast, often sailing by night.', facts: [['users', '60–160 guests'], ['clock', '3–4 nights'], ['pool', 'Pool, spa, gym']],
-      guests: '60–160', cabins: '30–80', power: 'Twin diesel engines', pace: 'Covers Luxor–Aswan in 3–4 nights, part of it after dark', mooring: 'Often rafted up to six ships abreast at Esna, Edfu and Kom Ombo', sound: 'Engine hum, busy decks, evening entertainment', days: 'Early temple starts with large groups, afternoons by the pool', price: 'US$600–3,500 pp',
+      guests: '60–160', cabins: '30–80', power: 'Twin diesel engines', pace: 'Covers Luxor–Aswan in 3–4 nights, part of it after dark', mooring: 'Often rafted up to six ships abreast at Esna, Edfu and Kom Ombo', sound: 'Engine hum, busy decks, evening entertainment', days: 'Early temple starts with large groups, afternoons by the pool', price: 'Price on request',
       meters: { Intimacy: 1, Quiet: 2, 'Free itinerary': 1, Facilities: 5, Heritage: 1 } },
     sail: { name: 'Sailing dahabiya', short: 'The private sailing house', line: 'A low two-masted boat moved by the wind, carrying 8 to 24 guests. It moors at islands and villages the big ships cannot reach.', facts: [['users', '8–24 guests'], ['clock', '5–7 nights'], ['quiet', 'No engine noise']],
-      guests: '8–24', cabins: '4–12', power: 'Two lateen sails; a tug helps on windless days', pace: 'Sails by day, 5–7 nights between Esna and Aswan', mooring: 'Private riverbank and island moorings, El Kab, Gebel Silsila', sound: 'Wind, water and birdsong', days: 'Unhurried mornings, lunch under sail, sites before the coaches', price: 'US$2,000–9,000 pp',
+      guests: '8–24', cabins: '4–12', power: 'Two lateen sails; a tug helps on windless days', pace: 'Sails by day, 5–7 nights between Esna and Aswan', mooring: 'Private riverbank and island moorings, El Kab, Gebel Silsila', sound: 'Wind, water and birdsong', days: 'Unhurried mornings, lunch under sail, sites before the coaches', price: 'Price on request',
       meters: { Intimacy: 5, Quiet: 5, 'Free itinerary': 5, Facilities: 2, Heritage: 4 } },
     steam: { name: 'Paddle steamer', short: 'The period piece', line: 'A restored vessel from the age of Cook\'s tours, with a turning paddle wheel, brass fittings and cabins that feel like the 1920s.', facts: [['users', '40–60 guests'], ['clock', '4–5 nights'], ['library', 'Period interiors']],
-      guests: '40–60', cabins: '20–30', power: 'Paddle wheel (steam heritage; most now run on diesel)', pace: '4–5 nights at an old-fashioned speed', mooring: 'Own berths, with few ships alongside', sound: 'A steady paddle beat, wood and brass', days: 'Lectures, afternoon tea and a sense of history', price: 'US$3,000–7,500 pp',
+      guests: '40–60', cabins: '20–30', power: 'Paddle wheel (steam heritage; most now run on diesel)', pace: '4–5 nights at an old-fashioned speed', mooring: 'Own berths, with few ships alongside', sound: 'A steady paddle beat, wood and brass', days: 'Lectures, afternoon tea and a sense of history', price: 'Price on request',
       meters: { Intimacy: 3, Quiet: 3, 'Free itinerary': 3, Facilities: 3, Heritage: 5 } }
   };
   function VesselTypeCard(props) {
@@ -500,8 +500,8 @@
           e('div', { className: 'nc-pa-total', 'aria-live': 'polite' }, e('b', null, money(shown, props.currency)), e('span', null, 'per person, 4–5 nights')),
           e('p', { className: 'nc-pa-note' }, props.note || 'A five-star licence confirms that the facilities exist. It does not measure how many people share them, who guides you or where you moor.')),
         e('div', { className: 'nc-pa-presets', role: 'group', 'aria-label': 'Examples' },
-          e(Button, { variant: 'outline', size: 'sm', 'aria-pressed': preset === 'low', onClick: function () { setPick(PRESETS.low.slice()); setFocus(null); } }, 'The US$800 five-star'),
-          e(Button, { variant: 'outline', size: 'sm', 'aria-pressed': preset === 'high', onClick: function () { setPick(PRESETS.high.slice()); setFocus(null); } }, 'The US$8,000 five-star'))),
+          e(Button, { variant: 'outline', size: 'sm', 'aria-pressed': preset === 'low', onClick: function () { setPick(PRESETS.low.slice()); setFocus(null); } }, 'The €400 five-star'),
+          e(Button, { variant: 'outline', size: 'sm', 'aria-pressed': preset === 'high', onClick: function () { setPick(PRESETS.high.slice()); setFocus(null); } }, 'The €6,500 five-star'))),
       e('div', { className: 'nc-pa-bar', role: 'img', 'aria-label': 'Price build-up: ' + factors.map(function (f, i) { return f.label + ' ' + money(f.options[pick[i]].v, props.currency); }).join(', ') },
         factors.map(function (f, i) { var w = (f.options[pick[i]].v / max) * 100; return e('span', { key: f.id, className: cx('nc-pa-seg', 'seg-' + i, focus === i && 'is-focus'), style: { width: w + '%' }, title: f.label + ': ' + money(f.options[pick[i]].v, props.currency) }); })),
       e('ol', { className: 'nc-pa-rows' }, factors.map(function (f, fi) {

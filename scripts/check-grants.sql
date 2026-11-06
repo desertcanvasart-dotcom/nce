@@ -50,7 +50,9 @@ with intended(table_name, grantee, privileges) as (
     -- Batch 11-2 (ADR-103): stop-sales are lifted, never deleted; holds and webhook deliveries are written through functions.
     ('stop_sales', 'authenticated', 'INSERT,SELECT,UPDATE'), ('stop_sales', 'service_role', 'INSERT,SELECT,UPDATE'),
     ('holds', 'authenticated', 'SELECT'), ('holds', 'service_role', 'SELECT'),
-    ('webhook_deliveries', 'authenticated', 'SELECT'), ('webhook_deliveries', 'service_role', 'SELECT')
+    ('webhook_deliveries', 'authenticated', 'SELECT'), ('webhook_deliveries', 'service_role', 'SELECT'),
+    -- ADR-109: travellers keep their own saved quotes; turning an alert on or off is a column grant.
+    ('saved_quotes', 'authenticated', 'DELETE,INSERT,SELECT'), ('saved_quotes', 'service_role', 'DELETE,INSERT,SELECT,UPDATE')
   union all
   select t, g, 'DELETE,INSERT,SELECT,UPDATE'
   from unnest(array['profiles', 'organisations', 'vessels', 'vessel_private', 'vessel_translations',

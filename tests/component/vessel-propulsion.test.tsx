@@ -72,12 +72,14 @@ const dahabiya = (over: Partial<VesselPage> = {}): VesselPage => ({
       sailings: [],
     },
   ],
-  indicativePrice: {
-    perTrip: { amount: 337500, currency: "EUR" },
-    nights: 5,
+  price: {
+    mode: "from_price",
+    from: { amount: 337500, currency: "EUR" },
     basis: "per_person_per_trip",
-    status: "indicative",
+    nights: 5,
+    lastChecked: "2026-11-04",
   },
+  rateDisplay: "offer_by_adviser",
   propulsionNote: "Sails when the wind allows, with no engine on board.",
   onBoard: ["A fan in every room"],
   goodToKnow: ["Children are welcome."],
@@ -104,13 +106,28 @@ describe("the vessel page for a wind-driven dahabiya", () => {
     expect(screen.queryByText("Renovated")).toBeNull();
   });
 
-  it("says the guide price per person for the whole cruise, never per night", () => {
+  it("says the approved starting price in the brief's words, for the whole cruise, never per night (ADR-109)", () => {
     renderEn(<VesselView locale="en" v={dahabiya()} today="2026-11-04" />);
-    expect(screen.getByText("From €3,375 per person for the 5-night cruise")).toBeTruthy();
-    expect(document.body.textContent).toContain(
-      "From €3,375 per person for the 5-night cruise, sharing a double room. This is a guide, not a quote.",
-    );
-    expect(document.body.textContent).not.toMatch(/per night/);
+    expect(document.body.textContent).toContain("From €3,375 per person. Includes our margin. A guide, not a quote.");
+    expect(document.body.textContent).toContain("Per person, for the 5-night cruise. Last checked 4 Nov 2026.");
+    expect(document.body.textContent).toContain("All prices we publish and quote already include our margin.");
+    expect(document.body.textContent).not.toMatch(/Per person, per night|€[\d,]+ a night|Prices in preparation|Indicative|US\$/);
+  });
+
+  it("says 'Price on request', with no figure, when the vessel has no approved price", () => {
+    renderEn(<VesselView locale="en" v={dahabiya({ price: { mode: "on_request" } })} today="2026-11-04" />);
+    expect(screen.getAllByText("Price on request").length).toBeGreaterThan(0);
+    expect(document.body.textContent).not.toMatch(/€\d{3}|€\d,\d|Last checked/);
+  });
+
+  it("offers 'Check rates for your dates' without an account, keeping the cruise", () => {
+    renderEn(<VesselView locale="en" v={dahabiya()} today="2026-11-04" rates={async () => ({})} />);
+    expect(screen.getByRole("heading", { name: "Check rates for your dates" })).toBeTruthy();
+    expect(screen.getByText("We’ll check availability and send your offer by email.")).toBeTruthy();
+    expect(screen.getByLabelText("Email")).toBeTruthy();
+    expect(screen.getByLabelText("Cabin preference")).toBeTruthy();
+    // Save-quote only after a result or enquiry.
+    expect(screen.queryByText("Save this quote and get an alert if the price changes.")).toBeNull();
   });
 
   it("labels the area as including the bathroom and draws no deck plan from unknown decks", () => {
@@ -141,7 +158,7 @@ describe("the vessel page for a wind-driven dahabiya", () => {
           summary: null,
           cabins: [],
           itineraries: [],
-          indicativePrice: undefined,
+          price: { mode: "on_request" },
           propulsionNote: null,
           onBoard: [],
           goodToKnow: [],
@@ -151,6 +168,7 @@ describe("the vessel page for a wind-driven dahabiya", () => {
     );
     expect(within(screen.getByText("Sailing dahabiya").closest("p")!).getByText("Wind")).toBeTruthy();
     expect(screen.queryByText("Indicative price")).toBeNull();
+    expect(screen.getByText("Starting price")).toBeTruthy();
     expect(screen.queryByRole("heading", { name: "Good to know" })).toBeNull();
     expect(screen.queryByRole("heading", { name: "Cabins and decks" })).toBeNull();
   });

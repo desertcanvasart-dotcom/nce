@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { dayText } from "@/components/calendar/SeasonCalendar";
 import { radarPoints, ring } from "@/lib/evaluation/radar";
 import { parseCompared, toggled } from "@/lib/marketplace/compare-store";
-import { priceWhy, seasonOf } from "@/lib/marketplace/price-why";
 import { paymentDeadline } from "@/lib/payments/deadlines";
 
 describe("EXP-009 the evaluation radar", () => {
@@ -22,37 +21,6 @@ describe("EXP-009 the evaluation radar", () => {
   it("keeps scores inside the rim", () => {
     expect(radarPoints([{ key: "a", label: "A", weight: 10, points: 12 }], 100, 150)[0]!.share).toBe(1);
     expect(ring(4, 100, 150)).toBe("150,50 250,150 150,250 50,150");
-  });
-});
-
-describe("EXP-001 why this price", () => {
-  const base = { price: { amount: 145000, currency: "USD" }, vesselType: "sail" as const, maxGuests: 16, gratuityUsdMinor: 800 };
-  it("says what the price is, who shares the boat and the season, from facts", () => {
-    const w = priceWhy({ ...base, nights: 4, nextDeparture: "2026-12-26" });
-    expect(w.title).toBe("Why US$1,450?");
-    expect(w.lines[0]).toBe(
-      "US$1,450 is per person for two sharing the lowest-priced cabin with places left, for 4 nights, from check-in to check-out.",
-    );
-    expect(w.lines.join(" ")).toContain("Up to 16 guests share this boat");
-    expect(w.lines.join(" ")).toContain("Christmas and New Year");
-    expect(w.notIncluded[0]).toBe("Crew gratuity: US$8 per person per night, paid on board at check-out.");
-  });
-  it("names the sightseeing option and who provides it (ADR-102)", () => {
-    expect(
-      priceWhy({ ...base, sightseeing: { by: "nilecruz", from: { amount: 173900, currency: "USD" } } }).lines.join(" "),
-    ).toContain("With Nilecruz’s sightseeing programme it’s from US$1,739, as two bookings paid together.");
-    expect(
-      priceWhy({ ...base, sightseeing: { by: "vessel", from: { amount: 175000, currency: "USD" } } }).lines.join(" "),
-    ).toContain("The vessel also sells it with its own sightseeing, from US$1,750.");
-  });
-  it("knows the seasons", () => {
-    expect([
-      seasonOf("2026-12-24"),
-      seasonOf("2027-01-07"),
-      seasonOf("2027-01-08"),
-      seasonOf("2027-04-30"),
-      seasonOf("2027-05-01"),
-    ]).toEqual(["festive", "festive", "cooler", "cooler", "summer"]);
   });
 });
 

@@ -48,7 +48,7 @@ test("the refresh route needs the scheduler's signature", async ({ request }) =>
   await refresh(request);
 });
 
-test("/cruises/ lists vessels with guests, the Nilecruz score and one 'from' price [PAGE-060, DASH-PUB-001, 002, 005, BRAND-026, 028]", async ({
+test("/cruises/ lists vessels with guests, the Nilecruz score and the approved starting price, else 'Price on request' [PAGE-060, DASH-PUB-001, 002, 005, BRAND-026, 028, ADR-109]", async ({
   page,
 }) => {
   await page.goto("/cruises/");
@@ -57,8 +57,9 @@ test("/cruises/ lists vessels with guests, the Nilecruz score and one 'from' pri
   const mine = card(page, NAME);
   await expect(mine).toContainText("60 guests max");
   await expect(mine).toContainText("80/100 · Nilecruz evaluation");
-  await expect(mine).toContainText("From, per person");
-  await expect(mine).toContainText("US$1,000");
+  // Its US$1,000 rate has no approved public price: no figure, and never converted (ADR-109).
+  await expect(mine).toContainText("Price on request");
+  await expect(mine).not.toContainText("US$");
   await expect(mine).toContainText("Sample data");
   // No stars anywhere until verified reviews exist (ADR-009).
   await expect(mine.getByRole("img", { name: /out of 5/ })).toHaveCount(0);
@@ -119,7 +120,8 @@ test("ticking two vessels compares them side by side [DASH-PUB-004]", async ({ p
   const table = page.getByRole("table", { name: "Vessels compared" });
   await expect(table.getByRole("columnheader", { name: NAME })).toBeVisible();
   await expect(table).toContainText("80/100");
-  await expect(table).toContainText("US$1,000");
+  await expect(table).toContainText("Price on request");
+  await expect(table).not.toContainText("US$");
   await expect(table).toContainText("Information only");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });

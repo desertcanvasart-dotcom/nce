@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DRAFT_PAGES } from "@/content/pages";
-import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
+import { PRICE_EXAMPLE, PRICE_EXAMPLE_TITLE, priceExampleTotal } from "@/content/price-factors";
 import { ROUTE_STOPS } from "@/content/routes";
 import { vesselProfile } from "@/content/vessel-types";
 import { houseStyleProblems, splitUp, toSections } from "@/lib/content/editorial";
@@ -159,16 +159,18 @@ describe("structured data and the site search (SEO-028)", () => {
 });
 
 describe("Prices Explained and the Guide (Batch 6-2)", () => {
-  it("builds prices from maintained factors, flagged and footnoted (DATA-008)", () => {
-    for (const f of PRICE_FACTORS) expect(f.options.length).toBeGreaterThan(1);
-    for (const preset of [PRICE_PRESETS.low, PRICE_PRESETS.high]) {
-      expect(preset).toHaveLength(PRICE_FACTORS.length);
-      preset.forEach((i, n) => expect(PRICE_FACTORS[n]!.options[i], `preset option ${n}`).toBeDefined());
-    }
-    const total = (p: number[]) => p.reduce((t, i, n) => t + PRICE_FACTORS[n]!.options[i]!.amount, 0);
-    expect(total(PRICE_PRESETS.low)).toBeLessThan(total(PRICE_PRESETS.high));
-    expect(PRICE_FOOTNOTE).toMatch(/not quotes/);
-    expect(PRICE_FOOTNOTE).toMatch(/gratuities/i);
+  it("builds the price page's example from its steps, in euros, as the brief gives it (ADR-109)", () => {
+    expect(PRICE_EXAMPLE_TITLE).toBe("Example: how a price builds up. A guide, not a quote.");
+    expect(PRICE_EXAMPLE.map((s) => [s.label, s.detail ?? null, s.amount / 100])).toEqual([
+      ["Starting price", null, 400],
+      ["Better boat with fewer guests", null, 800],
+      ["Better sightseeing and guiding", null, 300],
+      ["Cabin", "Standard cabin", 0],
+      ["Season", "Regular season", 0],
+    ]);
+    expect(priceExampleTotal()).toBe(150000);
+    // No boat is named in the example.
+    expect(JSON.stringify(PRICE_EXAMPLE)).not.toMatch(/Lily|Mövenpick|Oberoi|Sonesta|Sample data/);
   });
 
   it("route guides list stops, never prices (SEO-023)", () => {

@@ -34,7 +34,7 @@ export type PriceAnatomyProps = {
 };
 
 /**
- * The "why US$800 vs US$8,000" explainer (COMP-PriceAnatomy): presets and factors build the price live in a stacked bar.
+ * The "why €400 vs €6,500" explainer (COMP-PriceAnatomy): presets and factors build the price live in a stacked bar.
  * Each segment is keyed by a square and named in the bar's text alternative, so colour is never the only cue (A11Y-008).
  */
 export function PriceAnatomy({

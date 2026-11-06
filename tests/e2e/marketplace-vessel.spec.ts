@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { refreshSignature } from "@/lib/connections/signature";
 import { FEED_PULL_TEST_SECRET } from "../support/feed-tls";
-import { adminDb, LOCAL, newUser, signIn } from "../support/local-auth";
+import { adminDb, LOCAL, newUser, ORG, signIn } from "../support/local-auth";
 import { insertEvaluation } from "../support/evaluation";
 import { sampleReservations } from "../support/sailing";
 import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
@@ -104,17 +104,18 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.getByRole("img", { name: /^Evaluation 80 out of 100: / })).toBeVisible();
   await expect(page.getByText("Recommended", { exact: false }).first()).toBeVisible();
   await expect(page.locator("#ratings")).toContainText("4.5 of 5 on Sample Review Site, 120 reviews");
-  // One public price; cabins show facts only (ADR-025).
-  await expect(page.getByText("US$1,000", { exact: true })).toHaveCount(1);
-  await expect(page.getByText(/per person, two sharing/)).toHaveCount(0);
+  // ADR-109: its bookable US$1,000 rate isn't an approved public price, so the page says "Price on request", with no
+  // figure, no cabin rates and no Offer markup; rates for dates come by email.
+  await expect(page.getByText("Price on request").first()).toBeVisible();
+  await expect(page.locator("main")).not.toContainText("US$");
+  await expect(page.getByRole("heading", { name: "Check rates for your dates" })).toBeVisible();
   // The head as search engines see it, on a fresh load: after a client-side navigation the listing's canonical can
   // linger while the vessel page's metadata streams in.
   await page.reload();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`/cruises/${slug}/$`));
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
   expect(ld).toContain('"TouristTrip"');
-  expect(ld).toContain('"lowPrice":"1000.00"');
-  expect(ld).toContain('"priceCurrency":"USD"');
+  expect(ld).not.toMatch(/"Offer"|AggregateOffer|lowPrice|USD/);
   expect(ld).not.toContain("AggregateRating");
 
   // Another itinerary, chosen by its length; it swaps in place and the address carries it. The canonical stays the vessel URL.
@@ -180,6 +181,63 @@ test("asking for an offer needs no account, and keeps the boat, cruise and date 
     .eq("email", email)
     .single();
   expect(m).toMatchObject({ topic: "offer", nights: 4, departs_on: "2027-02-01", guests: 2, vessel: { slug } });
+});
+
+test("an approved euro starting price, and 'Check rates for your dates' with only an email, then save the quote [ADR-109]", async ({
+  page,
+  request,
+}) => {
+  const db = adminDb();
+  const own = `sample-euro-${RUN}`;
+  const today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });
+  const { data: v } = await db
+    .from("vessels")
+    .insert({
+      slug: own,
+      name: `Sample Euro Ship ${RUN}`,
+      type: "motor",
+      visibility: "published",
+      published_at: new Date().toISOString(),
+      operator_org_id: ORG.operatorA,
+      is_sample: true,
+      public_price_mode: "from_price",
+      from_price_minor: 112000,
+      price_basis: "per_person_per_trip",
+      price_last_checked: today,
+      operator_price_approved: true,
+    })
+    .select("id")
+    .single();
+  await refreshCatalogue(request);
+  try {
+    await page.goto(`/cruises/${own}/`);
+    await expect(page.getByText("From €1,120 per person. Includes our margin. A guide, not a quote.").first()).toBeVisible();
+    await expect(page.getByText(/Per person, per trip\. Last checked/)).toBeVisible();
+    // Information only: a price, but never Offer markup until it can be booked.
+    const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
+    expect(ld).not.toMatch(/"Offer"|AggregateOffer/);
+
+    const form = page.locator("form", { has: page.getByRole("button", { name: "Check rates" }) });
+    await expect(page.getByText("Save this quote and get an alert if the price changes.")).toHaveCount(0);
+    await form.getByLabel("Departure date").fill("2027-02-01");
+    const email = `rates-${RUN}@example.test`;
+    await form.getByLabel("Email").fill(email);
+    await form.getByRole("button", { name: "Check rates" }).click();
+    await expect(page.getByRole("status")).toContainText("We’ll check availability and send your offer by email.");
+    await expect(page.getByText("Save this quote and get an alert if the price changes.")).toBeVisible();
+    const { data: m } = await db
+      .from("contact_messages")
+      .select("topic, name, departs_on, guests, vessel_id")
+      .eq("email", email)
+      .single();
+    expect(m).toMatchObject({ topic: "offer", name: null, departs_on: "2027-02-01", guests: 2, vessel_id: v!.id });
+    // Saving needs an account; reading the price and asking never did.
+    await page.getByRole("link", { name: "Save this quote" }).click();
+    await page.waitForURL(/\/account\/sign-in\/\?next=/);
+  } finally {
+    await db.from("vessels").delete().eq("id", v!.id);
+    await refreshCatalogue(request);
+  }
 });
 
 test("listing → vessel → sign-in → reserve, at the published rate [DATA-033, DASH-PUB-008, 009, DASH-CUS-016]", async ({

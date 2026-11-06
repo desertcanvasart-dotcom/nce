@@ -79,7 +79,7 @@ export function webApplicationJsonLd(name: string, url: string) {
     url,
     applicationCategory: "TravelApplication",
     operatingSystem: "Any",
-    offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
   };
 }
 

@@ -1,30 +1,30 @@
 {
   "id": "P059",
   "title": "Nile cruise price calculator",
-  "standfirst": "Choose the boat, the cabin, the way you see the sites and the season, and see how each choice moves the price. It explains prices rather than quoting them: the figures are illustrative ranges. For real prices, see the cruises you can book. This tool is part of our guide to [[up]].",
+  "standfirst": "See how one cruise price builds up, step by step, from a starting price. It explains prices rather than quoting them. For a price for your dates, check rates on each cruise. This tool is part of our guide to [[up]].",
   "sections": [
     {
       "heading": "How to use it",
       "paragraphs": [
-        "Each row is one factor. Pick an option and the total changes, with a short reason. The two examples at the top show the same route at the low and high ends."
+        "Each row is one step from the starting price, and the total is their sum. More choices will be added once operators approve euro prices for them."
       ]
     },
     {
       "heading": "Where the figures come from",
       "paragraphs": [
-        "The amounts are illustrative estimates, shown so the proportions are clear. They are marked as sample data until enough operators’ real rates are in our catalogue to calculate them. Crew gratuities, flights and transfers are never included."
+        "The figures are per person, in euros, and already include our margin: a guide, not a quote. All prices we publish and quote already include our margin. Crew gratuities, flights and transfers are never included."
       ]
     }
   ],
   "faqs": [
     {
       "q": "Is this a quote?",
-      "a": "No. It shows how prices are built. Real prices for every cabin and date appear on each cruise after you sign in."
+      "a": "No. It shows how prices are built. For your dates, check rates on each cruise, and we’ll send your offer by email."
     }
   ],
   "seoTitle": "Nile cruise price calculator",
-  "seoDescription": "See how the boat, the cabin, the guide and the season move the price of a Nile cruise, with illustrative figures.",
-  "sample": true,
+  "seoDescription": "See how the boat, the sightseeing, the cabin and the season build up the price of a Nile cruise, per person in euros.",
+  "sample": false,
   "review": "draft",
   "upAnchor": "Nile cruise prices"
 }

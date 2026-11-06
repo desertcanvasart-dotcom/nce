@@ -4,20 +4,8 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
 test.skip(!LOCAL, "needs the local Supabase stack: pnpm with-local-db pnpm test:e2e");
 
-/** Batch 9-1: the price's "Why?", the compare tray, the season calendar and the evaluation radar (EXP-001, 004, 006, 009). */
+/** Batch 9-1: the compare tray, the season calendar and the evaluation radar (EXP-004, 006, 009; EXP-001 retired by ADR-109). */
 const card = (page: import("@playwright/test").Page, name: string) => page.getByRole("article", { name });
-
-test("a card's price explains itself from facts [EXP-001]", async ({ page }) => {
-  await page.goto("/cruises/");
-  const why = page.getByRole("button", { name: /^Why US\$/ }).first();
-  await why.click();
-  const sheet = page.getByRole("dialog", { name: /^Why US\$/ });
-  await expect(sheet).toBeVisible();
-  await expect(sheet).toContainText("per person for two sharing the lowest-priced cabin");
-  await expect(sheet).toContainText("Not in this price");
-  await page.keyboard.press("Escape");
-  await expect(sheet).toBeHidden();
-});
 
 test("the compare tray: three at most, kept onto a vessel page, with the keyboard [EXP-004, DASH-PUB-004]", async ({ page }) => {
   await page.goto("/cruises/");

@@ -1,7 +1,7 @@
 {
   "id": "P049",
-  "title": "Nile cruise prices: why five-star costs US$800 or US$8,000",
-  "standfirst": "Two cruises can both call themselves five-star, sail the same route in the same week and differ in price tenfold. The difference is not a mystery: it is the boat, the cabin, the crew, the season and what the price includes. Here we take a price apart.",
+  "title": "Nile cruise prices: why five-star costs €400 or €6,500",
+  "standfirst": "Two cruises can both call themselves five-star, sail the same route in the same week and differ in price more than 15 times over. The difference is not a mystery: it is the boat, the cabin, the crew, the season and what the price includes. Here we take a price apart.",
   "sections": [
     {
       "heading": "What a cruise price pays for",
@@ -13,7 +13,7 @@
     {
       "heading": "What is never in the price",
       "paragraphs": [
-        "A Nile cruise runs from check-in on the first day to check-out on the last. Flights, airport transfers and extra tours are separate, and so are crew gratuities, which are obligatory, paid on board at check-out and at least US$5 per guest per night."
+        "A Nile cruise runs from check-in on the first day to check-out on the last. Flights, airport transfers and extra tours are separate, and so are crew gratuities, which are obligatory, paid on board at check-out: usually €5 to €10 per person, per night, depending on the cruise. Check each cruise’s offer."
       ]
     },
     {
@@ -30,11 +30,11 @@
     },
     {
       "q": "Are prices per person or per cabin?",
-      "a": "On Nilecruz the public price is per person for two sharing a cabin. Prices for every cabin and date appear after you sign in."
+      "a": "Per person. Each cruise’s starting price says what it is based on, and when we last checked it. For your dates, ask us to check rates, and we’ll send your offer by email. All prices we publish and quote already include our margin."
     }
   ],
   "seoTitle": "Nile cruise prices explained",
-  "seoDescription": "Why one five-star Nile cruise costs ten times another: the boat, the cabin, the guide, the season and what the price includes.",
-  "sample": true,
+  "seoDescription": "Why one five-star Nile cruise costs more than 15 times another: the boat, the cabin, the guide, the season and what the price includes.",
+  "sample": false,
   "review": "draft"
 }

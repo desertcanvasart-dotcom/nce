@@ -81,8 +81,8 @@ test.describe("gallery", () => {
     const ctx = await browser.newContext({ reducedMotion: "reduce" });
     const page = await ctx.newPage();
     await page.goto("/dev/components/price-anatomy/");
-    await page.getByRole("button", { name: "The US$8,000 five-star" }).click();
-    await expect(page.getByText("US$8,000", { exact: true })).toBeVisible({ timeout: 100 });
+    await page.getByRole("button", { name: "The €6,500 five-star" }).click();
+    await expect(page.getByText("€6,500", { exact: true })).toBeVisible({ timeout: 100 });
     await ctx.close();
   });
 });

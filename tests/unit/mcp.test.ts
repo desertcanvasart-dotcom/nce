@@ -21,6 +21,13 @@ const listed = (over: Partial<ListingVessel>): ListingVessel => ({
   itineraries: [{ origin: "Luxor", destination: "Aswan", nights: 4, departures: ["2026-11-02", "2026-11-09"] }],
   from: { amount: 95000, currency: "USD" },
   bookable: true,
+  price: {
+    mode: "from_price",
+    from: { amount: 112000, currency: "EUR" },
+    basis: "per_person_per_trip",
+    nights: null,
+    lastChecked: "2026-11-06",
+  },
   ...over,
 });
 const page: VesselPage = {
@@ -89,6 +96,14 @@ const page: VesselPage = {
   externalRatings: [],
   from: { amount: 95000, currency: "USD" },
   bookable: true,
+  price: {
+    mode: "from_price",
+    from: { amount: 112000, currency: "EUR" },
+    basis: "per_person_per_trip",
+    nights: null,
+    lastChecked: "2026-11-06",
+  },
+  rateDisplay: "offer_by_adviser",
 };
 const data: McpData = {
   listing: async () => [
@@ -101,6 +116,7 @@ const data: McpData = {
       propulsion: null,
       bookable: false,
       from: undefined,
+      price: { mode: "on_request" },
       itineraries: [{ origin: "Esna", destination: "Aswan", nights: 5, departures: [] }],
     }),
   ],
@@ -152,23 +168,27 @@ describe("MCP protocol (DASH-PUB-011)", () => {
 });
 
 describe("MCP tools: what a visitor sees, nothing more (DASH-PUB-012)", () => {
-  it("searches by route and nights, with the public from-price and a link", async () => {
+  it("searches by route and nights, with the approved euro starting price and a link (ADR-109)", async () => {
     const r = (await call("search_cruises", { origin: "luxor", nights_min: 3 })).structuredContent as {
       count: number;
-      vessels: { slug: string; from_price: unknown; url: string }[];
+      vessels: { slug: string; starting_price: unknown; url: string }[];
     };
     expect(r.count).toBe(1);
     expect(r.vessels[0]).toMatchObject({
       slug: "sample-sun",
-      from_price: { amount: 950, currency: "USD" },
+      starting_price: { mode: "from_price", from: { amount: 1120, currency: "EUR" }, basis: "per person, per trip" },
       url: "https://nilecruz.example/cruises/sample-sun/",
     });
   });
-  it("shows no price for a vessel that isn't bookable", async () => {
+  it("says 'Price on request' without an approved price, and never a rate computed from cabins", async () => {
     const r = (await call("search_cruises", { destination: "Aswan" })).structuredContent as {
-      vessels: { slug: string; from_price: unknown }[];
+      vessels: { slug: string; starting_price: unknown }[];
     };
-    expect(r.vessels.find((v) => v.slug === "sample-dahab")?.from_price).toBeNull();
+    expect(r.vessels.find((v) => v.slug === "sample-dahab")?.starting_price).toEqual({
+      mode: "on_request",
+      text: "Price on request",
+    });
+    expect(JSON.stringify(r)).not.toMatch(/USD|950/);
   });
   it("gives sailings' booking modes without counts or prices", async () => {
     const r = await call("sailing_availability", { slug: "sample-sun" });
@@ -178,7 +198,7 @@ describe("MCP tools: what a visitor sees, nothing more (DASH-PUB-012)", () => {
   });
   it("keeps the gratuity apart, paid on board (DATA-016)", async () => {
     const r = (await call("get_vessel", { slug: "sample-sun" })).structuredContent as { gratuity: unknown; evaluation: unknown };
-    expect(r.gratuity).toEqual({ amount: 40, currency: "USD", note: "per person, paid on board at check-out" });
+    expect(r.gratuity).toBe("Usually €5 to €10 per person, per night, depending on the cruise. Check each cruise's offer.");
     expect(r.evaluation).toMatchObject({ score: 82, verdict: "Recommended" });
   });
   it("compares up to three and names those it can't find", async () => {

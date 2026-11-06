@@ -4,6 +4,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Listing } from "@/components/marketplace/Listing";
 import { VesselMessages } from "@/components/marketplace/VesselMessages";
 import { VesselView, vesselWords } from "@/components/marketplace/VesselView";
+import { checkRates } from "./rates/actions";
 import { routing, type Locale } from "@/i18n/routing";
 import { facetBySlug, FACETS, sortListing } from "@/lib/marketplace/listing";
 import type { ListingVessel } from "@/lib/marketplace/listing";
@@ -82,6 +83,7 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
           v={v}
           similar={similarTo(v.slug, v.type, all)}
           ogImage={v.photos[0] ? photoUrl(v.slug) : undefined}
+          rates={checkRates.bind(null, v.slug)}
         />
       </VesselMessages>
     );

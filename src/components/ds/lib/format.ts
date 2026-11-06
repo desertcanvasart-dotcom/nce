@@ -1,6 +1,6 @@
 /**
  * Brand formats (BRAND-005/006/007) with locale awareness (I18N-010).
- * English follows the brand book exactly: US$1,240 · 12 Feb 2027 · 4 nights.
+ * English follows the brand book exactly: €1,240 · 12 Feb 2027 · 4 nights.
  * Spanish and Japanese use their own number and date conventions with the same currency labels.
  */
 import type { Money } from "./types";

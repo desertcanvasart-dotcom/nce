@@ -61,14 +61,13 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
       ) : null}
       {tour.bookable ? (
         <div className={styles.booking}>
-          <ul>
-            {tour.prices.map((l) => (
-              <li key={l}>{l}</li>
-            ))}
-          </ul>
+          {/* ADR-109: tour rates are in US dollars and the euro is the only public selling currency; never converted. */}
+          <p>
+            <strong>Price on request.</strong> All prices we publish and quote already include our margin.
+          </p>
           <p>
             <Link href={`/dashboard/journey/tours/book/${tour.id}/`}>Choose a date for {tour.name}</Link>: pick shared or private
-            and your party, and see the price at once. High-season changes show when you pick a date.
+            and your party; the price shows after you sign in.
           </p>
         </div>
       ) : (

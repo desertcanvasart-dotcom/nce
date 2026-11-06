@@ -71,7 +71,8 @@ export default async function TermsPage() {
         </li>
         <li>
           Crew gratuities are obligatory and are not part of the cruise price. They are paid directly to the vessel&apos;s front
-          office at check-out, at the amount shown for that vessel, at least US$5 per guest aged 3 or over per night.
+          office at check-out, at the amount the vessel sets for each guest aged 3 or over: usually €5 to €10 per person, per
+          night, depending on the cruise. Check each cruise&apos;s offer.
         </li>
       </ul>
 

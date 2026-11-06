@@ -5,6 +5,7 @@ import type { Mooring } from "@/lib/catalogue/mooring";
  */
 import type { Money, Propulsion, VesselType } from "@/components/ds/lib/types";
 import type { SailingPeriod } from "@/lib/product/sailing-time";
+import type { PublicPrice, RateDisplay } from "./public-price";
 
 export type VesselCabin = {
   id: string;
@@ -117,25 +118,6 @@ export function evaluationPublishable(e: VesselEvaluation | undefined): e is Ves
   );
 }
 
-/**
- * A guide price per person, never a quote: per night, or for a whole cruise of a given length (sharing a double room)
- * when the operator prices per trip. A per-trip price is never turned into a nightly figure.
- */
-export type IndicativePrice =
-  | { perNight: Money; basis: "per_person_per_night"; status: "indicative" }
-  | { perTrip: Money; nights: number; basis: "per_person_per_trip"; status: "indicative" };
-
-/**
- * The indicative price of a whole itinerary per person: the nightly guide times the nights (rounded only for display),
- * or the per-trip guide for a cruise of exactly its length; none for any other length.
- */
-export const indicativeTotal = (p: IndicativePrice, nights: number): Money | null =>
-  p.basis === "per_person_per_night"
-    ? { amount: p.perNight.amount * nights, currency: p.perNight.currency }
-    : p.nights === nights
-      ? p.perTrip
-      : null;
-
 /** The distinct lengths of a vessel's itineraries, shortest first. */
 export const nightsOf = (its: Pick<VesselItinerary, "nights">[]) => [...new Set(its.map((i) => i.nights))].sort((a, b) => a - b);
 
@@ -179,8 +161,10 @@ export type VesselPage = {
   itineraries: VesselItinerary[];
   /** Only an evaluation that may be published (evaluationPublishable); otherwise none. */
   evaluation?: VesselEvaluation;
-  /** A guide price per person and night for a vessel that can't be booked: never a quote, never an offer. */
-  indicativePrice?: IndicativePrice;
+  /** ADR-109: the one public starting price, in euros and approved by the operator, or "Price on request". */
+  price: PublicPrice;
+  /** How a rate for given dates is given after a request: an adviser's offer by email, or a signed-in price. */
+  rateDisplay: RateDisplay;
   /** "Is this the right boat for you?", in the page's language; null hides it. */
   goodFor?: string | null;
   lessSuitedTo?: string | null;
@@ -259,8 +243,9 @@ export const VERDICT_TEXT = {
 
 /**
  * Structured data for the vessel page (PAGE-072, DATA-034, SEO-026): a TouristTrip for the vessel, one sub-trip per
- * itinerary with its stops, its main photo, and an AggregateOffer from the public "from" price only when it can be
- * booked. Never an offer from an indicative price, and never AggregateRating (no verified reviews yet).
+ * itinerary with its stops, its main photo, and an AggregateOffer only when the vessel can be booked AND has an
+ * approved public starting price in euros (ADR-109). Never an offer from a rate the operator hasn't approved for
+ * publication, and never AggregateRating (no verified reviews yet).
  */
 export function touristTripJsonLd(
   v: VesselPage,
@@ -290,11 +275,11 @@ export function touristTripJsonLd(
       ? v.itineraries.map((it) => ({ "@type": "TouristTrip", name: words.trip(it), itinerary: stops(it) }))
       : undefined,
     offers:
-      v.bookable && v.from
+      v.bookable && v.price.mode !== "on_request"
         ? {
             "@type": "AggregateOffer",
-            lowPrice: (v.from.amount / 100).toFixed(2),
-            priceCurrency: v.from.currency,
+            lowPrice: ((v.price.mode === "from_price" ? v.price.from : v.price.min).amount / 100).toFixed(2),
+            priceCurrency: "EUR",
             availability: "https://schema.org/InStock",
             url,
           }

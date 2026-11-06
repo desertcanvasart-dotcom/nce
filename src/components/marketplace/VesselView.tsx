@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ds/Badge/Badge";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import { Media } from "@/components/ds/Media/Media";
-import { formatMoney, formatNights } from "@/components/ds/lib/format";
+import { formatDate, formatMoney, formatNights } from "@/components/ds/lib/format";
 import { propulsionArt, propulsionIcon, type Money } from "@/components/ds/lib/types";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -11,9 +11,9 @@ import { EvaluationRadar } from "@/components/evaluation/EvaluationRadar";
 import { DIETARY_OPTIONS } from "@/lib/catalogue/dining";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { jsonLdScript, type ListingVessel } from "@/lib/marketplace/listing";
+import { hasFigure, type PublicPrice } from "@/lib/marketplace/public-price";
 import {
   formatDay,
-  indicativeTotal,
   nightsOf,
   stopsFor,
   touristTripJsonLd,
@@ -30,7 +30,7 @@ import { CabinsAndDecks } from "./CabinsAndDecks";
 import { VesselPhotos } from "./VesselPhotos";
 import { ItinerarySwitch } from "./ItinerarySwitch";
 import { AddToCompare, CompareTray } from "./CompareTray";
-import { PriceWhy } from "./PriceWhy";
+import { RatesForm, type RatesAction } from "./RatesForm";
 import { SailingCalendar } from "./SailingCalendar";
 import { SectionNav, type NavItem } from "./SectionNav";
 import styles from "./VesselPage.module.css";
@@ -58,8 +58,7 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
     new Intl.ListFormat(tag, { type }).format(xs);
   const places = raw("places") as Record<string, string>;
   const place = (name: string) => places[name] ?? name;
-  // A guide price shows whole units only.
-  const money = (m: Money) => formatMoney({ amount: Math.round(m.amount / 100) * 100, currency: m.currency }, locale);
+  const money = (m: Money) => formatMoney(m, locale);
   const plural = raw("weekdaysPlural") as string[];
   const days = (ds: number[]) => list([...ds].sort((a, b) => a - b).map((d) => plural[d - 1]!));
   const its = v.itineraries;
@@ -72,11 +71,6 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
     .filter((i) => i.sailingDays.length)
     .map((i) => t("hero.sailingsFrom", { days: days(i.sailingDays), origin: place(i.origin) }))
     .join(t("listSep"));
-  // A nightly guide gives a total for each length; a per-trip guide is only ever said for its own cruise.
-  const nightly = v.indicativePrice?.basis === "per_person_per_night" ? v.indicativePrice : undefined;
-  const total = (n: number, key: string) =>
-    t(key, { price: money(indicativeTotal(nightly!, n)!), nights: formatNights(n, locale) });
-  const p = v.indicativePrice;
   return {
     tag,
     list,
@@ -89,30 +83,6 @@ export function vesselWords(v: VesselPage, locale: Locale, t: Say, raw: (key: st
         ? t("hero.routeBetween", { nights: nightsList, a: place(ends[0]!), b: place(ends[1]!) })
         : t("hero.routeMixed", { nights: nightsList }),
     sailings: sailings ? sailings.replace(/^./, (c) => c.toUpperCase()) : null,
-    /** The guide price in a sentence: per night, or for the whole cruise sharing a double room. */
-    priceLine: !p
-      ? null
-      : p.basis === "per_person_per_night"
-        ? t("price.fromAbout", { price: money(p.perNight) })
-        : t("price.fromTrip", { price: money(p.perTrip), n: p.nights }),
-    priceFact: !p
-      ? null
-      : p.basis === "per_person_per_night"
-        ? t("hero.fromAbout", { price: money(p.perNight) })
-        : t("hero.fromTrip", { price: money(p.perTrip), n: p.nights }),
-    // "about US$900 per person for 3 nights or US$1,200 for 4 nights": per person said once.
-    totals: nightly
-      ? list(
-          nights.map((n, i) => total(n, i ? "price.totalMore" : "price.totalFirst")),
-          "disjunction",
-        )
-      : null,
-    faqTotals: nightly
-      ? list(
-          nights.map((n) => total(n, "price.totalMore")),
-          "disjunction",
-        )
-      : null,
     // A vessel's own search title and description, when its data has them, else the usual pattern.
     title:
       v.seoTitle ??
@@ -145,6 +115,7 @@ export function VesselView({
   similar = [],
   ogImage,
   today = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" }),
+  rates,
 }: {
   locale: Locale;
   v: VesselPage;
@@ -154,10 +125,13 @@ export function VesselView({
   ogImage?: string;
   /** Today in Cairo; injectable for tests. */
   today?: string;
+  /** ADR-109: the "Check rates for your dates" server action, bound to this vessel; the form is left out without it. */
+  rates?: RatesAction;
 }) {
   const t = useTranslations("vesselPage");
   const tc = useTranslations("sailingCalendar");
   const td = useTranslations("ds");
+  const tp = useTranslations("pricing");
   const w = vesselWords(
     v,
     locale,
@@ -173,7 +147,27 @@ export function VesselView({
   const its = v.itineraries;
   const ev = v.evaluation;
   const info = !v.bookable;
-  const price = info ? v.indicativePrice : undefined;
+  // ADR-109: the one public starting price (euros, operator-approved, in date), or "Price on request".
+  const price = v.price;
+  const priceText = (p: PublicPrice) =>
+    p.mode === "from_price"
+      ? tp.markup("from", { price: w.money(p.from), b: (c) => c })
+      : p.mode === "price_band"
+        ? tp.markup("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => c })
+        : tp("onRequest");
+  const priceRich = (p: PublicPrice) =>
+    p.mode === "from_price"
+      ? tp.rich("from", { price: w.money(p.from), b: (c) => <b>{c}</b> })
+      : p.mode === "price_band"
+        ? tp.rich("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => <b>{c}</b> })
+        : tp("onRequest");
+  const basis = hasFigure(price)
+    ? price.basis === "per_person_per_night"
+      ? tp("basisNight")
+      : price.nights
+        ? tp("basisTripNights", { n: price.nights })
+        : tp("basisTrip")
+    : null;
   const cabins = v.cabins;
   const showCabins = cabins.length > 0 || !!v.deckPlan?.layout;
   const diets = DIETARY_OPTIONS.filter((o) => v.dietaryOptions?.includes(o.value)).map((o) => t(`onBoard.diet.${o.value}`));
@@ -239,15 +233,10 @@ export function VesselView({
 
   // The questions only this vessel's data can answer, and only the ones it can.
   const faqs: { q: string; a: string }[] = [];
-  if (price?.basis === "per_person_per_night" && w.faqTotals)
-    faqs.push({
-      q: t("faq.costQ", { name: v.name }),
-      a: t("faq.costA", { price: w.money(price.perNight), totals: w.faqTotals }),
-    });
-  else if (price && w.priceLine)
-    faqs.push({ q: t("faq.costQ", { name: v.name }), a: `${w.priceLine}${locale === "ja" ? "" : " "}${t("price.guide")}` });
-  else if (v.bookable && v.from)
-    faqs.push({ q: t("faq.costQ", { name: v.name }), a: t("faq.costBookableA", { price: formatMoney(v.from, locale) }) });
+  faqs.push({
+    q: t("faq.costQ", { name: v.name }),
+    a: hasFigure(price) ? `${priceText(price)} ${basis} ${tp("policy")}` : `${tp("onRequest")}. ${tp("onRequestNote")}`,
+  });
   faqs.push({ q: t("faq.bookQ"), a: v.bookable ? t("faq.bookYes") : t("faq.bookNo") });
   if (its.length) {
     // "Four-night sailings leave Luxor for Aswan on Mondays, and three-night sailings leave Aswan …": longest first.
@@ -329,32 +318,10 @@ export function VesselView({
         ) : null}
         {/* The price on its own, so a phone shows it with the main action right under the photo. */}
         <dl className={styles.price}>
-          {v.bookable && v.from ? (
-            <div className={styles.priceFact}>
-              <dt>{t("hero.fromPrice")}</dt>
-              <dd>
-                <span>{formatMoney(v.from, locale)}</span>{" "}
-                <PriceWhy
-                  facts={{
-                    price: v.from,
-                    vesselType: v.type,
-                    maxGuests: v.maxGuests,
-                    nights: its[0]?.nights,
-                    nextDeparture: its[0]?.departures[0],
-                    gratuityUsdMinor: v.gratuityUsdMinor,
-                    sightseeing: v.fromWithSightseeing
-                      ? { by: v.sightseeingBy ?? "vessel", from: v.fromWithSightseeing }
-                      : undefined,
-                  }}
-                />
-              </dd>
-            </div>
-          ) : price && w.priceFact ? (
-            <div className={styles.priceFact}>
-              <dt>{t("hero.indicativePrice")}</dt>
-              <dd>{w.priceFact}</dd>
-            </div>
-          ) : null}
+          <div className={styles.priceFact}>
+            <dt>{t("hero.startingPrice")}</dt>
+            <dd>{priceRich(price)}</dd>
+          </div>
         </dl>
         <dl className={styles.facts} aria-label={t("hero.facts")}>
           {cabinsFact ? (
@@ -410,13 +377,7 @@ export function VesselView({
             </a>
             <AddToCompare vessel={{ slug: v.slug, name: v.name }} />
           </div>
-          <p className={styles.status}>
-            {v.bookable
-              ? `${t("hero.bookableNote")}${v.gratuityUsdMinor ? ` ${t("hero.gratuity", { amount: formatMoney({ amount: v.gratuityUsdMinor, currency: "USD" }, locale) })}` : ""}`
-              : price
-                ? t("hero.infoOnlyPrice")
-                : t("hero.infoOnly")}
-          </p>
+          <p className={styles.status}>{v.bookable ? t("hero.bookableNote") : t("hero.infoOnly")}</p>
         </div>
         {v.summary ? <p className={styles.lead}>{v.summary}</p> : null}
       </header>
@@ -455,28 +416,20 @@ export function VesselView({
 
       <section className={styles.section} id="price" aria-labelledby="price-h">
         <h2 id="price-h">{t("price.title")}</h2>
-        {v.bookable && v.from ? (
-          <>
-            <p className={styles.big}>{t("price.fromBookable", { price: formatMoney(v.from, locale) })}</p>
-            {v.fromWithSightseeing ? (
-              <p>{t("price.withSightseeing", { price: formatMoney(v.fromWithSightseeing, locale) })}</p>
-            ) : null}
-            <p>{t("price.shapesBookable")}</p>
-          </>
+        <p className={styles.big}>{priceRich(price)}</p>
+        {hasFigure(price) ? (
+          <p className={styles.muted}>
+            {basis} {tp("checked", { date: formatDate(price.lastChecked, locale) })}
+          </p>
         ) : (
-          <>
-            {price && w.priceLine ? (
-              <p className={styles.big}>
-                {w.priceLine} {w.totals ? `${t("price.totals", { list: w.totals })} ` : ""}
-                {t("price.guide")}
-              </p>
-            ) : null}
-            <p>{t("price.shapes")}</p>
-          </>
+          <p>{tp("onRequestNote")}</p>
         )}
+        <p>{t(v.bookable ? "price.shapesBookable" : "price.shapes")}</p>
+        <p>{tp("policy")}</p>
+        <p>{tp("gratuities")}</p>
         {isBuilt("/nile-cruise-prices/") ? (
           <p>
-            <Link href="/nile-cruise-prices/">{t("price.why")}</Link>
+            <Link href="/nile-cruise-prices/">{tp("why")}</Link>
           </p>
         ) : null}
         {lists.length ? (
@@ -501,6 +454,23 @@ export function VesselView({
             {anyDays ? ` ${t("price.fallbackProgramme")}` : ""}
           </p>
         )}
+        {rates ? (
+          <RatesForm
+            action={rates}
+            locale={locale}
+            slug={v.slug}
+            defaultItinerary={[...its].sort((a, b) => a.nights - b.nights || a.code.localeCompare(b.code))[0]?.code}
+            itineraries={its.map((i) => ({
+              value: i.code,
+              label: t("ask.cruiseOption", {
+                nights: formatNights(i.nights, locale),
+                origin: w.place(i.origin),
+                destination: w.place(i.destination),
+              }),
+            }))}
+            cabins={cabins.map((c) => ({ value: c.id, label: c.name }))}
+          />
+        ) : null}
         <p>
           <Link className={styles.secondary} href={askHref}>
             {t("price.askIncluded")}
@@ -528,18 +498,7 @@ export function VesselView({
                       ? w.days(i.sailingDays).replace(/^./, (c) => c.toUpperCase())
                       : t("itinerary.daysAWeek", { n: i.sailingDays.length }),
                 heading: headingOf(i.origin, i.destination),
-                node: (
-                  <ItineraryDetails
-                    v={v}
-                    it={i}
-                    locale={locale}
-                    place={w.place}
-                    total={(() => {
-                      const m = price ? indicativeTotal(price, i.nights) : null;
-                      return m ? w.money(m) : null;
-                    })()}
-                  />
-                ),
+                node: <ItineraryDetails v={v} it={i} locale={locale} place={w.place} />,
               }))}
           />
         </section>
@@ -794,13 +753,7 @@ export function VesselView({
                 <p className={styles.muted}>
                   {[
                     s.cabinCount ? t("similar.cabins", { n: s.cabinCount }) : null,
-                    s.bookable && s.from
-                      ? t("similar.from", { price: formatMoney(s.from, locale) })
-                      : s.indicativePrice?.basis === "per_person_per_night"
-                        ? t("similar.fromAbout", { price: w.money(s.indicativePrice.perNight) })
-                        : s.indicativePrice
-                          ? t("similar.fromTrip", { price: w.money(s.indicativePrice.perTrip), n: s.indicativePrice.nights })
-                          : null,
+                    hasFigure(s.price) ? priceText(s.price) : tp("onRequest"),
                   ]
                     .filter(Boolean)
                     .join(" · ")}
@@ -850,19 +803,17 @@ export function VesselView({
   );
 }
 
-/** One itinerary: its guide total, check-in to check-out (DATA-018), the sailing time (PROPOSED-019) and the days. */
+/** One itinerary: check-in to check-out (DATA-018), the sailing time (PROPOSED-019) and the days. */
 function ItineraryDetails({
   v,
   it,
   locale,
   place,
-  total,
 }: {
   v: VesselPage;
   it: VesselItinerary;
   locale: Locale;
   place: (name: string) => string;
-  total: string | null;
 }) {
   const t = useTranslations("vesselPage");
   const heading = headingOf(it.origin, it.destination);
@@ -872,7 +823,6 @@ function ItineraryDetails({
   const nights = formatNights(it.nights, locale);
   return (
     <div className={styles.itinerary}>
-      {total ? <p className={styles.total}>{t("itinerary.about", { price: total, nights })}</p> : null}
       <p>{t("itinerary.checkInOut", { origin, destination, last: it.nights + 1 })}</p>
       {it.boardingNote ? (
         <p>
@@ -895,9 +845,9 @@ function ItineraryDetails({
       ) : it.programme ? (
         <p>
           {/* ADR-102: Nilecruz's programme, its own booking with Nilecruz, paid together with the cruise. */}
-          {t.rich("itinerary.programme", {
+          {/* ADR-109: the programme's rate is in US dollars, so no price is shown (never converted). */}
+          {t.rich("itinerary.programmeOnRequest", {
             name: it.programme.name,
-            price: formatMoney({ amount: it.programme.ppForTwoMinor, currency: "USD" }, locale),
             link: (c) => <Link href={`/tours-extras/${it.programme!.slug}/`}>{c}</Link>,
           })}
         </p>

@@ -5,6 +5,7 @@ import { env, indexingAllowed } from "@/lib/env";
 import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
 import type { ItineraryPlaces } from "@/content/river-stops";
 import type { ListingVessel } from "@/lib/marketplace/listing";
+import { DEFAULT_PRICE_DATA, publicPrice, type PublicPriceData } from "@/lib/marketplace/public-price";
 import { evaluationPublishable, type CabinFact, type VesselEvaluation, type VesselPage } from "@/lib/marketplace/vessel";
 import type { Locale } from "@/i18n/routing";
 import type { Database } from "@/server/db/database.types";
@@ -76,29 +77,50 @@ function publishable(rows: EvaluationRow[], locale: Locale): VesselEvaluation | 
   return evaluationPublishable(out) ? out : undefined;
 }
 
-const indicative = (v: {
-  indicative_per_night_minor: number | null;
-  indicative_per_trip_minor: number | null;
-  indicative_trip_nights: number | null;
-  indicative_currency: string | null;
-}): VesselPage["indicativePrice"] => {
-  if (!v.indicative_currency) return undefined;
-  if (v.indicative_per_night_minor !== null)
-    return {
-      perNight: { amount: Number(v.indicative_per_night_minor), currency: v.indicative_currency },
-      basis: "per_person_per_night",
-      status: "indicative",
-    };
-  if (v.indicative_per_trip_minor !== null && v.indicative_trip_nights)
-    return {
-      perTrip: { amount: Number(v.indicative_per_trip_minor), currency: v.indicative_currency },
-      nights: v.indicative_trip_nights,
-      basis: "per_person_per_trip",
-      status: "indicative",
-    };
-  return undefined;
+type PriceRow = {
+  public_price_mode: Database["public"]["Enums"]["public_price_mode"];
+  from_price_minor: number | null;
+  price_band_min_minor: number | null;
+  price_band_max_minor: number | null;
+  price_currency: string;
+  price_basis: string | null;
+  price_trip_nights: number | null;
+  price_valid_from: string | null;
+  price_valid_to: string | null;
+  price_last_checked: string | null;
+  operator_price_approved: boolean;
+  rate_display_after_request: Database["public"]["Enums"]["rate_display"];
 };
-const PRICE_COLUMNS = "indicative_per_night_minor, indicative_per_trip_minor, indicative_trip_nights, indicative_currency";
+/** ADR-109: the vessel's public price fields; what may be shown is decided by `publicPrice`. */
+const priceOf = (v: PriceRow | undefined): PublicPriceData => (v ? priceData(v) : DEFAULT_PRICE_DATA);
+const priceData = (v: PriceRow): PublicPriceData => ({
+  publicPriceMode: v.public_price_mode,
+  fromPriceAmount: v.from_price_minor === null ? null : Number(v.from_price_minor),
+  priceBandMin: v.price_band_min_minor === null ? null : Number(v.price_band_min_minor),
+  priceBandMax: v.price_band_max_minor === null ? null : Number(v.price_band_max_minor),
+  priceCurrency: v.price_currency,
+  priceBasis: v.price_basis === "per_person_per_night" || v.price_basis === "per_person_per_trip" ? v.price_basis : null,
+  priceTripNights: v.price_trip_nights,
+  priceValidFrom: v.price_valid_from,
+  priceValidTo: v.price_valid_to,
+  priceLastChecked: v.price_last_checked,
+  operatorPriceApproved: v.operator_price_approved,
+  rateDisplayAfterRequest: v.rate_display_after_request,
+});
+/**
+ * Each vessel's public price fields, read on their own: if they can't be read (the database is a migration behind the
+ * code, as production is between a deploy and its hand-applied migration), every vessel says "Price on request"
+ * rather than the page failing. A missing price never shows a figure (ADR-109).
+ */
+async function priceRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: string): Promise<Map<string, PriceRow>> {
+  let q = db.from("vessels").select(`id, ${PRICE_COLUMNS}`).in("visibility", ["published", "showcase"]);
+  if (slug) q = q.eq("slug", slug);
+  const { data, error } = await q;
+  if (error || !data) return new Map();
+  return new Map((data as unknown as (PriceRow & { id: string })[]).map((r) => [r.id, r]));
+}
+const PRICE_COLUMNS =
+  "public_price_mode, from_price_minor, price_band_min_minor, price_band_max_minor, price_currency, price_basis, price_trip_nights, price_valid_from, price_valid_to, price_last_checked, operator_price_approved, rate_display_after_request";
 
 async function loadListing(): Promise<ListingVessel[]> {
   const db = visitorDb();
@@ -109,7 +131,7 @@ async function loadListing(): Promise<ListingVessel[]> {
     db
       .from("vessels")
       .select(
-        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, is_sample, visibility, ${PRICE_COLUMNS}, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
+        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, is_sample, visibility, vessel_translations(locale, summary), media(storage_path, width, height, sort_order, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), schedules(origin, destination, nights, active, departures(departs_on, status))`,
       )
       .in("visibility", ["published", "showcase"])
       .order("name"),
@@ -117,6 +139,7 @@ async function loadListing(): Promise<ListingVessel[]> {
   ]);
   if (error ?? pe) throw error ?? pe;
   const price = new Map((prices ?? []).map((p) => [p.vessel_id, p]));
+  const publicPrices = await priceRows(db);
   const out: ListingVessel[] = [];
   for (const v of vessels ?? []) {
     if (indexingAllowed && v.is_sample) continue; // sample records never reach production
@@ -147,7 +170,8 @@ async function loadListing(): Promise<ListingVessel[]> {
       summary: v.vessel_translations.find((t) => t.locale === "en")?.summary ?? null,
       image,
       evaluation: evaluation?.score,
-      indicativePrice: indicative(v),
+      price: publicPrice(priceOf(publicPrices.get(v.id)), today),
+      rateDisplay: priceOf(publicPrices.get(v.id)).rateDisplayAfterRequest,
       itineraries: v.schedules
         .filter((s) => s.active)
         .map((s) => ({
@@ -171,7 +195,7 @@ async function loadListing(): Promise<ListingVessel[]> {
   return out;
 }
 
-export const publicListing = unstable_cache(loadListing, ["public-listing-v4"], {
+export const publicListing = unstable_cache(loadListing, ["public-listing-v5"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });
@@ -213,7 +237,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     db
       .from("vessels")
       .select(
-        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, year_built, year_renovated, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, ${PRICE_COLUMNS}, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included, propulsion_note, on_board, good_to_know, seo_title, seo_description), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, size_includes_bathroom, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name, description, bed_configuration, view)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), schedule_translations(locale, boarding_note), departures(id, departs_on, returns_on, status))`,
+        `id, slug, name, display_name, type, propulsion, category, max_guests, cabin_count, deck_count, length_m, beam_m, year_built, year_renovated, gratuity_usd_minor, mooring, shared_spaces, dietary_options, is_sample, visibility, sightseeing_approved_at, vessel_translations(locale, summary, description, dining, good_for, less_suited_to, included, optional_extras, not_included, propulsion_note, on_board, good_to_know, seo_title, seo_description), media(storage_path, width, height, sort_order, cabin_type_id, shows_cabin_type_id, media_translations(locale, alt)), evaluations(${EVALUATION}), external_ratings(source_name, rating, scale, review_count, url, retrieved_on), deck_plans(layout, source_path, source_name, source_bytes, credit), cabin_types(id, code, name, deck, size_m2, size_includes_bathroom, bed_configuration, max_occupancy, view, balcony, amenities, active, cabin_count, unverified_fields, sort_order, cabin_type_translations(locale, name, description, bed_configuration, view)), schedules(id, code, origin, destination, nights, sailing_days, active, sailing_period, sails_at, schedule_periods(starts_on, ends_on), schedule_days(day_number, locale, title, description), schedule_translations(locale, boarding_note), departures(id, departs_on, returns_on, status))`,
       )
       .eq("slug", slug)
       .in("visibility", ["published", "showcase"])
@@ -222,6 +246,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
   ]);
   if (error ?? pe) throw error ?? pe;
   if (!v || (indexingAllowed && v.is_sample)) return null;
+  const publicPrices = await priceRows(db, slug);
   // The gallery, and the photos that show a cabin type (on that cabin's card instead).
   const photos: VesselPage["photos"] = [];
   const cabinPhotos = new Map<string, VesselPage["photos"]>();
@@ -311,7 +336,8 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     goodToKnow: listed("good_to_know"),
     seoTitle: say("seo_title"),
     seoDescription: say("seo_description"),
-    indicativePrice: indicative(v),
+    price: publicPrice(priceOf(publicPrices.get(v.id)), today),
+    rateDisplay: priceOf(publicPrices.get(v.id)).rateDisplayAfterRequest,
     dietaryOptions: v.dietary_options,
     gratuityUsdMinor: v.gratuity_usd_minor === null ? null : Number(v.gratuity_usd_minor),
     photos,
@@ -402,7 +428,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
 }
 
 /** One vessel's public page data, cached like the listing (the slug and language are part of the cache key). */
-export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v4"], {
+export const publicVessel = unstable_cache(loadVessel, ["public-vessel-v5"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });
