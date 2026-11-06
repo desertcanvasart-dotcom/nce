@@ -15,8 +15,11 @@ describe("Batch 10: which pages are translated", () => {
     expect(isTranslated("/about/", "ja", list)).toBe(false);
     expect(translatedLocales("/contact/", list)).toEqual(["en"]);
   });
-  it("translations arrive page by page: so far, the vessels pillar (ADR-106) and the destinations hub (ADR-108)", () => {
-    expect(TRANSLATED).toEqual({ es: ["/vessels/", "/destinations/"], ja: ["/vessels/", "/destinations/"] });
+  it("translations arrive page by page: so far, the vessels pillar, the destinations hub and the guide hub (ADR-106, ADR-108, ADR-111)", () => {
+    expect(TRANSLATED).toEqual({
+      es: ["/vessels/", "/destinations/", "/nile-cruise-guide/"],
+      ja: ["/vessels/", "/destinations/", "/nile-cruise-guide/"],
+    });
   });
 });
 
