@@ -17,10 +17,12 @@ for (const lang of ["", "/es", "/ja"]) {
   });
 }
 
-test("no page says 'Cruises you can book' beside a cruise that can't be booked, or 'ten times'", async ({ page }) => {
+test("'Cruises you can book' only heads a row where every cruise can be booked; no 'ten times'", async ({ page }) => {
   for (const url of ["/", "/vessels/compare/", "/vessels/dahabiya/", "/how-we-choose-vessels/", "/nile-cruise-prices/"]) {
     await page.goto(url);
     const main = page.locator("main");
-    await expect(main, url).not.toContainText(/Cruises you can book|\bten times\b|tenfold|obligatory|Silsileh|US\$/);
+    await expect(main, url).not.toContainText(/\bten times\b|tenfold|obligatory|Silsileh|US\$/);
+    const row = page.locator("section", { has: page.getByRole("heading", { name: "Cruises you can book" }) });
+    if (await row.count()) await expect(row, url).not.toContainText(/Information only|Booking unavailable through us/);
   }
 });

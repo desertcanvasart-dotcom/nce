@@ -85,6 +85,7 @@ test("the sitemaps: an index, one per language, only translated and indexable pa
     const sm = await (await request.get(`/sitemaps/sitemap/${l}.xml`)).text();
     expect([...sm.matchAll(/<loc>[^<]*?(\/[^<]*)<\/loc>/g)].map((m) => new URL(m[0].slice(5, -6)).pathname)).toEqual([
       `/${l}/destinations/`,
+      `/${l}/nile-cruise-guide/`,
       `/${l}/vessels/`,
     ]);
   }
