@@ -132,7 +132,7 @@ export default async function JourneyHome() {
                   q.guests ? ` · ${q.guests} guests` : "",
                   q.cabin_preference ? ` · ${q.cabin_preference}` : "",
                 ].join("")}
-                {q.price_alert ? <span className={ui.muted}> · alert on if the starting price changes</span> : null}
+                {q.pricing_alert ? <span className={ui.muted}> · alert on if the starting price changes</span> : null}
               </li>
             ))}
           </ul>

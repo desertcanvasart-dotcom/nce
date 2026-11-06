@@ -890,12 +890,12 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 - **Context:** Islam's pricing brief. It **replaces ADR-025's "one 'from' price per vessel, prices after sign-in" for starting prices**. ADR-025 still governs the signed-in reserve flow for bookable vessels.
 - **Decision, three levels:**
   - **Level 1, a starting price for everyone.** Each vessel carries structured public price data:
-    - `public_price_mode`: `from_price`, `price_band` or `on_request`;
+    - `public_pricing_mode`: `from_price`, `price_band` or `on_request`;
     - `from_price_minor`, `price_band_min_minor` and `price_band_max_minor`;
-    - `price_currency`, always `EUR`;
-    - `price_basis` (per person, per trip or per night), with optional `price_trip_nights`;
-    - `price_valid_from`, `price_valid_to` and `price_last_checked`;
-    - `operator_price_approved`;
+    - `pricing_currency`, always `EUR`;
+    - `pricing_basis` (per person, per trip or per night), with optional `pricing_trip_nights`;
+    - `pricing_valid_from`, `pricing_valid_to` and `pricing_last_checked`;
+    - `operator_pricing_approved`;
     - `rate_display_after_request`: `offer_by_adviser` or `signed_in_price`.
 
     Only catalogue admins change these columns (trigger `vessels_guard_public_price`).

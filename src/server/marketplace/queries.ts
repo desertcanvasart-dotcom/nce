@@ -78,33 +78,33 @@ function publishable(rows: EvaluationRow[], locale: Locale): VesselEvaluation | 
 }
 
 type PriceRow = {
-  public_price_mode: Database["public"]["Enums"]["public_price_mode"];
+  public_pricing_mode: Database["public"]["Enums"]["public_price_mode"];
   from_price_minor: number | null;
   price_band_min_minor: number | null;
   price_band_max_minor: number | null;
-  price_currency: string;
-  price_basis: string | null;
-  price_trip_nights: number | null;
-  price_valid_from: string | null;
-  price_valid_to: string | null;
-  price_last_checked: string | null;
-  operator_price_approved: boolean;
+  pricing_currency: string;
+  pricing_basis: string | null;
+  pricing_trip_nights: number | null;
+  pricing_valid_from: string | null;
+  pricing_valid_to: string | null;
+  pricing_last_checked: string | null;
+  operator_pricing_approved: boolean;
   rate_display_after_request: Database["public"]["Enums"]["rate_display"];
 };
 /** ADR-109: the vessel's public price fields; what may be shown is decided by `publicPrice`. */
 const priceOf = (v: PriceRow | undefined): PublicPriceData => (v ? priceData(v) : DEFAULT_PRICE_DATA);
 const priceData = (v: PriceRow): PublicPriceData => ({
-  publicPriceMode: v.public_price_mode,
+  publicPriceMode: v.public_pricing_mode,
   fromPriceAmount: v.from_price_minor === null ? null : Number(v.from_price_minor),
   priceBandMin: v.price_band_min_minor === null ? null : Number(v.price_band_min_minor),
   priceBandMax: v.price_band_max_minor === null ? null : Number(v.price_band_max_minor),
-  priceCurrency: v.price_currency,
-  priceBasis: v.price_basis === "per_person_per_night" || v.price_basis === "per_person_per_trip" ? v.price_basis : null,
-  priceTripNights: v.price_trip_nights,
-  priceValidFrom: v.price_valid_from,
-  priceValidTo: v.price_valid_to,
-  priceLastChecked: v.price_last_checked,
-  operatorPriceApproved: v.operator_price_approved,
+  priceCurrency: v.pricing_currency,
+  priceBasis: v.pricing_basis === "per_person_per_night" || v.pricing_basis === "per_person_per_trip" ? v.pricing_basis : null,
+  priceTripNights: v.pricing_trip_nights,
+  priceValidFrom: v.pricing_valid_from,
+  priceValidTo: v.pricing_valid_to,
+  priceLastChecked: v.pricing_last_checked,
+  operatorPriceApproved: v.operator_pricing_approved,
   rateDisplayAfterRequest: v.rate_display_after_request,
 });
 /**
@@ -120,7 +120,7 @@ async function priceRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: s
   return new Map((data as unknown as (PriceRow & { id: string })[]).map((r) => [r.id, r]));
 }
 const PRICE_COLUMNS =
-  "public_price_mode, from_price_minor, price_band_min_minor, price_band_max_minor, price_currency, price_basis, price_trip_nights, price_valid_from, price_valid_to, price_last_checked, operator_price_approved, rate_display_after_request";
+  "public_pricing_mode, from_price_minor, price_band_min_minor, price_band_max_minor, pricing_currency, pricing_basis, pricing_trip_nights, pricing_valid_from, pricing_valid_to, pricing_last_checked, operator_pricing_approved, rate_display_after_request";
 
 async function loadListing(): Promise<ListingVessel[]> {
   const db = visitorDb();

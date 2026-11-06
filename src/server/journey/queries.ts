@@ -147,7 +147,7 @@ export async function savedQuotes(userId: string) {
   const db = await getDb();
   const { data, error } = await db
     .from("saved_quotes")
-    .select("id, route, nights, departs_on, guests, cabin_preference, price_alert, created_at, vessel:vessels(name, slug)")
+    .select("id, route, nights, departs_on, guests, cabin_preference, pricing_alert, created_at, vessel:vessels(name, slug)")
     .eq("user_id", userId)
     .order("created_at", { ascending: false })
     .limit(50);
