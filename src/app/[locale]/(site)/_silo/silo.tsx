@@ -25,8 +25,7 @@ import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
 import { companyPageJsonLd, MAIN_SIGHT, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
-import { BUILT, children, closingListing, isBuilt, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
-import { Link } from "@/i18n/navigation";
+import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
 import { editorialPage } from "@/server/content/pages";
 import { publicTours } from "@/server/content/tours";
@@ -126,13 +125,6 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
           <VesselArt type={type} />
         </div>
         {compare}
-        {/* ADR-109: vessel type pages show prices only from approved data, and say why prices differ. */}
-        {isBuilt("/nile-cruise-prices/") ? (
-          <p>
-            <Link href="/nile-cruise-prices/">Why Nile cruise prices differ</Link>. All prices we publish and quote already
-            include our margin.
-          </p>
-        ) : null}
       </>
     );
   } else if (url.startsWith("/vessels/") && row.type === "Guide article" && type) {

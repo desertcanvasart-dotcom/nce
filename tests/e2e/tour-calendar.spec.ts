@@ -142,15 +142,18 @@ test.beforeAll(async () => {
     .insert({ schedule_id: cruise.scheduleId, day_number: 3, locale: "en", title: "Luxor: Karnak and Luxor Temple" });
 });
 
-test("a tour with rates shows its prices and the calendar link, not 'coming soon' [ADR-097]", async ({ page, request }) => {
+test("a tour with rates is bookable, but its US$ rates show as 'Price on request', with no Offer markup [ADR-097, ADR-109]", async ({
+  page,
+  request,
+}) => {
   await refresh(request);
   await page.goto(`/tours-extras/sample-calendar-tour-${RUN}/`);
-  await expect(page.getByText("Shared group: US$60 per adult")).toBeVisible();
-  await expect(page.getByText("Private: from US$60 per person, less for bigger parties")).toBeVisible();
+  await expect(page.getByText("Price on request.")).toBeVisible();
+  await expect(page.locator("main")).not.toContainText("US$");
   await expect(page.getByText("Prices coming soon.")).toHaveCount(0);
   await expect(page.getByRole("link", { name: `Choose a date for Sample Calendar Tour ${RUN}` })).toBeVisible();
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
-  expect(ld).toContain('"price":"60.00"');
+  expect(ld).not.toMatch(/"Offer"|"price":/);
 });
 
 test("a customer picks a date and time, books a shared tour for 2 and pays through the signed webhook [ADR-097, DATA-027]", async ({

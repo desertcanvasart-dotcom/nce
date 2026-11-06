@@ -60,16 +60,10 @@ test("the season calendar says each day's deadline, by keyboard [EXP-006, ADR-02
 });
 
 for (const theme of ["light", "dark"] as const) {
-  test(`the four interactions pass axe in ${theme === "light" ? "Day" : "Night"} [EXP-001, 004, 006, 009, A11Y-001]`, async ({
-    page,
-  }) => {
+  test(`the interactions pass axe in ${theme === "light" ? "Day" : "Night"} [EXP-004, 006, 009, A11Y-001]`, async ({ page }) => {
     await setTheme(page, theme);
     await page.goto("/cruises/");
     await card(page, "Sample Motor Ship One").getByLabel("Compare").check();
-    await page
-      .getByRole("button", { name: /^Why US\$/ })
-      .first()
-      .click();
     await expectNoSeriousA11yIssues(page);
     await page.goto("/nile-cruise-guide/when-to-go/");
     await expectNoSeriousA11yIssues(page);
