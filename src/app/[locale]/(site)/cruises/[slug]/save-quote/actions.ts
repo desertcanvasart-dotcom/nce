@@ -43,7 +43,7 @@ export async function saveQuote(slug: string, _prev: ActionState, fd: FormData):
     departs_on: r.data.date || null,
     guests: r.data.guests === "" || r.data.guests === undefined ? null : r.data.guests,
     cabin_preference: cabin?.name ?? null,
-    price_alert: r.data.alert === "on" && hasFigure(v.price),
+    pricing_alert: r.data.alert === "on" && hasFigure(v.price),
   });
   if (error) return failed(t("failed"));
   return saved(t("saved"));

@@ -200,11 +200,11 @@ test("an approved euro starting price, and 'Check rates for your dates' with onl
       published_at: new Date().toISOString(),
       operator_org_id: ORG.operatorA,
       is_sample: true,
-      public_price_mode: "from_price",
+      public_pricing_mode: "from_price",
       from_price_minor: 112000,
-      price_basis: "per_person_per_trip",
-      price_last_checked: today,
-      operator_price_approved: true,
+      pricing_basis: "per_person_per_trip",
+      pricing_last_checked: today,
+      operator_pricing_approved: true,
     })
     .select("id")
     .single();

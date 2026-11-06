@@ -17,38 +17,38 @@ end $$;
 -- adviser's offer by email. Amounts are selling prices per person in euro cents and already include Nilecruz's margin.
 -- Net rates and the margin itself never live here: they stay in the role-restricted rate tables.
 alter table public.vessels
-  add column if not exists public_price_mode public.public_price_mode not null default 'on_request',
+  add column if not exists public_pricing_mode public.public_price_mode not null default 'on_request',
   add column if not exists from_price_minor bigint check (from_price_minor > 0),
   add column if not exists price_band_min_minor bigint check (price_band_min_minor > 0),
   add column if not exists price_band_max_minor bigint check (price_band_max_minor > 0),
   -- The euro is the only public selling currency; a price is never converted from another one.
-  add column if not exists price_currency char(3) not null default 'EUR' check (price_currency = 'EUR'),
-  add column if not exists price_basis text check (price_basis in ('per_person_per_trip', 'per_person_per_night')),
+  add column if not exists pricing_currency char(3) not null default 'EUR' check (pricing_currency = 'EUR'),
+  add column if not exists pricing_basis text check (pricing_basis in ('per_person_per_trip', 'per_person_per_night')),
   -- A per-trip price for a cruise of this length, said only once Nilecruz has confirmed the sailing.
-  add column if not exists price_trip_nights smallint check (price_trip_nights between 1 and 21),
-  add column if not exists price_valid_from date,
-  add column if not exists price_valid_to date,
-  add column if not exists price_last_checked date,
-  add column if not exists operator_price_approved boolean not null default false,
+  add column if not exists pricing_trip_nights smallint check (pricing_trip_nights between 1 and 21),
+  add column if not exists pricing_valid_from date,
+  add column if not exists pricing_valid_to date,
+  add column if not exists pricing_last_checked date,
+  add column if not exists operator_pricing_approved boolean not null default false,
   add column if not exists rate_display_after_request public.rate_display not null default 'offer_by_adviser';
 
 alter table public.vessels drop constraint if exists vessels_public_price_complete;
 alter table public.vessels add constraint vessels_public_price_complete check (
-  (public_price_mode = 'on_request')
-  or (public_price_mode = 'from_price' and from_price_minor is not null and price_basis is not null
-    and price_last_checked is not null)
-  or (public_price_mode = 'price_band' and price_band_min_minor is not null and price_band_max_minor is not null
-    and price_band_min_minor <= price_band_max_minor and price_basis is not null and price_last_checked is not null));
+  (public_pricing_mode = 'on_request')
+  or (public_pricing_mode = 'from_price' and from_price_minor is not null and pricing_basis is not null
+    and pricing_last_checked is not null)
+  or (public_pricing_mode = 'price_band' and price_band_min_minor is not null and price_band_max_minor is not null
+    and price_band_min_minor <= price_band_max_minor and pricing_basis is not null and pricing_last_checked is not null));
 alter table public.vessels drop constraint if exists vessels_price_valid_order;
 alter table public.vessels add constraint vessels_price_valid_order
-  check (price_valid_from is null or price_valid_to is null or price_valid_from <= price_valid_to);
+  check (pricing_valid_from is null or pricing_valid_to is null or pricing_valid_from <= pricing_valid_to);
 alter table public.vessels drop constraint if exists vessels_price_nights_per_trip;
 alter table public.vessels add constraint vessels_price_nights_per_trip
-  check (price_trip_nights is null or price_basis = 'per_person_per_trip');
+  check (pricing_trip_nights is null or pricing_basis = 'per_person_per_trip');
 
-comment on column public.vessels.public_price_mode is
-  'Level 1 public price: from_price, price_band or on_request. Shown only when operator_price_approved and in date.';
-comment on column public.vessels.operator_price_approved is
+comment on column public.vessels.public_pricing_mode is
+  'Level 1 public price: from_price, price_band or on_request. Shown only when operator_pricing_approved and in date.';
+comment on column public.vessels.operator_pricing_approved is
   'The operator approved this public selling price. Without it the vessel shows "Price on request".';
 
 -- Only Nilecruz catalogue admins set the public price and its approval; operators approve outside the system.
@@ -58,13 +58,13 @@ begin
   if app.is_catalogue_admin() or auth.uid() is null then
     return new;
   end if;
-  if row(new.public_price_mode, new.from_price_minor, new.price_band_min_minor, new.price_band_max_minor,
-         new.price_currency, new.price_basis, new.price_trip_nights, new.price_valid_from, new.price_valid_to,
-         new.price_last_checked, new.operator_price_approved, new.rate_display_after_request)
+  if row(new.public_pricing_mode, new.from_price_minor, new.price_band_min_minor, new.price_band_max_minor,
+         new.pricing_currency, new.pricing_basis, new.pricing_trip_nights, new.pricing_valid_from, new.pricing_valid_to,
+         new.pricing_last_checked, new.operator_pricing_approved, new.rate_display_after_request)
      is distinct from
-     row(old.public_price_mode, old.from_price_minor, old.price_band_min_minor, old.price_band_max_minor,
-         old.price_currency, old.price_basis, old.price_trip_nights, old.price_valid_from, old.price_valid_to,
-         old.price_last_checked, old.operator_price_approved, old.rate_display_after_request) then
+     row(old.public_pricing_mode, old.from_price_minor, old.price_band_min_minor, old.price_band_max_minor,
+         old.pricing_currency, old.pricing_basis, old.pricing_trip_nights, old.pricing_valid_from, old.pricing_valid_to,
+         old.pricing_last_checked, old.operator_pricing_approved, old.rate_display_after_request) then
     raise exception 'Only Nilecruz catalogue admins can change a vessel''s public price' using errcode = '42501';
   end if;
   return new;
@@ -81,9 +81,9 @@ where indicative_currency is not null;
 
 -- The one value the brief confirms: Mövenpick MS Royal Lily from €1,120 per person for the 4-night cruise, Luxor to
 -- Aswan, including our margin; last checked 6 Nov 2026, no expiry (Islam). Nothing happens on a database without it.
-update public.vessels set public_price_mode = 'from_price', from_price_minor = 112000, price_currency = 'EUR',
-  price_basis = 'per_person_per_trip', price_trip_nights = 4, price_last_checked = date '2026-11-06',
-  operator_price_approved = true
+update public.vessels set public_pricing_mode = 'from_price', from_price_minor = 112000, pricing_currency = 'EUR',
+  pricing_basis = 'per_person_per_trip', pricing_trip_nights = 4, pricing_last_checked = date '2026-11-06',
+  operator_pricing_approved = true
 where slug = 'movenpick-royal-lily';
 
 -- ── Level 2: what a traveller asked for when checking rates for their dates ──────────────────────────────────────
@@ -119,11 +119,11 @@ create table if not exists public.saved_quotes (
   guests smallint check (guests between 1 and 30),
   cabin_preference text check (length(cabin_preference) <= 120),
   -- Alert when the vessel's public price changes. Only offered when it has a public figure to change.
-  price_alert boolean not null default false,
+  pricing_alert boolean not null default false,
   created_at timestamptz not null default now()
 );
 create index if not exists saved_quotes_user_idx on public.saved_quotes (user_id, created_at desc);
-create index if not exists saved_quotes_alert_idx on public.saved_quotes (vessel_id) where price_alert;
+create index if not exists saved_quotes_alert_idx on public.saved_quotes (vessel_id) where pricing_alert;
 alter table public.saved_quotes enable row level security;
 drop policy if exists "saved_quotes: own" on public.saved_quotes;
 create policy "saved_quotes: own" on public.saved_quotes for all to authenticated
@@ -131,23 +131,23 @@ create policy "saved_quotes: own" on public.saved_quotes for all to authenticate
 drop policy if exists "saved_quotes: admins read" on public.saved_quotes;
 create policy "saved_quotes: admins read" on public.saved_quotes for select to authenticated using (app.is_admin());
 revoke all on public.saved_quotes from anon, authenticated;
-grant select, insert, update (price_alert), delete on public.saved_quotes to authenticated;
+grant select, insert, update (pricing_alert), delete on public.saved_quotes to authenticated;
 grant select, insert, update, delete on public.saved_quotes to service_role;
 
 -- When a vessel's shown public price changes, each traveller with an alert on it gets a notice (and its email).
 create or replace function app.alert_public_price_change() returns trigger
 language plpgsql security definer set search_path = '' as $$
 begin
-  if row(new.public_price_mode, new.from_price_minor, new.price_band_min_minor, new.price_band_max_minor,
-         new.operator_price_approved, new.price_valid_to)
+  if row(new.public_pricing_mode, new.from_price_minor, new.price_band_min_minor, new.price_band_max_minor,
+         new.operator_pricing_approved, new.pricing_valid_to)
      is not distinct from
-     row(old.public_price_mode, old.from_price_minor, old.price_band_min_minor, old.price_band_max_minor,
-         old.operator_price_approved, old.price_valid_to) then
+     row(old.public_pricing_mode, old.from_price_minor, old.price_band_min_minor, old.price_band_max_minor,
+         old.operator_pricing_approved, old.pricing_valid_to) then
     return new;
   end if;
   insert into public.notifications (user_id, kind, title, link)
   select distinct q.user_id, 'price.changed', left('The price of ' || new.name || ' has changed', 200), '/dashboard/journey/'
-  from public.saved_quotes q where q.vessel_id = new.id and q.price_alert;
+  from public.saved_quotes q where q.vessel_id = new.id and q.pricing_alert;
   return new;
 end $$;
 drop trigger if exists vessels_alert_public_price on public.vessels;
