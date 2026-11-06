@@ -165,7 +165,17 @@ export function VesselView({
     ? price.basis === "per_person_per_night"
       ? tp("basisNight")
       : price.nights
-        ? tp("basisTripNights", { n: price.nights })
+        ? (() => {
+            // The cruise the price is for, named by its route when exactly one itinerary has that length.
+            const one = its.filter((i) => i.nights === price.nights);
+            return one.length === 1
+              ? tp("basisTripRoute", {
+                  n: price.nights,
+                  origin: w.place(one[0]!.origin),
+                  destination: w.place(one[0]!.destination),
+                })
+              : tp("basisTripNights", { n: price.nights });
+          })()
         : tp("basisTrip")
     : null;
   const cabins = v.cabins;

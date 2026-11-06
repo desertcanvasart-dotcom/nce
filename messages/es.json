@@ -998,6 +998,7 @@
     "onRequest": "Precio a consultar",
     "basisTrip": "Por persona y crucero.",
     "basisTripNights": "Por persona, para el crucero de {n} noches.",
+    "basisTripRoute": "Por persona, para el crucero de {n} noches de {origin} a {destination}.",
     "basisNight": "Por persona y noche.",
     "checked": "Última comprobación: {date}.",
     "policy": "Todos los precios que publicamos y presupuestamos ya incluyen nuestro margen.",

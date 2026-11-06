@@ -904,7 +904,7 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 
     The texts, exactly:
     - "From €X per person. Includes our margin. A guide, not a quote."
-    - "Typically €X–€Y per person. Includes our margin. A guide, not a quote." (the band wording is to be confirmed)
+    - "Typically €X–€Y per person. Includes our margin. A guide, not a quote."
     - "Price on request"
 
     Each figure comes with its basis and "Last checked". A per-night figure appears only when the data's basis is per night. "Prices in preparation" and "Indicative" are gone from price labels. The booking status ("Information only") stays a separate badge. There is no public cabin rate table.
@@ -932,5 +932,5 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - Its example is "Example: how a price builds up. A guide, not a quote.": €400, then +€800, +€300, +€0 and +€0, for a total of €1,500 calculated from the steps. It has no "Sample data" label and names no boat. The calculator page shows the same example until euro option values are approved.
   - Crew gratuities: "usually €5 to €10 per person, per night, depending on the cruise. Check each cruise's offer."
 - **Structured data:** an AggregateOffer only for a bookable vessel with an approved euro starting price. Today no vessel qualifies, so no vessel page has Offer markup.
-- **Launch data:** every vessel is `on_request`, except Mövenpick MS Royal Lily: from €1,120 per person, per trip, approved, last checked 6 Nov 2026, with no expiry and no nights stated until Islam confirms the sailing. It replaces its US$300-per-night guide, and with it the US$900 and US$1,200 totals.
+- **Launch data:** every vessel is `on_request`, except Mövenpick MS Royal Lily: from €1,120 per person for the 4-night cruise, Luxor to Aswan, approved, last checked 6 Nov 2026, with no expiry (Islam). It replaces its US$300-per-night guide, and with it the US$900 and US$1,200 totals.
 - **Consequence:** net rates and the margin stay in the role-restricted rate tables; the public columns hold only approved selling prices. Spanish and Japanese texts were drafted by Claude and need native review. The Sanity copies of the edited pages (P001, P019, P049, P051, P059) need re-seeding after merge. Signed-in flows (reserve, tour calendar, partner tools) still show the operator's currency; that is a separate decision.

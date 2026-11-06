@@ -998,6 +998,7 @@
     "onRequest": "料金はお問い合わせください",
     "basisTrip": "1名あたり、クルーズ1回分の料金です。",
     "basisTripNights": "1名あたり、{n}泊クルーズの料金です。",
+    "basisTripRoute": "1名あたり、{origin}から{destination}への{n}泊クルーズの料金です。",
     "basisNight": "1名1泊あたりの料金です。",
     "checked": "最終確認日：{date}",
     "policy": "当社が掲載・お見積もりするすべての料金には、当社の手数料が含まれています。",

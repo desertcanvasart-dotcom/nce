@@ -997,6 +997,7 @@
     "onRequest": "Price on request",
     "basisTrip": "Per person, per trip.",
     "basisTripNights": "Per person, for the {n}-night cruise.",
+    "basisTripRoute": "Per person, for the {n}-night cruise, {origin} to {destination}.",
     "basisNight": "Per person, per night.",
     "checked": "Last checked {date}.",
     "policy": "All prices we publish and quote already include our margin.",

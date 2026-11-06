@@ -79,10 +79,10 @@ update public.vessels set indicative_per_night_minor = null, indicative_per_trip
   indicative_trip_nights = null, indicative_currency = null, indicative_basis = null, indicative_status = null
 where indicative_currency is not null;
 
--- The one value the brief confirms: Mövenpick MS Royal Lily from €1,120 per person, per trip, including our margin.
--- Its sailing (nights) is said only once Islam confirms it. Nothing happens on a database without the vessel.
+-- The one value the brief confirms: Mövenpick MS Royal Lily from €1,120 per person for the 4-night cruise, Luxor to
+-- Aswan, including our margin; last checked 6 Nov 2026, no expiry (Islam). Nothing happens on a database without it.
 update public.vessels set public_price_mode = 'from_price', from_price_minor = 112000, price_currency = 'EUR',
-  price_basis = 'per_person_per_trip', price_trip_nights = null, price_last_checked = date '2026-11-06',
+  price_basis = 'per_person_per_trip', price_trip_nights = 4, price_last_checked = date '2026-11-06',
   operator_price_approved = true
 where slug = 'movenpick-royal-lily';
 

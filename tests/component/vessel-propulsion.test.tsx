@@ -109,7 +109,7 @@ describe("the vessel page for a wind-driven dahabiya", () => {
   it("says the approved starting price in the brief's words, for the whole cruise, never per night (ADR-109)", () => {
     renderEn(<VesselView locale="en" v={dahabiya()} today="2026-11-04" />);
     expect(document.body.textContent).toContain("From €3,375 per person. Includes our margin. A guide, not a quote.");
-    expect(document.body.textContent).toContain("Per person, for the 5-night cruise. Last checked 4 Nov 2026.");
+    expect(document.body.textContent).toContain("Per person, for the 5-night cruise, Esna to Aswan. Last checked 4 Nov 2026.");
     expect(document.body.textContent).toContain("All prices we publish and quote already include our margin.");
     expect(document.body.textContent).not.toMatch(/Per person, per night|€[\d,]+ a night|Prices in preparation|Indicative|US\$/);
   });
