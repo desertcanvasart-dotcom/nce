@@ -36,7 +36,7 @@ const searchFor = async (p: Page) => {
 
 test.beforeAll(async () => {
   [owner, booker, accountant] = await Promise.all([newUser("agency-owner"), newUser("agency-booker"), newUser("agency-finance")]);
-  // A bookable sailing with a public double rate (US$2,000 for two); no reservations needed.
+  // A bookable sailing with a public double rate (€2,000 for two); no reservations needed.
   S = await sampleReservations({
     run: `${RUN}p`,
     customer: owner,
@@ -114,7 +114,7 @@ test("the operator sets a company rate; the agency searches at it, its finance u
   await signIn(page, booker.email, booker.password);
   await searchFor(page);
   const result = page.getByRole("article", { name: new RegExp(`Sample Cancel Ship ${RUN}p`) });
-  await expect(result).toContainText("US$1,400");
+  await expect(result).toContainText("€1,400");
   await expect(result).toContainText("Your company rate");
 
   const fin = await (await browser.newContext()).newPage();

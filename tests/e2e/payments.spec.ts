@@ -71,7 +71,7 @@ test.beforeAll(async () => {
     vessel_id: v.id,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 100000,
   });
   const { data: p } = await db
@@ -106,7 +106,7 @@ test.beforeAll(async () => {
       req: r.id,
       dep: d!.id,
       plan: "international",
-      cur: "USD",
+      cur: "EUR",
       cabins: [{ cabin_type_id: c!.id, adults: 2, child_ages: [], price_minor: 200000 }],
       total: 200000,
       list_total: 200000,
@@ -177,7 +177,7 @@ test("a card payment is recorded only from a signed Stripe webhook, once, with a
   // ADR-094: Nilecruz receives the payment as the operator's booking agent.
   await expect(page.getByText("Nilecruz, as booking agent")).toBeVisible();
   await expect(page.getByText("On behalf of (seller)")).toBeVisible();
-  await expect(page.getByText("US$2,000")).toBeVisible();
+  await expect(page.getByText("€2,000")).toBeVisible();
   const { count } = await adminDb().from("payments").select("id", { count: "exact", head: true }).eq("reservation_id", res[0]!);
   expect(count).toBe(1);
 });
@@ -189,7 +189,7 @@ test("a reported transfer is checked by a finance admin; the operator sees its p
   await signIn(page, customer.email, customer.password);
   await page.goto(page0(1));
   const f = page.locator("form", { has: page.getByRole("button", { name: "Report the transfer" }) });
-  await f.getByLabel("Amount sent (USD)").fill("2000.00");
+  await f.getByLabel("Amount sent (EUR)").fill("2000.00");
   await f.getByLabel("Date sent").fill(isoIn(0));
   await f.getByLabel("Bank reference").fill(`TRF-${RUN}`);
   await f.getByRole("button", { name: "Report the transfer" }).click();
@@ -207,14 +207,14 @@ test("a reported transfer is checked by a finance admin; the operator sees its p
   await decide.getByRole("button", { name: `Save decision for ${refs[1]}` }).click();
   // The decision form leaves with the reported payment, so the outcome is read from the page (ADR-076).
   await expect(decide).toHaveCount(0);
-  await expect(admin.getByRole("row", { name: /Sample Operator A \(USD\)/ })).toBeVisible();
+  await expect(admin.getByRole("row", { name: /Sample Operator A \(EUR\)/ })).toBeVisible();
 
   await page.reload();
   await expect(row).toContainText("Received");
   const op = await (await browser.newContext()).newPage();
   await signIn(op, OWNER);
   await op.goto(`/dashboard/operator/${ORG.operatorA}/bookings/`);
-  await expect(op.getByText(/USD: earned .* · paid out .* · owed/)).toBeVisible();
+  await expect(op.getByText(/EUR: earned .* · paid out .* · owed/)).toBeVisible();
 });
 
 test("operators remind; only admins record money (ADR-089) [DASH-OPR-013, 014, DATA-043]", async ({ page, browser }) => {

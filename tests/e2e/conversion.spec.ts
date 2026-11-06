@@ -103,7 +103,7 @@ test("a visitor plans a cruise, signs up, sends it, and the offer is emailed (PA
     req: requestId,
     dep: S.departureId,
     plan: "international",
-    cur: "USD",
+    cur: "EUR",
     cabins: [
       { cabin_type_id: S.cabinTypeId, adults: 2, child_ages: [], price_minor: 200000 },
       { cabin_type_id: S.cabinTypeId, adults: 1, child_ages: [7], price_minor: 150000 },

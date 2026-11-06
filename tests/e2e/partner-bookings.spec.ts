@@ -37,7 +37,7 @@ test.beforeAll(async () => {
     cabin_type_id: S.cabinTypeId,
     vessel_id: S.vesselId,
     occupancy: 2,
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 70000,
   });
   if (error) throw error;
@@ -52,7 +52,7 @@ test("the reservations user books for a client at the company rate [DASH-B2B-003
   await signIn(page, BOOKER);
   await page.goto(`${base}search/?from=${S.departsOn}&to=${S.departsOn}&adults=2`);
   const result = page.getByRole("article", { name: new RegExp(`Sample Cancel Ship ${RUN}pb`) });
-  await expect(result).toContainText("US$1,400");
+  await expect(result).toContainText("€1,400");
   await result.getByRole("link", { name: "Reserve" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Reserve for a client" })).toBeVisible();
   await page.getByLabel("Cabin 1, guest 1: full name").fill("Sample Client One");
@@ -61,7 +61,7 @@ test("the reservations user books for a client at the company rate [DASH-B2B-003
   await page.getByLabel("Cabin 1, guest 2: full name").fill("Sample Client Two");
   await page.getByLabel("Date of birth").nth(1).fill("1982-06-01");
   await page.getByLabel("Your client reference").fill(`CLIENT-${RUN}`);
-  await page.getByLabel("Your selling price (USD, optional)").fill("1800");
+  await page.getByLabel("Your selling price (EUR, optional)").fill("1800");
   await page.getByLabel("The client has read the terms and the cancellation policy").check();
   await page.getByRole("button", { name: "Reserve" }).click();
   await page.waitForURL(/\/bookings\/[0-9a-f-]{36}\/$/);
@@ -71,9 +71,9 @@ test("the reservations user books for a client at the company rate [DASH-B2B-003
 
   const client = page.locator("section", { has: page.getByRole("heading", { name: "Your client" }) });
   await expect(client).toContainText(`CLIENT-${RUN}`);
-  await expect(client).toContainText("US$1,400");
-  await expect(client).toContainText("US$1,800");
-  await expect(client).toContainText("US$400");
+  await expect(client).toContainText("€1,400");
+  await expect(client).toContainText("€1,800");
+  await expect(client).toContainText("€400");
   // Reservations users don't pay; that's for finance and the owner.
   await expect(page.getByRole("button", { name: "Pay the balance by card" })).toHaveCount(0);
   await expect(page.getByText("Your finance colleagues or the owner pay this booking.")).toBeVisible();
@@ -109,10 +109,10 @@ test("the owner prints the client record: the agency and its price, never the tr
   const record = page.getByRole("article", { name: "Client booking record" });
   await expect(record).toContainText("Sample Partner");
   await expect(record).toContainText(`CLIENT-${RUN}`);
-  await expect(record).toContainText("US$1,800");
+  await expect(record).toContainText("€1,800");
   await expect(record).toContainText("Sample Client One");
   await expect(record).toContainText("Booked through Nilecruz");
-  await expect(record).not.toContainText("US$1,400");
+  await expect(record).not.toContainText("€1,400");
   await expect(record).not.toContainText("Account holder");
 });
 
@@ -120,7 +120,7 @@ test("the operator sees the agency's booking, never its selling price [DASH-ADM-
   await signIn(page, "owner@operator-a.test");
   await page.goto(`/dashboard/operator/${ORG.operatorA}/bookings/${reservationId}/`);
   await expect(page.getByText("Trade booking for Sample Partner, a Nilecruz travel partner.")).toBeVisible();
-  await expect(page.getByText("US$1,800")).toHaveCount(0);
+  await expect(page.getByText("€1,800")).toHaveCount(0);
   await expect(page.getByText(`CLIENT-${RUN}`)).toHaveCount(0);
 });
 
@@ -130,7 +130,7 @@ test.describe("partner booking screens are accessible", () => {
       await setTheme(page, theme);
       await signIn(page, OWNER);
       for (const path of [
-        `${base}reserve/?dep=${S.departureId}&cabin=${S.cabinTypeId}&cur=USD&adults=2&children=`,
+        `${base}reserve/?dep=${S.departureId}&cabin=${S.cabinTypeId}&cur=EUR&adults=2&children=`,
         bookingUrl,
         `${bookingUrl}client/`,
         `${base}bookings/`,

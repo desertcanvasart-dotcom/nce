@@ -120,14 +120,14 @@ test("the operator builds a schedule, departures, availability and prices", asyn
   await bulk.getByLabel("Price per person").fill("30000");
   await bulk.getByRole("button", { name: "Apply to matching departures" }).click();
   await expect(page.getByText("E£ is only for the Egyptian-citizen and foreign-resident plans.")).toBeVisible();
-  await bulk.getByLabel("Currency").selectOption("USD");
+  await bulk.getByLabel("Currency").selectOption("EUR");
   await bulk.getByLabel("Cabins available").fill("6");
   await bulk.getByLabel("Price per person").fill("650");
   await bulk.getByRole("button", { name: "Apply to matching departures" }).click();
   await expect(page.getByText(/^Updated 8 departures\.$/)).toBeVisible();
   await page.reload();
   await expect(page.getByText("6 left").first()).toBeVisible();
-  await expect(page.getByText("US$650").first()).toBeVisible();
+  await expect(page.getByText("€650").first()).toBeVisible();
 
   // A second currency never adds cabins.
   await bulk.getByLabel("Cabin type").selectOption({ label: "Standard double (Middle)" });
@@ -161,9 +161,9 @@ test("promotions: owners only, applied to existing rates, never stacked", async 
   await page.goto(`/dashboard/operator/${ORG.operatorA}/promotions/${vesselId}/`);
   await form.getByLabel("Type").selectOption("fixed");
   await form.getByLabel("Amount off per person (for a fixed discount)").fill("50");
-  await form.getByLabel("Currency of the fixed amount").selectOption("USD");
+  await form.getByLabel("Currency of the fixed amount").selectOption("EUR");
   await form.getByLabel("Standard double (Middle)").check();
-  await form.getByLabel("Benefit (English)").fill("US$50 off");
+  await form.getByLabel("Benefit (English)").fill("€50 off");
   await form.getByRole("button", { name: "Create promotion" }).click();
   await expect(page.getByText(/Created\. Applies to 0 rates; 8 skipped/)).toBeVisible();
   await page.getByRole("button", { name: "Pause" }).click();

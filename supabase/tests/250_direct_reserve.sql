@@ -13,7 +13,7 @@ begin
   perform set_config('role', 'postgres', true);
 end $$;
 
--- Operator A's steamer: a double at US$800 pp (two sharing), US$1,200 alone; trade US$500; 2 cabins left.
+-- Operator A's steamer: a double at €800 pp (two sharing), €1,200 alone; trade €500; 2 cabins left.
 update public.vessels set visibility = 'published', published_at = now() where id = '00000000-0000-4000-8000-000000000003';
 insert into public.cabin_types (id, vessel_id, code, name, deck, max_occupancy) values
   ('00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 'DBL', 'Double', 'Main', 2);
@@ -26,9 +26,9 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
   ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 2, 'feed');
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-8000-000000000003', '[{"from_days": 0, "percent": 100}]');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor) values
-  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 2, 'international', 'USD', 80000),
-  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 1, 'international', 'USD', 120000),
-  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 2, 'trade', 'USD', 50000);
+  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 2, 'international', 'EUR', 80000),
+  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 1, 'international', 'EUR', 120000),
+  ('00000000-0000-4000-f300-000000000021', '00000000-0000-4000-f100-000000000021', '00000000-0000-4000-8000-000000000003', 2, 'trade', 'EUR', 50000);
 create temp table t (k text primary key, v text) on commit drop;
 grant select, insert on t to authenticated;
 
@@ -36,7 +36,7 @@ grant select, insert on t to authenticated;
 set local role anon;
 select throws_ok($$select * from public.vessel_departure_prices('00000000-0000-4000-8000-000000000003')$$, '42501', null,
   'visitors don''t get departure prices');
-select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'USD', '[]', '[]', true)$$, '42501', null,
+select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'EUR', '[]', '[]', true)$$, '42501', null,
   'nor can they reserve');
 reset role;
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
@@ -46,13 +46,13 @@ select is((select places_left from public.vessel_departure_prices('00000000-0000
   'and the places left from confirmed inventory');
 
 -- Reserving.
-select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'USD',
+select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000021", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01"}]', true)$$, '22023', null, 'every guest must be named');
-select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'USD',
+select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'EUR',
   (select jsonb_agg('{"cabin_type_id": "00000000-0000-4000-f100-000000000021", "ages": [40, 38]}'::jsonb) from generate_series(1, 6)),
   '[]', true)$$, '22023', null, 'six cabins or more go through a request for offers');
-select lives_ok($$insert into t values ('ref', public.customer_reserve('00000000-0000-4000-f300-000000000021', 'USD',
+select lives_ok($$insert into t values ('ref', public.customer_reserve('00000000-0000-4000-f300-000000000021', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000021", "ages": [40, 7]}]',
   ('[{"full_name": "Sample Parent", "date_of_birth": "1985-01-01", "nationality": "gb"}, {"full_name": "Sample Child", "date_of_birth": "'
     || (current_date + 40 - interval '7 years 1 day')::date || '"}]')::jsonb, true))$$,
@@ -70,7 +70,7 @@ update public.inventory set confirmed_at = now() - interval '30 days' where depa
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is((select bookable from public.vessel_departure_prices('00000000-0000-4000-8000-000000000003')), false,
   'stale availability isn''t bookable');
-select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'USD',
+select throws_ok($$select public.customer_reserve('00000000-0000-4000-f300-000000000021', 'EUR',
   '[{"cabin_type_id": "00000000-0000-4000-f100-000000000021", "ages": [40, 38]}]',
   '[{"full_name": "Sample One", "date_of_birth": "1985-01-01"}, {"full_name": "Sample Two", "date_of_birth": "1987-01-01"}]', true)$$,
   '22023', null, 'and can''t be reserved');

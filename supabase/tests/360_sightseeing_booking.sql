@@ -27,9 +27,9 @@ insert into public.departures (id, schedule_id, vessel_id, departs_on, returns_o
 insert into public.inventory (departure_id, cabin_type_id, vessel_id, available, confirmed_at, source) values
   ('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', '00000000-0000-4000-e800-000000000001', 4, now(), 'feed');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor) values
-  ('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', '00000000-0000-4000-e800-000000000001', 2, 'international', 'USD', 100000);
+  ('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', '00000000-0000-4000-e800-000000000001', 2, 'international', 'EUR', 100000);
 insert into public.sightseeing_rates (departure_id, cabin_type_id, occupancy, currency, amount_minor) values
-  ('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', 2, 'USD', 130000);
+  ('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', 2, 'EUR', 130000);
 insert into public.schedule_sightseeing (schedule_id, guide, tickets_included, sites) values
   ('00000000-0000-4000-e800-000000000002', true, true, '{Esna Temple, Edfu Temple}');
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-e800-000000000001', '[{"from_days": 0, "percent": 100}]');
@@ -52,11 +52,11 @@ select is((select double_minor from public.vessel_departure_prices('00000000-000
   'the departure''s price with sightseeing');
 select is((select double_minor from public.vessel_departure_prices('00000000-0000-4000-e800-000000000001')), 100000::bigint,
   'cruise only by default, as before');
-select is(public.public_party_price('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', 'USD', '{40,38}', 'with_sightseeing'),
+select is(public.public_party_price('00000000-0000-4000-e800-000000000003', '00000000-0000-4000-e800-000000000011', 'EUR', '{40,38}', 'with_sightseeing'),
   260000::bigint, 'a couple''s price with sightseeing');
 
 -- Booking with sightseeing: priced at that rate, and what's included kept on the reservation.
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'USD', pg_temp.cabins('with_sightseeing'), pg_temp.guests(), true) $$,
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'EUR', pg_temp.cabins('with_sightseeing'), pg_temp.guests(), true) $$,
   'a customer books with the vessel''s sightseeing');
 select pg_temp.as_postgres();
 select results_eq($$ select package, total_minor, sightseeing -> 'sites' from public.reservations where departure_id = '00000000-0000-4000-e800-000000000003' $$,
@@ -65,9 +65,9 @@ select results_eq($$ select package, total_minor, sightseeing -> 'sites' from pu
 
 -- Cruise only is unchanged; mixing packages is refused.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'USD', pg_temp.cabins('cruise'), pg_temp.guests(), true) $$,
+select lives_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'EUR', pg_temp.cabins('cruise'), pg_temp.guests(), true) $$,
   'cruise only still books');
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'USD',
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'EUR',
   pg_temp.cabins('cruise') || pg_temp.cabins('with_sightseeing'), pg_temp.guests() || pg_temp.guests(), true) $$,
   '22023', 'Book every cabin with the same package', 'every cabin has the same package');
 
@@ -77,7 +77,7 @@ delete from public.schedule_sightseeing where schedule_id = '00000000-0000-4000-
 select is((select sightseeing_amount_minor from public.public_vessel_prices() where vessel_id = '00000000-0000-4000-e800-000000000001'), null,
   'no "with sightseeing" price until the operator says what it includes');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'USD', pg_temp.cabins('with_sightseeing'), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_reserve('00000000-0000-4000-e800-000000000003', 'EUR', pg_temp.cabins('with_sightseeing'), pg_temp.guests(), true) $$,
   '22023', 'This sailing isn''t sold with sightseeing by its vessel', '… and no booking with it');
 select is((select count(*)::int from public.vessel_departure_prices('00000000-0000-4000-e800-000000000001', 'with_sightseeing')), 0,
   '… nor prices');

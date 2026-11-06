@@ -11,7 +11,7 @@ test.describe.configure({ mode: "serial", timeout: 150_000 });
 
 /**
  * Batch 5-2, the exit criterion: listing → vessel → sign-in → reserve (ADR-093). A published sample motor ship
- * (US$1,000 per person for two) with two itineraries, a day-by-day programme, a morning sailing, a published evaluation
+ * (€1,000 per person for two) with two itineraries, a day-by-day programme, a morning sailing, a published evaluation
  * and an external rating.
  */
 const RUN = Date.now();
@@ -104,7 +104,7 @@ test("the vessel page: itineraries, decks, evaluation and ratings, no cabin pric
   await expect(page.getByRole("img", { name: /^Evaluation 80 out of 100: / })).toBeVisible();
   await expect(page.getByText("Recommended", { exact: false }).first()).toBeVisible();
   await expect(page.locator("#ratings")).toContainText("4.5 of 5 on Sample Review Site, 120 reviews");
-  // ADR-109: its bookable US$1,000 rate isn't an approved public price, so the page says "Price on request", with no
+  // ADR-109: its bookable €1,000 rate isn't an approved public price, so the page says "Price on request", with no
   // figure, no cabin rates and no Offer markup; rates for dates come by email.
   await expect(page.getByText("Price on request").first()).toBeVisible();
   await expect(page.locator("main")).not.toContainText("US$");
@@ -252,7 +252,7 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
   await signIn(page, customer.email, customer.password, new URL(page.url()).pathname + new URL(page.url()).search);
   await page.waitForURL(new RegExp(`/cruises/${slug}/reserve/`));
   await expect(page.getByRole("heading", { level: 1, name: `Prices and dates: ${NAME}` })).toBeVisible();
-  await expect(page.getByText("from US$1,000 per person, two sharing")).toBeVisible();
+  await expect(page.getByText("from €1,000 per person, two sharing")).toBeVisible();
   await page
     .getByRole("link", { name: /to/ })
     .filter({ hasText: /2026|2027/ })
@@ -266,7 +266,7 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
   await page.getByLabel("Adults per cabin (18 and over)").selectOption("2");
   await page.getByRole("button", { name: "See the price" }).click();
   await expect(page.getByRole("heading", { name: "3. Guests and reserving" })).toBeVisible();
-  await expect(page.getByText("US$2,000", { exact: true })).toBeVisible();
+  await expect(page.getByText("€2,000", { exact: true })).toBeVisible();
   await page.getByLabel("Cabin 1, guest 1: full name").fill("Sample Guest One");
   await page.getByLabel("Date of birth").nth(0).fill("1980-02-02");
   await page.getByLabel("Nationality").fill("GB");
@@ -275,7 +275,7 @@ test("listing → vessel → sign-in → reserve, at the published rate [DATA-03
   await page.getByLabel("I have read the terms and the cancellation policy").check();
   await page.getByRole("button", { name: "Reserve" }).click();
   await page.waitForURL(/\/dashboard\/journey\/reservations\/[0-9a-f-]{36}\/$/);
-  await expect(page.getByText("US$2,000").first()).toBeVisible();
+  await expect(page.getByText("€2,000").first()).toBeVisible();
   // ADR-094: the operator sells; Nilecruz books as its agent. An unpaid booking costs nothing to cancel.
   await expect(page.getByText(/Booked through Nilecruz, acting as booking agent for the operator of/)).toBeVisible();
   await expect(page.getByText(/the operator; booked through Nilecruz as its agent/)).toBeVisible();

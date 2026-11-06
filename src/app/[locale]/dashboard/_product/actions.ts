@@ -581,7 +581,7 @@ export async function bulkUpdate(
   const d = input.data;
   if (d.available === null && d.amount === null) return failed("Enter cabins available, a price, or both.");
   if (d.amount !== null && !currenciesFor(d.rate_plan as RatePlan).includes(d.currency))
-    return failed("E£ is only for the Egyptian-citizen and foreign-resident plans.");
+    return failed("Prices are in € (ADR-110); E£ only for the Egyptian-citizen and foreign-resident plans.");
   const db = await getDb();
   const q = db
     .from("departures")
@@ -1099,7 +1099,7 @@ const supplementInput = dateRange.and(
   z.object({
     kind: z.enum(["gala_dinner", "peak"], { message: "gala dinner or peak dates" }),
     name: z.string().trim().min(1, "required").max(120),
-    currency: z.enum(["USD", "EUR", "EGP"], { message: "US$, € or E£" }),
+    currency: z.enum(["EUR", "EGP"], { message: "€ or E£" }),
     amount: money,
   }),
 );

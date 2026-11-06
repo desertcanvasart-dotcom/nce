@@ -311,11 +311,11 @@ export type BookingMode = "instant" | "request" | "unconfirmed" | "sold_out";
 export const canBook = (r: Pick<DeparturePrice, "bookable" | "mode">) =>
   r.bookable && (r.mode === "instant" || r.mode === "request");
 
-/** One currency per departure and cabin: US$ when there is one, else € (ADR-093). */
+/** One price per departure and cabin, in euros only: bookings settle in € and nothing is converted (ADR-110). */
 export function preferredPrices(rows: DeparturePrice[]): DeparturePrice[] {
   const best = new Map<string, DeparturePrice>();
-  const rank = (c: string) => (c === "USD" ? 0 : c === "EUR" ? 1 : 2);
-  for (const r of rows) {
+  const rank = (c: string) => (c === "EUR" ? 0 : 1);
+  for (const r of rows.filter((x) => x.currency === "EUR")) {
     const key = `${r.departureId}:${r.cabinTypeId}`;
     const cur = best.get(key);
     if (!cur || rank(r.currency) < rank(cur.currency)) best.set(key, r);

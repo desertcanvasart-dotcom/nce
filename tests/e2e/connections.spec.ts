@@ -33,7 +33,7 @@ function doc(date: string, available: number, price = "1250.00") {
           {
             date,
             schedule: SCHEDULE,
-            cabins: [{ type: CABIN, available, rates: [{ occupancy: 2, plan: "international", currency: "USD", price }] }],
+            cabins: [{ type: CABIN, available, rates: [{ occupancy: 2, plan: "international", currency: "EUR", price }] }],
           },
         ],
       },
@@ -99,7 +99,7 @@ test.beforeAll(async () => {
       return res.end(`<?xml version="1.0"?>
 <feed format="nilecruz-inventory/1"><cruises><cruise><id>${SLUG}</id><availability>
   <date date="${isoIn(8)}" schedule="${SCHEDULE}"><cabin type="${CABIN}" available="6" confirmed_at="${new Date().toISOString()}">
-    <rate occupancy="2" plan="international" currency="USD" price="990.00"/></cabin></date>
+    <rate occupancy="2" plan="international" currency="EUR" price="990.00"/></cabin></date>
 </availability></cruise></cruises></feed>`);
     }
     res.writeHead(404).end();

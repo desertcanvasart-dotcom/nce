@@ -21,7 +21,7 @@ const isoIn = (days: number) => {
 
 /**
  * Operator A's own sample sailing, `departsIn` days out, with the given cancellation bands, and `count` reservations for
- * the customer at US$2,000 each (two adults, one double cabin).
+ * the customer at €2,000 each (two adults, one double cabin).
  */
 export async function sampleReservations(opts: {
   run: number | string;
@@ -71,7 +71,7 @@ export async function sampleReservations(opts: {
     vessel_id: v.id,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 100000,
   });
   const { data: p } = await db.from("cancellation_policies").insert({ vessel_id: v.id, bands: opts.bands }).select("id").single();
@@ -103,7 +103,7 @@ export async function sampleReservations(opts: {
       req: r.id,
       dep: d!.id,
       plan: "international",
-      cur: "USD",
+      cur: "EUR",
       cabins: [{ cabin_type_id: c!.id, adults: 2, child_ages: [], price_minor: 200000 }],
       total: 200000,
       list_total: 200000,

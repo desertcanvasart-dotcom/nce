@@ -88,7 +88,7 @@ test("its operator says what's included and adds a price with sightseeing", asyn
   await expect(rates.getByText(/Updated \d+ departure/)).toBeVisible();
   await page.goto(`${schedule}${departureId}/`);
   await expect(page.getByRole("list", { name: "Prices with sightseeing" })).toContainText(
-    "With sightseeing · International · double · US$1,400",
+    "With sightseeing · International · double · €1,400",
   );
 });
 
@@ -153,12 +153,12 @@ test("a customer books an approved vessel with its sightseeing, at that price (8
     vessel_id: v!.id,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 100000,
   });
   await db
     .from("sightseeing_rates")
-    .insert({ departure_id: d!.id, cabin_type_id: c!.id, vessel_id: v!.id, occupancy: 2, currency: "USD", amount_minor: 130000 });
+    .insert({ departure_id: d!.id, cabin_type_id: c!.id, vessel_id: v!.id, occupancy: 2, currency: "EUR", amount_minor: 130000 });
   await db
     .from("schedule_sightseeing")
     .insert({ schedule_id: s!.id, vessel_id: v!.id, guide: true, tickets_included: true, sites: ["Edfu Temple"] });
@@ -174,7 +174,7 @@ test("a customer books an approved vessel with its sightseeing, at that price (8
       "The vessel's own sightseeing is in the price: An Egyptologist guide, entrance fees included; visiting Edfu Temple.",
     ),
   ).toBeVisible();
-  await expect(page.getByText("US$2,600", { exact: true })).toBeVisible();
+  await expect(page.getByText("€2,600", { exact: true })).toBeVisible();
   await page.getByLabel("Cabin 1, guest 1: full name").fill("Sample Guest One");
   await page.getByLabel("Date of birth").first().fill("1975-03-14");
   await page.getByLabel("Cabin 1, guest 2: full name").fill("Sample Guest Two");
@@ -240,7 +240,7 @@ test("a customer books a cruise with Nilecruz's programme and pays both on one p
     vessel_id: v!.id,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 100000,
   });
   await db.from("cancellation_policies").insert({ vessel_id: v!.id, bands: [{ from_days: 0, percent: 100 }] });
@@ -262,6 +262,7 @@ test("a customer books a cruise with Nilecruz's programme and pays both on one p
   await db.from("tour_rates").insert({
     tour_id: t!.id,
     mode: "program",
+    currency: "EUR", // ADR-110: the programme goes with a cruise booked in euros
     prices: {
       tiers: [
         { min: 1, max: 1, pp: 45400 },
@@ -277,8 +278,8 @@ test("a customer books a cruise with Nilecruz's programme and pays both on one p
   await page.goto(
     `/cruises/${slug}/reserve/?itinerary=LX4&pkg=with_programme&dep=${d!.id}&cabin=${c!.id}&adults=2&children=&cabins=1`,
   );
-  await expect(page.getByText(`US$578 · Sample 4-Night Sightseeing ${RUN}, a separate booking with Nilecruz`)).toBeVisible();
-  await expect(page.getByText("US$2,578", { exact: true })).toBeVisible(); // together: US$2,000 + US$578
+  await expect(page.getByText(`€578 · Sample 4-Night Sightseeing ${RUN}, a separate booking with Nilecruz`)).toBeVisible();
+  await expect(page.getByText("€2,578", { exact: true })).toBeVisible(); // together: €2,000 + €578
   await page.getByLabel("Cabin 1, guest 1: full name").fill("Sample Guest One");
   await page.getByLabel("Date of birth").first().fill("1975-03-14");
   await page.getByLabel("Cabin 1, guest 2: full name").fill("Sample Guest Two");

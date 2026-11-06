@@ -47,7 +47,7 @@ test.beforeAll(async () => {
     vessel_id: S.vesselId,
     occupancy: 2,
     rate_plan: "international",
-    currency: "USD",
+    currency: "EUR",
     amount_minor: 150000,
   });
 });
@@ -74,7 +74,7 @@ test("the operator stops sales on one cabin type and adds a gala supplement; the
   await supps.getByLabel("Kind").selectOption("gala_dinner");
   await supps.getByLabel("First night").fill(plusDays(S.departsOn, 1));
   await supps.getByLabel("Last night").fill(plusDays(S.departsOn, 1));
-  await supps.getByLabel("Currency").selectOption("USD");
+  await supps.getByLabel("Currency").selectOption("EUR");
   await supps.getByLabel("Per guest").fill("85");
   await supps.getByRole("button", { name: "Add supplement" }).click();
   await expect(page.getByText("Supplement added. New bookings of those nights include it.")).toBeVisible();

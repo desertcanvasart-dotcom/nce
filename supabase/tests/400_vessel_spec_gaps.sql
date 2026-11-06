@@ -30,7 +30,7 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
 select d, '00000000-0000-4000-e500-000000000002', '00000000-0000-4000-e500-000000000001', 4, now() - interval '1 day', 'manual'
 from unnest(array['00000000-0000-4000-e500-000000000004', '00000000-0000-4000-e500-000000000005', '00000000-0000-4000-e500-000000000006']::uuid[]) d;
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor)
-select d, '00000000-0000-4000-e500-000000000002', '00000000-0000-4000-e500-000000000001', 2, 'international', 'USD', 100000
+select d, '00000000-0000-4000-e500-000000000002', '00000000-0000-4000-e500-000000000001', 2, 'international', 'EUR', 100000
 from unnest(array['00000000-0000-4000-e500-000000000004', '00000000-0000-4000-e500-000000000005', '00000000-0000-4000-e500-000000000006']::uuid[]) d;
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-e500-000000000001', '[{"from_days": 0, "percent": 100}]');
 create temp table t (k text primary key, v text) on commit drop;
@@ -85,7 +85,7 @@ values ('00000000-0000-4000-e500-000000000010', '00000000-0000-4000-b000-0000000
 select pass('reservations staff stop sales on the ship for a range of departures');
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select is(public.departure_bookable('00000000-0000-4000-e500-000000000006'), false, 'a stopped sailing can''t be booked or requested');
-select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e500-000000000006', 'USD', pg_temp.cabin(), pg_temp.guests(), true) $$,
+select throws_ok($$ select public.customer_request_booking('00000000-0000-4000-e500-000000000006', 'EUR', pg_temp.cabin(), pg_temp.guests(), true) $$,
   '22023', null, 'and a booking request is refused');
 select pg_temp.as_postgres();
 select is(app.apply_inventory_rows('00000000-0000-4000-b000-00000000000a', 'sheet',
@@ -128,7 +128,7 @@ select is((select count(*)::int from public.webhook_deliveries where event = 'ho
 
 -- An operator's "Hold 72h" answer is a hold too; confirming it confirms the hold.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
-insert into t values ('r', public.customer_request_booking('00000000-0000-4000-e500-000000000006', 'USD', pg_temp.cabin(), pg_temp.guests(), true));
+insert into t values ('r', public.customer_request_booking('00000000-0000-4000-e500-000000000006', 'EUR', pg_temp.cabin(), pg_temp.guests(), true));
 select pg_temp.as_user('00000000-0000-4000-a000-000000000011');
 select is(public.operator_answer_booking_request((select v from t where k = 'r')::uuid, 'hold') ->> 'status', 'held', 'the operator holds');
 select results_eq($$ select status::text, cabins::int from public.holds where booking_request_id = (select v from t where k = 'r')::uuid $$,
@@ -150,12 +150,12 @@ select is((select status::text from public.holds where booking_request_id = (sel
 -- A gala dinner on the 21st night from now: the sailing in 20 days is on board, the one in 30 days isn't.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000011');
 insert into public.supplements (vessel_id, kind, name, starts_on, ends_on, currency, amount_minor)
-values ('00000000-0000-4000-e500-000000000001', 'gala_dinner', 'Sample gala dinner', current_date + 21, current_date + 21, 'USD', 15000);
+values ('00000000-0000-4000-e500-000000000001', 'gala_dinner', 'Sample gala dinner', current_date + 21, current_date + 21, 'EUR', 15000);
 select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select results_eq($$ select right(departure_id::text, 1), supplement_minor from public.vessel_departure_prices('00000000-0000-4000-e500-000000000001')
   where right(departure_id::text, 1) in ('4', '5') order by departs_on $$,
   $$ values ('4', 15000::bigint), ('5', 0::bigint) $$, 'each sailing shows its supplement per adult');
-insert into t values ('c', public.customer_reserve('00000000-0000-4000-e500-000000000004', 'USD', pg_temp.cabin(), pg_temp.guests(), true));
+insert into t values ('c', public.customer_reserve('00000000-0000-4000-e500-000000000004', 'EUR', pg_temp.cabin(), pg_temp.guests(), true));
 select pg_temp.as_postgres();
 select results_eq($$ select r.total_minor, rc.price_minor, rc.supplement_minor from public.reservations r
   join public.reservation_cabins rc on rc.reservation_id = r.id where r.reference = (select v from t where k = 'c') $$,
@@ -170,7 +170,7 @@ select results_eq($$ select payload ->> 'vessel', payload -> 'cabins' -> 0 ->> '
 insert into public.booking_requests (reference, customer_id, org_id, vessel_id, departure_id, currency, total_minor, cabins, guest_count,
   shown, responded_at, created_at)
 select 'NQ-SAMPL' || x, '00000000-0000-4000-a000-000000000040', '00000000-0000-4000-b000-00000000000a', '00000000-0000-4000-e500-000000000001',
-  '00000000-0000-4000-e500-000000000005', 'USD', 200000, pg_temp.cabin(), 2,
+  '00000000-0000-4000-e500-000000000005', 'EUR', 200000, pg_temp.cabin(), 2,
   '[{"cabin_type_id": "00000000-0000-4000-e500-000000000002", "available": 3}]', now(), now() - interval '1 hour'
 from unnest(array['A', 'B', 'C', 'D', 'E']) x;
 update public.booking_requests set response = case when right(reference, 1) in ('A', 'B') then 'decline' else 'confirm' end,

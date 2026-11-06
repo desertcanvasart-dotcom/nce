@@ -101,7 +101,6 @@ export function PromotionFields({
           placeholder="—"
           defaultValue={value?.fixed_currency}
           options={[
-            { value: "USD", label: "US$" },
             { value: "EUR", label: "€" },
             { value: "EGP", label: "E£" },
           ]}

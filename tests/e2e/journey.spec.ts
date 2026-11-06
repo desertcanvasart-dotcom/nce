@@ -75,7 +75,7 @@ test.beforeAll(async () => {
     req: open,
     dep: A.departureId,
     plan: "international",
-    cur: "USD",
+    cur: "EUR",
     cabins: [{ cabin_type_id: A.cabinTypeId, adults: 2, child_ages: [], price_minor: 200000 }],
     total: 200000,
     list_total: 200000,
@@ -123,7 +123,7 @@ test.beforeAll(async () => {
       kind: "shared",
       pricing: "per_guest",
       capacity: 10,
-      currency: "USD",
+      currency: "EUR",
       price_minor: 5000,
     })
     .select("id")

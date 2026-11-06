@@ -31,7 +31,7 @@ export async function sendOffer(
   const currency = String(f.currency ?? "");
   if (!RATE_PLANS.some((p) => p.value === plan)) return failed("Choose a rate plan.");
   if (!currenciesFor(plan).includes(currency as "USD"))
-    return failed("E£ prices are only for the Egyptian-citizen and foreign-resident plans.");
+    return failed("Offers are in € (ADR-110); E£ only for the Egyptian-citizen and foreign-resident plans.");
   const hours = Number(f.expires_hours ?? 72);
   const exp = expiryProblem(hours);
   if (exp) return failed(exp);

@@ -31,7 +31,7 @@ insert into public.inventory (departure_id, cabin_type_id, vessel_id, available,
   ('00000000-0000-4000-e400-000000000005', '00000000-0000-4000-e400-000000000002', '00000000-0000-4000-e400-000000000001', 5, now() - interval '10 days', 'manual'),
   ('00000000-0000-4000-e400-000000000006', '00000000-0000-4000-e400-000000000002', '00000000-0000-4000-e400-000000000001', 5, now() - interval '1 day', 'manual');
 insert into public.rates (departure_id, cabin_type_id, vessel_id, occupancy, rate_plan, currency, amount_minor)
-select d, '00000000-0000-4000-e400-000000000002', '00000000-0000-4000-e400-000000000001', 2, 'international', 'USD', 100000
+select d, '00000000-0000-4000-e400-000000000002', '00000000-0000-4000-e400-000000000001', 2, 'international', 'EUR', 100000
 from unnest(array['00000000-0000-4000-e400-000000000004', '00000000-0000-4000-e400-000000000005', '00000000-0000-4000-e400-000000000006']::uuid[]) d;
 insert into public.cancellation_policies (vessel_id, bands) values ('00000000-0000-4000-e400-000000000001', '[{"from_days": 0, "percent": 100}]');
 create temp table t (k text primary key, v text) on commit drop;
@@ -63,7 +63,7 @@ select pg_temp.as_user('00000000-0000-4000-a000-000000000040');
 select results_eq($$ select right(departure_id::text, 1), booking_mode, places_left from public.vessel_departure_prices('00000000-0000-4000-e400-000000000001') order by departs_on $$,
   $$ values ('5', 'unconfirmed', null::int), ('4', 'instant', 2), ('6', 'request', null::int) $$,
   'instant with 2 places from the allotment; released inside 14 days; a request from fresh manual data');
-insert into t values ('c', public.customer_reserve('00000000-0000-4000-e400-000000000004', 'USD', pg_temp.cabin(), pg_temp.guests(), true));
+insert into t values ('c', public.customer_reserve('00000000-0000-4000-e400-000000000004', 'EUR', pg_temp.cabin(), pg_temp.guests(), true));
 select pg_temp.as_postgres();
 select is((select count(*)::int from public.reservation_cabins rc join public.reservations r on r.id = rc.reservation_id
   where r.reference = (select v from t where k = 'c') and rc.allotment_id = '00000000-0000-4000-e400-000000000007'), 1,
@@ -74,9 +74,9 @@ select is(app.allotment_left('00000000-0000-4000-e400-000000000004', '00000000-0
 
 -- Travel partners book from the allotment the same way.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-select lives_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000004', 'USD',
+select lives_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000004', 'EUR',
   pg_temp.cabin(), pg_temp.guests(), 'CLIENT-A1', 0, true) $$, 'a travel partner books the last allotment cabin instantly');
-select throws_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000004', 'USD',
+select throws_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000004', 'EUR',
   pg_temp.cabin(), pg_temp.guests(), 'CLIENT-A2', 0, true) $$, '22023',
   'This sailing has no cabins left or can''t be booked right now. Nothing was booked.',
   'with the allotment used up and only old manual data, the sailing can''t be booked (or requested)');
@@ -95,9 +95,9 @@ select is((select count(*)::int from public.allotment_usage('00000000-0000-4000-
 
 -- Travel partners and manual data: no instant booking; a booking request in the agency's name.
 select pg_temp.as_user('00000000-0000-4000-a000-000000000031');
-select throws_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000006', 'USD',
+select throws_ok($$ select public.partner_reserve('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000006', 'EUR',
   pg_temp.cabin(), pg_temp.guests(), 'CLIENT-B', 0, true) $$, '22023', null, 'a travel partner can''t pay instantly for manual data');
-insert into t values ('p', public.partner_request_booking('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000006', 'USD',
+insert into t values ('p', public.partner_request_booking('00000000-0000-4000-b000-0000000000c1', '00000000-0000-4000-e400-000000000006', 'EUR',
   pg_temp.cabin(), pg_temp.guests(), 'CLIENT-B', 250000, true));
 select pg_temp.as_user('00000000-0000-4000-a000-000000000032');
 select results_eq($$ select buyer_name, client_reference, selling_total_minor, status::text from public.booking_requests where id = (select v from t where k = 'p')::uuid $$,
