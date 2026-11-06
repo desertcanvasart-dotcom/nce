@@ -119,7 +119,9 @@ test("the operator builds a schedule, departures, availability and prices", asyn
   await bulk.getByLabel("Currency").selectOption("EGP");
   await bulk.getByLabel("Price per person").fill("30000");
   await bulk.getByRole("button", { name: "Apply to matching departures" }).click();
-  await expect(page.getByText("E£ is only for the Egyptian-citizen and foreign-resident plans.")).toBeVisible();
+  await expect(
+    page.getByText("Prices are in € (ADR-110); E£ only for the Egyptian-citizen and foreign-resident plans."),
+  ).toBeVisible();
   await bulk.getByLabel("Currency").selectOption("EUR");
   await bulk.getByLabel("Cabins available").fill("6");
   await bulk.getByLabel("Price per person").fill("650");

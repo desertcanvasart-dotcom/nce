@@ -88,7 +88,7 @@ test("the finance user pays; the booking is confirmed [DASH-B2B-005]", async ({ 
   await page.getByLabel("I have read the cancellation policy below").check();
   await page.getByRole("button", { name: "Pay the balance by card" }).click();
   await expect(page.getByText(/Card payments aren.t switched on yet/)).toBeVisible();
-  const ev = paidCheckoutEvent(reservationId, 140000, "usd", `${RUN}pb`);
+  const ev = paidCheckoutEvent(reservationId, 140000, "eur", `${RUN}pb`);
   const r = await request.post("/api/stripe/webhook/", {
     data: ev.payload,
     headers: { "stripe-signature": ev.signature, "content-type": "application/json" },

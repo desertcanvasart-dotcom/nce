@@ -37,7 +37,7 @@ test.beforeAll(async () => {
       session_id: `cs_j_${RUN}_${i}`,
       intent: `pi_j_${RUN}_${i}`,
       amount: 200000,
-      cur: "usd",
+      cur: "eur",
     });
     if (error) throw error;
   }

@@ -60,7 +60,7 @@ test.beforeAll(async ({ request }) => {
   }));
   // The first two paid in full by card, through signed webhooks as Stripe would send them; the third stays unpaid.
   for (const [i, id] of res.slice(0, 2).entries()) {
-    const ev = paidCheckoutEvent(id, 200000, "usd", `${RUN}-c${i}`);
+    const ev = paidCheckoutEvent(id, 200000, "eur", `${RUN}-c${i}`);
     const r = await request.post("/api/stripe/webhook/", {
       data: ev.payload,
       headers: { "stripe-signature": ev.signature, "content-type": "application/json" },

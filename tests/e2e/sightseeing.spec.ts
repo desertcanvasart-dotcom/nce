@@ -295,7 +295,7 @@ test("a customer books a cruise with Nilecruz's programme and pays both on one p
   // One Stripe payment for both, recorded as two payments.
   const { data: order } = await db.from("tour_orders").select("id, total_minor").eq("reservation_id", reservationId).single();
   expect(Number(order!.total_minor)).toBe(57800);
-  const ev = paidCruiseAndProgrammeEvent(reservationId, order!.id, 200000, 57800, "usd", `${RUN}prog`);
+  const ev = paidCruiseAndProgrammeEvent(reservationId, order!.id, 200000, 57800, "eur", `${RUN}prog`);
   const r = await request.post("/api/stripe/webhook/", {
     data: ev.payload,
     headers: { "stripe-signature": ev.signature, "content-type": "application/json" },
