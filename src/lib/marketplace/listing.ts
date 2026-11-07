@@ -4,6 +4,7 @@
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
 import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
+import { onLakeNasser } from "@/content/river-stops";
 import {
   hasFigure,
   sellsThroughUs,
@@ -71,6 +72,13 @@ export type Facet = {
   description: string;
   intro: string;
   match: (v: ListingVessel) => boolean;
+  /** What the page says when nothing matches; a general line when not set. */
+  empty?: string;
+  /**
+   * ADR-113: the page stays hidden (noindex, out of the sitemap and the facet links) until a published, non-sample
+   * vessel matches, so it is never a thin page.
+   */
+  gated?: boolean;
 };
 
 const sails = (v: ListingVessel, origin: string, destination: string) =>
@@ -118,9 +126,46 @@ export const FACETS: Facet[] = [
     intro: "Cruises that start in Aswan and end in Luxor, sailing downstream with the current.",
     match: (v) => sails(v, "Aswan", "Luxor"),
   },
+  {
+    // PAGE-069 (ADR-113): by where the itineraries start or end, never by the vessel's name or route notes.
+    slug: "lake-nasser",
+    h1: "Lake Nasser cruises",
+    title: "Lake Nasser cruises between Aswan and Abu Simbel",
+    description: "Cruises on Lake Nasser, between Aswan and Abu Simbel: vessels, nights, evaluations and starting prices.",
+    intro: "Cruises that sail Lake Nasser, south of Aswan, between Aswan and the temples of Abu Simbel.",
+    match: (v) => v.itineraries.some(onLakeNasser),
+    empty: "No Lake Nasser cruises are published yet. See all cruises.",
+    gated: true,
+  },
 ];
 
 export const facetBySlug = (slug: string) => FACETS.find((f) => f.slug === slug);
+
+/** Real vessels a facet lists: sample vessels never make a gated page live. */
+const realMatches = (f: Facet, all: ListingVessel[]) => all.filter((v) => !v.sample && f.match(v));
+
+/** ADR-113: a facet page is shown and indexed unless it is gated and no real vessel matches yet. */
+export const facetLive = (f: Facet, all: ListingVessel[]) => !f.gated || realMatches(f, all).length > 0;
+
+/**
+ * ADR-113: pages that exist but stay hidden until the catalogue fills them, each with the facet that decides it. They
+ * are not in the link engine's BUILT set; `livePages` says which of them are live now.
+ */
+export const GATED_PAGES: Record<string, string> = {
+  "/cruises/lake-nasser/": "lake-nasser",
+  "/nile-cruise-guide/routes/lake-nasser/": "lake-nasser",
+};
+
+export function livePages(all: ListingVessel[]): Set<string> {
+  return new Set(
+    Object.entries(GATED_PAGES)
+      .filter(([, slug]) => {
+        const f = facetBySlug(slug);
+        return !!f && facetLive(f, all);
+      })
+      .map(([path]) => path),
+  );
+}
 
 /**
  * ADR-109: by starting price, lowest first; vessels with "Price on request" have no price to sort by, so they follow,

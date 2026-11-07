@@ -6,7 +6,7 @@ import { VesselMessages } from "@/components/marketplace/VesselMessages";
 import { VesselView, vesselWords } from "@/components/marketplace/VesselView";
 import { checkRates } from "./rates/actions";
 import { routing, type Locale } from "@/i18n/routing";
-import { facetBySlug, FACETS, sortListing } from "@/lib/marketplace/listing";
+import { facetBySlug, facetLive, FACETS, sortListing } from "@/lib/marketplace/listing";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import { siteUrl } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo/metadata";
@@ -27,7 +27,15 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const f = facetBySlug(slug);
-  if (f) return pageMetadata({ locale, path: `/cruises/${f.slug}`, title: f.title, description: f.description });
+  // ADR-113: a gated facet (Lake Nasser) is noindex until a real vessel matches it.
+  if (f)
+    return pageMetadata({
+      locale,
+      path: `/cruises/${f.slug}`,
+      title: f.title,
+      description: f.description,
+      noindex: !facetLive(f, await publicListing()),
+    });
   const v = await publicVessel(slug, locale);
   if (!v) return {};
   // The title and description cover every itinerary (DATA-031): no single sailing sets the page's identity.
@@ -105,7 +113,7 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
       all={all}
       vesselType={FACET_TYPE[f.slug]}
       current={f.slug}
-      empty="No vessels of this kind are published yet. See all cruises."
+      empty={f.empty ?? "No vessels of this kind are published yet. See all cruises."}
     />
   );
 }

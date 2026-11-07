@@ -11,10 +11,12 @@ export const EXTRA_PAGES = ["/operators/connect/"];
 
 /**
  * SEO-019: every indexable public page, unprefixed: the built pages plus published vessels and tours (no samples), and
- * the blog's indexable pages (ADR-105).
+ * the blog's indexable pages (ADR-105), and the gated pages that are live (ADR-113).
  */
-export function indexablePaths(vessels: string[], tours: string[], blog: string[] = []): string[] {
-  return [...new Set([...BUILT, ...EXTRA_PAGES, ...vessels, ...tours, ...blog])].filter((p) => !NOT_IN_SITEMAP.has(p)).sort();
+export function indexablePaths(vessels: string[], tours: string[], blog: string[] = [], live: string[] = []): string[] {
+  return [...new Set([...BUILT, ...EXTRA_PAGES, ...vessels, ...tours, ...blog, ...live])]
+    .filter((p) => !NOT_IN_SITEMAP.has(p))
+    .sort();
 }
 
 /** One language's sitemap: only the pages complete in that language, each with its hreflang set. */

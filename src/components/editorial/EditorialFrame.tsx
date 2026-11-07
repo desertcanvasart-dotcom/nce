@@ -5,7 +5,7 @@ import type { Locale } from "@/i18n/routing";
 import { splitUp, type EditorialPage } from "@/lib/content/editorial";
 import { jsonLdScript } from "@/lib/marketplace/listing";
 import { articleJsonLd, faqJsonLd } from "@/lib/seo/jsonld";
-import { bridges, children, siblings, trail, up } from "@/lib/seo/links";
+import { bridges, children, siblings, trail, up, type Live } from "@/lib/seo/links";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import { LinkCards } from "./LinkCards";
 import styles from "./editorial.module.css";
@@ -20,6 +20,8 @@ type Props = {
   closing?: ReactNode;
   /** Pillars show their children with richer cards of their own. */
   hideChildren?: boolean;
+  /** Gated pages that are live now (ADR-113), so links to them are shown. */
+  live?: Live;
 };
 
 /**
@@ -27,11 +29,11 @@ type Props = {
  * page's components and sections, its children (SEO-009), bridges to other silos (SEO-011), "Keep reading" (SEO-010),
  * FAQs, the closing cruises (SEO-012), and Article and FAQPage data. Draft copy says so (ADR-096).
  */
-export function EditorialFrame({ locale, url, page, lead, closing, hideChildren }: Props) {
+export function EditorialFrame({ locale, url, page, lead, closing, hideChildren, live }: Props) {
   const [before, after] = splitUp(page.standfirst);
-  const parent = up(url);
+  const parent = up(url, live);
   const faq = faqJsonLd(page);
-  const crossLinks = bridges(url).filter((b) => !b.href.startsWith("/cruises/"));
+  const crossLinks = bridges(url, live).filter((b) => !b.href.startsWith("/cruises/"));
   return (
     <article className={styles.page}>
       <Breadcrumbs locale={locale} trail={trail(url)} />
@@ -58,7 +60,7 @@ export function EditorialFrame({ locale, url, page, lead, closing, hideChildren 
           ))}
         </section>
       ))}
-      {hideChildren ? null : <LinkCards title="In this guide" links={children(url)} id="children" />}
+      {hideChildren ? null : <LinkCards title="In this guide" links={children(url, live)} id="children" />}
       {crossLinks.length ? (
         <nav aria-label="Related guides" className={styles.related}>
           <h2>Related</h2>
@@ -71,7 +73,7 @@ export function EditorialFrame({ locale, url, page, lead, closing, hideChildren 
           </ul>
         </nav>
       ) : null}
-      <LinkCards title="Keep reading" links={siblings(url)} id="keep-reading" />
+      <LinkCards title="Keep reading" links={siblings(url, live)} id="keep-reading" />
       {page.faqs.length ? (
         <section className={styles.section} aria-labelledby="faqs">
           <h2 id="faqs">Questions</h2>

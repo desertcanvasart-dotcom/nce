@@ -26,7 +26,7 @@ import { tourUrl, WORKBOOK_TOURS } from "@/lib/content/tours";
 import { exploreVessels } from "@/lib/guide/explore";
 import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
-import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
+import { collectionJsonLd, facetBySlug, GATED_PAGES, jsonLdScript, livePages } from "@/lib/marketplace/listing";
 import { companyPageJsonLd, MAIN_SIGHT, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
 import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
@@ -47,8 +47,11 @@ export type SiloParams = { locale: Locale; path?: string[] };
 
 const urlOf = (prefix: string, path?: string[]) => `${prefix}${path?.length ? `${path.join("/")}/` : ""}`;
 
+/** Pages this renderer serves: the built ones, and the gated ones (ADR-113), which render but stay hidden until live. */
+const SERVED = (url: string) => BUILT.has(url) || url in GATED_PAGES;
+
 export function siloStaticParams(prefix: string) {
-  const urls = [...BUILT].filter((u) => u.startsWith(prefix));
+  const urls = [...BUILT, ...Object.keys(GATED_PAGES)].filter((u) => u.startsWith(prefix));
   return routing.locales.flatMap((locale) =>
     urls.map((u) => ({ locale, path: u.slice(prefix.length).split("/").filter(Boolean) })),
   );
@@ -81,9 +84,11 @@ export async function siloMetadata(prefix: string, { locale, path }: SiloParams)
     });
   }
   const row = LINK_MAP[url];
-  const page = row && BUILT.has(url) ? await editorialPage(row.id) : null;
+  const page = row && SERVED(url) ? await editorialPage(row.id) : null;
   if (!row || !page) return {};
-  return pageMetadata({ locale, path: url, title: page.seoTitle ?? row.h1, description: page.seoDescription });
+  // ADR-113: a gated page is noindex until the catalogue has a real vessel for it.
+  const hidden = url in GATED_PAGES && !livePages(await publicListing()).has(url);
+  return pageMetadata({ locale, path: url, title: page.seoTitle ?? row.h1, description: page.seoDescription, noindex: hidden });
 }
 
 /** Which vessel type a page is about, for its illustration, comparison default and closing cruises. */
@@ -100,7 +105,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   setRequestLocale(locale);
   const url = urlOf(prefix, path);
   const row = LINK_MAP[url];
-  if (!row || !BUILT.has(url)) notFound();
+  if (!row || !SERVED(url)) notFound();
   // PAGE-026: the vessels pillar is laid out by hand, in every language (ADR-106).
   if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing()} />;
   // PAGE-074: the destinations hub, an illustrated river chart (Islam's destinations brief, 4 Nov 2026).
@@ -116,6 +121,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     url.startsWith("/tours-extras/") ? publicTours() : Promise.resolve([]),
   ]);
   if (!page) notFound();
+  // ADR-113: the gated pages that are live now; links to the others are left out.
+  const live = livePages(all);
   const type = TYPE_OF[url] ?? ROUTE_STOPS[url]?.vessel;
   const profiles = (["sail", "motor", "steam"] as const).map((t) => vesselProfile(t));
   // The three-way comparison page opens with every type side by side; elsewhere, on the page's own type.
@@ -261,10 +268,13 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   // The guide's pages end with vessels to explore, one of each type that sails the page's route; none are bookable yet,
   // so the row doesn't say "you can book" (Islam's guide brief, 4 Nov 2026).
   const stops = ROUTE_STOPS[url]?.stops;
+  // A gated guide page (Lake Nasser) shows only the vessels of its own facet, never Luxor–Aswan ones.
+  const gatedFacet = GATED_PAGES[url] ? facetBySlug(GATED_PAGES[url]) : undefined;
   const explore = url.startsWith("/nile-cruise-guide/")
     ? exploreVessels(all, {
         route: type === "sail" || !stops ? undefined : { origin: stops[0]!.place, destination: stops.at(-1)!.place },
         type: type === "sail" ? "sail" : undefined,
+        match: gatedFacet?.match,
       })
     : null;
   return (
@@ -274,20 +284,21 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         url={url}
         page={page}
         lead={lead}
+        live={live}
         closing={
           url.startsWith("/destinations/") && stopByPath(url) ? (
             closingRow
           ) : !closing ? null : explore?.length === 0 ? (
             // No two types sail this route yet: no vessel row, but still the way to its cruises (SEO-012).
             <p>
-              <Link href={closingListing(url).href} className={styles.more}>
-                See all: {closingListing(url).anchor}
+              <Link href={closingListing(url, live).href} className={styles.more}>
+                See all: {closingListing(url, live).anchor}
               </Link>
             </p>
           ) : (
             <ClosingCruises
               all={all}
-              listing={closingListing(url)}
+              listing={closingListing(url, live)}
               type={TYPE_OF[url]}
               {...(explore ? { picked: explore, title: "Vessels to explore" } : {})}
             />
@@ -300,7 +311,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         ? ld(
             collectionJsonLd(
               { name: row.h1, description, url: absoluteUrl(locale, url) },
-              children(url).map((l) => ({ name: LINK_MAP[l.href]?.h1 ?? l.anchor, url: absoluteUrl(locale, l.href) })),
+              children(url, live).map((l) => ({ name: LINK_MAP[l.href]?.h1 ?? l.anchor, url: absoluteUrl(locale, l.href) })),
             ),
           )
         : null}

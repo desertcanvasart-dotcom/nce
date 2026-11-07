@@ -4,6 +4,7 @@ import P003 from "./P003.json";
 import P004 from "./P004.json";
 import P005 from "./P005.json";
 import P007 from "./P007.json";
+import P008 from "./P008.json";
 import P010 from "./P010.json";
 import P016 from "./P016.json";
 import P017 from "./P017.json";
@@ -42,6 +43,8 @@ export const DRAFT_PAGES: Record<string, EditorialPage> = {
   P004: P004 as EditorialPage,
   P005: P005 as EditorialPage,
   P007: P007 as EditorialPage,
+  // ADR-113: the Lake Nasser route guide, hidden until Lake Nasser cruises are published.
+  P008: P008 as EditorialPage,
   P010: P010 as EditorialPage,
   P016: P016 as EditorialPage,
   P017: P017 as EditorialPage,

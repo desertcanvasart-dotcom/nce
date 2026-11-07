@@ -13,14 +13,25 @@ const TYPES: VesselType[] = ["sail", "motor", "steam"];
  */
 export function exploreVessels(
   all: ListingVessel[],
-  { route, type }: { route?: { origin: string; destination: string }; type?: VesselType } = {},
+  {
+    route,
+    type,
+    match,
+  }: {
+    route?: { origin: string; destination: string };
+    type?: VesselType;
+    /** A gated page's own facet (ADR-113: Lake Nasser), used instead of the route. */
+    match?: (v: ListingVessel) => boolean;
+  } = {},
 ): ListingVessel[] {
   const sails = (v: ListingVessel) =>
-    v.itineraries.some((i) =>
-      route
-        ? i.origin === route.origin && i.destination === route.destination
-        : CLASSIC.has(i.origin) && CLASSIC.has(i.destination),
-    );
+    match
+      ? match(v)
+      : v.itineraries.some((i) =>
+          route
+            ? i.origin === route.origin && i.destination === route.destination
+            : CLASSIC.has(i.origin) && CLASSIC.has(i.destination),
+        );
   const picked = (type ? [type] : TYPES)
     .map((t) => sortListing(all.filter((v) => v.type === t && sails(v)))[0])
     .filter((v): v is ListingVessel => !!v);
