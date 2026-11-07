@@ -1,0 +1,80 @@
+{
+  "vessel": "oberoi-zahra",
+  "source": "The Oberoi Zahra deck plan (PDF, 2 pages), each deck measured stern 0 to bow 100 on its own drawing; A, B and C are the full hull, D is aligned to A and B by its beam and lift, E is drawn from its own aft end",
+  "credit": "Oberoi",
+  "layout": {
+    "decks": [
+      {
+        "name": "E",
+        "length": 53,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 18, "space": "sun_deck" },
+          { "from": 18, "to": 23.5, "space": "bar" },
+          { "from": 23.5, "to": 36.5, "space": "sun_deck" },
+          { "from": 36.5, "to": 50, "space": "pool" },
+          { "from": 50, "to": 53, "space": "sun_deck" }
+        ]
+      },
+      {
+        "name": "D",
+        "length": 89,
+        "bow": "square",
+        "areas": [
+          { "from": 0, "to": 30, "side": "port", "cabin": "LS" },
+          { "from": 0, "to": 30, "side": "starboard", "cabin": "LS" },
+          { "from": 30, "to": 36.7, "side": "port", "cabin": "LC" },
+          { "from": 36.7, "to": 43.6, "side": "port", "space": "lounge" },
+          { "from": 30, "to": 43.6, "side": "starboard", "cabin": "LC" },
+          { "from": 43.6, "to": 56.2, "side": "port", "space": "gym" },
+          { "from": 43.6, "to": 50, "side": "starboard", "space": "reception", "label": "Foyer" },
+          { "from": 50, "to": 56.2, "side": "starboard", "space": "shop" },
+          { "from": 56.2, "to": 62.5, "space": "reception" },
+          { "from": 62.5, "to": 79.3, "space": "spa", "label": "Massage suites" },
+          { "from": 79.3, "to": 89, "space": "crew", "label": "Wheelhouse" }
+        ]
+      },
+      {
+        "name": "C",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 6.7, "space": "open" },
+          { "from": 6.7, "to": 43.3, "side": "port", "cabin": "LC" },
+          { "from": 6.7, "to": 43.3, "side": "starboard", "cabin": "LC" },
+          { "from": 43.3, "to": 60.4, "space": "reception", "label": "Foyer" },
+          { "from": 60.4, "to": 72.5, "side": "port", "cabin": "LC" },
+          { "from": 60.4, "to": 72.5, "side": "starboard", "cabin": "LC" },
+          { "from": 72.5, "to": 89.5, "space": "library", "label": "Library and cigar lounge" },
+          { "from": 89.5, "to": 100, "space": "open" }
+        ]
+      },
+      {
+        "name": "B",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 20.7, "space": "crew" },
+          { "from": 20.7, "to": 39.4, "side": "port", "cabin": "LC" },
+          { "from": 20.7, "to": 39.4, "side": "starboard", "cabin": "LC" },
+          { "from": 39.4, "to": 62.2, "space": "reception" },
+          { "from": 62.2, "to": 80, "space": "lounge" },
+          { "from": 80, "to": 91.3, "space": "lounge", "label": "Theatre" },
+          { "from": 91.3, "to": 100, "space": "open" }
+        ]
+      },
+      {
+        "name": "A",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          { "from": 0, "to": 27.2, "space": "crew" },
+          { "from": 27.2, "to": 39.8, "space": "crew", "label": "Galley" },
+          { "from": 39.8, "to": 57.4, "space": "restaurant" },
+          { "from": 57.4, "to": 63.2, "space": "reception", "label": "Foyer" },
+          { "from": 63.2, "to": 100, "space": "crew" }
+        ]
+      }
+    ]
+  }
+}
