@@ -3,9 +3,8 @@
  * unit-tested. Copy is English for now; Batch 10 translates it (ADR-093).
  */
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
-import { formatMoney } from "@/components/ds/lib/format";
 import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
-import { indicativeTotal, type IndicativePrice } from "./vessel";
+import { hasFigure, sortAmount, type PublicPrice, type RateDisplay } from "./public-price";
 
 export type Itinerary = {
   origin: string;
@@ -38,10 +37,11 @@ export type ListingVessel = {
   image?: { src: string; alt: string; width: number; height: number };
   /** Published Nilecruz evaluation, 0–100 (ADR-009): only one that may be published (evaluationPublishable). */
   evaluation?: number;
-  /** A guide price per person (per night or per trip) for a vessel that can't be booked; never a "from" price. */
-  indicativePrice?: IndicativePrice;
+  /** ADR-109: the one public starting price (euros, operator-approved), or "Price on request". */
+  price: PublicPrice;
+  rateDisplay?: RateDisplay;
   itineraries: Itinerary[];
-  /** The one public price (ADR-025, ADR-093); absent when nothing is bookable or no rate fits. */
+  /** The lowest bookable rate (any currency). Never shown publicly: ADR-109 shows `price` instead. */
   from?: Money;
   /** False: information only. No price, availability or reserve button (DASH-PUB-010). */
   bookable: boolean;
@@ -113,16 +113,23 @@ export const FACETS: Facet[] = [
 
 export const facetBySlug = (slug: string) => FACETS.find((f) => f.slug === slug);
 
-/** Bookable vessels first (by price), then information-only ones, each group by name. */
+/**
+ * ADR-109: by starting price, lowest first; vessels with "Price on request" have no price to sort by, so they follow,
+ * by name (the listing says so). Bookable vessels come first among equals.
+ */
 export function sortListing(list: ListingVessel[]): ListingVessel[] {
   return [...list].sort((a, b) => {
+    const x = sortAmount(a.price);
+    const y = sortAmount(b.price);
+    if ((x === null) !== (y === null)) return x === null ? 1 : -1;
+    if (x !== null && y !== null && x !== y) return x - y;
     if (a.bookable !== b.bookable) return a.bookable ? -1 : 1;
-    if (a.from && b.from && a.from.currency === b.from.currency && a.from.amount !== b.from.amount)
-      return a.from.amount - b.from.amount;
-    if (!!a.from !== !!b.from) return a.from ? -1 : 1;
     return a.name.localeCompare(b.name);
   });
 }
+
+/** How many vessels have a public figure; the rest are "Price on request" and sit outside a price sort. */
+export const pricedCount = (list: ListingVessel[]) => list.filter((v) => hasFigure(v.price)).length;
 
 /** The card's route and nights: the vessel's shortest itinerary, so the headline matches what's on sale soonest. */
 export function headlineItinerary(v: ListingVessel): Itinerary | undefined {
@@ -135,6 +142,7 @@ export type GridCard = Omit<CruiseCardProps, "onCompare" | "onSave" | "compared"
 export function toCard(v: ListingVessel): GridCard {
   const it = headlineItinerary(v);
   const badges: GridCard["badges"] = [];
+  // Booking status, apart from the price: a vessel that can't be booked online yet.
   if (!v.bookable) badges.push({ label: "Information only", tone: "media" });
   if (v.sample) badges.push({ label: "Sample data", tone: "accent", icon: "info" });
   return {
@@ -147,16 +155,15 @@ export function toCard(v: ListingVessel): GridCard {
     nights: it?.nights,
     guests: v.maxGuests ?? undefined,
     evaluation: v.evaluation,
-    // ADR-025: the one public price, only for a vessel that can be booked; information-only listings show none.
-    price: v.bookable ? v.from : undefined,
-    // The same guide price the vessel page shows, so the card never says "Prices in preparation" beside it.
-    indicativePrice:
-      !v.bookable && v.indicativePrice && it ? (indicativeTotal(v.indicativePrice, it.nights) ?? undefined) : undefined,
+    // ADR-109: the approved starting price in euros, or "Price on request"; never a rate computed from cabins.
+    price:
+      v.price.mode === "from_price"
+        ? { from: v.price.from }
+        : v.price.mode === "price_band"
+          ? { min: v.price.min, max: v.price.max }
+          : undefined,
     image: v.image,
-    badges:
-      v.bookable && v.fromWithSightseeing
-        ? [...badges, { label: `With sightseeing from ${formatMoney(v.fromWithSightseeing, "en")}`, tone: "success" as const }]
-        : badges,
+    badges,
   };
 }
 

@@ -16,7 +16,9 @@ import {
   sortListing,
   toCard,
   type ListingVessel,
+  pricedCount,
 } from "@/lib/marketplace/listing";
+import type { PublicPrice } from "@/lib/marketplace/public-price";
 
 const vessel = (over: Partial<ListingVessel> = {}): ListingVessel => ({
   id: "v",
@@ -34,11 +36,19 @@ const vessel = (over: Partial<ListingVessel> = {}): ListingVessel => ({
   itineraries: [{ origin: "Luxor", destination: "Aswan", nights: 4, departures: ["2026-12-01", "2026-12-05"] }],
   bookable: true,
   from: { amount: 70000, currency: "USD" },
+  price: { mode: "on_request" },
   ...over,
+});
+const fromEur = (amount: number): PublicPrice => ({
+  mode: "from_price",
+  from: { amount, currency: "EUR" },
+  basis: "per_person_per_trip",
+  nights: null,
+  lastChecked: "2026-11-06",
 });
 
 const sail = vessel({ id: "a", slug: "dahabiya-a", name: "Dahabiya A", type: "sail", category: "luxury", maxGuests: 12 });
-const ship = vessel({ id: "b", slug: "ship-b", name: "Ship B", from: { amount: 50000, currency: "USD" } });
+const ship = vessel({ id: "b", slug: "ship-b", name: "Ship B", price: fromEur(50000) });
 const back = vessel({
   id: "c",
   slug: "ship-c",
@@ -46,7 +56,16 @@ const back = vessel({
   category: "deluxe",
   itineraries: [{ origin: "Aswan", destination: "Luxor", nights: 3, departures: ["2026-12-03"] }],
 });
-const info = vessel({ id: "d", slug: "info-d", name: "Info D", bookable: false, from: undefined, showcase: true, sample: true });
+const info = vessel({
+  id: "d",
+  slug: "info-d",
+  name: "Info D",
+  bookable: false,
+  from: undefined,
+  showcase: true,
+  sample: true,
+  price: fromEur(112000),
+});
 
 describe("facets (PAGE-061–067, SEO-016)", () => {
   it("are the five Phase 1 filtered listings, none of them a possible vessel slug", () => {
@@ -65,61 +84,47 @@ describe("facets (PAGE-061–067, SEO-016)", () => {
     expect(pick("aswan-to-luxor")).toEqual(["c"]);
   });
 
-  it("list bookable vessels first, cheapest first, information-only last", () => {
-    expect(sortListing([info, sail, back, ship]).map((v) => v.id)).toEqual(["b", "a", "c", "d"]);
+  it("sort by starting price; 'Price on request' has none, so those follow by name (ADR-109)", () => {
+    // Ship B €500 and Info D €1,120 have prices; A and C are on request, by name. A dollar rate never sorts.
+    expect(sortListing([info, sail, back, ship]).map((v) => v.id)).toEqual(["b", "d", "a", "c"]);
+    expect(pricedCount([info, sail, back, ship])).toBe(2);
   });
 });
 
 describe("cards (BRAND-026, 028, ADR-025, DASH-PUB-010)", () => {
-  it("show guests, the published score and the one public price; never stars", () => {
-    const c = toCard(vessel({ evaluation: 86.4 }));
+  it("show guests, the published score and the approved starting price in euros; never stars", () => {
+    const c = toCard(vessel({ evaluation: 86.4, price: fromEur(112000) }));
     expect(c).toMatchObject({
       guests: 80,
       evaluation: 86.4,
-      price: { amount: 70000, currency: "USD" },
+      price: { from: { amount: 112000, currency: "EUR" } },
       route: ["Luxor", "Aswan"],
     });
     expect(c.rating).toBeUndefined();
     expect(c.href).toBe("/cruises/sample/");
   });
 
-  it("show no price and say 'Information only' when nothing can be booked; flag sample data", () => {
-    const c = toCard(vessel({ bookable: false, sample: true }));
-    expect(c.price).toBeUndefined();
+  it("never show a rate computed from cabins: without an approved price, the card says 'Price on request'", () => {
+    // The vessel has a bookable US$700 rate, but no approved public price.
+    expect(toCard(vessel()).price).toBeUndefined();
+  });
+
+  it("show a typical band as a band", () => {
+    const band: PublicPrice = {
+      mode: "price_band",
+      min: { amount: 90000, currency: "EUR" },
+      max: { amount: 140000, currency: "EUR" },
+      basis: "per_person_per_trip",
+      nights: 4,
+      lastChecked: "2026-11-06",
+    };
+    expect(toCard(vessel({ price: band })).price).toEqual({ min: band.min, max: band.max });
+  });
+
+  it("keep the booking status apart from the price, and flag sample data", () => {
+    const c = toCard(vessel({ bookable: false, sample: true, price: fromEur(112000) }));
+    expect(c.price).toEqual({ from: { amount: 112000, currency: "EUR" } });
     expect(c.badges?.map((b) => b.label)).toEqual(["Information only", "Sample data"]);
-  });
-
-  it("show an information-only vessel's indicative price for its headline cruise, as its own page does", () => {
-    const perTrip = {
-      perTrip: { amount: 250000, currency: "EUR" },
-      nights: 5,
-      basis: "per_person_per_trip" as const,
-      status: "indicative" as const,
-    };
-    const fiveNights = vessel().itineraries.map((i) => ({ ...i, nights: 5 }));
-    expect(toCard(vessel({ bookable: false, indicativePrice: perTrip, itineraries: fiveNights }))).toMatchObject({
-      price: undefined,
-      indicativePrice: { amount: 250000, currency: "EUR" },
-    });
-    // A guide for another length is never stretched to fit.
-    expect(
-      toCard(vessel({ bookable: false, indicativePrice: { ...perTrip, nights: 4 }, itineraries: fiveNights })).indicativePrice,
-    ).toBeUndefined();
-  });
-
-  it("show a per-night guide price as the headline cruise's total, as Royal Lily's page lists it by itinerary", () => {
-    const perNight = {
-      perNight: { amount: 30000, currency: "USD" },
-      basis: "per_person_per_night" as const,
-      status: "indicative" as const,
-    };
-    // The headline itinerary is the shortest: 4 nights × US$300.
-    expect(toCard(vessel({ bookable: false, indicativePrice: perNight })).indicativePrice).toEqual({
-      amount: 120000,
-      currency: "USD",
-    });
-    // A bookable vessel shows its one public price, never the guide.
-    expect(toCard(vessel({ indicativePrice: perNight })).indicativePrice).toBeUndefined();
   });
 });
 

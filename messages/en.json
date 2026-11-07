@@ -2,7 +2,7 @@
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Nile cruises, explained before you sail",
-    "homeDescription": "How a sailing dahabiya, a paddle steamer and a motor cruise ship differ on board, and why one five-star cabin costs ten times another."
+    "homeDescription": "How a sailing dahabiya, a paddle steamer and a motor cruise ship differ on board, and why one five-star cabin costs more than 15 times another."
   },
   "shell": {
     "skipToContent": "Skip to content",
@@ -111,12 +111,12 @@
       "guestsMax": "{count} guests max",
       "evaluation": "{score}/100 · Nilecruz evaluation",
       "onBoard": "On board",
-      "fromPerPerson": "From, per person",
-      "indicativePerPerson": "Indicative, per person",
-      "pricesInPreparation": "Prices in preparation",
       "compare": "Compare",
       "save": "Save {name}",
-      "remove": "Remove {name} from saved"
+      "remove": "Remove {name} from saved",
+      "from": "From <b>{price}</b> per person. Includes our margin. A guide, not a quote.",
+      "band": "Typically <b>{min}–{max}</b> per person. Includes our margin. A guide, not a quote.",
+      "onRequest": "Price on request"
     },
     "experienceCard": {
       "seeDetails": "See details"
@@ -472,7 +472,7 @@
     "meta": {
       "title": "{name}: {nights}-night Nile cruises",
       "titleOne": "{name}: Nile cruises",
-      "description": "Compare {nights}-night {name} cruises between {a} and {b}: cabins, deck plan, usual programme and indicative prices.",
+      "description": "Compare {nights}-night {name} cruises between {a} and {b}: cabins, deck plan, usual programme and starting prices.",
       "descriptionRoute": "Compare {nights}-night {name} cruises on the Nile: cabins, deck plan, usual programme and prices.",
       "trip": "{name}: {nights}, {origin} to {destination}"
     },
@@ -480,9 +480,6 @@
       "routeBetween": "{nights}-night cruises between {a} and {b}",
       "routeMixed": "{nights}-night Nile cruises",
       "facts": "Key facts",
-      "indicativePrice": "Indicative price",
-      "fromPrice": "From, per person",
-      "fromAbout": "From about {price} per person, per night",
       "cabins": "Cabins",
       "cabinsIncluding": "{count}, including {list}",
       "cabinTypeCount": "{n} {name}",
@@ -498,16 +495,14 @@
       "seeIncluded": "See what’s included",
       "seePrices": "See prices and dates",
       "infoOnly": "This boat can’t be booked on Nilecruz yet. Ask for an offer to get current rates and availability.",
-      "infoOnlyPrice": "This boat can’t be booked on Nilecruz yet. The price is an indication, not a quote. Ask for an offer to get current rates and availability.",
-      "bookableNote": "Sign in to see every cabin’s price for every departure, and reserve. The “from” price is per person for two sharing the lowest-priced cabin with places left.",
-      "gratuity": "Crew gratuities of {amount} per person per night are separate, paid on board at check-out.",
+      "bookableNote": "Sign in to reserve.",
       "photos": "{name}: photos",
       "photoCount": "{n} photos",
       "photoOf": "{name}: photo {n} of {total}",
       "prevPhoto": "Previous photo",
       "nextPhoto": "Next photo",
       "closePhotos": "Close photos",
-      "fromTrip": "From {price} per person for the {n}-night cruise"
+      "startingPrice": "Starting price"
     },
     "verdict": {
       "title": "Is this the right boat for you?",
@@ -528,28 +523,18 @@
     },
     "price": {
       "title": "Price and what’s included",
-      "fromAbout": "From about {price} per person, per night.",
-      "totals": "That’s about {list}.",
-      "totalFirst": "{price} per person for {nights}",
-      "totalMore": "{price} for {nights}",
-      "guide": "This is a guide, not a quote.",
-      "fromBookable": "From {price} per person, for two sharing the lowest-priced cabin with places left.",
-      "withSightseeing": "With sightseeing, from {price} per person.",
-      "shapes": "The final price depends on your cabin, travel dates, sailing and package. Ask for an offer to see what applies to your trip.",
-      "shapesBookable": "The final price depends on your cabin, travel dates and sailing. Sign in to see every cabin’s price.",
-      "why": "Why Nile cruise prices differ",
+      "shapes": "The final price depends on your cabin, travel dates, sailing and package. Check rates for your dates below.",
+      "shapesBookable": "The final price depends on your cabin, travel dates and sailing. Check rates for your dates below.",
       "included": "Included",
       "optional": "Optional or depends on your package",
       "notIncluded": "Not included",
       "fallback": "Flights and <link>transfers</link> are booked separately.",
       "fallbackProgramme": "The itinerary shows the usual sightseeing programme, so check which guides, entry tickets and excursions your offer includes.",
-      "askIncluded": "Ask what’s included in my dates",
-      "fromTrip": "From {price} per person for the {n}-night cruise, sharing a double room."
+      "askIncluded": "Ask what’s included in my dates"
     },
     "itinerary": {
       "title": "The usual programme",
       "choose": "Choose your cruise",
-      "about": "About {price} per person for {nights}, as a guide.",
       "checkInOut": "From check-in on day 1 in {origin} to check-out on day {last} in {destination}.",
       "stops": "Stops:",
       "south": "Upstream, sailing south",
@@ -573,8 +558,8 @@
       "fees": "entrance fees included",
       "noFees": "entrance fees not included",
       "visiting": "visiting {sites}",
-      "programme": "With sightseeing: add Nilecruz’s <link>{name}</link> when you book, from {price} per person for two. It’s a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise.",
-      "boarding": "Getting on board:"
+      "boarding": "Getting on board:",
+      "programmeOnRequest": "With sightseeing: add Nilecruz’s <link>{name}</link> when you book. It’s a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise. Price on request."
     },
     "cabins": {
       "title": "Cabins and decks",
@@ -713,11 +698,9 @@
     "faq": {
       "title": "Questions about {name}",
       "costQ": "How much does a cruise on {name} cost?",
-      "costA": "As a guide, from about {price} per person, per night. That’s about {totals}. The final price depends on your cabin, dates, sailing and package.",
-      "costBookableA": "From {price} per person, for two sharing the lowest-priced cabin with places left. The final price depends on your cabin, dates and sailing.",
       "bookQ": "Can I book this boat on Nilecruz?",
       "bookNo": "Not yet. You can ask for an offer, and we’ll check rates and availability for your dates.",
-      "bookYes": "Yes. Sign in to see every cabin’s price for every departure, and reserve.",
+      "bookYes": "Yes. Sign in to reserve, or check rates for your dates without an account.",
       "lengthQ": "How long are the cruises?",
       "lengthLine": "{nights, plural, =1 {One} =2 {Two} =3 {Three} =4 {Four} =5 {Five} =6 {Six} =7 {Seven} other {#}}-night sailings leave {origin} for {destination} {days}",
       "lengthDays": "on {days}",
@@ -737,11 +720,8 @@
     "similar": {
       "title": "Other boats to compare",
       "cabins": "{n, plural, one {# cabin} other {# cabins}}",
-      "fromAbout": "From about {price} a night",
-      "from": "From {price} per person",
       "bookable": "Bookable on Nilecruz",
-      "compareTypes": "Compare vessel types",
-      "fromTrip": "From {price} per person for {n} nights"
+      "compareTypes": "Compare vessel types"
     },
     "final": {
       "title": "Want a price for your dates?",
@@ -879,7 +859,7 @@
     },
     "samples": {
       "heading": "Vessels to explore",
-      "intro": "One example of each type. Prices are being prepared, so ask us about current rates and availability.",
+      "intro": "One example of each type. Each shows its starting price, or “Price on request” until the operator approves one.",
       "cabins": "{count} cabins",
       "empty": "These vessels aren’t published yet.",
       "more": "See all Nile cruises",
@@ -1009,6 +989,53 @@
       "previous": "Previous stop: {name}",
       "next": "Next stop: {name}",
       "all": "See all Nile cruises"
+    }
+  },
+  "pricing": {
+    "from": "From <b>{price}</b> per person. Includes our margin. A guide, not a quote.",
+    "band": "Typically <b>{min}–{max}</b> per person. Includes our margin. A guide, not a quote.",
+    "onRequest": "Price on request",
+    "basisTrip": "Per person, per trip.",
+    "basisTripNights": "Per person, for the {n}-night cruise.",
+    "basisTripRoute": "Per person, for the {n}-night cruise, {origin} to {destination}.",
+    "basisNight": "Per person, per night.",
+    "checked": "Last checked {date}.",
+    "policy": "All prices we publish and quote already include our margin.",
+    "onRequestNote": "We don’t publish a price for this cruise yet. Check rates for your dates, and we’ll send your offer by email.",
+    "why": "Why Nile cruise prices differ",
+    "gratuities": "Crew gratuities are separate: usually €5 to €10 per person, per night, depending on the cruise. Check each cruise’s offer.",
+    "sortNote": "Sorted by starting price. Cruises with “Price on request” have no price to sort by, so they come after the others, by name.",
+    "rates": {
+      "title": "Check rates for your dates",
+      "lead": "We’ll check availability and send your offer by email.",
+      "cruise": "Cruise",
+      "anyCruise": "Any of its cruises",
+      "date": "Departure date",
+      "dateHint": "Leave it empty if your dates are flexible.",
+      "guests": "Guests",
+      "cabin": "Cabin preference",
+      "anyCabin": "No preference",
+      "email": "Email",
+      "emailHint": "Only to send your offer. No account needed.",
+      "submit": "Check rates",
+      "sent": "Thank you. We’ll check availability and send your offer by email.",
+      "failed": "Your request couldn’t be sent. Please try again in a moment.",
+      "tooMany": "Too many requests from here. Please try again in a few minutes.",
+      "invalid": "Please check: {fields}.",
+      "signedInResult": "{price} per person, departing {date}, {cabin}. Includes our margin.",
+      "signedInNone": "We don’t have a rate for that date yet. We’ll check availability and send your offer by email."
+    },
+    "save": {
+      "title": "Save this quote and get an alert if the price changes.",
+      "button": "Save this quote",
+      "alert": "Email me if the starting price changes",
+      "signIn": "Sign in to save it",
+      "noAccount": "You don’t need an account to read prices or ask for an offer.",
+      "saved": "Saved. You’ll find it in My journey.",
+      "failed": "It couldn’t be saved. Please try again.",
+      "pageTitle": "Save this quote",
+      "summary": "{name}: {details}",
+      "any": "dates to be agreed"
     }
   }
 }

@@ -3,7 +3,7 @@
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "Cruceros por el Nilo, explicados antes de zarpar",
-    "homeDescription": "En qué se diferencian a bordo una dahabiya de vela, un vapor de ruedas y un crucero a motor, y por qué un camarote de cinco estrellas cuesta diez veces más que otro."
+    "homeDescription": "En qué se diferencian a bordo una dahabiya de vela, un vapor de ruedas y un crucero a motor, y por qué un camarote de cinco estrellas cuesta más de 15 veces lo que otro."
   },
   "shell": {
     "skipToContent": "Ir al contenido",
@@ -112,12 +112,12 @@
       "guestsMax": "Máx. {count} pasajeros",
       "evaluation": "{score}/100 · evaluación de Nilecruz",
       "onBoard": "A bordo",
-      "fromPerPerson": "Desde, por persona",
-      "indicativePerPerson": "Orientativo, por persona",
-      "pricesInPreparation": "Precios en preparación",
       "compare": "Comparar",
       "save": "Guardar {name}",
-      "remove": "Quitar {name} de guardados"
+      "remove": "Quitar {name} de guardados",
+      "from": "Desde <b>{price}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+      "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+      "onRequest": "Precio a consultar"
     },
     "experienceCard": {
       "seeDetails": "Ver detalles"
@@ -473,7 +473,7 @@
     "meta": {
       "title": "{name}: cruceros por el Nilo de {nights} noches",
       "titleOne": "{name}: cruceros por el Nilo",
-      "description": "Compara los cruceros de {nights} noches del {name} entre {a} y {b}: camarotes, plano de cubiertas, programa habitual y precios orientativos.",
+      "description": "Compara los cruceros de {nights} noches del {name} entre {a} y {b}: camarotes, plano de cubiertas, programa habitual y precios de partida.",
       "descriptionRoute": "Compara los cruceros de {nights} noches del {name} por el Nilo: camarotes, plano de cubiertas, programa habitual y precios.",
       "trip": "{name}: {nights}, de {origin} a {destination}"
     },
@@ -481,9 +481,6 @@
       "routeBetween": "Cruceros de {nights} noches entre {a} y {b}",
       "routeMixed": "Cruceros por el Nilo de {nights} noches",
       "facts": "Datos clave",
-      "indicativePrice": "Precio orientativo",
-      "fromPrice": "Desde, por persona",
-      "fromAbout": "Desde unos {price} por persona y noche",
       "cabins": "Camarotes",
       "cabinsIncluding": "{count}, incluidas {list}",
       "cabinTypeCount": "{n} {name}",
@@ -499,16 +496,14 @@
       "seeIncluded": "Qué incluye",
       "seePrices": "Ver precios y fechas",
       "infoOnly": "Este barco aún no se puede reservar en Nilecruz. Pide una oferta para conocer las tarifas y la disponibilidad actuales.",
-      "infoOnlyPrice": "Este barco aún no se puede reservar en Nilecruz. El precio es orientativo, no un presupuesto. Pide una oferta para conocer las tarifas y la disponibilidad actuales.",
-      "bookableNote": "Inicia sesión para ver el precio de cada camarote en cada salida y reservar. El precio «desde» es por persona, para dos personas que comparten el camarote más económico con plazas libres.",
-      "gratuity": "Las propinas de la tripulación, de {amount} por persona y noche, se pagan aparte, a bordo, al dejar el barco.",
+      "bookableNote": "Inicia sesión para reservar.",
       "photos": "{name}: fotos",
       "photoCount": "{n} fotos",
       "photoOf": "{name}: foto {n} de {total}",
       "prevPhoto": "Foto anterior",
       "nextPhoto": "Foto siguiente",
       "closePhotos": "Cerrar las fotos",
-      "fromTrip": "Desde {price} por persona por el crucero de {n} noches"
+      "startingPrice": "Precio de partida"
     },
     "verdict": {
       "title": "¿Es el barco adecuado para ti?",
@@ -529,28 +524,18 @@
     },
     "price": {
       "title": "Precio y qué incluye",
-      "fromAbout": "Desde unos {price} por persona y noche.",
-      "totals": "Eso supone unos {list}.",
-      "totalFirst": "{price} por persona por {nights}",
-      "totalMore": "{price} por {nights}",
-      "guide": "Es una orientación, no un presupuesto.",
-      "fromBookable": "Desde {price} por persona, para dos personas que comparten el camarote más económico con plazas libres.",
-      "withSightseeing": "Con visitas, desde {price} por persona.",
-      "shapes": "El precio final depende del camarote, las fechas, la salida y el paquete. Pide una oferta para ver qué se aplica a tu viaje.",
-      "shapesBookable": "El precio final depende del camarote, las fechas y la salida. Inicia sesión para ver el precio de cada camarote.",
-      "why": "Por qué varían los precios de los cruceros por el Nilo",
+      "shapes": "El precio final depende del camarote, las fechas, la salida y el paquete. Consulta más abajo las tarifas para tus fechas.",
+      "shapesBookable": "El precio final depende del camarote, las fechas y la salida. Consulta más abajo las tarifas para tus fechas.",
       "included": "Incluido",
       "optional": "Opcional o según tu paquete",
       "notIncluded": "No incluido",
       "fallback": "Los vuelos y los <link>traslados</link> se reservan aparte.",
       "fallbackProgramme": "El itinerario muestra el programa de visitas habitual, así que comprueba qué guías, entradas y excursiones incluye tu oferta.",
-      "askIncluded": "Pregunta qué incluye en mis fechas",
-      "fromTrip": "Desde {price} por persona por el crucero de {n} noches, en habitación doble compartida."
+      "askIncluded": "Pregunta qué incluye en mis fechas"
     },
     "itinerary": {
       "title": "El programa habitual",
       "choose": "Elige tu crucero",
-      "about": "Unos {price} por persona por {nights}, como orientación.",
       "checkInOut": "Desde el embarque el día 1 en {origin} hasta el desembarque el día {last} en {destination}.",
       "stops": "Paradas:",
       "south": "Río arriba, rumbo al sur",
@@ -574,8 +559,8 @@
       "fees": "entradas incluidas",
       "noFees": "entradas no incluidas",
       "visiting": "con visitas a {sites}",
-      "programme": "Con visitas: añade el <link>{name}</link> de Nilecruz al reservar, desde {price} por persona para dos. Es una reserva aparte con Nilecruz, con guía egiptólogo y entradas, que se paga junto con el crucero.",
-      "boarding": "Cómo embarcar:"
+      "boarding": "Cómo embarcar:",
+      "programmeOnRequest": "Con visitas: añade el <link>{name}</link> de Nilecruz al reservar. Es una reserva aparte con Nilecruz, con guía egiptólogo y entradas, que se paga junto con el crucero. Precio a consultar."
     },
     "cabins": {
       "title": "Camarotes y cubiertas",
@@ -714,11 +699,9 @@
     "faq": {
       "title": "Preguntas sobre el {name}",
       "costQ": "¿Cuánto cuesta un crucero en el {name}?",
-      "costA": "Como orientación, desde unos {price} por persona y noche. Eso supone unos {totals}. El precio final depende del camarote, las fechas, la salida y el paquete.",
-      "costBookableA": "Desde {price} por persona, para dos personas que comparten el camarote más económico con plazas libres. El precio final depende del camarote, las fechas y la salida.",
       "bookQ": "¿Puedo reservar este barco en Nilecruz?",
       "bookNo": "Todavía no. Puedes pedir una oferta y comprobaremos las tarifas y la disponibilidad para tus fechas.",
-      "bookYes": "Sí. Inicia sesión para ver el precio de cada camarote en cada salida y reservar.",
+      "bookYes": "Sí. Inicia sesión para reservar, o consulta las tarifas para tus fechas sin cuenta.",
       "lengthQ": "¿Cuánto duran los cruceros?",
       "lengthLine": "Los cruceros de {nights, plural, =1 {una noche} =2 {dos noches} =3 {tres noches} =4 {cuatro noches} =5 {cinco noches} =6 {seis noches} =7 {siete noches} other {# noches}} salen de {origin} hacia {destination} {days}",
       "lengthDays": "{days}",
@@ -738,11 +721,8 @@
     "similar": {
       "title": "Otros barcos para comparar",
       "cabins": "{n, plural, one {# camarote} other {# camarotes}}",
-      "fromAbout": "Desde unos {price} por noche",
-      "from": "Desde {price} por persona",
       "bookable": "Se puede reservar en Nilecruz",
-      "compareTypes": "Compara los tipos de barco",
-      "fromTrip": "Desde {price} por persona por {n} noches"
+      "compareTypes": "Compara los tipos de barco"
     },
     "final": {
       "title": "¿Quieres un precio para tus fechas?",
@@ -880,7 +860,7 @@
     },
     "samples": {
       "heading": "Embarcaciones para descubrir",
-      "intro": "Un ejemplo de cada tipo. Estamos preparando los precios, así que pregúntenos por las tarifas y la disponibilidad actuales.",
+      "intro": "Un ejemplo de cada tipo. Cada uno muestra su precio de partida, o «Precio a consultar» hasta que el operador apruebe uno.",
       "cabins": "{count} camarotes",
       "empty": "Estas embarcaciones aún no están publicadas.",
       "more": "Ver todos los cruceros por el Nilo",
@@ -1010,6 +990,53 @@
       "previous": "Parada anterior: {name}",
       "next": "Siguiente parada: {name}",
       "all": "Ver todos los cruceros por el Nilo"
+    }
+  },
+  "pricing": {
+    "from": "Desde <b>{price}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+    "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+    "onRequest": "Precio a consultar",
+    "basisTrip": "Por persona y crucero.",
+    "basisTripNights": "Por persona, para el crucero de {n} noches.",
+    "basisTripRoute": "Por persona, para el crucero de {n} noches de {origin} a {destination}.",
+    "basisNight": "Por persona y noche.",
+    "checked": "Última comprobación: {date}.",
+    "policy": "Todos los precios que publicamos y presupuestamos ya incluyen nuestro margen.",
+    "onRequestNote": "Aún no publicamos un precio para este crucero. Consulta las tarifas para tus fechas y te enviaremos tu oferta por correo electrónico.",
+    "why": "Por qué varían los precios de los cruceros por el Nilo",
+    "gratuities": "Las propinas de la tripulación van aparte: normalmente entre 5 € y 10 € por persona y noche, según el crucero. Comprueba la oferta de cada crucero.",
+    "sortNote": "Ordenado por precio de partida. Los cruceros con «Precio a consultar» no tienen precio por el que ordenar, así que aparecen después, por nombre.",
+    "rates": {
+      "title": "Consulta las tarifas para tus fechas",
+      "lead": "Comprobaremos la disponibilidad y te enviaremos tu oferta por correo electrónico.",
+      "cruise": "Crucero",
+      "anyCruise": "Cualquiera de sus cruceros",
+      "date": "Fecha de salida",
+      "dateHint": "Déjala vacía si tus fechas son flexibles.",
+      "guests": "Personas",
+      "cabin": "Preferencia de camarote",
+      "anyCabin": "Sin preferencia",
+      "email": "Correo electrónico",
+      "emailHint": "Solo para enviarte tu oferta. No necesitas cuenta.",
+      "submit": "Consultar tarifas",
+      "sent": "Gracias. Comprobaremos la disponibilidad y te enviaremos tu oferta por correo electrónico.",
+      "failed": "No se pudo enviar tu solicitud. Inténtalo de nuevo en un momento.",
+      "tooMany": "Demasiadas solicitudes desde aquí. Inténtalo de nuevo en unos minutos.",
+      "invalid": "Revisa: {fields}.",
+      "signedInResult": "{price} por persona, con salida el {date}, {cabin}. Incluye nuestro margen.",
+      "signedInNone": "Aún no tenemos tarifa para esa fecha. Comprobaremos la disponibilidad y te enviaremos tu oferta por correo electrónico."
+    },
+    "save": {
+      "title": "Guarda este presupuesto y recibe un aviso si cambia el precio.",
+      "button": "Guardar este presupuesto",
+      "alert": "Avísame por correo si cambia el precio de partida",
+      "signIn": "Inicia sesión para guardarlo",
+      "noAccount": "No necesitas una cuenta para ver precios ni para pedir una oferta.",
+      "saved": "Guardado. Lo encontrarás en Mi viaje.",
+      "failed": "No se pudo guardar. Inténtalo de nuevo.",
+      "pageTitle": "Guardar este presupuesto",
+      "summary": "{name}: {details}",
+      "any": "fechas por acordar"
     }
   }
 }

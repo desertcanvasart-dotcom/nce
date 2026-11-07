@@ -125,16 +125,8 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
         </div>
         <div className={styles.row}>
           <label>
-            Budget for everyone <span className={styles.hint}>(optional)</span>
+            Budget for everyone, in euros <span className={styles.hint}>(optional)</span>
             <input type="text" inputMode="decimal" value={plan.budget} onChange={(e) => update("budget", e.target.value)} />
-          </label>
-          <label>
-            Currency
-            <select value={plan.currency} onChange={(e) => update("currency", e.target.value as Plan["currency"])}>
-              <option value="USD">US$</option>
-              <option value="EUR">€</option>
-              <option value="EGP">E£</option>
-            </select>
           </label>
         </div>
         <label>

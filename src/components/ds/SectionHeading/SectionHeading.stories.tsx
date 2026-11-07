@@ -8,8 +8,8 @@ export const stories: Story[] = [
     render: () => (
       <SectionHeading
         eyebrow="Why prices differ"
-        title="Same five stars, ten times the price"
-        intro="A cabin on the Nile can cost US$800 or US$8,000, and both ships may carry the same licence. Here is where the difference goes."
+        title="Same five stars, more than 15 times the price"
+        intro="A cabin on the Nile can cost €400 or €6,500, and both ships may carry the same licence. Here is where the difference goes."
       />
     ),
   },

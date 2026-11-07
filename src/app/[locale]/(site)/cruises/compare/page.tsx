@@ -59,8 +59,8 @@ export default async function Compare({ params, searchParams }: Props) {
       <header className={styles.head}>
         <h1 className={styles.title}>Compare vessels</h1>
         <p className={styles.lead}>
-          The facts that differ most between Nile vessels. Prices are the public “from” price per person for two sharing; every
-          cabin and date is priced after you sign in.
+          The facts that differ most between Nile vessels. Starting prices are per person, in euros: a guide, not a quote. All
+          prices we publish and quote already include our margin.
         </p>
       </header>
       {picked.length < 2 ? (
@@ -93,12 +93,15 @@ export default async function Compare({ params, searchParams }: Props) {
               {row("Nilecruz evaluation", (v) =>
                 v.evaluation !== undefined ? `${Math.round(v.evaluation)}/100` : "Not evaluated yet",
               )}
-              {row("From, per person", (v) =>
-                v.bookable && v.from ? formatMoney(v.from, locale) : v.bookable ? "Prices on request" : "Information only",
+              {/* ADR-109: the approved starting price in euros, else "Price on request"; booking status is its own row. */}
+              {row("Starting price", (v) =>
+                v.price.mode === "from_price"
+                  ? `From ${formatMoney(v.price.from, locale)} per person. Includes our margin. A guide, not a quote.`
+                  : v.price.mode === "price_band"
+                    ? `Typically ${formatMoney(v.price.min, locale)}–${formatMoney(v.price.max, locale)} per person. Includes our margin. A guide, not a quote.`
+                    : "Price on request",
               )}
-              {row("With sightseeing, from", (v) =>
-                v.bookable && v.fromWithSightseeing ? formatMoney(v.fromWithSightseeing, locale) : "Cruise only",
-              )}
+              {row("Booking", (v) => (v.bookable ? "Bookable on Nilecruz" : "Information only"))}
               {row("Itineraries", (v) =>
                 v.itineraries.length ? (
                   <ul>

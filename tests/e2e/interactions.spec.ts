@@ -4,20 +4,8 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
 
 test.skip(!LOCAL, "needs the local Supabase stack: pnpm with-local-db pnpm test:e2e");
 
-/** Batch 9-1: the price's "Why?", the compare tray, the season calendar and the evaluation radar (EXP-001, 004, 006, 009). */
+/** Batch 9-1: the compare tray, the season calendar and the evaluation radar (EXP-004, 006, 009; EXP-001 retired by ADR-109). */
 const card = (page: import("@playwright/test").Page, name: string) => page.getByRole("article", { name });
-
-test("a card's price explains itself from facts [EXP-001]", async ({ page }) => {
-  await page.goto("/cruises/");
-  const why = page.getByRole("button", { name: /^Why US\$/ }).first();
-  await why.click();
-  const sheet = page.getByRole("dialog", { name: /^Why US\$/ });
-  await expect(sheet).toBeVisible();
-  await expect(sheet).toContainText("per person for two sharing the lowest-priced cabin");
-  await expect(sheet).toContainText("Not in this price");
-  await page.keyboard.press("Escape");
-  await expect(sheet).toBeHidden();
-});
 
 test("the compare tray: three at most, kept onto a vessel page, with the keyboard [EXP-004, DASH-PUB-004]", async ({ page }) => {
   await page.goto("/cruises/");
@@ -72,16 +60,10 @@ test("the season calendar says each day's deadline, by keyboard [EXP-006, ADR-02
 });
 
 for (const theme of ["light", "dark"] as const) {
-  test(`the four interactions pass axe in ${theme === "light" ? "Day" : "Night"} [EXP-001, 004, 006, 009, A11Y-001]`, async ({
-    page,
-  }) => {
+  test(`the interactions pass axe in ${theme === "light" ? "Day" : "Night"} [EXP-004, 006, 009, A11Y-001]`, async ({ page }) => {
     await setTheme(page, theme);
     await page.goto("/cruises/");
     await card(page, "Sample Motor Ship One").getByLabel("Compare").check();
-    await page
-      .getByRole("button", { name: /^Why US\$/ })
-      .first()
-      .click();
     await expectNoSeriousA11yIssues(page);
     await page.goto("/nile-cruise-guide/when-to-go/");
     await expectNoSeriousA11yIssues(page);

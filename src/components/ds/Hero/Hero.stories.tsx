@@ -16,7 +16,7 @@ export const stories: Story[] = [
         vessel="sail"
         eyebrow="Luxor — Aswan"
         title="The Nile, explained before you sail"
-        subtitle="Dahabiyas, steamers and floating hotels: what each is really like on board, and why the price of a five-star cabin runs from US$800 to US$8,000."
+        subtitle="Dahabiyas, steamers and floating hotels: what each is really like on board, and why the price of a five-star cabin runs from €400 to €6,500."
         action={
           <Button variant="link" onMedia icon="arrow-up-right" href="/cruises/">
             Browse cruises

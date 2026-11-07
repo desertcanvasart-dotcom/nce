@@ -11,16 +11,16 @@ import { Stepper } from "../Stepper/Stepper";
  */
 export function BookingSummaryDemo({ childAges = [] as number[] }: { childAges?: number[] }) {
   const [adults, setAdults] = useState(2);
-  const rate = 189000; // sample: US$1,890 per adult, minor units
+  const rate = 189000; // sample: €1,890 per adult, minor units
   const share = (age: number) => (age < 3 ? 0 : age < 6 ? 0.25 : age < 12 ? 0.5 : 1);
   const lines = [
     {
-      label: `${formatMoney({ amount: rate, currency: "USD" })} × ${adults}`,
-      amount: { amount: rate * adults, currency: "USD" },
+      label: `${formatMoney({ amount: rate, currency: "EUR" })} × ${adults}`,
+      amount: { amount: rate * adults, currency: "EUR" },
     },
     ...childAges.map((age, i) => ({
       label: `Child ${i + 1}, age ${age}`,
-      amount: { amount: Math.round(rate * share(age)), currency: "USD" },
+      amount: { amount: Math.round(rate * share(age)), currency: "EUR" },
     })),
   ];
   const total = lines.reduce((s, l) => s + l.amount.amount, 0);
@@ -38,8 +38,8 @@ export function BookingSummaryDemo({ childAges = [] as number[] }: { childAges?:
         </div>
       }
       lines={lines}
-      total={{ amount: total, currency: "USD" }}
-      gratuity={{ perPersonPerNight: { amount: 500, currency: "USD" }, payingGuests: paying, nights: 4 }}
+      total={{ amount: total, currency: "EUR" }}
+      gratuity={{ perPersonPerNight: { amount: 500, currency: "EUR" }, payingGuests: paying, nights: 4 }}
       extras={[{ label: "Airport and hotel transfers", href: "/tours-extras/transfers/" }]}
       policyNote="Sample policy text. The real note states this departure's payment deadline and cancellation policy."
       requestHref="/plan-my-cruise/"

@@ -39,7 +39,7 @@ export const ABOUT = {
   statement: "That is who evaluates your next cruise.",
   closing: [
     "When we look at a vessel, we read it the way crew do. We notice what guests feel without always knowing why: the pace of the service, the care in the kitchen, the honesty of the cabin photos, the calm of the people in charge.",
-    "So when a cruise appears on Nilecruz, someone who has done that job has looked at it closely. And when we tell you a ship is worth it, whether it costs $800 or $8,000, we've spent enough of our lives on the Nile to mean it.",
+    "So when a cruise appears on Nilecruz, someone who has done that job has looked at it closely. And when we tell you a ship is worth it, whether it costs €400 or €6,500, we've spent enough of our lives on the Nile to mean it.",
   ],
   seoTitle: "About Nilecruz: we've worked every deck",
   seoDescription:

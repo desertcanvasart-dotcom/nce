@@ -5,7 +5,7 @@ import { SavedPlan } from "@/components/plan/SavedPlan";
 import { CairoTime } from "@/components/shell/CairoTime";
 import { requireUser } from "@/server/auth";
 import { notices } from "@/server/bookings/queries";
-import { journey } from "@/server/journey/queries";
+import { journey, savedQuotes } from "@/server/journey/queries";
 import { Notices } from "../_bookings/Notices";
 import { RESERVATION_BADGE } from "../_bookings/ReservationRecord";
 import { SailingTime } from "../_bookings/SailingTime";
@@ -16,7 +16,11 @@ import { markNoticesRead } from "./actions";
 export default async function JourneyHome() {
   const session = await requireUser("/dashboard/journey/");
   const inCompany = session.memberships.some((m) => m.kind === "operator");
-  const [j, items] = await Promise.all([journey(session.userId), notices({ userId: session.userId })]);
+  const [j, items, quotes] = await Promise.all([
+    journey(session.userId),
+    notices({ userId: session.userId }),
+    savedQuotes(session.userId),
+  ]);
   const next = j.next?.reservation;
   return (
     <>
@@ -114,6 +118,26 @@ export default async function JourneyHome() {
           <p className={ui.muted}>Nothing coming up.</p>
         )}
       </Section>
+
+      {quotes.length ? (
+        <Section title="Saved quotes" id="saved-quotes">
+          <ul className={ui.list}>
+            {quotes.map((q) => (
+              <li key={q.id}>
+                {q.vessel ? <Link href={`/cruises/${q.vessel.slug}/`}>{q.vessel.name}</Link> : "A cruise no longer listed"}
+                {[
+                  q.nights ? ` · ${q.nights} nights` : "",
+                  q.route ? ` · ${q.route}` : "",
+                  q.departs_on ? ` · ${q.departs_on}` : "",
+                  q.guests ? ` · ${q.guests} guests` : "",
+                  q.cabin_preference ? ` · ${q.cabin_preference}` : "",
+                ].join("")}
+                {q.pricing_alert ? <span className={ui.muted}> · alert on if the starting price changes</span> : null}
+              </li>
+            ))}
+          </ul>
+        </Section>
+      ) : null}
 
       <Notices items={items} markRead={markNoticesRead} />
       {inCompany || session.platformRole === "admin" ? null : (

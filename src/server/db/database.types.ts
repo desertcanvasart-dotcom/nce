@@ -692,6 +692,7 @@ export type Database = {
       };
       contact_messages: {
         Row: {
+          cabin_preference: string | null;
           created_at: string;
           departs_on: string | null;
           email: string;
@@ -700,7 +701,7 @@ export type Database = {
           handled_by: string | null;
           id: string;
           message: string;
-          name: string;
+          name: string | null;
           nights: number | null;
           route: string | null;
           topic: Database["public"]["Enums"]["contact_topic"];
@@ -708,6 +709,7 @@ export type Database = {
           vessel_id: string | null;
         };
         Insert: {
+          cabin_preference?: string | null;
           created_at?: string;
           departs_on?: string | null;
           email: string;
@@ -716,7 +718,7 @@ export type Database = {
           handled_by?: string | null;
           id?: string;
           message: string;
-          name: string;
+          name?: string | null;
           nights?: number | null;
           route?: string | null;
           topic?: Database["public"]["Enums"]["contact_topic"];
@@ -724,6 +726,7 @@ export type Database = {
           vessel_id?: string | null;
         };
         Update: {
+          cabin_preference?: string | null;
           created_at?: string;
           departs_on?: string | null;
           email?: string;
@@ -732,7 +735,7 @@ export type Database = {
           handled_by?: string | null;
           id?: string;
           message?: string;
-          name?: string;
+          name?: string | null;
           nights?: number | null;
           route?: string | null;
           topic?: Database["public"]["Enums"]["contact_topic"];
@@ -3150,6 +3153,56 @@ export type Database = {
           },
         ];
       };
+      saved_quotes: {
+        Row: {
+          cabin_preference: string | null;
+          created_at: string;
+          departs_on: string | null;
+          guests: number | null;
+          id: string;
+          nights: number | null;
+          pricing_alert: boolean;
+          route: string | null;
+          schedule_code: string | null;
+          user_id: string;
+          vessel_id: string;
+        };
+        Insert: {
+          cabin_preference?: string | null;
+          created_at?: string;
+          departs_on?: string | null;
+          guests?: number | null;
+          id?: string;
+          nights?: number | null;
+          pricing_alert?: boolean;
+          route?: string | null;
+          schedule_code?: string | null;
+          user_id?: string;
+          vessel_id: string;
+        };
+        Update: {
+          cabin_preference?: string | null;
+          created_at?: string;
+          departs_on?: string | null;
+          guests?: number | null;
+          id?: string;
+          nights?: number | null;
+          pricing_alert?: boolean;
+          route?: string | null;
+          schedule_code?: string | null;
+          user_id?: string;
+          vessel_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "saved_quotes_vessel_id_fkey";
+            columns: ["vessel_id"];
+            isOneToOne: false;
+            referencedRelation: "vessels";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       schedule_days: {
         Row: {
           day_number: number;
@@ -4511,6 +4564,7 @@ export type Database = {
           deck_count: number | null;
           dietary_options: string[];
           display_name: string | null;
+          from_price_minor: number | null;
           gratuity_usd_minor: number | null;
           id: string;
           indicative_basis: string | null;
@@ -4525,8 +4579,19 @@ export type Database = {
           mooring: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id: string | null;
+          operator_pricing_approved: boolean;
+          price_band_max_minor: number | null;
+          price_band_min_minor: number | null;
+          pricing_basis: string | null;
+          pricing_currency: string;
+          pricing_last_checked: string | null;
+          pricing_trip_nights: number | null;
+          pricing_valid_from: string | null;
+          pricing_valid_to: string | null;
           propulsion: Database["public"]["Enums"]["propulsion"] | null;
+          public_pricing_mode: Database["public"]["Enums"]["public_price_mode"];
           published_at: string | null;
+          rate_display_after_request: Database["public"]["Enums"]["rate_display"];
           route_text: string | null;
           shared_spaces: string[];
           showcase_reason: string | null;
@@ -4550,6 +4615,7 @@ export type Database = {
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
           indicative_basis?: string | null;
@@ -4564,8 +4630,19 @@ export type Database = {
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
           operator_org_id?: string | null;
+          operator_pricing_approved?: boolean;
+          price_band_max_minor?: number | null;
+          price_band_min_minor?: number | null;
+          pricing_basis?: string | null;
+          pricing_currency?: string;
+          pricing_last_checked?: string | null;
+          pricing_trip_nights?: number | null;
+          pricing_valid_from?: string | null;
+          pricing_valid_to?: string | null;
           propulsion?: Database["public"]["Enums"]["propulsion"] | null;
+          public_pricing_mode?: Database["public"]["Enums"]["public_price_mode"];
           published_at?: string | null;
+          rate_display_after_request?: Database["public"]["Enums"]["rate_display"];
           route_text?: string | null;
           shared_spaces?: string[];
           showcase_reason?: string | null;
@@ -4589,6 +4666,7 @@ export type Database = {
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
           indicative_basis?: string | null;
@@ -4603,8 +4681,19 @@ export type Database = {
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name?: string;
           operator_org_id?: string | null;
+          operator_pricing_approved?: boolean;
+          price_band_max_minor?: number | null;
+          price_band_min_minor?: number | null;
+          pricing_basis?: string | null;
+          pricing_currency?: string;
+          pricing_last_checked?: string | null;
+          pricing_trip_nights?: number | null;
+          pricing_valid_from?: string | null;
+          pricing_valid_to?: string | null;
           propulsion?: Database["public"]["Enums"]["propulsion"] | null;
+          public_pricing_mode?: Database["public"]["Enums"]["public_price_mode"];
           published_at?: string | null;
+          rate_display_after_request?: Database["public"]["Enums"]["rate_display"];
           route_text?: string | null;
           shared_spaces?: string[];
           showcase_reason?: string | null;
@@ -5407,6 +5496,8 @@ export type Database = {
       promotion_kind: "percent" | "fixed" | "extra" | "upgrade";
       proof_status: "submitted" | "verified" | "rejected";
       propulsion: "motor" | "wind" | "steam";
+      public_price_mode: "from_price" | "price_band" | "on_request";
+      rate_display: "offer_by_adviser" | "signed_in_price";
       rate_plan: "international" | "egyptian_citizen" | "foreign_resident" | "trade";
       refund_method: "stripe" | "manual";
       request_status: "open" | "accepted" | "closed";
@@ -5577,6 +5668,8 @@ export const Constants = {
       promotion_kind: ["percent", "fixed", "extra", "upgrade"],
       proof_status: ["submitted", "verified", "rejected"],
       propulsion: ["motor", "wind", "steam"],
+      public_price_mode: ["from_price", "price_band", "on_request"],
+      rate_display: ["offer_by_adviser", "signed_in_price"],
       rate_plan: ["international", "egyptian_citizen", "foreign_resident", "trade"],
       refund_method: ["stripe", "manual"],
       request_status: ["open", "accepted", "closed"],

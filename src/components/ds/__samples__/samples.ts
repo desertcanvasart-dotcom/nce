@@ -11,7 +11,8 @@ import type { PriceFactor } from "../PriceAnatomy/PriceAnatomy";
 import type { SearchRoute, SearchVessel } from "../CruiseSearch/CruiseSearch";
 import type { VesselProfile } from "../lib/vessel-profile";
 
-const usd = (dollars: number) => ({ amount: dollars * 100, currency: "USD" });
+// Euros, the only public selling currency (ADR-109). Illustrative amounts, never real prices.
+const eur = (euros: number) => ({ amount: euros * 100, currency: "EUR" });
 
 export const sampleProfiles: VesselProfile[] = [
   {
@@ -32,7 +33,7 @@ export const sampleProfiles: VesselProfile[] = [
       mooring: "Private riverbank and island moorings, El Kab, Gebel Silsila",
       sound: "Wind, water and birdsong",
       days: "Unhurried mornings, lunch under sail, sites before the coaches",
-      price: "US$2,000–9,000 pp",
+      price: "Price on request",
     },
     meters: { intimacy: 5, quiet: 5, freeItinerary: 5, facilities: 2, heritage: 4 },
     sample: true,
@@ -55,7 +56,7 @@ export const sampleProfiles: VesselProfile[] = [
       mooring: "Often rafted up to six ships abreast at Esna, Edfu and Kom Ombo",
       sound: "Engine hum, busy decks, evening entertainment",
       days: "Early temple starts with large groups, afternoons by the pool",
-      price: "US$600–3,500 pp",
+      price: "Price on request",
     },
     meters: { intimacy: 1, quiet: 2, freeItinerary: 1, facilities: 5, heritage: 1 },
     sample: true,
@@ -78,27 +79,27 @@ export const sampleProfiles: VesselProfile[] = [
       mooring: "Own berths, with few ships alongside",
       sound: "A steady paddle beat, wood and brass",
       days: "Lectures, afternoon tea and a sense of history",
-      price: "US$3,000–7,500 pp",
+      price: "Price on request",
     },
     meters: { intimacy: 3, quiet: 3, freeItinerary: 3, facilities: 3, heritage: 5 },
     sample: true,
   },
 ];
 
-const f = (dollars: number) => dollars * 100;
+const f = (euros: number) => euros * 100;
 export const sampleFactors: PriceFactor[] = [
   {
     id: "vessel",
     label: "Who shares the boat",
     icon: "users",
     options: [
-      { label: "140-guest motor ship", amount: f(640), why: "Fuel, crew and hull are split 140 ways, so each share is small." },
+      { label: "140-guest motor ship", amount: f(240), why: "Fuel, crew and hull are split 140 ways, so each share is small." },
       {
         label: "60-guest boutique ship",
         amount: f(1500),
         why: "Fewer guests carry the same running costs, and there are more crew per guest.",
       },
-      { label: "12-guest dahabiya", amount: f(2900), why: "Twelve guests carry a whole boat and around twenty crew." },
+      { label: "12-guest dahabiya", amount: f(2500), why: "Twelve guests carry a whole boat and around twenty crew." },
     ],
   },
   {
@@ -108,7 +109,7 @@ export const sampleFactors: PriceFactor[] = [
     options: [
       { label: "Standard, 18 m²", amount: 0, why: "A window onto the river, twin beds and a shower." },
       { label: "Suite, 32 m²", amount: f(900), why: "A sitting area, a bathtub and often a French balcony." },
-      { label: "Royal suite, 60 m²", amount: f(2400), why: "A private terrace on the water and a butler." },
+      { label: "Royal suite, 60 m²", amount: f(1700), why: "A private terrace on the water and a butler." },
     ],
   },
   {
@@ -120,7 +121,7 @@ export const sampleFactors: PriceFactor[] = [
       { label: "Egyptologist, groups of 12", amount: f(480), why: "A qualified Egyptologist, and time to ask questions." },
       {
         label: "Private Egyptologist",
-        amount: f(1100),
+        amount: f(700),
         why: "Your own scholar, timed slots and sites before the coaches arrive.",
       },
     ],
@@ -161,8 +162,8 @@ export const sampleFactors: PriceFactor[] = [
 export const samplePresets = {
   low: [0, 0, 0, 0, 0, 0],
   high: [2, 2, 2, 2, 1, 1],
-  lowLabel: "The US$800 five-star",
-  highLabel: "The US$8,000 five-star",
+  lowLabel: "The €400 five-star",
+  highLabel: "The €6,500 five-star",
 };
 
 export const sampleStops: ItineraryStop[] = [
@@ -211,9 +212,9 @@ export const sampleStops: ItineraryStop[] = [
 ];
 
 export const sampleCabins: Cabin[] = [
-  { id: "nile-view", name: "Nile-view cabin", sizeM2: 18, deck: "Lower deck", bed: "Twin or king", price: usd(1240) },
-  { id: "junior", name: "Junior suite", sizeM2: 32, deck: "Upper deck", bed: "King, bathtub", price: usd(1890), left: 2 },
-  { id: "royal", name: "Royal suite", sizeM2: 60, deck: "Sun deck", bed: "Private terrace", price: usd(3400), soldOut: true },
+  { id: "nile-view", name: "Nile-view cabin", sizeM2: 18, deck: "Lower deck", bed: "Twin or king", price: eur(1240) },
+  { id: "junior", name: "Junior suite", sizeM2: 32, deck: "Upper deck", bed: "King, bathtub", price: eur(1890), left: 2 },
+  { id: "royal", name: "Royal suite", sizeM2: 60, deck: "Sun deck", bed: "Private terrace", price: eur(3400), soldOut: true },
 ];
 
 export const sampleAmenities: Amenity[] = [
@@ -273,7 +274,7 @@ export const sampleCards = [
     nights: 5,
     guests: 16,
     evaluation: 91,
-    price: usd(2650),
+    price: { from: eur(2650) },
     amenities: ["quiet", "egyptologist", "anchor", "sundeck", "wine"] as const,
     badges: [{ label: "Only 2 suites left" }],
   },
@@ -287,7 +288,7 @@ export const sampleCards = [
     guests: 46,
     evaluation: 84,
     rating: { value: 4.7, count: 96 },
-    price: usd(3100),
+    price: { from: eur(3100) },
     amenities: ["library", "bar", "balcony", "egyptologist"] as const,
     saved: true,
   },

@@ -26,17 +26,17 @@ afterEach(cleanup);
 describe("PriceAnatomy (COMP-PriceAnatomy)", () => {
   const props = {
     factors: sampleFactors,
-    currency: "USD",
+    currency: "EUR",
     presets: samplePresets,
     totalLabel: "per person",
     footnote: "Illustrative.",
   };
 
-  it("adds the factors to the two five-star examples: US$800 and US$8,000", async () => {
+  it("adds the factors to the two five-star examples: €400 and €6,500", async () => {
     renderEn(<PriceAnatomy {...props} />);
-    expect(screen.getByText("US$800")).toBeTruthy();
+    expect(screen.getByText("€400")).toBeTruthy();
     await userEvent.click(screen.getByRole("button", { name: samplePresets.highLabel }));
-    expect(screen.getByText("US$8,000")).toBeTruthy();
+    expect(screen.getByText("€6,500")).toBeTruthy();
   });
 
   it("names every segment in the bar's text alternative, so colour is not the only cue (A11Y-008)", () => {
@@ -81,12 +81,12 @@ describe("AmenityGrid (COMP-AmenityGrid)", () => {
 describe("CabinPicker (COMP-CabinPicker, ADR-025)", () => {
   it("shows prices when signed in", () => {
     renderEn(<CabinPicker cabins={sampleCabins} />);
-    expect(screen.getByText("US$1,240")).toBeTruthy();
+    expect(screen.getByText("€1,240")).toBeTruthy();
     expect((screen.getByRole("radio", { name: /Royal suite/ }) as HTMLInputElement).disabled).toBe(true);
   });
   it("hides every price from signed-out visitors and says why", () => {
     renderEn(<CabinPicker cabins={sampleCabins} showPrices={false} />);
-    expect(screen.queryByText(/US\$/)).toBeNull();
+    expect(screen.queryByText(/€/)).toBeNull();
     expect(screen.getByText(/Sign in to see prices/)).toBeTruthy();
     expect(screen.getByText("32 m²")).toBeTruthy();
   });

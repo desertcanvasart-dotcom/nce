@@ -201,7 +201,7 @@ These are short ADRs. Each one is **Proposed** until Faris confirms it, then **A
 
 ## Faris's third answers, 17 Oct 2026
 
-### ADR-025 Public prices: one "from" price per vessel (Accepted)
+### ADR-025 Public prices: one "from" price per vessel (Accepted; starting prices superseded by ADR-109)
 - **Context:** Q3.
 - **Decision:**
   - Visitors see a single "from" price per vessel: the lowest available cabin category, per person, with currency and inclusions. No other cabin category shows a price publicly.
@@ -885,3 +885,52 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - **Esna, El Kab and Gebel Silsila** are shown on the hub without a link; no thin pages are made. "Gebel Silsila" is the site's spelling; the Nour El Nil data now uses it, and the old spelling still matches itineraries.
 - **Consequence:** the hub has no share image until a licensed photo is approved. The cruise cards still use signed photo addresses from the listing (the site-wide pattern); moving them to stable public addresses is wider work. Staging and production keep "Gebel Silsileh" in the Nour El Nil itineraries until `pnpm import:fleet` is run again.
 
+
+### ADR-109 Public prices in euros: a starting price for everyone, rates for your dates by email (Accepted; Islam 6 Nov 2026, pricing brief)
+- **Context:** Islam's pricing brief. It **replaces ADR-025's "one 'from' price per vessel, prices after sign-in" for starting prices**. ADR-025 still governs the signed-in reserve flow for bookable vessels.
+- **Decision, three levels:**
+  - **Level 1, a starting price for everyone.** Each vessel carries structured public price data:
+    - `public_pricing_mode`: `from_price`, `price_band` or `on_request`;
+    - `from_price_minor`, `price_band_min_minor` and `price_band_max_minor`;
+    - `pricing_currency`, always `EUR`;
+    - `pricing_basis` (per person, per trip or per night), with optional `pricing_trip_nights`;
+    - `pricing_valid_from`, `pricing_valid_to` and `pricing_last_checked`;
+    - `operator_pricing_approved`;
+    - `rate_display_after_request`: `offer_by_adviser` or `signed_in_price`.
+
+    Only catalogue admins change these columns (trigger `vessels_guard_public_price`).
+
+    A figure is shown only when all of these hold: the operator approved it; it is in euros; it is in date; its basis is known; the date it was last checked is known. Anything else shows **"Price on request"**.
+
+    The texts, exactly:
+    - "From €X per person. Includes our margin. A guide, not a quote."
+    - "Typically €X–€Y per person. Includes our margin. A guide, not a quote."
+    - "Price on request"
+
+    Each figure comes with its basis and "Last checked". A per-night figure appears only when the data's basis is per night. "Prices in preparation" and "Indicative" are gone from price labels. The booking status ("Information only") stays a separate badge. There is no public cabin rate table.
+  - **Level 2, "Check rates for your dates"**, on every vessel page:
+    - **What it asks:** a date, the number of guests, a cabin preference and an email address. The vessel, route and nights travel with it.
+    - **Default, `offer_by_adviser`:** a contact message (topic `offer`, with the new `cabin_preference` column); an adviser replies by email ("We'll check availability and send your offer by email."). The name is now optional for offer messages. No account is needed.
+    - **`signed_in_price`** (only where set, and only for bookable vessels): a signed-in traveller sees the euro rate for that one date. It is rate-limited per account (`rate-check`, 20 an hour) and never shown as a calendar of dates and prices.
+    - **Anti-abuse:** the site's existing honeypot and the per-address `contact` limit.
+    - No public page shows a price for given dates.
+  - **Level 3, an optional account.** "Save this quote and get an alert if the price changes." is offered only after a rate is shown or an enquiry is sent.
+    - Saved quotes live in `saved_quotes` (each traveller's own rows, under RLS) and are listed in My journey.
+    - The alert is offered only when the vessel has a public figure. A change to it notifies the traveller (`price.changed`) through the existing notifications and their email.
+    - Reading a price or sending an enquiry never needs an account.
+- **Euros across the site:**
+  - The euro is the only public selling currency in every language: €1,240 in English, 1.240 € in Spanish, €1,240 in Japanese. The brand book's `US$1,240` rule now reads €1,240.
+  - Prices are never converted. Every US-dollar guide price was removed (the migration clears `indicative_*`), and those vessels show "Price on request".
+  - Tour prices (rate sheets in US$) and Nilecruz's sightseeing-programme prices are shown publicly as "Price on request". Neither has Offer markup.
+  - The rate-derived "from" price and the "with sightseeing from" badge are no longer shown publicly; the "Why this price" pop-up (EXP-001), built on them, is removed.
+  - The plan-my-cruise budget is in euros, with no currency switcher.
+- **Other pages:**
+  - Vessel pages link to "Why Nile cruise prices differ"; vessel type hubs reach it through the site header ("Why prices differ"), because their silo-workbook rows don't list the price page as an in-article link.
+  - "All prices we publish and quote already include our margin." appears on vessel pages, listings, the compare page and the price pages.
+  - The listing sorts by starting price and says that vessels with "Price on request" come after the others.
+  - The price page's heading is "Nile cruise prices: why five-star costs €400 or €6,500". "ten times" and "tenfold" become "more than 15 times".
+  - Its example is "Example: how a price builds up. A guide, not a quote.": €400, then +€800, +€300, +€0 and +€0, for a total of €1,500 calculated from the steps. It has no "Sample data" label and names no boat. The calculator page shows the same example until euro option values are approved.
+  - Crew gratuities: "usually €5 to €10 per person, per night, depending on the cruise. Check each cruise's offer."
+- **Structured data:** an AggregateOffer only for a bookable vessel with an approved euro starting price. Today no vessel qualifies, so no vessel page has Offer markup.
+- **Launch data:** every vessel is `on_request`, except Mövenpick MS Royal Lily: from €1,120 per person for the 4-night cruise, Luxor to Aswan, approved, last checked 6 Nov 2026, with no expiry (Islam). It replaces its US$300-per-night guide, and with it the US$900 and US$1,200 totals.
+- **Consequence:** net rates and the margin stay in the role-restricted rate tables; the public columns hold only approved selling prices. Spanish and Japanese texts were drafted by Claude and need native review. The Sanity copies of the edited pages (P001, P019, P049, P051, P059) need re-seeding after merge. Signed-in flows (reserve, tour calendar, partner tools) still show the operator's currency; that is a separate decision.

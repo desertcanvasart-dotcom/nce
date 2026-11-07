@@ -23,7 +23,7 @@ describe("the gratuity on booking summaries (DATA-016, ADR-010)", () => {
 });
 
 describe("an approved vessel's price with sightseeing (ADR-102)", () => {
-  it("shows on its card as a badge, beside the cruise-only price", async () => {
+  it("never shows a rate-derived price on its card, with or without sightseeing (ADR-109)", async () => {
     const { toCard } = await import("@/lib/marketplace/listing");
     const card = toCard({
       id: "v",
@@ -42,9 +42,10 @@ describe("an approved vessel's price with sightseeing (ADR-102)", () => {
       from: { amount: 145000, currency: "USD" },
       fromWithSightseeing: { amount: 175000, currency: "USD" },
       bookable: true,
+      price: { mode: "on_request" },
     });
-    expect(card.price).toEqual({ amount: 145000, currency: "USD" });
-    expect(card.badges).toContainEqual({ label: "With sightseeing from US$1,750", tone: "success" });
+    expect(card.price).toBeUndefined();
+    expect(JSON.stringify(card)).not.toMatch(/US\$|1,750/);
   });
   it("says what's included in plain words", async () => {
     const { sightseeingText } = await import("@/lib/marketplace/vessel");
@@ -112,6 +113,7 @@ describe("the cruise with Nilecruz's programme (ADR-102, 8-3b-2)", () => {
       bookable: true,
       type: "motor" as const,
       propulsion: null,
+      price: { mode: "on_request" as const },
     };
     const q = parseSearch({ sightseeing: "1" });
     expect(q.sightseeing).toBe(true);

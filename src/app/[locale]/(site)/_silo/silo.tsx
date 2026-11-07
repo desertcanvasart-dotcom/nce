@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ItineraryTimeline } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
-import { PriceAnatomy } from "@/components/ds/PriceAnatomy/PriceAnatomy";
 import { Scene } from "@/components/ds/Scene/Scene";
 import { VesselArt } from "@/components/ds/VesselArt/VesselArt";
 import { VesselCompare } from "@/components/ds/VesselCompare/VesselCompare";
@@ -16,7 +15,7 @@ import { TourCards, TourDetails } from "@/components/editorial/TourDetails";
 import { VesselsPillar } from "@/components/editorial/VesselsPillar";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
-import { PRICE_FACTORS, PRICE_FOOTNOTE, PRICE_PRESETS } from "@/content/price-factors";
+import { PriceExample } from "@/components/editorial/PriceExample";
 import { stopByPath } from "@/content/river-stops";
 import { ROUTE_STOPS } from "@/content/routes";
 import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
@@ -110,19 +109,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       <VesselCompare profiles={profiles} defaultType={type} defaultAll={url === "/vessels/compare/"} />
     </div>
   );
-  // DATA-008: the price breakdown, flagged as sample data with an honest footnote.
-  const anatomy = (preset: "low" | "high" = "low") => (
-    <PriceAnatomy
-      factors={PRICE_FACTORS}
-      currency="USD"
-      presets={PRICE_PRESETS}
-      defaultPreset={preset}
-      eyebrow="How a price is built"
-      totalLabel="per person, 4 nights Luxor–Aswan"
-      footnote={PRICE_FOOTNOTE}
-      sample
-    />
-  );
+  // ADR-109: the price page's example, in euros, its total calculated from the steps; no boat named, no sample flag.
+  const anatomy = () => <PriceExample locale={locale} />;
 
   let lead: ReactNode = null;
   let extra: ReactNode = null;
@@ -150,7 +138,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   } else if (url === "/nile-cruise-prices/" || url === "/nile-cruise-prices/star-ratings-explained/") {
     lead = anatomy();
   } else if (url === "/nile-cruise-prices/budget-vs-luxury/") {
-    lead = anatomy("high");
+    lead = anatomy();
   } else if (row.type === "Tool") {
     // PAGE-059: the calculator is the price breakdown as a full-page tool.
     lead = anatomy();
@@ -214,8 +202,8 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         ))}
       </>
     ) : null;
-    const prices = covered.map((t) => t.fromMinor).filter((m): m is number => m !== null);
-    extra = ld(tourJsonLd(row.h1, description, absoluteUrl(locale, url), prices.length ? Math.min(...prices) : null));
+    // ADR-109: no Offer markup: tour rates are in US dollars, and only approved euro prices are published.
+    extra = ld(tourJsonLd(row.h1, description, absoluteUrl(locale, url)));
   } else if (url === "/how-we-choose-vessels/") {
     // PAGE-102: the evaluation method's weights, straight from the code that scores vessels.
     lead = (
@@ -314,7 +302,7 @@ export async function TourPage({ params }: { params: SiloParams }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: jsonLdScript(tourJsonLd(tour.name, tour.description, absoluteUrl(locale, url), tour.fromMinor)),
+          __html: jsonLdScript(tourJsonLd(tour.name, tour.description, absoluteUrl(locale, url))),
         }}
       />
     </article>

@@ -141,3 +141,16 @@ export async function journey(userId: string) {
     .filter((x) => x.tours.length);
   return { ...state, suggestions };
 }
+
+/** ADR-109, Level 3: the traveller's saved quotes, newest first, with the vessel's name and address (RLS: own rows). */
+export async function savedQuotes(userId: string) {
+  const db = await getDb();
+  const { data, error } = await db
+    .from("saved_quotes")
+    .select("id, route, nights, departs_on, guests, cabin_preference, pricing_alert, created_at, vessel:vessels(name, slug)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  if (error) return [];
+  return data ?? [];
+}

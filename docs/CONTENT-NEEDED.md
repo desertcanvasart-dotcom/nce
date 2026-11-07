@@ -42,6 +42,8 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 62 | Whether classic Luxor–Aswan cruises stop at Esna and El Kab | Can follow | ADR-108. The table says "Check the itinerary" until confirmed |
 | 63 | Pages for Esna, El Kab and Gebel Silsila | Can follow | ADR-108. Shown on the hub without a link until each page is written (no thin pages) |
 | 65 | Steam Ship Sudan: permission to use its photos; the current numbered deck plan; certified guest capacity (48 reported); build or launch year (operator says 1921, others 1885); length; cabin areas (17 m² and 25 m² are category averages); Wi-Fi and cabin amenities after the refit; departure calendar; what a cruise includes; commercial terms | Can follow | Featured paddle steamer (it replaced SS Misr on /vessels/). `docs/imports/steam-ship-sudan-data.json`; each field stays hidden until confirmed |
+| 67 | Euro starting prices and operator approvals, vessel by vessel (public price mode, amount, basis, nights, valid dates). Until then every vessel shows "Price on request". Awaiting: the Nour El Nil dahabiyas' euro guides (Adelaïde €2,500, Agatha €2,500, El Nil €1,775, Malouka €2,100, Meroe €2,250, Najafa €3,375, Poppee €3,250, Roman €3,000 per person for 5 nights), whether they include our margin | Can follow | ADR-109. Set by catalogue admins; no price is converted from US dollars |
+| 68 | Euro option values for the price calculator (the band wording is confirmed) | Can follow | ADR-109 |
 
 ## Pages and copy
 
@@ -73,6 +75,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 58 | A review of the Spanish and Japanese text for the Nour El Nil fleet: summaries, inclusions, programme, cabins, life on board, good to know and photo alt text | With 17 | ADR-107. `docs/imports/nour-el-nil-fleet-i18n.json`, drafted by Claude and marked `needs_human_review`; re-run `pnpm import:fleet` after edits |
 | 64 | A review of the Spanish and Japanese text for the destinations hub and the stop data (`messages/*.json` → `destinationsPillar`, `src/content/river-stops.ts`) | With 17 | ADR-108. Drafted by Claude; the hub is listed in `TRANSLATED` so it renders in each language |
 | 66 | A review of the Spanish and Japanese text for Steam Ship Sudan | With 17 | `docs/imports/steam-ship-sudan-i18n.json`, drafted by Claude; re-run `pnpm import:fleet docs/imports/steam-ship-sudan-data.json docs/imports/steam-ship-sudan-i18n.json` after edits |
+| 69 | A review of the Spanish and Japanese price texts: the starting price, "Price on request", "Check rates for your dates", save-quote and alerts, the margin sentence and the gratuities line (`pricing` in messages/es.json and ja.json) | With 17 | ADR-109. Drafted by Claude |
 
 ## Accounts and settings (yours to create)
 

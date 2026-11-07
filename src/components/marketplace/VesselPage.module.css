@@ -358,6 +358,57 @@
   white-space: pre-line;
 }
 
+/* ADR-109, Level 2: "Check rates for your dates". */
+.rates {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 44rem;
+  padding: var(--space-5);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.rates h3 {
+  margin: 0;
+}
+
+.rates > p {
+  margin: 0;
+}
+
+.ratesForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+}
+
+.ratesForm > :first-of-type,
+.ratesForm > :last-child {
+  grid-column: 1 / -1;
+}
+
+.ratesOk,
+.ratesError {
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--success);
+  background: var(--surface-sunk);
+}
+
+.ratesError {
+  border-left-color: var(--danger);
+}
+
+.saveQuote {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.saveQuote p {
+  margin: 0;
+}
+
 .sub {
   display: grid;
   gap: var(--space-2);
@@ -631,6 +682,14 @@
 }
 
 @media (width < 760px) {
+  .rates {
+    padding: var(--space-4);
+  }
+
+  .ratesForm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .page {
     gap: var(--space-5);
     padding-top: var(--space-3);

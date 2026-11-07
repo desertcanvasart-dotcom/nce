@@ -2,6 +2,7 @@ import { CruiseSearch } from "@/components/ds/CruiseSearch/CruiseSearch";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import {
+  pricedCount,
   collectionJsonLd,
   FACETS,
   jsonLdScript,
@@ -9,14 +10,12 @@ import {
   toCard,
   VESSEL_OPTIONS,
   type ListingVessel,
-  headlineItinerary,
 } from "@/lib/marketplace/listing";
 import { absoluteUrl } from "@/lib/seo/metadata";
 import { Icon } from "@/components/ds/Icon/Icon";
 import { PROPULSIONS, propulsionIcon, vesselIcon, type Propulsion } from "@/components/ds/lib/types";
 import { Breadcrumbs, type Trail } from "./Breadcrumbs";
 import { ListingGrid } from "./ListingGrid";
-import { PriceWhy } from "./PriceWhy";
 import styles from "./marketplace.module.css";
 
 type Props = {
@@ -110,40 +109,12 @@ export function Listing(p: Props) {
         {p.vessels.length} vessel{p.vessels.length === 1 ? "" : "s"}
         {p.matchCount !== undefined ? ` · ${p.matchCount} matching departure${p.matchCount === 1 ? "" : "s"}` : ""}
       </p>
-      {p.vessels.length ? (
-        <ListingGrid
-          cards={p.vessels.map(toCard)}
-          why={Object.fromEntries(
-            p.vessels
-              .filter((v) => v.bookable && v.from)
-              .map((v) => {
-                const it = headlineItinerary(v);
-                return [
-                  v.slug,
-                  <PriceWhy
-                    key={v.slug}
-                    facts={{
-                      price: v.from!,
-                      vesselType: v.type,
-                      maxGuests: v.maxGuests,
-                      nights: it?.nights,
-                      nextDeparture: it?.departures[0],
-                      gratuityUsdMinor: null,
-                      sightseeing: v.fromWithSightseeing
-                        ? { by: v.sightseeingBy ?? "vessel", from: v.fromWithSightseeing }
-                        : undefined,
-                    }}
-                  />,
-                ];
-              }),
-          )}
-        />
-      ) : (
-        <p className={styles.empty}>{p.empty}</p>
-      )}
+      {p.vessels.length ? <ListingGrid cards={p.vessels.map(toCard)} /> : <p className={styles.empty}>{p.empty}</p>}
       <p className={styles.note}>
-        Prices are per person, for two sharing a cabin, in the operator’s currency. Crew gratuities are separate and paid on
-        board. Prices for every cabin and date appear after you sign in.
+        Starting prices are per person, in euros: a guide, not a quote. All prices we publish and quote already include our
+        margin. Sorted by starting price: cruises with “Price on request” have no price to sort by, so they come after the others,
+        by name ({pricedCount(p.vessels)} of {p.vessels.length} show a price). Crew gratuities are separate: usually €5 to €10 per
+        person, per night, depending on the cruise. Check each cruise’s offer.
       </p>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(json) }} />
     </div>
