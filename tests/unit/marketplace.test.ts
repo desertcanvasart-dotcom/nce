@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { pullSignature, refreshSignature, verifyPull, verifyRefresh } from "@/lib/connections/signature";
 import { RESERVED_VESSEL_SLUGS } from "@/lib/data/slugs";
 import {
+  closingHeading,
   applySearch,
   breadcrumbJsonLd,
   collectionJsonLd,
@@ -118,7 +119,26 @@ describe("cards (BRAND-026, 028, ADR-025, DASH-PUB-010)", () => {
       nights: 4,
       lastChecked: "2026-11-06",
     };
-    expect(toCard(vessel({ price: band })).price).toEqual({ min: band.min, max: band.max });
+    expect(toCard(vessel({ price: band })).price).toEqual({ min: band.min, max: band.max, margin: undefined });
+  });
+
+  it("are headed 'Cruises to explore' when any of them can't be booked, 'Cruises you can book' only when all can", () => {
+    expect(closingHeading([vessel(), vessel({ booking: "not_available_through_nilecruz", bookable: false })])).toBe(
+      "Cruises to explore",
+    );
+    expect(closingHeading([vessel(), vessel({ bookable: false })])).toBe("Cruises to explore");
+    expect(closingHeading([vessel(), vessel()])).toBe("Cruises you can book");
+    expect(closingHeading([])).toBe("Cruises to explore");
+  });
+
+  it("say 'Booking unavailable through us' for a vessel Nilecruz can't sell (Steam Ship Sudan, 6 Nov 2026)", () => {
+    expect(toCard(vessel({ booking: "not_available_through_nilecruz", bookable: false })).unavailable).toBe(true);
+    expect(toCard(vessel()).unavailable).toBe(false);
+  });
+
+  it("carry whether the figure includes our margin, so the card doesn't claim it when unconfirmed", () => {
+    const guide = { ...fromEur(250000), margin: false } as PublicPrice;
+    expect(toCard(vessel({ price: guide })).price).toMatchObject({ margin: false });
   });
 
   it("keep the booking status apart from the price, and flag sample data", () => {

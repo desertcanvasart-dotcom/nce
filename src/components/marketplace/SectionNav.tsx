@@ -18,7 +18,8 @@ export function SectionNav({
 }: {
   items: NavItem[];
   label: string;
-  action: { href: string; label: string };
+  /** The main action; a mailto: link (an enquiry partner's address) is a plain link. None for no action. */
+  action?: { href: string; label: string };
 }) {
   const [current, setCurrent] = useState<string | null>(null);
   const strip = useRef<HTMLUListElement>(null);
@@ -71,9 +72,15 @@ export function SectionNav({
           </li>
         ))}
       </ul>
-      <Link className={styles.navAction} href={action.href}>
-        {action.label}
-      </Link>
+      {!action ? null : action.href.startsWith("mailto:") ? (
+        <a className={styles.navAction} href={action.href}>
+          {action.label}
+        </a>
+      ) : (
+        <Link className={styles.navAction} href={action.href}>
+          {action.label}
+        </Link>
+      )}
     </nav>
   );
 }

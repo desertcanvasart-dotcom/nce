@@ -158,12 +158,30 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
         deck_count: null,
         shared_spaces: v.sharedSpaces as Database["public"]["Tables"]["vessels"]["Row"]["shared_spaces"],
         is_sample: false,
+        // ADR-109: the guide price becomes the public starting price, in euros only (never converted). Islam confirmed
+        // these figures for now (6 Nov 2026), without "Includes our margin" until he confirms they include it.
+        ...(v.indicative?.currency === "EUR"
+          ? {
+              public_pricing_mode: "from_price" as const,
+              from_price_minor: v.indicative.amountMinor,
+              pricing_currency: "EUR",
+              pricing_basis: "per_person_per_trip",
+              pricing_trip_nights: v.indicative.nights || null,
+              pricing_last_checked: v.checkedOn,
+              operator_pricing_approved: true,
+              margin_included: false,
+            }
+          : { public_pricing_mode: "on_request" as const, from_price_minor: null, operator_pricing_approved: false }),
         indicative_per_night_minor: null,
-        indicative_per_trip_minor: v.indicative?.amountMinor ?? null,
-        indicative_trip_nights: v.indicative?.nights ?? null,
-        indicative_currency: v.indicative?.currency ?? null,
-        indicative_basis: v.indicative ? "per_person_per_trip" : null,
-        indicative_status: v.indicative ? "indicative" : null,
+        indicative_per_trip_minor: null,
+        indicative_trip_nights: null,
+        indicative_currency: null,
+        indicative_basis: null,
+        indicative_status: null,
+        booking_availability: v.booking.availability,
+        commercial_relationship: v.booking.relationship,
+        enquiry_partner_name: v.booking.enquiry?.name ?? null,
+        enquiry_partner_email: v.booking.enquiry?.email ?? null,
       })
       .eq("id", id),
     `${v.slug}: facts`,

@@ -30,7 +30,12 @@ export type CruiseCardProps = {
    * ADR-109: the approved public starting price per person in euros, already including Nilecruz's margin: "from" one
    * figure, or a typical band. Leave it out and the card says "Price on request".
    */
-  price?: { from: Money } | { min: Money; max: Money };
+  price?: ({ from: Money } | { min: Money; max: Money }) & {
+    /** False: the figure isn't yet confirmed to include our margin, so the card doesn't say it does. */
+    margin?: boolean;
+  };
+  /** The vessel can't be booked through Nilecruz: "Booking unavailable through us" instead of a price. */
+  unavailable?: boolean;
   /** Five or fewer, the ones that differ. Each is labelled for screen readers. */
   amenities?: IconName[];
   badges?: { label: string; tone?: BadgeProps["tone"]; icon?: IconName }[];
@@ -115,11 +120,18 @@ export function CruiseCard(p: CruiseCardProps) {
         ) : null}
         <div className={styles.foot}>
           <div className={styles.price}>
-            {p.price ? (
+            {p.unavailable ? (
+              <p>
+                <b className={styles.onRequest}>{t("cruiseCard.unavailable")}</b>
+              </p>
+            ) : p.price ? (
               <p>
                 {"from" in p.price
-                  ? t.rich("cruiseCard.from", { price: formatMoney(p.price.from, locale), b: (c) => <b>{c}</b> })
-                  : t.rich("cruiseCard.band", {
+                  ? t.rich(p.price.margin === false ? "cruiseCard.fromGuide" : "cruiseCard.from", {
+                      price: formatMoney(p.price.from, locale),
+                      b: (c) => <b>{c}</b>,
+                    })
+                  : t.rich(p.price.margin === false ? "cruiseCard.bandGuide" : "cruiseCard.band", {
                       min: formatMoney(p.price.min, locale),
                       max: formatMoney(p.price.max, locale),
                       b: (c) => <b>{c}</b>,

@@ -4558,12 +4558,16 @@ export type Database = {
         Row: {
           beam_m: number | null;
           best_for: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability: string;
           cabin_count: number | null;
           category: Database["public"]["Enums"]["vessel_category"] | null;
+          commercial_relationship: string | null;
           created_at: string;
           deck_count: number | null;
           dietary_options: string[];
           display_name: string | null;
+          enquiry_partner_email: string | null;
+          enquiry_partner_name: string | null;
           from_price_minor: number | null;
           gratuity_usd_minor: number | null;
           id: string;
@@ -4575,6 +4579,7 @@ export type Database = {
           indicative_trip_nights: number | null;
           is_sample: boolean;
           length_m: number | null;
+          margin_included: boolean;
           max_guests: number | null;
           mooring: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
@@ -4609,12 +4614,16 @@ export type Database = {
         Insert: {
           beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability?: string;
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
+          commercial_relationship?: string | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          enquiry_partner_email?: string | null;
+          enquiry_partner_name?: string | null;
           from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
@@ -4626,6 +4635,7 @@ export type Database = {
           indicative_trip_nights?: number | null;
           is_sample?: boolean;
           length_m?: number | null;
+          margin_included?: boolean;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name: string;
@@ -4660,12 +4670,16 @@ export type Database = {
         Update: {
           beam_m?: number | null;
           best_for?: Database["public"]["Enums"]["best_for_label"][];
+          booking_availability?: string;
           cabin_count?: number | null;
           category?: Database["public"]["Enums"]["vessel_category"] | null;
+          commercial_relationship?: string | null;
           created_at?: string;
           deck_count?: number | null;
           dietary_options?: string[];
           display_name?: string | null;
+          enquiry_partner_email?: string | null;
+          enquiry_partner_name?: string | null;
           from_price_minor?: number | null;
           gratuity_usd_minor?: number | null;
           id?: string;
@@ -4677,6 +4691,7 @@ export type Database = {
           indicative_trip_nights?: number | null;
           is_sample?: boolean;
           length_m?: number | null;
+          margin_included?: boolean;
           max_guests?: number | null;
           mooring?: Database["public"]["Enums"]["mooring_practice"] | null;
           name?: string;

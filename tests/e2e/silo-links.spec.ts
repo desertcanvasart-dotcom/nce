@@ -11,8 +11,9 @@ import { expectNoSeriousA11yIssues, setTheme } from "./helpers";
  */
 const EDUCATION = [...BUILT].filter((u) => !u.startsWith("/cruises/"));
 const isTourPage = (h: string) => /^\/tours-extras\/[a-z0-9-]+\/$/.test(h) && !LINK_MAP[h];
-// Pages whose H1 was approved in place of the workbook's (PAGE-101: the About page's own title).
-const OWN_H1: Record<string, string> = { "/about/": ABOUT.title };
+// Pages whose H1 was approved in place of the workbook's (PAGE-101: the About page's own title; PAGE-002: the guide
+// hub's, from Islam's guide brief).
+const OWN_H1: Record<string, string> = { "/about/": ABOUT.title, "/nile-cruise-guide/": "Plan your Nile cruise" };
 // Home and the pillars link to many pages; each link is fetched to prove it exists.
 test.describe.configure({ timeout: 90_000 });
 
@@ -67,8 +68,14 @@ for (const url of EDUCATION) {
 }
 
 test("education pages say they are drafts and carry their structured data [ADR-096, SEO-028]", async ({ page }) => {
-  await page.goto("/vessels/dahabiya/");
+  // Cleared by Islam (6 Nov 2026): the homepage, /vessels/compare/ and /vessels/dahabiya/. How we choose vessels waits.
+  await page.goto("/how-we-choose-vessels/");
   await expect(page.getByText("Draft for review")).toBeVisible();
+  for (const cleared of ["/", "/vessels/compare/", "/vessels/dahabiya/"]) {
+    await page.goto(cleared);
+    await expect(page.getByText("Draft for review"), cleared).toHaveCount(0);
+  }
+  await page.goto("/vessels/dahabiya/");
   const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");
   expect(ld).toContain('"BreadcrumbList"');
   expect(ld).toContain('"Article"');

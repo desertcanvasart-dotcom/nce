@@ -26,8 +26,11 @@ export type SailingCalendarProps = {
   bookable: boolean;
   /** The vessel's reserve page, without a query. */
   reserve: string;
-  /** The vessel's "Ask for an offer" page, without a query: a date is asked about with its itinerary and day. */
-  ask: string;
+  /**
+   * The vessel's "Ask for an offer" page, without a query: a date is asked about with its itinerary and day. None for a
+   * vessel Nilecruz can't sell: its dates show without a way to ask us.
+   */
+  ask?: string;
 };
 
 // Months shown before "See more dates": the next three, this one first.
@@ -123,10 +126,10 @@ export function SailingCalendar({
           <div className={styles.weekly}>
             <h3 className={styles.kicker}>{t("patternTitle")}</h3>
             {timetable(usual)}
-            <p className={styles.empty}>{t("emptyUsual")}</p>
+            <p className={styles.empty}>{askPage ? t("emptyUsual") : t("emptyUsualInfo")}</p>
           </div>
         ) : (
-          <p className={styles.empty}>{t("empty")}</p>
+          <p className={styles.empty}>{askPage ? t("empty") : t("emptyInfo")}</p>
         )}
       </div>
     );
@@ -327,7 +330,7 @@ export function SailingCalendar({
                       >
                         {t("book")}
                       </Link>
-                    ) : s.status !== "cancelled" ? (
+                    ) : s.status !== "cancelled" && askPage ? (
                       <Link className={styles.askLink} href={ask(s)}>
                         {t("ask")}
                       </Link>

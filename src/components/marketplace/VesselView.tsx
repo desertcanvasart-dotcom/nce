@@ -11,7 +11,7 @@ import { EvaluationRadar } from "@/components/evaluation/EvaluationRadar";
 import { DIETARY_OPTIONS } from "@/lib/catalogue/dining";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { jsonLdScript, type ListingVessel } from "@/lib/marketplace/listing";
-import { hasFigure, type PublicPrice } from "@/lib/marketplace/public-price";
+import { hasFigure, sellsThroughUs, type PublicPrice } from "@/lib/marketplace/public-price";
 import {
   formatDay,
   nightsOf,
@@ -147,20 +147,28 @@ export function VesselView({
   const its = v.itineraries;
   const ev = v.evaluation;
   const info = !v.bookable;
+  // A vessel Nilecruz can't sell: no price, booking or offer request; an enquiry partner's address when there is one.
+  const sold = sellsThroughUs(v.booking);
+  const enquire =
+    !sold && v.enquiry ? { href: `mailto:${v.enquiry.email}`, label: t("booking.enquire", { name: v.enquiry.name }) } : null;
   // ADR-109: the one public starting price (euros, operator-approved, in date), or "Price on request".
   const price = v.price;
+  // "Includes our margin" only where the figure is confirmed to include it (6 Nov 2026).
   const priceText = (p: PublicPrice) =>
     p.mode === "from_price"
-      ? tp.markup("from", { price: w.money(p.from), b: (c) => c })
+      ? tp.markup(p.margin !== false ? "from" : "fromGuide", { price: w.money(p.from), b: (c) => c })
       : p.mode === "price_band"
-        ? tp.markup("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => c })
+        ? tp.markup(p.margin !== false ? "band" : "bandGuide", { min: w.money(p.min), max: w.money(p.max), b: (c) => c })
         : tp("onRequest");
   const priceRich = (p: PublicPrice) =>
-    p.mode === "from_price"
-      ? tp.rich("from", { price: w.money(p.from), b: (c) => <b>{c}</b> })
-      : p.mode === "price_band"
-        ? tp.rich("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => <b>{c}</b> })
-        : tp("onRequest");
+    !sold
+      ? tp("unavailable")
+      : p.mode === "from_price"
+        ? tp.rich(p.margin !== false ? "from" : "fromGuide", { price: w.money(p.from), b: (c) => <b>{c}</b> })
+        : p.mode === "price_band"
+          ? tp.rich(p.margin !== false ? "band" : "bandGuide", { min: w.money(p.min), max: w.money(p.max), b: (c) => <b>{c}</b> })
+          : tp("onRequest");
+  const policy = !hasFigure(price) || price.margin !== false;
   const basis = hasFigure(price)
     ? price.basis === "per_person_per_night"
       ? tp("basisNight")
@@ -245,9 +253,22 @@ export function VesselView({
   const faqs: { q: string; a: string }[] = [];
   faqs.push({
     q: t("faq.costQ", { name: v.name }),
-    a: hasFigure(price) ? `${priceText(price)} ${basis} ${tp("policy")}` : `${tp("onRequest")}. ${tp("onRequestNote")}`,
+    a: !sold
+      ? `${tp("unavailable")}. ${t("booking.costA")}`
+      : hasFigure(price)
+        ? [priceText(price), basis, policy ? tp("policy") : null].filter(Boolean).join(" ")
+        : `${tp("onRequest")}. ${tp("onRequestNote")}`,
   });
-  faqs.push({ q: t("faq.bookQ"), a: v.bookable ? t("faq.bookYes") : t("faq.bookNo") });
+  faqs.push({
+    q: t("faq.bookQ"),
+    a: !sold
+      ? v.enquiry
+        ? t("booking.bookA", { name: v.enquiry.name })
+        : t("booking.bookNone")
+      : v.bookable
+        ? t("faq.bookYes")
+        : t("faq.bookNo"),
+  });
   if (its.length) {
     // "Four-night sailings leave Luxor for Aswan on Mondays, and three-night sailings leave Aswan …": longest first.
     const lines = [...its]
@@ -329,7 +350,7 @@ export function VesselView({
         {/* The price on its own, so a phone shows it with the main action right under the photo. */}
         <dl className={styles.price}>
           <div className={styles.priceFact}>
-            <dt>{t("hero.startingPrice")}</dt>
+            <dt>{sold ? t("hero.startingPrice") : t("booking.label")}</dt>
             <dd>{priceRich(price)}</dd>
           </div>
         </dl>
@@ -379,15 +400,21 @@ export function VesselView({
         </dl>
         <div className={styles.actions}>
           <div className={styles.buttons}>
-            <Link className={styles.primary} href={v.bookable ? reserveHref : askHref}>
-              {v.bookable ? t("hero.seePrices") : t("hero.ask")}
-            </Link>
+            {enquire ? (
+              <a className={styles.primary} href={enquire.href}>
+                {enquire.label}
+              </a>
+            ) : sold ? (
+              <Link className={styles.primary} href={v.bookable ? reserveHref : askHref}>
+                {v.bookable ? t("hero.seePrices") : t("hero.ask")}
+              </Link>
+            ) : null}
             <a className={styles.secondary} href="#price">
               {t("hero.seeIncluded")}
             </a>
             <AddToCompare vessel={{ slug: v.slug, name: v.name }} />
           </div>
-          <p className={styles.status}>{v.bookable ? t("hero.bookableNote") : t("hero.infoOnly")}</p>
+          <p className={styles.status}>{!sold ? t("booking.note") : v.bookable ? t("hero.bookableNote") : t("hero.infoOnly")}</p>
         </div>
         {v.summary ? <p className={styles.lead}>{v.summary}</p> : null}
       </header>
@@ -421,22 +448,41 @@ export function VesselView({
       <SectionNav
         items={nav}
         label={t("nav.label")}
-        action={{ href: v.bookable ? reserveHref : askHref, label: v.bookable ? t("hero.seePrices") : t("hero.ask") }}
+        action={
+          !sold
+            ? (enquire ?? undefined)
+            : { href: v.bookable ? reserveHref : askHref, label: v.bookable ? t("hero.seePrices") : t("hero.ask") }
+        }
       />
 
       <section className={styles.section} id="price" aria-labelledby="price-h">
         <h2 id="price-h">{t("price.title")}</h2>
         <p className={styles.big}>{priceRich(price)}</p>
-        {hasFigure(price) ? (
-          <p className={styles.muted}>
-            {basis} {tp("checked", { date: formatDate(price.lastChecked, locale) })}
-          </p>
+        {!sold ? (
+          <>
+            <p>{t("booking.note")}</p>
+            {enquire ? (
+              <p className={styles.buttons}>
+                <a className={styles.primary} href={enquire.href}>
+                  {enquire.label}
+                </a>
+              </p>
+            ) : null}
+          </>
         ) : (
-          <p>{tp("onRequestNote")}</p>
+          <>
+            {hasFigure(price) ? (
+              <p className={styles.muted}>
+                {basis} {tp("checked", { date: formatDate(price.lastChecked, locale) })}
+              </p>
+            ) : (
+              <p>{tp("onRequestNote")}</p>
+            )}
+            <p>{t(v.bookable ? "price.shapesBookable" : "price.shapes")}</p>
+            {policy ? <p>{tp("policy")}</p> : null}
+          </>
         )}
-        <p>{t(v.bookable ? "price.shapesBookable" : "price.shapes")}</p>
-        <p>{tp("policy")}</p>
-        <p>{tp("gratuities")}</p>
+        {sold ? <p>{tp("gratuities")}</p> : null}
         {isBuilt("/nile-cruise-prices/") ? (
           <p>
             <Link href="/nile-cruise-prices/">{tp("why")}</Link>
@@ -461,10 +507,10 @@ export function VesselView({
             {t.rich("price.fallback", {
               link: (c) => (isBuilt("/tours-extras/transfers/") ? <Link href="/tours-extras/transfers/">{c}</Link> : c),
             })}
-            {anyDays ? ` ${t("price.fallbackProgramme")}` : ""}
+            {anyDays && sold ? ` ${t("price.fallbackProgramme")}` : ""}
           </p>
         )}
-        {rates ? (
+        {rates && sold ? (
           <RatesForm
             action={rates}
             locale={locale}
@@ -481,11 +527,13 @@ export function VesselView({
             cabins={cabins.map((c) => ({ value: c.id, label: c.name }))}
           />
         ) : null}
-        <p>
-          <Link className={styles.secondary} href={askHref}>
-            {t("price.askIncluded")}
-          </Link>
-        </p>
+        {sold ? (
+          <p>
+            <Link className={styles.secondary} href={askHref}>
+              {t("price.askIncluded")}
+            </Link>
+          </p>
+        ) : null}
       </section>
 
       {its.length ? (
@@ -691,13 +739,15 @@ export function VesselView({
           {/* The sailing dates of every itinerary on one calendar: departure rows and the weekly pattern. */}
           <h2 id="dates-h">{tc("title")}</h2>
           <p>
-            {confirmed
-              ? t("dates.introConfirmed")
-              : calendarSailings(calendarIts, today).length
-                ? t("dates.intro")
-                : t("dates.introUsual")}
+            {!sold
+              ? t("booking.datesIntro")
+              : confirmed
+                ? t("dates.introConfirmed")
+                : calendarSailings(calendarIts, today).length
+                  ? t("dates.intro")
+                  : t("dates.introUsual")}
           </p>
-          {!confirmed ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
+          {!confirmed && sold ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
           <SailingCalendar
             // Direction is worked out on the English names; the visitor reads the places in their language.
             sailings={calendarSailings(calendarIts, today).map((s) => ({
@@ -718,7 +768,7 @@ export function VesselView({
             today={today}
             bookable={v.bookable}
             reserve={reserveHref}
-            ask={askHref}
+            ask={sold ? askHref : undefined}
           />
         </section>
       ) : null}
@@ -763,7 +813,7 @@ export function VesselView({
                 <p className={styles.muted}>
                   {[
                     s.cabinCount ? t("similar.cabins", { n: s.cabinCount }) : null,
-                    hasFigure(s.price) ? priceText(s.price) : tp("onRequest"),
+                    !sellsThroughUs(s.booking) ? tp("unavailable") : hasFigure(s.price) ? priceText(s.price) : tp("onRequest"),
                   ]
                     .filter(Boolean)
                     .join(" · ")}
@@ -781,12 +831,18 @@ export function VesselView({
       ) : null}
 
       <section className={styles.final} aria-labelledby="final-h">
-        <h2 id="final-h">{t("final.title")}</h2>
-        <p>{t("final.text")}</p>
+        <h2 id="final-h">{sold ? t("final.title") : t("booking.finalTitle")}</h2>
+        <p>{sold ? t("final.text") : t("booking.note")}</p>
         <p className={styles.buttons}>
-          <Link className={styles.primary} href={askHref}>
-            {t("hero.ask")}
-          </Link>
+          {enquire ? (
+            <a className={styles.primary} href={enquire.href}>
+              {enquire.label}
+            </a>
+          ) : sold ? (
+            <Link className={styles.primary} href={askHref}>
+              {t("hero.ask")}
+            </Link>
+          ) : null}
           {isBuilt("/plan-my-cruise/") ? (
             <Link className={styles.secondary} href="/plan-my-cruise/">
               {t("final.plan")}

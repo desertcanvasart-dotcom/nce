@@ -75,14 +75,16 @@ create trigger vessels_guard_public_price before update on public.vessels
 
 -- ── Launch data ──────────────────────────────────────────────────────────────────────────────────────────────────
 -- No price is converted from US dollars: every dollar guide price is removed, and those vessels show "Price on request".
+-- Euro guide prices stay for 20261106000400, which makes the Nour El Nil ones public (Islam, 6 Nov 2026).
 update public.vessels set indicative_per_night_minor = null, indicative_per_trip_minor = null,
   indicative_trip_nights = null, indicative_currency = null, indicative_basis = null, indicative_status = null
-where indicative_currency is not null;
+where indicative_currency is distinct from 'EUR' and indicative_currency is not null;
 
--- The one value the brief confirms: Mövenpick MS Royal Lily from €1,120 per person for the 4-night cruise, Luxor to
--- Aswan, including our margin; last checked 6 Nov 2026, no expiry (Islam). Nothing happens on a database without it.
+-- The one value the brief confirms: Mövenpick MS Royal Lily from €1,120 per person, including our margin; last checked
+-- 6 Nov 2026, no expiry (Islam). It is the lowest starting price across its sailings, so it names no cruise length
+-- (Islam, 6 Nov 2026: not tied to the 3-night or the 4-night cruise). Nothing happens on a database without it.
 update public.vessels set public_pricing_mode = 'from_price', from_price_minor = 112000, pricing_currency = 'EUR',
-  pricing_basis = 'per_person_per_trip', pricing_trip_nights = 4, pricing_last_checked = date '2026-11-06',
+  pricing_basis = 'per_person_per_trip', pricing_trip_nights = null, pricing_last_checked = date '2026-11-06',
   operator_pricing_approved = true
 where slug = 'movenpick-royal-lily';
 

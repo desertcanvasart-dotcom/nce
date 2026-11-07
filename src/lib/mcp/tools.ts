@@ -95,13 +95,15 @@ function startingPrice(p: PublicPrice) {
   if (p.mode === "on_request") return { mode: "on_request", text: "Price on request" };
   const eur = (m: { amount: number }) => ({ amount: m.amount / 100, currency: "EUR" });
   const basis = p.basis === "per_person_per_night" ? "per person, per night" : "per person, per trip";
+  // "Includes our margin" only where the figure is confirmed to include it (6 Nov 2026).
+  const note = p.margin !== false ? "Includes our margin. A guide, not a quote." : "A guide, not a quote.";
   return p.mode === "from_price"
     ? {
         mode: "from_price",
         from: eur(p.from),
         basis,
         last_checked: p.lastChecked,
-        note: "Includes our margin. A guide, not a quote.",
+        note,
       }
     : {
         mode: "price_band",
@@ -109,7 +111,7 @@ function startingPrice(p: PublicPrice) {
         max: eur(p.max),
         basis,
         last_checked: p.lastChecked,
-        note: "Includes our margin. A guide, not a quote.",
+        note,
       };
 }
 const PRICE_NOTE =

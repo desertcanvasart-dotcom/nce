@@ -5,7 +5,7 @@ import type { Mooring } from "@/lib/catalogue/mooring";
  */
 import type { Money, Propulsion, VesselType } from "@/components/ds/lib/types";
 import type { SailingPeriod } from "@/lib/product/sailing-time";
-import type { PublicPrice, RateDisplay } from "./public-price";
+import type { BookingAvailability, EnquiryPartner, PublicPrice, RateDisplay } from "./public-price";
 
 export type VesselCabin = {
   id: string;
@@ -165,6 +165,10 @@ export type VesselPage = {
   price: PublicPrice;
   /** How a rate for given dates is given after a request: an adviser's offer by email, or a signed-in price. */
   rateDisplay: RateDisplay;
+  /** Who can book it (6 Nov 2026); "not_available_through_nilecruz" shows no price, booking or offer request. */
+  booking?: BookingAvailability;
+  /** A travel company that takes enquiries for a vessel Nilecruz can't sell, with its approval. Never the operator. */
+  enquiry?: EnquiryPartner;
   /** "Is this the right boat for you?", in the page's language; null hides it. */
   goodFor?: string | null;
   lessSuitedTo?: string | null;

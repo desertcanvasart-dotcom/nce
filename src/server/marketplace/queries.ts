@@ -5,7 +5,15 @@ import { env, indexingAllowed } from "@/lib/env";
 import { parseLayout } from "@/lib/marketplace/deck-layout-schema";
 import type { ItineraryPlaces } from "@/content/river-stops";
 import type { ListingVessel } from "@/lib/marketplace/listing";
-import { DEFAULT_PRICE_DATA, publicPrice, type PublicPriceData } from "@/lib/marketplace/public-price";
+import {
+  DEFAULT_PRICE_DATA,
+  ON_REQUEST,
+  publicPrice,
+  sellsThroughUs,
+  type BookingAvailability,
+  type EnquiryPartner,
+  type PublicPriceData,
+} from "@/lib/marketplace/public-price";
 import { evaluationPublishable, type CabinFact, type VesselEvaluation, type VesselPage } from "@/lib/marketplace/vessel";
 import type { Locale } from "@/i18n/routing";
 import type { Database } from "@/server/db/database.types";
@@ -122,6 +130,47 @@ async function priceRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: s
 const PRICE_COLUMNS =
   "public_pricing_mode, from_price_minor, price_band_min_minor, price_band_max_minor, pricing_currency, pricing_basis, pricing_trip_nights, pricing_valid_from, pricing_valid_to, pricing_last_checked, operator_pricing_approved, rate_display_after_request";
 
+type BookingRow = {
+  booking_availability: string;
+  enquiry_partner_name: string | null;
+  enquiry_partner_email: string | null;
+  margin_included: boolean;
+};
+type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner; includesMargin: boolean };
+const SELLS: Booking = { availability: "available_through_nilecruz", includesMargin: true };
+/**
+ * Who can book each vessel, and whether its price includes our margin (6 Nov 2026), read on their own like the price
+ * columns: a database a migration behind the code reads as "available through Nilecruz", margin included.
+ */
+async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: string): Promise<Map<string, Booking>> {
+  let q = db
+    .from("vessels")
+    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email, margin_included")
+    .in("visibility", ["published", "showcase"]);
+  if (slug) q = q.eq("slug", slug);
+  const { data, error } = await q;
+  if (error || !data) return new Map();
+  return new Map(
+    (data as unknown as (BookingRow & { id: string })[]).map((r) => [
+      r.id,
+      {
+        availability:
+          r.booking_availability === "not_available_through_nilecruz"
+            ? "not_available_through_nilecruz"
+            : "available_through_nilecruz",
+        enquiry:
+          r.enquiry_partner_name && r.enquiry_partner_email
+            ? { name: r.enquiry_partner_name, email: r.enquiry_partner_email }
+            : undefined,
+        includesMargin: r.margin_included !== false,
+      },
+    ]),
+  );
+}
+/** The price the public sees: none at all for a vessel Nilecruz can't sell. */
+const shownPrice = (row: PriceRow | undefined, b: Booking, today: string) =>
+  sellsThroughUs(b.availability) ? publicPrice({ ...priceOf(row), priceIncludesMargin: b.includesMargin }, today) : ON_REQUEST;
+
 async function loadListing(): Promise<ListingVessel[]> {
   const db = visitorDb();
   // Builds without a database (Lighthouse in CI) render an empty marketplace; it fills on the first refresh.
@@ -139,7 +188,7 @@ async function loadListing(): Promise<ListingVessel[]> {
   ]);
   if (error ?? pe) throw error ?? pe;
   const price = new Map((prices ?? []).map((p) => [p.vessel_id, p]));
-  const publicPrices = await priceRows(db);
+  const [publicPrices, bookings] = await Promise.all([priceRows(db), bookingRows(db)]);
   const out: ListingVessel[] = [];
   for (const v of vessels ?? []) {
     if (indexingAllowed && v.is_sample) continue; // sample records never reach production
@@ -170,8 +219,9 @@ async function loadListing(): Promise<ListingVessel[]> {
       summary: v.vessel_translations.find((t) => t.locale === "en")?.summary ?? null,
       image,
       evaluation: evaluation?.score,
-      price: publicPrice(priceOf(publicPrices.get(v.id)), today),
+      price: shownPrice(publicPrices.get(v.id), bookings.get(v.id) ?? SELLS, today),
       rateDisplay: priceOf(publicPrices.get(v.id)).rateDisplayAfterRequest,
+      booking: (bookings.get(v.id) ?? SELLS).availability,
       itineraries: v.schedules
         .filter((s) => s.active)
         .map((s) => ({
@@ -184,7 +234,7 @@ async function loadListing(): Promise<ListingVessel[]> {
             .sort(),
         })),
       from: p?.amount_minor && p.currency ? { amount: Number(p.amount_minor), currency: p.currency } : undefined,
-      bookable: !!p?.bookable,
+      bookable: !!p?.bookable && sellsThroughUs(bookings.get(v.id)?.availability),
       fromWithSightseeing:
         p?.sightseeing_amount_minor && p.sightseeing_currency
           ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }
@@ -246,7 +296,8 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
   ]);
   if (error ?? pe) throw error ?? pe;
   if (!v || (indexingAllowed && v.is_sample)) return null;
-  const publicPrices = await priceRows(db, slug);
+  const [publicPrices, bookings] = await Promise.all([priceRows(db, slug), bookingRows(db, slug)]);
+  const booking = bookings.get(v.id) ?? SELLS;
   // The gallery, and the photos that show a cabin type (on that cabin's card instead).
   const photos: VesselPage["photos"] = [];
   const cabinPhotos = new Map<string, VesselPage["photos"]>();
@@ -336,8 +387,10 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     goodToKnow: listed("good_to_know"),
     seoTitle: say("seo_title"),
     seoDescription: say("seo_description"),
-    price: publicPrice(priceOf(publicPrices.get(v.id)), today),
+    price: shownPrice(publicPrices.get(v.id), booking, today),
     rateDisplay: priceOf(publicPrices.get(v.id)).rateDisplayAfterRequest,
+    booking: booking.availability,
+    enquiry: booking.enquiry,
     dietaryOptions: v.dietary_options,
     gratuityUsdMinor: v.gratuity_usd_minor === null ? null : Number(v.gratuity_usd_minor),
     photos,
@@ -418,7 +471,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
       retrievedOn: r.retrieved_on,
     })),
     from: p?.amount_minor && p.currency ? { amount: Number(p.amount_minor), currency: p.currency } : undefined,
-    bookable: !!p?.bookable,
+    bookable: !!p?.bookable && sellsThroughUs(booking.availability),
     fromWithSightseeing:
       p?.sightseeing_amount_minor && p.sightseeing_currency
         ? { amount: Number(p.sightseeing_amount_minor), currency: p.sightseeing_currency }

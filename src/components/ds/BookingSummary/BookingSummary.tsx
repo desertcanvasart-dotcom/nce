@@ -23,7 +23,7 @@ export type BookingSummaryProps = {
   total: Money;
   /** Optional guest controls, for example a Stepper, supplied by the caller who recomputes lines and total. */
   guests?: ReactNode;
-  /** Obligatory crew gratuity, paid on board at check-out, never part of the total (ADR-010, ADR-017). */
+  /** Expected crew gratuity, paid on board at check-out, never part of the total (ADR-010, ADR-017). */
   gratuity?: { perPersonPerNight: Money; payingGuests: number; nights: number };
   /** Extras sold separately (tours, transfers, flights), shown outside the total (ADR-011). */
   extras?: { label: string; price?: Money; href: string }[];

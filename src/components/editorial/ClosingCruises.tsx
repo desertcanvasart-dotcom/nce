@@ -2,34 +2,40 @@ import { Link } from "@/i18n/navigation";
 import { ListingGrid } from "@/components/marketplace/ListingGrid";
 import type { VesselType } from "@/components/ds/lib/types";
 import { featuredFirst } from "@/content/vessel-types";
-import { facetBySlug, sortListing, toCard, type ListingVessel } from "@/lib/marketplace/listing";
+import { closingHeading, facetBySlug, sortListing, toCard, type ListingVessel } from "@/lib/marketplace/listing";
 import type { Link as SiloLink } from "@/lib/seo/links";
 import styles from "./editorial.module.css";
 
 /**
  * SEO-012, 024: every informational page ends with a row of up to three real cruises from the matching listing, and a
- * link to that listing. `type` narrows the cards where the listing's own facet page doesn't exist yet.
+ * link to that listing. `type` narrows the cards where the listing's own facet page doesn't exist yet. `picked` shows
+ * vessels the page chose itself (the guide's "Vessels to explore", one of each type) instead.
  */
 export function ClosingCruises({
   all,
   listing,
   type,
   title,
+  picked,
 }: {
   /** Every public vessel (the page loads them: components don't read the server). */
   all: ListingVessel[];
   listing: SiloLink;
   type?: VesselType;
   title?: string;
+  picked?: ListingVessel[];
 }) {
   const facet = facetBySlug(listing.href.replace(/^\/cruises\/|\/$/g, ""));
   // Each type's featured vessel leads (Steam Ship Sudan for paddle steamers), then the listing's own order.
-  const fits = featuredFirst(sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type))));
+  const fits =
+    picked ?? featuredFirst(sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type))));
+  const shown = fits.slice(0, 3);
+  const heading = title ?? closingHeading(shown);
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
-      <h2 id="closing-cruises">{title ?? "Cruises you can book"}</h2>
-      {fits.length ? (
-        <ListingGrid cards={fits.slice(0, 3).map(toCard)} />
+      <h2 id="closing-cruises">{heading}</h2>
+      {shown.length ? (
+        <ListingGrid cards={shown.map(toCard)} />
       ) : (
         <p className={styles.muted}>No cruises of this kind are published yet.</p>
       )}

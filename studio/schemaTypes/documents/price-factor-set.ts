@@ -7,7 +7,7 @@ import { requireEnglish } from "../shared/localised";
 type Factor = { options?: unknown[] };
 
 /**
- * The data behind PriceAnatomy ("why US$800 vs US$8,000"). Figures are shared across languages, so the
+ * The data behind PriceAnatomy ("why €400 vs €6,500", ADR-109). Figures are shared across languages, so the
  * labels are translated field by field. Amounts are whole minor units (cents) in `currency` (DATA-001).
  */
 export const priceFactorSet = defineType({

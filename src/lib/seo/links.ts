@@ -167,6 +167,7 @@ export function expectedLinks(url: string): string[] {
   if (u) out.add(u.href);
   for (const l of [...children(url), ...siblings(url), ...bridges(url)]) out.add(l.href);
   if (p.type !== "Homepage" && !NO_CLOSING.has(url)) out.add(closingListing(url).href);
+  for (const l of LEFT_OUT[url] ?? []) out.delete(l);
   return [...out];
 }
 
@@ -179,6 +180,28 @@ export const TRUST_LINKS: Record<string, string[]> = {
   "/vessels/": ["/how-we-choose-vessels/", "/plan-my-cruise/"],
   // The destinations hub ends with "Plan my cruise" and "Plan your route" (Islam's destinations brief, 4 Nov 2026).
   "/destinations/": ["/plan-my-cruise/", "/nile-cruise-guide/"],
+  // Islam's guide brief (4 Nov 2026): the hub plans the trip, so it links each route, its cruises, how many nights,
+  // what's included, transfers and tours, and Plan my cruise.
+  "/nile-cruise-guide/": [
+    "/nile-cruise-guide/routes/luxor-to-aswan/",
+    "/nile-cruise-guide/routes/aswan-to-luxor/",
+    "/nile-cruise-guide/routes/esna-to-aswan/",
+    "/nile-cruise-guide/planning/how-many-nights/",
+    "/cruises/luxor-to-aswan/",
+    "/cruises/aswan-to-luxor/",
+    "/cruises/dahabiyas/",
+    "/nile-cruise-prices/whats-included/",
+    "/tours-extras/",
+    "/plan-my-cruise/",
+  ],
+};
+
+/**
+ * Workbook links a page leaves out on purpose (Islam's guide brief, 4 Nov 2026): the guide hub links the prices silo
+ * through "What's included on a Nile cruise" rather than the prices pillar.
+ */
+export const LEFT_OUT: Record<string, string[]> = {
+  "/nile-cruise-guide/": ["/nile-cruise-prices/"],
 };
 
 /** Every education-silo URL a page may link to: its own row's links, its trail, trust links and the closing listing. */

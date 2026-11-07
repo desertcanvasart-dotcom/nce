@@ -1,6 +1,5 @@
 import type { EditorialPage } from "@/lib/content/editorial";
 import P001 from "./P001.json";
-import P002 from "./P002.json";
 import P003 from "./P003.json";
 import P004 from "./P004.json";
 import P005 from "./P005.json";
@@ -39,7 +38,6 @@ import P106 from "./P106.json";
 /** The drafted pages in the repository (ADR-096): Sanity's seed, and the fallback where Sanity isn't configured. */
 export const DRAFT_PAGES: Record<string, EditorialPage> = {
   P001: P001 as EditorialPage,
-  P002: P002 as EditorialPage,
   P003: P003 as EditorialPage,
   P004: P004 as EditorialPage,
   P005: P005 as EditorialPage,
