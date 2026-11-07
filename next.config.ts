@@ -40,6 +40,12 @@ const nextConfig: NextConfig = {
     authInterrupts: true,
     // Vessel photos are uploaded through a server action (admins only); the storage bucket allows 15 MB.
     serverActions: { bodySizeLimit: "16mb" },
+    // The build prerenders ~280 pages and most read the catalogue as a visitor. Seven workers of eight pages each sent
+    // ~50 queries at once, past the visitor role's statement timeout on Supabase (Railway deploys of 7 Nov 2026).
+    // Two workers of two pages, and a retry, keep it under. The cached result is reused after the first read.
+    cpus: 2,
+    staticGenerationMaxConcurrency: 2,
+    staticGenerationRetryCount: 3,
   },
   async redirects() {
     const has = [{ type: "host" as const, value: `www.${site.hostname}`.replace(/\./g, "\\.") }];
