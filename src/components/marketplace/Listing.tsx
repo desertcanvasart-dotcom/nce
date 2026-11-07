@@ -4,6 +4,7 @@ import type { Locale } from "@/i18n/routing";
 import {
   pricedCount,
   collectionJsonLd,
+  facetLive,
   FACETS,
   jsonLdScript,
   searchRoutes,
@@ -71,7 +72,8 @@ export function Listing(p: Props) {
       </div>
       <nav aria-label="Cruise types and routes" className={styles.facets}>
         <ul>
-          {FACETS.map((f) => (
+          {/* ADR-113: a gated facet is linked only once it has vessels (shown here if it's this page). */}
+          {FACETS.filter((f) => f.slug === p.current || facetLive(f, p.all)).map((f) => (
             <li key={f.slug}>
               {p.current === f.slug ? <span aria-current="page">{f.h1}</span> : <Link href={`/cruises/${f.slug}/`}>{f.h1}</Link>}
             </li>

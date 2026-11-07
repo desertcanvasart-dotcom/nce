@@ -79,7 +79,14 @@ export const BUILT = new Set<string>([
   "/plan-my-cruise/",
 ]);
 
-export const isBuilt = (url: string) => BUILT.has(url);
+/**
+ * Gated pages (ADR-113) exist but aren't in BUILT: they count as built only on a render that has found them live
+ * (`livePages` in src/lib/marketplace/listing.ts) and passes them in. Without it, nothing links to them.
+ */
+export type Live = ReadonlySet<string>;
+const NONE: Live = new Set();
+
+export const isBuilt = (url: string, live: Live = NONE) => BUILT.has(url) || live.has(url);
 
 /** Pages that don't end with the cruise row (SEO-012 is for informational pages): the Contact and planning forms. */
 export const NO_CLOSING = new Set(["/contact/", "/plan-my-cruise/"]);
@@ -133,40 +140,56 @@ export function trail(url: string): { name: string; path: string }[] {
 }
 
 /** The parent page, for the one link up in the intro (SEO-008); none for home or a pillar's own home link. */
-export function up(url: string): Link | null {
+export function up(url: string, live: Live = NONE): Link | null {
   const p = page(url).parent;
-  return p && p !== "/" && isBuilt(p) ? inline(p) : null;
+  return p && p !== "/" && isBuilt(p, live) ? inline(p) : null;
 }
 
 /** SEO-009: a pillar's or hub's children that exist, in workbook order. */
-export const children = (url: string): Link[] =>
+export const children = (url: string, live: Live = NONE): Link[] =>
   page(url)
-    .down.filter((u) => u !== url && isBuilt(u))
+    .down.filter((u) => u !== url && isBuilt(u, live))
     .map(link);
 
 /** SEO-010: two or three siblings in the same hub ("Keep reading"); only ones that exist. */
-export const siblings = (url: string): Link[] => page(url).across.filter(isBuilt).slice(0, 3).map(link);
+export const siblings = (url: string, live: Live = NONE): Link[] =>
+  page(url)
+    .across.filter((u) => isBuilt(u, live))
+    .slice(0, 3)
+    .map(link);
 
 /** SEO-011: links to other silos, only where the workbook lists them. */
-export const bridges = (url: string): Link[] => page(url).bridges.filter(isBuilt).map(link);
+export const bridges = (url: string, live: Live = NONE): Link[] =>
+  bridgesOf(url)
+    .filter((u) => isBuilt(u, live))
+    .map(link);
+
+/**
+ * Bridges added beside the workbook's own (ADR-113, Islam 7 Nov 2026): Abu Simbel links the Lake Nasser cruise guide,
+ * the only way to reach the temples by water. Shown, like any link, only once the target is built or live.
+ */
+export const ADDED_BRIDGES: Record<string, string[]> = {
+  "/destinations/abu-simbel/": ["/nile-cruise-guide/routes/lake-nasser/"],
+};
+const bridgesOf = (url: string) => [...page(url).bridges, ...(ADDED_BRIDGES[url] ?? [])];
 
 /**
  * SEO-012: the closing cruise row's listing: the first bridge into /cruises/ that exists, else the listing hub.
  * `type` filters the cards when the matching facet page isn't built yet (paddle steamers).
  */
-export function closingListing(url: string): Link {
-  const b = page(url).bridges.find((u) => u.startsWith("/cruises/") && isBuilt(u));
+export function closingListing(url: string, live: Live = NONE): Link {
+  const b = page(url).bridges.find((u) => u.startsWith("/cruises/") && isBuilt(u, live));
   return b ? link(b) : link("/cruises/");
 }
 
 /** Every link a page must show (for the CI check): up, children, siblings, bridges and the closing listing. */
-export function expectedLinks(url: string): string[] {
+export function expectedLinks(url: string, live: Live = NONE): string[] {
   const p = page(url);
   const out = new Set<string>();
-  const u = up(url);
+  const u = up(url, live);
   if (u) out.add(u.href);
-  for (const l of [...children(url), ...siblings(url), ...bridges(url)]) out.add(l.href);
-  if (p.type !== "Homepage" && !NO_CLOSING.has(url)) out.add(closingListing(url).href);
+  for (const l of [...children(url, live), ...siblings(url, live), ...bridges(url, live)]) out.add(l.href);
+  if (p.type !== "Homepage" && !NO_CLOSING.has(url)) out.add(closingListing(url, live).href);
   for (const l of LEFT_OUT[url] ?? []) out.delete(l);
   return [...out];
 }
@@ -205,17 +228,17 @@ export const LEFT_OUT: Record<string, string[]> = {
 };
 
 /** Every education-silo URL a page may link to: its own row's links, its trail, trust links and the closing listing. */
-export function allowedLinks(url: string): Set<string> {
+export function allowedLinks(url: string, live: Live = NONE): Set<string> {
   const p = page(url);
   return new Set([
     ...p.down,
     ...p.across,
-    ...p.bridges,
+    ...bridgesOf(url),
     ...(TRUST_LINKS[url] ?? []),
     // A destination page links the stops before and after it on the river (src/content/river-stops.ts).
     ...(RIVER_NEIGHBOUR_LINKS[url] ?? []),
     ...trail(url).map((c) => c.path),
-    closingListing(url).href,
+    closingListing(url, live).href,
     url,
   ]);
 }

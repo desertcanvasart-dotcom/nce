@@ -4,7 +4,7 @@ import { PRICE_EXAMPLE, PRICE_EXAMPLE_TITLE, priceExampleTotal } from "@/content
 import { ROUTE_STOPS } from "@/content/routes";
 import { vesselProfile } from "@/content/vessel-types";
 import { houseStyleProblems, splitUp, toSections } from "@/lib/content/editorial";
-import { applySearch, parseSearch, type ListingVessel } from "@/lib/marketplace/listing";
+import { applySearch, GATED_PAGES, parseSearch, type ListingVessel } from "@/lib/marketplace/listing";
 import { faqJsonLd, webApplicationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
 import {
   BUILT,
@@ -84,7 +84,8 @@ describe("the drafted pages (ADR-096)", () => {
   for (const page of Object.values(DRAFT_PAGES)) {
     it(`${page.id} matches its workbook row and the house style`, () => {
       const url = urlOf[page.id]!;
-      expect(BUILT.has(url), url).toBe(true);
+      // A gated page (ADR-113) is drafted and served, but joins BUILT only through the live set.
+      expect(BUILT.has(url) || url in GATED_PAGES, url).toBe(true);
       expect(page.title).toBe(LINK_MAP[url]!.h1);
       expect(houseStyleProblems(page)).toEqual([]);
       // Islam cleared the draft label on the homepage, /vessels/compare/ and /vessels/dahabiya/ (6 Nov 2026).

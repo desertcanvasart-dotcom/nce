@@ -69,8 +69,15 @@ const info = vessel({
 });
 
 describe("facets (PAGE-061–067, SEO-016)", () => {
-  it("are the five Phase 1 filtered listings, none of them a possible vessel slug", () => {
-    expect(FACETS.map((f) => f.slug)).toEqual(["dahabiyas", "motor-ships", "luxury", "luxor-to-aswan", "aswan-to-luxor"]);
+  it("are the five Phase 1 listings and the gated Lake Nasser one (ADR-113), none of them a possible vessel slug", () => {
+    expect(FACETS.map((f) => f.slug)).toEqual([
+      "dahabiyas",
+      "motor-ships",
+      "luxury",
+      "luxor-to-aswan",
+      "aswan-to-luxor",
+      "lake-nasser",
+    ]);
     for (const f of FACETS) expect(RESERVED_VESSEL_SLUGS).toContain(f.slug);
     expect(facetBySlug("value")).toBeUndefined(); // a Phase 2 row: not built, not indexable
   });

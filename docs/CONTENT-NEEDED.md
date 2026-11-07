@@ -49,6 +49,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 68 | Euro option values for the price calculator (the band wording is confirmed) | Can follow | ADR-109 |
 | 70 | Whether the Nour El Nil "from" prices include our margin | Can follow | Islam, 6 Nov 2026: the eight euro prices stay visible, shown "From €X per person. A guide, not a quote." without "Includes our margin" (`margin_included = false`). Set it to true per boat once confirmed. P059's "All prices we publish and quote already include our margin" is not true for these until then |
 | 71 | The Sanity articles for P001, P019, P027, P032, P036, P041, P049 and P051, updated to the repository copy | Must | Production reads Sanity, not the repository: until then the live homepage keeps its old H1 and draft label, and the guide and price pages keep "obligatory". `pnpm seed:content` (production only after Faris approves); P001, P027 and P041 also need `reviewStatus` approved |
+| 73 | Lake Nasser cruise data, from each operator through Faris: MS Eugenie, MS Kasr Ibrim, MS Nubian Sea, MS Prince Abbas, Steigenberger Omar El Khayam | Can follow | ADR-113. For each: direction (Aswan → Abu Simbel, Abu Simbel → Aswan or both), nights, sailing weekdays, season dates, the day-by-day programme, the public price or "on request" with the operator's approval, photos and an operator account. Staging has only their names and the note "Lake Nasser: Aswan–Abu Simbel"; MS Eugenie may duplicate `eugenie`. The Lake Nasser listing and guide stay hidden until one is published. The guide's typical days (P008) need the same programmes |
 
 ## Pages and copy
 
@@ -82,6 +83,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 66 | A review of the Spanish and Japanese text for Steam Ship Sudan | With 17 | `docs/imports/steam-ship-sudan-i18n.json`, drafted by Claude; re-run `pnpm import:fleet docs/imports/steam-ship-sudan-data.json docs/imports/steam-ship-sudan-i18n.json` after edits |
 | 69 | A review of the Spanish and Japanese price texts: the starting price, "Price on request", "Check rates for your dates", save-quote and alerts, the margin sentence and the gratuities line (`pricing` in messages/es.json and ja.json) | With 17 | ADR-109. Drafted by Claude |
 | 72 | A review of the Spanish and Japanese text added on 6 Nov 2026 | With 17 | `messages/es.json`, `messages/ja.json`: "Booking unavailable through us", "Enquire with {name}" and its notes (`vesselPage.booking`), the guide-price wording without the margin (`fromGuide`, `bandGuide`), the calendar texts without an offer (`sailingCalendar.emptyInfo`, `emptyUsualInfo`), the homepage meta description, and the Japanese gratuities line (now "expected", not "required"). Drafted by Claude |
+| 74 | A review of the Spanish and Japanese drafts for the Lake Nasser listing and route guide | With 17 | ADR-113. `docs/drafts/lake-nasser-es-ja.md`, drafted by Claude; not shown until those pages are translated (I18N-005) |
 
 ## Accounts and settings (yours to create)
 
