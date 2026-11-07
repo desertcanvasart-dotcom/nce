@@ -958,3 +958,15 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - **Copy:** "more than 15 times", gratuities "expected", "Gebel Silsila" in stored itineraries (migration `20261106000500`; search keeps the old spelling through the stop's aliases).
 - **Consequence:** production needs migrations 200, 400 and 500 pasted in order, and the Sanity articles updated (CONTENT-NEEDED #71). Staging has all three (applied 6 Nov 2026).
 
+
+### ADR-113 Catalogue read rules work out who may read what once per query (Accepted; Islam 7 Nov 2026)
+
+- **Context:** Railway's deploys of 7 Nov 2026 failed with `57014 statement timeout` while prerendering. The visitor read rules on the catalogue called security-definer functions once per row (`app.can_read_product` → `app.can_read_vessel` → `app.is_admin`, plus `app.can_read_media` for photos). Postgres can't inline those, so every row ran its own nested queries.
+  - Measured read-only on production: 252 departures took 80 ms instead of 0.07 ms, and 226 photo captions 135 ms instead of 0.05 ms.
+  - One listing read spent about 0.3 s on these checks; 12 of 14 concurrent reads hit the timeout.
+  - Locally, 10,000 rows (about a year of sailing dates across a fleet) took 2.18 s with the per-row check.
+- **Decision:** the same rules, computed as sets (migration `20261107000100`).
+  - `app.readable_vessel_ids()`, `app.public_vessel_ids()`, `app.public_evaluation_ids()` and `app.readable_media_ids()` return the rows the caller may read.
+  - Sixteen catalogue read rules test `in (select …)`, which Postgres runs once per query and hashes. The same 10,000 rows take 1.9 ms.
+  - Tours, programmes and destinations keep their per-row checks for now (fewer rows); the same change applies to them if they grow.
+- **Consequence:** who may read what doesn't change. `supabase/tests/420_set_based_reads.sql` compares the old functions with the new sets on every row, for visitors, two operators, and an admin with and without two-step sign-in, and the existing access suites pass unchanged. The old functions stay for other callers. Production needs the migration applied by hand.
