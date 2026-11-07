@@ -118,7 +118,8 @@ test.describe("the guide's pages", () => {
       if (n) {
         await expect(page.getByRole("heading", { name: "Vessels to explore" })).toBeVisible();
         expect(n).toBeLessThanOrEqual(3);
-        const types = await row.locator("p:first-of-type").allTextContents();
+        // Each card's first line is its vessel type (the price line is a paragraph too).
+        const types = await row.evaluateAll((as) => as.map((a) => a.querySelector("p")?.textContent ?? ""));
         expect(new Set(types).size).toBe(types.length);
       }
     });

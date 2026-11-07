@@ -169,7 +169,7 @@ async function importVessel(db: Db, v: VesselPlan, existing: Row | undefined) {
               pricing_trip_nights: v.indicative.nights || null,
               pricing_last_checked: v.checkedOn,
               operator_pricing_approved: true,
-              price_includes_margin: false,
+              margin_included: false,
             }
           : { public_pricing_mode: "on_request" as const, from_price_minor: null, operator_pricing_approved: false }),
         indicative_per_night_minor: null,

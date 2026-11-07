@@ -134,7 +134,7 @@ type BookingRow = {
   booking_availability: string;
   enquiry_partner_name: string | null;
   enquiry_partner_email: string | null;
-  price_includes_margin: boolean;
+  margin_included: boolean;
 };
 type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner; includesMargin: boolean };
 const SELLS: Booking = { availability: "available_through_nilecruz", includesMargin: true };
@@ -145,7 +145,7 @@ const SELLS: Booking = { availability: "available_through_nilecruz", includesMar
 async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: string): Promise<Map<string, Booking>> {
   let q = db
     .from("vessels")
-    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email, price_includes_margin")
+    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email, margin_included")
     .in("visibility", ["published", "showcase"]);
   if (slug) q = q.eq("slug", slug);
   const { data, error } = await q;
@@ -162,7 +162,7 @@ async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?:
           r.enquiry_partner_name && r.enquiry_partner_email
             ? { name: r.enquiry_partner_name, email: r.enquiry_partner_email }
             : undefined,
-        includesMargin: r.price_includes_margin !== false,
+        includesMargin: r.margin_included !== false,
       },
     ]),
   );
