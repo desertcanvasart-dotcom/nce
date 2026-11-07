@@ -130,7 +130,7 @@ export function tourJsonLd(name: string, description: string | null, url: string
         : {
             "@type": "Offer",
             price: (fromMinor / 100).toFixed(2),
-            priceCurrency: "USD",
+            priceCurrency: "EUR",
             url,
             availability: "https://schema.org/InStock",
           },
