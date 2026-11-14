@@ -17,9 +17,21 @@ export function indexablePaths(vessels: string[], tours: string[], blog: string[
   return [...new Set([...BUILT, ...EXTRA_PAGES, ...vessels, ...tours, ...blog])].filter((p) => !NOT_IN_SITEMAP.has(p)).sort();
 }
 
-/** One language's sitemap: only the pages complete in that language, each with its hreflang set. */
-export function sitemapEntries(locale: Locale, paths: string[], list?: typeof TRANSLATED): MetadataRoute.Sitemap {
+/**
+ * One language's sitemap: only the pages complete in that language, each with its hreflang set, and the date it last
+ * changed where one is known (`modified`, by unprefixed path: vessels, tours and blog posts).
+ */
+export function sitemapEntries(
+  locale: Locale,
+  paths: string[],
+  list?: typeof TRANSLATED,
+  modified: Record<string, string> = {},
+): MetadataRoute.Sitemap {
   return paths
     .filter((p) => isTranslated(p, locale, list))
-    .map((p) => ({ url: absoluteUrl(locale, p), alternates: { languages: hreflangAlternates(p, list) } }));
+    .map((p) => ({
+      url: absoluteUrl(locale, p),
+      ...(modified[p] ? { lastModified: modified[p] } : {}),
+      alternates: { languages: hreflangAlternates(p, list) },
+    }));
 }

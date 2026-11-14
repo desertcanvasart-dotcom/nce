@@ -1,4 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { DRAFT_PAGES } from "@/content/pages";
+import { routing } from "@/i18n/routing";
+import { TOOLS } from "@/lib/mcp/tools";
+import { articleJsonLd, organizationJsonLd } from "@/lib/seo/jsonld";
+import { isBuilt } from "@/lib/seo/links";
+import { llmsTxt } from "@/lib/seo/llms";
 import { hreflangAlternates, pageMetadata } from "@/lib/seo/metadata";
 import { indexablePaths, sitemapEntries } from "@/lib/seo/sitemap";
 import { isTranslated, translatedLocales, TRANSLATED } from "@/lib/seo/translations";
@@ -65,5 +71,52 @@ describe("the crawler's reading of a page", () => {
   it("keeps internal links and leaves out the language switch's", () => {
     const html = `<a href="/es/about/?x=1#y">a</a><a href="https://x.test/">b</a><a href="/about/" hrefLang="en">EN</a><a href="//cdn">c</a>`;
     expect(internalLinks(html)).toEqual(["/es/about/"]);
+  });
+});
+
+describe("what crawlers and assistants are told", () => {
+  it("a thin list page stays out of search but its links are followed; a private page's are not", () => {
+    expect(pageMetadata({ locale: "en", path: "/blog", title: "Blog", noindex: true, follow: true }).robots).toEqual({
+      index: false,
+      follow: true,
+    });
+    expect(pageMetadata({ locale: "en", path: "/terms", title: "Terms", noindex: true }).robots).toEqual({
+      index: false,
+      follow: false,
+    });
+  });
+  it("the proxy sends no hreflang header of its own: the pages' tags are the only source (SEO-007)", () => {
+    expect(routing.alternateLinks).toBe(false);
+  });
+  it("sitemap entries carry the date a page last changed, where one is known (SEO-019)", () => {
+    const entries = sitemapEntries("en", ["/about/", "/cruises/some-ship/"], list, {
+      "/cruises/some-ship/": "2026-11-06T10:00:00Z",
+    });
+    expect(entries[0]!.lastModified).toBeUndefined();
+    expect(entries[1]!.lastModified).toBe("2026-11-06T10:00:00Z");
+  });
+  it("an article names its publisher with a logo, its language, a picture, and its date only when known", () => {
+    const page = { ...DRAFT_PAGES.P027!, updatedAt: undefined };
+    const ld = articleJsonLd(page, "https://x.test/a/", "es");
+    expect(ld.inLanguage).toBe("es");
+    expect(ld.publisher.logo.url).toMatch(/\/nilecruz-icon\.svg$/);
+    expect(ld.author).toEqual(ld.publisher);
+    expect(ld.image).toMatch(/\/nilecruz-social-share\.png$/);
+    expect(ld.dateModified).toBeUndefined();
+    expect(articleJsonLd({ ...page, updatedAt: "2026-11-01T08:00:00Z" }, "u").dateModified).toBe("2026-11-01T08:00:00Z");
+    expect(organizationJsonLd("https://x.test")).toMatchObject({
+      "@type": "Organization",
+      url: "https://x.test/",
+      logo: { "@type": "ImageObject", url: "https://x.test/nilecruz-icon.svg" },
+    });
+  });
+  it("llms.txt lists only built pages, with absolute links, and the read-only MCP address", () => {
+    const txt = llmsTxt("https://x.test");
+    expect(txt.startsWith("# Nilecruz\n")).toBe(true);
+    const links = [...txt.matchAll(/\]\((https:\/\/x\.test)(\/[^)]*)\)/g)].map((m) => m[2]!);
+    expect(links.length).toBeGreaterThan(10);
+    for (const l of links.filter((l) => l !== "/sitemap.xml")) expect(isBuilt(l), l).toBe(true);
+    expect(txt).toContain("https://x.test/api/mcp/");
+    for (const t of TOOLS) expect(txt).toContain(t.name);
   });
 });

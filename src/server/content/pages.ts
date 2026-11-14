@@ -23,12 +23,13 @@ type SanityArticle = {
   seoDescription?: string;
   sample?: boolean;
   reviewStatus?: "draft" | "approved";
+  _updatedAt?: string;
 };
 
 async function loadPage(id: string): Promise<EditorialPage | null> {
   try {
     const a = await fetchContent<SanityArticle | null>(
-      `*[_type == "article" && pageId == $id && language == "en"][0]{pageId, title, standfirst, upAnchor, body, faqs[]{question, answer}, seoTitle, seoDescription, sample, reviewStatus}`,
+      `*[_type == "article" && pageId == $id && language == "en"][0]{pageId, title, standfirst, upAnchor, body, faqs[]{question, answer}, seoTitle, seoDescription, sample, reviewStatus, _updatedAt}`,
       { id },
     );
     if (a)
@@ -43,6 +44,7 @@ async function loadPage(id: string): Promise<EditorialPage | null> {
         seoDescription: a.seoDescription,
         sample: a.sample ?? false,
         review: a.reviewStatus ?? "draft",
+        updatedAt: a._updatedAt,
       };
   } catch (e) {
     if (!(e instanceof ContentNotConfiguredError)) throw e;
@@ -50,7 +52,7 @@ async function loadPage(id: string): Promise<EditorialPage | null> {
   return DRAFT_PAGES[id] ?? null;
 }
 
-export const editorialPage = unstable_cache(loadPage, ["editorial-page-v1"], {
+export const editorialPage = unstable_cache(loadPage, ["editorial-page-v2"], {
   tags: [CONTENT_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

@@ -31,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${BLOG_TOPICS[topic].label} | Blog`,
     description: description(topic),
     noindex: !listIndexable(posts),
+    follow: true,
   });
 }
 

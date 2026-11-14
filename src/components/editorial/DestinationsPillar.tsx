@@ -292,10 +292,7 @@ export async function DestinationsPillar({
         </p>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript({ ...articleJsonLd(page, url), inLanguage: locale }) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(articleJsonLd(page, url, locale)) }} />
       {faqJsonLd(page) ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd(page)) }} />
       ) : null}

@@ -203,10 +203,7 @@ export async function VesselsPillar({ locale, all }: { locale: Locale; all: List
         </Button>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript({ ...articleJsonLd(page, url), inLanguage: locale }) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(articleJsonLd(page, url, locale)) }} />
       {faq ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faq) }} /> : null}
     </article>
   );
