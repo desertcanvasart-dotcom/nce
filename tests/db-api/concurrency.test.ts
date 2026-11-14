@@ -15,6 +15,7 @@ const ORG_A = "00000000-0000-4000-b000-00000000000a";
 const RUN = Date.now();
 const CUSTOMERS = 20;
 const CABINS = 3;
+const DELIVERIES = 8;
 
 let url = "";
 let anonKey = "";
@@ -151,6 +152,9 @@ afterAll(async () => {
   if (!service) return;
   const { data: made } = await service.from("reservations").select("id").eq("vessel_id", vesselId);
   for (const r of made ?? []) await service.from("notifications").delete().like("link", `%${r.id}%`);
+  const ids = (made ?? []).map((r) => r.id);
+  await service.from("commission_entries").delete().in("reservation_id", ids);
+  await service.from("payments").delete().in("reservation_id", ids);
   await service.from("reservations").delete().eq("vessel_id", vesselId);
   await service.from("offers").delete().eq("departure_id", departureId);
   for (const id of requestIds) await service.from("notifications").delete().like("link", `%${id}%`);
@@ -183,5 +187,37 @@ describe("no oversell under concurrency (DASH-OPR-021, ADR-084)", () => {
       .select("id", { count: "exact", head: true })
       .eq("departure_id", departureId);
     expect(count).toBe(CABINS);
+  }, 60_000);
+
+  // Stripe delivers a webhook at least once, and deliveries can overlap. The one that waits on the reservation's lock
+  // must find the payment the other recorded: 'duplicate', never 'refund' (which would send the money back while the
+  // reservation stays confirmed and paid).
+  it("the same card payment delivered many times at once is recorded once and never refunded", async () => {
+    const { data: waiting } = await service
+      .from("reservations")
+      .select("id, total_minor, currency")
+      .eq("departure_id", departureId)
+      .eq("status", "awaiting_payment");
+    expect(waiting).toHaveLength(CABINS);
+    for (const r of waiting!) {
+      const intent = `pi_race_${RUN}_${r.id}`;
+      const results = await Promise.all(
+        Array.from({ length: DELIVERIES }, () =>
+          service.rpc("service_card_payment", {
+            res: r.id,
+            session_id: `cs_race_${RUN}_${r.id}`,
+            intent,
+            amount: Number(r.total_minor),
+            cur: r.currency,
+          }),
+        ),
+      );
+      for (const x of results) expect(x.error).toBeNull();
+      expect(results.map((x) => x.data).sort()).toEqual(["recorded", ...Array<string>(DELIVERIES - 1).fill("duplicate")].sort());
+      const { data: paid } = await service.from("payments").select("status").eq("stripe_payment_intent_id", intent);
+      expect(paid).toEqual([{ status: "verified" }]);
+      const { data: after } = await service.from("reservations").select("status").eq("id", r.id).single();
+      expect(after!.status).toBe("confirmed");
+    }
   }, 60_000);
 });
