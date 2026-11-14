@@ -145,7 +145,7 @@ export async function GuideHub({ locale }: { locale: Locale }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: jsonLdScript({ ...articleJsonLd(page, absoluteUrl(locale, URL)), inLanguage: locale }),
+          __html: jsonLdScript(articleJsonLd(page, absoluteUrl(locale, URL), locale)),
         }}
       />
       {faq ? <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(faq) }} /> : null}

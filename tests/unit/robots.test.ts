@@ -12,10 +12,12 @@ describe("robots.txt (SEO-020)", () => {
   it("disallows private areas in production", async () => {
     vi.doMock("@/lib/env", () => ({ indexingAllowed: true, siteUrl: "https://nilecruz.com" }));
     const { default: robots } = await import("@/app/robots");
-    const rules = robots().rules as { disallow: string[] }[];
+    const rules = robots().rules as { allow: string[]; disallow: string[] }[];
     expect(rules[0]!.disallow).toEqual(
       expect.arrayContaining(["/dashboard/", "/account/", "/api/", "/mcp", "/dev/", "/studio/"]),
     );
+    // Vessel photos (share pictures, structured data) stay fetchable although they live under /api/.
+    expect(rules[0]!.allow).toContain("/api/vessel-files/");
     // SEO-019: and points crawlers at the sitemap index.
     expect(robots().sitemap).toBe("https://nilecruz.com/sitemap.xml");
   });

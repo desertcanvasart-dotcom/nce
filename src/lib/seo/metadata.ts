@@ -22,6 +22,8 @@ type PageMeta = {
   title: string;
   description?: string;
   noindex?: boolean;
+  /** A page kept out of search whose links should still be followed (a list too thin to index yet). */
+  follow?: boolean;
   /** The picture shown when the page is shared (path under the site, or absolute), with its size and alt text. */
   image?: { url: string; width: number; height: number; alt: string };
 };
@@ -47,7 +49,7 @@ export const SHARE_IMAGE = {
   alt: "Nilecruz: Nile cruises, explained",
 };
 
-export function pageMetadata({ locale, path, title, description, noindex, image = SHARE_IMAGE }: PageMeta): Metadata {
+export function pageMetadata({ locale, path, title, description, noindex, follow, image = SHARE_IMAGE }: PageMeta): Metadata {
   const translated = isTranslated(path, locale);
   const index = indexingAllowed && !noindex && translated;
   const self = absoluteUrl(locale, path);
@@ -57,7 +59,7 @@ export function pageMetadata({ locale, path, title, description, noindex, image 
     alternates: translated
       ? { canonical: self, languages: noindex ? undefined : hreflangAlternates(path) }
       : { canonical: absoluteUrl(routing.defaultLocale, path) },
-    robots: index ? { index: true, follow: true } : { index: false, follow: !noindex },
+    robots: index ? { index: true, follow: true } : { index: false, follow: follow ?? !noindex },
     openGraph: { title, description, url: self, siteName: "Nilecruz", locale, images: [image] },
     twitter: { card: "summary_large_image", title, description, images: [image] },
   };

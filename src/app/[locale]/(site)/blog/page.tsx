@@ -26,7 +26,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const posts = await blogPosts(locale);
-  return pageMetadata({ locale, path: BLOG_URL, title: TITLE, description: DESCRIPTION, noindex: !listIndexable(posts) });
+  return pageMetadata({
+    locale,
+    path: BLOG_URL,
+    title: TITLE,
+    description: DESCRIPTION,
+    noindex: !listIndexable(posts),
+    follow: true,
+  });
 }
 
 /** ADR-105: the blog index. Dated posts, newest first; evergreen advice lives in the guide. */

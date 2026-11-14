@@ -14,5 +14,6 @@ export async function generateSitemaps() {
 export default async function sitemap({ id }: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
   const locale = (await id) as Locale;
   if (!routing.locales.includes(locale)) return [];
-  return sitemapEntries(locale, await sitemapPaths());
+  const { paths, modified } = await sitemapPaths();
+  return sitemapEntries(locale, paths, undefined, modified);
 }

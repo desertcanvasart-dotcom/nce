@@ -21,6 +21,8 @@ export type EditorialPage = {
   sample: boolean;
   /** "draft" until Faris's team approves the copy: the page shows "Draft for review". */
   review: "draft" | "approved";
+  /** When the copy was last edited in Sanity (ISO). Absent for the drafts kept in the repository. */
+  updatedAt?: string;
 };
 
 /** Splits the standfirst at the [[up]] marker; without one, the link goes at the end. */

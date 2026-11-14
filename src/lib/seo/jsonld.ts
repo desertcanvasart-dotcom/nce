@@ -1,8 +1,24 @@
 /** Structured data for education pages (Batch 6): Article, FAQPage, and on home Organization and WebSite (SEO-028). */
 import { BLOG_TOPICS, type BlogPost } from "@/lib/content/blog";
 import type { EditorialPage } from "@/lib/content/editorial";
+import { siteUrl } from "@/lib/env";
+import { SHARE_IMAGE } from "./metadata";
 
-export function articleJsonLd(page: EditorialPage, url: string) {
+/** Nilecruz as publisher and author: its name, home page and logo, so an article can be tied to the organisation. */
+const organization = (site: string) => ({
+  "@type": "Organization",
+  name: "Nilecruz",
+  url: `${site}/`,
+  logo: { "@type": "ImageObject", url: `${site}/nilecruz-icon.svg` },
+});
+
+/**
+ * An education page. The language is the one the text is in (English unless the page is translated); the date is the
+ * last edit in Sanity, left out for copy that only lives in the repository.
+ */
+
+export function articleJsonLd(page: EditorialPage, url: string, language = "en") {
+  const publisher = organization(siteUrl);
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -10,17 +26,21 @@ export function articleJsonLd(page: EditorialPage, url: string) {
     description: page.seoDescription ?? page.standfirst.replace("[[up]]", "").trim(),
     url,
     mainEntityOfPage: url,
-    publisher: { "@type": "Organization", name: "Nilecruz" },
-    inLanguage: "en",
+    image: `${siteUrl}${SHARE_IMAGE.url}`,
+    dateModified: page.updatedAt,
+    author: publisher,
+    publisher,
+    inLanguage: language,
   };
 }
 
 /** ADR-105: a blog post, with its dates and byline (Nilecruz when no author is named). */
 export function blogPostingJsonLd(post: BlogPost, url: string, blogUrl: string) {
-  const publisher = { "@type": "Organization", name: "Nilecruz" };
+  const publisher = organization(siteUrl);
   return {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
+    image: `${siteUrl}${SHARE_IMAGE.url}`,
     headline: post.title,
     description: post.seoDescription ?? post.standfirst,
     url,
@@ -48,9 +68,7 @@ export function faqJsonLd(page: Pick<EditorialPage, "faqs">) {
 export function organizationJsonLd(site: string) {
   return {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Nilecruz",
-    url: `${site}/`,
+    ...organization(site),
     description: "A marketplace for Nile cruises that explains how vessels differ and what prices pay for.",
   };
 }
