@@ -73,6 +73,14 @@ beforeAll(async () => {
 afterAll(async () => {
   if (!service) return;
   await service.from("notifications").delete().in("user_id", userIds);
+  const { data: made } = await service.from("tour_orders").select("id").eq("tour_id", tourId);
+  await service
+    .from("tour_payments")
+    .delete()
+    .in(
+      "order_id",
+      (made ?? []).map((o) => o.id),
+    );
   await service.from("tour_orders").delete().eq("tour_id", tourId);
   for (const id of userIds) await service.auth.admin.deleteUser(id);
   await service.from("tours").delete().eq("id", tourId);
@@ -99,5 +107,36 @@ describe("shared tour starts under concurrency (ADR-097)", () => {
     for (const r of refused) expect(r.error!.code).toBe("23514");
     const { data: orders } = await service.from("tour_orders").select("ages").eq("rate_id", rateId).eq("starts_at", starts);
     expect((orders ?? []).reduce((n, o) => n + o.ages.length, 0)).toBe(6);
+  }, 60_000);
+
+  // The same rule as for cruise payments: a webhook delivered twice at once is 'duplicate', never 'refund'.
+  it("the same card payment delivered many times at once is recorded once and never refunded", async () => {
+    const { data: waiting } = await service
+      .from("tour_orders")
+      .select("id, total_minor, currency")
+      .eq("rate_id", rateId)
+      .eq("starts_at", starts)
+      .eq("status", "awaiting_payment");
+    expect(waiting).toHaveLength(2);
+    for (const o of waiting!) {
+      const intent = `pi_tour_race_${RUN}_${o.id}`;
+      const results = await Promise.all(
+        Array.from({ length: 8 }, () =>
+          service.rpc("service_tour_payment", {
+            target: o.id,
+            session_id: `cs_tour_race_${RUN}_${o.id}`,
+            intent,
+            amount: Number(o.total_minor),
+            cur: o.currency,
+          }),
+        ),
+      );
+      for (const x of results) expect(x.error).toBeNull();
+      expect(results.map((x) => x.data).sort()).toEqual(["recorded", ...Array<string>(7).fill("duplicate")].sort());
+      const { data: paid } = await service.from("tour_payments").select("status").eq("stripe_payment_intent_id", intent);
+      expect(paid).toEqual([{ status: "verified" }]);
+      const { data: after } = await service.from("tour_orders").select("status").eq("id", o.id).single();
+      expect(after!.status).toBe("confirmed");
+    }
   }, 60_000);
 });
