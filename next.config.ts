@@ -34,9 +34,12 @@ const nextConfig: NextConfig = {
   },
   reactStrictMode: true,
   // Our CSS is ~5 KB gzipped: inlining it removes every render-blocking stylesheet request (PERF-001, ADR-036).
+  // cssChunking "graph": a page gets close to only the CSS it imports. The default merged most of the site's into one
+  // chunk, inlined twice into every page, which put the home page over the LCP budget (ADR-114).
   // authInterrupts: forbidden() renders the 403 page for another role's workspace (ADR-067).
   experimental: {
     inlineCss: true,
+    cssChunking: "graph",
     authInterrupts: true,
     // Vessel photos are uploaded through a server action (admins only); the storage bucket allows 15 MB.
     serverActions: { bodySizeLimit: "16mb" },

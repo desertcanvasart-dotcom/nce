@@ -962,3 +962,13 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 - **Context:** Mövenpick gives separate resident rates. ADR-109 made the euro the only public selling currency.
 - **Decision:** a vessel may also show one "from" figure in Egyptian pounds, for Egyptians and foreign residents, under its euro price on its own page only (not on cards, search or structured data). Sightseeing is not included. It is shown only when approved and in date, and only catalogue admins set it. Everything else in ADR-109 stands.
 
+### ADR-114 Home page LCP back inside the budget (Proposed; 25 Nov 2026)
+- **Context:** the deployed gate (ADR-041) measured about 2.8 s on `/`, `/es/` and `/ja/` against 2.5 s; `/terms/` passed at 2.35 s. Three things added up:
+  - the default CSS chunking inlined most of the site's CSS into every page, twice (`<style>` and the React payload): the home page's HTML was about 85 KB compressed;
+  - the Cormorant italic (39 KB), used by one line far below the first screen, loaded with the page;
+  - the hero title fades in from `opacity: 0`, which Chrome doesn't count as painted until something repaints it.
+- **Decision:**
+  - `experimental.cssChunking: "graph"`. `inlineCss` stays: without it the pull-request Lighthouse check (devtools throttling) rose to about 5 s.
+  - The comparison's italic line has `content-visibility: auto`, so its font is asked for only near the screen. An end-to-end test checks it.
+  - The hero's fade starts at `opacity: 0.01`.
+- **Consequence:** under the gate's simulated throttling, run locally behind an HTTP/2 proxy with a server delay, the three pages fell from about 2.72–2.85 s to 2.42–2.53 s (median of 3). How far under or over 2.5 s depends on when the scripts land relative to the first paint, and the local setup differs from GitHub's runner by up to about 0.1 s. **The margin is thin: only a deployed run settles it.** The pull-request check's method (devtools throttling) improved from about 1.5 s to 0.95 s on `/`. Further savings would have to come from the font files or the JavaScript.

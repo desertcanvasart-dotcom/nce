@@ -67,9 +67,11 @@
   animation: rise var(--dur-3) var(--ease-river) both;
 }
 
+/* Starts just above 0: Chrome doesn't count text that fades in from 0 as painted until something repaints it, which
+   put the page's largest paint (LCP) after whatever file arrived late (PERF-001). Looks the same. */
 @keyframes rise {
   from {
-    opacity: 0;
+    opacity: 0.01;
     transform: translateY(16px);
   }
 
