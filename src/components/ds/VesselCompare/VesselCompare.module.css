@@ -103,6 +103,9 @@
 }
 
 .short {
+  /* Not laid out until near the screen, so the italic font file isn't part of the first load (PERF-001). */
+  content-visibility: auto;
+  contain-intrinsic-block-size: auto calc(var(--type-quote-line) * 1em);
   margin: 0;
   color: var(--ink-muted);
   font-family: var(--font-display);

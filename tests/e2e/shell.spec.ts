@@ -154,3 +154,17 @@ test("the error preview route is closed unless explicitly enabled", async ({ pag
   test.skip(process.env.ENABLE_DEV_ROUTES === "true", "only meaningful when dev routes are off");
   expect((await page.goto("/dev/error-preview/"))?.status()).toBe(404);
 });
+
+test("the home page's first load leaves the display italic for later (PERF-001, ADR-114)", async ({ page }) => {
+  await page.goto("/", { waitUntil: "networkidle" });
+  const italics = () =>
+    page.evaluate(async () => {
+      await document.fonts.ready;
+      return [...document.fonts].filter((f) => f.family.includes("Cormorant") && f.style === "italic" && f.status !== "unloaded")
+        .length;
+    });
+  expect(await italics()).toBe(0);
+  // The one line that uses it still gets it when it comes near the screen.
+  await page.locator('[role="tabpanel"] p').first().scrollIntoViewIfNeeded();
+  await expect.poll(italics).toBeGreaterThan(0);
+});
