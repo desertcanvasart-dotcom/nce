@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Media } from "@/components/ds/Media/Media";
 import { decksOf, type DeckLayout } from "@/lib/marketplace/deck-layout";
@@ -12,8 +12,8 @@ import styles from "./VesselPage.module.css";
 
 /**
  * Cabins and decks: a card per cabin type with its confirmed facts and photos only, above Nilecruz's deck plan.
- * Choosing a card (a button: mouse, touch or keyboard) lights its cabins up on the plan, and tapping a cabin on the
- * plan chooses its card. Without a drawn plan the cards come before the deck-by-deck schematic.
+ * Choosing a card (a button: mouse, touch or keyboard) lights its cabins up on the plan and goes there, and tapping a
+ * cabin on the plan chooses its card. Without a drawn plan the cards come before the deck-by-deck schematic.
  */
 export function CabinsAndDecks({
   cabins,
@@ -35,6 +35,18 @@ export function CabinsAndDecks({
   const list = (xs: string[]) => new Intl.ListFormat(tag, { type: "conjunction" }).format(xs);
   const drawn = layout ? drawnCabins(layout, cabins) : [];
   const onPlan = (c: VesselCabin) => !!c.code && drawn.some((d) => d.code === c.code);
+  const plan = useRef<HTMLDivElement>(null);
+  // The plan can be several screens below the cards: go to the first deck with this type, and take the focus with it so
+  // the keyboard and screen readers carry on from there.
+  const showOnPlan = (code: string) => {
+    const deck = layout && decksOf(layout, code)[0];
+    const decks = plan.current?.querySelectorAll<HTMLElement>("[data-deck]") ?? [];
+    const target = [...decks].find((d) => d.dataset.deck === deck);
+    if (!target) return;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.focus({ preventScroll: true });
+    target.scrollIntoView({ block: "center", behavior: still ? "auto" : "smooth" });
+  };
   // No deck schematic when the operator hasn't said which deck any cabin is on: nothing is drawn from guesses.
   const decksKnown = cabins.some((c) => c.deck !== UNKNOWN_DECK);
 
@@ -83,7 +95,10 @@ export function CabinsAndDecks({
                     type="button"
                     className={styles.showOnPlan}
                     aria-pressed={on}
-                    onClick={() => setPicked(on ? null : c.code!)}
+                    onClick={() => {
+                      setPicked(on ? null : c.code!);
+                      if (!on) showOnPlan(c.code!);
+                    }}
                   >
                     {on ? t("cabins.shown") : t("cabins.show")}
                   </button>
@@ -94,15 +109,17 @@ export function CabinsAndDecks({
         </ul>
       ) : null}
       {layout ? (
-        <DeckLayoutView
-          layout={layout}
-          original={original}
-          cabins={cabins}
-          maxGuests={maxGuests}
-          sharedSpaces={sharedSpaces}
-          picked={picked}
-          onPick={setPicked}
-        />
+        <div ref={plan}>
+          <DeckLayoutView
+            layout={layout}
+            original={original}
+            cabins={cabins}
+            maxGuests={maxGuests}
+            sharedSpaces={sharedSpaces}
+            picked={picked}
+            onPick={setPicked}
+          />
+        </div>
       ) : (
         <>
           {/* No drawn plan yet: the decks as a schematic, the operator's own plan to download when there is one. */}

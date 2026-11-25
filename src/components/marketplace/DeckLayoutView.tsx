@@ -148,7 +148,7 @@ export function DeckLayoutView({
           const clip = `${uid}-clip-${i}`;
           const hatch = `${uid}-hatch-${i}`;
           return (
-            <li key={d.name}>
+            <li key={d.name} data-deck={d.name} tabIndex={-1}>
               <h3>{t("deck.deck", { name: d.name })}</h3>
               <svg
                 viewBox={`0 0 ${DECK_W} 100`}
