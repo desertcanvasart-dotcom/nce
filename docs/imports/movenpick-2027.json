@@ -1498,7 +1498,296 @@
           "view": "Panoramic Nile view"
         }
       ],
-      "schedules": [],
+      "schedules": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Luxor East Bank",
+              "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "El Hegz village",
+              "description": "A day of sailing to El Hegz village, with dinner in the village."
+            },
+            {
+              "title": "El Kab and Edfu",
+              "description": "Visit El Kab, then sail to Edfu and visit the Temple of Horus. Sail on to Ramadi village for dinner."
+            },
+            {
+              "title": "Gebel El Silsila and Kom Ombo",
+              "description": "Explore Gebel El Silsila, then visit Kom Ombo Temple. Barbecue dinner on El Sheikh Fadl island."
+            },
+            {
+              "title": "Aswan",
+              "description": "Sail to Aswan. Breakfast and check-out, then visit the High Dam and Philae Temple."
+            }
+          ]
+        },
+        {
+          "code": "ASW-LXR-4",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 4,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Embark at noon and have lunch on board. Visit the High Dam and Philae Temple. Overnight near the Aswan Bridge."
+            },
+            {
+              "title": "Kom Ombo and Gebel El Silsila",
+              "description": "Visit Kom Ombo Temple, have lunch at Fares village and explore Gebel El Silsila. Dinner on Fawza island."
+            },
+            {
+              "title": "Edfu and El Kab",
+              "description": "Visit the Temple of Horus at Edfu, then the tombs at El Kab. Dinner and overnight at El Hegz village."
+            },
+            {
+              "title": "Luxor East Bank",
+              "description": "Sail to Luxor through the Esna lock and visit the Karnak and Luxor Temples."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "LXR-ASW-5",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 5,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Luxor East Bank",
+              "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank",
+              "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun. Sail to Esna."
+            },
+            {
+              "title": "El Kab",
+              "description": "Sail to El Kab and visit it, then continue to Edfu for the night."
+            },
+            {
+              "title": "Gebel El Silsila and Kom Ombo",
+              "description": "Sail to Gebel El Silsila and explore it, then continue to Kom Ombo and visit its temple. Sail on to El Sheikh Fadl island for the night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Sail to Aswan and visit the High Dam and Philae Temple, with a felucca ride in the afternoon."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "ASW-LXR-5",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 5,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Aswan",
+              "description": "Embark at noon and have lunch on board. Felucca ride in the afternoon. Overnight near the Aswan Bridge."
+            },
+            {
+              "title": "High Dam, Philae and Kom Ombo",
+              "description": "Visit the High Dam and Philae Temple, then sail to Kom Ombo and visit its temple. Overnight at Fares village."
+            },
+            {
+              "title": "Gebel El Silsila and Edfu",
+              "description": "Explore Gebel El Silsila, then sail to Edfu and visit the Temple of Horus."
+            },
+            {
+              "title": "El Kab and El Hegz",
+              "description": "Visit the tombs at El Kab, have lunch at El Hegz village and sail to Esna."
+            },
+            {
+              "title": "Luxor East Bank",
+              "description": "Sail to Luxor through the Esna lock and visit the Karnak and Luxor Temples."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "LXR-ASW-6",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 6,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Luxor East Bank",
+              "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank",
+              "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun. Sail to Esna."
+            },
+            {
+              "title": "El Kab",
+              "description": "Sail to El Kab and visit it, then continue to Edfu for the night."
+            },
+            {
+              "title": "Edfu and Ramadi village",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Ramadi village for a barbecue dinner."
+            },
+            {
+              "title": "Gebel El Silsila and Kom Ombo",
+              "description": "Sail to Gebel El Silsila and explore it, then continue to Kom Ombo and visit its temple. Sail on to El Sheikh Fadl island for the night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Sail to Aswan and visit the High Dam and Philae Temple, with a felucca ride in the afternoon."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "ASW-LXR-6",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 6,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Arrival in Aswan",
+              "description": "Visit the High Dam and Philae Temple straight from Aswan airport, with a packed lunch, then board. Overnight near the Aswan Bridge."
+            },
+            {
+              "title": "El Sheikh Fadl island",
+              "description": "Sail to El Sheikh Fadl island and spend the afternoon and night there."
+            },
+            {
+              "title": "Kom Ombo and Gebel El Silsila",
+              "description": "Sail to Kom Ombo and visit its temple, then continue to Gebel El Silsila to explore it. Overnight there."
+            },
+            {
+              "title": "Edfu and El Kab",
+              "description": "Sail to Edfu and visit the Temple of Horus. Continue to El Kab to visit it, then cross to El Hegz village for the night."
+            },
+            {
+              "title": "Esna and Luxor",
+              "description": "Sail to Esna, then on to Luxor, arriving in the evening."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "LXR-ASW-7",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 7,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Luxor",
+              "description": "Embark at noon. Overnight in Luxor."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut, the Colossi of Memnon and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+            },
+            {
+              "title": "Esna and El Hegz",
+              "description": "Sail to Esna and on to El Hegz village."
+            },
+            {
+              "title": "El Kab and Edfu",
+              "description": "Visit El Kab Temple, then sail to Edfu and visit the Temple of Horus. Continue to Ramadi village."
+            },
+            {
+              "title": "Gebel El Silsila and Kom Ombo",
+              "description": "Explore Gebel El Silsila, then visit Kom Ombo Temple. Sail on to El Sheikh Fadl island."
+            },
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Sail to Aswan and visit the High Dam and Philae Temple."
+            },
+            {
+              "title": "Aswan",
+              "description": "A free afternoon and the night in Aswan."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        },
+        {
+          "code": "ASW-LXR-7",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 7,
+          "sailing_period": "noon",
+          "on_request": true,
+          "days": [
+            {
+              "title": "Aswan",
+              "description": "Embark at noon and have lunch on board. Overnight near the Aswan Bridge."
+            },
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Visit the High Dam and Philae Temple. Overnight in Aswan."
+            },
+            {
+              "title": "El Sheikh Fadl island",
+              "description": "Sail to El Sheikh Fadl island and spend the afternoon and night there."
+            },
+            {
+              "title": "Kom Ombo and Gebel El Silsila",
+              "description": "Sail to Kom Ombo and visit its temple, then continue to Gebel El Silsila to explore it. Overnight there."
+            },
+            {
+              "title": "Edfu and El Kab",
+              "description": "Sail to Edfu and visit the Temple of Horus. Continue to El Kab to visit it, then cross to El Hegz village for the night."
+            },
+            {
+              "title": "Esna and Luxor",
+              "description": "Sail to Esna, then on to Luxor, arriving in the evening."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut, the Colossi of Memnon and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ]
+        }
+      ],
       "booking": "On request, no fixed dates (not Christmas or New Year): 4, 5, 6 or 7 nights from Luxor or Aswan, minimum 4. Sails with one suite booked. Check-in 12:00, check-out 08:00. Soft all-inclusive, local alcoholic and non-alcoholic drinks included."
     }
   ]

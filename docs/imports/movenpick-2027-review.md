@@ -119,13 +119,6 @@ Taken from the itinerary file each sheet links to on Google Drive and rewritten 
 - **Feddya** has no programme in these files. Its old six-night itinerary stays, inactive.
 - **The production database** has not been read.
 
-## Ask Mövenpick
-
-- Darakum's plan numbers two cabins 210 (one is probably 212).
-- Sun Ray's table says 21 king and 33 twin cabins; its plan shows 22 and 32.
-- Feddya's suite is "Superior" in one table and "Senior" in another.
-- The SS Misr seven-night programme has odd times on days 5 and 6 (a Friday "check-in" mid-cruise, dinner at 17:00).
-
 ## Applying to production
 
 Both are done; their backups are in `.import-backups/` on this branch. To report again:
@@ -162,4 +155,9 @@ Nine photos added by `scripts/add-movenpick-photos.ts`, ten with the exterior al
 
 - No photo for the Junior Upper Suite (none supplied under that name).
 - The files only say "Standard Cabin": a twin room was used for Superior, a king room for Deluxe.
-- Ask Mövenpick to confirm the suite photos show the real suites; the window views look edited.
+
+## Feddya programmes (added to staging, 25 November 2026)
+
+Eight on-request programmes, 4 to 7 nights in both directions, from Mövenpick's itinerary files (dated February 2024), replacing the inactive six-night placeholder. Noon embarkation. The page wording for a boat with no set dates ("On request") is a code change in this branch: deploy it before applying Feddya to production.
+
+- The 14-night files were not used: the fact sheet offers 4 to 7 nights only.

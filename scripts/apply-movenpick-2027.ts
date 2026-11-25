@@ -44,6 +44,8 @@ type Schedule = {
   sailing_days?: number[];
   periods?: [string, string][];
   departures?: string[];
+  /** No set dates or weekdays: the boat sails when booked. */
+  on_request?: boolean;
   days: { title: string; description: string }[];
 };
 type Vessel = {
@@ -83,7 +85,8 @@ const problems = vessels.flatMap((v) => {
   if (counted !== v.facts.cabin_count) p.push(`${v.slug}: cabin types add up to ${counted}, not ${v.facts.cabin_count}`);
   for (const s of v.schedules) {
     if (s.days.length !== s.nights + 1) p.push(`${v.slug}/${s.code}: ${s.days.length} days for ${s.nights} nights`);
-    if (!!s.departures === !!s.sailing_days) p.push(`${v.slug}/${s.code}: needs either dates or weekdays`);
+    if ([s.departures, s.sailing_days, s.on_request].filter(Boolean).length !== 1)
+      p.push(`${v.slug}/${s.code}: needs dates, weekdays or on request, one of them`);
     if (s.sailing_days && !s.periods?.length) p.push(`${v.slug}/${s.code}: weekdays without a season`);
   }
   const drawing = drawingOf(v.slug);
@@ -174,7 +177,7 @@ function reportOf(v: Vessel, e: Row | undefined): string {
   for (const s of v.schedules) {
     const x = e.schedules.find((t) => t.code === s.code);
     const dates = s.departures?.filter((d) => d > today);
-    const next = dates ? `${dates.length} dates` : `weekdays ${s.sailing_days!.join(",")}`;
+    const next = s.on_request ? "on request" : dates ? `${dates.length} dates` : `weekdays ${s.sailing_days!.join(",")}`;
     if (!x) lines.push(`itinerary ${s.code} added: ${s.days.length} days, ${next}`);
     else {
       lines.push(
