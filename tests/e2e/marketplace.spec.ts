@@ -63,9 +63,9 @@ test("/cruises/ lists vessels with guests, the Nilecruz score and the approved s
   await expect(mine).toContainText("Sample data");
   // No stars anywhere until verified reviews exist (ADR-009).
   await expect(mine.getByRole("img", { name: /out of 5/ })).toHaveCount(0);
-  // The seeded showcase ship is listed, information only, with no price (DASH-PUB-010).
+  // The seeded showcase ship is listed as request based, with no price (DASH-PUB-010).
   const showcase = card(page, "Sample Motor Ship One");
-  await expect(showcase).toContainText("Information only");
+  await expect(showcase).toContainText("Request based");
   await expect(showcase).not.toContainText("US$");
   // Indexable, with its own canonical; structured data: breadcrumbs and the item list, no ratings or offers.
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", /\/cruises\/$/);
@@ -122,7 +122,7 @@ test("ticking two vessels compares them side by side [DASH-PUB-004]", async ({ p
   await expect(table).toContainText("80/100");
   await expect(table).toContainText("Price on request");
   await expect(table).not.toContainText("US$");
-  await expect(table).toContainText("Information only");
+  await expect(table).toContainText("Request based");
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
 });
 
