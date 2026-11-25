@@ -144,7 +144,7 @@ describe("cards (BRAND-026, 028, ADR-025, DASH-PUB-010)", () => {
   it("keep the booking status apart from the price, and flag sample data", () => {
     const c = toCard(vessel({ bookable: false, sample: true, price: fromEur(112000) }));
     expect(c.price).toEqual({ from: { amount: 112000, currency: "EUR" } });
-    expect(c.badges?.map((b) => b.label)).toEqual(["Information only", "Sample data"]);
+    expect(c.badges?.map((b) => b.label)).toEqual(["Sample data"]);
   });
 });
 

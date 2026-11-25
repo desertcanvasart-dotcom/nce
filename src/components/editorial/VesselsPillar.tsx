@@ -149,11 +149,7 @@ export async function VesselsPillar({ locale, all }: { locale: Locale; all: List
         <p>{t("samples.intro")}</p>
         {samples.length ? (
           <ListingGrid
-            cards={samples.map((v) => {
-              // The heading and intro already say these can't be booked yet, so the card doesn't repeat it.
-              const card = toCard(v);
-              return { ...card, badges: card.badges?.filter((b) => b.label !== "Information only") };
-            })}
+            cards={samples.map(toCard)}
             why={Object.fromEntries(
               samples.map((v) => [
                 v.slug,

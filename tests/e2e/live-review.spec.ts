@@ -23,6 +23,6 @@ test("'Cruises you can book' only heads a row where every cruise can be booked; 
     const main = page.locator("main");
     await expect(main, url).not.toContainText(/\bten times\b|tenfold|obligatory|Silsileh|US\$/);
     const row = page.locator("section", { has: page.getByRole("heading", { name: "Cruises you can book" }) });
-    if (await row.count()) await expect(row, url).not.toContainText(/Information only|Booking unavailable through us/);
+    if (await row.count()) await expect(row, url).not.toContainText(/Request based|Booking unavailable through us/);
   }
 });

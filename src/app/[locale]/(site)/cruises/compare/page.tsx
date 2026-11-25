@@ -8,6 +8,7 @@ import styles from "@/components/marketplace/marketplace.module.css";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { compareSlugs } from "@/lib/marketplace/listing";
+import { sellsThroughUs } from "@/lib/marketplace/public-price";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { publicListing } from "@/server/marketplace/queries";
 
@@ -101,7 +102,13 @@ export default async function Compare({ params, searchParams }: Props) {
                     ? `Typically ${formatMoney(v.price.min, locale)}–${formatMoney(v.price.max, locale)} per person. Includes our margin. A guide, not a quote.`
                     : "Price on request",
               )}
-              {row("Booking", (v) => (v.bookable ? "Bookable on Nilecruz" : "Information only"))}
+              {row("Booking", (v) =>
+                v.bookable
+                  ? "Bookable on Nilecruz"
+                  : sellsThroughUs(v.booking)
+                    ? "Request based"
+                    : "Booking unavailable through us",
+              )}
               {row("Itineraries", (v) =>
                 v.itineraries.length ? (
                   <ul>

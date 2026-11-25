@@ -155,8 +155,9 @@ export const closingHeading = (shown: ListingVessel[]) =>
 export function toCard(v: ListingVessel): GridCard {
   const it = headlineItinerary(v);
   const badges: GridCard["badges"] = [];
-  // Booking status, apart from the price: a vessel that can't be booked online yet.
-  if (!v.bookable) badges.push({ label: "Information only", tone: "media" });
+  // Islam, 25 Nov 2026: no "Information only" tag. A boat with no public price that isn't booked online is tagged as
+  // sold on request; one we can't sell at all says so in its price line instead.
+  if (!v.bookable && !hasFigure(v.price) && sellsThroughUs(v.booking)) badges.push({ label: "Request based", tone: "media" });
   if (v.sample) badges.push({ label: "Sample data", tone: "accent", icon: "info" });
   return {
     slug: v.slug,
