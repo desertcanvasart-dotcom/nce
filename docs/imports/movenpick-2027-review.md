@@ -155,3 +155,11 @@ Euros per person per night, two sharing; sightseeing not included and sold separ
 | Feddya | Price on request | |
 
 Sightseeing can't yet be bought at reservation for these boats: there are no published sightseeing programmes, and the boats have no bookable rates.
+
+## Sun Ray photos (published 25 November 2026)
+
+Nine photos added by `scripts/add-movenpick-photos.ts`, ten with the exterior already there: restaurant, sun deck and reception in the gallery; Classic, Superior and Deluxe Cabins and Junior, Deluxe and Executive Suites on their cards. The originals and web copies are not in this repository.
+
+- No photo for the Junior Upper Suite (none supplied under that name).
+- The files only say "Standard Cabin": a twin room was used for Superior, a king room for Deluxe.
+- Ask Mövenpick to confirm the suite photos show the real suites; the window views look edited.
