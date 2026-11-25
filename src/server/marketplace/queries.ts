@@ -175,17 +175,17 @@ async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?:
 async function residentRow(db: NonNullable<ReturnType<typeof visitorDb>>, slug: string) {
   const { data, error } = await db
     .from("vessels")
-    .select("resident_from_minor, resident_price_basis, resident_price_valid_to, resident_price_approved")
+    .select("resident_from_minor, resident_pricing_basis, resident_pricing_valid_to, resident_pricing_approved")
     .eq("slug", slug)
     .in("visibility", ["published", "showcase"])
     .maybeSingle();
   if (error || !data) return null;
-  const basis = data.resident_price_basis;
+  const basis = data.resident_pricing_basis;
   return {
     amount: data.resident_from_minor === null ? null : Number(data.resident_from_minor),
     basis: basis === "per_person_per_night" || basis === "per_person_per_trip" ? basis : null,
-    validTo: data.resident_price_valid_to,
-    approved: data.resident_price_approved,
+    validTo: data.resident_pricing_valid_to,
+    approved: data.resident_pricing_approved,
   } as const;
 }
 /** The price the public sees: none at all for a vessel Nilecruz can't sell. */

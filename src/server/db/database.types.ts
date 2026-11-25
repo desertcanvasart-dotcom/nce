@@ -4598,9 +4598,9 @@ export type Database = {
           published_at: string | null;
           rate_display_after_request: Database["public"]["Enums"]["rate_display"];
           resident_from_minor: number | null;
-          resident_price_approved: boolean;
-          resident_price_basis: string | null;
-          resident_price_valid_to: string | null;
+          resident_pricing_approved: boolean;
+          resident_pricing_basis: string | null;
+          resident_pricing_valid_to: string | null;
           route_text: string | null;
           shared_spaces: string[];
           showcase_reason: string | null;
@@ -4658,9 +4658,9 @@ export type Database = {
           published_at?: string | null;
           rate_display_after_request?: Database["public"]["Enums"]["rate_display"];
           resident_from_minor?: number | null;
-          resident_price_approved?: boolean;
-          resident_price_basis?: string | null;
-          resident_price_valid_to?: string | null;
+          resident_pricing_approved?: boolean;
+          resident_pricing_basis?: string | null;
+          resident_pricing_valid_to?: string | null;
           route_text?: string | null;
           shared_spaces?: string[];
           showcase_reason?: string | null;
@@ -4718,9 +4718,9 @@ export type Database = {
           published_at?: string | null;
           rate_display_after_request?: Database["public"]["Enums"]["rate_display"];
           resident_from_minor?: number | null;
-          resident_price_approved?: boolean;
-          resident_price_basis?: string | null;
-          resident_price_valid_to?: string | null;
+          resident_pricing_approved?: boolean;
+          resident_pricing_basis?: string | null;
+          resident_pricing_valid_to?: string | null;
           route_text?: string | null;
           shared_spaces?: string[];
           showcase_reason?: string | null;

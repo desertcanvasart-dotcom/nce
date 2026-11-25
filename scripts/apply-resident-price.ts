@@ -46,7 +46,7 @@ async function run() {
   for (const b of BOATS) {
     const { data: v, error } = await db
       .from("vessels")
-      .select("id, name, resident_from_minor, resident_price_valid_to")
+      .select("id, name, resident_from_minor, resident_pricing_valid_to")
       .eq("slug", b.slug)
       .single();
     if (error) throw new Error(`${b.slug}: ${error.message} (is the migration applied to ${target}?)`);
@@ -57,9 +57,9 @@ async function run() {
       .from("vessels")
       .update({
         resident_from_minor: b.pounds * 100,
-        resident_price_basis: "per_person_per_night",
-        resident_price_valid_to: b.until,
-        resident_price_approved: true,
+        resident_pricing_basis: "per_person_per_night",
+        resident_pricing_valid_to: b.until,
+        resident_pricing_approved: true,
       })
       .eq("id", v.id);
     if (failed) throw new Error(`${b.slug}: ${failed.message}`);

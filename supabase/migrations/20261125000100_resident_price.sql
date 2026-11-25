@@ -3,12 +3,12 @@
 -- rates never live here. The euro stays the public price for everyone else. Idempotent.
 alter table public.vessels
   add column if not exists resident_from_minor bigint check (resident_from_minor > 0),
-  add column if not exists resident_price_basis text check (resident_price_basis in ('per_person_per_trip', 'per_person_per_night')),
-  add column if not exists resident_price_valid_to date,
-  add column if not exists resident_price_approved boolean not null default false;
+  add column if not exists resident_pricing_basis text check (resident_pricing_basis in ('per_person_per_trip', 'per_person_per_night')),
+  add column if not exists resident_pricing_valid_to date,
+  add column if not exists resident_pricing_approved boolean not null default false;
 alter table public.vessels drop constraint if exists vessels_resident_price_complete;
 alter table public.vessels add constraint vessels_resident_price_complete
-  check (resident_from_minor is null or resident_price_basis is not null);
+  check (resident_from_minor is null or resident_pricing_basis is not null);
 
 comment on column public.vessels.resident_from_minor is
   'Public "from" price for Egyptians and foreign residents, in piastres. Shown only when approved and in date.';
@@ -20,9 +20,9 @@ begin
   if app.is_catalogue_admin() or auth.uid() is null then
     return new;
   end if;
-  if row(new.resident_from_minor, new.resident_price_basis, new.resident_price_valid_to, new.resident_price_approved)
+  if row(new.resident_from_minor, new.resident_pricing_basis, new.resident_pricing_valid_to, new.resident_pricing_approved)
      is distinct from
-     row(old.resident_from_minor, old.resident_price_basis, old.resident_price_valid_to, old.resident_price_approved) then
+     row(old.resident_from_minor, old.resident_pricing_basis, old.resident_pricing_valid_to, old.resident_pricing_approved) then
     raise exception 'Only Nilecruz catalogue admins can change a vessel''s resident price' using errcode = '42501';
   end if;
   return new;
