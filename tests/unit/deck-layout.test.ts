@@ -12,7 +12,7 @@ const darakum = JSON.parse(
 ) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number }[] } };
 const hamees = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-hamees.json"), "utf8"),
-) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number; max_occupancy: number }[] } };
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number }[] } };
 const abbas = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-prince-abbas.json"), "utf8"),
 ) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number | null }[] } };
@@ -21,7 +21,7 @@ const lotus = JSON.parse(
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
 const sunRay = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-sun-ray.json"), "utf8"),
-) as { layout: unknown; uses_existing_cabin_types: string[] };
+) as { layout: unknown; cabin_types_needed: { types: { code: string; cabin_count: number }[] } };
 const misr = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/movenpick-ss-misr.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
@@ -87,14 +87,24 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
     expect(decksOf(layout, "SGL")).toEqual(["2"]);
   });
 
-  it("reads Sun Ray's drawing with its existing codes: Classic on deck 1, both suites on deck 4, not 'To be confirmed'", () => {
+  it("reads Sun Ray's drawing from the 2027 sheet: a deck per cabin grade, suites forward on 2, 3 and 4", () => {
     const layout = parseLayout(sunRay.layout)!;
+    const types = sunRay.cabin_types_needed.types;
     expect(layout.decks.map((d) => d.name)).toEqual(["Sun", "4", "3", "2", "1"]);
-    expect(layoutProblems(sunRay.layout, sunRay.uses_existing_cabin_types)).toEqual([]);
+    expect(
+      layoutProblems(
+        sunRay.layout,
+        types.map((t) => t.code),
+      ),
+    ).toEqual([]);
     expect(decksOf(layout, "CLASSIC")).toEqual(["1"]);
-    expect(decksOf(layout, "UPPER")).toEqual(["4", "3", "2"]);
-    expect(decksOf(layout, "JS")).toEqual(["4"]);
-    expect(decksOf(layout, "SS")).toEqual(["4"]);
+    expect(decksOf(layout, "UPPER")).toEqual(["2"]);
+    expect(decksOf(layout, "DLX")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "JS")).toEqual(["2"]);
+    expect(decksOf(layout, "SS")).toEqual(["3"]);
+    expect(decksOf(layout, "DS")).toEqual(["4"]);
+    expect(decksOf(layout, "ES")).toEqual(["4"]);
+    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(62);
   });
 
   it("reads Royal Lotus's drawing with the cabin types it already has: Deluxe on D, C and B, Royal Suites forward on B", () => {
@@ -125,7 +135,7 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
     ]);
   });
 
-  it("reads Hamees's drawing: decks A to E, 72 cabins and 142 guests as Mövenpick's fact sheet gives, no suites", () => {
+  it("reads Hamees's drawing from the 2027 sheet: decks A to E, 66 in all with two suites on each of B, C and D", () => {
     const layout = parseLayout(hamees.layout)!;
     const types = hamees.cabin_types_needed.types;
     expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);
@@ -135,14 +145,16 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
         types.map((t) => t.code),
       ),
     ).toEqual([]);
-    expect(decksOf(layout, "SUP")).toEqual(["D", "C"]);
-    expect(decksOf(layout, "STD")).toEqual(["B", "A"]);
-    expect(decksOf(layout, "SGL")).toEqual(["B"]);
-    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(72);
-    expect(types.reduce((n, t) => n + t.cabin_count * t.max_occupancy, 0)).toBe(142);
+    expect(decksOf(layout, "CLASSIC")).toEqual(["A"]);
+    expect(decksOf(layout, "SUP")).toEqual(["B"]);
+    expect(decksOf(layout, "DLX")).toEqual(["D", "C"]);
+    expect(decksOf(layout, "JS")).toEqual(["B"]);
+    expect(decksOf(layout, "DS")).toEqual(["C"]);
+    expect(decksOf(layout, "ES")).toEqual(["D"]);
+    expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(66);
   });
 
-  it("reads Darakum's drawing: five decks, its three cabin types where the plan puts them, 52 cabins in all", () => {
+  it("reads Darakum's drawing from the 2027 sheet: Junior Suites on 2, and 52 cabins and suites in all", () => {
     const layout = parseLayout(darakum.layout)!;
     const types = darakum.cabin_types_needed.types;
     expect(layout.decks.map((d) => d.name)).toEqual(["5", "4", "3", "2", "1"]);
@@ -152,8 +164,12 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
         types.map((t) => t.code),
       ),
     ).toEqual([]);
-    expect(decksOf(layout, "STD")).toEqual(["3", "2", "1"]);
-    expect(decksOf(layout, "SS")).toEqual(["4", "3"]);
+    expect(decksOf(layout, "CLASSIC")).toEqual(["1"]);
+    expect(decksOf(layout, "SUP")).toEqual(["2"]);
+    expect(decksOf(layout, "UPD")).toEqual(["3"]);
+    expect(decksOf(layout, "JS")).toEqual(["2"]);
+    expect(decksOf(layout, "SS")).toEqual(["3"]);
+    expect(decksOf(layout, "SST")).toEqual(["4"]);
     expect(decksOf(layout, "PS")).toEqual(["3"]);
     expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(52);
   });

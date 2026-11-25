@@ -548,6 +548,7 @@
       "noDays": "The operator hasn’t published the day-by-day programme yet.",
       "seeDates": "See this itinerary’s sailing dates on the calendar",
       "onDates": "On published dates",
+      "onRequest": "On request",
       "everyDay": "Every day",
       "daysAWeek": "{n} days a week",
       "sails": "Sails from {origin} {when}.",
@@ -698,6 +699,7 @@
       "intro": "These are expected dates based on the operator’s usual weekly sailings. Choose a date to see the route and length, or ask us to check it.",
       "introConfirmed": "Confirmed departures, and the operator’s usual weekly sailings where it has them. Choose a date to see the route and length.",
       "introUsual": "The operator’s usual weekly sailings. No dates are published yet, so ask us about the ones you want.",
+      "introRequest": "There are no set sailing dates: this boat sails on request.",
       "noneConfirmed": "No dates are confirmed for booking yet."
     },
     "faq": {
@@ -710,6 +712,7 @@
       "lengthLine": "{nights, plural, =1 {One} =2 {Two} =3 {Three} =4 {Four} =5 {Five} =6 {Six} =7 {Seven} other {#}}-night sailings leave {origin} for {destination} {days}",
       "lengthDays": "on {days}",
       "lengthDated": "on dates the operator publishes",
+      "lengthRequest": "Cruises of {nights} nights between {places}, on request: there are no set sailing dates.",
       "lengthA": "{lines}.",
       "lengthPattern": "These are the operator’s usual weekly days, so individual dates need confirming.",
       "cabinsQ": "How many cabins does it have?",

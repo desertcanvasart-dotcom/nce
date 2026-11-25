@@ -115,3 +115,32 @@ describe("a vessel that can't be booked through Nilecruz (Steam Ship Sudan)", ()
     for (const a of document.querySelectorAll("a")) expect(a.getAttribute("href") ?? "").not.toMatch(/\/(ask|reserve)\//);
   });
 });
+
+describe("a boat that sails on request (SB Feddya, 25 Nov 2026)", () => {
+  const boat = (sailings: VesselPage["itineraries"][number]["sailings"]) =>
+    vessel({
+      name: "Mövenpick SB Feddya",
+      showcase: false,
+      itineraries: [{ ...itinerary("LXR-ASW-4", "Luxor", "Aswan", 4), sailings }, itinerary("ASW-LXR-7", "Aswan", "Luxor", 7)],
+    });
+
+  it("says so once, instead of promising published or weekly dates", () => {
+    renderEn(<VesselView locale="en" v={boat([])} today="2026-11-25" />);
+    const text = document.body.textContent ?? "";
+    expect(text).toContain("Cruises of 4 and 7 nights between Luxor and Aswan, on request: there are no set sailing dates.");
+    expect(text).toContain("There are no set sailing dates: this boat sails on request.");
+    expect(text).toContain("On request");
+    expect(text).not.toMatch(/On published dates|dates the operator publishes|usual weekly sailings/);
+  });
+
+  it("keeps the dated wording once any of its cruises has a date", () => {
+    renderEn(
+      <VesselView
+        locale="en"
+        v={boat([{ id: "d", departsOn: "2027-01-04", returnsOn: "2027-01-08", status: "scheduled" }])}
+        today="2026-11-25"
+      />,
+    );
+    expect(document.body.textContent).not.toContain("there are no set sailing dates");
+  });
+});

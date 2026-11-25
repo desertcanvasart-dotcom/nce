@@ -549,6 +549,7 @@
       "noDays": "La naviera aún no ha publicado el programa día a día.",
       "seeDates": "Ver las fechas de este itinerario en el calendario",
       "onDates": "En las fechas publicadas",
+      "onRequest": "A petición",
       "everyDay": "Todos los días",
       "daysAWeek": "{n} días a la semana",
       "sails": "Zarpa de {origin} {when}.",
@@ -699,6 +700,7 @@
       "intro": "Son fechas previstas según las salidas semanales habituales de la naviera. Elige una fecha para ver la ruta y la duración, o pídenos que la comprobemos.",
       "introConfirmed": "Salidas confirmadas y, cuando las hay, las salidas semanales habituales de la naviera. Elige una fecha para ver la ruta y la duración.",
       "introUsual": "Las salidas semanales habituales de la naviera. Aún no hay fechas publicadas: pregúntanos por las que quieras.",
+      "introRequest": "No hay fechas de salida fijas: este barco navega a petición.",
       "noneConfirmed": "Aún no hay fechas confirmadas para reservar."
     },
     "faq": {
@@ -711,6 +713,7 @@
       "lengthLine": "Los cruceros de {nights, plural, =1 {una noche} =2 {dos noches} =3 {tres noches} =4 {cuatro noches} =5 {cinco noches} =6 {seis noches} =7 {siete noches} other {# noches}} salen de {origin} hacia {destination} {days}",
       "lengthDays": "{days}",
       "lengthDated": "en las fechas que publica la naviera",
+      "lengthRequest": "Cruceros de {nights} noches entre {places}, a petición: no hay fechas de salida fijas.",
       "lengthA": "{lines}.",
       "lengthPattern": "Son los días semanales habituales de la naviera, así que cada fecha debe confirmarse.",
       "cabinsQ": "¿Cuántos camarotes tiene?",

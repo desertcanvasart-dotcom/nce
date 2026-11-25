@@ -140,40 +140,200 @@
       "rename_from": "movenpick-ms-sun-ray",
       "name": "Mövenpick MS Sun Ray",
       "type": "motor",
-      "cabin_count": 66,
-      "shared_spaces": ["pool", "sun_deck", "dining_room", "lounge", "bar", "library"],
-      "summary": "A five-star Mövenpick cruiser with a grand lobby and 66 cabins and suites, among them two Junior and two Senior Suites, leaving Luxor on Thursdays and Aswan on Mondays.",
-      "description": "The Mövenpick MS Sun Ray (also written Sunray) is a five-star deluxe Nile cruise ship with an impressive high-ceilinged entrance lobby, spacious public areas and contemporary furnishings. Its cruises link Luxor, Edfu, Kom Ombo and Aswan, combining temple visits with a relaxed atmosphere on board.\n\nLower-deck Classic Cabins look out through two fixed portholes; upper-deck cabins have larger windows, some of which partly open. There are two suites in each of four categories: Junior, Superior, Deluxe and Executive.\n\nOn board: an outdoor pool and sun deck, a main restaurant and lounge bar, a reading room and a playroom.\n\nFour-night cruises usually leave Luxor on Thursdays and three-night cruises leave Aswan on Mondays, a different week from most other Mövenpick ships. This is the usual pattern, not live availability.",
-      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html", "https://movenpick.accor.com/en/africa/egypt/nilecruisers.html"],
-      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Cabins and suites from Mövenpick's fact sheet (2020): 60 outside cabins of 20 m², 2 singles of 15 m², 2 Junior Suites of 37 m² and 2 Senior Suites of 39 m², 66 in all; the website's other suite names are sales products. Confirm which rooms are the singles, and the 2027 calendar. Never copy Royal Lily's Monday/Friday schedule. Staging also has duplicate private records 'sunray' and 'movenpick-sunray-sun-ray'. Years (checked 6 November 2026): Year built 2003 per Cruising Journal (third party); no operator year found. Mövenpick took it over in October 2012.",
+      "cabin_count": 62,
+      "shared_spaces": ["sun_deck", "pool", "dining_room", "lounge", "bar", "library", "gym"],
+      "summary": "A five-star Mövenpick cruiser with 54 cabins and eight suites, leaving Luxor on Thursdays and Aswan on Mondays, with no sailings from June to August.",
+      "description": "The Mövenpick MS Sun Ray (also written Sunray) is a five-star deluxe Nile cruise ship with an impressive high-ceilinged entrance lobby, spacious public areas and contemporary furnishings. Its cruises link Luxor, Edfu, Kom Ombo and Aswan, combining temple visits with a relaxed atmosphere on board.\n\nThere are Classic Cabins on the water-level deck, Superior Cabins on the main deck and Deluxe Cabins above, with two suites in each of four categories: Junior, Junior Upper, Deluxe and Executive.\n\nOn board: an outdoor pool and sun deck, a main restaurant and lounge bar, a reading room and a playroom.\n\nFour-night cruises usually leave Luxor on Thursdays and three-night cruises leave Aswan on Mondays, a different week from most other Mövenpick ships. This is the usual pattern, not live availability.",
+      "source_urls": [
+        "https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-sun-ray.html",
+        "https://movenpick.accor.com/en/africa/egypt/nilecruisers.html"
+      ],
+      "verification_note": "Reservations: Cruise.Sunray@movenpick.com. Fact sheet 2027/28 (checked 25 November 2026): 62 in all: 54 cabins of 20 m² and 8 suites, no single cabins. The sheet's table says 21 king and 33 twin cabins; its plan shows 22 and 32: confirm.",
       "cabins": [
         {
           "code": "CLASSIC",
           "name": "Classic Cabin",
           "deck": "Deck 1",
-          "size_m2": 20,
-          "max_occupancy": 2,
-          "view": "Two fixed portholes (not opening)",
-          "balcony": false,
           "cabin_count": 8,
-          "amenities": ["Bathtub", "Hairdryer", "Air conditioning", "LED TV with satellite channels", "Espresso machine", "Tea and coffee", "Minibar", "Safe", "Telephone"],
-          "description": "Cabins of about 20 m² on the lower deck, facing the Nile through two fixed portholes, with a bathtub, espresso machine and satellite TV."
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the water-level deck, with a private bathroom with a bathtub."
         },
         {
           "code": "UPPER",
-          "name": "Upper-deck Cabin",
-          "deck": "Decks 2, 3 and 4",
+          "name": "Superior Cabin",
+          "deck": "Deck 2",
+          "cabin_count": 18,
           "size_m2": 20,
+          "bed_configuration": "King or twin",
           "max_occupancy": 2,
-          "view": "Large Nile-facing window, some partly opening",
           "balcony": false,
-          "cabin_count": 52,
-          "amenities": ["Air conditioning", "Television", "Minibar", "Safe"],
-          "description": "Cabins on the upper decks with larger Nile-facing windows, some partly opening, for a better view than the lower-deck portholes."
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the main deck, with a private bathroom with a bathtub."
         },
-        { "code": "JS", "name": "Junior Suite", "deck": "Deck 4", "size_m2": 37, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Junior Suites, with upgraded space and furnishings." },
-        { "code": "SS", "name": "Senior Suite", "deck": "Deck 4", "size_m2": 39, "max_occupancy": 2, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two Senior Suites, the ship’s largest, with a seating area." },
-        { "code": "SGL", "name": "Single Cabin", "size_m2": 15, "max_occupancy": 1, "balcony": false, "cabin_count": 2, "amenities": [], "description": "One of two single cabins of about 15 m²." }
+        {
+          "code": "DLX",
+          "name": "Deluxe Cabin",
+          "deck": "Decks 3 and 4",
+          "cabin_count": 28,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the upper and top decks, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "JS",
+          "name": "Junior Suite",
+          "deck": "Deck 2",
+          "cabin_count": 2,
+          "size_m2": 34.1,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 34 m² at the front of the main deck."
+        },
+        {
+          "code": "SS",
+          "name": "Junior Upper Suite",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 35.3,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 35 m² at the front of the upper deck."
+        },
+        {
+          "code": "DS",
+          "name": "Deluxe Suite",
+          "deck": "Deck 4",
+          "cabin_count": 2,
+          "size_m2": 37,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 37 m² at the front of the top deck."
+        },
+        {
+          "code": "ES",
+          "name": "Executive Suite",
+          "deck": "Deck 4",
+          "cabin_count": 2,
+          "size_m2": 39,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 39 m² on the top deck, the largest on board."
+        }
       ],
       "itineraries": [
         {
@@ -184,11 +344,26 @@
           "sailing_days": [4],
           "active": true,
           "days": [
-            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark in Luxor and visit Karnak and Luxor Temples." },
-            { "title": "Luxor West Bank", "description": "Visit the Valley of the Kings, Hatshepsut Temple and the West Bank, then sail to Esna." },
-            { "title": "Edfu and Kom Ombo", "description": "Visit Edfu Temple and Kom Ombo Temple, then sail to Aswan." },
-            { "title": "Aswan", "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, when included in the programme." },
-            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Embark in Luxor and visit Karnak and Luxor Temples."
+            },
+            {
+              "title": "Luxor West Bank",
+              "description": "Visit the Valley of the Kings, Hatshepsut Temple and the West Bank, then sail to Esna."
+            },
+            {
+              "title": "Edfu and Kom Ombo",
+              "description": "Visit Edfu Temple and Kom Ombo Temple, then sail to Aswan."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, when included in the programme."
+            },
+            {
+              "title": "Disembarkation in Aswan",
+              "description": "Breakfast and disembarkation."
+            }
           ]
         },
         {
@@ -199,10 +374,22 @@
           "sailing_days": [1],
           "active": true,
           "days": [
-            { "title": "Aswan", "description": "Embark in Aswan and go sightseeing." },
-            { "title": "Kom Ombo and Edfu", "description": "Visit the temples of Kom Ombo and Edfu, then sail north." },
-            { "title": "Luxor", "description": "Visit the sites of Luxor, as the operator's programme sets out." },
-            { "title": "Disembarkation in Luxor", "description": "Breakfast and disembarkation." }
+            {
+              "title": "Aswan",
+              "description": "Embark in Aswan and go sightseeing."
+            },
+            {
+              "title": "Kom Ombo and Edfu",
+              "description": "Visit the temples of Kom Ombo and Edfu, then sail north."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the sites of Luxor, as the operator's programme sets out."
+            },
+            {
+              "title": "Disembarkation in Luxor",
+              "description": "Breakfast and disembarkation."
+            }
           ]
         }
       ]
@@ -267,16 +454,119 @@
       "type": "steam",
       "cabin_count": 24,
       "year_built": 1918,
-      "shared_spaces": ["dining_room", "lounge", "bar", "sun_deck", "pool"],
+      "shared_spaces": ["sun_deck", "pool", "dining_room", "lounge", "bar"],
       "summary": "A historic royal-era steamer, built in 1918, with 16 cabins (two of them singles) and eight suites, sailing between Luxor and Aswan.",
       "description": "The Mövenpick SS Misr is a historic luxury Nile steamer with a royal-era atmosphere. Built in 1918 for the British Royal Navy and later converted into a luxury steamer associated with King Farouk, it recreates the golden age of river travel. Classic interiors and few cabins make it quite unlike a modern motor cruiser.\n\nThe ship is 63 m long and 13.8 m wide. It has 14 Outside Cabins of about 21 m², two Single Cabins of about 14.5 m² for travellers on their own (unusual on the Nile), six Suites of about 30 m² and two Panorama Suites of about 35 m².\n\nOn board: a main restaurant, a lounge and bar, a large sun deck with an outdoor pool, and elegant classic common rooms.\n\nFour-night cruises leave Luxor on Mondays on published dates; departures are selected dates, not a continuous weekly service.",
-      "source_urls": ["https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-misr.html", "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/b4n0/pdf-2024/msa_d_0000261.pdf"],
-      "verification_note": "Reservations: Cruise.Misr@movenpick.com. Height 11.75 m. Published departures are selected dates, not every week: add only confirmed 2027 dates. The three-night Aswan–Luxor programme was not imported (no day-by-day detail). Confirm Panorama Suite bedding and windows. Years (checked 6 November 2026): Built 1918 (Mövenpick's 2012 press release); converted to King Farouk's yacht in 1938. A restoration 'to her original drawings in 2006' is reported by a tour operator only: confirm before showing a renovation year.",
+      "source_urls": [
+        "https://movenpick.accor.com/en/africa/egypt/nilecruisers/cruise-misr.html",
+        "https://movenpick.accor.com/content/dam/brands/mov/hotels/africa/eg/nile-cruisers/b4n0/pdf-2024/msa_d_0000261.pdf"
+      ],
+      "verification_note": "Reservations: Cruise.Misr@movenpick.com. Height 11.75 m. The three-night Aswan–Luxor programme was not imported (no day-by-day detail). Confirm Panorama Suite bedding and windows. Years (checked 6 November 2026): Built 1918 (Mövenpick's 2012 press release); converted to King Farouk's yacht in 1938. A restoration 'to her original drawings in 2006' is reported by a tour operator only: confirm before showing a renovation year. Fact sheet 2027/28 (checked 25 November 2026): 2027 dates are the sheet's. The three-night Aswan–Luxor dates are in docs/imports/movenpick-2027.json until its day-by-day programme is in.",
       "cabins": [
-        { "code": "OUT", "name": "Outside Cabin", "size_m2": 21, "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 14, "amenities": [], "description": "Traditional-style cabins of about 21 m² with Nile views and historic character." },
-        { "code": "SGL", "name": "Single Cabin", "size_m2": 14.5, "max_occupancy": 1, "view": "Nile view", "balcony": false, "cabin_count": 2, "amenities": [], "description": "Two cabins of about 14.5 m² made for one traveller, a rare thing on a Nile cruise." },
-        { "code": "STE", "name": "Suite", "size_m2": 30, "max_occupancy": 2, "view": "Nile view", "balcony": false, "cabin_count": 6, "amenities": ["Living area"], "description": "Suites of about 30 m² with extra living space and refined, heritage-inspired furnishings." },
-        { "code": "PAN", "name": "Panorama Suite", "size_m2": 35, "max_occupancy": 2, "view": "Panoramic Nile view", "balcony": false, "cabin_count": 2, "amenities": ["Living area"], "description": "The two largest suites on board, about 35 m² each." }
+        {
+          "code": "OUT",
+          "name": "Outside Cabin",
+          "deck": "Decks 2, 3 and 4",
+          "cabin_count": 14,
+          "size_m2": 21,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 21 m², each with a private balcony over the Nile and a bathroom with a bathtub.",
+          "view": "Nile view"
+        },
+        {
+          "code": "SGL",
+          "name": "Single Cabin",
+          "deck": "Deck 2",
+          "cabin_count": 2,
+          "size_m2": 14.5,
+          "bed_configuration": "Single",
+          "max_occupancy": 1,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Two cabins of about 14.5 m² for one traveller, each with a private balcony.",
+          "view": "Nile view"
+        },
+        {
+          "code": "STE",
+          "name": "Senior Suite",
+          "deck": "Decks 3 and 4",
+          "cabin_count": 6,
+          "size_m2": 30,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Six suites of about 30 m², each with a private balcony, a sitting area with a sofa and a second television.",
+          "view": "Nile view"
+        },
+        {
+          "code": "PAN",
+          "name": "Panorama Suite",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 35,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 35 m² on the upper deck, each with a sitting area and a front panorama balcony.",
+          "view": "Panoramic Nile view"
+        }
       ],
       "itineraries": [
         {
@@ -284,14 +574,53 @@
           "origin": "Luxor",
           "destination": "Aswan",
           "nights": 4,
-          "sailing_days": [1],
+          "sailing_days": [],
           "active": true,
           "days": [
-            { "title": "Luxor: Karnak and Luxor Temples", "description": "Embark around midday, have lunch and visit Karnak and Luxor Temples. Dinner and overnight." },
-            { "title": "West Bank and Esna", "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple. Sail towards Esna, with a welcome reception and dinner on board." },
-            { "title": "Edfu", "description": "Visit the Temple of Horus at Edfu. Sail towards Kom Ombo for dinner and the night." },
-            { "title": "Kom Ombo and Aswan", "description": "Explore Kom Ombo Temple and sail to Aswan. Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca near Kitchener's Island." },
-            { "title": "Disembarkation in Aswan", "description": "Breakfast and disembarkation." }
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Embark around midday, have lunch and visit Karnak and Luxor Temples. Dinner and overnight."
+            },
+            {
+              "title": "West Bank and Esna",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple. Sail towards Esna, with a welcome reception and dinner on board."
+            },
+            {
+              "title": "Edfu",
+              "description": "Visit the Temple of Horus at Edfu. Sail towards Kom Ombo for dinner and the night."
+            },
+            {
+              "title": "Kom Ombo and Aswan",
+              "description": "Explore Kom Ombo Temple and sail to Aswan. Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca near Kitchener's Island."
+            },
+            {
+              "title": "Disembarkation in Aswan",
+              "description": "Breakfast and disembarkation."
+            }
+          ],
+          "departures": [
+            "2027-01-04",
+            "2027-01-11",
+            "2027-02-08",
+            "2027-03-15",
+            "2027-04-12",
+            "2027-04-26",
+            "2027-05-03",
+            "2027-05-10",
+            "2027-05-17",
+            "2027-05-24",
+            "2027-09-06",
+            "2027-09-13",
+            "2027-09-20",
+            "2027-09-27",
+            "2027-10-04",
+            "2027-10-11",
+            "2027-10-18",
+            "2027-11-29",
+            "2027-12-06",
+            "2027-12-13",
+            "2027-12-20",
+            "2027-12-27"
           ]
         }
       ]

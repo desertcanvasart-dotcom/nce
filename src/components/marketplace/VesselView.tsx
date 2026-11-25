@@ -213,6 +213,9 @@ export function VesselView({
   ).filter(([, xs]) => xs.length);
   const anyDays = its.some((i) => i.days.length);
   const confirmed = its.some((i) => i.sailings.some((s) => s.status === "scheduled"));
+  // No usual weekdays and no dates: the boat sails when booked (a dahabiya such as SB Feddya).
+  const sailsOnRequest = (i: (typeof its)[number]) => !i.sailingDays.length && !i.sailings.length;
+  const onRequest = its.length > 0 && its.every(sailsOnRequest);
   // The calendar draws usual weekdays without a period for the coming year, as expected dates.
   const calendarIts = withUsualYear(its, today);
   const linked = (text: string) => {
@@ -269,7 +272,17 @@ export function VesselView({
         ? t("faq.bookYes")
         : t("faq.bookNo"),
   });
-  if (its.length) {
+  if (onRequest) {
+    // One sentence for all of them: a line per itinerary would repeat "on request" for each length and direction.
+    const lengths = nightsOf(its).map(String);
+    faqs.push({
+      q: t("faq.lengthQ"),
+      a: t("faq.lengthRequest", {
+        nights: locale === "ja" ? lengths.join("・") : w.list(lengths),
+        places: w.list([...new Set(its.flatMap((i) => [i.origin, i.destination]))].map(w.place)),
+      }),
+    });
+  } else if (its.length) {
     // "Four-night sailings leave Luxor for Aswan on Mondays, and three-night sailings leave Aswan …": longest first.
     const lines = [...its]
       .sort((a, b) => b.nights - a.nights)
@@ -549,7 +562,7 @@ export function VesselView({
                 nights: formatNights(i.nights, locale),
                 route: `${w.place(i.origin)} → ${w.place(i.destination)}`,
                 when: !i.sailingDays.length
-                  ? t("itinerary.onDates")
+                  ? t(sailsOnRequest(i) ? "itinerary.onRequest" : "itinerary.onDates")
                   : i.sailingDays.length === 7
                     ? t("itinerary.everyDay")
                     : i.sailingDays.length < 3
@@ -741,13 +754,15 @@ export function VesselView({
           <p>
             {!sold
               ? t("booking.datesIntro")
-              : confirmed
-                ? t("dates.introConfirmed")
-                : calendarSailings(calendarIts, today).length
-                  ? t("dates.intro")
-                  : t("dates.introUsual")}
+              : onRequest
+                ? t("dates.introRequest")
+                : confirmed
+                  ? t("dates.introConfirmed")
+                  : calendarSailings(calendarIts, today).length
+                    ? t("dates.intro")
+                    : t("dates.introUsual")}
           </p>
-          {!confirmed && sold ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
+          {!confirmed && sold && !onRequest ? <p className={styles.callout}>{t("dates.noneConfirmed")}</p> : null}
           <SailingCalendar
             // Direction is worked out on the English names; the visitor reads the places in their language.
             sailings={calendarSailings(calendarIts, today).map((s) => ({

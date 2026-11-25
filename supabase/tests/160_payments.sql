@@ -57,7 +57,9 @@ select throws_ok($$update public.reservations set payment_due_at = now() + inter
 insert into public.premium_periods (name, starts_on, ends_on) values ('Test period', current_date + 35, current_date + 45);
 select ok((select payment_due_at = (select due_at from app.payment_deadline(booked_on, current_date + 40)) is false or deadline_rule <> 'premium'
   from public.reservations where id = (select v::uuid from t where k = 'res1')), 'a new premium period doesn''t change an existing reservation');
-select is((select rule from app.payment_deadline(current_date, current_date + 40)), 'premium', 'but applies to new bookings');
+-- A fixed June window: 40 days from today can fall at Christmas, where the festive rule outranks a premium period.
+insert into public.premium_periods (name, starts_on, ends_on) values ('Test period in June', '2030-06-10', '2030-06-20');
+select is((select rule from app.payment_deadline(current_date, '2030-06-15')), 'premium', 'but applies to new bookings');
 select is((select rule from app.payment_deadline('2026-10-18', '2027-03-25')), 'premium', 'Western Easter 2027 is a premium period');
 select is((select due_on from app.payment_deadline('2027-06-01', '2027-06-05')), '2027-06-04'::date, 'never later than the day before departure');
 
