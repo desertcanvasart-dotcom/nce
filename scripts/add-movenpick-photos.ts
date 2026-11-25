@@ -3,7 +3,7 @@
  * counting those already there). Web-sized copies are read from --photos=<folder>; the originals are not in this
  * repository. A cabin type's photo shows on its card, the others in the gallery, after what is already there.
  *
- *   tsx scripts/add-movenpick-photos.ts --boat=sun-ray|darakum --photos=<folder> --target=staging            report only
+ *   tsx scripts/add-movenpick-photos.ts --boat=sun-ray|darakum|hamees|ss-misr --photos=<folder> --target=staging            report only
  *   tsx scripts/add-movenpick-photos.ts --boat=… --photos=<folder> --apply --target=staging
  *
  * Production also needs --confirm-production. Running it again adds nothing twice.
@@ -17,6 +17,7 @@ import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
 const CREDIT = "Mövenpick Nile Cruises";
+const LIMITS: Record<string, number> = { "ss-misr": 12 };
 const LIMIT = 10;
 
 const alt = (en: string, es: string, ja: string) => ({ en, es, ja });
@@ -35,6 +36,8 @@ const named = (name: string) => ({
 });
 const sunRay = named("Mövenpick MS Sun Ray");
 const darakum = named("Mövenpick MS Darakum");
+const hamees = named("Mövenpick MS Hamees");
+const misr = named("Mövenpick SS Misr");
 
 // A cabin type with no photo had none supplied that could be told apart: Sun Ray's Junior Upper Suite; Darakum's Water
 // Level Cabin and Top Deck Senior Suite.
@@ -49,6 +52,33 @@ const BOATS: Record<string, Photo[]> = {
     sunRay.cabin("junior-suite.jpg", "JS", "Junior Suite", "Junior Suite", "ジュニアスイート"),
     sunRay.cabin("deluxe-suite.jpg", "DS", "Deluxe Suite", "Deluxe Suite", "デラックススイート"),
     sunRay.cabin("executive-suite.jpg", "ES", "Executive Suite", "Executive Suite", "エグゼクティブスイート"),
+  ],
+  hamees: [
+    hamees.room("restaurant.jpg", "restaurant", "restaurante", "レストラン"),
+    hamees.room("sun-deck.jpg", "sun deck and pool", "cubierta solar y piscina", "サンデッキとプール"),
+    hamees.room("reception.jpg", "reception lobby", "vestíbulo de recepción", "レセプションロビー"),
+    hamees.cabin("classic-cabin.jpg", "CLASSIC", "Classic Cabin", "camarote Classic", "クラシックキャビン"),
+    hamees.cabin("superior-cabin.jpg", "SUP", "Superior Cabin", "camarote Superior", "スーペリアキャビン"),
+    hamees.cabin("deluxe-cabin.jpg", "DLX", "Deluxe Cabin", "camarote Deluxe", "デラックスキャビン"),
+    hamees.cabin("junior-suite.jpg", "JS", "Junior Suite", "Junior Suite", "ジュニアスイート"),
+    hamees.cabin("deluxe-suite.jpg", "DS", "Deluxe Suite", "Deluxe Suite", "デラックススイート"),
+    hamees.cabin("executive-suite.jpg", "ES", "Executive Suite", "Executive Suite", "エグゼクティブスイート"),
+  ],
+  // No cabin photos were supplied for SS Misr. Islam: up to 12 for this boat, two of them of the engine.
+  "ss-misr": [
+    misr.room("exterior.jpg", "on the Nile", "en el Nilo", "ナイル川を行く船"),
+    misr.room("exterior-above.jpg", "seen from above", "vista desde arriba", "上空から見た船"),
+    misr.room("engine-telegraph.jpg", "the engine room telegraph", "el telégrafo de la sala de máquinas", "機関室のテレグラフ"),
+    misr.room(
+      "engine-room.jpg",
+      "an engineer among the brass fittings of the engine room",
+      "un maquinista entre los latones de la sala de máquinas",
+      "真鍮の機器が並ぶ機関室と機関士",
+    ),
+    misr.room("lounge-bar.jpg", "lounge bar", "bar salón", "ラウンジバー"),
+    misr.room("reception.jpg", "reception lounge", "salón de recepción", "レセプションラウンジ"),
+    misr.room("dining.jpg", "a table set beside the river", "una mesa puesta junto al río", "川辺に整えられたテーブル"),
+    misr.room("sun-deck.jpg", "seating on the sun deck", "zona de asientos en la cubierta solar", "サンデッキの座席"),
   ],
   darakum: [
     darakum.room("exterior.jpg", "on the Nile", "en el Nilo", "ナイル川を行く船"),
@@ -116,8 +146,9 @@ async function run() {
   )!;
   const path = (file: string) => `vessels/${v.id}/2027-${file}`;
   const fresh = PHOTOS.filter((p) => !v.media.some((m) => m.storage_path === path(p.file)));
-  if (v.media.length + fresh.length > LIMIT)
-    throw new Error(`${v.media.length} there + ${fresh.length} new is over the limit of ${LIMIT}.`);
+  const limit = LIMITS[boat] ?? LIMIT;
+  if (v.media.length + fresh.length > limit)
+    throw new Error(`${v.media.length} there + ${fresh.length} new is over the limit of ${limit}.`);
   for (const p of PHOTOS)
     if (p.cabin && !v.cabin_types.some((c) => c.code === p.cabin)) throw new Error(`No cabin type ${p.cabin}.`);
   console.log(`${target}: ${v.name} has ${v.media.length} photos; ${fresh.length} to add`);
