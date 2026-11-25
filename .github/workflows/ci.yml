@@ -121,7 +121,14 @@ jobs:
       - name: Install Arial (as desktop browsers have it)
         run: |
           echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | sudo debconf-set-selections
-          sudo apt-get update -qq && sudo apt-get install -y -qq ttf-mscorefonts-installer && fc-cache -f
+          sudo apt-get update -qq
+          # The installer downloads each font from a SourceForge mirror; one failed download breaks the install, so retry.
+          for attempt in 1 2 3 4; do
+            sudo apt-get install -y -qq --reinstall ttf-mscorefonts-installer && break
+            sleep 20
+          done
+          fc-cache -f
+          fc-list | grep -qi 'arial\.ttf' || { echo "Arial is not installed: Lighthouse would measure the wrong layout."; exit 1; }
       - run: pnpm with-local-db pnpm build
       - run: pnpm with-local-db pnpm lhci
       - uses: actions/upload-artifact@v7
