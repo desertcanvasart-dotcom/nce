@@ -1018,6 +1018,8 @@
     "basisTripNights": "Por persona, para el crucero de {n} noches.",
     "basisTripRoute": "Por persona, para el crucero de {n} noches de {origin} a {destination}.",
     "basisNight": "Por persona y noche.",
+    "residentNight": "Para egipcios y extranjeros residentes: desde {price} por persona y noche. Visitas no incluidas. Una orientación, no un presupuesto.",
+    "residentTrip": "Para egipcios y extranjeros residentes: desde {price} por persona y viaje. Visitas no incluidas. Una orientación, no un presupuesto.",
     "checked": "Última comprobación: {date}.",
     "policy": "Todos los precios que publicamos y presupuestamos ya incluyen nuestro margen.",
     "onRequestNote": "Aún no publicamos un precio para este crucero. Consulta las tarifas para tus fechas y te enviaremos tu oferta por correo electrónico.",

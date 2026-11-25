@@ -85,6 +85,24 @@ export function publicPrice(d: PublicPriceData | null | undefined, today: string
   return { mode: "price_band", min: eur(d.priceBandMin), max: eur(d.priceBandMax), ...common };
 }
 
+/**
+ * The Egyptian-pound starting price for Egyptians and foreign residents (ADR-113): the one public figure that isn't in
+ * euros. Like the euro price, shown only when approved, in date and with its basis.
+ */
+export type ResidentPriceData = {
+  amount: number | null;
+  basis: PriceBasis | null;
+  validTo: string | null;
+  approved: boolean;
+};
+export type ResidentPrice = { from: Money; basis: PriceBasis };
+
+export function residentPrice(d: ResidentPriceData | null | undefined, today: string): ResidentPrice | null {
+  if (!d?.approved || !d.basis || !d.amount || d.amount <= 0) return null;
+  if (d.validTo && d.validTo < today) return null;
+  return { from: { amount: d.amount, currency: "EGP" }, basis: d.basis };
+}
+
 export const hasFigure = (p: PublicPrice | undefined): p is Exclude<PublicPrice, { mode: "on_request" }> =>
   !!p && p.mode !== "on_request";
 
