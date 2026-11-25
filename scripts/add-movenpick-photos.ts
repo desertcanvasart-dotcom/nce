@@ -1,10 +1,10 @@
 /**
- * Sun Ray photos (Islam, 25 November 2026: cabins of each type, restaurant, sun deck, reception; at most 10 per boat,
+ * Mövenpick photos (Islam, 25 November 2026: cabins of each type, restaurant, sun deck, reception; at most 10 per boat,
  * counting those already there). Web-sized copies are read from --photos=<folder>; the originals are not in this
  * repository. A cabin type's photo shows on its card, the others in the gallery, after what is already there.
  *
- *   tsx scripts/add-movenpick-photos.ts --photos=<folder> --target=staging            report only
- *   tsx scripts/add-movenpick-photos.ts --photos=<folder> --apply --target=staging
+ *   tsx scripts/add-movenpick-photos.ts --boat=sun-ray|darakum --photos=<folder> --target=staging            report only
+ *   tsx scripts/add-movenpick-photos.ts --boat=… --photos=<folder> --apply --target=staging
  *
  * Production also needs --confirm-production. Running it again adds nothing twice.
  */
@@ -16,38 +16,63 @@ import type { Database } from "../src/server/db/database.types";
 import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
-const SLUG = "movenpick-sun-ray";
 const CREDIT = "Mövenpick Nile Cruises";
 const LIMIT = 10;
 
 const alt = (en: string, es: string, ja: string) => ({ en, es, ja });
-const NAME = "Mövenpick MS Sun Ray";
-const cabin = (file: string, code: string, en: string, es: string, ja: string) => ({
-  file,
-  cabin: code,
-  alt: alt(`${NAME}: ${en}`, `${NAME}: ${es}`, `${NAME}：${ja}`),
+type Photo = { file: string; cabin: string | null; alt: { en: string; es: string; ja: string } };
+const named = (name: string) => ({
+  cabin: (file: string, code: string, en: string, es: string, ja: string): Photo => ({
+    file,
+    cabin: code,
+    alt: alt(`${name}: ${en}`, `${name}: ${es}`, `${name}：${ja}`),
+  }),
+  room: (file: string, en: string, es: string, ja: string): Photo => ({
+    file,
+    cabin: null,
+    alt: alt(`${name}: ${en}`, `${name}: ${es}`, `${name}：${ja}`),
+  }),
 });
-const room = (file: string, en: string, es: string, ja: string) => ({
-  file,
-  cabin: null,
-  alt: alt(`${NAME}: ${en}`, `${NAME}: ${es}`, `${NAME}：${ja}`),
-});
-// The Junior Upper Suite has no photo: none of the supplied files is labelled as one.
-const PHOTOS = [
-  room("restaurant.jpg", "restaurant", "restaurante", "レストラン"),
-  room("sun-deck.jpg", "sun deck and pool", "cubierta solar y piscina", "サンデッキとプール"),
-  room("reception.jpg", "reception", "recepción", "レセプション"),
-  cabin("classic-cabin.jpg", "CLASSIC", "Classic Cabin", "camarote Classic", "クラシックキャビン"),
-  cabin("superior-cabin.jpg", "UPPER", "Superior Cabin", "camarote Superior", "スーペリアキャビン"),
-  cabin("deluxe-cabin.jpg", "DLX", "Deluxe Cabin", "camarote Deluxe", "デラックスキャビン"),
-  cabin("junior-suite.jpg", "JS", "Junior Suite", "Junior Suite", "ジュニアスイート"),
-  cabin("deluxe-suite.jpg", "DS", "Deluxe Suite", "Deluxe Suite", "デラックススイート"),
-  cabin("executive-suite.jpg", "ES", "Executive Suite", "Executive Suite", "エグゼクティブスイート"),
-];
+const sunRay = named("Mövenpick MS Sun Ray");
+const darakum = named("Mövenpick MS Darakum");
+
+// A cabin type with no photo had none supplied that could be told apart: Sun Ray's Junior Upper Suite; Darakum's Water
+// Level Cabin and Top Deck Senior Suite.
+const BOATS: Record<string, Photo[]> = {
+  "sun-ray": [
+    sunRay.room("restaurant.jpg", "restaurant", "restaurante", "レストラン"),
+    sunRay.room("sun-deck.jpg", "sun deck and pool", "cubierta solar y piscina", "サンデッキとプール"),
+    sunRay.room("reception.jpg", "reception", "recepción", "レセプション"),
+    sunRay.cabin("classic-cabin.jpg", "CLASSIC", "Classic Cabin", "camarote Classic", "クラシックキャビン"),
+    sunRay.cabin("superior-cabin.jpg", "UPPER", "Superior Cabin", "camarote Superior", "スーペリアキャビン"),
+    sunRay.cabin("deluxe-cabin.jpg", "DLX", "Deluxe Cabin", "camarote Deluxe", "デラックスキャビン"),
+    sunRay.cabin("junior-suite.jpg", "JS", "Junior Suite", "Junior Suite", "ジュニアスイート"),
+    sunRay.cabin("deluxe-suite.jpg", "DS", "Deluxe Suite", "Deluxe Suite", "デラックススイート"),
+    sunRay.cabin("executive-suite.jpg", "ES", "Executive Suite", "Executive Suite", "エグゼクティブスイート"),
+  ],
+  darakum: [
+    darakum.room("exterior.jpg", "on the Nile", "en el Nilo", "ナイル川を行く船"),
+    darakum.room("restaurant.jpg", "restaurant", "restaurante", "レストラン"),
+    darakum.room("sun-deck.jpg", "sun deck and pool", "cubierta solar y piscina", "サンデッキとプール"),
+    darakum.room("reception.jpg", "reception lobby", "vestíbulo de recepción", "レセプションロビー"),
+    darakum.cabin("main-deck-cabin.jpg", "SUP", "Main Deck Cabin", "camarote de la cubierta principal", "メインデッキキャビン"),
+    darakum.cabin(
+      "upper-deck-cabin.jpg",
+      "UPD",
+      "Upper Deck Cabin",
+      "camarote de la cubierta superior",
+      "アッパーデッキキャビン",
+    ),
+    darakum.cabin("junior-suite.jpg", "JS", "Junior Suite", "Junior Suite", "ジュニアスイート"),
+    darakum.cabin("senior-suite.jpg", "SS", "Senior Suite", "Senior Suite", "シニアスイート"),
+    darakum.cabin("panorama-suite.jpg", "PS", "Panorama Suite", "Panorama Suite", "パノラマスイート"),
+  ],
+};
 
 const args = process.argv.slice(2);
 const apply = args.includes("--apply");
 const target = args.find((a) => a.startsWith("--target="))?.split("=")[1];
+const boat = args.find((a) => a.startsWith("--boat="))?.split("=")[1] ?? "";
 const folder = args.find((a) => a.startsWith("--photos="))?.slice("--photos=".length);
 
 function connect() {
@@ -78,13 +103,16 @@ const must = <T>(r: { data: T; error: { message: string } | null }, what: string
 };
 
 async function run() {
+  const PHOTOS = BOATS[boat];
+  if (!PHOTOS) throw new Error(`--boat must be one of: ${Object.keys(BOATS).join(", ")}.`);
+  const slug = `movenpick-${boat}`;
   if (!folder) throw new Error("--photos=<folder> is needed.");
   const missing = PHOTOS.filter((p) => !existsSync(join(folder, p.file)));
   if (missing.length) throw new Error(`Missing photos: ${missing.map((p) => p.file).join(", ")}`);
   const db = connect();
   const v = must(
-    await db.from("vessels").select("id, name, cabin_types(id, code), media(storage_path, sort_order)").eq("slug", SLUG).single(),
-    SLUG,
+    await db.from("vessels").select("id, name, cabin_types(id, code), media(storage_path, sort_order)").eq("slug", slug).single(),
+    slug,
   )!;
   const path = (file: string) => `vessels/${v.id}/2027-${file}`;
   const fresh = PHOTOS.filter((p) => !v.media.some((m) => m.storage_path === path(p.file)));
