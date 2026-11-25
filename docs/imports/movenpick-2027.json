@@ -1,0 +1,1505 @@
+{
+  "source": "Mövenpick's 2027/28 fact sheets and the itinerary files they link to, checked 25 November 2026. Rates deliberately left out. Applied by scripts/apply-movenpick-2027.ts.",
+  "vessels": [
+    {
+      "slug": "movenpick-darakum",
+      "facts": {
+        "cabin_count": 52,
+        "length_m": 72,
+        "beam_m": 15,
+        "deck_count": 5
+      },
+      "shared_spaces": [
+        "sun_deck",
+        "pool",
+        "dining_room",
+        "lounge",
+        "gym"
+      ],
+      "cabins": [
+        {
+          "code": "CLASSIC",
+          "name": "Water Level Cabin",
+          "deck": "Deck 1",
+          "cabin_count": 8,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the lower deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "SUP",
+          "name": "Main Deck Cabin",
+          "deck": "Deck 2",
+          "cabin_count": 18,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the main deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "UPD",
+          "name": "Upper Deck Cabin",
+          "deck": "Deck 3",
+          "cabin_count": 18,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the upper deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "JS",
+          "name": "Junior Suite",
+          "deck": "Deck 2",
+          "cabin_count": 2,
+          "size_m2": 26,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 26 m², forward on the main deck."
+        },
+        {
+          "code": "SS",
+          "name": "Senior Suite, Upper Deck",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 40,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 40 m² on the upper deck."
+        },
+        {
+          "code": "SST",
+          "name": "Senior Suite, Top Deck",
+          "deck": "Deck 4",
+          "cabin_count": 2,
+          "size_m2": 34,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 34 m² on the top deck."
+        },
+        {
+          "code": "PS",
+          "name": "Panorama Suite",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 34,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 34 m² at the front of the upper deck."
+        }
+      ],
+      "schedules": [
+        {
+          "code": "ASW-CAI-12",
+          "origin": "Aswan",
+          "destination": "Cairo",
+          "nights": 12,
+          "departures": [
+            "2027-02-12",
+            "2027-03-10",
+            "2027-04-05",
+            "2027-05-01",
+            "2027-09-01",
+            "2027-09-27",
+            "2027-10-23"
+          ],
+          "days": [
+            {
+              "title": "Embark in Aswan",
+              "description": "Check in and have lunch on board, with afternoon tea. Overnight in Aswan."
+            },
+            {
+              "title": "Aswan: High Dam, Philae and the Nubian Museum",
+              "description": "Visit the High Dam, Philae Temple and the Nubian Museum. Nubian party in the evening."
+            },
+            {
+              "title": "Kom Ombo",
+              "description": "Sail to Kom Ombo and visit its temple. Gala dinner, then sail to Edfu."
+            },
+            {
+              "title": "Edfu and Luxor",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Luxor through the Esna lock."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Dendera",
+              "description": "Sail to Qena and visit the Temple of Dendera, then sail on to Naga Hammadi."
+            },
+            {
+              "title": "Abydos",
+              "description": "Sail to El Balyana and visit the Temple of Abydos, then sail to Sohag. Galabia party in the evening."
+            },
+            {
+              "title": "Towards Tell el-Amarna",
+              "description": "Sail from Sohag through the Asyut lock to Tell el-Amarna, passing the Monastery of Prince Tadros, which your guide explains from the boat."
+            },
+            {
+              "title": "Tell el-Amarna and Tuna el-Gebel",
+              "description": "Visit the northern tombs, the Royal Tomb of Akhenaten, the Northern Palace and the small temples of the Aten, then Tuna el-Gebel. Sail to Minya, with a folklore party."
+            },
+            {
+              "title": "Beni Hassan",
+              "description": "Drive about an hour to the rock tombs of Beni Hassan, including those of Baqet III, Khety, Amenemhat and Khnumhotep II. Sail to Beni Suef."
+            },
+            {
+              "title": "Coptic Cairo",
+              "description": "Sail to Cairo and visit the Hanging Church, the Coptic Museum and the synagogue. Takht, a traditional Arabic music ensemble, in the evening."
+            },
+            {
+              "title": "Giza and the Grand Egyptian Museum",
+              "description": "Visit the Pyramids of Giza, the Sphinx and the Grand Egyptian Museum."
+            },
+            {
+              "title": "Disembarkation in Cairo",
+              "description": "Breakfast and disembarkation."
+            }
+          ]
+        },
+        {
+          "code": "CAI-ASW-14",
+          "origin": "Cairo",
+          "destination": "Aswan",
+          "nights": 14,
+          "departures": [
+            "2027-02-24",
+            "2027-03-22",
+            "2027-04-17",
+            "2027-05-13",
+            "2027-09-13",
+            "2027-10-09",
+            "2027-11-04"
+          ],
+          "days": [
+            {
+              "title": "Embark in Cairo",
+              "description": "Check in and have lunch on board. Overnight in Cairo."
+            },
+            {
+              "title": "Coptic Cairo and Giza",
+              "description": "Visit the synagogue, the Hanging Church and the Coptic Museum, then the Pyramids of Giza and the Sphinx."
+            },
+            {
+              "title": "Memphis, Saqqara and the Grand Egyptian Museum",
+              "description": "Visit Memphis, Saqqara and the Grand Egyptian Museum. Welcome cocktail reception, gala dinner and Takht music."
+            },
+            {
+              "title": "Sailing to Beni Suef",
+              "description": "A full day on the river to Beni Suef, with a singer at dinner."
+            },
+            {
+              "title": "Sailing to Minya",
+              "description": "Sail to Minya, with a folklore party in the evening."
+            },
+            {
+              "title": "Tuna el-Gebel and Beni Hassan",
+              "description": "Visit Tuna el-Gebel, then drive about an hour to the rock tombs of Beni Hassan, including those of Baqet III, Khety, Amenemhat and Khnumhotep II."
+            },
+            {
+              "title": "Tell el-Amarna",
+              "description": "Visit the northern tombs, the Royal Tomb of Akhenaten, the Northern Palace and the small temples of the Aten. Sail to Asyut, passing the Monastery of Prince Tadros. Galabia party in the evening."
+            },
+            {
+              "title": "Sailing to Sohag",
+              "description": "A day on the river to Sohag."
+            },
+            {
+              "title": "Abydos",
+              "description": "Sail to El Balyana and visit the Temple of Abydos and the temple of Seti I. Sail on to Naga Hammadi through its lock and bridges."
+            },
+            {
+              "title": "Dendera",
+              "description": "Sail to Qena and visit the Temple of Dendera, about 20 minutes by road. Sail to Luxor, with a belly dance show."
+            },
+            {
+              "title": "Luxor West Bank",
+              "description": "Visit the Valley of the Kings and the Temple of Queen Hatshepsut. Belly dance show in the evening."
+            },
+            {
+              "title": "Luxor East Bank and Edfu",
+              "description": "Visit the Karnak and Luxor Temples, then sail towards Edfu through the Esna lock."
+            },
+            {
+              "title": "Edfu and Kom Ombo",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Continue to Aswan."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Nubian Museum. Nubian party in the evening."
+            },
+            {
+              "title": "Disembarkation in Aswan",
+              "description": "Breakfast and disembarkation."
+            }
+          ]
+        },
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "departures": [
+            "2026-11-23",
+            "2026-11-30",
+            "2026-12-07",
+            "2026-12-14",
+            "2026-12-21",
+            "2026-12-28",
+            "2027-01-04",
+            "2027-01-11",
+            "2027-01-18",
+            "2027-01-25",
+            "2027-02-01",
+            "2027-02-08"
+          ],
+          "days": [
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Edfu and Kom Ombo",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "departures": [
+            "2026-11-20",
+            "2026-12-04",
+            "2026-12-11",
+            "2026-12-18",
+            "2026-12-25",
+            "2027-01-01",
+            "2027-01-08",
+            "2027-01-15",
+            "2027-01-22",
+            "2027-01-29",
+            "2027-02-05"
+          ],
+          "days": [
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+            },
+            {
+              "title": "Kom Ombo and Edfu",
+              "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "LXR-LXR-7",
+          "origin": "Luxor",
+          "destination": "Luxor",
+          "nights": 7,
+          "departures": [
+            "2026-11-23",
+            "2026-11-30",
+            "2026-12-07",
+            "2026-12-14",
+            "2026-12-21",
+            "2026-12-28",
+            "2027-01-04",
+            "2027-01-11",
+            "2027-01-18",
+            "2027-01-25",
+            "2027-02-01"
+          ],
+          "days": [
+            {
+              "title": "Luxor",
+              "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Kom Ombo and Aswan",
+              "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Aswan",
+              "description": "A day on board in Aswan."
+            },
+            {
+              "title": "Edfu",
+              "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor East Bank",
+              "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-hamees",
+      "facts": {
+        "cabin_count": 66,
+        "length_m": 72,
+        "beam_m": 14.8,
+        "deck_count": 5
+      },
+      "shared_spaces": [
+        "sun_deck",
+        "pool",
+        "dining_room",
+        "lounge",
+        "bar",
+        "library",
+        "gym"
+      ],
+      "cabins": [
+        {
+          "code": "CLASSIC",
+          "name": "Classic Cabin",
+          "deck": "Deck A",
+          "cabin_count": 8,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins on the water-level deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "SUP",
+          "name": "Superior Cabin",
+          "deck": "Deck B",
+          "cabin_count": 6,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins on the main deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "DLX",
+          "name": "Deluxe Cabin",
+          "deck": "Decks C and D",
+          "cabin_count": 46,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins on the upper and top decks, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "JS",
+          "name": "Junior Suite",
+          "deck": "Deck B",
+          "cabin_count": 2,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites at the front of the main deck."
+        },
+        {
+          "code": "DS",
+          "name": "Deluxe Suite",
+          "deck": "Deck C",
+          "cabin_count": 2,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites at the front of the upper deck."
+        },
+        {
+          "code": "ES",
+          "name": "Executive Suite",
+          "deck": "Deck D",
+          "cabin_count": 2,
+          "size_m2": null,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites at the front of the top deck."
+        }
+      ],
+      "schedules": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [
+            1
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2028-12-31"
+            ]
+          ],
+          "days": [
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Edfu and Kom Ombo",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [
+            5
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2028-12-31"
+            ]
+          ],
+          "days": [
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+            },
+            {
+              "title": "Kom Ombo and Edfu",
+              "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "LXR-LXR-7",
+          "origin": "Luxor",
+          "destination": "Luxor",
+          "nights": 7,
+          "days": [
+            {
+              "title": "Luxor",
+              "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Kom Ombo and Aswan",
+              "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Aswan",
+              "description": "A day on board in Aswan."
+            },
+            {
+              "title": "Edfu",
+              "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor East Bank",
+              "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_days": [
+            1
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2028-12-31"
+            ]
+          ],
+          "sailing_period": "noon"
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-sun-ray",
+      "facts": {
+        "cabin_count": 62,
+        "length_m": 72,
+        "beam_m": 15,
+        "deck_count": 5
+      },
+      "shared_spaces": [
+        "sun_deck",
+        "pool",
+        "dining_room",
+        "lounge",
+        "bar",
+        "library",
+        "gym"
+      ],
+      "cabins": [
+        {
+          "code": "CLASSIC",
+          "name": "Classic Cabin",
+          "deck": "Deck 1",
+          "cabin_count": 8,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the water-level deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "UPPER",
+          "name": "Superior Cabin",
+          "deck": "Deck 2",
+          "cabin_count": 18,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the main deck, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "DLX",
+          "name": "Deluxe Cabin",
+          "deck": "Decks 3 and 4",
+          "cabin_count": 28,
+          "size_m2": 20,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 20 m² on the upper and top decks, with a private bathroom with a bathtub."
+        },
+        {
+          "code": "JS",
+          "name": "Junior Suite",
+          "deck": "Deck 2",
+          "cabin_count": 2,
+          "size_m2": 34.1,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 34 m² at the front of the main deck."
+        },
+        {
+          "code": "SS",
+          "name": "Junior Upper Suite",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 35.3,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 35 m² at the front of the upper deck."
+        },
+        {
+          "code": "DS",
+          "name": "Deluxe Suite",
+          "deck": "Deck 4",
+          "cabin_count": 2,
+          "size_m2": 37,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 37 m² at the front of the top deck."
+        },
+        {
+          "code": "ES",
+          "name": "Executive Suite",
+          "deck": "Deck 4",
+          "cabin_count": 2,
+          "size_m2": 39,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Bathrobe and slippers",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 39 m² on the top deck, the largest on board."
+        }
+      ],
+      "schedules": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "sailing_days": [
+            4
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2027-05-31"
+            ],
+            [
+              "2027-09-01",
+              "2027-12-31"
+            ],
+            [
+              "2028-01-01",
+              "2028-05-31"
+            ],
+            [
+              "2028-09-01",
+              "2028-12-31"
+            ]
+          ],
+          "days": [
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Edfu and Kom Ombo",
+              "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "sailing_days": [
+            1
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2027-05-31"
+            ],
+            [
+              "2027-09-01",
+              "2027-12-31"
+            ],
+            [
+              "2028-01-01",
+              "2028-05-31"
+            ],
+            [
+              "2028-09-01",
+              "2028-12-31"
+            ]
+          ],
+          "days": [
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+            },
+            {
+              "title": "Kom Ombo and Edfu",
+              "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "LXR-LXR-7",
+          "origin": "Luxor",
+          "destination": "Luxor",
+          "nights": 7,
+          "days": [
+            {
+              "title": "Luxor",
+              "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Edfu",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Kom Ombo and Aswan",
+              "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Aswan",
+              "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Aswan",
+              "description": "A day on board in Aswan."
+            },
+            {
+              "title": "Edfu",
+              "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor East Bank",
+              "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_days": [
+            4
+          ],
+          "periods": [
+            [
+              "2027-01-01",
+              "2027-05-31"
+            ],
+            [
+              "2027-09-01",
+              "2027-12-31"
+            ],
+            [
+              "2028-01-01",
+              "2028-05-31"
+            ],
+            [
+              "2028-09-01",
+              "2028-12-24"
+            ]
+          ],
+          "sailing_period": "noon"
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-ss-misr",
+      "facts": {
+        "cabin_count": 24,
+        "length_m": 63,
+        "beam_m": 13.8
+      },
+      "shared_spaces": [
+        "sun_deck",
+        "pool",
+        "dining_room",
+        "lounge",
+        "bar"
+      ],
+      "cabins": [
+        {
+          "code": "OUT",
+          "name": "Outside Cabin",
+          "deck": "Decks 2, 3 and 4",
+          "cabin_count": 14,
+          "size_m2": 21,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Cabins of about 21 m², each with a private balcony over the Nile and a bathroom with a bathtub.",
+          "view": "Nile view"
+        },
+        {
+          "code": "SGL",
+          "name": "Single Cabin",
+          "deck": "Deck 2",
+          "cabin_count": 2,
+          "size_m2": 14.5,
+          "bed_configuration": "Single",
+          "max_occupancy": 1,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee"
+          ],
+          "description": "Two cabins of about 14.5 m² for one traveller, each with a private balcony.",
+          "view": "Nile view"
+        },
+        {
+          "code": "STE",
+          "name": "Senior Suite",
+          "deck": "Decks 3 and 4",
+          "cabin_count": 6,
+          "size_m2": 30,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Six suites of about 30 m², each with a private balcony, a sitting area with a sofa and a second television.",
+          "view": "Nile view"
+        },
+        {
+          "code": "PAN",
+          "name": "Panorama Suite",
+          "deck": "Deck 3",
+          "cabin_count": 2,
+          "size_m2": 35,
+          "bed_configuration": "King or twin",
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Air conditioning",
+            "Private bathroom with bathtub",
+            "Hairdryer",
+            "Minibar",
+            "Safe",
+            "Telephone",
+            "LED TV with satellite channels",
+            "Free Wi-Fi",
+            "Espresso machine",
+            "Tea and coffee",
+            "Private MiFi device",
+            "Welcome bottle of local wine",
+            "Daily fruit, cookies or pastries",
+            "Complimentary soft minibar"
+          ],
+          "description": "Two suites of about 35 m² on the upper deck, each with a sitting area and a front panorama balcony.",
+          "view": "Panoramic Nile view"
+        }
+      ],
+      "schedules": [
+        {
+          "code": "LXR-ASW-4",
+          "origin": "Luxor",
+          "destination": "Aswan",
+          "nights": 4,
+          "departures": [
+            "2027-01-04",
+            "2027-01-11",
+            "2027-02-08",
+            "2027-03-15",
+            "2027-04-12",
+            "2027-04-26",
+            "2027-05-03",
+            "2027-05-10",
+            "2027-05-17",
+            "2027-05-24",
+            "2027-09-06",
+            "2027-09-13",
+            "2027-09-20",
+            "2027-09-27",
+            "2027-10-04",
+            "2027-10-11",
+            "2027-10-18",
+            "2027-11-29",
+            "2027-12-06",
+            "2027-12-13",
+            "2027-12-20",
+            "2027-12-27"
+          ],
+          "days": [
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Luxor West Bank and Esna",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Esna, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Edfu",
+              "description": "Sail to Edfu and visit the Temple of Horus. Sail on to Kom Ombo for an Egyptian Galabia night, and moor there overnight."
+            },
+            {
+              "title": "Kom Ombo and Aswan",
+              "description": "Visit Kom Ombo Temple and sail to Aswan. Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "ASW-LXR-3",
+          "origin": "Aswan",
+          "destination": "Luxor",
+          "nights": 3,
+          "departures": [
+            "2027-01-01",
+            "2027-01-08",
+            "2027-01-15",
+            "2027-03-12",
+            "2027-04-09",
+            "2027-04-16",
+            "2027-04-30",
+            "2027-05-07",
+            "2027-05-14",
+            "2027-05-21",
+            "2027-05-28",
+            "2027-09-10",
+            "2027-09-17",
+            "2027-09-24",
+            "2027-10-01",
+            "2027-10-08",
+            "2027-10-15",
+            "2027-11-19",
+            "2027-12-03",
+            "2027-12-10",
+            "2027-12-17",
+            "2027-12-24",
+            "2027-12-31"
+          ],
+          "days": [
+            {
+              "title": "Aswan: High Dam and Philae",
+              "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+            },
+            {
+              "title": "Kom Ombo and Edfu",
+              "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "sailing_period": "noon"
+        },
+        {
+          "code": "LXR-LXR-7",
+          "origin": "Luxor",
+          "destination": "Luxor",
+          "nights": 7,
+          "days": [
+            {
+              "title": "Luxor: Karnak and Luxor Temples",
+              "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+            },
+            {
+              "title": "Esna",
+              "description": "Sail to Esna, with a welcome cocktail reception before dinner."
+            },
+            {
+              "title": "Edfu",
+              "description": "Sail to Edfu and visit the Temple of Horus. Sail on to Kom Ombo for an Egyptian Galabia night, and moor there overnight."
+            },
+            {
+              "title": "Aswan",
+              "description": "Sail to Aswan and visit the High Dam, Philae Temple and the Unfinished Obelisk. Nubian show in the evening."
+            },
+            {
+              "title": "Aswan",
+              "description": "Take a felucca around Kitchener's Island. Overnight in Aswan."
+            },
+            {
+              "title": "Kom Ombo",
+              "description": "Sail early to Kom Ombo and visit its temple, then sail towards Luxor, with an Egyptian Galabia night."
+            },
+            {
+              "title": "Luxor West Bank",
+              "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Belly dance show in the evening."
+            },
+            {
+              "title": "Disembarkation",
+              "description": "Breakfast and check-out."
+            }
+          ],
+          "departures": [
+            "2027-01-04",
+            "2027-01-11",
+            "2027-04-12",
+            "2027-04-26",
+            "2027-05-03",
+            "2027-05-10",
+            "2027-05-17",
+            "2027-05-24",
+            "2027-09-06",
+            "2027-09-13",
+            "2027-09-20",
+            "2027-09-27",
+            "2027-10-04",
+            "2027-10-11",
+            "2027-11-29",
+            "2027-12-06",
+            "2027-12-13",
+            "2027-12-20",
+            "2027-12-27"
+          ],
+          "sailing_period": "noon"
+        }
+      ]
+    },
+    {
+      "slug": "movenpick-sb-feddya",
+      "facts": {
+        "cabin_count": 4,
+        "max_guests": 8
+      },
+      "shared_spaces": [
+        "dining_room",
+        "sun_deck",
+        "jacuzzi",
+        "lounge",
+        "bar"
+      ],
+      "cabins": [
+        {
+          "code": "SUITE",
+          "name": "Senior Suite",
+          "deck": null,
+          "cabin_count": 2,
+          "size_m2": 22.5,
+          "bed_configuration": null,
+          "max_occupancy": 2,
+          "balcony": false,
+          "amenities": [
+            "Private patio (8 m²)",
+            "Air conditioning",
+            "LCD TV with satellite channels",
+            "Private bathroom",
+            "Tea and coffee",
+            "Espresso machine",
+            "Private MiFi device",
+            "Safe",
+            "Free Wi-Fi"
+          ],
+          "description": "One of two suites of 22.5 m², each with its own 8 m² patio and its own colour scheme."
+        },
+        {
+          "code": "PANO",
+          "name": "Panorama Suite",
+          "deck": null,
+          "cabin_count": 2,
+          "size_m2": 24,
+          "bed_configuration": null,
+          "max_occupancy": 2,
+          "balcony": true,
+          "amenities": [
+            "Private balcony (8 m²)",
+            "Air conditioning",
+            "LCD TV with satellite channels",
+            "Private bathroom",
+            "Tea and coffee",
+            "Espresso machine",
+            "Private MiFi device",
+            "Safe",
+            "Free Wi-Fi"
+          ],
+          "description": "One of two suites of 24 m², each with an 8 m² balcony.",
+          "view": "Panoramic Nile view"
+        }
+      ],
+      "schedules": [],
+      "booking": "On request, no fixed dates (not Christmas or New Year): 4, 5, 6 or 7 nights from Luxor or Aswan, minimum 4. Sails with one suite booked. Check-in 12:00, check-out 08:00. Soft all-inclusive, local alcoholic and non-alcoholic drinks included."
+    }
+  ]
+}

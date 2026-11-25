@@ -2,7 +2,7 @@
   "vessel": "movenpick-ss-misr",
   "source": "Mövenpick's SS Misr fact sheet deck plan (cabin numbers and categories), redrawn by Nilecruz: all four guest decks on one drawing, measured stern 0 to the main deck's bow 100. Deck 1 (staff cabins and the steam engine room) is not on the plan and is not drawn.",
   "credit": "Mövenpick",
-  "checked_on": "2026-11-05",
+  "checked_on": "2026-11-25",
   "source_urls": ["https://www.scribd.com/document/170543378/Fact-Sheet-SS-Misr"],
   "uses_existing_cabin_types": ["OUT", "SGL", "STE", "PAN"],
   "to_confirm": {
@@ -42,7 +42,6 @@
           { "from": 5.8, "to": 22.6, "space": "crew", "label": "Galley" },
           { "from": 22.6, "to": 46, "space": "restaurant" },
           { "from": 46, "to": 60.1, "space": "reception", "label": "Lobby" },
-          { "from": 60.1, "to": 65.8, "side": "port", "space": "shop" },
           { "from": 60.1, "to": 65.8, "side": "starboard", "cabin": "OUT" },
           { "from": 65.8, "to": 79, "side": "port", "cabin": "STE" },
           { "from": 65.8, "to": 79, "side": "starboard", "cabin": "STE" },
