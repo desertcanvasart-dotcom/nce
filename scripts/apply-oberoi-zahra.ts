@@ -1,8 +1,9 @@
 /**
- * The Oberoi Zahra, from Oberoi's own fact sheet, deck plan, itineraries and sailing date sheets (Islam, 25 November
- * 2026): cabin counts and decks, facilities, the dining text, the four- and seven-night programmes, when guests
- * embark, and the dates for December 2026 and 2028. The 2027 dates on the site already match. The three-night
- * programme already matches; the deck drawing, the two-bedroom suite and prices are left as they are.
+ * The Oberoi Zahra, from Oberoi's own fact sheet, deck plan, itineraries, sailing date sheets and photos (Islam,
+ * 25 November 2026): cabin counts and decks, facilities, the dining text, the four- and seven-night programmes, when
+ * guests embark, the dates for December 2026 and 2028, and on the deck drawing the two-bedroom suite at the front of
+ * Deck C, with the library beside the theatre on Deck B. The 2027 dates on the site already match, and so does the
+ * three-night programme. Prices are left as they are.
  *
  *   tsx scripts/apply-oberoi-zahra.ts --target=staging            report only
  *   tsx scripts/apply-oberoi-zahra.ts --apply --target=staging
@@ -12,7 +13,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import type { Database } from "../src/server/db/database.types";
+import { layoutProblems } from "../src/lib/marketplace/deck-layout-schema";
+import type { Database, Json } from "../src/server/db/database.types";
 import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
@@ -131,7 +133,33 @@ const SPACES = ["bar", "spa", "library", "pool", "gym"] as const;
 const CABINS: Record<string, { count: number; deck: string }> = {
   LC: { count: 25, deck: "Decks B, C and D" },
   LS: { count: 2, deck: "Deck D" },
+  LS2: { count: 1, deck: "Deck C" },
 };
+type Area = { from: number; to: number; side?: "port" | "starboard"; cabin?: string; space?: string; label?: string };
+type Layout = { decks: { name: string; areas: Area[] }[] };
+const LIBRARY = "Library and cigar lounge";
+
+/** The two-bedroom suite goes where the drawing had the library; the library shares the theatre's stretch below. */
+function redraw(old: Layout) {
+  const layout = structuredClone(old);
+  const deck = (name: string) => layout.decks.find((d) => d.name === name)!;
+  const c = deck("C");
+  const was = c.areas.findIndex((a) => a.space === "library");
+  if (was >= 0) c.areas[was] = { from: c.areas[was]!.from, to: c.areas[was]!.to, cabin: "LS2" };
+  const b = deck("B");
+  const theatre = b.areas.findIndex((a) => a.label === "Theatre" && !a.side);
+  if (theatre >= 0) {
+    const { from, to } = b.areas[theatre]!;
+    b.areas.splice(
+      theatre,
+      1,
+      { from, to, side: "port", space: "lounge", label: "Theatre" },
+      { from, to, side: "starboard", space: "library", label: LIBRARY },
+    );
+  }
+  return layout;
+}
+
 const DINING =
   "The Restaurant serves freshly prepared international cuisine from a daily changing menu, 7 am to 10 pm. The Club Lounge serves high tea and drinks, 10 am to 11 pm, and hosts two cocktail receptions with live music and a Nubian performance on each cruise. The Library and Cigar Lounge is open day and night, with drinks until midnight.";
 
@@ -173,7 +201,7 @@ async function run() {
   const v = must(
     await db
       .from("vessels")
-      .select("*, vessel_translations(*), cabin_types(*), schedules(*, schedule_days(*), departures(departs_on))")
+      .select("*, deck_plans(*), vessel_translations(*), cabin_types(*), schedules(*, schedule_days(*), departures(departs_on))")
       .eq("slug", "oberoi-zahra")
       .single(),
     "Zahra",
@@ -188,6 +216,16 @@ async function run() {
   }
   const en = v.vessel_translations.find((t) => t.locale === "en");
   if (!en) throw new Error("No English text.");
+  const before = v.deck_plans?.layout as unknown as Layout | undefined;
+  if (!before) throw new Error("No deck drawing to change.");
+  const drawing = redraw(before);
+  const problems = layoutProblems(
+    drawing as unknown as Json,
+    v.cabin_types.map((c) => c.code),
+  );
+  if (problems.length) throw new Error(`Drawing: ${problems.join("; ")}`);
+  const changed = JSON.stringify(drawing) !== JSON.stringify(before);
+  console.log(`  deck drawing: ${changed ? "two-bedroom suite and library moved" : "already right"}`);
   console.log(`  dining text: ${en.dining ? "replaced" : "added"}`);
   for (const [code, nights] of Object.entries(NIGHTS)) {
     const s = v.schedules.find((x) => x.code === code);
@@ -236,6 +274,14 @@ async function run() {
     must(
       await db.from("cabin_types").update({ cabin_count: want.count, deck: want.deck }).eq("vessel_id", v.id).eq("code", code),
       code,
+    );
+  if (changed)
+    must(
+      await db
+        .from("deck_plans")
+        .update({ layout: drawing as unknown as Json })
+        .eq("vessel_id", v.id),
+      "drawing",
     );
   must(await db.from("vessel_translations").update({ dining: DINING }).eq("vessel_id", v.id).eq("locale", "en"), "dining");
 

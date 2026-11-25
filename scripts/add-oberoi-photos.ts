@@ -1,10 +1,10 @@
 /**
- * The Oberoi Philae photos (Islam, 25 November 2026: each cabin type, restaurant, sun deck, reception; at most 10 per
+ * The Oberoi Philae and Zahra photos (Islam, 25 November 2026: each cabin type, restaurant, sun deck, reception; at most 10 per
  * boat, counting those already there). Web-sized copies are read from --photos=<folder>; the originals are not in this
  * repository. A cabin type's photo shows on its card, the others in the gallery, after what is already there.
  *
- *   tsx scripts/add-oberoi-photos.ts --photos=<folder> --target=staging            report only
- *   tsx scripts/add-oberoi-photos.ts --photos=<folder> --apply --target=staging
+ *   tsx scripts/add-oberoi-photos.ts --boat=philae|zahra --photos=<folder> --target=staging            report only
+ *   tsx scripts/add-oberoi-photos.ts --boat=… --photos=<folder> --apply --target=staging
  *
  * Production also needs --confirm-production. Running it again adds nothing twice.
  */
@@ -18,14 +18,15 @@ import { refreshSite } from "./lib/refresh-site";
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
 const CREDIT = "Oberoi Hotels & Resorts";
 const LIMIT = 10;
-const NAME = "The Oberoi Philae";
 
-const photo = (file: string, cabin: string | null, en: string, es: string, ja: string) => ({
+const named = (name: string) => (file: string, cabin: string | null, en: string, es: string, ja: string) => ({
   file,
   cabin,
-  alt: { en: `${NAME}: ${en}`, es: `${NAME}: ${es}`, ja: `${NAME}：${ja}` },
+  alt: { en: `${name}: ${en}`, es: `${name}: ${es}`, ja: `${name}：${ja}` },
 });
-const PHOTOS = [
+const photo = named("The Oberoi Philae");
+const zahra = named("The Oberoi Zahra");
+const PHILAE = [
   photo("restaurant.jpg", null, "restaurant", "restaurante", "レストラン"),
   photo("pool-deck.jpg", null, "pool on the sun deck", "piscina en la cubierta solar", "サンデッキのプール"),
   photo("reception.jpg", null, "reception lobby", "vestíbulo de recepción", "レセプションロビー"),
@@ -40,10 +41,40 @@ const PHOTOS = [
   ),
   photo("suite-bathroom.jpg", null, "a suite bathroom", "baño de una suite", "スイートのバスルーム"),
 ];
+// Her exterior, pool and lobby are already on the page.
+const ZAHRA = [
+  zahra("restaurant.jpg", null, "restaurant", "restaurante", "レストラン"),
+  zahra("lounge.jpg", null, "lounge", "salón", "ラウンジ"),
+  zahra(
+    "pool-temple.jpg",
+    null,
+    "the pool, with a temple on the bank",
+    "la piscina, con un templo en la orilla",
+    "川岸の神殿を望むプール",
+  ),
+  zahra("luxury-cabin.jpg", "LC", "Luxury Cabin", "camarote Luxury", "ラグジュアリーキャビン"),
+  zahra("luxury-suite.jpg", "LS", "Luxury Suite", "Luxury Suite", "ラグジュアリースイート"),
+  zahra(
+    "two-bedroom-suite.jpg",
+    "LS2",
+    "the sitting room of the two-bedroom suite",
+    "la sala de estar de la suite de dos dormitorios",
+    "2ベッドルームスイートのリビング",
+  ),
+  zahra(
+    "suite-terrace.jpg",
+    null,
+    "a suite terrace with whirlpool",
+    "terraza de una suite con jacuzzi",
+    "ジャグジー付きのスイートテラス",
+  ),
+];
+const BOATS: Record<string, typeof PHILAE> = { philae: PHILAE, zahra: ZAHRA };
 
 const args = process.argv.slice(2);
 const apply = args.includes("--apply");
 const target = args.find((a) => a.startsWith("--target="))?.split("=")[1];
+const boat = args.find((a) => a.startsWith("--boat="))?.split("=")[1] ?? "";
 const folder = args.find((a) => a.startsWith("--photos="))?.slice("--photos=".length);
 
 function connect() {
@@ -74,7 +105,9 @@ const must = <T>(r: { data: T; error: { message: string } | null }, what: string
 };
 
 async function run() {
-  const slug = "oberoi-philae";
+  const PHOTOS = BOATS[boat];
+  if (!PHOTOS) throw new Error(`--boat must be one of: ${Object.keys(BOATS).join(", ")}.`);
+  const slug = `oberoi-${boat}`;
   if (!folder) throw new Error("--photos=<folder> is needed.");
   const missing = PHOTOS.filter((p) => !existsSync(join(folder, p.file)));
   if (missing.length) throw new Error(`Missing photos: ${missing.map((p) => p.file).join(", ")}`);
