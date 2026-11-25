@@ -37,6 +37,9 @@ const star = JSON.parse(
 const sun = JSON.parse(
   readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/sonesta-sun-goddess.json"), "utf8"),
 ) as { layout: unknown; uses_existing_cabin_types: string[] };
+const philae = JSON.parse(
+  readFileSync(resolve(import.meta.dirname, "../../docs/imports/deck-plans/oberoi-philae.json"), "utf8"),
+) as { layout: unknown; uses_existing_cabin_types: string[] };
 const names: Record<string, string> = { STD: "Standard Cabin", RS: "Royal Suite" };
 
 describe("deck layouts (EXP-002, 9-2b)", () => {
@@ -172,6 +175,15 @@ describe("deck layouts (EXP-002, 9-2b)", () => {
     expect(decksOf(layout, "SST")).toEqual(["4"]);
     expect(decksOf(layout, "PS")).toEqual(["3"]);
     expect(types.reduce((n, t) => n + t.cabin_count, 0)).toBe(52);
+  });
+
+  it("reads Oberoi Philae's drawing: cabins on D, C and B, and both kinds of suite on D", () => {
+    const layout = parseLayout(philae.layout)!;
+    expect(layout.decks.map((d) => d.name)).toEqual(["E", "D", "C", "B", "A"]);
+    expect(layoutProblems(philae.layout, philae.uses_existing_cabin_types)).toEqual([]);
+    expect(decksOf(layout, "LC")).toEqual(["D", "C", "B"]);
+    expect(decksOf(layout, "LS")).toEqual(["D"]);
+    expect(decksOf(layout, "LST")).toEqual(["D"]);
   });
 
   it("reads Royal Lily's drawing: five decks, top first, every cabin code known", () => {

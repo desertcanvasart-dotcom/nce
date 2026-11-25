@@ -633,7 +633,12 @@
       "Sauna and massage": "Sauna y masajes",
       "Reading and internet corner": "Rincón de lectura e internet",
       "Pool and jacuzzi": "Piscina y jacuzzi",
-      "Galley": "Cocina"
+      "Galley": "Cocina",
+      "Shaded dining": "Comedor a la sombra",
+      "Salon": "Peluquería",
+      "Foyer": "Vestíbulo",
+      "Library and cigar lounge": "Biblioteca y salón de puros",
+      "Bar and club lounge": "Bar y salón club"
     },
     "evaluation": {
       "title": "Evaluación de Nilecruz",

@@ -633,7 +633,12 @@
       "Sauna and massage": "サウナとマッサージ",
       "Reading and internet corner": "読書・インターネットコーナー",
       "Pool and jacuzzi": "プールとジャグジー",
-      "Galley": "厨房"
+      "Galley": "厨房",
+      "Shaded dining": "日よけ付きダイニング",
+      "Salon": "ヘアサロン",
+      "Foyer": "ロビー",
+      "Library and cigar lounge": "図書室とシガーラウンジ",
+      "Bar and club lounge": "バーとクラブラウンジ"
     },
     "evaluation": {
       "title": "Nilecruzの評価",
