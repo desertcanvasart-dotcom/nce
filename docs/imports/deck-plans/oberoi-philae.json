@@ -1,0 +1,226 @@
+{
+  "vessel": "oberoi-philae",
+  "source": "Oberoi's own deck plan of The Oberoi Philae (levels A to E), redrawn by Nilecruz: positions measured on that plan, which is not published.",
+  "credit": "The Oberoi",
+  "checked_on": "2026-11-25",
+  "uses_existing_cabin_types": [
+    "LC",
+    "LS",
+    "LST"
+  ],
+  "layout": {
+    "decks": [
+      {
+        "name": "E",
+        "length": 93.9,
+        "bow": "round",
+        "areas": [
+          {
+            "from": 7.1,
+            "to": 11.4,
+            "space": "sun_deck"
+          },
+          {
+            "from": 11.4,
+            "to": 27.4,
+            "space": "shade",
+            "label": "Shaded dining"
+          },
+          {
+            "from": 27.4,
+            "to": 71.5,
+            "space": "sun_deck"
+          },
+          {
+            "from": 71.7,
+            "to": 88.3,
+            "space": "pool"
+          },
+          {
+            "from": 88.3,
+            "to": 93.5,
+            "space": "sun_deck"
+          }
+        ]
+      },
+      {
+        "name": "D",
+        "length": 99.4,
+        "bow": "round",
+        "areas": [
+          {
+            "from": 7.1,
+            "to": 28.3,
+            "side": "port",
+            "cabin": "LST"
+          },
+          {
+            "from": 7.1,
+            "to": 28.3,
+            "side": "starboard",
+            "cabin": "LST"
+          },
+          {
+            "from": 28.4,
+            "to": 38.2,
+            "side": "port",
+            "cabin": "LC"
+          },
+          {
+            "from": 28.4,
+            "to": 38.2,
+            "side": "starboard",
+            "cabin": "LC"
+          },
+          {
+            "from": 38.4,
+            "to": 53.3,
+            "side": "port",
+            "cabin": "LS"
+          },
+          {
+            "from": 38.4,
+            "to": 53.3,
+            "side": "starboard",
+            "cabin": "LS"
+          },
+          {
+            "from": 53.5,
+            "to": 58.5,
+            "side": "port",
+            "space": "gym"
+          },
+          {
+            "from": 53.5,
+            "to": 58.5,
+            "side": "starboard",
+            "space": "shop",
+            "label": "Salon"
+          },
+          {
+            "from": 58.7,
+            "to": 87.0,
+            "space": "spa"
+          },
+          {
+            "from": 87.0,
+            "to": 91.1,
+            "space": "crew"
+          }
+        ]
+      },
+      {
+        "name": "C",
+        "length": 100,
+        "bow": "round",
+        "areas": [
+          {
+            "from": 0.2,
+            "to": 8.4,
+            "space": "open"
+          },
+          {
+            "from": 8.4,
+            "to": 47.4,
+            "side": "port",
+            "cabin": "LC"
+          },
+          {
+            "from": 8.4,
+            "to": 47.4,
+            "side": "starboard",
+            "cabin": "LC"
+          },
+          {
+            "from": 47.5,
+            "to": 66.7,
+            "space": "reception",
+            "label": "Foyer"
+          },
+          {
+            "from": 66.9,
+            "to": 76.8,
+            "side": "port",
+            "cabin": "LC"
+          },
+          {
+            "from": 66.9,
+            "to": 76.8,
+            "side": "starboard",
+            "cabin": "LC"
+          },
+          {
+            "from": 76.9,
+            "to": 91.4,
+            "space": "library",
+            "label": "Library and cigar lounge"
+          }
+        ]
+      },
+      {
+        "name": "B",
+        "length": 99.6,
+        "bow": "round",
+        "areas": [
+          {
+            "from": 1.2,
+            "to": 18.2,
+            "space": "crew"
+          },
+          {
+            "from": 18.2,
+            "to": 45.3,
+            "side": "port",
+            "cabin": "LC"
+          },
+          {
+            "from": 18.2,
+            "to": 45.3,
+            "side": "starboard",
+            "cabin": "LC"
+          },
+          {
+            "from": 45.5,
+            "to": 63.3,
+            "space": "reception",
+            "label": "Reception"
+          },
+          {
+            "from": 63.3,
+            "to": 90.1,
+            "space": "bar",
+            "label": "Bar and club lounge"
+          }
+        ]
+      },
+      {
+        "name": "A",
+        "length": 96.5,
+        "bow": "round",
+        "areas": [
+          {
+            "from": 1.2,
+            "to": 39.2,
+            "space": "crew"
+          },
+          {
+            "from": 39.2,
+            "to": 56.2,
+            "space": "restaurant"
+          },
+          {
+            "from": 56.2,
+            "to": 61.1,
+            "space": "reception",
+            "label": "Foyer"
+          },
+          {
+            "from": 61.1,
+            "to": 81.4,
+            "space": "crew"
+          }
+        ]
+      }
+    ]
+  }
+}
