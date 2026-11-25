@@ -1,5 +1,5 @@
 /**
- * Mövenpick MS Hamees's "from" price for Egyptians and foreign residents (Islam, 25 November 2026; ADR-113): a selling
+ * Mövenpick MS Hamees's and Sun Ray's "from" prices for Egyptians and foreign residents (Islam, 25 November 2026; ADR-113): a selling
  * figure in Egyptian pounds per person per night, sightseeing not included. No operator rate belongs here.
  * Needs migration 20261125000100_resident_price on the target first.
  *
@@ -13,7 +13,10 @@ import type { Database } from "../src/server/db/database.types";
 import { refreshSite } from "./lib/refresh-site";
 
 const STAGING_REF = "fmidxxcadbuzxaxyohtk"; // public project id of the staging database
-const BOATS = [{ slug: "movenpick-hamees", pounds: 14410, until: "2027-05-02" }];
+const BOATS = [
+  { slug: "movenpick-hamees", pounds: 14410, until: "2027-05-02" },
+  { slug: "movenpick-sun-ray", pounds: 15510, until: "2027-04-29" },
+];
 
 const args = process.argv.slice(2);
 const apply = args.includes("--apply");
