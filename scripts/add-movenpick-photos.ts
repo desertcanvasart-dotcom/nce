@@ -3,7 +3,7 @@
  * counting those already there). Web-sized copies are read from --photos=<folder>; the originals are not in this
  * repository. A cabin type's photo shows on its card, the others in the gallery, after what is already there.
  *
- *   tsx scripts/add-movenpick-photos.ts --boat=sun-ray|darakum|hamees|ss-misr --photos=<folder> --target=staging            report only
+ *   tsx scripts/add-movenpick-photos.ts --boat=sun-ray|darakum|hamees|ss-misr|sb-feddya --photos=<folder> --target=staging            report only
  *   tsx scripts/add-movenpick-photos.ts --boat=… --photos=<folder> --apply --target=staging
  *
  * Production also needs --confirm-production. Running it again adds nothing twice.
@@ -38,6 +38,7 @@ const sunRay = named("Mövenpick MS Sun Ray");
 const darakum = named("Mövenpick MS Darakum");
 const hamees = named("Mövenpick MS Hamees");
 const misr = named("Mövenpick SS Misr");
+const feddya = named("Mövenpick SB Feddya");
 
 // A cabin type with no photo had none supplied that could be told apart: Sun Ray's Junior Upper Suite; Darakum's Water
 // Level Cabin and Top Deck Senior Suite.
@@ -79,6 +80,17 @@ const BOATS: Record<string, Photo[]> = {
     misr.room("reception.jpg", "reception lounge", "salón de recepción", "レセプションラウンジ"),
     misr.room("dining.jpg", "a table set beside the river", "una mesa puesta junto al río", "川辺に整えられたテーブル"),
     misr.room("sun-deck.jpg", "seating on the sun deck", "zona de asientos en la cubierta solar", "サンデッキの座席"),
+  ],
+  "sb-feddya": [
+    feddya.room("exterior.jpg", "under sail on the Nile", "navegando a vela por el Nilo", "ナイル川を帆走する船"),
+    feddya.room("sail.jpg", "walking the deck under sail", "paseo por la cubierta bajo la vela", "帆の下のデッキを歩く"),
+    feddya.room("sun-deck.jpg", "sun deck at sunset", "cubierta solar al atardecer", "夕暮れのサンデッキ"),
+    feddya.room("pool.jpg", "pool at sunset", "piscina al atardecer", "夕暮れのプール"),
+    feddya.room("lounge.jpg", "lounge", "salón", "ラウンジ"),
+    feddya.room("restaurant.jpg", "dining table", "mesa del comedor", "ダイニングテーブル"),
+    feddya.room("balcony.jpg", "a suite balcony", "balcón de una suite", "スイートのバルコニー"),
+    feddya.cabin("senior-suite.jpg", "SUITE", "Senior Suite", "Senior Suite", "シニアスイート"),
+    feddya.cabin("panorama-suite.jpg", "PANO", "Panorama Suite", "Panorama Suite", "パノラマスイート"),
   ],
   darakum: [
     darakum.room("exterior.jpg", "on the Nile", "en el Nilo", "ナイル川を行く船"),

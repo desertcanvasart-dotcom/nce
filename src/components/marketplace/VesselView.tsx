@@ -491,6 +491,13 @@ export function VesselView({
             ) : (
               <p>{tp("onRequestNote")}</p>
             )}
+            {v.residentPrice ? (
+              <p>
+                {tp(v.residentPrice.basis === "per_person_per_night" ? "residentNight" : "residentTrip", {
+                  price: formatMoney(v.residentPrice.from, locale),
+                })}
+              </p>
+            ) : null}
             <p>{t(v.bookable ? "price.shapesBookable" : "price.shapes")}</p>
             {policy ? <p>{tp("policy")}</p> : null}
           </>

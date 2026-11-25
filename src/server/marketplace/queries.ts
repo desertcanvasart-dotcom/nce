@@ -9,6 +9,7 @@ import {
   DEFAULT_PRICE_DATA,
   ON_REQUEST,
   publicPrice,
+  residentPrice,
   sellsThroughUs,
   type BookingAvailability,
   type EnquiryPartner,
@@ -167,6 +168,26 @@ async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?:
     ]),
   );
 }
+/**
+ * ADR-113: the resident price, read on its own so that a database a migration behind the code loses only this line,
+ * never the euro prices.
+ */
+async function residentRow(db: NonNullable<ReturnType<typeof visitorDb>>, slug: string) {
+  const { data, error } = await db
+    .from("vessels")
+    .select("resident_from_minor, resident_pricing_basis, resident_pricing_valid_to, resident_pricing_approved")
+    .eq("slug", slug)
+    .in("visibility", ["published", "showcase"])
+    .maybeSingle();
+  if (error || !data) return null;
+  const basis = data.resident_pricing_basis;
+  return {
+    amount: data.resident_from_minor === null ? null : Number(data.resident_from_minor),
+    basis: basis === "per_person_per_night" || basis === "per_person_per_trip" ? basis : null,
+    validTo: data.resident_pricing_valid_to,
+    approved: data.resident_pricing_approved,
+  } as const;
+}
 /** The price the public sees: none at all for a vessel Nilecruz can't sell. */
 const shownPrice = (row: PriceRow | undefined, b: Booking, today: string) =>
   sellsThroughUs(b.availability) ? publicPrice({ ...priceOf(row), priceIncludesMargin: b.includesMargin }, today) : ON_REQUEST;
@@ -296,7 +317,11 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
   ]);
   if (error ?? pe) throw error ?? pe;
   if (!v || (indexingAllowed && v.is_sample)) return null;
-  const [publicPrices, bookings] = await Promise.all([priceRows(db, slug), bookingRows(db, slug)]);
+  const [publicPrices, bookings, resident] = await Promise.all([
+    priceRows(db, slug),
+    bookingRows(db, slug),
+    residentRow(db, slug),
+  ]);
   const booking = bookings.get(v.id) ?? SELLS;
   // The gallery, and the photos that show a cabin type (on that cabin's card instead).
   const photos: VesselPage["photos"] = [];
@@ -388,6 +413,7 @@ async function loadVessel(slug: string, locale: Locale = "en"): Promise<VesselPa
     seoTitle: say("seo_title"),
     seoDescription: say("seo_description"),
     price: shownPrice(publicPrices.get(v.id), booking, today),
+    residentPrice: sellsThroughUs(booking.availability) ? residentPrice(resident, today) : null,
     rateDisplay: priceOf(publicPrices.get(v.id)).rateDisplayAfterRequest,
     booking: booking.availability,
     enquiry: booking.enquiry,

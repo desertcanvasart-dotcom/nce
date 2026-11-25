@@ -1017,6 +1017,8 @@
     "basisTripNights": "Per person, for the {n}-night cruise.",
     "basisTripRoute": "Per person, for the {n}-night cruise, {origin} to {destination}.",
     "basisNight": "Per person, per night.",
+    "residentNight": "For Egyptians and foreign residents: from {price} per person, per night. Sightseeing not included. A guide, not a quote.",
+    "residentTrip": "For Egyptians and foreign residents: from {price} per person, per trip. Sightseeing not included. A guide, not a quote.",
     "checked": "Last checked {date}.",
     "policy": "All prices we publish and quote already include our margin.",
     "onRequestNote": "We don’t publish a price for this cruise yet. Check rates for your dates, and we’ll send your offer by email.",

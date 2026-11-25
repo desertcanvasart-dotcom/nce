@@ -144,3 +144,20 @@ describe("a boat that sails on request (SB Feddya, 25 Nov 2026)", () => {
     expect(document.body.textContent).not.toContain("there are no set sailing dates");
   });
 });
+
+describe("the resident price in Egyptian pounds (ADR-113)", () => {
+  const line = "For Egyptians and foreign residents: from E£14,410 per person, per night. Sightseeing not included.";
+
+  it("shows under the euro price when the vessel has one", () => {
+    const residentPrice = { from: { amount: 1441000, currency: "EGP" as const }, basis: "per_person_per_night" as const };
+    renderEn(<VesselView locale="en" v={vessel({ residentPrice })} today="2026-11-25" />);
+    const text = (document.body.textContent ?? "").replace(/ /g, " ");
+    expect(text).toContain(line);
+    expect(text).toContain("From €1,120 per person.");
+  });
+
+  it("is left out when there is none", () => {
+    renderEn(<VesselView locale="en" v={vessel()} today="2026-11-25" />);
+    expect(document.body.textContent).not.toContain("For Egyptians and foreign residents");
+  });
+});

@@ -5,7 +5,7 @@ import type { Mooring } from "@/lib/catalogue/mooring";
  */
 import type { Money, Propulsion, VesselType } from "@/components/ds/lib/types";
 import type { SailingPeriod } from "@/lib/product/sailing-time";
-import type { BookingAvailability, EnquiryPartner, PublicPrice, RateDisplay } from "./public-price";
+import type { BookingAvailability, EnquiryPartner, PublicPrice, RateDisplay, ResidentPrice } from "./public-price";
 
 export type VesselCabin = {
   id: string;
@@ -163,6 +163,8 @@ export type VesselPage = {
   evaluation?: VesselEvaluation;
   /** ADR-109: the one public starting price, in euros and approved by the operator, or "Price on request". */
   price: PublicPrice;
+  /** ADR-113: the Egyptian-pound "from" price for Egyptians and foreign residents, where one is approved. */
+  residentPrice?: ResidentPrice | null;
   /** How a rate for given dates is given after a request: an adviser's offer by email, or a signed-in price. */
   rateDisplay: RateDisplay;
   /** Who can book it (6 Nov 2026); "not_available_through_nilecruz" shows no price, booking or offer request. */

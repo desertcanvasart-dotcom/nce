@@ -958,3 +958,7 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - **Copy:** "more than 15 times", gratuities "expected", "Gebel Silsila" in stored itineraries (migration `20261106000500`; search keeps the old spelling through the stop's aliases).
 - **Consequence:** production needs migrations 200, 400 and 500 pasted in order, and the Sanity articles updated (CONTENT-NEEDED #71). Staging has all three (applied 6 Nov 2026).
 
+### ADR-113 A second public starting price, in Egyptian pounds, for Egyptians and foreign residents (Accepted; Islam 25 Nov 2026)
+- **Context:** Mövenpick gives separate resident rates. ADR-109 made the euro the only public selling currency.
+- **Decision:** a vessel may also show one "from" figure in Egyptian pounds, for Egyptians and foreign residents, under its euro price on its own page only (not on cards, search or structured data). Sightseeing is not included. It is shown only when approved and in date, and only catalogue admins set it. Everything else in ADR-109 stands.
+
