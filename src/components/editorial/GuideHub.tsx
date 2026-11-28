@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
+import { clientMessages } from "@/i18n/client-messages";
 import { Button } from "@/components/ds/Button/Button";
 import { Scene } from "@/components/ds/Scene/Scene";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
@@ -75,7 +76,7 @@ export async function GuideHub({ locale }: { locale: Locale }) {
       <section className={styles.wide} id="planner" aria-labelledby="planner-heading">
         <h2 id="planner-heading">{t("planner.heading")}</h2>
         {/* Only this page sends the planner's words to the browser (PERF: the layout leaves guideHub out). */}
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={clientMessages(await getMessages(), "guideHub")}>
           <GuidePlanner />
         </NextIntlClientProvider>
       </section>
