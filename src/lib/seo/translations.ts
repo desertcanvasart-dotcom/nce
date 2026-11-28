@@ -13,8 +13,8 @@ type Other = Exclude<Locale, "en">;
 const PILLARS = ["/vessels/", "/destinations/", "/nile-cruise-guide/"];
 
 /**
- * Japanese (28 Nov 2026): every public page whose text is in the repository, drafted for native review. The blog stays
- * out until its posts have Japanese versions in Sanity, and privacy and terms are English only (ADR-031).
+ * Japanese (28 Nov 2026): every public page whose text is in the repository, drafted for native review. Privacy and terms
+ * are English only (ADR-031).
  */
 const JA_PAGES = [
   "/cruises/",
@@ -66,6 +66,12 @@ const JA_PAGES = [
 ];
 
 /**
+ * The blog, and the posts that have a Japanese version in Sanity (ADR-105). A new post joins when its Japanese is
+ * published; so does a topic when its first post has one.
+ */
+const JA_BLOG = ["/blog/", "/blog/topics/news/", "/blog/nour-el-nil-dahabiyas-join-nilecruz/"];
+
+/**
  * Vessel pages whose database text is complete in Japanese (all 27 on production, 28 Nov 2026). A new vessel joins when
  * its Japanese rows are in.
  */
@@ -104,7 +110,7 @@ const JA_FORMS = /^\/cruises\/[^/]+\/(ask|reserve|save-quote)\/$/;
 
 export const TRANSLATED: Record<Other, readonly string[]> = {
   es: PILLARS,
-  ja: [...PILLARS, ...JA_PAGES, ...JA_VESSELS.map((slug) => `/cruises/${slug}/`)],
+  ja: [...PILLARS, ...JA_PAGES, ...JA_BLOG, ...JA_VESSELS.map((slug) => `/cruises/${slug}/`)],
 };
 
 const norm = (path: string) => {

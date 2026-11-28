@@ -88,5 +88,5 @@ test("the sitemaps: an index, one per language, only translated and indexable pa
   expect(await paths("es")).toEqual(["/es/destinations/", "/es/nile-cruise-guide/", "/es/vessels/"]);
   const ja = await paths("ja");
   expect(ja).toEqual(expect.arrayContaining(["/ja/", "/ja/about/", "/ja/cruises/", "/ja/operators/connect/"]));
-  expect(ja.filter((p) => p.startsWith("/ja/blog/") || p === "/ja/privacy/" || p === "/ja/terms/")).toEqual([]);
+  expect(ja.filter((p) => p === "/ja/privacy/" || p === "/ja/terms/")).toEqual([]);
 });

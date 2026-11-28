@@ -968,6 +968,6 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
   - Editorial pages: Japanese drafts in `src/content/pages/ja/`; a Japanese Sanity article overrides them.
   - Link, breadcrumb and heading names: `src/lib/seo/link-names.ja.json`, in place of the workbook's English keywords.
   - Cabin amenities and deck names have no locale column: `src/content/vessel-terms.ts`.
-  - Vessel pages join only when their database text is complete in Japanese (all 27 after the rows were applied to production); the blog joins when its posts have Japanese versions.
+  - Vessel pages join only when their database text is complete in Japanese (all 27 after the rows were applied to production); the blog joined once its one post was published in Japanese in Sanity (28 Nov 2026), and each new post joins with its Japanese version.
   - Privacy and terms stay English (ADR-031). Spanish is unchanged.
 

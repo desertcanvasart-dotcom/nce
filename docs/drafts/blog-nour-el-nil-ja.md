@@ -1,6 +1,6 @@
 # Japanese draft of the blog post `nour-el-nil-dahabiyas-join-nilecruz`
 
-Drafted by Claude on 28 Nov 2026 for review. Not in Sanity: publishing it means adding a `post` document with `language: "ja"` and the same slug to the production dataset.
+Drafted by Claude on 28 Nov 2026 and published the same day to the production dataset as `post-nour-el-nil-dahabiyas-join-nilecruz-ja`. Awaiting native review; Sanity holds the current text.
 
 - **Title:** Nour El Nilの帆走ダハビヤ9隻がNilecruzに加わりました
 - **Standfirst:** Nour El Nilの帆走ダハビヤ9隻のページをNilecruzに公開しました。2026年建造のDenderaから2006年建造のEl Nilまで、どの船もエスナからアスワンへ5泊で航行します。

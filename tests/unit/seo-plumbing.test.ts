@@ -19,7 +19,7 @@ describe("Batch 10: which pages are translated", () => {
   it("translations arrive page by page: Spanish has the three hand-laid hubs (ADR-106, ADR-108, ADR-111)", () => {
     expect(TRANSLATED.es).toEqual(["/vessels/", "/destinations/", "/nile-cruise-guide/"]);
   });
-  it("Japanese covers every built page; the blog and vessels without Japanese text wait for their content", () => {
+  it("Japanese covers every built page; new posts and vessels without Japanese text wait for their content", () => {
     const built = [...BUILT, ...EXTRA_PAGES];
     expect(built.filter((p) => !isTranslated(p, "ja"))).toEqual([]);
     expect(isTranslated("/cruises/nour-el-nil-dendera/", "ja")).toBe(true);
@@ -27,7 +27,8 @@ describe("Batch 10: which pages are translated", () => {
     expect(isTranslated("/cruises/a-new-vessel/", "ja")).toBe(false);
     expect(isTranslated("/cruises/a-new-vessel/ask/", "ja")).toBe(true);
     expect(isTranslated("/cruises/a-new-vessel/ask/", "es")).toBe(false);
-    expect(isTranslated("/blog/", "ja")).toBe(false);
+    expect(isTranslated("/blog/nour-el-nil-dahabiyas-join-nilecruz/", "ja")).toBe(true);
+    expect(isTranslated("/blog/a-new-post/", "ja")).toBe(false);
     expect(isTranslated("/terms/", "ja")).toBe(false);
   });
 });
@@ -42,9 +43,9 @@ describe("SEO-007 hreflang", () => {
     });
   });
   it("an untranslated page is noindex and points its canonical at English", () => {
-    const m = pageMetadata({ locale: "ja", path: "/blog", title: "Blog" });
+    const m = pageMetadata({ locale: "ja", path: "/privacy", title: "Privacy" });
     expect(m.robots).toEqual({ index: false, follow: true });
-    expect(origin(String(m.alternates?.canonical))).toBe("/blog/");
+    expect(origin(String(m.alternates?.canonical))).toBe("/privacy/");
     expect(m.alternates?.languages).toBeUndefined();
   });
 });
