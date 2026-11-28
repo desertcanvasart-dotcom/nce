@@ -27,13 +27,10 @@ export type CruiseCardProps = {
   /** Verified guest reviews only; never external ratings (ADR-009). */
   rating?: { value: number; count: number };
   /**
-   * ADR-109: the approved public starting price per person in euros, already including Nilecruz's margin: "from" one
+   * ADR-109: the approved public starting price per person in euros, with sightseeing included (ADR-114): "from" one
    * figure, or a typical band. Leave it out and the card says "Price on request".
    */
-  price?: ({ from: Money } | { min: Money; max: Money }) & {
-    /** False: the figure isn't yet confirmed to include our margin, so the card doesn't say it does. */
-    margin?: boolean;
-  };
+  price?: { from: Money } | { min: Money; max: Money };
   /** The vessel can't be booked through Nilecruz: "Booking unavailable through us" instead of a price. */
   unavailable?: boolean;
   /** Five or fewer, the ones that differ. Each is labelled for screen readers. */
@@ -127,11 +124,11 @@ export function CruiseCard(p: CruiseCardProps) {
             ) : p.price ? (
               <p>
                 {"from" in p.price
-                  ? t.rich(p.price.margin === false ? "cruiseCard.fromGuide" : "cruiseCard.from", {
+                  ? t.rich("cruiseCard.from", {
                       price: formatMoney(p.price.from, locale),
                       b: (c) => <b>{c}</b>,
                     })
-                  : t.rich(p.price.margin === false ? "cruiseCard.bandGuide" : "cruiseCard.band", {
+                  : t.rich("cruiseCard.band", {
                       min: formatMoney(p.price.min, locale),
                       max: formatMoney(p.price.max, locale),
                       b: (c) => <b>{c}</b>,

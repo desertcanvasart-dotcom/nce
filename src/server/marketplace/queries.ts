@@ -135,18 +135,17 @@ type BookingRow = {
   booking_availability: string;
   enquiry_partner_name: string | null;
   enquiry_partner_email: string | null;
-  margin_included: boolean;
 };
-type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner; includesMargin: boolean };
-const SELLS: Booking = { availability: "available_through_nilecruz", includesMargin: true };
+type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner };
+const SELLS: Booking = { availability: "available_through_nilecruz" };
 /**
- * Who can book each vessel, and whether its price includes our margin (6 Nov 2026), read on their own like the price
- * columns: a database a migration behind the code reads as "available through Nilecruz", margin included.
+ * Who can book each vessel, read on their own like the price
+ * columns: a database a migration behind the code reads as "available through Nilecruz".
  */
 async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: string): Promise<Map<string, Booking>> {
   let q = db
     .from("vessels")
-    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email, margin_included")
+    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email")
     .in("visibility", ["published", "showcase"]);
   if (slug) q = q.eq("slug", slug);
   const { data, error } = await q;
@@ -163,7 +162,6 @@ async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?:
           r.enquiry_partner_name && r.enquiry_partner_email
             ? { name: r.enquiry_partner_name, email: r.enquiry_partner_email }
             : undefined,
-        includesMargin: r.margin_included !== false,
       },
     ]),
   );
@@ -190,7 +188,7 @@ async function residentRow(db: NonNullable<ReturnType<typeof visitorDb>>, slug: 
 }
 /** The price the public sees: none at all for a vessel Nilecruz can't sell. */
 const shownPrice = (row: PriceRow | undefined, b: Booking, today: string) =>
-  sellsThroughUs(b.availability) ? publicPrice({ ...priceOf(row), priceIncludesMargin: b.includesMargin }, today) : ON_REQUEST;
+  sellsThroughUs(b.availability) ? publicPrice(priceOf(row), today) : ON_REQUEST;
 
 /** The cards' words (summary, photo description) are in the page's language where written, else in English. */
 async function loadListing(locale: Locale = "en"): Promise<ListingVessel[]> {

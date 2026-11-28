@@ -33,7 +33,6 @@ export function PriceExample({ steps: given, locale = "en" }: { steps?: PriceSte
           </tr>
         </tfoot>
       </table>
-      <p className={styles.note}>{t("policy")}</p>
     </section>
   );
 }

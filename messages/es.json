@@ -115,12 +115,10 @@
       "compare": "Comparar",
       "save": "Guardar {name}",
       "remove": "Quitar {name} de guardados",
-      "from": "Desde <b>{price}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
-      "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+      "from": "Desde <b>{price}</b> por persona. Incluye las visitas turísticas. Una referencia, no un presupuesto.",
+      "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye las visitas turísticas. Una referencia, no un presupuesto.",
       "onRequest": "Precio a consultar",
-      "unavailable": "No se puede reservar con nosotros",
-      "fromGuide": "Desde <b>{price}</b> por persona. Una referencia, no un presupuesto.",
-      "bandGuide": "Normalmente <b>{min}–{max}</b> por persona. Una referencia, no un presupuesto."
+      "unavailable": "No se puede reservar con nosotros"
     },
     "experienceCard": {
       "seeDetails": "Ver detalles"
@@ -1176,8 +1174,8 @@
     }
   },
   "pricing": {
-    "from": "Desde <b>{price}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
-    "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye nuestro margen. Una referencia, no un presupuesto.",
+    "from": "Desde <b>{price}</b> por persona. Incluye las visitas turísticas. Una referencia, no un presupuesto.",
+    "band": "Normalmente <b>{min}–{max}</b> por persona. Incluye las visitas turísticas. Una referencia, no un presupuesto.",
     "onRequest": "Precio a consultar",
     "basisTrip": "Por persona y crucero.",
     "basisTripNights": "Por persona, para el crucero de {n} noches.",
@@ -1186,7 +1184,6 @@
     "residentNight": "Para egipcios y extranjeros residentes: desde {price} por persona y noche. Visitas no incluidas. Una orientación, no un presupuesto.",
     "residentTrip": "Para egipcios y extranjeros residentes: desde {price} por persona y viaje. Visitas no incluidas. Una orientación, no un presupuesto.",
     "checked": "Última comprobación: {date}.",
-    "policy": "Todos los precios que publicamos y presupuestamos ya incluyen nuestro margen.",
     "onRequestNote": "Aún no publicamos un precio para este crucero. Consulta las tarifas para tus fechas y te enviaremos tu oferta por correo electrónico.",
     "why": "Por qué varían los precios de los cruceros por el Nilo",
     "gratuities": "Las propinas de la tripulación van aparte: normalmente entre 5 € y 10 € por persona y noche, según el crucero. Comprueba la oferta de cada crucero.",
@@ -1208,7 +1205,7 @@
       "failed": "No se pudo enviar tu solicitud. Inténtalo de nuevo en un momento.",
       "tooMany": "Demasiadas solicitudes desde aquí. Inténtalo de nuevo en unos minutos.",
       "invalid": "Revisa: {fields}.",
-      "signedInResult": "{price} por persona, con salida el {date}, {cabin}. Incluye nuestro margen.",
+      "signedInResult": "{price} por persona, con salida el {date}, {cabin}.",
       "signedInNone": "Aún no tenemos tarifa para esa fecha. Comprobaremos la disponibilidad y te enviaremos tu oferta por correo electrónico."
     },
     "save": {
@@ -1223,9 +1220,7 @@
       "summary": "{name}: {details}",
       "any": "fechas por acordar"
     },
-    "unavailable": "No se puede reservar con nosotros",
-    "fromGuide": "Desde <b>{price}</b> por persona. Una referencia, no un presupuesto.",
-    "bandGuide": "Normalmente <b>{min}–{max}</b> por persona. Una referencia, no un presupuesto."
+    "unavailable": "No se puede reservar con nosotros"
   },
   "guideHub": {
     "meta": {
@@ -1502,7 +1497,7 @@
     "propulsionLabel": "Propulsion",
     "vessels": "{count, plural, one {# vessel} other {# vessels}}",
     "departures": "{count, plural, one {# matching departure} other {# matching departures}}",
-    "note": "Starting prices are per person, in euros: a guide, not a quote. All prices we publish and quote already include our margin. Sorted by starting price: cruises with “Price on request” have no price to sort by, so they come after the others, by name ({priced} of {total} show a price). Crew gratuities are separate: usually €5 to €10 per person, per night, depending on the cruise. Check each cruise’s offer.",
+    "note": "Starting prices are per person, in euros: a guide, not a quote. Sorted by starting price: cruises with “Price on request” have no price to sort by, so they come after the others, by name ({priced} of {total} show a price). Crew gratuities are separate: usually €5 to €10 per person, per night, depending on the cruise. Check each cruise’s offer.",
     "cardsLabel": "Cruises",
     "trayFull": "Compare up to {max} vessels at a time. Remove one first.",
     "tray": "Compare",
@@ -1532,7 +1527,7 @@
     "title": "Compare vessels",
     "description": "Up to three Nile cruise vessels side by side.",
     "crumb": "Compare",
-    "lead": "The facts that differ most between Nile vessels. Starting prices are per person, in euros: a guide, not a quote. All prices we publish and quote already include our margin.",
+    "lead": "The facts that differ most between Nile vessels. Starting prices are per person, in euros: a guide, not a quote.",
     "empty": "Tick “Compare” on two or three vessels in the <link>cruise listings</link> to see them side by side.",
     "caption": "Vessels compared",
     "type": "Type",
@@ -1548,8 +1543,8 @@
     "evaluation": "Nilecruz evaluation",
     "notEvaluated": "Not evaluated yet",
     "price": "Starting price",
-    "from": "From {price} per person. Includes our margin. A guide, not a quote.",
-    "band": "Typically {min}–{max} per person. Includes our margin. A guide, not a quote.",
+    "from": "From {price} per person. Includes sightseeing. A guide, not a quote.",
+    "band": "Typically {min}–{max} per person. Includes sightseeing. A guide, not a quote.",
     "onRequest": "Price on request",
     "booking": "Booking",
     "bookable": "Bookable on Nilecruz",
@@ -1611,9 +1606,8 @@
     "stays": "Your plan stays on this device until you send it. Sending asks you to sign in or create an account, then shows your request to check before it goes to operators. No offer, price or ranking is guaranteed."
   },
   "priceExample": {
-    "caption": "Per person, in euros, including our margin",
-    "total": "Total, per person",
-    "policy": "All prices we publish and quote already include our margin."
+    "caption": "Per person, in euros",
+    "total": "Total, per person"
   },
   "tours": {
     "adultsOnly": "adults only",
@@ -1623,7 +1617,6 @@
     "starts": "Where it starts:",
     "cancellation": "Cancellation:",
     "onRequest": "Price on request.",
-    "policy": "All prices we publish and quote already include our margin.",
     "choose": "<link>Choose a date for {name}</link>: pick shared or private and your party; the price shows after you sign in.",
     "soon": "Prices coming soon.",
     "soonBody": "Booking opens when our office’s rates are loaded. Until then, <link>contact us</link> to ask about this tour.",

@@ -21,7 +21,7 @@ export default async function TermsPage() {
   setRequestLocale("en");
   const t = await getTranslations({ locale: "en", namespace: "legal" });
   return (
-    <LegalDraft title="Terms of use" updated="17 Oct 2026" banner={t("draftBanner")}>
+    <LegalDraft title="Terms of use" updated="28 Nov 2026" banner={t("draftBanner")}>
       <p>
         These terms explain how Nilecruz works and what you agree to when you use the site, create an account or book. They are a
         draft written to describe how the service is designed. They are not legal advice and are not yet in force.
@@ -63,6 +63,7 @@ export default async function TermsPage() {
       <h2>Prices</h2>
       <ul>
         <li>Prices are per person, in the currency shown, and state what is included.</li>
+        <li>All prices we publish and quote already include our margin.</li>
         <li>A cruise runs from check-in to check-out. Airport and hotel transfers are not included unless the cruise says so.</li>
         <li>
           Children under 3 travel free. Children aged 3 to 5 pay 25% of the adult rate and children aged 6 to 11 pay 50%; guests

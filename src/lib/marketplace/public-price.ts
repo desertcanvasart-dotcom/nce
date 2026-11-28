@@ -27,13 +27,11 @@ export type PublicPriceData = {
   priceLastChecked: string | null;
   operatorPriceApproved: boolean;
   rateDisplayAfterRequest: RateDisplay;
-  /** False until Islam confirms the figure includes our margin: shown without "Includes our margin" (6 Nov 2026). */
-  priceIncludesMargin?: boolean;
 };
 
 /** What the public may see. */
 export type PublicPrice =
-  | { mode: "from_price"; from: Money; basis: PriceBasis; nights: number | null; lastChecked: string; margin?: boolean }
+  | { mode: "from_price"; from: Money; basis: PriceBasis; nights: number | null; lastChecked: string }
   | {
       mode: "price_band";
       min: Money;
@@ -41,8 +39,6 @@ export type PublicPrice =
       basis: PriceBasis;
       nights: number | null;
       lastChecked: string;
-      /** False: shown without "Includes our margin" until Islam confirms it does. Missing means it does. */
-      margin?: boolean;
     }
   | { mode: "on_request" };
 
@@ -76,7 +72,7 @@ export function publicPrice(d: PublicPriceData | null | undefined, today: string
   if (d.priceValidTo && d.priceValidTo < today) return ON_REQUEST;
   const eur = (amount: number): Money => ({ amount, currency: "EUR" });
   const nights = d.priceBasis === "per_person_per_trip" ? d.priceTripNights : null;
-  const common = { basis: d.priceBasis, nights, lastChecked: d.priceLastChecked, margin: d.priceIncludesMargin ?? true };
+  const common = { basis: d.priceBasis, nights, lastChecked: d.priceLastChecked };
   if (d.publicPriceMode === "from_price") {
     if (!d.fromPriceAmount || d.fromPriceAmount <= 0) return ON_REQUEST;
     return { mode: "from_price", from: eur(d.fromPriceAmount), ...common };
@@ -115,13 +111,11 @@ export function priceMessage(
   p: PublicPrice,
   money: (m: Money) => string,
 ): {
-  key: "level1.from" | "level1.fromGuide" | "level1.band" | "level1.bandGuide" | "level1.onRequest";
+  key: "level1.from" | "level1.band" | "level1.onRequest";
   values: Record<string, string>;
 } {
-  if (p.mode === "from_price")
-    return { key: p.margin !== false ? "level1.from" : "level1.fromGuide", values: { price: money(p.from) } };
-  if (p.mode === "price_band")
-    return { key: p.margin !== false ? "level1.band" : "level1.bandGuide", values: { min: money(p.min), max: money(p.max) } };
+  if (p.mode === "from_price") return { key: "level1.from", values: { price: money(p.from) } };
+  if (p.mode === "price_band") return { key: "level1.band", values: { min: money(p.min), max: money(p.max) } };
   return { key: "level1.onRequest", values: {} };
 }
 

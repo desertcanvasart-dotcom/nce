@@ -211,9 +211,9 @@ export function toCard(v: ListingVessel, locale: string = "en"): GridCard {
     // ADR-109: the approved starting price in euros, or "Price on request"; never a rate computed from cabins.
     price:
       v.price.mode === "from_price"
-        ? { from: v.price.from, margin: v.price.margin }
+        ? { from: v.price.from }
         : v.price.mode === "price_band"
-          ? { min: v.price.min, max: v.price.max, margin: v.price.margin }
+          ? { min: v.price.min, max: v.price.max }
           : undefined,
     // A vessel Nilecruz can't sell says so instead of a price (Steam Ship Sudan, 6 Nov 2026).
     unavailable: !sellsThroughUs(v.booking),

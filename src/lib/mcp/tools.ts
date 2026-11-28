@@ -95,8 +95,7 @@ function startingPrice(p: PublicPrice) {
   if (p.mode === "on_request") return { mode: "on_request", text: "Price on request" };
   const eur = (m: { amount: number }) => ({ amount: m.amount / 100, currency: "EUR" });
   const basis = p.basis === "per_person_per_night" ? "per person, per night" : "per person, per trip";
-  // "Includes our margin" only where the figure is confirmed to include it (6 Nov 2026).
-  const note = p.margin !== false ? "Includes our margin. A guide, not a quote." : "A guide, not a quote.";
+  const note = "Includes sightseeing. A guide, not a quote.";
   return p.mode === "from_price"
     ? {
         mode: "from_price",
@@ -115,7 +114,7 @@ function startingPrice(p: PublicPrice) {
       };
 }
 const PRICE_NOTE =
-  "Starting prices are per person, in euros, and a guide, not a quote. All prices we publish and quote already include our margin. For given dates, Nilecruz checks availability and sends an offer by email.";
+  "Starting prices are per person, in euros, and a guide, not a quote. For given dates, Nilecruz checks availability and sends an offer by email.";
 const GRATUITY = "Usually €5 to €10 per person, per night, depending on the cruise. Check each cruise's offer.";
 
 function facts(v: VesselPage, site: string) {

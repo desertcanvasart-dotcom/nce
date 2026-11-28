@@ -68,7 +68,7 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
         <div className={styles.booking}>
           {/* ADR-109: tour rates are in US dollars and the euro is the only public selling currency; never converted. */}
           <p>
-            <strong>{t("onRequest")}</strong> {t("policy")}
+            <strong>{t("onRequest")}</strong>
           </p>
           <p>
             {t.rich("choose", {

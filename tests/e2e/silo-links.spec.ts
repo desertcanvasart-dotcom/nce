@@ -137,7 +137,7 @@ test("the price page: euros, the brief's heading and example, the total from its
   await expect(page.locator("header").getByText("Sample data")).toHaveCount(0);
   await expect(example).not.toContainText("Sample data");
   await expect(page.locator("main")).not.toContainText(/US\$|tenfold|ten times/);
-  await expect(page.getByText("All prices we publish and quote already include our margin.").first()).toBeVisible();
+  await expect(page.getByText("our margin")).toHaveCount(0);
 });
 
 test("the price calculator shows the same example and is a free web application [PAGE-059]", async ({ page }) => {

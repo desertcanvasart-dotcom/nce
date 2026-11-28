@@ -39,15 +39,7 @@ describe("public starting prices (ADR-109)", () => {
       basis: "per_person_per_trip",
       nights: null,
       lastChecked: "2026-11-06",
-      margin: true,
     });
-  });
-
-  it("says when a figure isn't yet confirmed to include our margin (the Nour El Nil boats, 6 Nov 2026)", () => {
-    const p = publicPrice({ ...royalLily, priceIncludesMargin: false }, today);
-    expect(p.mode === "from_price" && p.margin).toBe(false);
-    expect(priceMessage(p, () => "€2,500").key).toBe("level1.fromGuide");
-    expect(priceMessage(publicPrice(royalLily, today), () => "€1,120").key).toBe("level1.from");
   });
 
   it("only a vessel Nilecruz can sell is sold through us (Steam Ship Sudan isn't)", () => {
@@ -103,13 +95,12 @@ describe("public starting prices (ADR-109)", () => {
     const money = (a: number) => formatMoney({ amount: a, currency: "EUR" }, "en");
     const { key, values } = priceMessage(publicPrice(royalLily, today), (x) => formatMoney(x, "en"));
     expect(strip(m(key.replace("level1.", "")).replace("{price}", values.price!))).toBe(
-      "From €1,120 per person. Includes our margin. A guide, not a quote.",
+      "From €1,120 per person. Includes sightseeing. A guide, not a quote.",
     );
     expect(strip(en.pricing.band.replace("{min}", money(90000)).replace("{max}", money(140000)))).toBe(
-      "Typically €900–€1,400 per person. Includes our margin. A guide, not a quote.",
+      "Typically €900–€1,400 per person. Includes sightseeing. A guide, not a quote.",
     );
     expect(en.pricing.onRequest).toBe("Price on request");
-    expect(en.pricing.policy).toBe("All prices we publish and quote already include our margin.");
     expect(en.pricing.rates.title).toBe("Check rates for your dates");
     expect(en.pricing.rates.lead).toBe("We’ll check availability and send your offer by email.");
     expect(en.pricing.save.title).toBe("Save this quote and get an alert if the price changes.");

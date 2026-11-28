@@ -153,22 +153,20 @@ export function VesselView({
     !sold && v.enquiry ? { href: `mailto:${v.enquiry.email}`, label: t("booking.enquire", { name: v.enquiry.name }) } : null;
   // ADR-109: the one public starting price (euros, operator-approved, in date), or "Price on request".
   const price = v.price;
-  // "Includes our margin" only where the figure is confirmed to include it (6 Nov 2026).
   const priceText = (p: PublicPrice) =>
     p.mode === "from_price"
-      ? tp.markup(p.margin !== false ? "from" : "fromGuide", { price: w.money(p.from), b: (c) => c })
+      ? tp.markup("from", { price: w.money(p.from), b: (c) => c })
       : p.mode === "price_band"
-        ? tp.markup(p.margin !== false ? "band" : "bandGuide", { min: w.money(p.min), max: w.money(p.max), b: (c) => c })
+        ? tp.markup("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => c })
         : tp("onRequest");
   const priceRich = (p: PublicPrice) =>
     !sold
       ? tp("unavailable")
       : p.mode === "from_price"
-        ? tp.rich(p.margin !== false ? "from" : "fromGuide", { price: w.money(p.from), b: (c) => <b>{c}</b> })
+        ? tp.rich("from", { price: w.money(p.from), b: (c) => <b>{c}</b> })
         : p.mode === "price_band"
-          ? tp.rich(p.margin !== false ? "band" : "bandGuide", { min: w.money(p.min), max: w.money(p.max), b: (c) => <b>{c}</b> })
+          ? tp.rich("band", { min: w.money(p.min), max: w.money(p.max), b: (c) => <b>{c}</b> })
           : tp("onRequest");
-  const policy = !hasFigure(price) || price.margin !== false;
   const basis = hasFigure(price)
     ? price.basis === "per_person_per_night"
       ? tp("basisNight")
@@ -259,7 +257,7 @@ export function VesselView({
     a: !sold
       ? `${tp("unavailable")}. ${t("booking.costA")}`
       : hasFigure(price)
-        ? [priceText(price), basis, policy ? tp("policy") : null].filter(Boolean).join(" ")
+        ? [priceText(price), basis].filter(Boolean).join(" ")
         : `${tp("onRequest")}. ${tp("onRequestNote")}`,
   });
   faqs.push({
@@ -499,7 +497,6 @@ export function VesselView({
               </p>
             ) : null}
             <p>{t(v.bookable ? "price.shapesBookable" : "price.shapes")}</p>
-            {policy ? <p>{tp("policy")}</p> : null}
           </>
         )}
         {sold ? <p>{tp("gratuities")}</p> : null}
