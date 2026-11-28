@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { DeckPlan } from "@/components/marketplace/DeckPlan";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Checkboxes, Input } from "@/components/dashboard/ui";
-import { gratuityText } from "@/lib/product/pricing";
 import { formatMoney } from "@/components/ds/lib/format";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/marketplace/marketplace.module.css";
@@ -16,17 +15,15 @@ import {
   formatDay,
   perPersonFor,
   pickItinerary,
-  sightseeingText,
   preferredPrices,
-  availabilityLabel,
-  availabilityUpdated,
+  confirmedAgo,
   canBook,
   type BookingMode,
   type DeparturePrice,
 } from "@/lib/marketplace/vessel";
 import { routeId } from "@/lib/marketplace/listing";
-import { bandLines, type CancellationBand } from "@/lib/tours/tours";
-import { pageMetadata } from "@/lib/seo/metadata";
+import type { CancellationBand } from "@/lib/tours/tours";
+import { localizedPath, pageMetadata } from "@/lib/seo/metadata";
 import { requireUser } from "@/server/auth";
 import { policyFor } from "@/server/bookings/queries";
 import { premiumPeriods } from "@/server/payments/queries";
@@ -48,7 +45,8 @@ type Props = { params: Promise<{ locale: Locale; slug: string }>; searchParams: 
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
-  return pageMetadata({ locale, path: `/cruises/${slug}/reserve`, title: "Prices and dates", noindex: true });
+  const t = await getTranslations({ locale, namespace: "vesselPage.reserve" });
+  return pageMetadata({ locale, path: `/cruises/${slug}/reserve`, title: t("title"), noindex: true });
 }
 
 const UUID = /^[0-9a-f-]{36}$/;
@@ -62,9 +60,17 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
   setRequestLocale(locale);
   const q = await searchParams;
   const here = `/cruises/${slug}/reserve/?${new URLSearchParams(q as Record<string, string>).toString()}`;
-  await requireUser(here);
-  const v = await publicVessel(slug);
+  await requireUser(locale === "ja" ? localizedPath(locale, `/cruises/${slug}/reserve`) + here.slice(here.indexOf("?")) : here);
+  // The vessel's own words in Japanese where its data has them; every other language reads the English, as before.
+  const v = await publicVessel(slug, locale === "ja" ? "ja" : "en");
   if (!v) notFound();
+  const tv = await getTranslations({ locale, namespace: "vesselPage" });
+  const t = await getTranslations({ locale, namespace: "vesselPage.reserve" });
+  const places = tv.raw("places") as Record<string, string>;
+  const place = (n: string) => (locale === "ja" ? (places[n] ?? n) : n);
+  const sep = t("listJoin");
+  const money = (amount: number, currency: string) => formatMoney({ amount, currency: currency as "EUR" }, locale);
+  const range = (from: string, to: string) => t("range", { from: formatDay(from, locale), to: formatDay(to, locale) });
   const it = pickItinerary(v.itineraries, q.itinerary);
   // ADR-102: an approved vessel sells this itinerary with its own sightseeing too; the traveller chooses first.
   // ADR-102: or, on every other vessel, the cruise with Nilecruz's programme (its own order, paid together).
@@ -143,6 +149,44 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
     : { data: 24 };
   const confirmHours = Number(hours ?? 24);
   const openOn = (d: DeparturePrice[]) => d.some(canBook);
+  // The words of availabilityLabel and availabilityUpdated (lib/marketplace/vessel), in the visitor's language.
+  const availability = (r: DeparturePrice) =>
+    r.mode === "sold_out"
+      ? t("availability.soldOut")
+      : r.mode === "unconfirmed"
+        ? t("availability.unconfirmed")
+        : r.mode === "request"
+          ? t("availability.request", { hours: String(confirmHours) })
+          : r.placesLeft !== null && r.placesLeft <= 2
+            ? t("availability.last")
+            : t("availability.instant");
+  const updated = (confirmedAt: string) => {
+    const { n, unit } = confirmedAgo(confirmedAt);
+    return unit === "now" ? t("updated.now") : t(`updated.${unit}`, { n });
+  };
+  const bandLine = (bands: CancellationBand[]) => {
+    const sorted = [...bands].sort((a, b) => b.from_days - a.from_days);
+    if (sorted.length === 1 && sorted[0]!.from_days === 0) return [t("bandAny", { percent: String(sorted[0]!.percent) })];
+    return sorted.map((b, i) => {
+      const prev = sorted[i - 1];
+      const percent = String(b.percent);
+      return !prev
+        ? t("bandFirst", { days: String(b.from_days), percent })
+        : b.from_days === 0
+          ? t("bandLast", { days: String(prev.from_days), percent })
+          : t("bandBetween", { from: String(b.from_days), to: String(prev.from_days - 1), percent });
+    });
+  };
+  const gratuity = (perPersonPerNightMinor: number, party: { nights: number; ages: number[] }) => {
+    const usd = (m: number) => formatMoney({ amount: m, currency: "USD" }, locale === "ja" ? "ja" : "en");
+    const counted = party.ages.filter((a) => a >= 3).length;
+    return t("gratuity", {
+      amount: usd(perPersonPerNightMinor),
+      total: counted
+        ? t("gratuityTotal", { amount: usd(perPersonPerNightMinor * party.nights * counted), nights: String(party.nights) })
+        : "",
+    });
+  };
   // Sold out on the chosen date: the nearest dates on this ship with something bookable, and similar ships.
   const nearby =
     dep && !openOn(dep)
@@ -164,32 +208,32 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       <Breadcrumbs
         locale={locale}
         trail={[
-          { name: "Home", path: "/" },
-          { name: "Cruises", path: "/cruises/" },
+          { name: tv("crumbs.home"), path: "/" },
+          { name: tv("crumbs.cruises"), path: "/cruises/" },
           { name: v.name, path: `/cruises/${slug}/` },
-          { name: "Prices and dates", path: base },
+          { name: t("title"), path: base },
         ]}
       />
       <header className={styles.head}>
-        <h1 className={styles.title}>Prices and dates: {v.name}</h1>
+        <h1 className={styles.title}>{t("heading", { name: v.name })}</h1>
         <p className={styles.lead}>
-          {it ? `${it.origin} to ${it.destination}, ${it.nights} nights. ` : ""}Published prices per person, from check-in to
-          check-out. Crew gratuities are separate and paid on board.
+          {it ? t("leadRoute", { origin: place(it.origin), destination: place(it.destination), nights: String(it.nights) }) : ""}
+          {t("lead")}
         </p>
       </header>
 
       {v.itineraries.length > 1 ? (
-        <nav aria-label="Itineraries" className={styles.facets}>
+        <nav aria-label={t("itineraries")} className={styles.facets}>
           <ul>
             {v.itineraries.map((i) => (
               <li key={i.id}>
                 {i.id === it?.id ? (
                   <span aria-current="page">
-                    {i.origin} → {i.destination}, {i.nights} nights
+                    {t("itinerary", { origin: place(i.origin), destination: place(i.destination), nights: String(i.nights) })}
                   </span>
                 ) : (
                   <Link href={`${base}?itinerary=${encodeURIComponent(i.code)}`}>
-                    {i.origin} → {i.destination}, {i.nights} nights
+                    {t("itinerary", { origin: place(i.origin), destination: place(i.destination), nights: String(i.nights) })}
                   </Link>
                 )}
               </li>
@@ -199,12 +243,12 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       ) : null}
 
       {it && offer ? (
-        <nav aria-label="Package" className={styles.facets}>
+        <nav aria-label={t("package")} className={styles.facets}>
           <ul>
             {(
               [
-                ["cruise", "Cruise only"],
-                [offer, "With sightseeing"],
+                ["cruise", t("cruiseOnly")],
+                [offer, t("withSightseeing")],
               ] as const
             ).map(([value, label]) => (
               <li key={value}>
@@ -222,27 +266,39 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
           </ul>
           <p className={styles.note}>
             {pkg === "with_sightseeing" && it.sightseeing
-              ? `The vessel's own sightseeing is in the price: ${sightseeingText(it.sightseeing)}`
+              ? t("vesselSightseeing", {
+                  text: t("sightseeingText", {
+                    parts: [
+                      it.sightseeing.guide ? tv("itinerary.guide") : null,
+                      it.sightseeing.ticketsIncluded ? tv("itinerary.fees") : tv("itinerary.noFees"),
+                    ]
+                      .filter(Boolean)
+                      .join(sep),
+                    sites: it.sightseeing.sites.join(sep),
+                  }).replace(/^./, (c) => c.toUpperCase()),
+                })
               : pkg === "with_programme" && it.programme
-                ? `With Nilecruz's ${it.programme.name}: a separate booking with Nilecruz, with an Egyptologist guide and entrance fees, paid together with your cruise.`
-                : "Cruise only: choose “With sightseeing” to add it."}
+                ? t("programme", { name: it.programme.name })
+                : t("cruiseOnlyNote")}
           </p>
         </nav>
       ) : null}
 
       {!v.bookable || !it || !departures.length ? (
         <p className={styles.note}>
-          Nothing on this vessel can be booked online right now.{" "}
-          <Link
-            href={`/dashboard/journey/requests/?route=${encodeURIComponent(`${it?.origin ?? ""}→${it?.destination ?? ""}`)}#new`}
-          >
-            Ask operators for an offer
-          </Link>{" "}
-          instead.
+          {t.rich("notBookable", {
+            link: (c) => (
+              <Link
+                href={`/dashboard/journey/requests/?route=${encodeURIComponent(`${it?.origin ?? ""}→${it?.destination ?? ""}`)}#new`}
+              >
+                {c}
+              </Link>
+            ),
+          })}
         </p>
       ) : !dep ? (
         <section className={styles.section} aria-labelledby="deps">
-          <h2 id="deps">1. Choose a departure</h2>
+          <h2 id="deps">{t("step1")}</h2>
           <ul className={styles.list}>
             {departures.map((d) => {
               const first = d[0]!;
@@ -250,18 +306,18 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               const instant = d.some((r) => canBook(r) && r.mode === "instant");
               return (
                 <li key={first.departureId}>
-                  <Link href={keep({ dep: first.departureId })}>
-                    {formatDay(first.departsOn, locale)} to {formatDay(first.returnsOn, locale)}
-                  </Link>{" "}
+                  <Link href={keep({ dep: first.departureId })}>{range(first.departsOn, first.returnsOn)}</Link>{" "}
                   {prices.length ? (
                     <span>
-                      from {formatMoney({ amount: Math.min(...prices), currency: first.currency }, locale)} per person, two
-                      sharing · {instant ? "instant confirmation" : `confirmed within ${confirmHours} h`} · pay in full by{" "}
+                      {t("from", { price: money(Math.min(...prices), first.currency) })} ·{" "}
+                      {instant ? t("instantMode") : t("within", { hours: String(confirmHours) })} · {t("payBy")}{" "}
                       {/* EXP-006: the deadline if booked today, by the same rules as the reservation (ADR-027). */}
                       {formatDay(paymentDeadline(today, first.departsOn, periods).dueOn, locale)}
                     </span>
                   ) : (
-                    <span className={styles.note}>{d.some((r) => r.mode === "sold_out") ? "sold out" : "to be confirmed"}</span>
+                    <span className={styles.note}>
+                      {d.some((r) => r.mode === "sold_out") ? t("soldOutShort") : t("unconfirmedShort")}
+                    </span>
                   )}
                 </li>
               );
@@ -271,36 +327,32 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
       ) : !chosen || quote === null ? (
         <section className={styles.section} aria-labelledby="cabin">
           <h2 id="cabin">
-            2. Choose a deck and cabin · {formatDay(dep[0]!.departsOn, locale)} to {formatDay(dep[0]!.returnsOn, locale)}
+            {t("step2", { from: formatDay(dep[0]!.departsOn, locale), to: formatDay(dep[0]!.returnsOn, locale) })}
           </h2>
           <p>
-            <Link href={keep({})}>← Other departures</Link>
+            <Link href={keep({})}>{t("otherDepartures")}</Link>
           </p>
           {!openOn(dep) ? (
             <div className={styles.note}>
-              <p>Sold out on this date.</p>
+              <p>{t("soldOutDate")}</p>
               {nearby.length ? (
                 <p>
-                  Nearby dates on {v.name}:{" "}
+                  {t("nearby", { name: v.name })}{" "}
                   {nearby.map((d, i) => (
                     <span key={d[0]!.departureId}>
-                      {i ? ", " : ""}
+                      {i ? sep : ""}
                       <Link href={keep({ dep: d[0]!.departureId })}>{formatDay(d[0]!.departsOn, locale)}</Link>
                     </span>
                   ))}
-                  .
+                  {t("end")}
                 </p>
               ) : null}
               <p>
-                <Link href={similar}>Similar ships on this route</Link>
+                <Link href={similar}>{t("similar")}</Link>
               </p>
             </div>
           ) : null}
-          {chosen && quote === null ? (
-            <p className={styles.note}>
-              That cabin can’t take this party on this departure. Choose another cabin or change the guests.
-            </p>
-          ) : null}
+          {chosen && quote === null ? <p className={styles.note}>{t("cannotTake")}</p> : null}
           {/* EXP-002: the decks, each cabin type coloured by how it books on this sailing; choosing one ticks it below. */}
           <DeckPlan
             cabins={v.cabins.filter((c) => dep.some((r) => r.cabinTypeId === c.id))}
@@ -315,33 +367,29 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             <input type="hidden" name="dep" value={dep[0]!.departureId} />
             {deckGroups(v.cabins.filter((c) => dep.some((r) => r.cabinTypeId === c.id))).map((g) => (
               <fieldset key={g.deck} className={styles.deck}>
-                <legend>{g.deck} deck</legend>
+                <legend>{tv("deckView.deck", { name: g.deck })}</legend>
                 {g.cabins.map((c) => {
                   const r = dep.find((x) => x.cabinTypeId === c.id)!;
                   const open = canBook(r);
-                  const label = availabilityLabel(r, confirmHours);
+                  const label = availability(r);
                   return (
                     <label key={c.id} className={styles.cabinOption}>
                       <input type="radio" name="cabin" value={c.id} required disabled={!open} defaultChecked={q.cabin === c.id} />
-                      <span className="visually-hidden">Cabin type</span>
+                      <span className="visually-hidden">{t("cabinType")}</span>
                       <span>
                         <strong>{c.name}</strong>
                         <small>
-                          {[c.sizeM2 ? `${c.sizeM2} m²` : null, c.bed, `sleeps ${c.maxOccupancy}`, c.view]
+                          {[c.sizeM2 ? `${c.sizeM2} m²` : null, c.bed, tv("deckView.sleeps", { n: c.maxOccupancy }), c.view]
                             .filter(Boolean)
                             .join(" · ")}
                         </small>
                         <small>
-                          {r.double
-                            ? `${formatMoney({ amount: r.double, currency: r.currency }, locale)} per person, two sharing`
-                            : ""}
-                          {r.single ? ` · ${formatMoney({ amount: r.single, currency: r.currency }, locale)} alone` : ""}
-                          {r.supplement
-                            ? ` · plus ${formatMoney({ amount: r.supplement, currency: r.currency }, locale)} per adult in supplements`
-                            : ""}
+                          {r.double ? t("priceDouble", { price: money(r.double, r.currency) }) : ""}
+                          {r.single ? ` · ${t("priceSingle", { price: money(r.single, r.currency) })}` : ""}
+                          {r.supplement ? ` · ${t("priceSupplement", { price: money(r.supplement, r.currency) })}` : ""}
                         </small>
                         <em>{label}</em>
-                        {r.confirmedAt && r.mode !== "sold_out" ? <small>{availabilityUpdated(r.confirmedAt)}</small> : null}
+                        {r.confirmedAt && r.mode !== "sold_out" ? <small>{updated(r.confirmedAt)}</small> : null}
                       </span>
                     </label>
                   );
@@ -350,7 +398,7 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             ))}
             <div className={styles.party}>
               <label>
-                Adults per cabin (18 and over)
+                {t("adults")}
                 <select name="adults" defaultValue={String(adults)}>
                   {[1, 2, 3].map((n) => (
                     <option key={n}>{n}</option>
@@ -358,11 +406,11 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 </select>
               </label>
               <label>
-                Children’s ages, per cabin (optional)
+                {t("children")}
                 <input name="children" defaultValue={q.children ?? ""} inputMode="numeric" placeholder="7, 4" maxLength={20} />
               </label>
               <label>
-                Cabins like this
+                {t("cabinsLike")}
                 <select name="cabins" defaultValue={String(cabinsWanted)}>
                   {[1, 2, 3, 4, 5].map((n) => (
                     <option key={n}>{n}</option>
@@ -371,13 +419,13 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
               </label>
             </div>
             <button type="submit" className={styles.primary}>
-              See the price
+              {t("seePrice")}
             </button>
           </form>
         </section>
       ) : (
         <section className={styles.section} aria-labelledby="guests">
-          <h2 id="guests">3. Guests and reserving</h2>
+          <h2 id="guests">{t("step3")}</h2>
           <p>
             <Link
               href={keep({
@@ -388,31 +436,27 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                 cabins: String(cabinsWanted),
               })}
             >
-              ← Change the cabin or guests
+              {t("change")}
             </Link>
           </p>
           <dl className={styles.facts}>
             <div>
-              <dt>Departure</dt>
+              <dt>{t("departure")}</dt>
+              <dd>{range(chosen.departsOn, chosen.returnsOn)}</dd>
+            </div>
+            <div>
+              <dt>{t("cabin")}</dt>
+              <dd>{t("cabinValue", { n: String(cabinsWanted), name: cabinType!.name, deck: cabinType!.deck })}</dd>
+            </div>
+            <div>
+              <dt>{t("guestsPerCabin")}</dt>
               <dd>
-                {formatDay(chosen.departsOn, locale)} to {formatDay(chosen.returnsOn, locale)}
+                {t("adultCount", { n: adults })}
+                {childAges.length ? t("childrenAged", { ages: childAges.join(sep) }) : ""}
               </dd>
             </div>
             <div>
-              <dt>Cabin</dt>
-              <dd>
-                {cabinsWanted} × {cabinType!.name}, {cabinType!.deck} deck
-              </dd>
-            </div>
-            <div>
-              <dt>Guests per cabin</dt>
-              <dd>
-                {adults} adult{adults === 1 ? "" : "s"}
-                {childAges.length ? `, children aged ${childAges.join(", ")}` : ""}
-              </dd>
-            </div>
-            <div>
-              <dt>Total</dt>
+              <dt>{t("total")}</dt>
               <dd>
                 <strong>{formatMoney({ amount: quote * cabinsWanted, currency: chosen.currency }, locale)}</strong>
               </dd>
@@ -420,37 +464,34 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             {programme ? (
               <>
                 <div>
-                  <dt>Sightseeing by Nilecruz</dt>
+                  <dt>{t("byNilecruz")}</dt>
                   <dd>
-                    {formatMoney({ amount: programme.total, currency: programme.currency }, locale)} · {programme.name}, a
-                    separate booking with Nilecruz
+                    {money(programme.total, programme.currency)} · {t("programmeSeparate", { name: programme.name })}
                   </dd>
                 </div>
                 {programme.currency === chosen.currency ? (
                   <div>
-                    <dt>Together</dt>
+                    <dt>{t("together")}</dt>
                     <dd>
                       <strong>
                         {formatMoney({ amount: quote * cabinsWanted + programme.total, currency: chosen.currency }, locale)}
                       </strong>{" "}
-                      paid on one page
+                      {t("onePage")}
                     </dd>
                   </div>
                 ) : (
                   <div>
-                    <dt>Currency</dt>
-                    <dd>
-                      The sightseeing is priced in {programme.currency}; choose a cabin priced in {programme.currency} to add it.
-                    </dd>
+                    <dt>{t("currency")}</dt>
+                    <dd>{t("currencyNote", { currency: programme.currency })}</dd>
                   </div>
                 )}
               </>
             ) : null}
             {v.gratuityUsdMinor && it ? (
               <div>
-                <dt>Crew gratuity</dt>
+                <dt>{t("gratuityLabel")}</dt>
                 <dd>
-                  {gratuityText(v.gratuityUsdMinor, {
+                  {gratuity(v.gratuityUsdMinor, {
                     nights: it.nights,
                     ages: Array.from({ length: cabinsWanted }, () => ages).flat(),
                   })}
@@ -459,34 +500,30 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
             ) : null}
           </dl>
           <p className={styles.note}>
-            {perPersonFor(chosen, ages)
-              ? `${formatMoney({ amount: perPersonFor(chosen, ages)!, currency: chosen.currency }, locale)} per adult; `
-              : ""}
-            children are priced by age.{" "}
+            {perPersonFor(chosen, ages) ? t("perAdult", { price: money(perPersonFor(chosen, ages)!, chosen.currency) }) : ""}
+            {t("byAge")}{" "}
             {chosen.supplement
-              ? `The total includes ${formatMoney({ amount: chosen.supplement, currency: chosen.currency }, locale)} per adult in compulsory supplements for these dates${supplements.length ? ` (${supplements.join(", ")})` : ""}. `
+              ? t("includesSupplements", {
+                  price: money(chosen.supplement, chosen.currency),
+                  names: supplements.length ? t("supplementNames", { list: supplements.join(sep) }) : "",
+                })
               : ""}
-            {pkg === "with_sightseeing"
-              ? "The total holds the cruise fare and the vessel's own sightseeing; transfers, flights and other tours are booked separately."
-              : "The total holds the cruise fare only (DATA-017): transfers, flights and tours are booked separately."}
+            {pkg === "with_sightseeing" ? t("totalSightseeing") : t("totalCruise")}
           </p>
           {chosen.mode === "instant" && chosen.placesLeft !== null && chosen.placesLeft < cabinsWanted ? (
-            <p className={styles.note}>Only {chosen.placesLeft} of these cabins are left. Choose fewer cabins.</p>
+            <p className={styles.note}>{t("onlyLeft", { n: String(chosen.placesLeft) })}</p>
           ) : (
             <>
-              <h3>Cancellation policy</h3>
+              <h3>{t("policy")}</h3>
               {policy ? (
                 <ul className={styles.list}>
-                  {bandLines(policy.bands as CancellationBand[], "departure").map((l) => (
+                  {bandLine(policy.bands as CancellationBand[]).map((l) => (
                     <li key={l}>{l}</li>
                   ))}
                 </ul>
               ) : null}
               {chosen.mode === "request" ? (
-                <p className={styles.note}>
-                  The operator confirms these cabins before you pay, usually within {confirmHours} hours. Nothing is charged until
-                  then.
-                </p>
+                <p className={styles.note}>{t("requestNote", { hours: String(confirmHours) })}</p>
               ) : null}
               <ActionForm
                 action={(chosen.mode === "request" ? customerRequestBooking : customerReserve).bind(null, slug, {
@@ -498,38 +535,30 @@ export default async function ReserveOnVessel({ params, searchParams }: Props) {
                   cabins: cabinsWanted,
                   ages,
                 })}
-                submit={chosen.mode === "request" ? "Send booking request" : "Reserve"}
+                submit={chosen.mode === "request" ? t("sendRequest") : t("reserve")}
               >
-                <p className={styles.note}>
-                  Full names as in passports and dates of birth for all {cabinsWanted * ages.length} guests; ages on the departure
-                  date must match. The first guest is the lead passenger.
-                </p>
+                <input type="hidden" name="locale" value={locale} />
+                <p className={styles.note}>{t("namesNote", { n: String(cabinsWanted * ages.length) })}</p>
                 {Array.from({ length: cabinsWanted * ages.length }, (_, i) => (
                   <div key={i} className={styles.party}>
                     <Input
-                      label={`Cabin ${Math.floor(i / ages.length) + 1}, guest ${(i % ages.length) + 1}: full name`}
+                      label={t("guestName", {
+                        cabin: String(Math.floor(i / ages.length) + 1),
+                        guest: String((i % ages.length) + 1),
+                      })}
                       name={`name_${i}`}
                       required
                       maxLength={160}
                       autoComplete={i === 0 ? "name" : "off"}
                     />
-                    <Input label="Date of birth" name={`dob_${i}`} type="date" required />
+                    <Input label={t("dob")} name={`dob_${i}`} type="date" required />
                     {i === 0 ? (
-                      <Input label="Nationality" name="nationality" maxLength={2} hint="Two-letter code, for example GB." />
+                      <Input label={t("nationality")} name="nationality" maxLength={2} hint={t("nationalityHint")} />
                     ) : null}
                   </div>
                 ))}
-                <Checkboxes
-                  legend="Agreement"
-                  name="terms"
-                  options={[{ value: "yes", label: "I have read the terms and the cancellation policy" }]}
-                  checked={[]}
-                />
-                <p className={styles.note}>
-                  {chosen.mode === "request"
-                    ? "We send your request to the operator now. When they confirm, you pay in My journey."
-                    : "Reserving checks the cabins are still free and holds them for you. Payment details and the deadline follow in My journey."}
-                </p>
+                <Checkboxes legend={t("agreement")} name="terms" options={[{ value: "yes", label: t("agree") }]} checked={[]} />
+                <p className={styles.note}>{chosen.mode === "request" ? t("afterRequest") : t("afterReserve")}</p>
               </ActionForm>
             </>
           )}

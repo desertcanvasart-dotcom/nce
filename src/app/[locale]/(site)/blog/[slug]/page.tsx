@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
 import { LinkCards } from "@/components/editorial/LinkCards";
 import { MorePosts, PostMeta, PostScene } from "@/components/editorial/PostList";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
 import blog from "@/components/editorial/blog.module.css";
+import { contentLocale } from "@/content/places";
 import { routing, type Locale } from "@/i18n/routing";
 import { BLOG_URL, morePosts, postDate, postDay, postUrl, type BlogPost } from "@/lib/content/blog";
 import { jsonLdScript } from "@/lib/marketplace/listing";
 import { blogPostingJsonLd, faqJsonLd } from "@/lib/seo/jsonld";
-import { closingListing, isBuilt, LINK_MAP, sentence, type Link } from "@/lib/seo/links";
+import { closingListing, isBuilt, LINK_MAP, nameOf, type Link } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
 import { blogPosts } from "@/server/content/posts";
 import { publicListing } from "@/server/marketplace/queries";
@@ -55,9 +56,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** The guide page a post links up to; the guide's pillar when that page isn't built. */
-function guideLink(post: BlogPost): Link {
+function guideLink(post: BlogPost, locale: Locale): Link {
   const href = LINK_MAP[post.guidePage] && isBuilt(post.guidePage) ? post.guidePage : "/nile-cruise-guide/";
-  return { href, anchor: sentence(LINK_MAP[href]!.keyword) };
+  return { href, anchor: nameOf(href, locale) };
 }
 
 /**
@@ -67,10 +68,13 @@ function guideLink(post: BlogPost): Link {
 export default async function BlogPostPage({ params }: Props) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const [{ post, posts }, all] = await Promise.all([find(locale, slug), publicListing()]);
+  const [{ post, posts }, all] = await Promise.all([find(locale, slug), publicListing(contentLocale(locale))]);
+  const t = await getTranslations({ locale, namespace: "blog" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const editorial = await getTranslations({ locale, namespace: "editorial" });
   if (!post) notFound();
   const url = postUrl(post.slug);
-  const guide = guideLink(post);
+  const guide = guideLink(post, locale);
   const faq = faqJsonLd(post);
   const updated = post.updatedAt && postDay(post.updatedAt) !== postDay(post.publishedAt) ? post.updatedAt : null;
   return (
@@ -78,8 +82,8 @@ export default async function BlogPostPage({ params }: Props) {
       <Breadcrumbs
         locale={locale}
         trail={[
-          { name: "Home", path: "/" },
-          { name: "Blog", path: BLOG_URL },
+          { name: common("home"), path: "/" },
+          { name: t("crumb"), path: BLOG_URL },
           { name: post.title, path: url },
         ]}
       />
@@ -88,14 +92,14 @@ export default async function BlogPostPage({ params }: Props) {
         <h1 className={styles.title}>{post.title}</h1>
         <p className={styles.lead}>{post.standfirst}</p>
         <p className={blog.byline}>
-          By {post.author ?? "Nilecruz"}
-          {post.reviewer ? `. Checked by ${post.reviewer}` : null}
-          {updated ? (
-            <>
-              . Updated <time dateTime={postDay(updated)}>{postDate(updated)}</time>
-            </>
-          ) : null}
-          .
+          {t("by", { author: post.author ?? "Nilecruz" })}
+          {post.reviewer ? t("checkedBy", { name: post.reviewer }) : null}
+          {updated
+            ? t.rich("updated", {
+                date: () => <time dateTime={postDay(updated)}>{postDate(updated, locale)}</time>,
+              })
+            : null}
+          {t("end")}
         </p>
       </header>
       <PostScene post={post} />
@@ -107,10 +111,10 @@ export default async function BlogPostPage({ params }: Props) {
           ))}
         </section>
       ))}
-      <LinkCards title="Read more in the guide" links={[guide]} id="in-the-guide" />
+      <LinkCards title={t("readMore")} links={[guide]} id="in-the-guide" />
       {post.faqs.length ? (
         <section className={styles.section} aria-labelledby="faqs">
-          <h2 id="faqs">Questions</h2>
+          <h2 id="faqs">{editorial("questions")}</h2>
           <dl className={styles.faqs}>
             {post.faqs.map((f) => (
               <div key={f.q}>
@@ -122,7 +126,7 @@ export default async function BlogPostPage({ params }: Props) {
         </section>
       ) : null}
       <MorePosts posts={morePosts(post, posts)} />
-      <ClosingCruises all={all} listing={closingListing(guide.href)} type={post.vesselTypes[0]} />
+      <ClosingCruises all={all} listing={closingListing(guide.href, locale)} type={post.vesselTypes[0]} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

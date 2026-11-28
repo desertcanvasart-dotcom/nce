@@ -4,7 +4,11 @@
  * here matches what the system does (ADR-099 the reservable rule, ADR-100 allotments, ADR-103 freesale, stop-sales,
  * supplements, holds and webhooks, the inventory format v1).
  * Commission and commercial terms are never on this page: they are agreed with each operator.
+ * Japanese is in operator-connect.ja.ts (change both together); Spanish shows the English.
  */
+import type { Locale } from "@/i18n/routing";
+import { JA } from "./operator-connect.ja";
+
 export type Shot = { file: string; alt: string; width: number; height: number; caption: string };
 
 export type Way = {
@@ -361,3 +365,72 @@ export const FOR_IT = {
   }]
 }`,
 };
+
+/** The page's own headings and labels. */
+export const UI = {
+  home: "Home",
+  crumb: "How operators connect",
+  draft: "Draft for review",
+  words: "A few words we use",
+  glance: "The six ways at a glance",
+  glanceCaption: "The six ways to connect, compared",
+  way: "Way",
+  effort: "Work for you",
+  freshness: "How fresh",
+  booking: "How guests book",
+  bestFor: "Best for:",
+  youDo: "What you do",
+  weDo: "What Nilecruz does",
+  update: "How often:",
+  never: "What Nilecruz never does",
+  apply: "Apply as an operator",
+  or: "or",
+  ask: "ask us a question",
+  end: ".",
+  questions: "Questions operators ask",
+  sample: "A short example of the format, in JSON",
+};
+
+type WayWords = Omit<Way, "id" | "shots"> & { shots: [alt: string, caption: string][] };
+
+/** What a translation supplies: every word on the page, with the ways keyed by their ids. */
+export type ConnectContent = {
+  ui: typeof UI;
+  intro: typeof INTRO;
+  glossary: typeof GLOSSARY;
+  ways: Record<string, WayWords>;
+  bookingRule: typeof BOOKING_RULE;
+  never: string[];
+  start: Omit<typeof START, "apply">;
+  faqs: typeof FAQS;
+  forIt: Omit<typeof FOR_IT, "sample">;
+};
+
+/** The page in the visitor's language. */
+export function connectFor(locale: Locale) {
+  const en = {
+    ui: UI,
+    intro: INTRO,
+    glossary: GLOSSARY,
+    ways: WAYS,
+    bookingRule: BOOKING_RULE,
+    never: NEVER,
+    start: START,
+    faqs: FAQS,
+    forIt: FOR_IT,
+  };
+  if (locale !== "ja") return en;
+  return {
+    ...JA,
+    ways: WAYS.map((w): Way => {
+      const words = JA.ways[w.id]!;
+      return {
+        ...words,
+        id: w.id,
+        shots: w.shots.map((s, i) => ({ ...s, alt: words.shots[i]![0], caption: words.shots[i]![1] })),
+      };
+    }),
+    start: { ...JA.start, apply: START.apply },
+    forIt: { ...JA.forIt, sample: FOR_IT.sample },
+  };
+}

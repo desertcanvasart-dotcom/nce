@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { ActionForm } from "@/components/dashboard/ActionForm";
 import { Input, Select, TextArea } from "@/components/dashboard/ui";
-import { facts, shownLines } from "@/lib/requests/message";
+import type { Locale } from "@/i18n/routing";
+import { facts, shownLines, type RequestSummary } from "@/lib/requests/message";
 import { replyState } from "@/server/requests/reply";
 import { answerLink } from "./actions";
 import styles from "./reply.module.css";
@@ -11,51 +13,82 @@ import styles from "./reply.module.css";
  * pressed, so mail scanners that open links change nothing. A used or expired link shows the recorded answer.
  */
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Booking request", robots: { index: false, follow: false } };
+type Params = Promise<{ locale: Locale; token: string }>;
 
-const ANSWER = {
-  confirm: "Confirmed",
-  decline: "Declined",
-  hold: "Held for 72 hours",
-  other: "Something else offered",
-} as Record<string, string>;
-const STATUS = {
-  confirmed: "confirmed",
-  declined: "declined",
-  held: "held for 72 hours",
-  alternative_offered: "answered with another offer",
-  expired: "expired without an answer",
-  withdrawn: "withdrawn by the customer",
-} as Record<string, string>;
-const BUTTON = {
-  confirm: { title: "Confirm these cabins", text: "The customer is asked to pay straight away." },
-  decline: { title: "Decline", text: "We mark these cabins as full and offer the customer other dates." },
-  hold: { title: "Hold for 72 hours", text: "The cabins are held while you check. Confirm or decline before the hold ends." },
-} as const;
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const t = await getTranslations({ locale: (await params).locale, namespace: "operatorReply" });
+  return { title: t("title"), robots: { index: false, follow: false } };
+}
+
+const ANSWERS = ["confirm", "decline", "hold", "other"];
+const STATUSES = ["confirmed", "declined", "held", "alternative_offered", "expired", "withdrawn"];
+
+type Say = Awaited<ReturnType<typeof getTranslations<"operatorReply">>>;
+
+/**
+ * The facts and "what our data showed" lines in Japanese. Every other language shows the lines the email itself carries
+ * (lib/requests/message).
+ */
+function japaneseLines(s: RequestSummary, t: Say, places: Record<string, string>): string[] {
+  const day = (iso: string, o: Intl.DateTimeFormatOptions) =>
+    new Date(iso).toLocaleDateString("ja-JP", { ...o, timeZone: "Africa/Cairo" });
+  const source = (v: string | null) =>
+    t(`facts.source.${["manual", "paste", "feed", "api", "tap", "sheet"].includes(v ?? "") ? v : "data"}` as never);
+  return [
+    t("facts.ship", { vessel: s.vessel }),
+    t("facts.cruise", {
+      origin: places[s.origin] ?? s.origin,
+      destination: places[s.destination] ?? s.destination,
+      date: day(`${s.departsOn}T12:00:00Z`, { year: "numeric", month: "short", day: "numeric", weekday: "short" }),
+      nights: String(s.nights),
+    }),
+    t("facts.cabins", { list: s.lines.map((l) => `${l.cabin} × ${l.count}`).join("、") }),
+    t("facts.guests", {
+      n: String(s.guests),
+      nationality: s.nationality ? t("facts.nationality", { code: s.nationality }) : "",
+    }),
+    ...(s.agency ? [t("facts.agency", { agency: s.agency })] : []),
+    t("facts.request", { reference: s.reference }),
+    ...s.shown.map((x) =>
+      x.available === null || !x.confirmedAt
+        ? t("facts.noData", { cabin: x.cabin })
+        : t("facts.shown", {
+            source: source(x.source),
+            date: day(x.confirmedAt, { month: "short", day: "numeric" }),
+            n: String(x.available),
+            cabin: x.cabin,
+          }),
+    ),
+  ];
+}
 
 export default async function OperatorReply({
   params,
   searchParams,
 }: {
-  params: Promise<{ token: string }>;
+  params: Params;
   searchParams: Promise<{ via?: string }>;
 }) {
-  const { token } = await params;
+  const { locale, token } = await params;
+  const t = await getTranslations({ locale, namespace: "operatorReply" });
+  const dateTag = locale === "ja" ? "ja-JP" : "en-GB";
+  const places = (await getTranslations({ locale, namespace: "vesselPage" })).raw("places") as Record<string, string>;
+  const language = <input type="hidden" name="locale" value={locale} />;
   const via = (await searchParams).via === "whatsapp" ? "whatsapp" : "email";
   const state = await replyState(decodeURIComponent(token));
 
   if (state.kind === "invalid")
     return (
       <main id="main" className={styles.page}>
-        <h1>This link isn’t valid</h1>
-        <p>Please use the link in the latest message from Nilecruz, or contact us.</p>
+        <h1>{t("invalidTitle")}</h1>
+        <p>{t("invalidText")}</p>
       </main>
     );
 
   const summary = state.summary;
   const details = summary ? (
     <ul className={styles.facts}>
-      {[...facts(summary), ...shownLines(summary)].map((l) => (
+      {(locale === "ja" ? japaneseLines(summary, t, places) : [...facts(summary), ...shownLines(summary)]).map((l) => (
         <li key={l}>{l}</li>
       ))}
     </ul>
@@ -64,8 +97,8 @@ export default async function OperatorReply({
   if (state.kind === "expired")
     return (
       <main id="main" className={styles.page}>
-        <h1>This link has expired</h1>
-        <p>Links work for 7 days. Please contact Nilecruz about this request.</p>
+        <h1>{t("expiredTitle")}</h1>
+        <p>{t("expiredText")}</p>
         {details}
       </main>
     );
@@ -74,15 +107,25 @@ export default async function OperatorReply({
     return (
       <main id="main" className={styles.page}>
         <h1>
-          Request {summary!.reference} is {STATUS[state.summary.status] ?? state.summary.status}
+          {t("answeredTitle", {
+            reference: summary!.reference,
+            status: STATUSES.includes(state.summary.status) ? t(`status.${state.summary.status}` as never) : state.summary.status,
+          })}
         </h1>
         {state.response ? (
           <p>
-            Recorded answer: <strong>{ANSWER[state.response] ?? state.response}</strong>
+            {t("recorded")}{" "}
+            <strong>{ANSWERS.includes(state.response) ? t(`answer.${state.response}` as never) : state.response}</strong>
             {state.respondedAt
-              ? ` (first answer ${new Date(state.respondedAt).toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Cairo" })} Cairo)`
+              ? t("firstAnswer", {
+                  when: new Date(state.respondedAt).toLocaleString(dateTag, {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                    timeZone: "Africa/Cairo",
+                  }),
+                })
               : ""}
-            .
+            {t("end")}
           </p>
         ) : null}
         {details}
@@ -92,21 +135,20 @@ export default async function OperatorReply({
   const action = answerLink.bind(null, decodeURIComponent(token), via);
   return (
     <main id="main" className={styles.page}>
-      <p className={styles.kicker}>Nilecruz booking request</p>
-      <h1>
-        {summary!.vessel}: request {summary!.reference}
-      </h1>
+      <p className={styles.kicker}>{t("kicker")}</p>
+      <h1>{t("heading", { vessel: summary!.vessel, reference: summary!.reference })}</h1>
       {details}
       {state.action === "other" ? (
-        <ActionForm action={action} submit="Send this offer">
-          <p>Offer another date or cabin type. The customer chooses; nothing changes until they book.</p>
+        <ActionForm action={action} submit={t("sendOffer")}>
+          {language}
+          <p>{t("offerText")}</p>
           <Select
-            label="Another date"
+            label={t("anotherDate")}
             name="departure_id"
-            placeholder="Same date"
+            placeholder={t("sameDate")}
             options={state.sailings.map((s) => ({
               value: s.id,
-              label: new Date(`${s.departsOn}T12:00:00Z`).toLocaleDateString("en-GB", {
+              label: new Date(`${s.departsOn}T12:00:00Z`).toLocaleDateString(dateTag, {
                 weekday: "short",
                 day: "numeric",
                 month: "short",
@@ -116,13 +158,13 @@ export default async function OperatorReply({
             }))}
           />
           <Select
-            label="Another cabin type"
+            label={t("anotherCabin")}
             name="cabin_type_id"
-            placeholder="Same cabin type"
+            placeholder={t("sameCabin")}
             options={state.cabinTypes.map((c) => ({ value: c.id, label: c.name }))}
           />
           <Input
-            label="Number of cabins"
+            label={t("cabins")}
             name="cabins"
             type="number"
             min={1}
@@ -131,11 +173,12 @@ export default async function OperatorReply({
             defaultValue={summary!.lines.reduce((n, l) => n + l.count, 0)}
             inputMode="numeric"
           />
-          <TextArea label="Short note for the customer" name="note" rows={3} maxLength={500} />
+          <TextArea label={t("note")} name="note" rows={3} maxLength={500} />
         </ActionForm>
       ) : (
-        <ActionForm action={action} submit={BUTTON[state.action].title}>
-          <p>{BUTTON[state.action].text}</p>
+        <ActionForm action={action} submit={t(`button.${state.action}.title`)}>
+          {language}
+          <p>{t(`button.${state.action}.text`)}</p>
         </ActionForm>
       )}
     </main>

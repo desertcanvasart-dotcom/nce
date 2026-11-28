@@ -149,7 +149,7 @@ export async function VesselsPillar({ locale, all }: { locale: Locale; all: List
         <p>{t("samples.intro")}</p>
         {samples.length ? (
           <ListingGrid
-            cards={samples.map(toCard)}
+            cards={samples.map((v) => toCard(v, locale))}
             why={Object.fromEntries(
               samples.map((v) => [
                 v.slug,

@@ -9,14 +9,17 @@ export const BLOG_URL = "/blog/";
 
 /** Keep in step with TOPICS in studio/schemaTypes/documents/post.ts. */
 export const BLOG_TOPICS = {
-  news: { label: "News", time: "day" },
-  seasons: { label: "Seasons", time: "dusk" },
-  vessels: { label: "Vessels", time: "dawn" },
-  egyptology: { label: "Egyptology", time: "day" },
-  "trip-stories": { label: "Trip stories", time: "dusk" },
-} as const satisfies Record<string, { label: string; time: SceneTime }>;
+  news: { label: "News", ja: "ニュース", time: "day" },
+  seasons: { label: "Seasons", ja: "シーズン情報", time: "dusk" },
+  vessels: { label: "Vessels", ja: "船", time: "dawn" },
+  egyptology: { label: "Egyptology", ja: "エジプト学", time: "day" },
+  "trip-stories": { label: "Trip stories", ja: "旅の記録", time: "dusk" },
+} as const satisfies Record<string, { label: string; ja: string; time: SceneTime }>;
 
 export type BlogTopic = keyof typeof BLOG_TOPICS;
+
+export const topicLabel = (topic: BlogTopic, locale: string = "en"): string =>
+  locale === "ja" ? BLOG_TOPICS[topic].ja : BLOG_TOPICS[topic].label;
 
 export const isBlogTopic = (s: string): s is BlogTopic => Object.hasOwn(BLOG_TOPICS, s);
 
@@ -53,8 +56,13 @@ export const topicUrl = (topic: BlogTopic) => `${BLOG_URL}topics/${topic}/`;
 export const latestFirst = (posts: BlogPost[]) => [...posts].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 
 /** "3 November 2026", on Cairo's calendar. */
-export const postDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "Africa/Cairo" });
+export const postDate = (iso: string, locale: string = "en") =>
+  new Date(iso).toLocaleDateString(locale === "ja" ? "ja" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Africa/Cairo",
+  });
 
 /** The date as the <time> element's machine-readable value (Cairo's calendar day). */
 export const postDay = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" });

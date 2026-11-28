@@ -1,17 +1,20 @@
+import { useTranslations } from "next-intl";
 import { formatMoney } from "@/components/ds/lib/format";
-import { PRICE_EXAMPLE, PRICE_EXAMPLE_TITLE, priceExampleTotal, type PriceStep } from "@/content/price-factors";
+import { priceExampleSteps, priceExampleTitle, priceExampleTotal, type PriceStep } from "@/content/price-factors";
 import styles from "./PriceExample.module.css";
 
 /** ADR-109: the price page's worked example, per person in euros; the total is calculated from the steps. */
-export function PriceExample({ steps = PRICE_EXAMPLE, locale = "en" }: { steps?: PriceStep[]; locale?: string }) {
+export function PriceExample({ steps: given, locale = "en" }: { steps?: PriceStep[]; locale?: string }) {
+  const t = useTranslations("priceExample");
+  const steps = given ?? priceExampleSteps(locale);
   const money = (amount: number) => formatMoney({ amount, currency: "EUR" }, locale);
   return (
     <section className={styles.example} aria-labelledby="price-example">
       <h2 id="price-example" className={styles.title}>
-        {PRICE_EXAMPLE_TITLE}
+        {priceExampleTitle(locale)}
       </h2>
       <table className={styles.table}>
-        <caption className="visually-hidden">Per person, in euros, including our margin</caption>
+        <caption className="visually-hidden">{t("caption")}</caption>
         <tbody>
           {steps.map((s, i) => (
             <tr key={s.label}>
@@ -25,12 +28,12 @@ export function PriceExample({ steps = PRICE_EXAMPLE, locale = "en" }: { steps?:
         </tbody>
         <tfoot>
           <tr>
-            <th scope="row">Total, per person</th>
+            <th scope="row">{t("total")}</th>
             <td>{money(priceExampleTotal(steps))}</td>
           </tr>
         </tfoot>
       </table>
-      <p className={styles.note}>All prices we publish and quote already include our margin.</p>
+      <p className={styles.note}>{t("policy")}</p>
     </section>
   );
 }

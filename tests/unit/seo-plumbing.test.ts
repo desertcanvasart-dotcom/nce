@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { hreflangAlternates, pageMetadata } from "@/lib/seo/metadata";
-import { indexablePaths, sitemapEntries } from "@/lib/seo/sitemap";
+import { BUILT } from "@/lib/seo/links";
+import { EXTRA_PAGES, indexablePaths, sitemapEntries } from "@/lib/seo/sitemap";
 import { isTranslated, translatedLocales, TRANSLATED } from "@/lib/seo/translations";
 import { internalLinks, jsonLdTypes } from "../support/crawl";
 
@@ -15,11 +16,18 @@ describe("Batch 10: which pages are translated", () => {
     expect(isTranslated("/about/", "ja", list)).toBe(false);
     expect(translatedLocales("/contact/", list)).toEqual(["en"]);
   });
-  it("translations arrive page by page: so far, the vessels pillar, the destinations hub and the guide hub (ADR-106, ADR-108, ADR-111)", () => {
-    expect(TRANSLATED).toEqual({
-      es: ["/vessels/", "/destinations/", "/nile-cruise-guide/"],
-      ja: ["/vessels/", "/destinations/", "/nile-cruise-guide/"],
-    });
+  it("translations arrive page by page: Spanish has the three hand-laid hubs (ADR-106, ADR-108, ADR-111)", () => {
+    expect(TRANSLATED.es).toEqual(["/vessels/", "/destinations/", "/nile-cruise-guide/"]);
+  });
+  it("Japanese covers every built page; the blog and unfinished vessel pages wait for their content", () => {
+    const built = [...BUILT, ...EXTRA_PAGES];
+    expect(built.filter((p) => !isTranslated(p, "ja"))).toEqual([]);
+    expect(isTranslated("/cruises/nour-el-nil-dendera/", "ja")).toBe(true);
+    expect(isTranslated("/cruises/oberoi-zahra/", "ja")).toBe(false);
+    expect(isTranslated("/cruises/oberoi-zahra/ask/", "ja")).toBe(true);
+    expect(isTranslated("/cruises/oberoi-zahra/ask/", "es")).toBe(false);
+    expect(isTranslated("/blog/", "ja")).toBe(false);
+    expect(isTranslated("/terms/", "ja")).toBe(false);
   });
 });
 
@@ -33,9 +41,9 @@ describe("SEO-007 hreflang", () => {
     });
   });
   it("an untranslated page is noindex and points its canonical at English", () => {
-    const m = pageMetadata({ locale: "ja", path: "/about", title: "About" });
+    const m = pageMetadata({ locale: "ja", path: "/blog", title: "Blog" });
     expect(m.robots).toEqual({ index: false, follow: true });
-    expect(origin(String(m.alternates?.canonical))).toBe("/about/");
+    expect(origin(String(m.alternates?.canonical))).toBe("/blog/");
     expect(m.alternates?.languages).toBeUndefined();
   });
 });

@@ -4,7 +4,9 @@
  * Anchors are the target's primary keyword (SEO-014). The CI link check (tests/e2e/silo-links.spec.ts) reads the same.
  */
 import { RIVER_NEIGHBOUR_LINKS } from "@/content/river-stops";
+import type { Locale } from "@/i18n/routing";
 import map from "./link-map.json";
+import namesJa from "./link-names.ja.json";
 
 export type SiloPage = {
   id: string;
@@ -79,6 +81,18 @@ export const BUILT = new Set<string>([
   "/plan-my-cruise/",
 ]);
 
+/**
+ * Japanese page names and H1s, used instead of the workbook's English keywords on /ja/ (Japanese has no case, so one
+ * name serves as card title, breadcrumb and in-sentence anchor). Spanish still uses the workbook's English.
+ */
+const JA = namesJa as Record<string, { name: string; h1: string } | undefined>;
+const ja = (url: string, locale: Locale) => (locale === "ja" ? JA[url] : undefined);
+
+/** A page's H1 in the visitor's language. */
+export const h1Of = (url: string, locale: Locale = "en") => ja(url, locale)?.h1 ?? page(url).h1;
+/** A page's name as a card title or standalone link. */
+export const nameOf = (url: string, locale: Locale = "en") => ja(url, locale)?.name ?? sentence(page(url).keyword);
+
 export const isBuilt = (url: string) => BUILT.has(url);
 
 /** Pages that don't end with the cruise row (SEO-012 is for informational pages): the Contact and planning forms. */
@@ -102,9 +116,12 @@ const page = (url: string): SiloPage => {
   return p;
 };
 
-const link = (url: string): Link => ({ href: url, anchor: sentence(page(url).keyword) });
+const link = (url: string, locale: Locale = "en"): Link => ({ href: url, anchor: nameOf(url, locale) });
 /** The same link for use inside a sentence: proper nouns capitalised, the rest as written. */
-const inline = (url: string): Link => ({ href: url, anchor: keywordText(page(url).keyword) });
+const inline = (url: string, locale: Locale = "en"): Link => ({
+  href: url,
+  anchor: ja(url, locale)?.name ?? keywordText(page(url).keyword),
+});
 
 /** Breadcrumb names: the pillars by their navigation names, every other page by its keyword. */
 const PILLAR_NAMES: Record<string, string> = {
@@ -122,41 +139,49 @@ const PILLAR_NAMES: Record<string, string> = {
 };
 
 /** SEO-008: home → pillar → … → this page. */
-export function trail(url: string): { name: string; path: string }[] {
+export function trail(url: string, locale: Locale = "en"): { name: string; path: string }[] {
+  const home = ja("/", locale)?.name ?? "Home";
   const out: { name: string; path: string }[] = [];
   for (let u: string | null = url; u; u = LINK_MAP[u]?.parent ?? null) {
-    out.unshift({ name: PILLAR_NAMES[u] ?? sentence(page(u).keyword), path: u });
+    out.unshift({ name: ja(u, locale)?.name ?? PILLAR_NAMES[u] ?? sentence(page(u).keyword), path: u });
     if (u === "/") break;
   }
-  if (out[0]?.path !== "/") out.unshift({ name: "Home", path: "/" });
+  if (out[0]?.path !== "/") out.unshift({ name: home, path: "/" });
   return out;
 }
 
 /** The parent page, for the one link up in the intro (SEO-008); none for home or a pillar's own home link. */
-export function up(url: string): Link | null {
+export function up(url: string, locale: Locale = "en"): Link | null {
   const p = page(url).parent;
-  return p && p !== "/" && isBuilt(p) ? inline(p) : null;
+  return p && p !== "/" && isBuilt(p) ? inline(p, locale) : null;
 }
 
 /** SEO-009: a pillar's or hub's children that exist, in workbook order. */
-export const children = (url: string): Link[] =>
+export const children = (url: string, locale: Locale = "en"): Link[] =>
   page(url)
     .down.filter((u) => u !== url && isBuilt(u))
-    .map(link);
+    .map((u) => link(u, locale));
 
 /** SEO-010: two or three siblings in the same hub ("Keep reading"); only ones that exist. */
-export const siblings = (url: string): Link[] => page(url).across.filter(isBuilt).slice(0, 3).map(link);
+export const siblings = (url: string, locale: Locale = "en"): Link[] =>
+  page(url)
+    .across.filter(isBuilt)
+    .slice(0, 3)
+    .map((u) => link(u, locale));
 
 /** SEO-011: links to other silos, only where the workbook lists them. */
-export const bridges = (url: string): Link[] => page(url).bridges.filter(isBuilt).map(link);
+export const bridges = (url: string, locale: Locale = "en"): Link[] =>
+  page(url)
+    .bridges.filter(isBuilt)
+    .map((u) => link(u, locale));
 
 /**
  * SEO-012: the closing cruise row's listing: the first bridge into /cruises/ that exists, else the listing hub.
  * `type` filters the cards when the matching facet page isn't built yet (paddle steamers).
  */
-export function closingListing(url: string): Link {
+export function closingListing(url: string, locale: Locale = "en"): Link {
   const b = page(url).bridges.find((u) => u.startsWith("/cruises/") && isBuilt(u));
-  return b ? link(b) : link("/cruises/");
+  return b ? link(b, locale) : link("/cruises/", locale);
 }
 
 /** Every link a page must show (for the CI check): up, children, siblings, bridges and the closing listing. */

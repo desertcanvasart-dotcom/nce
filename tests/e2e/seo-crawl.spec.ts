@@ -80,13 +80,13 @@ test("the sitemaps: an index, one per language, only translated and indexable pa
   expect(en).not.toContain("/cruises/compare/");
   expect(en).not.toContain("/dashboard/");
   expect(en).toContain('hreflang="x-default"');
-  // Only translated pages join a language’s sitemap: so far the vessels pillar (ADR-106) and the destinations hub (ADR-108).
-  for (const l of ["es", "ja"]) {
+  // Only translated pages join a language’s sitemap: Spanish has the three hubs, Japanese the pages in the repository.
+  const paths = async (l: string) => {
     const sm = await (await request.get(`/sitemaps/sitemap/${l}.xml`)).text();
-    expect([...sm.matchAll(/<loc>[^<]*?(\/[^<]*)<\/loc>/g)].map((m) => new URL(m[0].slice(5, -6)).pathname)).toEqual([
-      `/${l}/destinations/`,
-      `/${l}/nile-cruise-guide/`,
-      `/${l}/vessels/`,
-    ]);
-  }
+    return [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => new URL(m[1]!).pathname);
+  };
+  expect(await paths("es")).toEqual(["/es/destinations/", "/es/nile-cruise-guide/", "/es/vessels/"]);
+  const ja = await paths("ja");
+  expect(ja).toEqual(expect.arrayContaining(["/ja/", "/ja/about/", "/ja/cruises/", "/ja/operators/connect/"]));
+  expect(ja.filter((p) => p.startsWith("/ja/blog/") || p === "/ja/privacy/" || p === "/ja/terms/")).toEqual([]);
 });

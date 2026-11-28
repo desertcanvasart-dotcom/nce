@@ -8,7 +8,7 @@ import type { Database } from "@/server/db/database.types";
 import { CATALOGUE_SECONDS, CATALOGUE_TAG } from "@/server/marketplace/queries";
 
 /** Published tours, read as a visitor (Batch 7-1), cached with the catalogue. Sample tours never reach production. */
-async function loadTours(): Promise<PublicTour[]> {
+async function loadTours(locale: "en" | "ja" = "en"): Promise<PublicTour[]> {
   const url = env.NEXT_PUBLIC_SUPABASE_URL;
   const key = env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) return [];
@@ -24,7 +24,7 @@ async function loadTours(): Promise<PublicTour[]> {
   return (data ?? [])
     .filter((t) => !(indexingAllowed && t.is_sample))
     .map((t) => {
-      const en = t.tour_translations.find((x) => x.locale === "en");
+      const en = t.tour_translations.find((x) => x.locale === locale) ?? t.tour_translations.find((x) => x.locale === "en");
       const rates = t.tour_rates.filter((r) => r.active);
       const lines = [...new Map(rates.map((r) => [priceLine(rateFromRow(r)).text, priceLine(rateFromRow(r)).from])).entries()];
       const bookable = Boolean(t.office_id) && rates.length > 0;
@@ -50,7 +50,7 @@ async function loadTours(): Promise<PublicTour[]> {
     });
 }
 
-export const publicTours = unstable_cache(loadTours, ["public-tours-v2"], {
+export const publicTours = unstable_cache(loadTours, ["public-tours-v3"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

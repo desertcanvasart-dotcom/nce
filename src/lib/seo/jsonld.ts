@@ -1,5 +1,5 @@
 /** Structured data for education pages (Batch 6): Article, FAQPage, and on home Organization and WebSite (SEO-028). */
-import { BLOG_TOPICS, type BlogPost } from "@/lib/content/blog";
+import { topicLabel, type BlogPost } from "@/lib/content/blog";
 import type { EditorialPage } from "@/lib/content/editorial";
 
 export function articleJsonLd(page: EditorialPage, url: string) {
@@ -11,7 +11,8 @@ export function articleJsonLd(page: EditorialPage, url: string) {
     url,
     mainEntityOfPage: url,
     publisher: { "@type": "Organization", name: "Nilecruz" },
-    inLanguage: "en",
+    // The language the text is in, which is English where a translation is still missing.
+    inLanguage: /[\u3040-\u30ff]/.test(`${page.title}${page.standfirst}`) ? "ja" : "en",
   };
 }
 
@@ -29,8 +30,8 @@ export function blogPostingJsonLd(post: BlogPost, url: string, blogUrl: string) 
     dateModified: post.updatedAt ?? post.publishedAt,
     author: post.author ? { "@type": "Person", name: post.author } : publisher,
     publisher,
-    articleSection: BLOG_TOPICS[post.topic].label,
-    isPartOf: { "@type": "Blog", name: "Nilecruz blog", url: blogUrl },
+    articleSection: topicLabel(post.topic, post.language),
+    isPartOf: { "@type": "Blog", name: post.language === "ja" ? "Nilecruzブログ" : "Nilecruz blog", url: blogUrl },
     inLanguage: post.language,
   };
 }
@@ -45,13 +46,16 @@ export function faqJsonLd(page: Pick<EditorialPage, "faqs">) {
   };
 }
 
-export function organizationJsonLd(site: string) {
+export function organizationJsonLd(site: string, locale: string = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: "Nilecruz",
     url: `${site}/`,
-    description: "A marketplace for Nile cruises that explains how vessels differ and what prices pay for.",
+    description:
+      locale === "ja"
+        ? "船の違いと料金の内訳をわかりやすく説明する、ナイル川クルーズのマーケットプレイスです。"
+        : "A marketplace for Nile cruises that explains how vessels differ and what prices pay for.",
   };
 }
 
@@ -84,15 +88,22 @@ export function webApplicationJsonLd(name: string, url: string) {
 }
 
 /** PAGE-074–090: a destination and its main sight (SEO, workbook schema TouristDestination · TouristAttraction). */
-export function touristDestinationJsonLd(name: string, description: string, url: string, sight?: string) {
+export function touristDestinationJsonLd(name: string, description: string, url: string, sight?: string, locale: string = "en") {
   return {
     "@context": "https://schema.org",
     "@type": "TouristDestination",
     name,
     description,
     url,
-    containedInPlace: { "@type": "Country", name: "Egypt" },
-    ...(sight ? { includesAttraction: { "@type": "TouristAttraction", name: sight } } : {}),
+    containedInPlace: { "@type": "Country", name: locale === "ja" ? "エジプト" : "Egypt" },
+    ...(sight
+      ? {
+          includesAttraction: {
+            "@type": "TouristAttraction",
+            name: locale === "ja" ? (MAIN_SIGHT_JA[sight] ?? sight) : sight,
+          },
+        }
+      : {}),
   };
 }
 
@@ -103,6 +114,14 @@ export const MAIN_SIGHT: Record<string, string> = {
   "/destinations/kom-ombo/": "Kom Ombo Temple",
   "/destinations/aswan/": "Philae Temple",
   "/destinations/abu-simbel/": "Abu Simbel temples",
+};
+
+const MAIN_SIGHT_JA: Record<string, string> = {
+  "Karnak Temple": "カルナック神殿",
+  "Temple of Horus": "ホルス神殿",
+  "Kom Ombo Temple": "コム・オンボ神殿",
+  "Philae Temple": "フィラエ神殿",
+  "Abu Simbel temples": "アブ・シンベル神殿",
 };
 
 /** PAGE-101, 106: About and Contact pages, each with the organisation. */

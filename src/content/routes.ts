@@ -1,5 +1,6 @@
 import type { ItineraryStop } from "@/components/ds/ItineraryTimeline/ItineraryTimeline";
 import type { VesselType } from "@/components/ds/lib/types";
+import { placeName } from "./places";
 
 /**
  * The typical days of each route guide (PAGE-004, 005, 007), drafted for review (ADR-096). A route guide shows stops,
@@ -70,4 +71,38 @@ export const ROUTE_STOPS: Record<string, { vessel: VesselType; stops: ItineraryS
       { day: 5, place: "Aswan", title: "Aswan", body: "Arrive in Aswan and check out." },
     ],
   },
+};
+
+/** Japanese titles and text for the days above, in order, drafted for review (I18N-005). */
+const JA: Record<string, [title: string, body: string][]> = {
+  "/nile-cruise-guide/routes/luxor-to-aswan/": [
+    ["乗船と東岸", "正午ごろに乗船し、カルナック神殿とルクソール神殿へ。"],
+    ["西岸を訪ね、出航", "王家の谷とハトシェプスト女王葬祭殿へ。その後、エスナの閘門を通って航行します。"],
+    ["エドフとコム・オンボ", "エドフのホルス神殿、続いてコム・オンボの二重神殿へ。"],
+    ["アスワン", "アスワン・ハイ・ダム、切りかけのオベリスク、フィラエ神殿を訪ね、帆船フルーカに乗ります。"],
+    ["下船", "船上で朝食をとり、チェックアウトします。"],
+  ],
+  "/nile-cruise-guide/routes/aswan-to-luxor/": [
+    ["アスワンで乗船", "乗船後、帆船フルーカに乗ります。午前中に出航するクルーズもあるため、前日に到着してください。"],
+    ["アスワンの見どころとコム・オンボ", "フィラエ神殿、アスワン・ハイ・ダム、切りかけのオベリスクを訪ね、コム・オンボへ。"],
+    ["エドフからルクソールへ", "エドフのホルス神殿を訪ね、ルクソールへ航行してカルナック神殿とルクソール神殿へ。"],
+    ["西岸、そして下船", "王家の谷とハトシェプスト女王葬祭殿を訪ね、ルクソールでチェックアウトします。"],
+  ],
+  "/nile-cruise-guide/routes/esna-to-aswan/": [
+    ["エスナで乗船", "エスナの閘門の南側でダハビヤに乗船します。"],
+    ["エル・カブ", "岩窟墓を訪ね、静かな場所に停泊します。"],
+    ["エドフ", "エドフのホルス神殿へ。"],
+    ["ゲベル・シルシラとコム・オンボ", "古代の砂岩の石切り場を訪ね、コム・オンボへ。"],
+    ["アスワン", "アスワンに到着し、チェックアウトします。"],
+  ],
+};
+
+/** A route's days as shown in the page's language. Matching by place uses ROUTE_STOPS itself, which stays English. */
+export const routeStops = (url: string, locale: string = "en"): ItineraryStop[] => {
+  const stops = ROUTE_STOPS[url]!.stops;
+  if (locale !== "ja") return stops;
+  return stops.map((s, i) => {
+    const [title, body] = JA[url]![i]!;
+    return { ...s, place: placeName(s.place, locale), title, body };
+  });
 };

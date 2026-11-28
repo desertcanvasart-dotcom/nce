@@ -19,8 +19,10 @@ import { Link } from "@/i18n/navigation";
 import styles from "@/components/editorial/editorial.module.css";
 import { PriceExample } from "@/components/editorial/PriceExample";
 import { stopByPath } from "@/content/river-stops";
-import { ROUTE_STOPS } from "@/content/routes";
-import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
+import { DIMENSIONS_JA } from "@/content/method-ja";
+import { contentLocale } from "@/content/places";
+import { ROUTE_STOPS, routeStops } from "@/content/routes";
+import { vesselProfile } from "@/content/vessel-types";
 import { routing, type Locale } from "@/i18n/routing";
 import { tourUrl, WORKBOOK_TOURS } from "@/lib/content/tours";
 import { exploreVessels } from "@/lib/guide/explore";
@@ -28,13 +30,13 @@ import { siteUrl } from "@/lib/env";
 import { DIMENSIONS } from "@/lib/evaluation/method";
 import { collectionJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
 import { companyPageJsonLd, MAIN_SIGHT, tourJsonLd, touristDestinationJsonLd, webApplicationJsonLd } from "@/lib/seo/jsonld";
-import { BUILT, children, closingListing, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
+import { BUILT, children, closingListing, h1Of, LINK_MAP, NO_CLOSING } from "@/lib/seo/links";
 import { absoluteUrl, pageMetadata } from "@/lib/seo/metadata";
 import { editorialPage } from "@/server/content/pages";
 import { publicTours } from "@/server/content/tours";
 import { ContactForm } from "../contact/ContactForm";
 import { PlanForm } from "@/components/plan/PlanForm";
-import { SeasonCalendar } from "@/components/calendar/SeasonCalendar";
+import { RULE_LINES_JA, SeasonCalendar } from "@/components/calendar/SeasonCalendar";
 import { RULE_WORDS } from "@/lib/payments/deadlines";
 import { publicPremiumPeriods } from "@/server/content/premium";
 import { publicItineraryPlaces, publicListing } from "@/server/marketplace/queries";
@@ -81,9 +83,9 @@ export async function siloMetadata(prefix: string, { locale, path }: SiloParams)
     });
   }
   const row = LINK_MAP[url];
-  const page = row && BUILT.has(url) ? await editorialPage(row.id) : null;
+  const page = row && BUILT.has(url) ? await editorialPage(row.id, locale) : null;
   if (!row || !page) return {};
-  return pageMetadata({ locale, path: url, title: page.seoTitle ?? row.h1, description: page.seoDescription });
+  return pageMetadata({ locale, path: url, title: page.seoTitle ?? h1Of(url, locale), description: page.seoDescription });
 }
 
 /** Which vessel type a page is about, for its illustration, comparison default and closing cruises. */
@@ -101,23 +103,28 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   const url = urlOf(prefix, path);
   const row = LINK_MAP[url];
   if (!row || !BUILT.has(url)) notFound();
+  // The words that come from data and content modules: Japanese on /ja/, English elsewhere.
+  const words = contentLocale(locale);
   // PAGE-026: the vessels pillar is laid out by hand, in every language (ADR-106).
-  if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing()} />;
+  if (url === "/vessels/") return <VesselsPillar locale={locale} all={await publicListing(words)} />;
   // PAGE-074: the destinations hub, an illustrated river chart (Islam's destinations brief, 4 Nov 2026).
   if (url === "/destinations/") {
-    const [all, places] = await Promise.all([publicListing(), publicItineraryPlaces()]);
+    const [all, places] = await Promise.all([publicListing(words), publicItineraryPlaces()]);
     return <DestinationsPillar locale={locale} all={all} places={places} />;
   }
   // PAGE-002: the guide hub plans the trip, laid out by hand in every language (Islam's guide brief, 4 Nov 2026).
   if (url === "/nile-cruise-guide/") return <GuideHub locale={locale} />;
   const [page, all, tours] = await Promise.all([
-    editorialPage(row.id),
-    publicListing(),
-    url.startsWith("/tours-extras/") ? publicTours() : Promise.resolve([]),
+    editorialPage(row.id, locale),
+    publicListing(words),
+    url.startsWith("/tours-extras/") ? publicTours(words) : Promise.resolve([]),
   ]);
+  const t = await getTranslations({ locale, namespace: "silo" });
+  const editorial = await getTranslations({ locale, namespace: "editorial" });
+  const h1 = h1Of(url, locale);
   if (!page) notFound();
   const type = TYPE_OF[url] ?? ROUTE_STOPS[url]?.vessel;
-  const profiles = (["sail", "motor", "steam"] as const).map((t) => vesselProfile(t));
+  const profiles = (["sail", "motor", "steam"] as const).map((kind) => vesselProfile(kind, words));
   // The three-way comparison page opens with every type side by side; elsewhere, on the page's own type.
   const compare = (
     <div className={styles.compare}>
@@ -145,7 +152,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
   } else if (url.startsWith("/vessels/") && row.type === "Guide article" && type) {
     lead = (
       <div className={styles.scene}>
-        <Scene time="dawn" vessel={type} label={`A ${VESSEL_TYPE_TEXT[type].name.toLowerCase()} on the Nile at dawn`} />
+        <Scene time="dawn" vessel={type} label={t("dawnScene", { vessel: vesselProfile(type, words).name.toLowerCase() })} />
       </div>
     );
   } else if (url.startsWith("/vessels/")) {
@@ -160,21 +167,21 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     extra = (
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: jsonLdScript(webApplicationJsonLd(row.h1, absoluteUrl(locale, url))) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(webApplicationJsonLd(h1, absoluteUrl(locale, url))) }}
       />
     );
   } else if (ROUTE_STOPS[url]) {
     // SEO-023: a route guide shows the days and the vessels, never a price grid.
     lead = (
       <>
-        <ItineraryTimeline scroll vessel={ROUTE_STOPS[url].vessel} stops={ROUTE_STOPS[url].stops} />
+        <ItineraryTimeline scroll vessel={ROUTE_STOPS[url].vessel} stops={routeStops(url, locale)} />
         {compare}
       </>
     );
   } else if (url === "/nile-cruise-guide/when-to-go/") {
     lead = (
       <div className={styles.scene}>
-        <Scene time="day" vessel="motor" temple label="A Nile cruise ship passing a temple in the midday sun" />
+        <Scene time="day" vessel="motor" temple label={t("middayScene")} />
       </div>
     );
     // EXP-006: the seasons and the payment deadline you'd face, from the same rules as booking.
@@ -183,10 +190,14 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
         <SeasonCalendar
           today={new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" })}
           periods={await publicPremiumPeriods()}
+          locale={locale}
         />
         <ul className={styles.rules}>
-          {Object.values(RULE_WORDS).map((w) => (
-            <li key={w}>{w.replace(/^./, (c) => c.toUpperCase())}, and always before departure.</li>
+          {(words === "ja"
+            ? RULE_LINES_JA
+            : Object.values(RULE_WORDS).map((w) => `${w.replace(/^./, (c) => c.toUpperCase())}, and always before departure.`)
+          ).map((line) => (
+            <li key={line}>{line}</li>
           ))}
         </ul>
       </>
@@ -200,11 +211,11 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       <DestinationLead locale={locale} stop={stop} />
     ) : (
       <div className={styles.scene}>
-        <Scene time="dawn" temple vessel={null} label={`${row.h1} from the river`} />
+        <Scene time="dawn" temple vessel={null} label={t("riverScene", { name: h1 })} />
       </div>
     );
     if (stop) closingRow = <StopCruises locale={locale} stop={stop} all={all} places={await publicItineraryPlaces()} />;
-    extra = ld(touristDestinationJsonLd(row.h1, description, absoluteUrl(locale, url), MAIN_SIGHT[url]));
+    extra = ld(touristDestinationJsonLd(h1, description, absoluteUrl(locale, url), MAIN_SIGHT[url], locale));
   } else if (url === "/tours-extras/") {
     lead = <TourCards tours={tours} />;
   } else if (WORKBOOK_TOURS[url]) {
@@ -218,25 +229,25 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       </>
     ) : null;
     // ADR-109: no Offer markup: tour rates are in US dollars, and only approved euro prices are published.
-    extra = ld(tourJsonLd(row.h1, description, absoluteUrl(locale, url)));
+    extra = ld(tourJsonLd(h1, description, absoluteUrl(locale, url)));
   } else if (url === "/how-we-choose-vessels/") {
     // PAGE-102: the evaluation method's weights, straight from the code that scores vessels.
     lead = (
       <table className={styles.weights}>
-        <caption className="visually-hidden">The seven dimensions and their weights</caption>
+        <caption className="visually-hidden">{t("weightsCaption")}</caption>
         <thead>
           <tr>
-            <th scope="col">Dimension</th>
-            <th scope="col">What is scored</th>
-            <th scope="col">Weight</th>
+            <th scope="col">{t("dimension")}</th>
+            <th scope="col">{t("scored")}</th>
+            <th scope="col">{t("weight")}</th>
           </tr>
         </thead>
         <tbody>
           {DIMENSIONS.map((d) => (
             <tr key={d.key}>
-              <th scope="row">{d.label}</th>
-              <td>{d.criteria.join("; ")}</td>
-              <td>{d.weight} of 100</td>
+              <th scope="row">{words === "ja" ? DIMENSIONS_JA[d.key].label : d.label}</th>
+              <td>{words === "ja" ? DIMENSIONS_JA[d.key].criteria.join("、") : d.criteria.join("; ")}</td>
+              <td>{t("outOf100", { weight: d.weight })}</td>
             </tr>
           ))}
         </tbody>
@@ -244,7 +255,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
     );
   } else if (url === "/contact/") {
     lead = <ContactForm />;
-    extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
+    extra = ld(companyPageJsonLd("ContactPage", h1, absoluteUrl(locale, url), siteUrl));
   } else if (url === "/plan-my-cruise/") {
     // PAGE-105, DASH-PUB-007: plan without an account; the routes are the published itineraries'.
     const routes = [
@@ -255,7 +266,7 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       ).values(),
     ].sort((a, b) => `${a.origin}${a.destination}`.localeCompare(`${b.origin}${b.destination}`));
     lead = <PlanForm routes={routes} today={new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Cairo" })} />;
-    extra = ld(companyPageJsonLd("ContactPage", row.h1, absoluteUrl(locale, url), siteUrl));
+    extra = ld(companyPageJsonLd("ContactPage", h1, absoluteUrl(locale, url), siteUrl));
   }
 
   // The guide's pages end with vessels to explore, one of each type that sails the page's route; none are bookable yet,
@@ -281,15 +292,15 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
             // No two types sail this route yet: no vessel row, but still the way to its cruises (SEO-012).
             <p>
               <Link href={closingListing(url).href} className={styles.more}>
-                See all: {closingListing(url).anchor}
+                {editorial("seeAll", { anchor: closingListing(url, locale).anchor })}
               </Link>
             </p>
           ) : (
             <ClosingCruises
               all={all}
-              listing={closingListing(url)}
+              listing={closingListing(url, locale)}
               type={TYPE_OF[url]}
-              {...(explore ? { picked: explore, title: "Vessels to explore" } : {})}
+              {...(explore ? { picked: explore, title: editorial("exploreTitle") } : {})}
             />
           )
         }
@@ -299,8 +310,11 @@ export async function SiloPage({ prefix, params }: { prefix: string; params: Sil
       {row.schema.includes("CollectionPage")
         ? ld(
             collectionJsonLd(
-              { name: row.h1, description, url: absoluteUrl(locale, url) },
-              children(url).map((l) => ({ name: LINK_MAP[l.href]?.h1 ?? l.anchor, url: absoluteUrl(locale, l.href) })),
+              { name: h1, description, url: absoluteUrl(locale, url) },
+              children(url, locale).map((l) => ({
+                name: LINK_MAP[l.href] ? h1Of(l.href, locale) : l.anchor,
+                url: absoluteUrl(locale, l.href),
+              })),
             ),
           )
         : null}
@@ -318,16 +332,18 @@ export async function TourPage({ params }: { params: SiloParams }) {
   const slug = path?.length === 1 ? path[0]! : "";
   const home = tourUrl(slug);
   if (home !== `/tours-extras/${slug}/`) permanentRedirect(home);
-  const tour = (await publicTours()).find((t) => t.slug === slug);
+  const tour = (await publicTours(contentLocale(locale))).find((t) => t.slug === slug);
   if (!tour) notFound();
+  const t = await getTranslations({ locale, namespace: "silo" });
+  const common = await getTranslations({ locale, namespace: "common" });
   const url = `/tours-extras/${slug}/`;
   return (
     <article className={styles.page}>
       <Breadcrumbs
         locale={locale}
         trail={[
-          { name: "Home", path: "/" },
-          { name: "Tours & extras", path: "/tours-extras/" },
+          { name: common("home"), path: "/" },
+          { name: t("toursCrumb"), path: "/tours-extras/" },
           { name: tour.name, path: url },
         ]}
       />
@@ -347,12 +363,13 @@ export async function TourPage({ params }: { params: SiloParams }) {
 
 export async function tourMetadata({ locale, path }: SiloParams): Promise<Metadata> {
   const slug = path?.length === 1 ? path[0]! : "";
-  const tour = (await publicTours()).find((t) => t.slug === slug);
+  const tour = (await publicTours(contentLocale(locale))).find((x) => x.slug === slug);
   if (!tour) return {};
+  const t = await getTranslations({ locale, namespace: "silo" });
   return pageMetadata({
     locale,
     path: `/tours-extras/${slug}`,
-    title: `${tour.name} | Tours and extras`,
+    title: t("tourTitle", { name: tour.name }),
     description: tour.description?.split("\n")[0]?.slice(0, 160),
     noindex: tour.sample,
   });

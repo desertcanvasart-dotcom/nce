@@ -5,8 +5,9 @@ import { Listing } from "@/components/marketplace/Listing";
 import { VesselMessages } from "@/components/marketplace/VesselMessages";
 import { VesselView, vesselWords } from "@/components/marketplace/VesselView";
 import { checkRates } from "./rates/actions";
+import { contentLocale } from "@/content/places";
 import { routing, type Locale } from "@/i18n/routing";
-import { facetBySlug, FACETS, sortListing } from "@/lib/marketplace/listing";
+import { facetBySlug, FACETS, facetText, sortListing } from "@/lib/marketplace/listing";
 import type { ListingVessel } from "@/lib/marketplace/listing";
 import { siteUrl } from "@/lib/env";
 import { pageMetadata } from "@/lib/seo/metadata";
@@ -27,7 +28,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const f = facetBySlug(slug);
-  if (f) return pageMetadata({ locale, path: `/cruises/${f.slug}`, title: f.title, description: f.description });
+  if (f) {
+    const { title, description } = facetText(f, locale);
+    return pageMetadata({ locale, path: `/cruises/${f.slug}`, title, description });
+  }
   const v = await publicVessel(slug, locale);
   if (!v) return {};
   // The title and description cover every itinerary (DATA-031): no single sailing sets the page's identity.
@@ -74,7 +78,7 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
   setRequestLocale(locale);
   const f = facetBySlug(slug);
   if (!f) {
-    const [v, all] = await Promise.all([publicVessel(slug, locale), publicListing()]);
+    const [v, all] = await Promise.all([publicVessel(slug, locale), publicListing(contentLocale(locale))]);
     if (!v) notFound();
     return (
       <VesselMessages>
@@ -88,24 +92,27 @@ export default async function CruiseFacetOrVessel({ params }: Props) {
       </VesselMessages>
     );
   }
-  const all = await publicListing();
+  const all = await publicListing(contentLocale(locale));
+  const t = await getTranslations({ locale, namespace: "cruisesHub" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const text = facetText(f, locale);
   return (
     <Listing
       locale={locale}
       trail={[
-        { name: "Home", path: "/" },
-        { name: "Cruises", path: "/cruises/" },
-        { name: f.h1, path: `/cruises/${f.slug}/` },
+        { name: common("home"), path: "/" },
+        { name: common("cruises"), path: "/cruises/" },
+        { name: text.h1, path: `/cruises/${f.slug}/` },
       ]}
-      h1={f.h1}
-      intro={f.intro}
+      h1={text.h1}
+      intro={text.intro}
       path={`/cruises/${f.slug}`}
-      description={f.description}
+      description={text.description}
       vessels={sortListing(all.filter(f.match))}
       all={all}
       vesselType={FACET_TYPE[f.slug]}
       current={f.slug}
-      empty="No vessels of this kind are published yet. See all cruises."
+      empty={t("noneOfKind")}
     />
   );
 }

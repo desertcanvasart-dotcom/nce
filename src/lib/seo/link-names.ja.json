@@ -1,0 +1,182 @@
+{
+  "/": {
+    "name": "ホーム",
+    "h1": "自分に合うナイル川クルーズを見つける"
+  },
+  "/cruises/": {
+    "name": "ナイル川クルーズ",
+    "h1": "ナイル川クルーズを比較する"
+  },
+  "/cruises/dahabiyas/": {
+    "name": "ダハビヤ・クルーズ",
+    "h1": "ダハビヤ・クルーズ"
+  },
+  "/cruises/motor-ships/": {
+    "name": "ナイル川クルーズ船",
+    "h1": "ナイル川クルーズ船"
+  },
+  "/cruises/luxury/": {
+    "name": "ラグジュアリー・ナイル川クルーズ",
+    "h1": "ラグジュアリー・ナイル川クルーズ"
+  },
+  "/cruises/luxor-to-aswan/": {
+    "name": "ルクソール発アスワン行きクルーズ",
+    "h1": "ルクソール発アスワン行きクルーズ"
+  },
+  "/cruises/aswan-to-luxor/": {
+    "name": "アスワン発ルクソール行きクルーズ",
+    "h1": "アスワン発ルクソール行きクルーズ"
+  },
+  "/cruises/compare/": {
+    "name": "クルーズの比較",
+    "h1": "選んだクルーズを比較"
+  },
+  "/vessels/": {
+    "name": "ナイル川クルーズの船の種類",
+    "h1": "ナイル川を旅する3つの方法"
+  },
+  "/vessels/dahabiya/": {
+    "name": "ダハビヤ",
+    "h1": "帆走ダハビヤ"
+  },
+  "/vessels/dahabiya/a-day-on-board/": {
+    "name": "ダハビヤの船上の一日",
+    "h1": "ダハビヤの船上の一日"
+  },
+  "/vessels/motor-cruise-ships/": {
+    "name": "ナイル川クルーズ船",
+    "h1": "モータークルーズ船"
+  },
+  "/vessels/motor-cruise-ships/a-day-on-board/": {
+    "name": "クルーズ船の船上の一日",
+    "h1": "ナイル川クルーズ船の船上の一日"
+  },
+  "/vessels/paddle-steamers/": {
+    "name": "ナイル川の外輪蒸気船",
+    "h1": "外輪蒸気船"
+  },
+  "/vessels/compare/": {
+    "name": "ダハビヤとクルーズ船の比較",
+    "h1": "ナイル川の船を並べて比較"
+  },
+  "/vessels/compare/dahabiya-vs-cruise-ship/": {
+    "name": "ダハビヤかクルーズ船か",
+    "h1": "ダハビヤかクルーズ船か"
+  },
+  "/nile-cruise-prices/": {
+    "name": "ナイル川クルーズの料金",
+    "h1": "ナイル川クルーズの料金：同じ五つ星で€400と€6,500の違い"
+  },
+  "/nile-cruise-prices/star-ratings-explained/": {
+    "name": "ナイル川の「五つ星」",
+    "h1": "ナイル川の「五つ星」が意味するもの"
+  },
+  "/nile-cruise-prices/whats-included/": {
+    "name": "料金に含まれるもの",
+    "h1": "ナイル川クルーズの料金に含まれるもの・含まれないもの"
+  },
+  "/nile-cruise-prices/budget-vs-luxury/": {
+    "name": "格安とラグジュアリーの比較",
+    "h1": "格安かラグジュアリーか：同じ航路の両極"
+  },
+  "/nile-cruise-prices/price-calculator/": {
+    "name": "料金シミュレーター",
+    "h1": "ナイル川クルーズ料金シミュレーター"
+  },
+  "/nile-cruise-guide/": {
+    "name": "ナイル川クルーズガイド",
+    "h1": "ナイル川クルーズ完全ガイド"
+  },
+  "/nile-cruise-guide/routes/": {
+    "name": "ナイル川クルーズの航路",
+    "h1": "ナイル川クルーズの航路を比較"
+  },
+  "/nile-cruise-guide/routes/luxor-to-aswan/": {
+    "name": "ルクソールからアスワンへ",
+    "h1": "ルクソールからアスワンへ：定番の4泊ルート"
+  },
+  "/nile-cruise-guide/routes/aswan-to-luxor/": {
+    "name": "アスワンからルクソールへ",
+    "h1": "アスワンからルクソールへ：川を下る3泊ルート"
+  },
+  "/nile-cruise-guide/routes/esna-to-aswan/": {
+    "name": "エスナからアスワンへのダハビヤ",
+    "h1": "エスナからアスワンへ：ダハビヤの航路"
+  },
+  "/nile-cruise-guide/when-to-go/": {
+    "name": "クルーズのベストシーズン",
+    "h1": "ナイル川クルーズに行く時期"
+  },
+  "/nile-cruise-guide/planning/": {
+    "name": "クルーズの計画の立て方",
+    "h1": "ナイル川クルーズを計画する"
+  },
+  "/nile-cruise-guide/planning/how-many-nights/": {
+    "name": "何泊がよいか",
+    "h1": "ナイル川には何泊必要？"
+  },
+  "/nile-cruise-guide/planning/nile-cruise-vs-land-tour/": {
+    "name": "クルーズと陸路ツアーの比較",
+    "h1": "ナイル川クルーズか陸路ツアーか"
+  },
+  "/nile-cruise-guide/planning/tipping/": {
+    "name": "チップについて",
+    "h1": "ナイル川クルーズのチップ"
+  },
+  "/destinations/": {
+    "name": "寄港地",
+    "h1": "ナイル川沿いの神殿と町"
+  },
+  "/destinations/luxor/": {
+    "name": "ルクソール",
+    "h1": "ルクソール"
+  },
+  "/destinations/edfu/": {
+    "name": "エドフ神殿",
+    "h1": "エドフとホルス神殿"
+  },
+  "/destinations/kom-ombo/": {
+    "name": "コム・オンボ神殿",
+    "h1": "コム・オンボ"
+  },
+  "/destinations/aswan/": {
+    "name": "アスワン",
+    "h1": "アスワン"
+  },
+  "/destinations/abu-simbel/": {
+    "name": "アブ・シンベル",
+    "h1": "アブ・シンベル"
+  },
+  "/tours-extras/": {
+    "name": "ツアーとオプション",
+    "h1": "クルーズ前後のツアーとオプション"
+  },
+  "/tours-extras/abu-simbel-day-trip/": {
+    "name": "アブ・シンベル日帰りツアー",
+    "h1": "アスワン発アブ・シンベル日帰りツアー"
+  },
+  "/tours-extras/luxor-hot-air-balloon/": {
+    "name": "ルクソールの熱気球",
+    "h1": "ルクソール上空の熱気球"
+  },
+  "/tours-extras/transfers/": {
+    "name": "空港・ホテル送迎",
+    "h1": "空港・ホテル送迎"
+  },
+  "/about/": {
+    "name": "Nilecruzについて",
+    "h1": "Nilecruzについて"
+  },
+  "/how-we-choose-vessels/": {
+    "name": "船の選び方",
+    "h1": "船の調査と選定の方法"
+  },
+  "/contact/": {
+    "name": "お問い合わせ",
+    "h1": "お問い合わせ"
+  },
+  "/plan-my-cruise/": {
+    "name": "クルーズを計画する",
+    "h1": "クルーズを計画する"
+  }
+}

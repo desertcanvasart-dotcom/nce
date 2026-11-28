@@ -7,21 +7,22 @@ import { VesselTypeCard } from "@/components/ds/VesselTypeCard/VesselTypeCard";
 import { vesselIcon } from "@/components/ds/lib/types";
 import { ClosingCruises } from "@/components/editorial/ClosingCruises";
 import styles from "@/components/editorial/editorial.module.css";
+import { contentLocale } from "@/content/places";
 import { vesselProfile, VESSEL_TYPE_TEXT } from "@/content/vessel-types";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { siteUrl } from "@/lib/env";
-import { jsonLdScript, searchRoutes, VESSEL_OPTIONS } from "@/lib/marketplace/listing";
+import { jsonLdScript, searchRoutes, vesselOptions } from "@/lib/marketplace/listing";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo/jsonld";
-import { bridges, LINK_MAP, sentence } from "@/lib/seo/links";
+import { bridges, nameOf } from "@/lib/seo/links";
 import { pageMetadata } from "@/lib/seo/metadata";
 import { editorialPage } from "@/server/content/pages";
 import { publicListing } from "@/server/marketplace/queries";
 
 type Props = { params: Promise<{ locale: Locale }> };
 
-/** The hero carries one sentence over the picture; the full intro follows below it. */
-const firstSentence = (s: string) => s.match(/^.+?[.?](\s|$)/)?.[0].trim() ?? s;
+/** The hero carries one sentence over the picture; the full intro follows below it. Japanese ends its own with 。 */
+const firstSentence = (s: string) => s.match(/^.+?(?:[.?](\s|$)|[。？])/)?.[0].trim() ?? s;
 
 // Static, refreshed with the content and the catalogue (PERF-010).
 export const revalidate = 600;
@@ -39,22 +40,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const [page, all] = await Promise.all([editorialPage("P001"), publicListing()]);
-  const profiles = (["sail", "motor", "steam"] as const).map((t) => vesselProfile(t));
+  const words = contentLocale(locale);
+  const [page, all] = await Promise.all([editorialPage("P001", locale), publicListing(words)]);
+  const t = await getTranslations({ locale, namespace: "editorial" });
+  const common = await getTranslations({ locale, namespace: "common" });
+  const profiles = (["sail", "motor", "steam"] as const).map((kind) => vesselProfile(kind, words));
   const [types, prices, how] = page?.sections ?? [];
-  const pillars = bridges("/").filter((b) => b.href !== "/cruises/");
+  const pillars = bridges("/", locale).filter((b) => b.href !== "/cruises/");
   return (
     <>
       {/* No eyebrow: the logo already says "Nile cruises, explained" (Islam's review, 6 Nov 2026). */}
       <Hero
-        title={page?.title ?? "Find the right Nile cruise"}
+        title={page?.title ?? t("homeTitle")}
         subtitle={page ? firstSentence(page.standfirst) : undefined}
         vessel="sail"
         height={560}
       >
         <CruiseSearch
-          routes={searchRoutes(all)}
-          vessels={VESSEL_OPTIONS.map((o) => ({ id: o.id, label: o.label, icon: o.type ? vesselIcon[o.type] : undefined }))}
+          routes={searchRoutes(all, locale)}
+          vessels={vesselOptions(locale).map((o) => ({
+            id: o.id,
+            label: o.label,
+            icon: o.type ? vesselIcon[o.type] : undefined,
+          }))}
           action="/cruises/"
           onMedia
         />
@@ -62,7 +70,7 @@ export default async function HomePage({ params }: Props) {
       <div className={styles.page}>
         {page?.review === "draft" ? (
           <p className={styles.flags}>
-            <span>Draft for review</span>
+            <span>{common("draft")}</span>
           </p>
         ) : null}
         {/* The rest of the intro, when it runs past the hero's one sentence. */}
@@ -87,7 +95,7 @@ export default async function HomePage({ params }: Props) {
                 description={p.line}
                 facts={p.facts}
                 href={hub}
-                cta={sentence(LINK_MAP[hub]!.keyword)}
+                cta={nameOf(hub, locale)}
               />
             );
           })}
@@ -104,8 +112,8 @@ export default async function HomePage({ params }: Props) {
           </section>
         ))}
         {pillars.length ? (
-          <nav aria-label="Guides" className={styles.related}>
-            <h2>Start here</h2>
+          <nav aria-label={t("guides")} className={styles.related}>
+            <h2>{t("startHere")}</h2>
             <ul>
               {pillars.map((b) => (
                 <li key={b.href}>
@@ -115,9 +123,12 @@ export default async function HomePage({ params }: Props) {
             </ul>
           </nav>
         ) : null}
-        <ClosingCruises all={all} listing={{ href: "/cruises/", anchor: "Nile cruises" }} />
+        <ClosingCruises all={all} listing={{ href: "/cruises/", anchor: t("nileCruises") }} />
       </div>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd(siteUrl)) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd(siteUrl, locale)) }}
+      />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteJsonLd(siteUrl)) }} />
     </>
   );

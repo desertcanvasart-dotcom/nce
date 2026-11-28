@@ -8,7 +8,7 @@ import styles from "@/components/marketplace/VesselPage.module.css";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { hasFigure } from "@/lib/marketplace/public-price";
-import { pageMetadata } from "@/lib/seo/metadata";
+import { localizedPath, pageMetadata } from "@/lib/seo/metadata";
 import { requireUser } from "@/server/auth";
 import { publicVessel } from "@/server/marketplace/queries";
 import { saveQuote } from "./actions";
@@ -37,7 +37,8 @@ export default async function SaveQuote({ params, searchParams }: Props) {
       (e): e is [string, string] => typeof e[1] === "string" && ["itinerary", "date", "guests", "cabin"].includes(e[0]),
     ),
   ).toString();
-  await requireUser(`/cruises/${slug}/save-quote/${keep ? `?${keep}` : ""}`);
+  const here = `/cruises/${slug}/save-quote/`;
+  await requireUser(`${locale === "ja" ? localizedPath(locale, here) : here}${keep ? `?${keep}` : ""}`);
   const v = await publicVessel(slug, locale);
   if (!v) notFound();
   const t = await getTranslations({ locale, namespace: "pricing" });

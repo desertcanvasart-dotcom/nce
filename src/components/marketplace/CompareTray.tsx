@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   readCompared,
@@ -22,10 +23,11 @@ export function useCompared() {
  * and opens the side-by-side page with two or three. Kept on this device; nothing is sent anywhere.
  */
 export function CompareTray({ note }: { note?: string }) {
+  const t = useTranslations("listing");
   const list = useCompared();
   if (!list.length) return null;
   return (
-    <aside className={styles.tray} aria-label="Compare">
+    <aside className={styles.tray} aria-label={t("tray")}>
       <ul className={styles.trayList}>
         {list.map((v) => (
           <li key={v.slug}>
@@ -34,7 +36,7 @@ export function CompareTray({ note }: { note?: string }) {
               type="button"
               className={styles.trayRemove}
               onClick={() => writeCompared(toggled(list, v, false).list)}
-              aria-label={`Remove ${v.name} from the comparison`}
+              aria-label={t("remove", { name: v.name })}
             >
               ×
             </button>
@@ -42,23 +44,18 @@ export function CompareTray({ note }: { note?: string }) {
         ))}
       </ul>
       <p className={styles.trayStatus} role="status" aria-live="polite">
-        {note ??
-          (list.length === 1
-            ? "Add one more vessel to compare."
-            : list.length >= COMPARE_MAX
-              ? `That's ${COMPARE_MAX}, the most at once.`
-              : "")}
+        {note ?? (list.length === 1 ? t("addOne") : list.length >= COMPARE_MAX ? t("most", { max: COMPARE_MAX }) : "")}
       </p>
       {list.length >= 2 ? (
         <Link
           className={styles.compareLink}
           href={{ pathname: "/cruises/compare/", query: { v: list.map((v) => v.slug).join(",") } }}
         >
-          Compare {list.length} vessels
+          {t("compareN", { count: list.length })}
         </Link>
       ) : null}
       <button type="button" className={styles.trayClear} onClick={() => writeCompared([])}>
-        Clear
+        {t("clear")}
       </button>
     </aside>
   );
@@ -66,6 +63,7 @@ export function CompareTray({ note }: { note?: string }) {
 
 /** A vessel page's "Add to compare" (the same tray as the listings). */
 export function AddToCompare({ vessel }: { vessel: Compared }) {
+  const t = useTranslations("listing");
   const list = useCompared();
   const on = list.some((v) => v.slug === vessel.slug);
   const full = !on && list.length >= COMPARE_MAX;
@@ -76,9 +74,9 @@ export function AddToCompare({ vessel }: { vessel: Compared }) {
       aria-pressed={on}
       disabled={full}
       onClick={() => writeCompared(toggled(list, vessel, !on).list)}
-      title={full ? `Compare up to ${COMPARE_MAX} vessels at a time` : undefined}
+      title={full ? t("limit", { max: COMPARE_MAX }) : undefined}
     >
-      {on ? "In your comparison ✓" : "Add to compare"}
+      {on ? t("inComparison") : t("add")}
     </button>
   );
 }

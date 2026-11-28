@@ -54,11 +54,12 @@ export const LIVE_TOUR_REDIRECTS: { source: string; slug: string }[] = [
 ];
 
 /** "about 10 hours", "3 nights", "40 minutes". */
-export function durationText(minutes: number): string {
+export function durationText(minutes: number, locale: string = "en"): string {
   if (minutes >= 24 * 60) {
     const nights = Math.round(minutes / (24 * 60));
-    return `${nights} ${nights === 1 ? "night" : "nights"}`;
+    return locale === "ja" ? `${nights}泊` : `${nights} ${nights === 1 ? "night" : "nights"}`;
   }
+  if (locale === "ja") return minutes >= 60 ? `約${minutes >= 90 ? Math.round(minutes / 60) : 1}時間` : `${minutes}分`;
   if (minutes >= 90) return `about ${Math.round(minutes / 60)} hours`;
   if (minutes >= 60) return "about an hour";
   return `${minutes} minutes`;
@@ -71,3 +72,13 @@ export const KIND_TEXT: Record<PublicTour["kind"], string> = {
   transfer: "Private transfer",
   other: "Tour",
 };
+
+const KIND_TEXT_JA: Record<PublicTour["kind"], string> = {
+  museum_visit: "博物館見学",
+  excursion: "日帰りツアー",
+  evening_tour: "夜のツアー",
+  transfer: "プライベート送迎",
+  other: "ツアー",
+};
+
+export const kindText = (kind: PublicTour["kind"], locale: string = "en") => (locale === "ja" ? KIND_TEXT_JA : KIND_TEXT)[kind];

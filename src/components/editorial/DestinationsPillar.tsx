@@ -259,7 +259,11 @@ export async function DestinationsPillar({
       <section className={styles.closing} aria-labelledby="cruises-heading">
         <h2 id="cruises-heading">{t("cruises.heading")}</h2>
         <p>{t("cruises.intro")}</p>
-        {examples.length ? <ListingGrid cards={examples.map(toCard)} /> : <p className={styles.muted}>{t("cruises.empty")}</p>}
+        {examples.length ? (
+          <ListingGrid cards={examples.map((v) => toCard(v, locale))} />
+        ) : (
+          <p className={styles.muted}>{t("cruises.empty")}</p>
+        )}
         <p>
           <Link href="/cruises/" className={styles.more}>
             {t("cruises.link")} →

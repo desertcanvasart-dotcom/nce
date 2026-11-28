@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -28,18 +29,20 @@ type Props = {
  * FAQs, the closing cruises (SEO-012), and Article and FAQPage data. Draft copy says so (ADR-096).
  */
 export function EditorialFrame({ locale, url, page, lead, closing, hideChildren }: Props) {
+  const t = useTranslations("editorial");
+  const common = useTranslations("common");
   const [before, after] = splitUp(page.standfirst);
-  const parent = up(url);
+  const parent = up(url, locale);
   const faq = faqJsonLd(page);
-  const crossLinks = bridges(url).filter((b) => !b.href.startsWith("/cruises/"));
+  const crossLinks = bridges(url, locale).filter((b) => !b.href.startsWith("/cruises/"));
   return (
     <article className={styles.page}>
-      <Breadcrumbs locale={locale} trail={trail(url)} />
+      <Breadcrumbs locale={locale} trail={trail(url, locale)} />
       <header className={styles.head}>
         {page.review === "draft" || page.sample ? (
           <p className={styles.flags}>
-            {page.review === "draft" ? <span>Draft for review</span> : null}
-            {page.sample ? <span>Sample data</span> : null}
+            {page.review === "draft" ? <span>{common("draft")}</span> : null}
+            {page.sample ? <span>{common("sample")}</span> : null}
           </p>
         ) : null}
         <h1 className={styles.title}>{page.title}</h1>
@@ -58,10 +61,10 @@ export function EditorialFrame({ locale, url, page, lead, closing, hideChildren 
           ))}
         </section>
       ))}
-      {hideChildren ? null : <LinkCards title="In this guide" links={children(url)} id="children" />}
+      {hideChildren ? null : <LinkCards title={t("inThisGuide")} links={children(url, locale)} id="children" />}
       {crossLinks.length ? (
-        <nav aria-label="Related guides" className={styles.related}>
-          <h2>Related</h2>
+        <nav aria-label={t("relatedGuides")} className={styles.related}>
+          <h2>{t("related")}</h2>
           <ul>
             {crossLinks.map((b) => (
               <li key={b.href}>
@@ -71,10 +74,10 @@ export function EditorialFrame({ locale, url, page, lead, closing, hideChildren 
           </ul>
         </nav>
       ) : null}
-      <LinkCards title="Keep reading" links={siblings(url)} id="keep-reading" />
+      <LinkCards title={t("keepReading")} links={siblings(url, locale)} id="keep-reading" />
       {page.faqs.length ? (
         <section className={styles.section} aria-labelledby="faqs">
-          <h2 id="faqs">Questions</h2>
+          <h2 id="faqs">{t("questions")}</h2>
           <dl className={styles.faqs}>
             {page.faqs.map((f) => (
               <div key={f.q}>

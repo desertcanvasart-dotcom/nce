@@ -923,12 +923,13 @@ function ItineraryDetails({
           {[
             it.sightseeing.guide ? t("itinerary.guide") : null,
             it.sightseeing.ticketsIncluded ? t("itinerary.fees") : t("itinerary.noFees"),
-            t("itinerary.visiting", { sites: it.sightseeing.sites.join(", ") }),
+            t("itinerary.visiting", { sites: it.sightseeing.sites.join(t("listSep")) }),
           ]
             .filter(Boolean)
-            .join("; ")
+            .join(t("itinerary.sightseeingJoin"))
             .replace(/^./, (c) => c.toUpperCase())}
-          .{it.sightseeing.note ? ` ${it.sightseeing.note}` : ""}
+          {t("itinerary.sightseeingEnd")}
+          {it.sightseeing.note ? ` ${it.sightseeing.note}` : ""}
         </p>
       ) : it.programme ? (
         <p>
