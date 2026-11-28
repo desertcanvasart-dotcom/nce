@@ -97,7 +97,7 @@ Facts I must not invent. Each is a marked placeholder until it is supplied.
 | 49 | `ANTHROPIC_API_KEY` in Railway, for reading messy vacancy sheets | Can follow | Clean sheets work without it |
 | 33 | A Google Cloud OAuth client, only if you want "Sign in with Google" | Can follow | ADR-065 |
 | 50 | The old site's vessel list export, only for vessel-by-vessel redirects | Can follow | Batch 10-2a. Old vessel pages redirect to /vessels/ until then |
-| 73 | A native review of the Japanese added on 28 Nov 2026: every public page's interface text, the 35 editorial drafts, the operators and About pages, the vessel text in `docs/imports/ja-content-missing.json` and the blog draft in `docs/drafts/blog-nour-el-nil-ja.md` | With 17 | Drafted by Claude (ADR-114) |
+| 75 | A native review of the Japanese added on 28 Nov 2026: every public page's interface text, the 35 editorial drafts, the operators and About pages, the vessel text in `docs/imports/ja-content-missing.json` and the blog draft in `docs/drafts/blog-nour-el-nil-ja.md` | With 17 | Drafted by Claude (ADR-115) |
 
 ## Not content from you
 

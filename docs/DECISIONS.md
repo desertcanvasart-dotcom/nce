@@ -962,9 +962,9 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 - **Context:** Mövenpick gives separate resident rates. ADR-109 made the euro the only public selling currency.
 - **Decision:** a vessel may also show one "from" figure in Egyptian pounds, for Egyptians and foreign residents, under its euro price on its own page only (not on cards, search or structured data). Sightseeing is not included. It is shown only when approved and in date, and only catalogue admins set it. Everything else in ADR-109 stands.
 
-### ADR-114 Japanese across the public site (Proposed; 28 Nov 2026)
+### ADR-115 Japanese across the public site (Proposed; 28 Nov 2026)
 - **Context:** only the three hand-laid hubs were listed as translated (ADR-106, ADR-108, ADR-111), so every other `/ja/` page showed English under a note.
-- **Decision:** every public page whose text is in the repository gets Japanese and joins `TRANSLATED.ja`, so it is indexed with hreflang. Drafted by Claude; native review is CONTENT-NEEDED #73.
+- **Decision:** every public page whose text is in the repository gets Japanese and joins `TRANSLATED.ja`, so it is indexed with hreflang. Drafted by Claude; native review is CONTENT-NEEDED #75.
   - Editorial pages: Japanese drafts in `src/content/pages/ja/`; a Japanese Sanity article overrides them.
   - Link, breadcrumb and heading names: `src/lib/seo/link-names.ja.json`, in place of the workbook's English keywords.
   - Cabin amenities and deck names have no locale column: `src/content/vessel-terms.ts`.
