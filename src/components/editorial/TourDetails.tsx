@@ -1,5 +1,7 @@
+import { useLocale, useTranslations } from "next-intl";
+import { placeName } from "@/content/places";
 import { Link } from "@/i18n/navigation";
-import { durationText, KIND_TEXT, tourUrl, type PublicTour } from "@/lib/content/tours";
+import { durationText, kindText, tourUrl, type PublicTour } from "@/lib/content/tours";
 import styles from "./editorial.module.css";
 
 /**
@@ -8,18 +10,21 @@ import styles from "./editorial.module.css";
  * soon" (ADR-097).
  */
 export function TourDetails({ tour, heading = true }: { tour: PublicTour; heading?: boolean }) {
+  const t = useTranslations("tours");
+  const common = useTranslations("common");
+  const locale = useLocale();
   return (
     <section className={styles.tour} aria-labelledby={`tour-${tour.slug}`}>
       {heading ? <h2 id={`tour-${tour.slug}`}>{tour.name}</h2> : null}
       <p className={styles.muted}>
-        {KIND_TEXT[tour.kind]} · {tour.location} · {durationText(tour.durationMinutes)}
-        {tour.adultsOnly ? " · adults only" : ""}
-        {tour.sample ? " · Sample data" : ""}
+        {kindText(tour.kind, locale)} · {placeName(tour.location, locale)} · {durationText(tour.durationMinutes, locale)}
+        {tour.adultsOnly ? ` · ${t("adultsOnly")}` : ""}
+        {tour.sample ? ` · ${common("sample")}` : ""}
       </p>
       {tour.description ? <p className={styles.prewrap}>{tour.description.split("\n\n")[0]}</p> : null}
       {tour.itinerary.length ? (
         <>
-          <h3>The day</h3>
+          <h3>{t("day")}</h3>
           <ol className={styles.steps}>
             {tour.itinerary.map((s) => (
               <li key={s}>{s}</li>
@@ -30,7 +35,7 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
       <div className={styles.split}>
         {tour.inclusions.length ? (
           <div>
-            <h3>Included</h3>
+            <h3>{t("included")}</h3>
             <ul>
               {tour.inclusions.map((s) => (
                 <li key={s}>{s}</li>
@@ -40,7 +45,7 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
         ) : null}
         {tour.exclusions.length ? (
           <div>
-            <h3>Not included</h3>
+            <h3>{t("notIncluded")}</h3>
             <ul>
               {tour.exclusions.map((s) => (
                 <li key={s}>{s}</li>
@@ -51,29 +56,30 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
       </div>
       {tour.meetingPoint ? (
         <p>
-          <strong>Where it starts:</strong> {tour.meetingPoint}
+          <strong>{t("starts")}</strong> {tour.meetingPoint}
         </p>
       ) : null}
       {tour.cancellationTerms ? (
         <p>
-          <strong>Cancellation:</strong> {tour.cancellationTerms}
+          <strong>{t("cancellation")}</strong> {tour.cancellationTerms}
         </p>
       ) : null}
       {tour.bookable ? (
         <div className={styles.booking}>
           {/* ADR-109: tour rates are in US dollars and the euro is the only public selling currency; never converted. */}
           <p>
-            <strong>Price on request.</strong> All prices we publish and quote already include our margin.
+            <strong>{t("onRequest")}</strong>
           </p>
           <p>
-            <Link href={`/dashboard/journey/tours/book/${tour.id}/`}>Choose a date for {tour.name}</Link>: pick shared or private
-            and your party; the price shows after you sign in.
+            {t.rich("choose", {
+              name: tour.name,
+              link: (c) => <Link href={`/dashboard/journey/tours/book/${tour.id}/`}>{c}</Link>,
+            })}
           </p>
         </div>
       ) : (
         <p className={styles.booking}>
-          <strong>Prices coming soon.</strong> Booking opens when our office’s rates are loaded. Until then,{" "}
-          <Link href="/contact/">contact us</Link> to ask about this tour.
+          <strong>{t("soon")}</strong> {t.rich("soonBody", { link: (c) => <Link href="/contact/">{c}</Link> })}
         </p>
       )}
     </section>
@@ -82,16 +88,18 @@ export function TourDetails({ tour, heading = true }: { tour: PublicTour; headin
 
 /** The tours hub's cards: name, kind, place and length, linking to each tour's one page (DASH-ADM-072). */
 export function TourCards({ tours }: { tours: PublicTour[] }) {
-  if (!tours.length) return <p className={styles.muted}>No tours are published yet.</p>;
+  const t = useTranslations("tours");
+  const locale = useLocale();
+  if (!tours.length) return <p className={styles.muted}>{t("none")}</p>;
   return (
     <section className={styles.cards} aria-labelledby="all-tours">
-      <h2 id="all-tours">All tours and extras</h2>
+      <h2 id="all-tours">{t("all")}</h2>
       <ul>
-        {tours.map((t) => (
-          <li key={t.slug}>
-            <Link href={tourUrl(t.slug)}>{t.name}</Link>
+        {tours.map((tour) => (
+          <li key={tour.slug}>
+            <Link href={tourUrl(tour.slug)}>{tour.name}</Link>
             <span>
-              {KIND_TEXT[t.kind]} · {t.location} · {durationText(t.durationMinutes)}
+              {kindText(tour.kind, locale)} · {placeName(tour.location, locale)} · {durationText(tour.durationMinutes, locale)}
             </span>
           </li>
         ))}

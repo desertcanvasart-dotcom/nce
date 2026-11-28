@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { deckName } from "@/content/vessel-terms";
 import { Media } from "@/components/ds/Media/Media";
 import { decksOf, type DeckLayout } from "@/lib/marketplace/deck-layout";
 import { UNKNOWN_DECK, verifiedCabin, type VesselCabin, type VesselPage } from "@/lib/marketplace/vessel";
@@ -64,7 +65,7 @@ export function CabinsAndDecks({
               c.maxGuests ? t("cabins.sleeps", { n: c.maxGuests }) : null,
               c.view,
               c.balcony ? t("cabins.balcony") : null,
-              decks ? t("cabins.decks", { n: decks.length, list: list(decks) }) : null,
+              decks ? t("cabins.decks", { n: decks.length, list: list(decks.map((d) => deckName(d, locale))) }) : null,
             ].filter((x): x is string => !!x);
             const on = !!c.code && picked === c.code;
             return (

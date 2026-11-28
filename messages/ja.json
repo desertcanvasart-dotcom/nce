@@ -1,5 +1,5 @@
 {
-  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28). The vessels pillar (vesselsPillar) and the vessel-type text in src/content/vessel-types.ts were drafted by Claude on 3 Nov 2026 and need the same review (ADR-106).",
+  "_review": "Drafted by Claude on 17 Oct 2026 for Batches 1–2, 4a and 10 (shell.untranslated). Needs review by a native Japanese translator before launch (ADR-032, CONTENT-NEEDED #28). The vessels pillar (vesselsPillar) and the vessel-type text in src/content/vessel-types.ts were drafted by Claude on 3 Nov 2026 and need the same review (ADR-106). On 28 Nov 2026 Claude added Japanese for the remaining public pages (ADR-115, CONTENT-NEEDED #75).",
   "meta": {
     "siteName": "Nilecruz",
     "homeTitle": "乗船前にわかる、ナイル川クルーズ",
@@ -115,12 +115,10 @@
       "compare": "比較する",
       "save": "{name}を保存",
       "remove": "{name}を保存から外す",
-      "from": "<b>{price}</b>から（1名あたり）。当社の手数料を含みます。目安であり、見積もりではありません。",
-      "band": "通常<b>{min}〜{max}</b>（1名あたり）。当社の手数料を含みます。目安であり、見積もりではありません。",
+      "from": "<b>{price}</b>から（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
+      "band": "通常<b>{min}〜{max}</b>（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
       "onRequest": "料金はお問い合わせください",
-      "unavailable": "当社では予約できません",
-      "fromGuide": "<b>{price}</b>から（1名あたり）。目安であり、見積もりではありません。",
-      "bandGuide": "通常<b>{min}〜{max}</b>（1名あたり）。目安であり、見積もりではありません。"
+      "unavailable": "当社では予約できません"
     },
     "experienceCard": {
       "seeDetails": "詳細を見る"
@@ -566,7 +564,9 @@
       "noFees": "入場料は含まれません",
       "visiting": "訪問先:{sites}",
       "boarding": "乗船について:",
-      "programmeOnRequest": "観光付き：予約時にNilecruzの<link>{name}</link>を追加できます。エジプト学者のガイドと入場料が含まれ、Nilecruzとの別予約として、クルーズと一緒にお支払いいただきます。料金はお問い合わせください。"
+      "programmeOnRequest": "観光付き：予約時にNilecruzの<link>{name}</link>を追加できます。エジプト学者のガイドと入場料が含まれ、Nilecruzとの別予約として、クルーズと一緒にお支払いいただきます。料金はお問い合わせください。",
+      "sightseeingJoin": "、",
+      "sightseeingEnd": "。"
     },
     "cabins": {
       "title": "客室とデッキ",
@@ -638,7 +638,14 @@
       "Salon": "ヘアサロン",
       "Foyer": "ロビー",
       "Library and cigar lounge": "図書室とシガーラウンジ",
-      "Bar and club lounge": "バーとクラブラウンジ"
+      "Bar and club lounge": "バーとクラブラウンジ",
+      "Engine room": "機関室",
+      "Lounge bar": "ラウンジバー",
+      "Massage suites": "マッサージスイート",
+      "Reading room": "読書室",
+      "Reception": "レセプション",
+      "Theatre": "シアター",
+      "Wheelhouse": "操舵室"
     },
     "evaluation": {
       "title": "Nilecruzの評価",
@@ -776,6 +783,157 @@
       "finalTitle": "このクルーズに興味がありますか？",
       "label": "予約",
       "datesIntro": "運航会社が公開している出航日と通常の運航パターンです（参考情報）。Nilecruzでは予約できません。"
+    },
+    "mooringExplainer": {
+      "practice": {
+        "private_bank": "この船は専用の川岸に停泊します。窓からは川と川岸の景色が見えます。",
+        "rafted": "この船は他の船と横並びで停泊し、何隻も並ぶことがよくあります。寄港地によっては窓が隣の船に面し、岸へ出るには他の船のロビーを通り抜けます。",
+        "varies": "この船は可能な場所では専用の川岸に、それ以外の場所では他の船と横並びで停泊します。"
+      },
+      "toggle": "船の停泊場所",
+      "rafted": {
+        "label": "6隻が横並びで停泊",
+        "caption": "上から見た図:混み合う寄港地では、船どうしが横並びで係留します。岸に接するのは最初の1隻だけです。窓が隣の船に面することがあり、上陸するには他の船のロビーを通り抜けます。"
+      },
+      "private_bank": {
+        "label": "専用の川岸",
+        "caption": "上から見た図:船は専用の川岸に単独で係留します。窓の外は開けた川面かヤシの木です。"
+      },
+      "riverbank": "川岸",
+      "yourShip": "ご乗船の船",
+      "windowNext": "窓は隣の船に面します",
+      "openRiver": "反対側は開けた川面",
+      "stop": "。"
+    },
+    "radar": {
+      "label": "評価は100点中{score}点:{list}。",
+      "item": "{label}{weight}点中{points}点",
+      "sep": "、",
+      "caption": "各項目が満点のとき、点は外周に達します。"
+    },
+    "deckView": {
+      "empty": "運航会社がこの船の客室タイプをまだ登録していないため、デッキ図はありません。各客室の様子は、見積もりを依頼してお確かめください。",
+      "schematic": "模式図であり、間取り図ではありません。各客室タイプがどのデッキにあるかを示しています。客室番号は運航会社が割り当てます。",
+      "deck": "{name}デッキ",
+      "decks": "デッキ",
+      "sleeps": "定員{n}名",
+      "balcony": "専用バルコニー",
+      "state": {
+        "instant": "即時確定",
+        "confirm": "運航会社が所定の時間内に確定します",
+        "sold_out": "この出航日は満室"
+      },
+      "stateSentence": "{state}。",
+      "choose": "{name}を選ぶ",
+      "hint": "客室タイプを選ぶと、詳しい内容が表示されます。",
+      "credit": "({credit})"
+    },
+    "reserve": {
+      "title": "料金と日程",
+      "heading": "料金と日程:{name}",
+      "leadRoute": "{origin}から{destination}まで、{nights}泊。",
+      "lead": "乗船から下船までの、1名あたりの公表料金です。乗組員へのチップは別料金で、船内でお支払いいただきます。",
+      "itineraries": "行程",
+      "itinerary": "{origin} → {destination}、{nights}泊",
+      "package": "プラン",
+      "cruiseOnly": "クルーズのみ",
+      "withSightseeing": "観光付き",
+      "vesselSightseeing": "料金には船独自の観光が含まれます:{text}",
+      "sightseeingText": "{parts}、訪問先:{sites}。",
+      "programme": "Nilecruzの{name}付き:Nilecruzとの別予約です。エジプト学者のガイドと入場料が含まれ、クルーズと一緒にお支払いいただきます。",
+      "cruiseOnlyNote": "クルーズのみです。観光を追加するには「観光付き」を選んでください。",
+      "notBookable": "現在、この船はオンラインで予約できません。代わりに<link>運航会社に見積もりを依頼</link>してください。",
+      "step1": "1. 出発日を選ぶ",
+      "range": "{from}〜{to}",
+      "from": "2名1室利用で1名あたり{price}から",
+      "instantMode": "即時確定",
+      "within": "{hours}時間以内に確定",
+      "payBy": "全額のお支払期限:",
+      "soldOutShort": "満室",
+      "unconfirmedShort": "確認中",
+      "step2": "2. デッキと客室を選ぶ · {from}〜{to}",
+      "otherDepartures": "← 他の出発日",
+      "soldOutDate": "この日は満室です。",
+      "nearby": "{name}の近い日程:",
+      "listJoin": "、",
+      "end": "",
+      "similar": "同じ航路の似た船",
+      "cannotTake": "この出発日では、その客室にこの人数は宿泊できません。別の客室を選ぶか、人数を変更してください。",
+      "cabinType": "客室タイプ",
+      "priceDouble": "2名1室利用で1名あたり{price}",
+      "priceSingle": "1名利用{price}",
+      "priceSupplement": "追加料金は大人1名あたり{price}",
+      "availability": {
+        "soldOut": "満室",
+        "unconfirmed": "確認中",
+        "request": "空室あり · {hours}時間以内に確定",
+        "last": "残りわずか",
+        "instant": "即時確定"
+      },
+      "updated": {
+        "now": "空室状況はたった今更新",
+        "minute": "空室状況は{n}分前に更新",
+        "hour": "空室状況は{n}時間前に更新",
+        "day": "空室状況は{n}日前に更新"
+      },
+      "adults": "1室あたりの大人の人数(18歳以上)",
+      "children": "1室あたりのお子様の年齢(任意)",
+      "cabinsLike": "このタイプの客室数",
+      "seePrice": "料金を見る",
+      "step3": "3. 宿泊者情報と予約",
+      "change": "← 客室や人数を変更",
+      "departure": "出発日",
+      "cabin": "客室",
+      "cabinValue": "{name} × {n}室、{deck}デッキ",
+      "guestsPerCabin": "1室あたりの人数",
+      "adultCount": "大人{n}名",
+      "childrenAged": "、お子様の年齢:{ages}",
+      "total": "合計",
+      "byNilecruz": "Nilecruzの観光",
+      "programmeSeparate": "{name}(Nilecruzとの別予約)",
+      "together": "合わせて",
+      "onePage": "まとめてお支払い",
+      "currency": "通貨",
+      "currencyNote": "観光は{currency}建てです。追加するには{currency}建ての客室を選んでください。",
+      "gratuityLabel": "乗組員へのチップ",
+      "gratuity": "乗組員へのチップ:1名1泊あたり{amount}(3歳以上){total}。下船時に船内でお支払いください。オンラインで請求されることはなく、お支払い金額には含まれません。",
+      "gratuityTotal": "、このグループの{nights}泊分は{amount}",
+      "perAdult": "大人1名あたり{price}。",
+      "byAge": "お子様の料金は年齢によって決まります。",
+      "includesSupplements": "合計には、この日程の必須追加料金(大人1名あたり{price}){names}が含まれます。",
+      "supplementNames": "({list})",
+      "totalSightseeing": "合計には、クルーズ料金と船独自の観光が含まれます。送迎、航空券、その他のツアーは別途ご予約ください。",
+      "totalCruise": "合計はクルーズ料金のみです。送迎、航空券、ツアーは別途ご予約ください。",
+      "onlyLeft": "この客室は残り{n}室です。室数を減らしてください。",
+      "policy": "キャンセル規定",
+      "bandAny": "いつキャンセルしても:{percent}%を請求",
+      "bandFirst": "出発の{days}日前までのキャンセル:{percent}%を請求",
+      "bandLast": "出発まで{days}日を切ってからのキャンセル:{percent}%を請求",
+      "bandBetween": "出発の{to}日前から{from}日前までのキャンセル:{percent}%を請求",
+      "requestNote": "お支払いの前に運航会社が客室を確定します(通常{hours}時間以内)。それまで料金は請求されません。",
+      "sendRequest": "予約リクエストを送る",
+      "reserve": "予約する",
+      "namesNote": "宿泊者{n}名全員の氏名(パスポート表記)と生年月日を入力してください。出発日時点の年齢が一致している必要があります。1人目が代表者となります。",
+      "guestName": "客室{cabin}、宿泊者{guest}:氏名",
+      "dob": "生年月日",
+      "nationality": "国籍",
+      "nationalityHint": "2文字の国コード(例:JP)",
+      "agreement": "同意",
+      "agree": "利用規約とキャンセル規定を読みました",
+      "afterRequest": "リクエストはすぐに運航会社へ送ります。確定後、「My journey」(マイページ)でお支払いいただきます。",
+      "afterReserve": "予約時に空室を再確認し、お客様のために確保します。お支払い方法と期限は「My journey」(マイページ)でご案内します。",
+      "errors": {
+        "terms": "利用規約とキャンセル規定を読んだことにチェックを入れてください。",
+        "plan": "この内容では予約できません。日程の選択に戻り、もう一度お選びください。",
+        "tooMany": "試行回数が多すぎます。{n}分後にもう一度お試しください。",
+        "count": "宿泊者{n}名全員の氏名と生年月日を入力してください。",
+        "missing": "宿泊者全員の氏名と生年月日が必要です。",
+        "future": "出発日より後の生年月日があります。",
+        "ages": "出発日時点で、この予約は大人{adults}名{children}の内容です。生年月日をご確認ください。",
+        "agesChildren": "、お子様(年齢:{ages})",
+        "nationality": "代表者の国籍は、JPのような2文字の国コードで入力してください。",
+        "database": "予約できませんでした。日程の選択に戻ってもう一度お試しいただくか、お問い合わせください。"
+      }
     }
   },
   "vesselsPillar": {
@@ -1016,8 +1174,8 @@
     }
   },
   "pricing": {
-    "from": "<b>{price}</b>から（1名あたり）。当社の手数料を含みます。目安であり、見積もりではありません。",
-    "band": "通常<b>{min}〜{max}</b>（1名あたり）。当社の手数料を含みます。目安であり、見積もりではありません。",
+    "from": "<b>{price}</b>から（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
+    "band": "通常<b>{min}〜{max}</b>（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
     "onRequest": "料金はお問い合わせください",
     "basisTrip": "1名あたり、クルーズ1回分の料金です。",
     "basisTripNights": "1名あたり、{n}泊クルーズの料金です。",
@@ -1026,7 +1184,6 @@
     "residentNight": "エジプト国籍の方と在住外国人の方：お一人様1泊{price}から。観光は含まれません。目安であり、見積もりではありません。",
     "residentTrip": "エジプト国籍の方と在住外国人の方：お一人様1旅程{price}から。観光は含まれません。目安であり、見積もりではありません。",
     "checked": "最終確認日：{date}",
-    "policy": "当社が掲載・お見積もりするすべての料金には、当社の手数料が含まれています。",
     "onRequestNote": "このクルーズの料金はまだ掲載していません。ご希望の日程で料金をご確認いただければ、お見積もりをメールでお送りします。",
     "why": "ナイル川クルーズの料金が異なる理由",
     "gratuities": "乗務員へのチップは料金とは別に、お渡しするのが一般的です。クルーズにより異なりますが、通常1名1泊あたり€5〜€10です。各クルーズのお見積もりをご確認ください。",
@@ -1048,7 +1205,7 @@
       "failed": "送信できませんでした。しばらくしてからもう一度お試しください。",
       "tooMany": "送信回数が多すぎます。数分後にもう一度お試しください。",
       "invalid": "次の項目をご確認ください：{fields}",
-      "signedInResult": "{date}出発、{cabin}：1名あたり{price}（当社の手数料を含みます）。",
+      "signedInResult": "{date}出発、{cabin}：1名あたり{price}。",
       "signedInNone": "その日の料金はまだありません。空き状況を確認し、お見積もりをメールでお送りします。"
     },
     "save": {
@@ -1063,9 +1220,7 @@
       "summary": "{name}：{details}",
       "any": "日程未定"
     },
-    "unavailable": "当社では予約できません",
-    "fromGuide": "<b>{price}</b>から（1名あたり）。目安であり、見積もりではありません。",
-    "bandGuide": "通常<b>{min}〜{max}</b>（1名あたり）。目安であり、見積もりではありません。"
+    "unavailable": "当社では予約できません"
   },
   "guideHub": {
     "meta": {
@@ -1218,5 +1373,254 @@
       "button": "クルーズを計画する",
       "all": "ナイル川クルーズをすべて見る"
     }
+  },
+  "common": {
+    "draft": "確認用の下書き",
+    "sample": "サンプルデータ",
+    "home": "ホーム",
+    "cruises": "クルーズ",
+    "breadcrumb": "パンくずリスト",
+    "leaveEmpty": "この欄は空欄のままにしてください"
+  },
+  "operatorReply": {
+    "title": "予約リクエスト",
+    "invalidTitle": "このリンクは無効です",
+    "invalidText": "Nilecruzから届いた最新のメッセージのリンクをご利用いただくか、お問い合わせください。",
+    "expiredTitle": "このリンクは期限切れです",
+    "expiredText": "リンクの有効期間は7日間です。このリクエストについてはNilecruzにお問い合わせください。",
+    "answeredTitle": "リクエスト{reference}は{status}",
+    "status": {
+      "confirmed": "確定済みです",
+      "declined": "お断り済みです",
+      "held": "72時間確保中です",
+      "alternative_offered": "別の提案で回答済みです",
+      "expired": "回答がないまま期限切れになりました",
+      "withdrawn": "お客様により取り下げられました"
+    },
+    "recorded": "記録された回答:",
+    "answer": {
+      "confirm": "確定",
+      "decline": "お断り",
+      "hold": "72時間確保",
+      "other": "別の提案"
+    },
+    "firstAnswer": "(最初の回答:{when} カイロ時間)",
+    "end": "",
+    "kicker": "Nilecruzの予約リクエスト",
+    "heading": "{vessel}:リクエスト{reference}",
+    "sendOffer": "この提案を送る",
+    "offerText": "別の日程または客室タイプを提案してください。選ぶのはお客様です。お客様が予約するまで何も変わりません。",
+    "anotherDate": "別の日程",
+    "sameDate": "同じ日程",
+    "anotherCabin": "別の客室タイプ",
+    "sameCabin": "同じ客室タイプ",
+    "cabins": "客室数",
+    "note": "お客様への短いメモ",
+    "button": {
+      "confirm": {
+        "title": "この客室を確定する",
+        "text": "お客様にはすぐにお支払いをお願いします。"
+      },
+      "decline": {
+        "title": "お断りする",
+        "text": "これらの客室を満室として扱い、お客様に別の日程をご案内します。"
+      },
+      "hold": {
+        "title": "72時間確保する",
+        "text": "確認の間、客室を確保します。確保の期限までに確定またはお断りしてください。"
+      }
+    },
+    "facts": {
+      "ship": "船:{vessel}",
+      "cruise": "クルーズ:{origin}から{destination}まで、乗船日{date}、{nights}泊",
+      "cabins": "客室:{list}",
+      "guests": "人数:{n}名{nationality}",
+      "nationality": "(代表者の国籍:{code})",
+      "agency": "旅行会社:{agency}(業者予約)",
+      "request": "リクエスト番号:{reference}",
+      "noData": "{cabin}の空室情報はありませんでした。",
+      "shown": "{date}時点の{source}では、{cabin}の空室は{n}室でした。",
+      "source": {
+        "manual": "手入力データ",
+        "paste": "貼り付けデータ",
+        "feed": "フィード",
+        "api": "API",
+        "tap": "前回の回答",
+        "sheet": "空室表",
+        "data": "データ"
+      }
+    },
+    "result": {
+      "confirmed": "確定しました。お客様にお支払いをお願いします。予約はダッシュボードで確認できます。",
+      "declined": "お断りを記録しました。該当の客室を満室とし、お客様に別の日程をご案内します。",
+      "held": "72時間確保しました。期限までに確定またはお断りしてください。回答がない場合、客室は解放されます。",
+      "alternative_offered": "送信しました。選ぶのはお客様です。予約が入ればお知らせします。",
+      "done": "完了しました。",
+      "already": "このリクエストは回答済みです。変更はありません。"
+    },
+    "errors": {
+      "choose": "別の日程または客室タイプと、客室数(1〜5)を選んでください。",
+      "chooseOne": "別の日程または別の客室タイプを選んでください。",
+      "tooMany": "試行回数が多すぎます。{n}分後にもう一度お試しください。",
+      "failed": "回答を記録できませんでした。Nilecruzにお問い合わせください。"
+    }
+  },
+  "editorial": {
+    "inThisGuide": "このガイドの内容",
+    "relatedGuides": "関連ガイド",
+    "related": "関連情報",
+    "keepReading": "あわせて読む",
+    "questions": "よくある質問",
+    "noCruises": "この種類のクルーズはまだ掲載していません。",
+    "seeAll": "すべて見る：{anchor}",
+    "exploreTitle": "注目の船",
+    "guides": "ガイド",
+    "startHere": "まずはこちら",
+    "homeTitle": "自分に合うナイル川クルーズを見つける",
+    "nileCruises": "ナイル川クルーズ"
+  },
+  "silo": {
+    "dawnScene": "夜明けのナイル川を行く{vessel}",
+    "middayScene": "真昼の日差しの中、神殿の前を通るナイル川クルーズ船",
+    "riverScene": "川から望む{name}",
+    "weightsCaption": "7つの評価項目と配点",
+    "dimension": "評価項目",
+    "scored": "採点する内容",
+    "weight": "配点",
+    "outOf100": "100点中{weight}点",
+    "toursCrumb": "ツアーとオプション",
+    "tourTitle": "{name} | ツアーとオプション"
+  },
+  "listing": {
+    "facetsLabel": "クルーズの種類と航路",
+    "withSightseeing": "観光付き",
+    "propulsionLabel": "推進方式",
+    "vessels": "{count}隻",
+    "departures": "該当する出航{count}件",
+    "note": "開始料金は1名あたりのユーロ建てで、目安であり、見積もりではありません。開始料金の安い順に表示しています。「料金はお問い合わせください」のクルーズは並べ替える料金がないため、その後に船名順で表示しています（{total}隻中{priced}隻に料金を表示）。クルーへのチップは別途で、クルーズにより通常1名1泊あたり€5〜€10です。各クルーズの案内をご確認ください。",
+    "cardsLabel": "クルーズ",
+    "trayFull": "一度に比較できるのは{max}隻までです。先に1隻を外してください。",
+    "tray": "比較",
+    "remove": "{name}を比較から外す",
+    "addOne": "比較するには、もう1隻追加してください。",
+    "most": "{max}隻になりました。一度に比較できる上限です。",
+    "compareN": "{count}隻を比較",
+    "clear": "すべて外す",
+    "limit": "一度に比較できるのは{max}隻までです",
+    "inComparison": "比較に追加済み ✓",
+    "add": "比較に追加",
+    "propulsion": {
+      "motor": "モーター",
+      "wind": "風力",
+      "steam": "蒸気"
+    }
+  },
+  "cruisesHub": {
+    "title": "ナイル川クルーズを比較する",
+    "description": "ダハビヤとクルーズ船のナイル川クルーズを比較。航路、泊数、乗客数、Nilecruzの評価、正直な開始料金をまとめています。",
+    "intro": "Nilecruzに掲載しているすべての船を、航路、乗客数、当社独自の評価、正直な開始料金とともに紹介します。ダハビヤで帆走するか、モーターシップでクルーズするかを選べます。",
+    "noMatch": "条件に合う出航はありません。日付を変えるか、ルートを指定せずにお試しください。",
+    "none": "クルーズはまだ掲載していません。",
+    "noneOfKind": "この種類の船はまだ掲載していません。すべてのクルーズをご覧ください。"
+  },
+  "compare": {
+    "title": "船を比較する",
+    "description": "ナイル川クルーズの船を最大3隻まで並べて比較できます。",
+    "crumb": "比較",
+    "lead": "ナイル川の船で違いが大きい項目をまとめました。開始料金は1名あたりのユーロ建てで、目安であり、見積もりではありません。",
+    "empty": "<link>クルーズ一覧</link>で2隻か3隻の「比較する」にチェックを入れると、並べて表示します。",
+    "caption": "比較する船",
+    "type": "種類",
+    "dahabiya": "ダハビヤ",
+    "motorShip": "モータークルーズ船",
+    "steamer": "蒸気船",
+    "propulsion": "推進方式",
+    "notConfirmed": "未確認",
+    "guests": "最大乗客数",
+    "notGiven": "情報なし",
+    "cabins": "客室数",
+    "decks": "デッキ数",
+    "evaluation": "Nilecruzの評価",
+    "notEvaluated": "未評価",
+    "price": "開始料金",
+    "from": "{price}から（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
+    "band": "通常{min}〜{max}（1名あたり）。観光を含みます。目安であり、見積もりではありません。",
+    "onRequest": "料金はお問い合わせください",
+    "booking": "予約",
+    "bookable": "Nilecruzで予約できます",
+    "requestBased": "リクエスト受付",
+    "unavailable": "当社では予約できません",
+    "itineraries": "旅程",
+    "itinerary": "{from} → {to}、{nights}泊",
+    "notPublished": "未掲載"
+  },
+  "blog": {
+    "title": "Nilecruzブログ",
+    "description": "ナイル川からのニュース、シーズン情報、旅の話を新しい順に掲載しています。",
+    "lead": "川からのニュース、シーズン情報、旅の話をお届けします。毎年変わらない計画のコツは<link>ナイル川クルーズガイド</link>をご覧ください。",
+    "crumb": "ブログ",
+    "earlier": "過去の記事",
+    "more": "ブログのほかの記事",
+    "empty": "最初の記事を準備しています。",
+    "topics": "ブログのトピック",
+    "topicDescription": "Nilecruzブログの「{topic}」の記事を新しい順に掲載しています。",
+    "topicTitle": "{topic} | ブログ",
+    "moreTopic": "{topic}のほかの記事",
+    "by": "執筆：{author}",
+    "checkedBy": "。確認：{name}",
+    "updated": "。更新日：<date></date>",
+    "end": "。",
+    "readMore": "ガイドで詳しく読む"
+  },
+  "contact": {
+    "heading": "お問い合わせフォーム",
+    "send": "送信する",
+    "name": "お名前",
+    "email": "メールアドレス",
+    "about": "お問い合わせの内容",
+    "cruise": "クルーズ選び",
+    "booking": "ご予約について",
+    "vessel": "船や当社の評価について",
+    "partner": "運航会社・旅行パートナーの方",
+    "other": "その他",
+    "message": "メッセージ",
+    "privacy": "ご入力いただいた情報は、返信のためにのみ使用します。"
+  },
+  "plan": {
+    "heading": "あなたの旅行プラン",
+    "restored": "前回のプランをこの端末に保存していました。",
+    "route": "ルート",
+    "anyRoute": "ルート指定なし",
+    "routeOption": "{from}から{to}",
+    "earliest": "最も早い出発日",
+    "latest": "最も遅い出発日",
+    "nightsMin": "最少泊数",
+    "nightsMax": "最多泊数",
+    "adults": "大人（18歳以上）",
+    "childAges": "お子様の年齢<hint>（旅行日時点。例：7, 4）</hint>",
+    "cabins": "客室数",
+    "budget": "全員分の予算（ユーロ）<hint>（任意）</hint>",
+    "notes": "運航会社に伝えたいこと<hint>（任意）</hint>",
+    "send": "運航会社に送る",
+    "again": "最初からやり直す",
+    "stays": "プランは送信するまでこの端末内にのみ保存されます。送信するにはログインまたはアカウント作成が必要で、その後、運航会社に送る前にリクエスト内容を確認できます。オファー、料金、順位を保証するものではありません。"
+  },
+  "priceExample": {
+    "caption": "1名あたり、ユーロ建て",
+    "total": "合計（1名あたり）"
+  },
+  "tours": {
+    "adultsOnly": "大人限定",
+    "day": "当日の流れ",
+    "included": "含まれるもの",
+    "notIncluded": "含まれないもの",
+    "starts": "集合場所：",
+    "cancellation": "キャンセル条件：",
+    "onRequest": "料金はお問い合わせください。",
+    "choose": "<link>{name}の日付を選ぶ</link>：混載かプライベートか、参加人数を選んでください。料金はログイン後に表示されます。",
+    "soon": "料金は近日公開します。",
+    "soonBody": "当社オフィスの料金が登録され次第、予約を受け付けます。それまでは、このツアーについて<link>お問い合わせください</link>。",
+    "none": "ツアーはまだ掲載していません。",
+    "all": "すべてのツアーとオプション"
   }
 }

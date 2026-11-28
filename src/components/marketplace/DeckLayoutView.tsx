@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { deckName } from "@/content/vessel-terms";
 import {
   areaBox,
   cabinShare,
@@ -108,7 +109,7 @@ export function DeckLayoutView({
     return a.cabin === picked ? `${base} ${styles.on}` : `${base} ${styles.dim}`;
   };
   const tap = (deck: string, a: DeckArea) => {
-    setTapped({ deck: t("deck.deck", { name: deck }), area: labelOf(a), with: picked });
+    setTapped({ deck: t("deck.deck", { name: deckName(deck, locale) }), area: labelOf(a), with: picked });
     if (a.cabin && drawn.some((c) => c.code === a.cabin)) pick(a.cabin === picked ? null : a.cabin);
   };
 
@@ -149,12 +150,12 @@ export function DeckLayoutView({
           const hatch = `${uid}-hatch-${i}`;
           return (
             <li key={d.name} data-deck={d.name} tabIndex={-1}>
-              <h3>{t("deck.deck", { name: d.name })}</h3>
+              <h3>{t("deck.deck", { name: deckName(d.name, locale) })}</h3>
               <svg
                 viewBox={`0 0 ${DECK_W} 100`}
                 className={styles.deck}
                 role="img"
-                aria-label={t("deck.deckLabel", { name: d.name, list: list(words) })}
+                aria-label={t("deck.deckLabel", { name: deckName(d.name, locale), list: list(words) })}
               >
                 <defs>
                   <clipPath id={clip}>

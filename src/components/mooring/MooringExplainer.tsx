@@ -1,29 +1,20 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useTranslations } from "next-intl";
 import { useHydrated } from "@/components/ds/lib/useHydrated";
-import { MOORING_TEXT, type Mooring } from "@/lib/catalogue/mooring";
+import type { Mooring } from "@/lib/catalogue/mooring";
 import styles from "./MooringExplainer.module.css";
 
 type State = "rafted" | "private_bank";
-const STATES: { key: State; label: string; caption: string }[] = [
-  {
-    key: "rafted",
-    label: "Rafted, six abreast",
-    caption:
-      "Seen from above: at busy stops ships tie up side by side. Only the first touches the bank; your window may face the next ship, and you cross other ships’ lobbies to go ashore.",
-  },
-  {
-    key: "private_bank",
-    label: "A private riverbank",
-    caption: "Seen from above: the vessel ties up alone at its own bank. Your window faces open river or palms.",
-  },
-];
+// The words are in `vesselPage.mooringExplainer` (English as MOORING_TEXT in the catalogue).
+const STATES: State[] = ["rafted", "private_bank"];
 
 /** A hull seen from above, bow to the right. */
 const hull = (y: number) => `M60 ${y}h300q46 0 60 13q-14 13-60 13h-300q-8 0-8-6v-14q0-6 8-6z`;
 
 function Drawing({ state }: { state: State }) {
+  const t = useTranslations("vesselPage.mooringExplainer");
   const rafted = state === "rafted";
   const ships = rafted ? 6 : 1;
   return (
@@ -42,24 +33,24 @@ function Drawing({ state }: { state: State }) {
         <path key={i} d={hull(40 + i * 32)} className={!rafted || i === 2 ? styles.yours : styles.ship} />
       ))}
       <text x="12" y="22" className={styles.label}>
-        Riverbank
+        {t("riverbank")}
       </text>
       {rafted ? (
         <>
           <text x="236" y="121" className={styles.labelOn}>
-            Your ship
+            {t("yourShip")}
           </text>
           <text x="468" y="252" className={styles.labelEnd}>
-            Your window faces the next ship
+            {t("windowNext")}
           </text>
         </>
       ) : (
         <>
           <text x="236" y="57" className={styles.labelOn}>
-            Your ship
+            {t("yourShip")}
           </text>
           <text x="300" y="150" className={styles.label}>
-            Open river on the other side
+            {t("openRiver")}
           </text>
         </>
       )}
@@ -73,6 +64,7 @@ function Drawing({ state }: { state: State }) {
  * that vessel's practice and says it in words.
  */
 export function MooringExplainer({ practice }: { practice?: Mooring | null }) {
+  const t = useTranslations("vesselPage.mooringExplainer");
   const [state, setState] = useState<State>(practice === "rafted" || practice === "varies" ? "rafted" : "private_bank");
   const js = useHydrated();
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -80,38 +72,43 @@ export function MooringExplainer({ practice }: { practice?: Mooring | null }) {
     if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) return;
     e.preventDefault();
     const next = state === "rafted" ? 1 : 0;
-    setState(STATES[next]!.key);
+    setState(STATES[next]!);
     buttons.current[next]?.focus();
   };
   return (
     <div className={styles.explainer} data-js={js ? "" : undefined}>
-      {practice ? <p>{MOORING_TEXT[practice]}</p> : null}
+      {practice ? <p>{t(`practice.${practice}`)}</p> : null}
       {js ? (
-        <div className={styles.toggle} role="group" aria-label="Where the ship moors">
+        <div className={styles.toggle} role="group" aria-label={t("toggle")}>
           {STATES.map((s, i) => (
             <button
-              key={s.key}
+              key={s}
               ref={(el) => {
                 buttons.current[i] = el;
               }}
               type="button"
-              aria-pressed={state === s.key}
-              tabIndex={state === s.key ? 0 : -1}
-              onClick={() => setState(s.key)}
+              aria-pressed={state === s}
+              tabIndex={state === s ? 0 : -1}
+              onClick={() => setState(s)}
               onKeyDown={onKey}
             >
-              {s.label}
+              {t(`${s}.label`)}
             </button>
           ))}
         </div>
       ) : null}
       {STATES.map((s) =>
-        !js || state === s.key ? (
-          <figure key={s.key} className={styles.figure}>
-            <Drawing state={s.key} />
+        !js || state === s ? (
+          <figure key={s} className={styles.figure}>
+            <Drawing state={s} />
             <figcaption>
-              {js ? null : <strong>{s.label}. </strong>}
-              {s.caption}
+              {js ? null : (
+                <strong>
+                  {t(`${s}.label`)}
+                  {t("stop")}
+                </strong>
+              )}
+              {t(`${s}.caption`)}
             </figcaption>
           </figure>
         ) : null,

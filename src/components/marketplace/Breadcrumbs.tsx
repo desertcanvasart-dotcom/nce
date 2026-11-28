@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { breadcrumbJsonLd, jsonLdScript } from "@/lib/marketplace/listing";
@@ -8,10 +9,11 @@ export type Trail = { name: string; path: string }[];
 
 /** SEO-004: a visible breadcrumb and its BreadcrumbList. The last item is the current page. */
 export function Breadcrumbs({ locale, trail }: { locale: Locale; trail: Trail }) {
+  const t = useTranslations("common");
   const json = breadcrumbJsonLd(trail.map((c) => ({ name: c.name, url: absoluteUrl(locale, c.path) })));
   return (
     <>
-      <nav aria-label="Breadcrumb" className={styles.crumbs}>
+      <nav aria-label={t("breadcrumb")} className={styles.crumbs}>
         <ol>
           {trail.map((c, i) =>
             i === trail.length - 1 ? (

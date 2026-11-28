@@ -357,17 +357,23 @@ export function availabilityLabel(r: Pick<DeparturePrice, "placesLeft" | "mode">
  * words. Never in the future (clocks differ a little).
  */
 export function availabilityUpdated(confirmedAt: string, now: Date = new Date()): string {
-  const minutes = Math.max(0, Math.floor((now.getTime() - Date.parse(confirmedAt)) / 60_000));
-  const ago = (n: number, unit: string) => `${n} ${unit}${n === 1 ? "" : "s"} ago`;
-  const when =
-    minutes < 1
-      ? "just now"
-      : minutes < 60
-        ? ago(minutes, "minute")
-        : minutes < 48 * 60
-          ? ago(Math.floor(minutes / 60), "hour")
-          : ago(Math.floor(minutes / (24 * 60)), "day");
+  const { n, unit } = confirmedAgo(confirmedAt, now);
+  const when = unit === "now" ? "just now" : `${n} ${unit}${n === 1 ? "" : "s"} ago`;
   return `Availability updated ${when}`;
+}
+
+/** The same age as a number and a unit, for pages that say it in the visitor's language. */
+export function confirmedAgo(confirmedAt: string, now: Date = new Date()) {
+  const minutes = Math.max(0, Math.floor((now.getTime() - Date.parse(confirmedAt)) / 60_000));
+  const [n, unit] =
+    minutes < 1
+      ? ([0, "now"] as const)
+      : minutes < 60
+        ? ([minutes, "minute"] as const)
+        : minutes < 48 * 60
+          ? ([Math.floor(minutes / 60), "hour"] as const)
+          : ([Math.floor(minutes / (24 * 60)), "day"] as const);
+  return { n, unit };
 }
 
 /**

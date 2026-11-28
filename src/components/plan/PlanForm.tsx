@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { placeName } from "@/content/places";
 import { emptyPlan, planProblems, readPlan, requestHref, STORAGE_KEY, type Plan } from "@/lib/plan/plan";
 import styles from "./PlanForm.module.css";
 
@@ -22,6 +24,9 @@ const subscribe = (onChange: () => void) => {
  * for before sign-up). "Send to operators" opens the request form, filled in, after sign-in or sign-up.
  */
 export function PlanForm({ routes, today }: { routes: { origin: string; destination: string }[]; today: string }) {
+  const t = useTranslations("plan");
+  const locale = useLocale();
+  const hint = (c: ReactNode) => <span className={styles.hint}>{c}</span>;
   // The saved plan, read from this device's storage (the server can't see it, so the first render is empty).
   const saved = useSyncExternalStore(subscribe, readSaved, () => null);
   const [draft, setDraft] = useState<Plan | null>(null);
@@ -39,7 +44,7 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
       // Storage blocked (private window): the plan just isn't kept.
     }
   };
-  const problems = planProblems(plan, today);
+  const problems = planProblems(plan, today, locale);
   const send = () => {
     setTried(true);
     if (!problems.length) window.location.assign(requestHref(plan));
@@ -57,8 +62,8 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
 
   return (
     <section className={styles.plan} aria-labelledby="your-plan">
-      <h2 id="your-plan">Your plan</h2>
-      {restored ? <p className={styles.note}>We kept your plan on this device from last time.</p> : null}
+      <h2 id="your-plan">{t("heading")}</h2>
+      {restored ? <p className={styles.note}>{t("restored")}</p> : null}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -67,29 +72,29 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
         noValidate
       >
         <label>
-          Route
+          {t("route")}
           <select value={plan.route} onChange={(e) => update("route", e.target.value)}>
-            <option value="">Any route</option>
+            <option value="">{t("anyRoute")}</option>
             {routes.map((r) => (
               <option key={`${r.origin}→${r.destination}`} value={`${r.origin}→${r.destination}`}>
-                {r.origin} to {r.destination}
+                {t("routeOption", { from: placeName(r.origin, locale), to: placeName(r.destination, locale) })}
               </option>
             ))}
           </select>
         </label>
         <div className={styles.row}>
           <label>
-            Earliest departure
+            {t("earliest")}
             <input type="date" value={plan.earliest} min={today} onChange={(e) => update("earliest", e.target.value)} />
           </label>
           <label>
-            Latest departure
+            {t("latest")}
             <input type="date" value={plan.latest} min={plan.earliest} onChange={(e) => update("latest", e.target.value)} />
           </label>
         </div>
         <div className={styles.row}>
           <label>
-            Shortest stay (nights)
+            {t("nightsMin")}
             <input
               type="number"
               min={1}
@@ -99,7 +104,7 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
             />
           </label>
           <label>
-            Longest stay (nights)
+            {t("nightsMax")}
             <input
               type="number"
               min={1}
@@ -111,26 +116,26 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
         </div>
         <div className={styles.row}>
           <label>
-            Adults (18 and over)
+            {t("adults")}
             <input type="number" min={1} max={30} value={plan.adults} onChange={(e) => update("adults", num(e.target.value))} />
           </label>
           <label>
-            Children’s ages <span className={styles.hint}>(on the travel date, e.g. 7, 4)</span>
+            {t.rich("childAges", { hint })}
             <input type="text" inputMode="numeric" value={plan.childAges} onChange={(e) => update("childAges", e.target.value)} />
           </label>
           <label>
-            Cabins
+            {t("cabins")}
             <input type="number" min={1} max={30} value={plan.cabins} onChange={(e) => update("cabins", num(e.target.value))} />
           </label>
         </div>
         <div className={styles.row}>
           <label>
-            Budget for everyone, in euros <span className={styles.hint}>(optional)</span>
+            {t.rich("budget", { hint })}
             <input type="text" inputMode="decimal" value={plan.budget} onChange={(e) => update("budget", e.target.value)} />
           </label>
         </div>
         <label>
-          Anything else operators should know <span className={styles.hint}>(optional)</span>
+          {t.rich("notes", { hint })}
           <textarea rows={3} maxLength={1000} value={plan.notes} onChange={(e) => update("notes", e.target.value)} />
         </label>
         {tried && problems.length ? (
@@ -142,16 +147,13 @@ export function PlanForm({ routes, today }: { routes: { origin: string; destinat
         ) : null}
         <div className={styles.actions}>
           <button type="submit" className={styles.primary}>
-            Send to operators
+            {t("send")}
           </button>
           <button type="button" className={styles.secondary} onClick={clear}>
-            Start again
+            {t("again")}
           </button>
         </div>
-        <p className={styles.note}>
-          Your plan stays on this device until you send it. Sending asks you to sign in or create an account, then shows your
-          request to check before it goes to operators. No offer, price or ranking is guaranteed.
-        </p>
+        <p className={styles.note}>{t("stays")}</p>
       </form>
     </section>
   );

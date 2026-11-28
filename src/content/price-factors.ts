@@ -18,3 +18,25 @@ export const PRICE_EXAMPLE: PriceStep[] = [
 ];
 
 export const priceExampleTotal = (steps: PriceStep[] = PRICE_EXAMPLE) => steps.reduce((sum, s) => sum + s.amount, 0);
+
+const JA_TITLE = "例：料金の積み上がり方。目安であり、見積もりではありません。";
+const JA_WORDS: Record<string, string> = {
+  "Starting price": "開始料金",
+  "Better boat with fewer guests": "乗客が少ない、より良い船",
+  "Better sightseeing and guiding": "より充実した観光とガイド",
+  Cabin: "客室",
+  "Standard cabin": "スタンダード客室",
+  Season: "シーズン",
+  "Regular season": "通常シーズン",
+};
+
+/** The example's words in the page's language; the figures are the same everywhere. */
+export const priceExampleTitle = (locale: string = "en") => (locale === "ja" ? JA_TITLE : PRICE_EXAMPLE_TITLE);
+export const priceExampleSteps = (locale: string = "en"): PriceStep[] =>
+  locale === "ja"
+    ? PRICE_EXAMPLE.map((s) => ({
+        ...s,
+        label: JA_WORDS[s.label] ?? s.label,
+        detail: s.detail ? (JA_WORDS[s.detail] ?? s.detail) : undefined,
+      }))
+    : PRICE_EXAMPLE;

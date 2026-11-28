@@ -962,3 +962,21 @@ Faris asked for seven items the compliance review against "Nile Cruise Vessel On
 - **Context:** Mövenpick gives separate resident rates. ADR-109 made the euro the only public selling currency.
 - **Decision:** a vessel may also show one "from" figure in Egyptian pounds, for Egyptians and foreign residents, under its euro price on its own page only (not on cards, search or structured data). Sightseeing is not included. It is shown only when approved and in date, and only catalogue admins set it. Everything else in ADR-109 stands.
 
+### ADR-115 Japanese across the public site (Proposed; 28 Nov 2026)
+- **Context:** only the three hand-laid hubs were listed as translated (ADR-106, ADR-108, ADR-111), so every other `/ja/` page showed English under a note.
+- **Decision:** every public page whose text is in the repository gets Japanese and joins `TRANSLATED.ja`, so it is indexed with hreflang. Drafted by Claude; native review is CONTENT-NEEDED #75.
+  - Editorial pages: Japanese drafts in `src/content/pages/ja/`; a Japanese Sanity article overrides them.
+  - Link, breadcrumb and heading names: `src/lib/seo/link-names.ja.json`, in place of the workbook's English keywords.
+  - Cabin amenities and deck names have no locale column: `src/content/vessel-terms.ts`.
+  - Vessel pages join only when their database text is complete in Japanese (all 27 after the rows were applied to production); the blog joined once its one post was published in Japanese in Sanity (28 Nov 2026), and each new post joins with its Japanese version.
+  - Privacy and terms stay English (ADR-031). Spanish is unchanged.
+
+### ADR-114 Price lines say "Includes sightseeing"; the margin statement moves to the terms (Accepted; Islam 28 Nov 2026)
+- **Context:** Every published euro "from" price now includes sightseeing, which sets Nilecruz apart from cruise-only offers. Islam asked that price lines say so instead of "Includes our margin", and that the margin be stated in the terms.
+- **Decision:**
+  - The texts are "From €X per person. Includes sightseeing. A guide, not a quote." and "Typically €X–€Y per person. Includes sightseeing. A guide, not a quote.", in all three languages. This replaces those texts in ADR-109.
+  - **A euro starting price is published only when it includes sightseeing.** A vessel whose figure excludes it stays "Price on request" until the wording can say otherwise.
+  - "All prices we publish and quote already include our margin." is removed from every page and the MCP answers, and stated once, in the terms of use (under Prices).
+  - The `margin_included` column is no longer read (ADR-112's two variants are gone). The column stays; no migration.
+- **Consequence:** the terms are still an English-only draft (ADR-031), so Spanish and Japanese readers see no margin statement until the terms are translated. The Egyptian-pound line still says "Sightseeing not included" (ADR-113).
+

@@ -1,0 +1,5429 @@
+{
+ "note": "Japanese for database content that had English only (28 Nov 2026). Keyed by vessel slug, cabin code, schedule code, day number and photo file name, so it applies to any database. \"en\" is the English each translation was made from: the script skips a row whose English has changed. Apply with pnpm apply:ja-content.",
+ "vessel_translations": [
+  {
+   "vessel": "movenpick-darakum",
+   "en": {
+    "summary": "Mövenpick MS Darakum combines Moroccan-inspired interiors, 52 cabins and suites, and Mövenpick hospitality with a journey through Egypt’s history and Nile landscapes. Warm colours and decorative details give the ship a distinctive setting for sightseeing and time on the river.",
+    "description": "Mövenpick MS Darakum combines Moroccan-inspired interiors, 52 cabins and suites, and Mövenpick hospitality with a journey through Egypt’s history and Nile landscapes. Warm colours and decorative details give the ship a distinctive setting for sightseeing and time on the river.\n\nAlongside short cruises between Luxor and Aswan, Darakum offers extended voyages between Cairo and Aswan. These longer journeys reach Middle Egypt, including Beni Hassan, Tell el-Amarna, Abydos and Dendera—destinations beyond the usual short Nile cruise route.\n\nGuests can relax by the outdoor pool, on the sun deck, or in the lounge between excursions. A main restaurant, lounge bar, fitness facilities and cultural entertainment complement the accommodation. Routes and operating seasons depend on the published sailing schedule, river conditions and navigation requirements; not every programme runs throughout the year.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "Full board",
+     "Service charge and VAT",
+     "Sightseeing tours, guides and entry tickets",
+     "Two airport transfers, at the start and end of your cruise (Luxor or Aswan)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick MS Darakumは、モロッコ風のインテリア、52室の客室とスイート、Mövenpickのホスピタリティを備え、エジプトの歴史とナイルの風景をたどる旅をお届けします。温かみのある色彩と装飾が、観光と川の上で過ごす時間に個性ある舞台を添えます。",
+    "description": "Mövenpick MS Darakumは、モロッコ風のインテリア、52室の客室とスイート、Mövenpickのホスピタリティを備え、エジプトの歴史とナイルの風景をたどる旅をお届けします。温かみのある色彩と装飾が、観光と川の上で過ごす時間に個性ある舞台を添えます。\n\nDarakumはルクソールとアスワンを結ぶ短いクルーズに加えて、カイロとアスワンを結ぶ長期の航海も運航しています。こうした長い旅では、ベニ・ハッサン、テル・エル・アマルナ、アビドス、デンデラなど、一般的な短いナイル川クルーズの航路の先にある中部エジプトを訪れます。\n\n観光の合間には、屋外プール、サンデッキ、ラウンジでおくつろぎいただけます。メインレストラン、ラウンジバー、フィットネス施設、文化的な催しも用意されています。航路と運航期間は、公表されている出航日程、川の状況、航行上の条件によって異なり、すべての行程が通年で運航されるわけではありません。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "全食事付き",
+     "サービス料と付加価値税(VAT)",
+     "観光ツアー、ガイド、入場券",
+     "空港送迎2回(クルーズの開始時と終了時、ルクソールまたはアスワン)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "en": {
+    "summary": "Mövenpick MS Hamees combines contemporary interiors, comfortable cabins and spacious public areas with journeys between Luxor and Aswan. Upper-deck accommodation has larger Nile-facing windows, while lower-deck Classic Cabins use fixed portholes.",
+    "description": "Mövenpick MS Hamees combines contemporary interiors, comfortable cabins and spacious public areas with journeys between Luxor and Aswan. Upper-deck accommodation has larger Nile-facing windows, while lower-deck Classic Cabins use fixed portholes.\n\nThree-, four- and seven-night programmes explore Luxor, Edfu, Kom Ombo and Aswan. Between excursions, guests can relax at the outdoor pool or sun deck, dine on Egyptian and international dishes, or spend time in the lounge bar, reading room and games area.\n\nThe ship offers six accommodation categories, from Classic Cabins to Executive Suites with separate seating areas and two bathrooms. It suits couples, families, history enthusiasts and small groups looking for a balance of cultural visits and time aboard. Family occupancy and child policies depend on the confirmed cabin and rate.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "Full board",
+     "Service charge and VAT",
+     "Sightseeing tours, guides and entry tickets",
+     "Two airport transfers, at the start and end of your cruise (Luxor or Aswan)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick MS Hameesは、現代的なインテリア、快適な客室、広々とした共用スペースを備え、ルクソールとアスワンの間を旅します。アッパーデッキの客室にはナイル川に面した大きめの窓があり、下層デッキのクラシックキャビンには開閉できない丸窓があります。",
+    "description": "Mövenpick MS Hameesは、現代的なインテリア、快適な客室、広々とした共用スペースを備え、ルクソールとアスワンの間を旅します。アッパーデッキの客室にはナイル川に面した大きめの窓があり、下層デッキのクラシックキャビンには開閉できない丸窓があります。\n\n3泊、4泊、7泊の行程で、ルクソール、エドフ、コム・オンボ、アスワンを巡ります。観光の合間には、屋外プールやサンデッキでくつろぎ、エジプト料理と各国料理を味わい、ラウンジバー、読書室、ゲームエリアで過ごせます。\n\n客室は、クラシックキャビンから、独立した座席スペースとバスルーム2室を備えたエグゼクティブスイートまで、6つのカテゴリーがあります。観光と船上の時間の両方を楽しみたいカップル、ご家族、歴史好きの方、少人数のグループに向いています。ご家族の定員とお子様の規定は、確定した客室と料金によって異なります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "全食事付き",
+     "サービス料と付加価値税(VAT)",
+     "観光ツアー、ガイド、入場券",
+     "空港送迎2回(クルーズの開始時と終了時、ルクソールまたはアスワン)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-prince-abbas",
+   "en": {
+    "summary": "Mövenpick MS Prince Abbas is a five-star deluxe Lake Nasser cruise ship sailing between Aswan and Abu Simbel. Its peaceful setting combines panoramic lake views, remote desert landscapes and archaeological discoveries in ancient Nubia.",
+    "description": "Mövenpick MS Prince Abbas is a five-star deluxe Lake Nasser cruise ship sailing between Aswan and Abu Simbel. Its peaceful setting combines panoramic lake views, remote desert landscapes and archaeological discoveries in ancient Nubia.\n\nThree- and four-night journeys explore Kalabsha, Wadi El Seboua, Amada, the Temple of Derr, the Tomb of Pennut and the magnificent Abu Simbel Temples. Many of these monuments were relocated during the UNESCO campaign to save Nubia’s heritage. Kasr Ibrim is viewed from the ship, without a landing excursion.\n\nThe vessel has 65 cabins and suites, elegant dining and lounges, a plunge pool connected to a whirlpool, a sun deck, gymnasium, library and billiards room. Its construction was developed under Lloyd’s Register supervision according to the supplied technical factsheet. This is a Lake Nasser voyage, separate from the classic Luxor–Aswan Nile route.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick MS Prince Abbasは、アスワンとアブ・シンベルの間を運航する5つ星デラックスのナセル湖クルーズ船です。静かな環境の中で、湖の眺望、人里離れた砂漠の景観、古代ヌビアの考古遺跡をあわせて楽しめます。",
+    "description": "Mövenpick MS Prince Abbasは、アスワンとアブ・シンベルの間を運航する5つ星デラックスのナセル湖クルーズ船です。静かな環境の中で、湖の眺望、人里離れた砂漠の景観、古代ヌビアの考古遺跡をあわせて楽しめます。\n\n3泊と4泊の旅では、カラブシャ、ワディ・エル・セブア、アマダ、デル神殿、ペンヌトの墓、そして壮大なアブ・シンベル神殿を巡ります。これらの遺跡の多くは、ヌビアの遺産を救うためのユネスコのキャンペーンで移築されました。カスル・イブリムは船上から眺め、上陸観光はありません。\n\n船内には65室の客室とスイート、上品なダイニングとラウンジ、ジャグジーにつながるプランジプール、サンデッキ、ジム、図書室、ビリヤード室があります。提供されたテクニカルファクトシートによると、建造はロイド船級協会の監督のもとで進められました。こちらはナセル湖の航海で、定番のルクソール〜アスワン間のナイル川航路とは別のものです。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lotus",
+   "en": {
+    "summary": "Mövenpick MS Royal Lotus is a motor cruise ship serving the Luxor–Aswan route. The official accommodation pages describe river-view rooms and suites, with onboard dining and shared leisure spaces.",
+    "description": "Mövenpick MS Royal Lotus is a motor cruise ship serving the Luxor–Aswan route. The official accommodation pages describe river-view rooms and suites, with onboard dining and shared leisure spaces.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick MS Royal Lotusは、ルクソール〜アスワン航路を運航するモータークルーズ船です。公式の客室案内ページには、川の見える客室とスイート、船内ダイニング、共用のくつろぎスペースが紹介されています。",
+    "description": "Mövenpick MS Royal Lotusは、ルクソール〜アスワン航路を運航するモータークルーズ船です。公式の客室案内ページには、川の見える客室とスイート、船内ダイニング、共用のくつろぎスペースが紹介されています。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "en": {
+    "summary": "A four-suite Mövenpick dahabiya for up to eight guests, sailing on request: 4 to 7 nights between Luxor and Aswan, from one suite booked.",
+    "description": "The Mövenpick SB Feddya is a dahabiya with four suites for up to eight guests: two Senior Suites, each with a patio, and two Panorama Suites, each with a balcony.\n\nIt sails on any day, subject to availability, once one suite is booked, for 4 to 7 nights from Luxor or Aswan. Its programmes add lesser-visited places such as El Kab and Gebel El Silsila to the great temples.\n\nFrom 22 March to 1 April 2027 and from 20 December 2027 to 4 January 2028 it is available only as a whole-boat charter.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "Soft all-inclusive, with local alcoholic and non-alcoholic drinks",
+     "Service charge and VAT"
+    ],
+    "optional_extras": [
+     "Sightseeing package, sold separately: ask for it with your offer"
+    ],
+    "not_included": [
+     "Sightseeing tours, guides and entry tickets"
+    ],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [
+     "Sails on any day, subject to availability, from one suite booked.",
+     "22 March to 1 April 2027 and 20 December 2027 to 4 January 2028: whole-boat charter only, up to 8 guests.",
+     "Minimum 4 nights; 5 nights over Christmas and New Year.",
+     "Embarkation at noon, check-out at 8:00."
+    ],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "4室のスイートに最大8名が滞在できるMövenpickのダハビヤです。リクエスト制で運航し、ルクソールとアスワンの間を4〜7泊で巡ります。スイート1室のご予約から出航します。",
+    "description": "Mövenpick SB Feddyaは、4室のスイートに最大8名が滞在できるダハビヤです。パティオ付きのシニアスイート2室と、バルコニー付きのパノラマスイート2室があります。\n\nスイート1室のご予約があれば、空き状況に応じて曜日を問わず出航し、ルクソールまたはアスワンから4〜7泊で運航します。行程には、大神殿に加えて、エル・カブやゲベル・エル・シルシラといった訪れる人の少ない場所も含まれます。\n\n2027年3月22日から4月1日まで、および2027年12月20日から2028年1月4日までは、船の貸切チャーターのみのご利用となります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "ソフト・オールインクルーシブ(地元のアルコール飲料とノンアルコール飲料を含む)",
+     "サービス料と付加価値税(VAT)"
+    ],
+    "optional_extras": [
+     "観光パッケージ(別売り):お見積もりの際にお申し付けください"
+    ],
+    "not_included": [
+     "観光ツアー、ガイド、入場券"
+    ],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [
+     "空き状況に応じて曜日を問わず出航し、スイート1室のご予約から運航します。",
+     "2027年3月22日から4月1日まで、および2027年12月20日から2028年1月4日まで:船の貸切チャーターのみ、最大8名。",
+     "最低4泊。クリスマスと年末年始は5泊から。",
+     "乗船は正午、チェックアウトは8:00です。"
+    ],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "en": {
+    "summary": "Mövenpick SS Misr is a heritage Nile steamship with 16 cabins and eight suites. Its facilities include restaurants, lounges and a sun deck with a swimming pool. Detailed cabin categories are documented in the operator’s factsheet.",
+    "description": "Mövenpick SS Misr is a heritage Nile steamship with 16 cabins and eight suites. Its facilities include restaurants, lounges and a sun deck with a swimming pool. Detailed cabin categories are documented in the operator’s factsheet.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "Full board",
+     "Service charge and VAT",
+     "Sightseeing tours, guides and entry tickets",
+     "Two airport transfers, at the start and end of your cruise (Luxor or Aswan)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick SS Misrは、16室の客室と8室のスイートを備えた、歴史あるナイル川の蒸気船です。レストラン、ラウンジ、スイミングプールのあるサンデッキがあります。客室カテゴリーの詳細は、運航会社のファクトシートに記載されています。",
+    "description": "Mövenpick SS Misrは、16室の客室と8室のスイートを備えた、歴史あるナイル川の蒸気船です。レストラン、ラウンジ、スイミングプールのあるサンデッキがあります。客室カテゴリーの詳細は、運航会社のファクトシートに記載されています。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "全食事付き",
+     "サービス料と付加価値税(VAT)",
+     "観光ツアー、ガイド、入場券",
+     "空港送迎2回(クルーズの開始時と終了時、ルクソールまたはアスワン)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "en": {
+    "summary": "Mövenpick MS Sun Ray is a motor cruise ship serving the Luxor–Aswan route. Its official accommodation pages offer cabin and suite options, with dining, a lounge and sun-deck facilities.",
+    "description": "Mövenpick MS Sun Ray is a motor cruise ship serving the Luxor–Aswan route. Its official accommodation pages offer cabin and suite options, with dining, a lounge and sun-deck facilities.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "Full board",
+     "Service charge and VAT",
+     "Sightseeing tours, guides and entry tickets",
+     "Two airport transfers, at the start and end of your cruise (Luxor or Aswan)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Mövenpick MS Sun Rayは、ルクソール〜アスワン航路を運航するモータークルーズ船です。公式の客室案内ページには客室とスイートの選択肢が掲載され、ダイニング、ラウンジ、サンデッキの設備があります。",
+    "description": "Mövenpick MS Sun Rayは、ルクソール〜アスワン航路を運航するモータークルーズ船です。公式の客室案内ページには客室とスイートの選択肢が掲載され、ダイニング、ラウンジ、サンデッキの設備があります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [
+     "全食事付き",
+     "サービス料と付加価値税(VAT)",
+     "観光ツアー、ガイド、入場券",
+     "空港送迎2回(クルーズの開始時と終了時、ルクソールまたはアスワン)"
+    ],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "en": {
+    "summary": "The Oberoi Philae offers Nile cruises with Luxury Cabins and suites. Luxury Cabins measure 36 square metres and sleep two guests. Facilities include a pool, spa and dining areas, with four- and six-night itineraries, including low-water alternatives.",
+    "description": "The Oberoi Philae offers Nile cruises with Luxury Cabins and suites. Luxury Cabins measure 36 square metres and sleep two guests. Facilities include a pool, spa and dining areas, with four- and six-night itineraries, including low-water alternatives.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "The Oberoi Philaeは、ラグジュアリーキャビンとスイートでナイル川クルーズを運航しています。ラグジュアリーキャビンは36平方メートルで、定員は2名です。プール、スパ、ダイニングエリアがあり、4泊と6泊の行程には低水位時の代替行程も用意されています。",
+    "description": "The Oberoi Philaeは、ラグジュアリーキャビンとスイートでナイル川クルーズを運航しています。ラグジュアリーキャビンは36平方メートルで、定員は2名です。プール、スパ、ダイニングエリアがあり、4泊と6泊の行程には低水位時の代替行程も用意されています。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "en": {
+    "summary": "The Oberoi Zahra offers Nile cruises with cabins and suites, including a two-bedroom suite category. Facilities include dining venues, lounges, a temperature-controlled pool, spa and fitness centre. The operator publishes dated sailing programmes from Luxor and Aswan.",
+    "description": "The Oberoi Zahra offers Nile cruises with cabins and suites, including a two-bedroom suite category. Facilities include dining venues, lounges, a temperature-controlled pool, spa and fitness centre. The operator publishes dated sailing programmes from Luxor and Aswan.",
+    "dining": "The Restaurant serves freshly prepared international cuisine from a daily changing menu, 7 am to 10 pm. The Club Lounge serves high tea and drinks, 10 am to 11 pm, and hosts two cocktail receptions with live music and a Nubian performance on each cruise. The Library and Cigar Lounge is open day and night, with drinks until midnight.",
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "The Oberoi Zahraは、2ベッドルームのスイートカテゴリーを含む客室とスイートで、ナイル川クルーズを運航しています。ダイニング、ラウンジ、温度調節されたプール、スパ、フィットネスセンターがあります。運航会社はルクソール発とアスワン発の日付指定の出航日程を公表しています。",
+    "description": "The Oberoi Zahraは、2ベッドルームのスイートカテゴリーを含む客室とスイートで、ナイル川クルーズを運航しています。ダイニング、ラウンジ、温度調節されたプール、スパ、フィットネスセンターがあります。運航会社はルクソール発とアスワン発の日付指定の出航日程を公表しています。",
+    "dining": "レストランでは、日替わりメニューから作りたての各国料理を午前7時から午後10時まで提供します。クラブラウンジでは午前10時から午後11時までハイティーと飲み物を提供し、クルーズごとに生演奏とヌビアの舞踊を伴うカクテルレセプションを2回開催します。ライブラリー兼シガーラウンジは終日利用でき、飲み物は深夜0時まで提供します。",
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "en": {
+    "summary": "Sonesta Dahabeya Amirat is a small sailing vessel with five Deluxe cabins and two suites with private terraces. Its public spaces include a shaded sun deck and lounge, with seven-night itineraries between Luxor and Aswan.",
+    "description": "Sonesta Dahabeya Amirat is a small sailing vessel with five Deluxe cabins and two suites with private terraces. Its public spaces include a shaded sun deck and lounge, with seven-night itineraries between Luxor and Aswan.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Dahabeya Amiratは、デラックスキャビン5室と専用テラス付きスイート2室を備えた小型の帆船です。共用スペースには日よけ付きのサンデッキとラウンジがあり、ルクソールとアスワンの間を7泊の行程で巡ります。",
+    "description": "Sonesta Dahabeya Amiratは、デラックスキャビン5室と専用テラス付きスイート2室を備えた小型の帆船です。共用スペースには日よけ付きのサンデッキとラウンジがあり、ルクソールとアスワンの間を7泊の行程で巡ります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "en": {
+    "summary": "Sonesta Dahabeya Amirat II offers Executive cabins and suites, with an onboard elevator, sun deck, fitness centre and spa. Its dedicated accommodation page lists five Executive cabins and four suites. Four-night itineraries travel between Luxor and Aswan.",
+    "description": "Sonesta Dahabeya Amirat II offers Executive cabins and suites, with an onboard elevator, sun deck, fitness centre and spa. Its dedicated accommodation page lists five Executive cabins and four suites. Four-night itineraries travel between Luxor and Aswan.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Dahabeya Amirat IIには、エグゼクティブキャビンとスイートがあり、船内エレベーター、サンデッキ、フィットネスセンター、スパを備えています。専用の客室案内ページには、エグゼクティブキャビン5室とスイート4室が掲載されています。4泊の行程でルクソールとアスワンの間を旅します。",
+    "description": "Sonesta Dahabeya Amirat IIには、エグゼクティブキャビンとスイートがあり、船内エレベーター、サンデッキ、フィットネスセンター、スパを備えています。専用の客室案内ページには、エグゼクティブキャビン5室とスイート4室が掲載されています。4泊の行程でルクソールとアスワンの間を旅します。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "en": {
+    "summary": "Sonesta Moon Goddess sails between Luxor and Aswan. Facilities include a sun-deck pool, lounge, dining room, gym and spa. Cabin amenities include air conditioning, a minibar and bathrooms with bathtubs.",
+    "description": "Sonesta Moon Goddess sails between Luxor and Aswan. Facilities include a sun-deck pool, lounge, dining room, gym and spa. Cabin amenities include air conditioning, a minibar and bathrooms with bathtubs.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Moon Goddessは、ルクソールとアスワンの間を運航しています。サンデッキのプール、ラウンジ、ダイニングルーム、ジム、スパがあります。客室にはエアコン、ミニバー、バスタブ付きのバスルームを備えています。",
+    "description": "Sonesta Moon Goddessは、ルクソールとアスワンの間を運航しています。サンデッキのプール、ラウンジ、ダイニングルーム、ジム、スパがあります。客室にはエアコン、ミニバー、バスタブ付きのバスルームを備えています。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "en": {
+    "summary": "Sonesta Nile Goddess has 47 Deluxe cabins, two Senator Suites and four Presidential Suites. Presidential Suites have private terraces. The ship offers a pool, lounge, spa, gym and onboard elevator.",
+    "description": "Sonesta Nile Goddess has 47 Deluxe cabins, two Senator Suites and four Presidential Suites. Presidential Suites have private terraces. The ship offers a pool, lounge, spa, gym and onboard elevator.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Nile Goddessには、デラックスキャビン47室、セネタースイート2室、プレジデンシャルスイート4室があります。プレジデンシャルスイートには専用テラスがあります。船内にはプール、ラウンジ、スパ、ジム、エレベーターがあります。",
+    "description": "Sonesta Nile Goddessには、デラックスキャビン47室、セネタースイート2室、プレジデンシャルスイート4室があります。プレジデンシャルスイートには専用テラスがあります。船内にはプール、ラウンジ、スパ、ジム、エレベーターがあります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "en": {
+    "summary": "Sonesta St. George I has 47 Deluxe cabins, six Presidential Suites, three Elite Suites and one Royal Suite. Facilities include a sun deck, pool, spa and fitness centre.",
+    "description": "Sonesta St. George I has 47 Deluxe cabins, six Presidential Suites, three Elite Suites and one Royal Suite. Facilities include a sun deck, pool, spa and fitness centre.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta St. George Iには、デラックスキャビン47室、プレジデンシャルスイート6室、エリートスイート3室、ロイヤルスイート1室があります。サンデッキ、プール、スパ、フィットネスセンターを備えています。",
+    "description": "Sonesta St. George Iには、デラックスキャビン47室、プレジデンシャルスイート6室、エリートスイート3室、ロイヤルスイート1室があります。サンデッキ、プール、スパ、フィットネスセンターを備えています。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "en": {
+    "summary": "Sonesta Star Goddess is an all-suite Nile cruiser with 33 terrace suites: Beethoven, Mozart and Chopin categories. Onboard facilities include a sun deck, dining room, lounge, spa and fitness centre.",
+    "description": "Sonesta Star Goddess is an all-suite Nile cruiser with 33 terrace suites: Beethoven, Mozart and Chopin categories. Onboard facilities include a sun deck, dining room, lounge, spa and fitness centre.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Star Goddessは、33室のテラススイート(ベートーヴェン、モーツァルト、ショパンの各カテゴリー)を備えた全室スイートのナイル川クルーズ船です。船内にはサンデッキ、ダイニングルーム、ラウンジ、スパ、フィットネスセンターがあります。",
+    "description": "Sonesta Star Goddessは、33室のテラススイート(ベートーヴェン、モーツァルト、ショパンの各カテゴリー)を備えた全室スイートのナイル川クルーズ船です。船内にはサンデッキ、ダイニングルーム、ラウンジ、スパ、フィットネスセンターがあります。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "en": {
+    "summary": "Sonesta Sun Goddess offers 30 suites with private terraces, including Presidential, Family, Executive and Royal categories. The ship has a pool, hot tub and outdoor bar, with sailings between Luxor and Aswan.",
+    "description": "Sonesta Sun Goddess offers 30 suites with private terraces, including Presidential, Family, Executive and Royal categories. The ship has a pool, hot tub and outdoor bar, with sailings between Luxor and Aswan.",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   },
+   "ja": {
+    "summary": "Sonesta Sun Goddessには、プレジデンシャル、ファミリー、エグゼクティブ、ロイヤルの各カテゴリーを含む、専用テラス付きのスイートが30室あります。プール、ホットタブ、屋外バーを備え、ルクソールとアスワンの間を運航します。",
+    "description": "Sonesta Sun Goddessには、プレジデンシャル、ファミリー、エグゼクティブ、ロイヤルの各カテゴリーを含む、専用テラス付きのスイートが30室あります。プール、ホットタブ、屋外バーを備え、ルクソールとアスワンの間を運航します。",
+    "dining": null,
+    "good_for": null,
+    "less_suited_to": null,
+    "included": [],
+    "optional_extras": [],
+    "not_included": [],
+    "propulsion_note": null,
+    "on_board": [],
+    "good_to_know": [],
+    "seo_title": null,
+    "seo_description": null
+   }
+  }
+ ],
+ "cabin_type_translations": [
+  {
+   "vessel": "movenpick-darakum",
+   "code": "CLASSIC",
+   "en": {
+    "name": "Water Level Cabin",
+    "description": "Cabins of about 20 m² on the lower deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "ウォーターレベルキャビン",
+    "description": "下層デッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "JS",
+   "en": {
+    "name": "Junior Suite",
+    "description": "Two suites of about 26 m², forward on the main deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "ジュニアスイート",
+    "description": "メインデッキの前方にある、約26 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "PS",
+   "en": {
+    "name": "Panorama Suite",
+    "description": "Two suites of about 34 m² at the front of the upper deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "パノラマスイート",
+    "description": "アッパーデッキの前部にある、約34 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "SS",
+   "en": {
+    "name": "Senior Suite, Upper Deck",
+    "description": "Two suites of about 40 m² on the upper deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "シニアスイート(アッパーデッキ)",
+    "description": "アッパーデッキにある、約40 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "SST",
+   "en": {
+    "name": "Senior Suite, Top Deck",
+    "description": "Two suites of about 34 m² on the top deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "シニアスイート(最上層デッキ)",
+    "description": "最上層デッキにある、約34 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "SUP",
+   "en": {
+    "name": "Main Deck Cabin",
+    "description": "Cabins of about 20 m² on the main deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "メインデッキキャビン",
+    "description": "メインデッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "code": "UPD",
+   "en": {
+    "name": "Upper Deck Cabin",
+    "description": "Cabins of about 20 m² on the upper deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "アッパーデッキキャビン",
+    "description": "アッパーデッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "CLASSIC",
+   "en": {
+    "name": "Classic Cabin",
+    "description": "Cabins on the water-level deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "クラシックキャビン",
+    "description": "水面の高さのデッキにある客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Cabins on the upper and top decks, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "アッパーデッキと最上層デッキにある客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "DS",
+   "en": {
+    "name": "Deluxe Suite",
+    "description": "Two suites at the front of the upper deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "デラックススイート",
+    "description": "アッパーデッキの前部にあるスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "ES",
+   "en": {
+    "name": "Executive Suite",
+    "description": "Two suites at the front of the top deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "エグゼクティブスイート",
+    "description": "最上層デッキの前部にあるスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "JS",
+   "en": {
+    "name": "Junior Suite",
+    "description": "Two suites at the front of the main deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "ジュニアスイート",
+    "description": "メインデッキの前部にあるスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "code": "SUP",
+   "en": {
+    "name": "Superior Cabin",
+    "description": "Cabins on the main deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "スーペリアキャビン",
+    "description": "メインデッキにある客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "code": "RS",
+   "en": {
+    "name": "Royal Suite",
+    "description": "Four suites of about 42 m², each with a separate bedroom with a king bed, a living area, elegant furnishings, a private bathroom with Jacuzzi and Nile views.",
+    "bed_configuration": "One king bed",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "ロイヤルスイート",
+    "description": "約42 m²のスイート4室。各室にキングベッドのある独立した寝室、リビングエリア、上品な調度品、ジャグジー付きの専用バスルームがあり、ナイル川を眺められます。",
+    "bed_configuration": "キングベッド1台",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "code": "STD",
+   "en": {
+    "name": "Standard Cabin",
+    "description": "Comfortable cabins of about 22 m² with modern furnishings and Nile-facing views, queen or twin beds, a seating area and an en-suite bathroom with a bathtub and shower.",
+    "bed_configuration": "Queen or twin",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "スタンダードキャビン",
+    "description": "約22 m²の快適な客室。現代的な調度品とナイル川に面した眺め、クイーンベッドまたはツインベッド、座席スペース、バスタブとシャワー付きの専用バスルームを備えています。",
+    "bed_configuration": "クイーンベッドまたはシングルベッド2台",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lotus",
+   "code": "RS",
+   "en": {
+    "name": "Royal Suite",
+    "description": "Two spacious suites with more living space, elegant furnishings, a private bathroom and Nile views.",
+    "bed_configuration": null,
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "ロイヤルスイート",
+    "description": "より広い居住スペース、上品な調度品、専用バスルーム、ナイル川の眺めを備えた、ゆったりとしたスイート2室です。",
+    "bed_configuration": null,
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lotus",
+   "code": "STD",
+   "en": {
+    "name": "Standard / Deluxe Cabin",
+    "description": "Comfortable cabins of about 22 m² with queen or twin beds, Nile-facing views, individually controlled air conditioning and a private bathroom with a bathtub.",
+    "bed_configuration": "Queen or twin",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "スタンダード/デラックスキャビン",
+    "description": "約22 m²の快適な客室。クイーンベッドまたはツインベッド、ナイル川に面した眺め、個別調節できるエアコン、バスタブ付きの専用バスルームを備えています。",
+    "bed_configuration": "クイーンベッドまたはシングルベッド2台",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "code": "PANO",
+   "en": {
+    "name": "Panorama Suite",
+    "description": "One of two suites of 24 m², each with an 8 m² balcony.",
+    "bed_configuration": null,
+    "view": "Panoramic Nile view"
+   },
+   "ja": {
+    "name": "パノラマスイート",
+    "description": "24 m²のスイート2室のうちの1室で、8 m²のバルコニーが付いています。",
+    "bed_configuration": null,
+    "view": "ナイル川のパノラマビュー"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "code": "SUITE",
+   "en": {
+    "name": "Senior Suite",
+    "description": "One of two suites of 22.5 m², each with its own 8 m² patio and its own colour scheme.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "シニアスイート",
+    "description": "22.5 m²のスイート2室のうちの1室で、専用の8 m²のパティオと独自の配色が特徴です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "code": "OUT",
+   "en": {
+    "name": "Outside Cabin",
+    "description": "Cabins of about 21 m², each with a private balcony over the Nile and a bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "アウトサイドキャビン",
+    "description": "約21 m²の客室。各室にナイル川を望む専用バルコニーと、バスタブ付きのバスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "code": "PAN",
+   "en": {
+    "name": "Panorama Suite",
+    "description": "Two suites of about 35 m² on the upper deck, each with a sitting area and a front panorama balcony.",
+    "bed_configuration": "King or twin",
+    "view": "Panoramic Nile view"
+   },
+   "ja": {
+    "name": "パノラマスイート",
+    "description": "アッパーデッキにある約35 m²のスイート2室。各室に座席エリアと、前方のパノラマバルコニーがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "ナイル川のパノラマビュー"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "code": "SGL",
+   "en": {
+    "name": "Single Cabin",
+    "description": "Two cabins of about 14.5 m² for one traveller, each with a private balcony.",
+    "bed_configuration": "Single",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "シングルキャビン",
+    "description": "お一人様用の約14.5 m²の客室2室。各室に専用バルコニーがあります。",
+    "bed_configuration": "シングルベッド",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "code": "STE",
+   "en": {
+    "name": "Senior Suite",
+    "description": "Six suites of about 30 m², each with a private balcony, a sitting area with a sofa and a second television.",
+    "bed_configuration": "King or twin",
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "シニアスイート",
+    "description": "約30 m²のスイート6室。各室に専用バルコニー、ソファのある座席エリア、2台目のテレビがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "CLASSIC",
+   "en": {
+    "name": "Classic Cabin",
+    "description": "Cabins of about 20 m² on the water-level deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": "Two fixed portholes (not opening)"
+   },
+   "ja": {
+    "name": "クラシックキャビン",
+    "description": "水面の高さのデッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "丸窓2つ(開閉不可)"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Cabins of about 20 m² on the upper and top decks, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "アッパーデッキと最上層デッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "DS",
+   "en": {
+    "name": "Deluxe Suite",
+    "description": "Two suites of about 37 m² at the front of the top deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "デラックススイート",
+    "description": "最上層デッキの前部にある、約37 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "ES",
+   "en": {
+    "name": "Executive Suite",
+    "description": "Two suites of about 39 m² on the top deck, the largest on board.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "エグゼクティブスイート",
+    "description": "最上層デッキにある約39 m²のスイート2室で、船内で最も広い客室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "JS",
+   "en": {
+    "name": "Junior Suite",
+    "description": "Two suites of about 34 m² at the front of the main deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "ジュニアスイート",
+    "description": "メインデッキの前部にある、約34 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "SS",
+   "en": {
+    "name": "Junior Upper Suite",
+    "description": "Two suites of about 35 m² at the front of the upper deck.",
+    "bed_configuration": "King or twin",
+    "view": null
+   },
+   "ja": {
+    "name": "ジュニアアッパースイート",
+    "description": "アッパーデッキの前部にある、約35 m²のスイート2室です。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": null
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "code": "UPPER",
+   "en": {
+    "name": "Superior Cabin",
+    "description": "Cabins of about 20 m² on the main deck, with a private bathroom with a bathtub.",
+    "bed_configuration": "King or twin",
+    "view": "Large Nile-facing window, some partly opening"
+   },
+   "ja": {
+    "name": "スーペリアキャビン",
+    "description": "メインデッキにある約20 m²の客室。バスタブ付きの専用バスルームがあります。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "ナイル川に面した大きな窓(一部は部分的に開閉可)"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "code": "LC",
+   "en": {
+    "name": "Luxury Cabin",
+    "description": "Cabins of about 36 m² with king or twin beds, soundproof windows that open, a living space and a rain shower.",
+    "bed_configuration": "King or twin",
+    "view": "Soundproof windows that open"
+   },
+   "ja": {
+    "name": "ラグジュアリーキャビン",
+    "description": "約36 m²の客室。キングベッドまたはツインベッド、開閉できる防音窓、リビングスペース、レインシャワーを備えています。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "開閉できる防音窓"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "code": "LS",
+   "en": {
+    "name": "Luxury Suite",
+    "description": "Suites of about 55 m² with a king bedroom, a separate living room, a private changing room, a standalone bathtub and a separate shower.",
+    "bed_configuration": "King",
+    "view": "Nile-facing windows that open"
+   },
+   "ja": {
+    "name": "ラグジュアリースイート",
+    "description": "約55 m²のスイート。キングベッドの寝室、独立したリビングルーム、専用の更衣室、独立型バスタブ、別になったシャワーがあります。",
+    "bed_configuration": "キングベッド",
+    "view": "ナイル川に面した開閉できる窓"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "code": "LST",
+   "en": {
+    "name": "Luxury Suite with Terrace",
+    "description": "Two suites of 55 m² with a 30 m² private terrace and a jacuzzi: a king-size bedroom, a living room, a bathroom with a standalone bathtub and a shower, and a private changing room.",
+    "bed_configuration": "King",
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "テラス付きラグジュアリースイート",
+    "description": "30 m²の専用テラスとジャグジーを備えた55 m²のスイート2室。キングサイズの寝室、リビングルーム、独立型バスタブとシャワーのあるバスルーム、専用の更衣室があります。",
+    "bed_configuration": "キングベッド",
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "code": "LC",
+   "en": {
+    "name": "Luxury Cabin",
+    "description": "Cabins of about 26.4 m² with king or twin beds, a picture-frame Nile window and a rain shower with a view.",
+    "bed_configuration": "King or twin",
+    "view": "Picture-frame Nile window"
+   },
+   "ja": {
+    "name": "ラグジュアリーキャビン",
+    "description": "約26.4 m²の客室。キングベッドまたはツインベッド、ナイル川を額縁のように切り取る窓、景色を眺められるレインシャワーを備えています。",
+    "bed_configuration": "キングベッドまたはシングルベッド2台",
+    "view": "ナイル川を額縁のように切り取る窓"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "code": "LS",
+   "en": {
+    "name": "Luxury Suite",
+    "description": "Suites with 50 m² inside and about 115 m² in all: a king bedroom, separate lounge, private dining area and an outdoor terrace with a heated whirlpool.",
+    "bed_configuration": "King",
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "ラグジュアリースイート",
+    "description": "室内50 m²、全体で約115 m²のスイート。キングベッドの寝室、独立したラウンジ、専用ダイニングエリア、温水ジャグジーのある屋外テラスを備えています。",
+    "bed_configuration": "キングベッド",
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "code": "LS2",
+   "en": {
+    "name": "Luxury Suite with Two Bedrooms",
+    "description": "About 92 m² with two bedrooms, living and dining areas and premium bathrooms. Sleeps four.",
+    "bed_configuration": null,
+    "view": "Panoramic Nile views"
+   },
+   "ja": {
+    "name": "ラグジュアリースイート(寝室2室)",
+    "description": "約92 m²で、寝室2室、リビングとダイニングのエリア、上質なバスルームがあります。定員4名です。",
+    "bed_configuration": null,
+    "view": "ナイル川のパノラマビュー"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Five cabins with individually controlled air conditioning, a television with films, Wi-Fi, a minibar and a safe.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "個別調節できるエアコン、映画を視聴できるテレビ、Wi-Fi、ミニバー、金庫を備えた客室5室です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "code": "ELS",
+   "en": {
+    "name": "Elegant Suite",
+    "description": "Two more spacious suites, each with a private terrace.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "エレガントスイート",
+    "description": "より広いスイート2室で、各室に専用テラスがあります。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "code": "ES",
+   "en": {
+    "name": "Executive Suite",
+    "description": "Two spacious suites with a separate seating area.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "エグゼクティブスイート",
+    "description": "独立した座席エリアのある、ゆったりとしたスイート2室です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "code": "EXC",
+   "en": {
+    "name": "Executive Cabin",
+    "description": "Five cabins of about 25 m² with individual climate control, a tea and coffee station, and butler service on request.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "エグゼクティブキャビン",
+    "description": "約25 m²の客室5室。個別の空調、紅茶とコーヒーのセットがあり、ご希望に応じてバトラーサービスを利用できます。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "code": "RS",
+   "en": {
+    "name": "Royal Suite",
+    "description": "Two upgraded suites, each with a private terrace facing the Nile.",
+    "bed_configuration": null,
+    "view": "Private Nile-facing terrace"
+   },
+   "ja": {
+    "name": "ロイヤルスイート",
+    "description": "アップグレードされたスイート2室で、各室にナイル川に面した専用テラスがあります。",
+    "bed_configuration": null,
+    "view": "ナイル川に面した専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Deluxe cabins with sliding glass doors onto a private balcony and a bathroom with a bathtub. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private balcony with sliding glass doors"
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "専用バルコニーに出られるガラスの引き戸と、バスタブ付きのバスルームを備えたデラックスキャビンです。禁煙です。",
+    "bed_configuration": null,
+    "view": "ガラスの引き戸付き専用バルコニー"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "code": "PRES",
+   "en": {
+    "name": "Presidential Suite",
+    "description": "Four more spacious suites with a private lounge. Non-smoking.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "プレジデンシャルスイート",
+    "description": "専用ラウンジのある、より広いスイート4室です。禁煙です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Elegant Nile-view cabins with individual climate control and a full-size bathtub. Some connect, subject to allocation. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Nile view"
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "個別の空調とフルサイズのバスタブを備えた、ナイル川を望む上品な客室です。一部はコネクティングルームになりますが、割り当て状況によります。禁煙です。",
+    "bed_configuration": null,
+    "view": "ナイル川の眺め"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "code": "PRES",
+   "en": {
+    "name": "Presidential Suite",
+    "description": "Four spacious suites with a private terrace. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "プレジデンシャルスイート",
+    "description": "専用テラスのある、ゆったりとしたスイート4室です。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "code": "SEN",
+   "en": {
+    "name": "Senator Suite",
+    "description": "Two upgraded suites with a private balcony. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private balcony"
+   },
+   "ja": {
+    "name": "セネタースイート",
+    "description": "専用バルコニーのある、アップグレードされたスイート2室です。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用バルコニー"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "code": "DLX",
+   "en": {
+    "name": "Deluxe Cabin",
+    "description": "Cabins with double-glazed panoramic French windows that open, a 43-inch TV with a live sailing channel, and a spa-style bathroom with steam bath, Jacuzzi and water massage.",
+    "bed_configuration": null,
+    "view": "Opening panoramic French windows"
+   },
+   "ja": {
+    "name": "デラックスキャビン",
+    "description": "開閉できる二重ガラスのパノラマフレンチウィンドウ、航行のライブ映像チャンネルを備えた43インチテレビ、スチームバス、ジャグジー、水流マッサージのあるスパ仕様のバスルームを備えた客室です。",
+    "bed_configuration": null,
+    "view": "開閉できるパノラマフレンチウィンドウ"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "code": "ELITE",
+   "en": {
+    "name": "Elite Suite",
+    "description": "Three exclusive suites with more space and comfort.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "エリートスイート",
+    "description": "より広く快適な、特別仕様のスイート3室です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "code": "PRES",
+   "en": {
+    "name": "Presidential Suite",
+    "description": "Six upgraded suites with extra living space and premium furnishings.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "プレジデンシャルスイート",
+    "description": "リビングスペースを広げ、上質な調度品を備えた、アップグレードされたスイート6室です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "code": "ROYAL",
+   "en": {
+    "name": "Royal Suite",
+    "description": "The ship's single Royal Suite, its most exclusive accommodation.",
+    "bed_configuration": null,
+    "view": null
+   },
+   "ja": {
+    "name": "ロイヤルスイート",
+    "description": "船に1室だけのロイヤルスイートで、船内でも特別な客室です。",
+    "bed_configuration": null,
+    "view": null
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "code": "BEETHOVEN",
+   "en": {
+    "name": "Beethoven Suite",
+    "description": "Spacious, well-appointed suites of about 40 m² with a private terrace and Nile views.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "ベートーヴェンスイート",
+    "description": "専用テラスとナイル川の眺めを備えた、約40 m²の広く設備の整ったスイートです。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "code": "CHOPIN",
+   "en": {
+    "name": "Chopin Suite",
+    "description": "The two largest suites, about 52 m², with a private terrace and a spa-style bathroom with steam bath, Jacuzzi and water massage.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "ショパンスイート",
+    "description": "約52 m²の、船内で最も広いスイート2室。専用テラスと、スチームバス、ジャグジー、水流マッサージのあるスパ仕様のバスルームを備えています。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "code": "MOZART",
+   "en": {
+    "name": "Mozart Suite",
+    "description": "Intimate luxury suites of about 35 m² with a private terrace.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "モーツァルトスイート",
+    "description": "専用テラスのある、約35 m²の落ち着いたラグジュアリースイートです。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "code": "EXEC",
+   "en": {
+    "name": "Executive Suite",
+    "description": "A premium suite of about 60 m² with generous living space and a private terrace. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "エグゼクティブスイート",
+    "description": "ゆったりとしたリビングスペースと専用テラスを備えた、約60 m²のプレミアムスイートです。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "code": "FAMILY",
+   "en": {
+    "name": "Family Suite",
+    "description": "Two suites of about 60 m² with an extra room and connecting arrangements suited to families. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "ファミリースイート",
+    "description": "約60 m²のスイート2室。追加の部屋があり、ご家族に向いたコネクティングの利用もできます。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "code": "PRES",
+   "en": {
+    "name": "Presidential Suite",
+    "description": "Spacious suites of about 40 m² with a private terrace and seating. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "プレジデンシャルスイート",
+    "description": "専用テラスと座席を備えた、約40 m²の広々としたスイートです。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "code": "ROYAL",
+   "en": {
+    "name": "Royal Suite",
+    "description": "The ship's Royal Suite, about 60 m², with its own Jacuzzi and a terrace. Non-smoking.",
+    "bed_configuration": null,
+    "view": "Private terrace"
+   },
+   "ja": {
+    "name": "ロイヤルスイート",
+    "description": "船のロイヤルスイートは約60 m²で、専用のジャグジーとテラスがあります。禁煙です。",
+    "bed_configuration": null,
+    "view": "専用テラス"
+   }
+  }
+ ],
+ "media_translations": [
+  {
+   "vessel": "movenpick-darakum",
+   "file": "brand-movenpick-darakum-owner-lounge.jpg",
+   "en": {
+    "alt": "Lounge aboard Mövenpick MS Darakum."
+   },
+   "ja": {
+    "alt": "Mövenpick MS Darakumの船内ラウンジ。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "file": "brand-movenpick-hamees-1.jpg",
+   "en": {
+    "alt": "Mövenpick MS Hamees — Nile cruiser exterior"
+   },
+   "ja": {
+    "alt": "Mövenpick MS Hamees(ナイル川クルーズ船の外観)"
+   }
+  },
+  {
+   "vessel": "movenpick-prince-abbas",
+   "file": "brand-movenpick-prince-abbas-exterior.webp",
+   "en": {
+    "alt": "Mövenpick MS Prince Abbas beside the Abu Simbel temples on Lake Nasser."
+   },
+   "ja": {
+    "alt": "ナセル湖で、アブ・シンベル神殿のそばに停泊するMövenpick MS Prince Abbas。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-01-royal-lily-on-the-nile.jpg",
+   "en": {
+    "alt": "Aerial view of Royal Lily on the Nile, with its sun deck, swimming pool and riverbanks visible."
+   },
+   "ja": {
+    "alt": "ナイル川に浮かぶRoyal Lilyの空撮。サンデッキ、スイミングプール、川岸が見える。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-02-welcome-aboard.jpg",
+   "en": {
+    "alt": "Royal Lily entrance lobby with a circular ceiling feature, marble floor, staircase and glass doors overlooking the Nile."
+   },
+   "ja": {
+    "alt": "Royal Lilyのエントランスロビー。円形の天井装飾、大理石の床、階段、ナイル川を望むガラス扉がある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-03-settle-in.jpg",
+   "en": {
+    "alt": "Turquoise armchairs around a wooden table with orange flowers, beside decorative wood screens in the Royal Lily lobby."
+   },
+   "ja": {
+    "alt": "Royal Lilyのロビー。装飾を施した木製の仕切りのそばに、オレンジ色の花を飾った木のテーブルと青緑色の肘掛け椅子が並ぶ。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-04-queen-cabin.jpg",
+   "en": {
+    "alt": "Royal Lily cabin with a double bed, blue bed runner, dark wood headboard and a large window overlooking the Nile."
+   },
+   "ja": {
+    "alt": "Royal Lilyの客室。ダブルベッド、青いベッドランナー、濃い色の木製ヘッドボード、ナイル川を望む大きな窓がある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-05-twin-cabin.jpg",
+   "en": {
+    "alt": "Royal Lily twin cabin with two single beds, blue bed runners, a television and two chairs beside a Nile-facing window."
+   },
+   "ja": {
+    "alt": "Royal Lilyのツインルーム。青いベッドランナーを掛けたシングルベッド2台、テレビ、ナイル川に面した窓のそばの椅子2脚。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-06-cabin-bathroom.jpg",
+   "en": {
+    "alt": "Royal Lily cabin bathroom with a jetted bathtub, overhead shower, vessel sink, large mirror, bathrobe and towel shelves."
+   },
+   "ja": {
+    "alt": "Royal Lilyの客室のバスルーム。ジェットバス、頭上のシャワー、置き型の洗面ボウル、大きな鏡、バスローブ、タオル棚がある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-07-dining-on-the-nile.jpg",
+   "en": {
+    "alt": "Royal Lily restaurant with white tablecloths, wooden chairs, a buffet counter and windows overlooking the river."
+   },
+   "ja": {
+    "alt": "Royal Lilyのレストラン。白いテーブルクロス、木の椅子、ビュッフェカウンター、川を望む窓がある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-08-panoramic-lounge.jpg",
+   "en": {
+    "alt": "Royal Lily lounge with a blue sofa, cream armchairs and glass coffee table beneath a large window framing the Nile and hills."
+   },
+   "ja": {
+    "alt": "Royal Lilyのラウンジ。ナイル川と丘を縁取る大きな窓の下に、青いソファ、クリーム色の肘掛け椅子、ガラスのコーヒーテーブルがある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lily",
+   "file": "royal-lily-09-watch-the-nile-drift-by.jpg",
+   "en": {
+    "alt": "Royal Lily cabin with a double bed, blue bed runner and two chairs beside a window overlooking a sailboat on the Nile."
+   },
+   "ja": {
+    "alt": "Royal Lilyの客室。ダブルベッドと青いベッドランナー、ナイル川の帆船を望む窓のそばに椅子2脚がある。"
+   }
+  },
+  {
+   "vessel": "movenpick-royal-lotus",
+   "file": "brand-movenpick-royal-lotus-1.jpg",
+   "en": {
+    "alt": "Mövenpick MS Royal Lotus — Nile cruiser exterior"
+   },
+   "ja": {
+    "alt": "Mövenpick MS Royal Lotus(ナイル川クルーズ船の外観)"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "file": "brand-movenpick-sb-feddya-dining.jpg",
+   "en": {
+    "alt": "Dining room aboard Mövenpick SB Feddya, overlooking the Nile."
+   },
+   "ja": {
+    "alt": "ナイル川を望む、Mövenpick SB Feddyaのダイニングルーム。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "file": "brand-movenpick-ss-misr-owner-interior.jpg",
+   "en": {
+    "alt": "Seating area with Nile views aboard Mövenpick SS Misr."
+   },
+   "ja": {
+    "alt": "ナイル川の眺めが楽しめる、Mövenpick SS Misrの座席エリア。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "file": "brand-movenpick-sun-ray-1.jpg",
+   "en": {
+    "alt": "Mövenpick MS Sun Ray — Nile cruiser exterior"
+   },
+   "ja": {
+    "alt": "Mövenpick MS Sun Ray(ナイル川クルーズ船の外観)"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "file": "brand-oberoi-philae-1.jpg",
+   "en": {
+    "alt": "The Oberoi Philae — Nile cruiser exterior"
+   },
+   "ja": {
+    "alt": "The Oberoi Philae(ナイル川クルーズ船の外観)"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "file": "brand-oberoi-philae-2.jpg",
+   "en": {
+    "alt": "The Oberoi Philae — onboard facilities"
+   },
+   "ja": {
+    "alt": "The Oberoi Philaeの船内設備"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "file": "brand-oberoi-philae-3.jpg",
+   "en": {
+    "alt": "The Oberoi Philae — onboard facilities"
+   },
+   "ja": {
+    "alt": "The Oberoi Philaeの船内設備"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "file": "brand-oberoi-zahra-1.jpg",
+   "en": {
+    "alt": "The Oberoi Zahra — Nile cruiser exterior"
+   },
+   "ja": {
+    "alt": "The Oberoi Zahra(ナイル川クルーズ船の外観)"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "file": "brand-oberoi-zahra-2.jpg",
+   "en": {
+    "alt": "The Oberoi Zahra — onboard facilities"
+   },
+   "ja": {
+    "alt": "The Oberoi Zahraの船内設備"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "file": "brand-oberoi-zahra-3.jpg",
+   "en": {
+    "alt": "The Oberoi Zahra — onboard facilities"
+   },
+   "ja": {
+    "alt": "The Oberoi Zahraの船内設備"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "file": "brand-sonesta-dahabeya-amirat-1.jpg",
+   "en": {
+    "alt": "The exterior of the Sonesta Dahabeya Amirat Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amiratの外観。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "file": "brand-sonesta-dahabeya-amirat-2.jpg",
+   "en": {
+    "alt": "Sun Lounges on the deck of the Sonesta Dahabeya Amirat Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amiratのデッキに並ぶサンラウンジャー。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "file": "brand-sonesta-dahabeya-amirat-3.jpg",
+   "en": {
+    "alt": "Sun Lounges on the deck of the Sonesta Dahabeya Amirat Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amiratのデッキに並ぶサンラウンジャー。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "file": "brand-sonesta-dahabeya-amirat-ii-1.jpg",
+   "en": {
+    "alt": "Sonesta Dahabeya Amirat II Exterior"
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amirat IIの外観"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "file": "brand-sonesta-dahabeya-amirat-ii-2.jpg",
+   "en": {
+    "alt": "Sonesta Dahabeya Amirat II Pool"
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amirat IIのプール"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "file": "brand-sonesta-dahabeya-amirat-ii-3.jpg",
+   "en": {
+    "alt": "Sonesta Dahabeya Amirat II Double Executive Cabin"
+   },
+   "ja": {
+    "alt": "Sonesta Dahabeya Amirat IIのエグゼクティブダブルキャビン"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "file": "brand-sonesta-moon-goddess-1.jpg",
+   "en": {
+    "alt": "The exterior of the Sonesta Moon Goddess Nile River cruise."
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta Moon Goddessの外観。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "file": "brand-sonesta-moon-goddess-2.jpg",
+   "en": {
+    "alt": "The exterior of the Sonesta Moon Goddess Nile River cruise."
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta Moon Goddessの外観。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "file": "brand-sonesta-moon-goddess-3.jpg",
+   "en": {
+    "alt": "The lobby of the Sonesta Moon Goddess Nile River cruise."
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta Moon Goddessのロビー。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "file": "brand-sonesta-nile-goddess-1.jpg",
+   "en": {
+    "alt": "Exterior Sonesta Nile Goddess Cruise Ship"
+   },
+   "ja": {
+    "alt": "クルーズ船Sonesta Nile Goddessの外観"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "file": "brand-sonesta-nile-goddess-2.jpg",
+   "en": {
+    "alt": "Sonesta Nile Goddess Cruise Ship Sun Deck"
+   },
+   "ja": {
+    "alt": "クルーズ船Sonesta Nile Goddessのサンデッキ"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "file": "brand-sonesta-nile-goddess-3.jpg",
+   "en": {
+    "alt": "Sonesta Nile Goddess Cruise Ship Sun Deck"
+   },
+   "ja": {
+    "alt": "クルーズ船Sonesta Nile Goddessのサンデッキ"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "file": "brand-sonesta-st-george-i-1.jpg",
+   "en": {
+    "alt": "Sonesta St. George1 Nile Cruise Ship Sundeck and Pool"
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta St. George 1のサンデッキとプール"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "file": "brand-sonesta-st-george-i-2.jpg",
+   "en": {
+    "alt": "Sonesta St. George 1 Nile Cruise Cruise Exterior"
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta St. George 1の外観"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "file": "brand-sonesta-st-george-i-3.jpg",
+   "en": {
+    "alt": "Sonesta St. George 1 Nile Cruise Lobby"
+   },
+   "ja": {
+    "alt": "ナイル川クルーズ船Sonesta St. George 1のロビー"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "file": "brand-sonesta-star-goddess-1.jpg",
+   "en": {
+    "alt": "The sun deck of the Sonesta Star Goddess Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Star Goddessのサンデッキ。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "file": "brand-sonesta-star-goddess-2.jpg",
+   "en": {
+    "alt": "The lounge on the Sonesta Star Goddess Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Star Goddessのラウンジ。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "file": "brand-sonesta-star-goddess-3.jpg",
+   "en": {
+    "alt": "A seating area in a room on the Sonesta Star Goddess Cruise."
+   },
+   "ja": {
+    "alt": "Sonesta Star Goddessの室内の座席エリア。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "file": "brand-sonesta-sun-goddess-1.jpg",
+   "en": {
+    "alt": "Exterior Sonesta Sun Goddess Cruise Ship"
+   },
+   "ja": {
+    "alt": "クルーズ船Sonesta Sun Goddessの外観"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "file": "brand-sonesta-sun-goddess-2.jpg",
+   "en": {
+    "alt": "Pool"
+   },
+   "ja": {
+    "alt": "プール"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "file": "brand-sonesta-sun-goddess-3.jpg",
+   "en": {
+    "alt": "hot tub"
+   },
+   "ja": {
+    "alt": "ホットタブ"
+   }
+  }
+ ],
+ "schedule_days": [
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 1,
+   "en": {
+    "title": "Embark in Aswan",
+    "description": "Check in and have lunch on board, with afternoon tea. Overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワンで乗船",
+    "description": "チェックイン後、船内で昼食とアフタヌーンティー。アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 2,
+   "en": {
+    "title": "Aswan: High Dam, Philae and the Nubian Museum",
+    "description": "Visit the High Dam, Philae Temple and the Nubian Museum. Nubian party in the evening."
+   },
+   "ja": {
+    "title": "アスワン:ハイダム、フィラエ神殿、ヌビア博物館",
+    "description": "ハイダム、フィラエ神殿、ヌビア博物館を見学します。夜はヌビアのパーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo",
+    "description": "Sail to Kom Ombo and visit its temple. Gala dinner, then sail to Edfu."
+   },
+   "ja": {
+    "title": "コム・オンボ",
+    "description": "コム・オンボへ航行し、神殿を見学します。ガラディナーの後、エドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu and Luxor",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Luxor through the Esna lock."
+   },
+   "ja": {
+    "title": "エドフとルクソール",
+    "description": "エドフのホルス神殿を見学し、エスナの水門を通ってルクソールへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 5,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、続いてカルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 6,
+   "en": {
+    "title": "Dendera",
+    "description": "Sail to Qena and visit the Temple of Dendera, then sail on to Naga Hammadi."
+   },
+   "ja": {
+    "title": "デンデラ",
+    "description": "ケナへ航行してデンデラ神殿を見学し、ナグ・ハマディへ向けて航行を続けます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 7,
+   "en": {
+    "title": "Abydos",
+    "description": "Sail to El Balyana and visit the Temple of Abydos, then sail to Sohag. Galabia party in the evening."
+   },
+   "ja": {
+    "title": "アビドス",
+    "description": "エル・バリャナへ航行してアビドス神殿を見学し、ソハーグへ航行します。夜はガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 8,
+   "en": {
+    "title": "Towards Tell el-Amarna",
+    "description": "Sail from Sohag through the Asyut lock to Tell el-Amarna, passing the Monastery of Prince Tadros, which your guide explains from the boat."
+   },
+   "ja": {
+    "title": "テル・エル・アマルナへ",
+    "description": "ソハーグからアシュートの水門を通ってテル・エル・アマルナへ航行します。途中のプリンス・タドロス修道院は、ガイドが船上から解説します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 9,
+   "en": {
+    "title": "Tell el-Amarna and Tuna el-Gebel",
+    "description": "Visit the northern tombs, the Royal Tomb of Akhenaten, the Northern Palace and the small temples of the Aten, then Tuna el-Gebel. Sail to Minya, with a folklore party."
+   },
+   "ja": {
+    "title": "テル・エル・アマルナとトゥナ・エル・ゲベル",
+    "description": "北の墓群、アクエンアテン王の王墓、北宮殿、アテンの小神殿を見学し、続いてトゥナ・エル・ゲベルを訪れます。ミニヤへ航行し、民俗芸能のパーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 10,
+   "en": {
+    "title": "Beni Hassan",
+    "description": "Drive about an hour to the rock tombs of Beni Hassan, including those of Baqet III, Khety, Amenemhat and Khnumhotep II. Sail to Beni Suef."
+   },
+   "ja": {
+    "title": "ベニ・ハッサン",
+    "description": "車で約1時間のベニ・ハッサンの岩窟墓へ向かい、バケト3世、ケティ、アメンエムハト、クヌムホテプ2世などの墓を見学します。ベニ・スエフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 11,
+   "en": {
+    "title": "Coptic Cairo",
+    "description": "Sail to Cairo and visit the Hanging Church, the Coptic Museum and the synagogue. Takht, a traditional Arabic music ensemble, in the evening."
+   },
+   "ja": {
+    "title": "コプト・カイロ",
+    "description": "カイロへ航行し、ハンギング・チャーチ(吊り教会)、コプト博物館、シナゴーグを見学します。夜はアラブ伝統音楽の合奏団「タフト」の演奏があります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 12,
+   "en": {
+    "title": "Giza and the Grand Egyptian Museum",
+    "description": "Visit the Pyramids of Giza, the Sphinx and the Grand Egyptian Museum."
+   },
+   "ja": {
+    "title": "ギザと大エジプト博物館",
+    "description": "ギザのピラミッド、スフィンクス、大エジプト博物館を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-CAI-12",
+   "day_number": 13,
+   "en": {
+    "title": "Disembarkation in Cairo",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "カイロで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午からチェックインし、船内で昼食。ハイダム、フィラエ神殿、未完成のオベリスクを見学します。ウェルカムカクテルレセプションの後、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "早朝にコム・オンボへ航行して神殿を見学し、続いてエドフへ向かい、ホルス神殿を訪れます。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、続いてカルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 1,
+   "en": {
+    "title": "Embark in Cairo",
+    "description": "Check in and have lunch on board. Overnight in Cairo."
+   },
+   "ja": {
+    "title": "カイロで乗船",
+    "description": "チェックイン後、船内で昼食。カイロで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 2,
+   "en": {
+    "title": "Coptic Cairo and Giza",
+    "description": "Visit the synagogue, the Hanging Church and the Coptic Museum, then the Pyramids of Giza and the Sphinx."
+   },
+   "ja": {
+    "title": "コプト・カイロとギザ",
+    "description": "シナゴーグ、ハンギング・チャーチ(吊り教会)、コプト博物館を見学し、続いてギザのピラミッドとスフィンクスを訪れます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 3,
+   "en": {
+    "title": "Memphis, Saqqara and the Grand Egyptian Museum",
+    "description": "Visit Memphis, Saqqara and the Grand Egyptian Museum. Welcome cocktail reception, gala dinner and Takht music."
+   },
+   "ja": {
+    "title": "メンフィス、サッカラ、大エジプト博物館",
+    "description": "メンフィス、サッカラ、大エジプト博物館を見学します。ウェルカムカクテルレセプション、ガラディナー、タフトの演奏があります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 4,
+   "en": {
+    "title": "Sailing to Beni Suef",
+    "description": "A full day on the river to Beni Suef, with a singer at dinner."
+   },
+   "ja": {
+    "title": "ベニ・スエフへ航行",
+    "description": "終日、ベニ・スエフへ向けて川を航行します。夕食には歌手が登場します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 5,
+   "en": {
+    "title": "Sailing to Minya",
+    "description": "Sail to Minya, with a folklore party in the evening."
+   },
+   "ja": {
+    "title": "ミニヤへ航行",
+    "description": "ミニヤへ航行し、夜は民俗芸能のパーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 6,
+   "en": {
+    "title": "Tuna el-Gebel and Beni Hassan",
+    "description": "Visit Tuna el-Gebel, then drive about an hour to the rock tombs of Beni Hassan, including those of Baqet III, Khety, Amenemhat and Khnumhotep II."
+   },
+   "ja": {
+    "title": "トゥナ・エル・ゲベルとベニ・ハッサン",
+    "description": "トゥナ・エル・ゲベルを見学した後、車で約1時間のベニ・ハッサンの岩窟墓へ向かい、バケト3世、ケティ、アメンエムハト、クヌムホテプ2世などの墓を訪れます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 7,
+   "en": {
+    "title": "Tell el-Amarna",
+    "description": "Visit the northern tombs, the Royal Tomb of Akhenaten, the Northern Palace and the small temples of the Aten. Sail to Asyut, passing the Monastery of Prince Tadros. Galabia party in the evening."
+   },
+   "ja": {
+    "title": "テル・エル・アマルナ",
+    "description": "北の墓群、アクエンアテン王の王墓、北宮殿、アテンの小神殿を見学します。プリンス・タドロス修道院を眺めながらアシュートへ航行します。夜はガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 8,
+   "en": {
+    "title": "Sailing to Sohag",
+    "description": "A day on the river to Sohag."
+   },
+   "ja": {
+    "title": "ソハーグへ航行",
+    "description": "一日かけて川をソハーグへ向かいます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 9,
+   "en": {
+    "title": "Abydos",
+    "description": "Sail to El Balyana and visit the Temple of Abydos and the temple of Seti I. Sail on to Naga Hammadi through its lock and bridges."
+   },
+   "ja": {
+    "title": "アビドス",
+    "description": "エル・バリャナへ航行し、アビドス神殿とセティ1世の神殿を見学します。ナグ・ハマディの水門と橋を通って航行を続けます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 10,
+   "en": {
+    "title": "Dendera",
+    "description": "Sail to Qena and visit the Temple of Dendera, about 20 minutes by road. Sail to Luxor, with a belly dance show."
+   },
+   "ja": {
+    "title": "デンデラ",
+    "description": "ケナへ航行し、車で約20分のデンデラ神殿を見学します。ルクソールへ航行し、ベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 11,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings and the Temple of Queen Hatshepsut. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷とハトシェプスト女王葬祭殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 12,
+   "en": {
+    "title": "Luxor East Bank and Edfu",
+    "description": "Visit the Karnak and Luxor Temples, then sail towards Edfu through the Esna lock."
+   },
+   "ja": {
+    "title": "ルクソール東岸とエドフ",
+    "description": "カルナック神殿とルクソール神殿を見学し、エスナの水門を通ってエドフへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 13,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Continue to Aswan."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフのホルス神殿を見学した後、コム・オンボへ航行して神殿を訪れ、アスワンへ向かいます。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 14,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Nubian Museum. Nubian party in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、ヌビア博物館を見学します。夜はヌビアのパーティーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "CAI-ASW-14",
+   "day_number": 15,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午からチェックインし、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフのホルス神殿を見学した後、コム・オンボへ航行して神殿を訪れます。アスワンへ航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor",
+    "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "正午からチェックインし、船内で昼食。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and Aswan",
+    "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとアスワン",
+    "description": "コム・オンボへ航行して神殿を見学し、アスワンへ向かいます。夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "A day on board in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンで船内に滞在する一日です。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "早朝にコム・オンボを通過してエドフへ航行し、ホルス神殿を見学します。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "カルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-darakum",
+   "schedule": "LXR-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午からチェックインし、船内で昼食。ハイダム、フィラエ神殿、未完成のオベリスクを見学します。ウェルカムカクテルレセプションの後、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "早朝にコム・オンボへ航行して神殿を見学し、続いてエドフへ向かい、ホルス神殿を訪れます。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、続いてカルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午からチェックインし、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフのホルス神殿を見学した後、コム・オンボへ航行して神殿を訪れます。アスワンへ航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor",
+    "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "正午からチェックインし、船内で昼食。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and Aswan",
+    "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとアスワン",
+    "description": "コム・オンボへ航行して神殿を見学し、アスワンへ向かいます。夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "A day on board in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンで船内に滞在する一日です。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "早朝にコム・オンボを通過してエドフへ航行し、ホルス神殿を見学します。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "カルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-hamees",
+   "schedule": "LXR-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-4",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Embark at noon and have lunch on board. Visit the High Dam and Philae Temple. Overnight near the Aswan Bridge."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午に乗船し、船内で昼食。ハイダムとフィラエ神殿を見学します。アスワン橋の近くで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-4",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Gebel El Silsila",
+    "description": "Visit Kom Ombo Temple, have lunch at Fares village and explore Gebel El Silsila. Dinner on Fawza island."
+   },
+   "ja": {
+    "title": "コム・オンボとゲベル・エル・シルシラ",
+    "description": "コム・オンボ神殿を見学し、ファレス村で昼食の後、ゲベル・エル・シルシラを散策します。夕食はファウザ島でとります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and El Kab",
+    "description": "Visit the Temple of Horus at Edfu, then the tombs at El Kab. Dinner and overnight at El Hegz village."
+   },
+   "ja": {
+    "title": "エドフとエル・カブ",
+    "description": "エドフのホルス神殿を見学し、続いてエル・カブの墓所を訪れます。夕食と宿泊はエル・ヘグズ村です。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-4",
+   "day_number": 4,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Sail to Luxor through the Esna lock and visit the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "エスナの水門を通ってルクソールへ航行し、カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan",
+    "description": "Embark at noon and have lunch on board. Felucca ride in the afternoon. Overnight near the Aswan Bridge."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "正午に乗船し、船内で昼食。午後はファルーカに乗ります。アスワン橋の近くで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 2,
+   "en": {
+    "title": "High Dam, Philae and Kom Ombo",
+    "description": "Visit the High Dam and Philae Temple, then sail to Kom Ombo and visit its temple. Overnight at Fares village."
+   },
+   "ja": {
+    "title": "ハイダム、フィラエ神殿、コム・オンボ",
+    "description": "ハイダムとフィラエ神殿を見学した後、コム・オンボへ航行して神殿を訪れます。ファレス村で停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 3,
+   "en": {
+    "title": "Gebel El Silsila and Edfu",
+    "description": "Explore Gebel El Silsila, then sail to Edfu and visit the Temple of Horus."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとエドフ",
+    "description": "ゲベル・エル・シルシラを散策した後、エドフへ航行してホルス神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 4,
+   "en": {
+    "title": "El Kab and El Hegz",
+    "description": "Visit the tombs at El Kab, have lunch at El Hegz village and sail to Esna."
+   },
+   "ja": {
+    "title": "エル・カブとエル・ヘグズ",
+    "description": "エル・カブの墓所を見学し、エル・ヘグズ村で昼食の後、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 5,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Sail to Luxor through the Esna lock and visit the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "エスナの水門を通ってルクソールへ航行し、カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-5",
+   "day_number": 6,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 1,
+   "en": {
+    "title": "Arrival in Aswan",
+    "description": "Visit the High Dam and Philae Temple straight from Aswan airport, with a packed lunch, then board. Overnight near the Aswan Bridge."
+   },
+   "ja": {
+    "title": "アスワン到着",
+    "description": "アスワン空港から直接、ランチボックスを持ってハイダムとフィラエ神殿を見学し、その後乗船します。アスワン橋の近くで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 2,
+   "en": {
+    "title": "El Sheikh Fadl island",
+    "description": "Sail to El Sheikh Fadl island and spend the afternoon and night there."
+   },
+   "ja": {
+    "title": "エル・シェイク・ファドル島",
+    "description": "エル・シェイク・ファドル島へ航行し、午後と夜を島で過ごします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and Gebel El Silsila",
+    "description": "Sail to Kom Ombo and visit its temple, then continue to Gebel El Silsila to explore it. Overnight there."
+   },
+   "ja": {
+    "title": "コム・オンボとゲベル・エル・シルシラ",
+    "description": "コム・オンボへ航行して神殿を見学し、ゲベル・エル・シルシラへ向かって散策します。そこで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu and El Kab",
+    "description": "Sail to Edfu and visit the Temple of Horus. Continue to El Kab to visit it, then cross to El Hegz village for the night."
+   },
+   "ja": {
+    "title": "エドフとエル・カブ",
+    "description": "エドフへ航行してホルス神殿を見学します。続いてエル・カブを訪れ、対岸のエル・ヘグズ村へ渡って一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 5,
+   "en": {
+    "title": "Esna and Luxor",
+    "description": "Sail to Esna, then on to Luxor, arriving in the evening."
+   },
+   "ja": {
+    "title": "エスナとルクソール",
+    "description": "エスナへ航行し、さらにルクソールへ向かい、夕方に到着します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 6,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "王家の谷、ハトシェプスト女王葬祭殿、セティ1世とツタンカーメンの墓を訪れ、続いてカルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-6",
+   "day_number": 7,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan",
+    "description": "Embark at noon and have lunch on board. Overnight near the Aswan Bridge."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "正午に乗船し、船内で昼食。アスワン橋の近くで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Visit the High Dam and Philae Temple. Overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "ハイダムとフィラエ神殿を見学します。アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "El Sheikh Fadl island",
+    "description": "Sail to El Sheikh Fadl island and spend the afternoon and night there."
+   },
+   "ja": {
+    "title": "エル・シェイク・ファドル島",
+    "description": "エル・シェイク・ファドル島へ航行し、午後と夜を島で過ごします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Kom Ombo and Gebel El Silsila",
+    "description": "Sail to Kom Ombo and visit its temple, then continue to Gebel El Silsila to explore it. Overnight there."
+   },
+   "ja": {
+    "title": "コム・オンボとゲベル・エル・シルシラ",
+    "description": "コム・オンボへ航行して神殿を見学し、ゲベル・エル・シルシラへ向かって散策します。そこで停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Edfu and El Kab",
+    "description": "Sail to Edfu and visit the Temple of Horus. Continue to El Kab to visit it, then cross to El Hegz village for the night."
+   },
+   "ja": {
+    "title": "エドフとエル・カブ",
+    "description": "エドフへ航行してホルス神殿を見学します。続いてエル・カブを訪れ、対岸のエル・ヘグズ村へ渡って一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Esna and Luxor",
+    "description": "Sail to Esna, then on to Luxor, arriving in the evening."
+   },
+   "ja": {
+    "title": "エスナとルクソール",
+    "description": "エスナへ航行し、さらにルクソールへ向かい、夕方に到着します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut, the Colossi of Memnon and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "王家の谷、ハトシェプスト女王葬祭殿、メムノンの巨像、セティ1世とツタンカーメンの墓を訪れ、続いてカルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "ASW-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "正午に乗船し、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "El Hegz village",
+    "description": "A day of sailing to El Hegz village, with dinner in the village."
+   },
+   "ja": {
+    "title": "エル・ヘグズ村",
+    "description": "一日かけてエル・ヘグズ村へ航行し、村で夕食をとります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "El Kab and Edfu",
+    "description": "Visit El Kab, then sail to Edfu and visit the Temple of Horus. Sail on to Ramadi village for dinner."
+   },
+   "ja": {
+    "title": "エル・カブとエドフ",
+    "description": "エル・カブを見学した後、エドフへ航行してホルス神殿を訪れます。夕食のためラマディ村へ向かいます。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Gebel El Silsila and Kom Ombo",
+    "description": "Explore Gebel El Silsila, then visit Kom Ombo Temple. Barbecue dinner on El Sheikh Fadl island."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとコム・オンボ",
+    "description": "ゲベル・エル・シルシラを散策した後、コム・オンボ神殿を見学します。エル・シェイク・ファドル島でバーベキューの夕食をとります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan. Breakfast and check-out, then visit the High Dam and Philae Temple."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行します。朝食後にチェックアウトし、ハイダムとフィラエ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "正午に乗船し、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun. Sail to Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、ハトシェプスト女王葬祭殿、セティ1世とツタンカーメンの墓を訪れます。エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 3,
+   "en": {
+    "title": "El Kab",
+    "description": "Sail to El Kab and visit it, then continue to Edfu for the night."
+   },
+   "ja": {
+    "title": "エル・カブ",
+    "description": "エル・カブへ航行して見学し、エドフへ向かって一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 4,
+   "en": {
+    "title": "Gebel El Silsila and Kom Ombo",
+    "description": "Sail to Gebel El Silsila and explore it, then continue to Kom Ombo and visit its temple. Sail on to El Sheikh Fadl island for the night."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとコム・オンボ",
+    "description": "ゲベル・エル・シルシラへ航行して散策し、コム・オンボへ向かって神殿を見学します。エル・シェイク・ファドル島へ航行して一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan and visit the High Dam and Philae Temple, with a felucca ride in the afternoon."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行してハイダムとフィラエ神殿を見学し、午後はファルーカに乗ります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-5",
+   "day_number": 6,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "正午に乗船し、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut and the tombs of Seti I and Tutankhamun. Sail to Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、ハトシェプスト女王葬祭殿、セティ1世とツタンカーメンの墓を訪れます。エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 3,
+   "en": {
+    "title": "El Kab",
+    "description": "Sail to El Kab and visit it, then continue to Edfu for the night."
+   },
+   "ja": {
+    "title": "エル・カブ",
+    "description": "エル・カブへ航行して見学し、エドフへ向かって一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu and Ramadi village",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Ramadi village for a barbecue dinner."
+   },
+   "ja": {
+    "title": "エドフとラマディ村",
+    "description": "エドフのホルス神殿を見学した後、バーベキューの夕食のためラマディ村へ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 5,
+   "en": {
+    "title": "Gebel El Silsila and Kom Ombo",
+    "description": "Sail to Gebel El Silsila and explore it, then continue to Kom Ombo and visit its temple. Sail on to El Sheikh Fadl island for the night."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとコム・オンボ",
+    "description": "ゲベル・エル・シルシラへ航行して散策し、コム・オンボへ向かって神殿を見学します。エル・シェイク・ファドル島へ航行して一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 6,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan and visit the High Dam and Philae Temple, with a felucca ride in the afternoon."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行してハイダムとフィラエ神殿を見学し、午後はファルーカに乗ります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-6",
+   "day_number": 7,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor",
+    "description": "Embark at noon. Overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "正午に乗船します。ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Temple of Queen Hatshepsut, the Colossi of Memnon and the tombs of Seti I and Tutankhamun, then the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "王家の谷、ハトシェプスト女王葬祭殿、メムノンの巨像、セティ1世とツタンカーメンの墓を訪れ、続いてカルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 3,
+   "en": {
+    "title": "Esna and El Hegz",
+    "description": "Sail to Esna and on to El Hegz village."
+   },
+   "ja": {
+    "title": "エスナとエル・ヘグズ",
+    "description": "エスナへ航行し、さらにエル・ヘグズ村へ向かいます。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 4,
+   "en": {
+    "title": "El Kab and Edfu",
+    "description": "Visit El Kab Temple, then sail to Edfu and visit the Temple of Horus. Continue to Ramadi village."
+   },
+   "ja": {
+    "title": "エル・カブとエドフ",
+    "description": "エル・カブの神殿を見学した後、エドフへ航行してホルス神殿を訪れます。ラマディ村へ向かいます。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 5,
+   "en": {
+    "title": "Gebel El Silsila and Kom Ombo",
+    "description": "Explore Gebel El Silsila, then visit Kom Ombo Temple. Sail on to El Sheikh Fadl island."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとコム・オンボ",
+    "description": "ゲベル・エル・シルシラを散策した後、コム・オンボ神殿を見学します。エル・シェイク・ファドル島へ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 6,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Sail to Aswan and visit the High Dam and Philae Temple."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "アスワンへ航行し、ハイダムとフィラエ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 7,
+   "en": {
+    "title": "Aswan",
+    "description": "A free afternoon and the night in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "午後は自由行動で、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sb-feddya",
+   "schedule": "LXR-ASW-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午からチェックインし、船内で昼食。ハイダム、フィラエ神殿、未完成のオベリスクを見学します。ウェルカムカクテルレセプションの後、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "早朝にコム・オンボへ航行して神殿を見学し、続いてエドフへ向かい、ホルス神殿を訪れます。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、続いてカルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午からチェックインし、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Esna",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Esna, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエスナ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail to Edfu and visit the Temple of Horus. Sail on to Kom Ombo for an Egyptian Galabia night, and moor there overnight."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "エドフへ航行してホルス神殿を見学します。エジプトのガラベーヤ・ナイトを楽しみながらコム・オンボへ航行し、同地で停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Kom Ombo and Aswan",
+    "description": "Visit Kom Ombo Temple and sail to Aswan. Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "コム・オンボとアスワン",
+    "description": "コム・オンボ神殿を見学し、アスワンへ航行します。ハイダム、フィラエ神殿、未完成のオベリスクを訪れた後、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午からチェックインし、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Esna",
+    "description": "Sail to Esna, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "エスナ",
+    "description": "夕食前のウェルカムカクテルレセプションとともに、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail to Edfu and visit the Temple of Horus. Sail on to Kom Ombo for an Egyptian Galabia night, and moor there overnight."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "エドフへ航行してホルス神殿を見学します。エジプトのガラベーヤ・ナイトを楽しみながらコム・オンボへ航行し、同地で停泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan and visit the High Dam, Philae Temple and the Unfinished Obelisk. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行し、ハイダム、フィラエ神殿、未完成のオベリスクを見学します。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "Take a felucca around Kitchener's Island. Overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ファルーカでキッチナー島を巡ります。アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Kom Ombo",
+    "description": "Sail early to Kom Ombo and visit its temple, then sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボ",
+    "description": "早朝にコム・オンボへ航行して神殿を見学し、ルクソールへ向けて航行します。夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-ss-misr",
+   "schedule": "LXR-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Check in from noon and have lunch on board. Visit the High Dam, Philae Temple and the Unfinished Obelisk. Welcome cocktail reception and overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午からチェックインし、船内で昼食。ハイダム、フィラエ神殿、未完成のオベリスクを見学します。ウェルカムカクテルレセプションの後、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Sail early to Kom Ombo and visit its temple, then sail to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "早朝にコム・オンボへ航行して神殿を見学し、続いてエドフへ向かい、ホルス神殿を訪れます。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut on the West Bank, then the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、続いてカルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Check in from noon and have lunch on board. Visit the Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午からチェックインし、船内で昼食。カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Kom Ombo and visit its temple. Sail to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフのホルス神殿を見学した後、コム・オンボへ航行して神殿を訪れます。アスワンへ航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor",
+    "description": "Check in from noon and have lunch on board. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "正午からチェックインし、船内で昼食。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Edfu",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and the Temple of Queen Hatshepsut. Sail to Edfu through the Esna lock, with a welcome cocktail reception before dinner."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエドフ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。夕食前のウェルカムカクテルレセプションとともに、エスナの水門を通ってエドフへ航行します。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and Aswan",
+    "description": "Sail to Kom Ombo and visit its temple, then continue to Aswan, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "コム・オンボとアスワン",
+    "description": "コム・オンボへ航行して神殿を見学し、アスワンへ向かいます。夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the Unfinished Obelisk, then take a felucca around Kitchener's Island. Nubian show in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、未完成のオベリスクを見学し、ファルーカでキッチナー島を巡ります。夜はヌビアのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan",
+    "description": "A day on board in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンで船内に滞在する一日です。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail early past Kom Ombo to Edfu and visit the Temple of Horus. Sail towards Luxor, with an Egyptian Galabia night."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "早朝にコム・オンボを通過してエドフへ航行し、ホルス神殿を見学します。ルクソールへ向けて航行し、夜はエジプトのガラベーヤ・ナイトがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor East Bank",
+    "description": "Visit the Karnak and Luxor Temples. Belly dance show in the evening."
+   },
+   "ja": {
+    "title": "ルクソール東岸",
+    "description": "カルナック神殿とルクソール神殿を見学します。夜はベリーダンスのショーがあります。"
+   }
+  },
+  {
+   "vessel": "movenpick-sun-ray",
+   "schedule": "LXR-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation",
+    "description": "Breakfast and check-out."
+   },
+   "ja": {
+    "title": "下船",
+    "description": "朝食後、チェックアウトします。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-4",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: Nubian Museum",
+    "description": "Embark around midday, have lunch and visit the Nubian Museum. Afternoon tea, cocktails and dinner; overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ヌビア博物館",
+    "description": "正午ごろに乗船して昼食の後、ヌビア博物館を見学します。アフタヌーンティー、カクテル、夕食をお楽しみいただき、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-4",
+   "day_number": 2,
+   "en": {
+    "title": "Philae, High Dam and Kom Ombo",
+    "description": "Visit Philae Temple and the High Dam, then sail to Kom Ombo and its double temple. Continue to Edfu."
+   },
+   "ja": {
+    "title": "フィラエ神殿、ハイダム、コム・オンボ",
+    "description": "フィラエ神殿とハイダムを見学した後、コム・オンボへ航行し、二重神殿を訪れます。エドフへ向かいます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Luxor",
+    "description": "Visit the Temple of Horus at Edfu, pass through the Esna lock and sail to Luxor."
+   },
+   "ja": {
+    "title": "エドフとルクソール",
+    "description": "エドフのホルス神殿を見学し、エスナの水門を通ってルクソールへ航行します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-4",
+   "day_number": 4,
+   "en": {
+    "title": "Luxor",
+    "description": "The Valley of the Kings (with the tombs of Tutankhamun and Ramesses VI when included), Deir el-Medina, Medinet Habu and the Colossi of Memnon; Luxor and Karnak Temples in the afternoon."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "王家の谷(含まれる場合はツタンカーメンとラムセス6世の墓)、デイル・エル・メディーナ、メディネト・ハブ、メムノンの巨像を訪れ、午後はルクソール神殿とカルナック神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: Nubian Museum",
+    "description": "Embark at noon, have lunch on board and visit the Nubian Museum. Cocktail reception, dinner and overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ヌビア博物館",
+    "description": "正午に乗船し、船内で昼食の後、ヌビア博物館を見学します。カクテルレセプションと夕食の後、アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 2,
+   "en": {
+    "title": "Philae, High Dam and Kom Ombo",
+    "description": "Visit Philae Temple and the High Dam, then sail to Kom Ombo and visit its twin temple. Sail on to Edfu."
+   },
+   "ja": {
+    "title": "フィラエ神殿、ハイダム、コム・オンボ",
+    "description": "フィラエ神殿とハイダムを見学した後、コム・オンボへ航行し、二重神殿を訪れます。エドフへ向けて航行を続けます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and the Esna lock",
+    "description": "Visit the Temple of Horus at Edfu, then sail to Luxor through the Esna lock."
+   },
+   "ja": {
+    "title": "エドフとエスナの水門",
+    "description": "エドフのホルス神殿を見学し、エスナの水門を通ってルクソールへ航行します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 4,
+   "en": {
+    "title": "Luxor",
+    "description": "Visit the Valley of the Kings, including the tombs of Tutankhamun and Ramesses VI, then Deir el-Medina, Medinet Habu and the Colossi of Memnon, then the Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "ツタンカーメンとラムセス6世の墓を含む王家の谷を訪れ、続いてデイル・エル・メディーナ、メディネト・ハブ、メムノンの巨像、さらにカルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 5,
+   "en": {
+    "title": "Dendera",
+    "description": "Sail to Qena and visit the Temple of Dendera. Overnight in Qena."
+   },
+   "ja": {
+    "title": "デンデラ",
+    "description": "ケナへ航行してデンデラ神殿を見学します。ケナで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 6,
+   "en": {
+    "title": "Abydos and Luxor",
+    "description": "Visit the Temple of Abydos, then sail back to Luxor and visit the Luxor Museum."
+   },
+   "ja": {
+    "title": "アビドスとルクソール",
+    "description": "アビドス神殿を見学した後、ルクソールへ戻る航行をし、ルクソール博物館を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "ASW-LXR-6",
+   "day_number": 7,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark at noon and have lunch on board. Visit the Karnak and Luxor Temples. Cocktail reception, dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午に乗船し、船内で昼食。カルナック神殿とルクソール神殿を見学します。カクテルレセプションと夕食の後、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Esna",
+    "description": "Visit the Valley of the Kings, including the tombs of Tutankhamun and Ramesses VI, then Deir el-Medina, Medinet Habu and the Colossi of Memnon. Sail to Esna and pass through the lock."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエスナ",
+    "description": "ツタンカーメンとラムセス6世の墓を含む王家の谷を訪れ、続いてデイル・エル・メディーナ、メディネト・ハブ、メムノンの巨像を見学します。エスナへ航行し、水門を通過します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Sail to Edfu and visit the Temple of Horus, then sail to Kom Ombo and visit its twin temple. Overnight in Kom Ombo."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフへ航行してホルス神殿を見学した後、コム・オンボへ航行し、二重神殿を訪れます。コム・オンボで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan. Visit the High Dam and Philae Temple, then the Nubian Museum."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行します。ハイダムとフィラエ神殿を見学し、続いてヌビア博物館を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 1,
+   "en": {
+    "title": "Dendera",
+    "description": "Embark in the morning, sail to Qena and visit the Temple of Dendera. Overnight in Qena."
+   },
+   "ja": {
+    "title": "デンデラ",
+    "description": "午前中に乗船し、ケナへ航行してデンデラ神殿を見学します。ケナで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 2,
+   "en": {
+    "title": "Abydos and Luxor",
+    "description": "Visit the Temple of Abydos, then sail to Luxor and visit the Luxor Museum."
+   },
+   "ja": {
+    "title": "アビドスとルクソール",
+    "description": "アビドス神殿を見学した後、ルクソールへ航行し、ルクソール博物館を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "A free morning for the spa, then visit the Luxor and Karnak Temples. Cocktail reception."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "午前はスパなどでご自由にお過ごしいただき、その後ルクソール神殿とカルナック神殿を見学します。カクテルレセプションがあります。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 4,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, including the tombs of Tutankhamun and Ramesses VI, then Deir el-Medina, Medinet Habu and the Colossi of Memnon. Sail to Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "ツタンカーメンとラムセス6世の墓を含む王家の谷を訪れ、続いてデイル・エル・メディーナ、メディネト・ハブ、メムノンの巨像を見学します。エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 5,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Sail to Edfu and visit the Temple of Horus, then continue to Kom Ombo and visit its twin temple."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフへ航行してホルス神殿を見学した後、コム・オンボへ向かい、二重神殿を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 6,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan. Visit the High Dam and Philae Temple, then the Nubian Museum."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行します。ハイダムとフィラエ神殿を見学し、続いてヌビア博物館を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-philae",
+   "schedule": "LXR-ASW-6",
+   "day_number": 7,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Embark around midday. Visit the High Dam and Philae Temple. Cocktails and dinner; sail towards Kom Ombo."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午ごろに乗船します。ハイダムとフィラエ神殿を見学します。カクテルと夕食の後、コム・オンボへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Visit Kom Ombo Temple and Edfu Temple, then continue towards Esna."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "コム・オンボ神殿とエドフ神殿を見学し、エスナへ向けて航行を続けます。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "The West Bank, including the Valley of the Kings, Medinet Habu and the Colossi of Memnon; Karnak and Luxor Temples in the afternoon."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "王家の谷、メディネト・ハブ、メムノンの巨像を含む西岸を見学し、午後はカルナック神殿とルクソール神殿を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Embark at noon and have lunch on board. Visit the High Dam and Philae Temple. Overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "正午に乗船し、船内で昼食。ハイダムとフィラエ神殿を見学します。アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 2,
+   "en": {
+    "title": "A day in Aswan",
+    "description": "A day on board in Aswan, with an optional visit to Abu Simbel. An afternoon sail around Aswan."
+   },
+   "ja": {
+    "title": "アスワンでの一日",
+    "description": "アスワンで船内に滞在する一日で、オプションでアブ・シンベルを訪れることができます。午後はアスワン周辺を帆走します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and a private island",
+    "description": "Sail to Kom Ombo and visit its temple, then return to Aswan. Visit the Botanical Garden, then sunset cocktails with entertainment on a private island."
+   },
+   "ja": {
+    "title": "コム・オンボとプライベート・アイランド",
+    "description": "コム・オンボへ航行して神殿を見学し、アスワンへ戻ります。植物園を訪れた後、プライベート・アイランドで催しを交えたサンセットカクテルをお楽しみいただきます。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail to Edfu and visit the Temple of Horus in the afternoon. Overnight in Edfu."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "エドフへ航行し、午後にホルス神殿を見学します。エドフで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 5,
+   "en": {
+    "title": "Luxor: Karnak and the Luxor Museum",
+    "description": "Visit the Karnak Temple and the Luxor Museum. Tea, dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール博物館",
+    "description": "カルナック神殿とルクソール博物館を見学します。お茶と夕食の後、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 6,
+   "en": {
+    "title": "Luxor West Bank and Dendera",
+    "description": "Visit the Valley of the Kings, Medinet Habu and the Colossi of Memnon early, then sail to Qena for the Temple of Dendera and back to Luxor."
+   },
+   "ja": {
+    "title": "ルクソール西岸とデンデラ",
+    "description": "早い時間に王家の谷、メディネト・ハブ、メムノンの巨像を訪れた後、ケナへ航行してデンデラ神殿を見学し、ルクソールへ戻ります。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor: the Tombs of the Nobles and Hatshepsut",
+    "description": "Visit the Valley of the Nobles, Deir el-Medina and the Temple of Hatshepsut, and Luxor Temple in the afternoon. Cocktails with entertainment as the boat sails in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:貴族の墓とハトシェプスト女王葬祭殿",
+    "description": "貴族の谷、デイル・エル・メディーナ、ハトシェプスト女王葬祭殿を訪れ、午後はルクソール神殿を見学します。船がルクソールを帆走する中、催しを交えたカクテルの時間があります。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZAL7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark at noon and have lunch on board. Visit the Luxor and Karnak Temples. Cocktails with entertainment as the boat sails in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "正午に乗船し、船内で昼食。ルクソール神殿とカルナック神殿を見学します。船がルクソールを帆走する中、催しを交えたカクテルの時間があります。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Esna",
+    "description": "Visit the Valley of the Kings, Deir el-Medina, the Temple of Hatshepsut and the Colossi of Memnon, then sail to Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸とエスナ",
+    "description": "王家の谷、デイル・エル・メディーナ、ハトシェプスト女王葬祭殿、メムノンの巨像を見学し、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Sail to Edfu and visit the Temple of Horus, then sail to Kom Ombo and visit its temple in the evening."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフへ航行してホルス神殿を見学した後、コム・オンボへ航行し、夕方に神殿を訪れます。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Sail to Aswan. Visit the High Dam, Philae Temple and the Botanical Garden. Overnight in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンへ航行します。ハイダム、フィラエ神殿、植物園を訪れます。アスワンで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and the Luxor Museum",
+    "description": "Embark at noon and have lunch on board. Visit the Karnak Temple and the Luxor Museum. Overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール博物館",
+    "description": "正午に乗船し、船内で昼食。カルナック神殿とルクソール博物館を見学します。ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank and Dendera",
+    "description": "Visit the Valley of the Kings, Medinet Habu and the Colossi of Memnon early, then sail to Qena for the Temple of Dendera and back to Luxor."
+   },
+   "ja": {
+    "title": "ルクソール西岸とデンデラ",
+    "description": "早い時間に王家の谷、メディネト・ハブ、メムノンの巨像を訪れた後、ケナへ航行してデンデラ神殿を見学し、ルクソールへ戻ります。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor: the Tombs of the Nobles and Hatshepsut",
+    "description": "Visit the Valley of the Nobles, Deir el-Medina and the Temple of Hatshepsut, and Luxor Temple in the afternoon. Cocktails with entertainment as the boat sails in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:貴族の墓とハトシェプスト女王葬祭殿",
+    "description": "貴族の谷、デイル・エル・メディーナ、ハトシェプスト女王葬祭殿を訪れ、午後はルクソール神殿を見学します。船がルクソールを帆走する中、催しを交えたカクテルの時間があります。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu",
+    "description": "Sail to Edfu and visit the Temple of Horus in the afternoon. Overnight in Edfu."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "エドフへ航行し、午後にホルス神殿を見学します。エドフで一泊します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 5,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Sail to Aswan. Visit the High Dam and Philae Temple."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "アスワンへ航行します。ハイダムとフィラエ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 6,
+   "en": {
+    "title": "Kom Ombo and a private island",
+    "description": "Sail to Kom Ombo and visit its temple, then return to Aswan. Visit the Botanical Garden, then sunset cocktails with entertainment on a private island."
+   },
+   "ja": {
+    "title": "コム・オンボとプライベート・アイランド",
+    "description": "コム・オンボへ航行して神殿を見学し、アスワンへ戻ります。植物園を訪れた後、プライベート・アイランドで催しを交えたサンセットカクテルをお楽しみいただきます。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 7,
+   "en": {
+    "title": "A day in Aswan",
+    "description": "A day on board in Aswan, with an optional visit to Abu Simbel. An afternoon sail around Aswan."
+   },
+   "ja": {
+    "title": "アスワンでの一日",
+    "description": "アスワンで船内に滞在する一日で、オプションでアブ・シンベルを訪れることができます。午後はアスワン周辺を帆走します。"
+   }
+  },
+  {
+   "vessel": "oberoi-zahra",
+   "schedule": "ZLA7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan",
+    "description": "Embark in Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "アスワンで乗船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 2,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Visit the High Dam, the Old Dam and Philae Temple, then sail towards Kom Ombo."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "ハイダム、アスワン・ロウダム、フィラエ神殿を見学し、コム・オンボへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 3,
+   "en": {
+    "title": "Kom Ombo and Gebel El Silsila",
+    "description": "Visit Kom Ombo Temple, with an optional stop at Gebel El Silsila."
+   },
+   "ja": {
+    "title": "コム・オンボとゲベル・エル・シルシラ",
+    "description": "コム・オンボ神殿を見学します。オプションでゲベル・エル・シルシラに立ち寄ることもできます。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu",
+    "description": "Visit Edfu Temple and sail towards Esna."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "エドフ神殿を見学し、エスナへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 5,
+   "en": {
+    "title": "Esna to Luxor",
+    "description": "Continue through Esna to Luxor."
+   },
+   "ja": {
+    "title": "エスナからルクソールへ",
+    "description": "エスナを通過してルクソールへ向かいます。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 6,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Visit Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 7,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens, Medinet Habu and the Colossi of Memnon."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、王妃の谷、メディネト・ハブ、メムノンの巨像を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "ASW-LXR-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and have lunch, then visit Karnak and Luxor Temples. Dinner and overnight in Luxor."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船して昼食の後、カルナック神殿とルクソール神殿を見学します。夕食をとり、ルクソールで一泊します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens, Medinet Habu and the Colossi of Memnon. Sail towards Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、王妃の谷、メディネト・ハブ、メムノンの巨像を見学します。エスナへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 3,
+   "en": {
+    "title": "Sailing to Edfu",
+    "description": "A peaceful day under sail towards Edfu, past the countryside, with a mooring at a Nile island."
+   },
+   "ja": {
+    "title": "エドフへ航行",
+    "description": "田園風景を眺めながらエドフへ向けて帆走する穏やかな一日で、ナイル川の島に停泊します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 4,
+   "en": {
+    "title": "Edfu",
+    "description": "Visit the Temple of Horus. Continue towards Kom Ombo, with dinner near Maneeha Island."
+   },
+   "ja": {
+    "title": "エドフ",
+    "description": "ホルス神殿を見学します。コム・オンボへ向けて航行し、マニーハ島の近くで夕食をとります。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 5,
+   "en": {
+    "title": "Gebel El Silsila and Kom Ombo",
+    "description": "An optional visit to Gebel El Silsila, then the double temple at Kom Ombo. Island mooring."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラとコム・オンボ",
+    "description": "オプションでゲベル・エル・シルシラを訪れた後、コム・オンボの二重神殿を見学します。島に停泊します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 6,
+   "en": {
+    "title": "Sailing towards Aswan",
+    "description": "Relax on board while sailing to Aswan; overnight near the Aswan bridge."
+   },
+   "ja": {
+    "title": "アスワンへ向けて航行",
+    "description": "船内でくつろぎながらアスワンへ航行し、アスワン橋の近くで停泊します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 7,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, the Old Dam and Philae Temple, then return for the last evening on board."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、アスワン・ロウダム、フィラエ神殿を見学した後、船に戻り、船上で最後の夜を過ごします。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat",
+   "schedule": "LXR-ASW-7",
+   "day_number": 8,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "ASW-LXR-4",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: Philae Temple",
+    "description": "Embark around 11:00, have lunch and visit Philae Temple. Afternoon tea, Nubian entertainment and dinner on board."
+   },
+   "ja": {
+    "title": "アスワン:フィラエ神殿",
+    "description": "11:00ごろに乗船して昼食の後、フィラエ神殿を見学します。アフタヌーンティー、ヌビアの催し、船内での夕食があります。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "ASW-LXR-4",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Ramadi Island",
+    "description": "Visit Kom Ombo Temple and sail to Ramadi Island, with an optional visit to Gebel El Silsila. Dinner on the island and overnight."
+   },
+   "ja": {
+    "title": "コム・オンボとラマディ島",
+    "description": "コム・オンボ神殿を見学し、ラマディ島へ航行します。オプションでゲベル・エル・シルシラを訪れることもできます。島で夕食をとり、停泊します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "ASW-LXR-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Luxor",
+    "description": "Visit the Temple of Horus at Edfu and continue to Luxor."
+   },
+   "ja": {
+    "title": "エドフとルクソール",
+    "description": "エドフのホルス神殿を見学し、ルクソールへ向かいます。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "ASW-LXR-4",
+   "day_number": 4,
+   "en": {
+    "title": "Luxor",
+    "description": "Explore the West Bank, then Karnak and Luxor Temples. Evening entertainment and dinner."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸を見学した後、カルナック神殿とルクソール神殿を訪れます。夜の催しと夕食があります。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "ASW-LXR-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor",
+    "description": "West Bank sightseeing in the morning, then embarkation at midday. After lunch, visit Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "午前中に西岸を観光し、正午ごろに乗船します。昼食後、カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Abu El Arabi Island",
+    "description": "Sail to Abu El Arabi Island and enjoy the quiet Nile landscapes at the island mooring."
+   },
+   "ja": {
+    "title": "アブ・エル・アラビ島",
+    "description": "アブ・エル・アラビ島へ航行し、島の停泊地で静かなナイルの風景をお楽しみいただきます。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Ramadi Island",
+    "description": "Visit Edfu Temple, then sail to Ramadi Island for dinner."
+   },
+   "ja": {
+    "title": "エドフとラマディ島",
+    "description": "エドフ神殿を見学した後、夕食のためラマディ島へ航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Gebel El Silsila, Kom Ombo and Aswan",
+    "description": "An optional visit to Gebel El Silsila, then Kom Ombo Temple and the sail to Aswan. Nubian entertainment."
+   },
+   "ja": {
+    "title": "ゲベル・エル・シルシラ、コム・オンボ、アスワン",
+    "description": "オプションでゲベル・エル・シルシラを訪れた後、コム・オンボ神殿を見学し、アスワンへ航行します。ヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-dahabeya-amirat-ii",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan",
+    "description": "Embark and explore Aswan."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "乗船し、アスワンを観光します。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Visit the temples of Kom Ombo and Edfu."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "コム・オンボ神殿とエドフ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Continue to Luxor, with sightseeing as the programme for the sailing sets out."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "ルクソールへ向かいます。観光は出航ごとのプログラムに沿って行います。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and visit Karnak and Luxor Temples. Afternoon tea, dinner and entertainment."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船し、カルナック神殿とルクソール神殿を見学します。アフタヌーンティー、夕食、催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "West Bank and Esna",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple. Sail to Esna. Welcome cocktail and dinner."
+   },
+   "ja": {
+    "title": "西岸とエスナ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学します。エスナへ航行します。ウェルカムカクテルと夕食があります。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit Edfu Temple and Kom Ombo Temple. Dinner and a galabiya party."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフ神殿とコム・オンボ神殿を見学します。夕食とガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, the granite quarries and Philae Temple. A felucca sail around Kitchener's Island, with views towards the Aga Khan Mausoleum. Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、花崗岩の石切り場、フィラエ神殿を見学します。ファルーカでキッチナー島を巡り、アガ・ハーン廟の方角を望みます。ヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-moon-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: felucca sail",
+    "description": "Embark, have lunch and take a felucca sail. Captain's welcome reception and Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン:ファルーカ帆走",
+    "description": "乗船して昼食の後、ファルーカ帆走をお楽しみいただきます。船長主催のウェルカムレセプションとヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Aswan and Kom Ombo",
+    "description": "Visit the High Dam, the granite quarries and Philae Temple. Sail to Kom Ombo and explore the temple, then continue towards Edfu. Galabiya party."
+   },
+   "ja": {
+    "title": "アスワンとコム・オンボ",
+    "description": "ハイダム、花崗岩の石切り場、フィラエ神殿を見学します。コム・オンボへ航行して神殿を訪れ、エドフへ向かいます。ガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Luxor",
+    "description": "Visit the Temple of Horus at Edfu and continue to Luxor. Dinner and evening entertainment."
+   },
+   "ja": {
+    "title": "エドフとルクソール",
+    "description": "エドフのホルス神殿を見学し、ルクソールへ向かいます。夕食と夜の催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and visit Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船し、カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "West Bank and Esna",
+    "description": "Visit the Valley of the Kings, the Valley of the Queens and Hatshepsut Temple, then sail to Esna."
+   },
+   "ja": {
+    "title": "西岸とエスナ",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を見学し、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the temples of Edfu and Kom Ombo."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフ神殿とコム・オンボ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the other Aswan sites in the programme."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、プログラムに含まれるその他のアスワンの見どころを訪れます。"
+   }
+  },
+  {
+   "vessel": "sonesta-nile-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan",
+    "description": "The High Dam, Philae Temple and a motorboat trip; welcome reception and Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿の見学とモーターボート乗船。ウェルカムレセプションとヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Visit both temples and sail towards Esna."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "2つの神殿を見学し、エスナへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "The Valley of the Kings, Medinet Habu, Hatshepsut Temple and the Colossi of Memnon; dinner on board."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、メディネト・ハブ、ハトシェプスト女王葬祭殿、メムノンの巨像を訪れます。夕食は船内でとります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation. The programme may continue with Karnak and Luxor Temples after disembarkation, so allow time before onward travel."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。下船後もカルナック神殿とルクソール神殿の観光が続く場合があるため、その後の移動には余裕をもってご予定ください。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and visit Karnak and Luxor Temples. Tea, dinner and entertainment on board."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船し、カルナック神殿とルクソール神殿を見学します。お茶、夕食、船内の催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the Valley of the Kings, Medinet Habu, Hatshepsut Temple and the Colossi of Memnon. Sail towards Esna; captain's welcome reception."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、メディネト・ハブ、ハトシェプスト女王葬祭殿、メムノンの巨像を見学します。エスナへ向けて航行し、船長主催のウェルカムレセプションがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit Edfu Temple, then sail to Kom Ombo; the day may include a ship tour or cooking demonstration. Visit Kom Ombo Temple; oriental entertainment in the evening."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフ神殿を見学し、コム・オンボへ航行します。この日は船内見学や料理の実演が含まれる場合があります。コム・オンボ神殿を訪れ、夜はオリエンタルショーがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam and Philae Temple, take a motorboat on the Nile and see the Botanical Garden, as scheduled. Nubian entertainment in the evening."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "日程に応じて、ハイダムとフィラエ神殿を見学し、モーターボートでナイル川を巡り、植物園を眺めます。夜はヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-st-george-i",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: felucca sail",
+    "description": "Embark and take a felucca sail; welcome cocktail and Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン:ファルーカ帆走",
+    "description": "乗船し、ファルーカ帆走をお楽しみいただきます。ウェルカムカクテルとヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Aswan and Kom Ombo",
+    "description": "The High Dam, the granite quarries, Philae Temple and Kom Ombo Temple; sail towards Edfu."
+   },
+   "ja": {
+    "title": "アスワンとコム・オンボ",
+    "description": "ハイダム、花崗岩の石切り場、フィラエ神殿、コム・オンボ神殿を見学し、エドフへ向けて航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Luxor",
+    "description": "Visit the Temple of Horus and sail towards Luxor; evening entertainment."
+   },
+   "ja": {
+    "title": "エドフとルクソール",
+    "description": "ホルス神殿を見学し、ルクソールへ向けて航行します。夜の催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation. The programme includes temple visits after disembarkation, so allow time before onward travel."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。下船後に神殿観光が行程に含まれるため、その後の移動には余裕をもってご予定ください。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and explore Karnak and Luxor Temples. Dinner and entertainment."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船し、カルナック神殿とルクソール神殿を見学します。夕食と催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "The Valley of the Kings, the Valley of the Queens and Hatshepsut Temple; sail towards Esna. Welcome reception."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "王家の谷、王妃の谷、ハトシェプスト女王葬祭殿を訪れ、エスナへ向けて航行します。ウェルカムレセプションがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the temples of Edfu and Kom Ombo; galabiya party in the evening."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフ神殿とコム・オンボ神殿を見学します。夜はガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, the granite quarries and Philae Temple. A felucca sail around Kitchener's Island, with views of the Aga Khan Mausoleum. Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、花崗岩の石切り場、フィラエ神殿を見学します。ファルーカでキッチナー島を巡り、アガ・ハーン廟を眺めます。ヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-star-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 1,
+   "en": {
+    "title": "Aswan: High Dam and Philae",
+    "description": "Embark, visit the High Dam and Philae Temple and take a motorboat ride. Captain's reception and Nubian entertainment."
+   },
+   "ja": {
+    "title": "アスワン:ハイダムとフィラエ神殿",
+    "description": "乗船し、ハイダムとフィラエ神殿を見学して、モーターボートに乗ります。船長主催のレセプションとヌビアの催しがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 2,
+   "en": {
+    "title": "Kom Ombo and Edfu",
+    "description": "Visit both temples, then sail through Esna towards Luxor. Afternoon tea, dinner and a galabiya party."
+   },
+   "ja": {
+    "title": "コム・オンボとエドフ",
+    "description": "2つの神殿を見学し、エスナを通ってルクソールへ向けて航行します。アフタヌーンティー、夕食、ガラベーヤ・パーティーがあります。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 3,
+   "en": {
+    "title": "Luxor",
+    "description": "Explore the West Bank: the Valley of the Kings and Queens, Hatshepsut Temple and the Colossi of Memnon. The East Bank temples follow, as the programme for the sailing sets out."
+   },
+   "ja": {
+    "title": "ルクソール",
+    "description": "西岸の王家の谷と王妃の谷、ハトシェプスト女王葬祭殿、メムノンの巨像を見学します。東岸の神殿は、出航ごとのプログラムに沿ってその後訪れます。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "ASW-LXR-3",
+   "day_number": 4,
+   "en": {
+    "title": "Disembarkation in Luxor",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "ルクソールで下船",
+    "description": "朝食後、下船します。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 1,
+   "en": {
+    "title": "Luxor: Karnak and Luxor Temples",
+    "description": "Embark and visit Karnak and Luxor Temples."
+   },
+   "ja": {
+    "title": "ルクソール:カルナック神殿とルクソール神殿",
+    "description": "乗船し、カルナック神殿とルクソール神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 2,
+   "en": {
+    "title": "Luxor West Bank",
+    "description": "Visit the West Bank, then sail to Esna."
+   },
+   "ja": {
+    "title": "ルクソール西岸",
+    "description": "西岸を見学した後、エスナへ航行します。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 3,
+   "en": {
+    "title": "Edfu and Kom Ombo",
+    "description": "Visit the temples of Edfu and Kom Ombo."
+   },
+   "ja": {
+    "title": "エドフとコム・オンボ",
+    "description": "エドフ神殿とコム・オンボ神殿を見学します。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 4,
+   "en": {
+    "title": "Aswan",
+    "description": "Visit the High Dam, Philae Temple and the other Aswan sites in the programme."
+   },
+   "ja": {
+    "title": "アスワン",
+    "description": "ハイダム、フィラエ神殿、プログラムに含まれるその他のアスワンの見どころを訪れます。"
+   }
+  },
+  {
+   "vessel": "sonesta-sun-goddess",
+   "schedule": "LXR-ASW-4",
+   "day_number": 5,
+   "en": {
+    "title": "Disembarkation in Aswan",
+    "description": "Breakfast and disembarkation."
+   },
+   "ja": {
+    "title": "アスワンで下船",
+    "description": "朝食後、下船します。"
+   }
+  }
+ ]
+}

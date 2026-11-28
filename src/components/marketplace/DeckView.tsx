@@ -1,21 +1,26 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { useHydrated } from "@/components/ds/lib/useHydrated";
-import { DECK_STATE_TEXT, deckState, sharedText } from "@/lib/marketplace/deck-view";
+import { amenityText, cabinDeckText } from "@/content/vessel-terms";
+import { spaceLabel } from "@/lib/catalogue/mooring";
+import { deckState } from "@/lib/marketplace/deck-view";
 import { deckGroups, type BookingMode, type VesselCabin } from "@/lib/marketplace/vessel";
 import styles from "./DeckView.module.css";
 
 const TONE = { instant: styles.instant, confirm: styles.confirm, sold_out: styles.soldOut };
 
+type Say = (key: string, values?: Record<string, string | number>) => string;
+
 /** A cabin type's facts in words; facts nobody has confirmed (`unverified`) are left out. */
-export const cabinFacts = (c: VesselCabin) =>
+export const cabinFacts = (c: VesselCabin, t: Say) =>
   [
-    c.sizeM2 && !c.unverified?.includes("size") ? `${c.sizeM2} m²` : null,
+    c.sizeM2 && !c.unverified?.includes("size") ? t("cabins.size", { n: String(c.sizeM2) }) : null,
     c.unverified?.includes("bed") ? null : c.bed,
-    c.unverified?.includes("max_guests") ? null : `sleeps ${c.maxOccupancy}`,
+    c.unverified?.includes("max_guests") ? null : t("deckView.sleeps", { n: c.maxOccupancy }),
     c.unverified?.includes("view") ? null : c.view,
-    c.balcony ? "private balcony" : null,
+    c.balcony ? t("deckView.balcony") : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -38,12 +43,26 @@ export function DeckView({
   modes?: Record<string, BookingMode>;
   chooseInForm?: boolean;
 }) {
+  const t = useTranslations("vesselPage");
+  const locale = useLocale();
+  const tag = locale === "en" ? "en-GB" : locale;
+  const say: Say = (k, x) => t(k, x);
+  const deckTitle = (d: string) => cabinDeckText(d, locale) ?? t("deckView.deck", { name: d });
   const groups = deckGroups(cabins);
   const js = useHydrated();
   const [deck, setDeck] = useState(0);
   const [picked, setPicked] = useState<string | null>(null);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
-  const shared = sharedText(maxGuests, sharedSpaces);
+  // The honest size signal, as on the drawn plan: how many guests share the spaces everyone shares.
+  const names = sharedSpaces.map((s) => (t.has(`spaces.${s}`) ? t(`spaces.${s}`) : spaceLabel(s)).toLocaleLowerCase(tag));
+  const list = new Intl.ListFormat(tag, { type: "conjunction" }).format(names);
+  const shared = !maxGuests
+    ? names.length
+      ? t("deck.shared", { list })
+      : null
+    : names.length
+      ? t("deck.sharedGuests", { n: maxGuests, list })
+      : t("deck.sharedGuestsOnly", { n: maxGuests });
   const g = groups[deck]!;
   const cabin = g.cabins.find((c) => c.id === picked) ?? null;
   const state = (c: VesselCabin) => (modes?.[c.id] ? deckState(modes[c.id]!) : null);
@@ -71,19 +90,17 @@ export function DeckView({
 
   return (
     <div className={styles.view}>
-      <p className={styles.schematic}>
-        Schematic: not a floor plan. It shows which deck each cabin type is on; your cabin number is assigned by the operator.
-      </p>
+      <p className={styles.schematic}>{t("deckView.schematic")}</p>
       {shared ? <p>{shared}</p> : null}
       {!js ? (
         <ol className={styles.list}>
           {groups.map((d) => (
             <li key={d.deck}>
-              <h3>{d.deck} deck</h3>
+              <h3>{deckTitle(d.deck)}</h3>
               <ul>
                 {d.cabins.map((c) => (
                   <li key={c.id}>
-                    <strong>{c.name}</strong> <span>{cabinFacts(c)}</span>
+                    <strong>{c.name}</strong> <span>{cabinFacts(c, say)}</span>
                   </li>
                 ))}
               </ul>
@@ -108,14 +125,14 @@ export function DeckView({
                     className={i === deck ? styles.deckOn : styles.deckBand}
                   />
                   <text x={200} y={top + 16} className={i === deck ? styles.deckLabelOn : styles.deckLabel}>
-                    {d.deck}
+                    {cabinDeckText(d.deck, locale) ?? d.deck}
                   </text>
                 </g>
               );
             })}
             <path d={`M20 ${groups.length * 28 + 6}h360l-24 14h-312z`} className={styles.hull} />
           </svg>
-          <div className={styles.tabs} role="tablist" aria-label="Decks">
+          <div className={styles.tabs} role="tablist" aria-label={t("deckView.decks")}>
             {groups.map((d, i) => (
               <button
                 key={d.deck}
@@ -131,7 +148,7 @@ export function DeckView({
                 onClick={() => go(i)}
                 onKeyDown={onKey}
               >
-                {d.deck} deck
+                {deckTitle(d.deck)}
               </button>
             ))}
           </div>
@@ -148,7 +165,7 @@ export function DeckView({
                       onClick={() => setPicked(c.id === picked ? null : c.id)}
                     >
                       <strong>{c.name}</strong>
-                      {s ? <small>{DECK_STATE_TEXT[s]}</small> : null}
+                      {s ? <small>{t(`deckView.state.${s}`)}</small> : null}
                     </button>
                   </li>
                 );
@@ -158,17 +175,21 @@ export function DeckView({
               {cabin ? (
                 <>
                   <h3>{cabin.name}</h3>
-                  <p>{cabinFacts(cabin)}</p>
-                  {cabin.amenities.length ? <p className={styles.muted}>{cabin.amenities.join(", ")}</p> : null}
-                  {state(cabin) ? <p>{DECK_STATE_TEXT[state(cabin)!]}.</p> : null}
+                  <p>{cabinFacts(cabin, say)}</p>
+                  {cabin.amenities.length ? (
+                    <p className={styles.muted}>
+                      {cabin.amenities.map((a) => amenityText(a, locale)).join(locale === "ja" ? "、" : ", ")}
+                    </p>
+                  ) : null}
+                  {state(cabin) ? <p>{t("deckView.stateSentence", { state: t(`deckView.state.${state(cabin)!}`) })}</p> : null}
                   {chooseInForm && state(cabin) !== "sold_out" ? (
                     <button type="button" className={styles.choose} onClick={() => choose(cabin.id)}>
-                      Choose {cabin.name}
+                      {t("deckView.choose", { name: cabin.name })}
                     </button>
                   ) : null}
                 </>
               ) : (
-                <p className={styles.muted}>Choose a cabin type to see what it’s like.</p>
+                <p className={styles.muted}>{t("deckView.hint")}</p>
               )}
             </div>
           </div>
@@ -176,7 +197,7 @@ export function DeckView({
             <ul className={styles.legend}>
               {(["instant", "confirm", "sold_out"] as const).map((s) => (
                 <li key={s}>
-                  <span className={TONE[s]} /> {DECK_STATE_TEXT[s]}
+                  <span className={TONE[s]} /> {t(`deckView.state.${s}`)}
                 </li>
               ))}
             </ul>

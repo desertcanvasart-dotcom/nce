@@ -1,3 +1,4 @@
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { ListingGrid } from "@/components/marketplace/ListingGrid";
 import type { VesselType } from "@/components/ds/lib/types";
@@ -25,23 +26,25 @@ export function ClosingCruises({
   title?: string;
   picked?: ListingVessel[];
 }) {
+  const t = useTranslations("editorial");
+  const locale = useLocale();
   const facet = facetBySlug(listing.href.replace(/^\/cruises\/|\/$/g, ""));
   // Each type's featured vessel leads (Steam Ship Sudan for paddle steamers), then the listing's own order.
   const fits =
     picked ?? featuredFirst(sortListing(all.filter((v) => (facet ? facet.match(v) : true) && (!type || v.type === type))));
   const shown = fits.slice(0, 3);
-  const heading = title ?? closingHeading(shown);
+  const heading = title ?? closingHeading(shown, locale);
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
       <h2 id="closing-cruises">{heading}</h2>
       {shown.length ? (
-        <ListingGrid cards={shown.map(toCard)} />
+        <ListingGrid cards={shown.map((v) => toCard(v, locale))} />
       ) : (
-        <p className={styles.muted}>No cruises of this kind are published yet.</p>
+        <p className={styles.muted}>{t("noCruises")}</p>
       )}
       <p>
         <Link href={listing.href} className={styles.more}>
-          See all: {listing.anchor}
+          {t("seeAll", { anchor: listing.anchor })}
         </Link>
       </p>
     </section>

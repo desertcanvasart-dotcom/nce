@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PostList, TopicNav } from "@/components/editorial/PostList";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
@@ -15,9 +15,6 @@ type Props = { params: Promise<{ locale: Locale }> };
 // Static, refreshed when content is published, or every ten minutes (PERF-010).
 export const revalidate = 600;
 
-const TITLE = "Nilecruz blog";
-const DESCRIPTION = "News, season updates and stories from the Nile, newest first.";
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -26,7 +23,14 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const posts = await blogPosts(locale);
-  return pageMetadata({ locale, path: BLOG_URL, title: TITLE, description: DESCRIPTION, noindex: !listIndexable(posts) });
+  const t = await getTranslations({ locale, namespace: "blog" });
+  return pageMetadata({
+    locale,
+    path: BLOG_URL,
+    title: t("title"),
+    description: t("description"),
+    noindex: !listIndexable(posts),
+  });
 }
 
 /** ADR-105: the blog index. Dated posts, newest first; evergreen advice lives in the guide. */
@@ -34,30 +38,29 @@ export default async function BlogIndex({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const posts = await blogPosts(locale);
+  const t = await getTranslations({ locale, namespace: "blog" });
+  const common = await getTranslations({ locale, namespace: "common" });
   return (
     <article className={styles.page}>
       <Breadcrumbs
         locale={locale}
         trail={[
-          { name: "Home", path: "/" },
-          { name: "Blog", path: BLOG_URL },
+          { name: common("home"), path: "/" },
+          { name: t("crumb"), path: BLOG_URL },
         ]}
       />
       <header className={styles.head}>
-        <h1 className={styles.title}>{TITLE}</h1>
-        <p className={styles.lead}>
-          News, season updates and stories from the river. For planning advice that holds from year to year, read the{" "}
-          <Link href="/nile-cruise-guide/">Nile cruise guide</Link>.
-        </p>
+        <h1 className={styles.title}>{t("title")}</h1>
+        <p className={styles.lead}>{t.rich("lead", { link: (c) => <Link href="/nile-cruise-guide/">{c}</Link> })}</p>
       </header>
       <TopicNav posts={posts} />
-      <PostList posts={posts} title="Earlier posts" />
+      <PostList posts={posts} title={t("earlier")} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: jsonLdScript(
             collectionJsonLd(
-              { name: TITLE, description: DESCRIPTION, url: absoluteUrl(locale, BLOG_URL) },
+              { name: t("title"), description: t("description"), url: absoluteUrl(locale, BLOG_URL) },
               posts.map((p) => ({ name: p.title, url: absoluteUrl(locale, postUrl(p.slug)) })),
             ),
           ),

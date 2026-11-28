@@ -135,18 +135,17 @@ type BookingRow = {
   booking_availability: string;
   enquiry_partner_name: string | null;
   enquiry_partner_email: string | null;
-  margin_included: boolean;
 };
-type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner; includesMargin: boolean };
-const SELLS: Booking = { availability: "available_through_nilecruz", includesMargin: true };
+type Booking = { availability: BookingAvailability; enquiry?: EnquiryPartner };
+const SELLS: Booking = { availability: "available_through_nilecruz" };
 /**
- * Who can book each vessel, and whether its price includes our margin (6 Nov 2026), read on their own like the price
- * columns: a database a migration behind the code reads as "available through Nilecruz", margin included.
+ * Who can book each vessel, read on their own like the price
+ * columns: a database a migration behind the code reads as "available through Nilecruz".
  */
 async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?: string): Promise<Map<string, Booking>> {
   let q = db
     .from("vessels")
-    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email, margin_included")
+    .select("id, booking_availability, enquiry_partner_name, enquiry_partner_email")
     .in("visibility", ["published", "showcase"]);
   if (slug) q = q.eq("slug", slug);
   const { data, error } = await q;
@@ -163,7 +162,6 @@ async function bookingRows(db: NonNullable<ReturnType<typeof visitorDb>>, slug?:
           r.enquiry_partner_name && r.enquiry_partner_email
             ? { name: r.enquiry_partner_name, email: r.enquiry_partner_email }
             : undefined,
-        includesMargin: r.margin_included !== false,
       },
     ]),
   );
@@ -190,9 +188,10 @@ async function residentRow(db: NonNullable<ReturnType<typeof visitorDb>>, slug: 
 }
 /** The price the public sees: none at all for a vessel Nilecruz can't sell. */
 const shownPrice = (row: PriceRow | undefined, b: Booking, today: string) =>
-  sellsThroughUs(b.availability) ? publicPrice({ ...priceOf(row), priceIncludesMargin: b.includesMargin }, today) : ON_REQUEST;
+  sellsThroughUs(b.availability) ? publicPrice(priceOf(row), today) : ON_REQUEST;
 
-async function loadListing(): Promise<ListingVessel[]> {
+/** The cards' words (summary, photo description) are in the page's language where written, else in English. */
+async function loadListing(locale: Locale = "en"): Promise<ListingVessel[]> {
   const db = visitorDb();
   // Builds without a database (Lighthouse in CI) render an empty marketplace; it fills on the first refresh.
   if (!db) return [];
@@ -217,7 +216,9 @@ async function loadListing(): Promise<ListingVessel[]> {
     let image: ListingVessel["image"];
     if (photo) {
       const { data: s } = await db.storage.from("media").createSignedUrl(photo.storage_path, PHOTO_SECONDS);
-      const alt = photo.media_translations.find((t) => t.locale === "en")?.alt;
+      const alt =
+        photo.media_translations.find((t) => t.locale === locale)?.alt ??
+        photo.media_translations.find((t) => t.locale === "en")?.alt;
       if (s?.signedUrl && alt) image = { src: s.signedUrl, alt, width: photo.width, height: photo.height };
     }
     const evaluation = publishable(v.evaluations as EvaluationRow[], "en");
@@ -237,7 +238,10 @@ async function loadListing(): Promise<ListingVessel[]> {
       beamM: v.beam_m === null ? null : Number(v.beam_m),
       sample: v.is_sample,
       showcase: v.visibility === "showcase",
-      summary: v.vessel_translations.find((t) => t.locale === "en")?.summary ?? null,
+      summary:
+        v.vessel_translations.find((t) => t.locale === locale)?.summary ??
+        v.vessel_translations.find((t) => t.locale === "en")?.summary ??
+        null,
       image,
       evaluation: evaluation?.score,
       price: shownPrice(publicPrices.get(v.id), bookings.get(v.id) ?? SELLS, today),
@@ -266,7 +270,8 @@ async function loadListing(): Promise<ListingVessel[]> {
   return out;
 }
 
-export const publicListing = unstable_cache(loadListing, ["public-listing-v5"], {
+// The language is part of the cache key, as for a vessel's page.
+export const publicListing = unstable_cache(loadListing, ["public-listing-v6"], {
   tags: [CATALOGUE_TAG],
   revalidate: CATALOGUE_SECONDS,
 });

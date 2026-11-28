@@ -109,7 +109,7 @@ export async function StopCruises({
   return (
     <section className={styles.closing} aria-labelledby="closing-cruises">
       <h2 id="closing-cruises">{t("cruises.heading")}</h2>
-      <ListingGrid cards={fits.slice(0, 3).map(toCard)} />
+      <ListingGrid cards={fits.slice(0, 3).map((v) => toCard(v, locale))} />
     </section>
   );
 }

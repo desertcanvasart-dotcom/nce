@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import type { BookingMode, VesselCabin, VesselPage } from "@/lib/marketplace/vessel";
 import { DeckLayoutView } from "./DeckLayoutView";
 import { DeckView } from "./DeckView";
@@ -16,13 +17,8 @@ export function DeckPlan(props: {
   chooseInForm?: boolean;
   plan?: VesselPage["deckPlan"];
 }) {
-  if (!props.cabins.length)
-    return (
-      <p className={styles.note}>
-        The operator hasn’t listed this vessel’s cabin types yet, so there is no deck view. Ask for an offer to learn what each
-        cabin is like.
-      </p>
-    );
+  const t = useTranslations("vesselPage");
+  if (!props.cabins.length) return <p className={styles.note}>{t("deckView.empty")}</p>;
   const { plan, ...rest } = props;
   if (plan?.layout && !props.modes)
     return (
@@ -37,16 +33,16 @@ export function DeckPlan(props: {
       </VesselMessages>
     );
   return (
-    <>
+    <VesselMessages>
       <DeckView {...rest} />
       {plan?.original ? (
         <p>
           <a href={plan.original.url} download={plan.original.name}>
-            Download the official deck plan
+            {t("deck.download")}
           </a>
-          {plan.original.credit ? ` (${plan.original.credit})` : null}
+          {plan.original.credit ? t("deckView.credit", { credit: plan.original.credit }) : null}
         </p>
       ) : null}
-    </>
+    </VesselMessages>
   );
 }

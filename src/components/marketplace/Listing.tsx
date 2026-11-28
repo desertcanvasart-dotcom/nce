@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { CruiseSearch } from "@/components/ds/CruiseSearch/CruiseSearch";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -5,10 +6,12 @@ import {
   pricedCount,
   collectionJsonLd,
   FACETS,
+  facetText,
   jsonLdScript,
   searchRoutes,
   toCard,
   VESSEL_OPTIONS,
+  vesselOptions,
   type ListingVessel,
 } from "@/lib/marketplace/listing";
 import { absoluteUrl } from "@/lib/seo/metadata";
@@ -40,12 +43,15 @@ type Props = {
   propulsion?: Propulsion;
 };
 
-const PROPULSION_TEXT: Record<Propulsion, string> = { motor: "Motor", wind: "Wind", steam: "Steam" };
-
 /** A /cruises/ listing (PAGE-060–067): breadcrumb, H1, search, the facet links and the cards. */
 export function Listing(p: Props) {
-  const routes = searchRoutes(p.all);
-  const vessels = VESSEL_OPTIONS.map((o) => ({ id: o.id, label: o.label, icon: o.type ? vesselIcon[o.type] : undefined }));
+  const t = useTranslations("listing");
+  const routes = searchRoutes(p.all, p.locale);
+  const vessels = vesselOptions(p.locale).map((o) => ({
+    id: o.id,
+    label: o.label,
+    icon: o.type ? vesselIcon[o.type] : undefined,
+  }));
   const json = collectionJsonLd(
     { name: p.h1, description: p.description, url: absoluteUrl(p.locale, p.path) },
     p.vessels.map((v) => ({ name: v.name, url: absoluteUrl(p.locale, `/cruises/${v.slug}`) })),
@@ -69,36 +75,40 @@ export function Listing(p: Props) {
           matchCount={p.matchCount}
         />
       </div>
-      <nav aria-label="Cruise types and routes" className={styles.facets}>
+      <nav aria-label={t("facetsLabel")} className={styles.facets}>
         <ul>
           {FACETS.map((f) => (
             <li key={f.slug}>
-              {p.current === f.slug ? <span aria-current="page">{f.h1}</span> : <Link href={`/cruises/${f.slug}/`}>{f.h1}</Link>}
+              {p.current === f.slug ? (
+                <span aria-current="page">{facetText(f, p.locale).h1}</span>
+              ) : (
+                <Link href={`/cruises/${f.slug}/`}>{facetText(f, p.locale).h1}</Link>
+              )}
             </li>
           ))}
           <li>
             {p.sightseeing ? (
-              <span aria-current="page">With sightseeing</span>
+              <span aria-current="page">{t("withSightseeing")}</span>
             ) : (
-              <Link href="/cruises/?sightseeing=1">With sightseeing</Link>
+              <Link href="/cruises/?sightseeing=1">{t("withSightseeing")}</Link>
             )}
           </li>
         </ul>
       </nav>
       {/* What drives the vessel, from its own data: an icon and a word for each, never colour alone. */}
-      <nav aria-label="Propulsion" className={styles.facets}>
+      <nav aria-label={t("propulsionLabel")} className={styles.facets}>
         <ul>
           {PROPULSIONS.map((k) => (
             <li key={k}>
               {p.propulsion === k ? (
                 <span aria-current="page">
                   <Icon name={propulsionIcon[k]} />
-                  {PROPULSION_TEXT[k]}
+                  {t(`propulsion.${k}`)}
                 </span>
               ) : (
                 <Link href={`/cruises/?propulsion=${k}`}>
                   <Icon name={propulsionIcon[k]} />
-                  {PROPULSION_TEXT[k]}
+                  {t(`propulsion.${k}`)}
                 </Link>
               )}
             </li>
@@ -106,16 +116,15 @@ export function Listing(p: Props) {
         </ul>
       </nav>
       <p className={styles.count}>
-        {p.vessels.length} vessel{p.vessels.length === 1 ? "" : "s"}
-        {p.matchCount !== undefined ? ` · ${p.matchCount} matching departure${p.matchCount === 1 ? "" : "s"}` : ""}
+        {t("vessels", { count: p.vessels.length })}
+        {p.matchCount !== undefined ? ` · ${t("departures", { count: p.matchCount })}` : ""}
       </p>
-      {p.vessels.length ? <ListingGrid cards={p.vessels.map(toCard)} /> : <p className={styles.empty}>{p.empty}</p>}
-      <p className={styles.note}>
-        Starting prices are per person, in euros: a guide, not a quote. All prices we publish and quote already include our
-        margin. Sorted by starting price: cruises with “Price on request” have no price to sort by, so they come after the others,
-        by name ({pricedCount(p.vessels)} of {p.vessels.length} show a price). Crew gratuities are separate: usually €5 to €10 per
-        person, per night, depending on the cruise. Check each cruise’s offer.
-      </p>
+      {p.vessels.length ? (
+        <ListingGrid cards={p.vessels.map((v) => toCard(v, p.locale))} />
+      ) : (
+        <p className={styles.empty}>{p.empty}</p>
+      )}
+      <p className={styles.note}>{t("note", { priced: pricedCount(p.vessels), total: p.vessels.length })}</p>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(json) }} />
     </div>
   );

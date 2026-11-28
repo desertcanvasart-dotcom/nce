@@ -100,6 +100,35 @@ export function expiryProblem(hours: number): string | null {
 // ── Passengers at acceptance (ADR-088, DATA-020) ────────────────────────────────────────────────────────
 export type Passenger = { full_name: string; date_of_birth: string; nationality?: string };
 
+export type PassengersIssue =
+  | { key: "count"; total: number }
+  | { key: "missing" | "future" | "nationality" }
+  | { key: "ages"; adults: number; childAges: number[] };
+
+/** What is wrong with the guests, as data, for forms that say it in the visitor's language. */
+export function passengersIssue(
+  passengers: Passenger[],
+  departsOn: string,
+  offered: { adults: number; childAges: number[] },
+  ageOn: (dob: string, on: string) => number,
+): PassengersIssue | null {
+  const total = offered.adults + offered.childAges.length;
+  if (passengers.length !== total) return { key: "count", total };
+  if (passengers.some((p) => p.full_name.trim().length < 2 || !/^\d{4}-\d{2}-\d{2}$/.test(p.date_of_birth))) {
+    return { key: "missing" };
+  }
+  const ages = passengers.map((p) => ageOn(p.date_of_birth, departsOn));
+  if (ages.some((a) => a < 0)) return { key: "future" };
+  const adults = ages.filter((a) => a >= ADULT_AGE).length;
+  const kids = ages.filter((a) => a < ADULT_AGE).sort((a, b) => a - b);
+  if (adults !== offered.adults || kids.join(",") !== [...offered.childAges].sort((a, b) => a - b).join(",")) {
+    return { key: "ages", adults: offered.adults, childAges: [...offered.childAges].sort((a, b) => a - b) };
+  }
+  const nat = passengers[0]?.nationality?.trim();
+  if (nat && !/^[A-Za-z]{2}$/.test(nat)) return { key: "nationality" };
+  return null;
+}
+
 /** Ages on the departure date must match the offer: the same number of adults and the same children's ages. */
 export function passengersProblem(
   passengers: Passenger[],
@@ -107,23 +136,22 @@ export function passengersProblem(
   offered: { adults: number; childAges: number[] },
   ageOn: (dob: string, on: string) => number,
 ): string | null {
-  const total = offered.adults + offered.childAges.length;
-  if (passengers.length !== total) return `Give the name and date of birth of all ${total} guests.`;
-  if (passengers.some((p) => p.full_name.trim().length < 2 || !/^\d{4}-\d{2}-\d{2}$/.test(p.date_of_birth))) {
-    return "Every guest needs a full name and a date of birth.";
+  const issue = passengersIssue(passengers, departsOn, offered, ageOn);
+  if (!issue) return null;
+  switch (issue.key) {
+    case "count":
+      return `Give the name and date of birth of all ${issue.total} guests.`;
+    case "missing":
+      return "Every guest needs a full name and a date of birth.";
+    case "future":
+      return "A date of birth is after the departure.";
+    case "nationality":
+      return "Give the lead passenger’s nationality as a two-letter country code, such as GB.";
+    case "ages":
+      return `On the departure date this offer is for ${issue.adults} adult${issue.adults === 1 ? "" : "s"}${
+        issue.childAges.length ? ` and children aged ${issue.childAges.join(", ")}` : ""
+      }. Check the dates of birth, or ask the operator for an updated offer.`;
   }
-  const ages = passengers.map((p) => ageOn(p.date_of_birth, departsOn));
-  if (ages.some((a) => a < 0)) return "A date of birth is after the departure.";
-  const adults = ages.filter((a) => a >= ADULT_AGE).length;
-  const kids = ages.filter((a) => a < ADULT_AGE).sort((a, b) => a - b);
-  if (adults !== offered.adults || kids.join(",") !== [...offered.childAges].sort((a, b) => a - b).join(",")) {
-    return `On the departure date this offer is for ${offered.adults} adult${offered.adults === 1 ? "" : "s"}${
-      offered.childAges.length ? ` and children aged ${[...offered.childAges].sort((a, b) => a - b).join(", ")}` : ""
-    }. Check the dates of birth, or ask the operator for an updated offer.`;
-  }
-  const nat = passengers[0]?.nationality?.trim();
-  if (nat && !/^[A-Za-z]{2}$/.test(nat)) return "Give the lead passenger’s nationality as a two-letter country code, such as GB.";
-  return null;
 }
 
 // ── The bookable gate, explained (DASH-BND-001) ─────────────────────────────────────────────────────────

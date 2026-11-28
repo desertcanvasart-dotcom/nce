@@ -12,7 +12,9 @@ import { getSession, type Session } from "./session";
 /** Signed in, or sent to sign-in and brought back afterwards. */
 export async function requireUser(returnTo = "/dashboard/"): Promise<Session> {
   const session = await getSession();
-  if (!session) redirect(`/account/sign-in/?next=${encodeURIComponent(returnTo)}`);
+  // A Japanese page's visitor signs in on the Japanese sign-in page.
+  const prefix = returnTo.startsWith("/ja/") ? "/ja" : "";
+  if (!session) redirect(`${prefix}/account/sign-in/?next=${encodeURIComponent(returnTo)}`);
   return session;
 }
 

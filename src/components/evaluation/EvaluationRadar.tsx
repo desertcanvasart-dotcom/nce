@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { radarPoints, ring, type RadarAxis } from "@/lib/evaluation/radar";
 import styles from "./EvaluationRadar.module.css";
 
@@ -6,14 +7,16 @@ import styles from "./EvaluationRadar.module.css";
  * no JavaScript; with reduced motion it simply appears. The table beside it stays the accessible, exact version.
  */
 export function EvaluationRadar({ axes, score }: { axes: RadarAxis[]; score: number }) {
+  const t = useTranslations("vesselPage.radar");
   const size = 320;
   const centre = size / 2;
   const radius = 110;
   const pad = 100;
   const pts = radarPoints(axes, radius, centre);
-  const label = `Evaluation ${Math.round(score)} out of 100: ${axes
-    .map((a) => `${a.label} ${a.points.toFixed(1)} of ${a.weight}`)
-    .join(", ")}.`;
+  const label = t("label", {
+    score: Math.round(score),
+    list: axes.map((a) => t("item", { label: a.label, points: a.points.toFixed(1), weight: a.weight })).join(t("sep")),
+  });
   return (
     <figure className={styles.radar}>
       {/* Side margins so the longest labels ("Cruise experience") fit inside the drawing. */}
@@ -48,7 +51,7 @@ export function EvaluationRadar({ axes, score }: { axes: RadarAxis[]; score: num
           ))}
         </g>
       </svg>
-      <figcaption className={styles.caption}>Each point reaches the rim at a full mark for that dimension.</figcaption>
+      <figcaption className={styles.caption}>{t("caption")}</figcaption>
     </figure>
   );
 }

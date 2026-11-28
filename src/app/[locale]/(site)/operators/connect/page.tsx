@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { Breadcrumbs } from "@/components/marketplace/Breadcrumbs";
 import styles from "@/components/editorial/editorial.module.css";
-import { BOOKING_RULE, FAQS, FOR_IT, GLOSSARY, INTRO, NEVER, START, WAYS, type Shot } from "@/content/operator-connect";
+import { connectFor, type Shot } from "@/content/operator-connect";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { jsonLdScript } from "@/lib/marketplace/listing";
@@ -20,7 +20,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
-  return pageMetadata({ locale, path: URL, title: INTRO.seoTitle, description: INTRO.seoDescription });
+  const { intro } = connectFor(locale);
+  return pageMetadata({ locale, path: URL, title: intro.seoTitle, description: intro.seoDescription });
 }
 
 /** A screenshot shows once its file is in public/ (taken by scripts/operator-shots.ts from sample data). */
@@ -42,32 +43,33 @@ function Figure({ shot }: { shot: Shot }) {
 export default async function OperatorsConnect({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const { ui, intro, glossary, ways, bookingRule, never, start, faqs, forIt } = connectFor(locale);
   const faq = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+    mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
   };
   return (
     <article className={styles.page}>
       <Breadcrumbs
         locale={locale}
         trail={[
-          { name: "Home", path: "/" },
-          { name: "How operators connect", path: URL },
+          { name: ui.home, path: "/" },
+          { name: ui.crumb, path: URL },
         ]}
       />
       <header className={styles.head}>
         <p className={styles.flags}>
-          <span>Draft for review</span>
+          <span>{ui.draft}</span>
         </p>
-        <h1 className={styles.title}>{INTRO.title}</h1>
-        <p className={styles.lead}>{INTRO.lead}</p>
+        <h1 className={styles.title}>{intro.title}</h1>
+        <p className={styles.lead}>{intro.lead}</p>
       </header>
 
       <section className={styles.section} aria-labelledby="words">
-        <h2 id="words">A few words we use</h2>
+        <h2 id="words">{ui.words}</h2>
         <dl className={styles.faqs}>
-          {GLOSSARY.map((g) => (
+          {glossary.map((g) => (
             <div key={g.term}>
               <dt>{g.term}</dt>
               <dd>{g.meaning}</dd>
@@ -77,27 +79,27 @@ export default async function OperatorsConnect({ params }: Props) {
       </section>
 
       <section className={own.wide} aria-labelledby="ways">
-        <h2 id="ways">The six ways at a glance</h2>
+        <h2 id="ways">{ui.glance}</h2>
         <div className={own.tableWrap}>
           <table className={own.table}>
-            <caption className="visually-hidden">The six ways to connect, compared</caption>
+            <caption className="visually-hidden">{ui.glanceCaption}</caption>
             <thead>
               <tr>
-                <th scope="col">Way</th>
-                <th scope="col">Work for you</th>
-                <th scope="col">How fresh</th>
-                <th scope="col">How guests book</th>
+                <th scope="col">{ui.way}</th>
+                <th scope="col">{ui.effort}</th>
+                <th scope="col">{ui.freshness}</th>
+                <th scope="col">{ui.booking}</th>
               </tr>
             </thead>
             <tbody>
-              {WAYS.map((w) => (
+              {ways.map((w) => (
                 <tr key={w.id}>
                   <th scope="row">
                     <a href={`#${w.id}`}>{w.title.replace(/^\d+\.\s*/, "")}</a>
                   </th>
-                  <td data-label="Work for you">{w.effort}</td>
-                  <td data-label="How fresh">{w.freshness}</td>
-                  <td data-label="How guests book">{w.booking}</td>
+                  <td data-label={ui.effort}>{w.effort}</td>
+                  <td data-label={ui.freshness}>{w.freshness}</td>
+                  <td data-label={ui.booking}>{w.booking}</td>
                 </tr>
               ))}
             </tbody>
@@ -105,16 +107,16 @@ export default async function OperatorsConnect({ params }: Props) {
         </div>
       </section>
 
-      {WAYS.map((w) => (
+      {ways.map((w) => (
         <section key={w.id} className={own.way} aria-labelledby={w.id}>
           <h2 id={w.id}>{w.title}</h2>
           <p className={styles.lead}>{w.summary}</p>
           <p className={styles.booking}>
-            <strong>Best for:</strong> {w.bestFor}
+            <strong>{ui.bestFor}</strong> {w.bestFor}
           </p>
           <div className={styles.split}>
             <div>
-              <h3>What you do</h3>
+              <h3>{ui.youDo}</h3>
               <ol className={styles.steps}>
                 {w.steps.map((s) => (
                   <li key={s}>{s}</li>
@@ -122,7 +124,7 @@ export default async function OperatorsConnect({ params }: Props) {
               </ol>
             </div>
             <div>
-              <h3>What Nilecruz does</h3>
+              <h3>{ui.weDo}</h3>
               <ul>
                 {w.weDo.map((s) => (
                   <li key={s}>{s}</li>
@@ -131,7 +133,7 @@ export default async function OperatorsConnect({ params }: Props) {
             </div>
           </div>
           <p>
-            <strong>How often:</strong> {w.update}
+            <strong>{ui.update}</strong> {w.update}
           </p>
           {w.notes?.map((n) => (
             <p key={n} className={styles.muted}>
@@ -145,40 +147,41 @@ export default async function OperatorsConnect({ params }: Props) {
       ))}
 
       <section className={styles.section} aria-labelledby="booking">
-        <h2 id="booking">{BOOKING_RULE.title}</h2>
-        {BOOKING_RULE.paragraphs.map((p) => (
+        <h2 id="booking">{bookingRule.title}</h2>
+        {bookingRule.paragraphs.map((p) => (
           <p key={p}>{p}</p>
         ))}
       </section>
 
       <section className={styles.section} aria-labelledby="never">
-        <h2 id="never">What Nilecruz never does</h2>
+        <h2 id="never">{ui.never}</h2>
         <ul>
-          {NEVER.map((n) => (
+          {never.map((n) => (
             <li key={n}>{n}</li>
           ))}
         </ul>
       </section>
 
       <section className={styles.section} aria-labelledby="start">
-        <h2 id="start">{START.title}</h2>
+        <h2 id="start">{start.title}</h2>
         <ol className={styles.steps}>
-          {START.steps.map((s) => (
+          {start.steps.map((s) => (
             <li key={s}>{s}</li>
           ))}
         </ol>
         <p>
-          <Link className={own.cta} href={START.apply}>
-            Apply as an operator
+          <Link className={own.cta} href={start.apply}>
+            {ui.apply}
           </Link>{" "}
-          or <Link href="/contact/">ask us a question</Link>.
+          {ui.or} <Link href="/contact/">{ui.ask}</Link>
+          {ui.end}
         </p>
       </section>
 
       <section className={styles.section} aria-labelledby="questions">
-        <h2 id="questions">Questions operators ask</h2>
+        <h2 id="questions">{ui.questions}</h2>
         <dl className={styles.faqs}>
-          {FAQS.map((f) => (
+          {faqs.map((f) => (
             <div key={f.q}>
               <dt>{f.q}</dt>
               <dd>{f.a}</dd>
@@ -188,12 +191,12 @@ export default async function OperatorsConnect({ params }: Props) {
       </section>
 
       <section className={styles.section} aria-labelledby="it">
-        <h2 id="it">{FOR_IT.title}</h2>
-        {FOR_IT.paragraphs.map((p) => (
+        <h2 id="it">{forIt.title}</h2>
+        {forIt.paragraphs.map((p) => (
           <p key={p}>{p}</p>
         ))}
-        <pre className={own.code} aria-label="A short example of the format, in JSON">
-          {FOR_IT.sample}
+        <pre className={own.code} aria-label={ui.sample}>
+          {forIt.sample}
         </pre>
       </section>
 

@@ -1,7 +1,9 @@
 /**
  * The public marketplace (Batch 5-1): facet pages, search filtering and structured data, kept free of I/O so it is
- * unit-tested. Copy is English for now; Batch 10 translates it (ADR-093).
+ * unit-tested. Shown words are English or Japanese (Spanish shows English until Batch 10, ADR-093); ids, slugs and
+ * filter values are the same in every language.
  */
+import { placeName } from "@/content/places";
 import type { CruiseCardProps } from "@/components/ds/CruiseCard/CruiseCard";
 import { PROPULSIONS, type Money, type Propulsion, type VesselType } from "@/components/ds/lib/types";
 import {
@@ -70,8 +72,14 @@ export type Facet = {
   title: string;
   description: string;
   intro: string;
+  ja: FacetText;
   match: (v: ListingVessel) => boolean;
 };
+
+export type FacetText = { h1: string; title: string; description: string; intro: string };
+
+/** A facet's words in the page's language. */
+export const facetText = (f: Facet, locale: string = "en"): FacetText => (locale === "ja" ? f.ja : f);
 
 const sails = (v: ListingVessel, origin: string, destination: string) =>
   v.itineraries.some((i) => same(i.origin, origin) && same(i.destination, destination));
@@ -84,6 +92,12 @@ export const FACETS: Facet[] = [
     title: "Dahabiya cruises on the Nile",
     description: "Sailing dahabiyas on the Nile: small boats, few guests, with Nilecruz evaluations and honest starting prices.",
     intro: "Dahabiyas are sailing boats with a handful of cabins. They moor at quiet riverbanks rather than town quays.",
+    ja: {
+      h1: "ダハビヤ・クルーズ",
+      title: "ナイル川のダハビヤ・クルーズ",
+      description: "ナイル川の帆走ダハビヤ。小さな船と少ない乗客、Nilecruzの評価と正直な開始料金を掲載しています。",
+      intro: "ダハビヤは客室の少ない帆船です。町の船着き場ではなく、静かな川岸に停泊します。",
+    },
     match: (v) => v.type === "sail",
   },
   {
@@ -92,6 +106,12 @@ export const FACETS: Facet[] = [
     title: "Nile cruise ships: compare motor ships",
     description: "Motor cruise ships on the Nile, compared by size, route, Nilecruz evaluation and starting price.",
     intro: "Motor ships carry more guests and usually more facilities, such as a pool deck, and keep to set schedules.",
+    ja: {
+      h1: "ナイル川クルーズ船",
+      title: "ナイル川クルーズ船：モーターシップを比較",
+      description: "ナイル川のモータークルーズ船を、大きさ、航路、Nilecruzの評価、開始料金で比較します。",
+      intro: "モーターシップは乗客が多く、たいていはプールデッキなどの設備も充実していて、決まった日程で運航します。",
+    },
     match: (v) => v.type === "motor",
   },
   {
@@ -100,6 +120,12 @@ export const FACETS: Facet[] = [
     title: "Luxury Nile cruises compared",
     description: "Vessels Nilecruz classes as luxury, with their evaluations, routes and starting prices.",
     intro: "Vessels we class as luxury, from our own checks. The evaluation shows how each one scored.",
+    ja: {
+      h1: "ラグジュアリー・ナイル川クルーズ",
+      title: "ラグジュアリー・ナイル川クルーズを比較",
+      description: "Nilecruzがラグジュアリーに分類する船を、評価、航路、開始料金とともに紹介します。",
+      intro: "当社の確認に基づいてラグジュアリーに分類した船です。各船の点数は評価でご確認いただけます。",
+    },
     match: (v) => v.category === "luxury",
   },
   {
@@ -108,6 +134,12 @@ export const FACETS: Facet[] = [
     title: "Luxor to Aswan Nile cruises",
     description: "Nile cruises sailing from Luxor to Aswan: vessels, nights, evaluations and starting prices.",
     intro: "Cruises that start in Luxor and end in Aswan, sailing upstream.",
+    ja: {
+      h1: "ルクソール発アスワン行きクルーズ",
+      title: "ルクソール発アスワン行きのナイル川クルーズ",
+      description: "ルクソールからアスワンへ向かうナイル川クルーズ。船、泊数、評価、開始料金を掲載しています。",
+      intro: "ルクソールを出発し、アスワンに到着する上りのクルーズです。",
+    },
     match: (v) => sails(v, "Luxor", "Aswan"),
   },
   {
@@ -116,6 +148,12 @@ export const FACETS: Facet[] = [
     title: "Aswan to Luxor Nile cruises",
     description: "Nile cruises sailing from Aswan to Luxor: vessels, nights, evaluations and starting prices.",
     intro: "Cruises that start in Aswan and end in Luxor, sailing downstream with the current.",
+    ja: {
+      h1: "アスワン発ルクソール行きクルーズ",
+      title: "アスワン発ルクソール行きのナイル川クルーズ",
+      description: "アスワンからルクソールへ向かうナイル川クルーズ。船、泊数、評価、開始料金を掲載しています。",
+      intro: "アスワンを出発し、流れに乗ってルクソールに到着する下りのクルーズです。",
+    },
     match: (v) => sails(v, "Aswan", "Luxor"),
   },
 ];
@@ -149,32 +187,33 @@ export function headlineItinerary(v: ListingVessel): Itinerary | undefined {
 export type GridCard = Omit<CruiseCardProps, "onCompare" | "onSave" | "compared" | "saved"> & { slug: string };
 
 /** "Cruises you can book" only when every cruise in the row can be booked through Nilecruz (Islam, 6 Nov 2026). */
-export const closingHeading = (shown: ListingVessel[]) =>
-  shown.length && shown.every((v) => v.bookable) ? "Cruises you can book" : "Cruises to explore";
+export const closingHeading = (shown: ListingVessel[], locale: string = "en") =>
+  shown.length && shown.every((v) => v.bookable) ? WORDS[wordsOf(locale)].canBook : WORDS[wordsOf(locale)].explore;
 
-export function toCard(v: ListingVessel): GridCard {
+export function toCard(v: ListingVessel, locale: string = "en"): GridCard {
+  const words = WORDS[wordsOf(locale)];
   const it = headlineItinerary(v);
   const badges: GridCard["badges"] = [];
   // Islam, 25 Nov 2026: no "Information only" tag. A boat with no public price that isn't booked online is tagged as
   // sold on request; one we can't sell at all says so in its price line instead.
-  if (!v.bookable && !hasFigure(v.price) && sellsThroughUs(v.booking)) badges.push({ label: "Request based", tone: "media" });
-  if (v.sample) badges.push({ label: "Sample data", tone: "accent", icon: "info" });
+  if (!v.bookable && !hasFigure(v.price) && sellsThroughUs(v.booking)) badges.push({ label: words.requestBased, tone: "media" });
+  if (v.sample) badges.push({ label: words.sample, tone: "accent", icon: "info" });
   return {
     slug: v.slug,
     name: v.displayName ?? v.name,
     href: `/cruises/${v.slug}/`,
     vessel: v.type,
     propulsion: v.propulsion ?? undefined,
-    route: it ? [it.origin, it.destination] : undefined,
+    route: it ? [placeName(it.origin, locale), placeName(it.destination, locale)] : undefined,
     nights: it?.nights,
     guests: v.maxGuests ?? undefined,
     evaluation: v.evaluation,
     // ADR-109: the approved starting price in euros, or "Price on request"; never a rate computed from cabins.
     price:
       v.price.mode === "from_price"
-        ? { from: v.price.from, margin: v.price.margin }
+        ? { from: v.price.from }
         : v.price.mode === "price_band"
-          ? { min: v.price.min, max: v.price.max, margin: v.price.margin }
+          ? { min: v.price.min, max: v.price.max }
           : undefined,
     // A vessel Nilecruz can't sell says so instead of a price (Steam Ship Sudan, 6 Nov 2026).
     unavailable: !sellsThroughUs(v.booking),
@@ -182,6 +221,31 @@ export function toCard(v: ListingVessel): GridCard {
     badges,
   };
 }
+
+// ── Words the listing code shows ────────────────────────────────────────────────────────────────────────────
+const WORDS = {
+  en: {
+    canBook: "Cruises you can book",
+    explore: "Cruises to explore",
+    requestBased: "Request based",
+    sample: "Sample data",
+    anyRoute: "Any route",
+    everySailing: "Every sailing",
+    nights: (n: string) => `${n} nights`,
+    vessels: { any: "Any vessel", sail: "Dahabiya", motor: "Motor ship", steam: "Steamer" },
+  },
+  ja: {
+    canBook: "予約できるクルーズ",
+    explore: "注目のクルーズ",
+    requestBased: "リクエスト受付",
+    sample: "サンプルデータ",
+    anyRoute: "ルート指定なし",
+    everySailing: "すべての出航",
+    nights: (n: string) => `${n}泊`,
+    vessels: { any: "船の指定なし", sail: "ダハビヤ", motor: "モータークルーズ船", steam: "蒸気船" },
+  },
+};
+const wordsOf = (locale: string) => (locale === "ja" ? "ja" : "en");
 
 // ── Search (DATA-012): routes, dates and match counts from real schedules and departures ────────────────────
 export const routeId = (origin: string, destination: string) =>
@@ -195,13 +259,19 @@ export const routeId = (origin: string, destination: string) =>
 export type SearchRouteOption = { id: string; label: string; sub?: string; dates: string[] };
 
 /** Every route with future departures, its dates merged across vessels. "Any route" first. */
-export function searchRoutes(list: ListingVessel[]): SearchRouteOption[] {
-  const byRoute = new Map<string, { label: string; nights: Set<number>; dates: Set<string> }>();
+export function searchRoutes(list: ListingVessel[], locale: string = "en"): SearchRouteOption[] {
+  const words = WORDS[wordsOf(locale)];
+  const byRoute = new Map<string, { label: string; shown: string; nights: Set<number>; dates: Set<string> }>();
   for (const v of list)
     for (const i of v.itineraries) {
       if (!i.departures.length) continue;
       const id = routeId(i.origin, i.destination);
-      const r = byRoute.get(id) ?? { label: `${i.origin} → ${i.destination}`, nights: new Set(), dates: new Set() };
+      const r = byRoute.get(id) ?? {
+        label: `${i.origin} → ${i.destination}`,
+        shown: `${placeName(i.origin, locale)} → ${placeName(i.destination, locale)}`,
+        nights: new Set(),
+        dates: new Set(),
+      };
       if (i.nights) r.nights.add(i.nights);
       i.departures.forEach((d) => r.dates.add(d));
       byRoute.set(id, r);
@@ -210,27 +280,34 @@ export function searchRoutes(list: ListingVessel[]): SearchRouteOption[] {
     .map(([id, r]) => ({
       id,
       label: r.label,
-      sub: nightsRange([...r.nights]),
+      shown: r.shown,
+      sub: nightsRange([...r.nights], words.nights),
       dates: [...r.dates].sort(),
     }))
-    .sort((a, b) => a.label.localeCompare(b.label));
+    // Ordered by the English names, so every language lists the routes alike.
+    .sort((a, b) => a.label.localeCompare(b.label))
+    .map(({ shown, ...r }) => ({ ...r, label: shown }));
   const all = [...new Set(routes.flatMap((r) => r.dates))].sort();
-  return [{ id: "any", label: "Any route", sub: "Every sailing", dates: all }, ...routes];
+  return [{ id: "any", label: words.anyRoute, sub: words.everySailing, dates: all }, ...routes];
 }
 
-function nightsRange(n: number[]): string | undefined {
+function nightsRange(n: number[], nights: (n: string) => string): string | undefined {
   if (!n.length) return undefined;
   const lo = Math.min(...n);
   const hi = Math.max(...n);
-  return lo === hi ? `${lo} nights` : `${lo}–${hi} nights`;
+  return nights(lo === hi ? `${lo}` : `${lo}–${hi}`);
 }
 
 export const VESSEL_OPTIONS: { id: string; label: string; type?: VesselType }[] = [
-  { id: "any", label: "Any vessel" },
-  { id: "sail", label: "Dahabiya", type: "sail" },
-  { id: "motor", label: "Motor ship", type: "motor" },
-  { id: "steam", label: "Steamer", type: "steam" },
+  { id: "any", label: WORDS.en.vessels.any },
+  { id: "sail", label: WORDS.en.vessels.sail, type: "sail" },
+  { id: "motor", label: WORDS.en.vessels.motor, type: "motor" },
+  { id: "steam", label: WORDS.en.vessels.steam, type: "steam" },
 ];
+
+/** The same options as the search shows them in the page's language. */
+export const vesselOptions = (locale: string = "en") =>
+  VESSEL_OPTIONS.map((o) => ({ ...o, label: WORDS[wordsOf(locale)].vessels[o.type ?? "any"] }));
 
 export type SearchQuery = {
   route?: string;

@@ -6,10 +6,13 @@ for (const lang of ["", "/es", "/ja"]) {
     page,
   }) => {
     await page.goto(`${lang}/`);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Find the right Nile cruise");
+    // Japanese has its own copy (ADR-115); Spanish shows the English until its translation arrives.
+    const heading = lang === "/ja" ? "自分に合うナイル川クルーズを見つける" : "Find the right Nile cruise";
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(heading);
     // The footer keeps the brand line; the hero no longer repeats it as an eyebrow.
     await expect(page.locator("main").getByText("Nile cruises, explained", { exact: true })).toHaveCount(0);
     await expect(page.getByText("Draft for review")).toHaveCount(0);
+    await expect(page.getByText("確認用の下書き")).toHaveCount(0);
     const logos = await page.locator("header img").evaluateAll((is) => is.map((i) => i.getAttribute("src") ?? ""));
     expect(logos.length).toBeGreaterThan(0);
     for (const src of logos) expect(src).toMatch(/nilecruz-wordmark-/);

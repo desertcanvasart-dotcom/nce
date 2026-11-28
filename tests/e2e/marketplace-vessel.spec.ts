@@ -211,7 +211,7 @@ test("an approved euro starting price, and 'Check rates for your dates' with onl
   await refreshCatalogue(request);
   try {
     await page.goto(`/cruises/${own}/`);
-    await expect(page.getByText("From €1,120 per person. Includes our margin. A guide, not a quote.").first()).toBeVisible();
+    await expect(page.getByText("From €1,120 per person. Includes sightseeing. A guide, not a quote.").first()).toBeVisible();
     await expect(page.getByText(/Per person, per trip\. Last checked/)).toBeVisible();
     // Information only: a price, but never Offer markup until it can be booked.
     const ld = (await page.locator('script[type="application/ld+json"]').allTextContents()).join("\n");

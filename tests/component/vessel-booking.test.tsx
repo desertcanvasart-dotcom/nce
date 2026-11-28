@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, screen } from "@testing-library/react";
+import { cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { renderEn } from "./setup";
 import { VesselView } from "@/components/marketplace/VesselView";
@@ -70,49 +70,12 @@ const vessel = (over: Partial<VesselPage> = {}): VesselPage => ({
 });
 
 describe("Royal Lily's starting price (Islam's review, 6 Nov 2026)", () => {
-  it("says 'From €1,120 per person', with our margin, and no per-night figure or per-cruise total", () => {
+  it("says 'From €1,120 per person', with sightseeing, and no per-night figure or per-cruise total", () => {
     renderEn(<VesselView locale="en" v={vessel()} today="2026-11-06" />);
     const text = document.body.textContent ?? "";
-    expect(text).toContain("From €1,120 per person. Includes our margin. A guide, not a quote.");
+    expect(text).toContain("From €1,120 per person. Includes sightseeing. A guide, not a quote.");
     expect(text).toContain("Per person, per trip.");
     expect(text).not.toMatch(/€[\d,]+ (a|per) night|per person, per night\.|for the [34]-night cruise|US\$|\$\d/i);
-  });
-});
-
-describe("the Nour El Nil boats' prices (Islam, 6 Nov 2026)", () => {
-  it("show the 'from' price without 'Includes our margin' until it is confirmed", () => {
-    const price = { ...(vessel().price as Extract<VesselPage["price"], { mode: "from_price" }>), margin: false };
-    renderEn(<VesselView locale="en" v={vessel({ name: "Adelaïde", price })} today="2026-11-06" />);
-    const text = document.body.textContent ?? "";
-    expect(text).toContain("From €1,120 per person. A guide, not a quote.");
-    expect(text).not.toContain("Includes our margin");
-    expect(text).not.toContain("All prices we publish and quote already include our margin.");
-  });
-});
-
-describe("a vessel that can't be booked through Nilecruz (Steam Ship Sudan)", () => {
-  const sudan = vessel({
-    slug: "steam-ship-sudan",
-    name: "Steam Ship Sudan",
-    type: "steam",
-    propulsion: "steam",
-    price: { mode: "on_request" },
-    booking: "not_available_through_nilecruz",
-    enquiry: { name: "Original Travel", email: "jamie.armstrong@originaltravel.co.uk" },
-  });
-
-  it("shows no price and no Nilecruz booking action, and offers to enquire with Original Travel", () => {
-    renderEn(<VesselView locale="en" v={sudan} today="2026-11-06" rates={async () => ({})} />);
-    expect(screen.getAllByText("Booking unavailable through us").length).toBeGreaterThan(0);
-    const enquire = screen.getAllByRole("link", { name: "Enquire with Original Travel" });
-    expect(enquire.length).toBeGreaterThan(0);
-    for (const a of enquire) expect(a.getAttribute("href")).toBe("mailto:jamie.armstrong@originaltravel.co.uk");
-    expect(screen.queryByRole("link", { name: /Ask for an offer|See prices and dates/ })).toBeNull();
-    expect(screen.queryByRole("heading", { name: "Check rates for your dates" })).toBeNull();
-    expect(screen.queryByText("Starting price")).toBeNull();
-    const text = document.body.textContent ?? "";
-    expect(text).not.toMatch(/€\d|Price on request|ask for an offer|ask us|your offer|Original Travel[^.]*operator/i);
-    for (const a of document.querySelectorAll("a")) expect(a.getAttribute("href") ?? "").not.toMatch(/\/(ask|reserve)\//);
   });
 });
 

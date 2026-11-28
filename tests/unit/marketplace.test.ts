@@ -136,11 +136,6 @@ describe("cards (BRAND-026, 028, ADR-025, DASH-PUB-010)", () => {
     expect(toCard(vessel()).unavailable).toBe(false);
   });
 
-  it("carry whether the figure includes our margin, so the card doesn't claim it when unconfirmed", () => {
-    const guide = { ...fromEur(250000), margin: false } as PublicPrice;
-    expect(toCard(vessel({ price: guide })).price).toMatchObject({ margin: false });
-  });
-
   it("keep the booking status apart from the price, and flag sample data", () => {
     const c = toCard(vessel({ bookable: false, sample: true, price: fromEur(112000) }));
     expect(c.price).toEqual({ from: { amount: 112000, currency: "EUR" } });
