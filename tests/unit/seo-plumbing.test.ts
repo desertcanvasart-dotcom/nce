@@ -19,13 +19,14 @@ describe("Batch 10: which pages are translated", () => {
   it("translations arrive page by page: Spanish has the three hand-laid hubs (ADR-106, ADR-108, ADR-111)", () => {
     expect(TRANSLATED.es).toEqual(["/vessels/", "/destinations/", "/nile-cruise-guide/"]);
   });
-  it("Japanese covers every built page; the blog and unfinished vessel pages wait for their content", () => {
+  it("Japanese covers every built page; the blog and vessels without Japanese text wait for their content", () => {
     const built = [...BUILT, ...EXTRA_PAGES];
     expect(built.filter((p) => !isTranslated(p, "ja"))).toEqual([]);
     expect(isTranslated("/cruises/nour-el-nil-dendera/", "ja")).toBe(true);
-    expect(isTranslated("/cruises/oberoi-zahra/", "ja")).toBe(false);
-    expect(isTranslated("/cruises/oberoi-zahra/ask/", "ja")).toBe(true);
-    expect(isTranslated("/cruises/oberoi-zahra/ask/", "es")).toBe(false);
+    expect(isTranslated("/cruises/oberoi-zahra/", "ja")).toBe(true);
+    expect(isTranslated("/cruises/a-new-vessel/", "ja")).toBe(false);
+    expect(isTranslated("/cruises/a-new-vessel/ask/", "ja")).toBe(true);
+    expect(isTranslated("/cruises/a-new-vessel/ask/", "es")).toBe(false);
     expect(isTranslated("/blog/", "ja")).toBe(false);
     expect(isTranslated("/terms/", "ja")).toBe(false);
   });

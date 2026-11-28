@@ -66,11 +66,18 @@ const JA_PAGES = [
 ];
 
 /**
- * Vessel pages whose database text is complete in Japanese. The others join once their rows are in
- * (docs/imports/ja-content-missing.json, `pnpm apply:ja-content`).
+ * Vessel pages whose database text is complete in Japanese (all 27 on production, 28 Nov 2026). A new vessel joins when
+ * its Japanese rows are in.
  */
 const JA_VESSELS = [
-  "steam-ship-sudan",
+  "movenpick-darakum",
+  "movenpick-hamees",
+  "movenpick-prince-abbas",
+  "movenpick-royal-lily",
+  "movenpick-royal-lotus",
+  "movenpick-sb-feddya",
+  "movenpick-ss-misr",
+  "movenpick-sun-ray",
   "nour-el-nil-adelaide",
   "nour-el-nil-agatha",
   "nour-el-nil-dendera",
@@ -80,6 +87,16 @@ const JA_VESSELS = [
   "nour-el-nil-najafa",
   "nour-el-nil-poppee",
   "nour-el-nil-roman",
+  "oberoi-philae",
+  "oberoi-zahra",
+  "sonesta-dahabeya-amirat",
+  "sonesta-dahabeya-amirat-ii",
+  "sonesta-moon-goddess",
+  "sonesta-nile-goddess",
+  "sonesta-st-george-i",
+  "sonesta-star-goddess",
+  "sonesta-sun-goddess",
+  "steam-ship-sudan",
 ];
 
 /** The vessel's own forms (ask, reserve, save a quote) hold interface text only, so they are translated for every vessel. */
